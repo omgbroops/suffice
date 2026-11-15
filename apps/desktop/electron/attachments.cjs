@@ -12,7 +12,19 @@ async function prepareAttachments(home,items=[]){
 }
 async function removeAttachmentCopy(home,directory){if(!directory)return;const root=await fs.realpath(path.join(home,'attachments')),target=await fs.realpath(directory);if(path.dirname(target)!==root||!/^[a-f0-9-]{36}$/i.test(path.basename(target)))throw new Error('Invalid attachment directory');for(const item of await fs.readdir(target,{withFileTypes:true})){if(!item.isFile())throw new Error('Unexpected attachment entry');await fs.unlink(path.join(target,item.name));}await fs.rmdir(target);}
 async function clipboardFiles(clipboard){
- const formats=clipboard.availableFormats();let names=[];
+ let names=[];
+ const formats=typeof clipboard.availableFormats==='function'?clipboard.availableFormats():[];
+ if(!formats.length&&typeof clipboard.read==='function'){
+  const items=await clipboard.read();
+  for(const item of Array.isArray(items)?items:[]){for(const type of item.types||[]){
+   const raw=/format="([^"]+)"/.exec(type)?.[1];if(!['FileNameW','FileName'].includes(raw)&&type!=='text/uri-list')continue;
+   const blob=await item.getType(type);const buffer=Buffer.from(await blob.arrayBuffer());
+   if(raw)names=buffer.toString(raw==='FileNameW'?'utf16le':'utf8').split('\0').filter(Boolean);
+   else {const {fileURLToPath}=require('node:url');names=buffer.toString().split(/\r?\n/).filter(line=>line.startsWith('file:')).map(fileURLToPath);}
+   if(names.length)break;
+  }if(names.length)break;}
+  if(!names.length&&items.some(item=>item.types?.includes('text/plain')))return [];
+ }
  for(const format of ['FileNameW','FileName']){if(!formats.includes(format))continue;const buffer=clipboard.readBuffer(format);names=buffer.toString(format==='FileNameW'?'utf16le':'utf8').split('\0').filter(Boolean);if(names.length)break;}
  if(!names.length&&formats.includes('text/uri-list')){const {fileURLToPath}=require('node:url');names=clipboard.read('text/uri-list').split(/\r?\n/).filter(line=>line.startsWith('file:')).map(fileURLToPath);}
  if(!names.length&&process.platform==='win32'){

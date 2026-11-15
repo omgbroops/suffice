@@ -31,8 +31,13 @@ The JavaScript adapter preserves sibling `localeCompare` ordering and lexical
 tie order. Rust skips dot entries, node_modules, symlinks and non-regular files,
 uses heap-based DFS, and returns filesystem/encoding failures without writing
 anything. The old JavaScript implementation remains the authoritative fallback.
-Authorization remains in `repositoryPath` and the existing tool wrappers; the
-native module does not grant a wider path scope.
+After the edge-to-edge branch integration, production `repositoryPath` treats the
+selected project as a working directory and resolves explicit task-directed local
+paths beyond it. Tool access modes and approval wrappers still apply; this helper
+is no longer a project confinement boundary. The native traversal adapter retains
+its own ordered relative-output validation and JavaScript fallback. Research
+workers remain separately isolated, and `SessionStore` authority remains confined
+to its explicit session directory. See `edge-to-edge-integration.md`.
 
 One operation per module/isolate may occupy a libuv worker. Concurrent callers
 immediately use JavaScript so multiple native jobs cannot consume all default

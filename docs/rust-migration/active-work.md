@@ -4,7 +4,14 @@ The user's persistent goal remains active: a concretely verified, demonstrably
 lighter app and continued work toward full Rust across all original features.
 The earlier delivery report is a historical checkpoint, not completion.
 
-Latest continuation: [`continuation-session-store.md`](continuation-session-store.md).
+Latest integration: [`edge-to-edge-integration.md`](edge-to-edge-integration.md).
+The user requested `experiment/edge-to-edge-chat`; upstream `9164605` was merged
+with local migration checkpoint `801387e`, retaining the Rust addon, native hosts,
+session store and earlier evidence. The current feature inventory includes the
+new edge/shared-chrome, queue, access-mode, file-link/opener and resource behavior.
+The full Rust rewrite and performance/platform gates remain open.
+
+Previous continuation: [`continuation-session-store.md`](continuation-session-store.md).
 Rust now supplies retained capability-relative, bounded discovery/reads to the
 native viewer; 13 Rust session tests, 22 Pi/wire tests and 8 native tests pass.
 The macOS desktop suite is now 97 passed, 0 failed, 2 Windows-only skips after

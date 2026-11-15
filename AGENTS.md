@@ -23,6 +23,12 @@ assuming that research behavior is production behavior.
 - `apps/desktop-rust`, `apps/desktop-bridge`: experimental Wry host and transitional
   Node business logic. Process containment currently requires Windows.
 
+The imported edge-to-edge production file API intentionally treats the project
+as a working directory for task-directed local access; preserve access-mode and
+approval checks. This does not relax the separate session-store capability or
+research-worker filesystem boundaries. New upstream capabilities and validation
+are recorded in `docs/rust-migration/edge-to-edge-integration.md`.
+
 ## Verified baseline commands (Windows)
 
 Use Node 24.22.2 and Bun 1.4.4, matching `.github/workflows/desktop.yml`.

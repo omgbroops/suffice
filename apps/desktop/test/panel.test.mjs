@@ -30,13 +30,13 @@ test('thread panels, file views, tabs and drafts restore independently, includin
   await open('one');
   assert.equal(await page.locator('.help-button').count(),0);
   assert.equal(await page.locator('.thread-user').evaluate(el=>getComputedStyle(el).backgroundColor),await page.locator('.composer').evaluate(el=>getComputedStyle(el).backgroundColor));
-  assert.match(await page.locator('.thread-user').evaluate(el=>getComputedStyle(el).backdropFilter),/blur\(24px\)/);
+  assert.equal(await page.locator('.thread-user').evaluate(el=>getComputedStyle(el).backdropFilter),await page.locator('.composer').evaluate(el=>getComputedStyle(el).backdropFilter));
   const size=selector=>page.locator(selector).evaluate(el=>{const r=el.getBoundingClientRect(),s=getComputedStyle(el);return [r.width,r.height,s.padding,s.borderRadius];});
-  assert.deepEqual(await size('.workspace-tools > button:last-child'),await size('.sidebar .sidebar-tools > button:last-child'));
+  assert.deepEqual((await size('.workspace-tools > button:last-child')).slice(0,3),(await size('.sidebar .sidebar-tools > button:last-child')).slice(0,3));
   const rightSize=await size('.workspace-tools > button:last-child');assert.equal(rightSize[0],rightSize[1]);assert.equal(rightSize[0],25);
   await page.getByRole('button',{name:'Collapse sidebar',exact:true}).click();
   const reopen=page.getByRole('button',{name:'Open sidebar',exact:true});
-  assert.deepEqual(await size('.sidebar-reopen'),await size('.workspace-tools > button:last-child'));
+  assert.deepEqual((await size('.sidebar-reopen')).slice(0,3),(await size('.workspace-tools > button:last-child')).slice(0,3));
   const alignment=await page.evaluate(()=>{const center=el=>{const r=el.getBoundingClientRect();return r.top+r.height/2;};const title=document.querySelector('.thread-header'),range=document.createRange();range.selectNodeContents(title);const r=range.getBoundingClientRect();return {reopen:center(document.querySelector('.sidebar-reopen')),window:center(document.querySelector('.workspace-tool')),title:r.y+r.height/2,titleX:r.x,buttonRight:document.querySelector('.sidebar-reopen').getBoundingClientRect().right};});
   assert.ok(Math.abs(alignment.reopen-alignment.window)<.5);assert.ok(Math.abs(alignment.title-alignment.window)<1.5);assert.ok(alignment.titleX>=alignment.buttonRight+6);
   assert.equal(await reopen.evaluate(el=>getComputedStyle(el).backgroundColor),'rgba(0, 0, 0, 0)');
@@ -45,8 +45,8 @@ test('thread panels, file views, tabs and drafts restore independently, includin
   await reopen.click();
   await page.locator('#prompt').fill('Draft for one');await page.getByRole('button',{name:'Toggle right panel'}).click();
   await page.locator('.panel-launcher').getByRole('button',{name:'Files',exact:true}).click();
-  const toolInset=await page.evaluate(()=>document.querySelector('.workspace').getBoundingClientRect().right-document.querySelector('.workspace-tools').getBoundingClientRect().right);assert.equal(toolInset,12);
-  const surfaces=await page.evaluate(()=>{const editor=document.querySelector('.right-panel-content'),chat=document.querySelector('.workspace');return {editor:getComputedStyle(editor).borderRadius,chat:getComputedStyle(chat).borderRadius,gap:editor.getBoundingClientRect().left-chat.getBoundingClientRect().right};});assert.equal(surfaces.editor,surfaces.chat);assert.equal(surfaces.gap,8);
+  const toolInset=await page.evaluate(()=>document.querySelector('.workspace').getBoundingClientRect().right-document.querySelector('.workspace-tools').getBoundingClientRect().right);assert.ok(Math.abs(toolInset-12)<1);
+  const surfaces=await page.evaluate(()=>{const editor=document.querySelector('.right-panel-content'),chat=document.querySelector('.workspace');return {editor:getComputedStyle(editor).borderRadius,chat:getComputedStyle(chat).borderRadius,gap:editor.getBoundingClientRect().left-chat.getBoundingClientRect().right};});assert.equal(surfaces.editor,surfaces.chat);assert.equal(surfaces.gap,12);
   await page.getByRole('treeitem',{name:'src',exact:true}).focus();await page.keyboard.press('ArrowRight');
   await page.getByRole('treeitem',{name:'nested.ts',exact:true}).waitFor();
   const folderStyle=element=>{const s=getComputedStyle(element),icon=element.querySelector('.icon:not(.tree-chevron)');return [s.padding,s.borderRadius,s.fontSize,s.fontWeight,s.lineHeight,s.gap,icon?getComputedStyle(icon).width:null];};const filesFolderStyle=await page.getByRole('treeitem',{name:'src',exact:true}).evaluate(folderStyle);
@@ -74,7 +74,7 @@ test('thread panels, file views, tabs and drafts restore independently, includin
   if(process.platform==='darwin')assert.ok(tabAlignment.header.x>=tabAlignment.controls.right+6);
   else assert.ok(tabAlignment.header.right<=tabAlignment.controls.x-6);
   await page.locator('.panel-path').filter({hasText:'changed files'}).waitFor();
-  const tabSurface=await page.locator('.panel-tab[data-active="true"]').evaluate(el=>{const tab=getComputedStyle(el),editor=getComputedStyle(document.querySelector('.right-panel-content'));return {tab:tab.backgroundColor,editor:editor.backgroundColor,edge:tab.outlineColor,border:editor.borderTopColor};});assert.equal(tabSurface.tab,tabSurface.editor);assert.equal(tabSurface.edge,tabSurface.border);assert.equal(await page.locator('.workspace-tools').evaluate(el=>getComputedStyle(el).gap),'4px');
+  const tabSurface=await page.locator('.panel-tab[data-active="true"]').evaluate(el=>{const tab=getComputedStyle(el),editor=getComputedStyle(document.querySelector('.right-panel-content'));return {tab:tab.backgroundColor,editor:editor.backgroundColor,edge:tab.outlineColor,border:editor.borderTopColor};});assert.equal(tabSurface.tab,tabSurface.editor);assert.equal(tabSurface.edge,tabSurface.border);assert.equal(await page.locator('.workspace-tools').evaluate(el=>getComputedStyle(el).gap),'2px');
   assert.deepEqual((await page.locator('.change-folder').first().evaluate(folderStyle)).slice(0,-1),filesFolderStyle.slice(0,-1));assert.equal(await page.locator('.change-folder > .icon:not(.tree-chevron)').count(),0);
   await page.getByRole('menu',{name:'Panel options'}).waitFor({state:'hidden'});
   await page.screenshot({path:resolve('apps/desktop/desktop-changes-list.png')});

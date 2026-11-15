@@ -31,6 +31,7 @@ class App extends EventEmitter {
  requestSingleInstanceLock(){return true;}
  getPath(name){if(name==='userData')return profile;if(name==='appData')return path.dirname(profile);if(name==='home')return require('node:os').homedir();if(name==='temp')return require('node:os').tmpdir();return unsupported(`app.getPath(${name})`);}
  setPath(name,value){if(name!=='userData'||path.resolve(value)!==path.resolve(profile))unsupported('app.setPath');}
+ getFileIcon(file,options){return native('app.getFileIcon',file,options).then(data=>({toDataURL:()=>data}));}
  getAppPath(){return root;}
  getVersion(){return require(path.join(root,'apps','desktop','package.json')).version;}
  setAppUserModelId(){}

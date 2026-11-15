@@ -1,0 +1,10 @@
+import {threadViewState as store} from './thread-view-state.js';
+import {getThreadDirectory} from './thread-directory.js';
+export function connectChatChangesWidget(){
+ const workspace=document.querySelector('.workspace'),composer=workspace.querySelector('.composer');
+ const button=document.createElement('button');button.type='button';button.className='chat-changes-widget';button.hidden=true;workspace.append(button);
+ function position(){if(button.hidden)return;const box=composer.getBoundingClientRect(),host=workspace.getBoundingClientRect();button.style.left=box.left-host.left+box.width/2+'px';button.style.top=box.top-host.top-button.offsetHeight-10-(workspace.querySelector('.queued-messages:not([hidden])')?.offsetHeight||0)+'px';}
+ function paint(){const thread=getThreadDirectory().threads.find(thread=>thread.id===store.id),diff=thread?.turnDiff;button.hidden=!store.id||!['working','approval'].includes(thread?.status)||diff?.scope!=='turn'||!diff.files;if(button.hidden)return;button.replaceChildren();const count=document.createElement('span');count.textContent=diff.files+' '+(diff.files===1?'file':'files')+' changed';const added=document.createElement('span'),removed=document.createElement('span');added.className='thread-added';removed.className='thread-removed';added.textContent='+'+diff.added;removed.textContent='−'+diff.removed;button.append(count,added,removed);button.title=diff.partial?'Tracked changes this turn; some changes could not be attributed.':'Changes made in this turn';position();}
+ button.addEventListener('click',()=>store.update({panelOpen:true,tabs:[...new Set([...store.state.tabs,'changes'])],activeTab:'changes'}));
+ store.subscribe(paint);document.addEventListener('suffice-thread-directory',paint);window.addEventListener('resize',position);document.addEventListener('suffice-queue-layout',position);const resize=new ResizeObserver(position);resize.observe(composer);resize.observe(workspace);paint();
+}

@@ -1,0 +1,819 @@
+TAP version 13
+# Subtest: custom accent previews, validates, saves and cancels without changing the saved color
+ok 1 - custom accent previews, validates, saves and cancels without changing the saved color
+  ---
+  duration_ms: 1353.884375
+  type: 'test'
+  ...
+# Subtest: codemode labels reflect real calls and active/completed states
+ok 2 - codemode labels reflect real calls and active/completed states
+  ---
+  duration_ms: 2.327916
+  type: 'test'
+  ...
+# Subtest: activity headings combine repeated actions and sentence case
+ok 3 - activity headings combine repeated actions and sentence case
+  ---
+  duration_ms: 0.470125
+  type: 'test'
+  ...
+# Subtest: direct tool headings never include commands, paths or queries
+ok 4 - direct tool headings never include commands, paths or queries
+  ---
+  duration_ms: 0.063042
+  type: 'test'
+  ...
+# Subtest: parallel tool calls keep their own multi-part results in one action each
+ok 5 - parallel tool calls keep their own multi-part results in one action each
+  ---
+  duration_ms: 0.305333
+  type: 'test'
+  ...
+# Subtest: refresh restores a live transcript and pending approval, then continues the original run
+ok 6 - refresh restores a live transcript and pending approval, then continues the original run
+  ---
+  duration_ms: 1806.455792
+  type: 'test'
+  ...
+# Approval screenshots: /var/folders/c7/_jc6_hn14psfbfyg5vmlrd380000gp/T/suffice-approval-ui-njEW2Y
+# Subtest: composer approvals preserve drafts, isolate threads, and send explicit Allow/Deny answers
+ok 7 - composer approvals preserve drafts, isolate threads, and send explicit Allow/Deny answers
+  ---
+  duration_ms: 7274.3945
+  type: 'test'
+  ...
+# Subtest: attachments stay in app storage and images reach the harness separately
+ok 8 - attachments stay in app storage and images reach the harness separately
+  ---
+  duration_ms: 4.228792
+  type: 'test'
+  ...
+# Subtest: async Electron clipboard reads external file formats and ignores plain text
+ok 9 - async Electron clipboard reads external file formats and ignores plain text
+  ---
+  duration_ms: 1.114834
+  type: 'test'
+  ...
+# Subtest: chat and settings background visibility persist independently and fade to solid
+ok 10 - chat and settings background visibility persist independently and fade to solid
+  ---
+  duration_ms: 4569.412209
+  type: 'test'
+  ...
+# Subtest: background sessions use separate hosts and never forward foreground stream events
+ok 11 - background sessions use separate hosts and never forward foreground stream events
+  ---
+  duration_ms: 1.799875
+  type: 'test'
+  ...
+# Subtest: background extension prompts route answers to the owning worker and drain shutdown
+ok 12 - background extension prompts route answers to the owning worker and drain shutdown
+  ---
+  duration_ms: 0.550375
+  type: 'test'
+  ...
+# Subtest: branch picker matches project menu, searches, checks out and creates isolated worktrees; slider follows accent
+ok 13 - branch picker matches project menu, searches, checks out and creates isolated worktrees; slider follows accent
+  ---
+  duration_ms: 2290.379583
+  type: 'test'
+  ...
+# Subtest: checkout preserves compatible dirt and refuses tracked overwrites and unknown refs
+ok 14 - checkout preserves compatible dirt and refuses tracked overwrites and unknown refs
+  ---
+  duration_ms: 183.199583
+  type: 'test'
+  ...
+# Subtest: worktrees use the selected commit and leave dirty source untouched
+ok 15 - worktrees use the selected commit and leave dirty source untouched
+  ---
+  duration_ms: 124.840542
+  type: 'test'
+  ...
+# Subtest: remote branches create tracking branches and non-repositories have no picker entries
+ok 16 - remote branches create tracking branches and non-repositories have no picker entries
+  ---
+  duration_ms: 142.2115
+  type: 'test'
+  ...
+# Subtest: workspace directory aliases produce complete receipts and share conflict identity
+ok 17 - workspace directory aliases produce complete receipts and share conflict identity
+  ---
+  duration_ms: 7.878958
+  type: 'test'
+  ...
+# Subtest: canonical workspace containment still excludes directory links escaping the root
+ok 18 - canonical workspace containment still excludes directory links escaping the root
+  ---
+  duration_ms: 1.540417
+  type: 'test'
+  ...
+# Subtest: chat receipts exclude existing dirt, compose net edits, persist and isolate threads
+ok 19 - chat receipts exclude existing dirt, compose net edits, persist and isolate threads
+  ---
+  duration_ms: 4.646916
+  type: 'test'
+  ...
+# Subtest: shell snapshots include new and deleted text files without requiring git
+ok 20 - shell snapshots include new and deleted text files without requiring git
+  ---
+  duration_ms: 15.809292
+  type: 'test'
+  ...
+# Subtest: overlapping tools never claim a shared file as confidently attributed
+ok 21 - overlapping tools never claim a shared file as confidently attributed
+  ---
+  duration_ms: 3.067292
+  type: 'test'
+  ...
+# Subtest: an external intervening change makes further shared-file attribution partial
+ok 22 - an external intervening change makes further shared-file attribution partial
+  ---
+  duration_ms: 2.647375
+  type: 'test'
+  ...
+# Subtest: separate background processes detect overlapping workspace operations
+ok 23 - separate background processes detect overlapping workspace operations
+  ---
+  duration_ms: 31.845208
+  type: 'test'
+  ...
+# Subtest: project totals compare the feature branch to main, including uncommitted edits
+ok 24 - project totals compare the feature branch to main, including uncommitted edits
+  ---
+  duration_ms: 208.094583
+  type: 'test'
+  ...
+# Subtest: turn receipts reset independently of cumulative chat changes
+ok 25 - turn receipts reset independently of cumulative chat changes
+  ---
+  duration_ms: 4.028459
+  type: 'test'
+  ...
+# Subtest: chat Git receipts isolate branches and explicit PR creation from shared repository state
+ok 26 - chat Git receipts isolate branches and explicit PR creation from shared repository state
+  ---
+  duration_ms: 146.029417
+  type: 'test'
+  ...
+# Subtest: project aliases retain the same receipt and do not add a prior context
+ok 27 - project aliases retain the same receipt and do not add a prior context
+  ---
+  duration_ms: 79.768958
+  type: 'test'
+  ...
+# Subtest: Windows relaunch metadata preserves app/profile paths and a real multi-size icon
+ok 28 - Windows relaunch metadata preserves app/profile paths and a real multi-size icon
+  ---
+  duration_ms: 1.557583
+  type: 'test'
+  ...
+# Bubble screenshots: /var/folders/c7/_jc6_hn14psfbfyg5vmlrd380000gp/T/suffice-bubble-surface-Xlguaq
+# Subtest: user bubbles share the composer material, assistant text stays plain, and the taskbar uses Suffice
+ok 29 - user bubbles share the composer material, assistant text stays plain, and the taskbar uses Suffice
+  ---
+  duration_ms: 1716.038792
+  type: 'test'
+  ...
+# Background screenshot: /var/folders/c7/_jc6_hn14psfbfyg5vmlrd380000gp/T/suffice-soft-horizon-OggwYR/soft-horizon-dark.png
+# Subtest: Soft horizon is selectable, persists, renders a warm band and resizes
+ok 30 - Soft horizon is selectable, persists, renders a warm band and resizes
+  ---
+  duration_ms: 2091.775125
+  type: 'test'
+  ...
+# Subtest: composer attachments, preview menus, persisted defaults and background sends
+ok 31 - composer attachments, preview menus, persisted defaults and background sends
+  ---
+  duration_ms: 3218.604292
+  type: 'test'
+  ...
+# Subtest: threads keep independent live runs and accept steering without aborting
+ok 32 - threads keep independent live runs and accept steering without aborting
+  ---
+  duration_ms: 903.538833
+  type: 'test'
+  ...
+# Subtest: forced app termination preserves saved chats and drafts for a fresh launch
+ok 33 - forced app termination preserves saved chats and drafts for a fresh launch
+  ---
+  duration_ms: 2894.750834
+  type: 'test'
+  ...
+# Subtest: a first installed launch creates its profile before Electron accepts the override
+ok 34 - a first installed launch creates its profile before Electron accepts the override
+  ---
+  duration_ms: 2.60225
+  type: 'test'
+  ...
+# Subtest: explicit smoke/project profiles and development launches retain their existing paths
+ok 35 - explicit smoke/project profiles and development launches retain their existing paths
+  ---
+  duration_ms: 0.099709
+  type: 'test'
+  ...
+# Subtest: development icon replacement stays inside existing PE resources
+ok 36 - development icon replacement stays inside existing PE resources # SKIP
+  ---
+  duration_ms: 0.2565
+  type: 'test'
+  ...
+# Subtest: the branded development executable keeps source relaunch arguments and its own taskbar identity
+ok 37 - the branded development executable keeps source relaunch arguments and its own taskbar identity # SKIP
+  ---
+  duration_ms: 0.071625
+  type: 'test'
+  ...
+# Subtest: Changes shows nested counts, animated groups, guides and persistent split/wrap views
+ok 38 - Changes shows nested counts, animated groups, guides and persistent split/wrap views
+  ---
+  duration_ms: 3477.056209
+  type: 'test'
+  ...
+# Subtest: Electron loads the unchanged shell and reaches the real isolated harness
+ok 39 - Electron loads the unchanged shell and reaches the real isolated harness
+  ---
+  duration_ms: 5884.812458
+  type: 'test'
+  ...
+# Subtest: default-browser links permit web and mail links and reject executable schemes
+ok 40 - default-browser links permit web and mail links and reject executable schemes
+  ---
+  duration_ms: 0.497667
+  type: 'test'
+  ...
+# Subtest: transcript file links preserve relative and outside paths without treating web links as files
+ok 41 - transcript file links preserve relative and outside paths without treating web links as files
+  ---
+  duration_ms: 0.707541
+  type: 'test'
+  ...
+# Subtest: file openers validate project paths and dispatch default app and reveal
+ok 42 - file openers validate project paths and dispatch default app and reveal
+  ---
+  duration_ms: 3.925416
+  type: 'test'
+  ...
+# Subtest: a desktop fork keeps messages, gives a new identity and never changes its source
+ok 43 - a desktop fork keeps messages, gives a new identity and never changes its source
+  ---
+  duration_ms: 51.693625
+  type: 'test'
+  ...
+# Subtest: host streams events, reuses a session, prevents overlapping tasks, cancels, and disposes
+ok 44 - host streams events, reuses a session, prevents overlapping tasks, cancels, and disposes
+  ---
+  duration_ms: 18.011083
+  type: 'test'
+  ...
+# Subtest: host rejects malformed and unauthenticated tasks without executing the harness
+ok 45 - host rejects malformed and unauthenticated tasks without executing the harness
+  ---
+  duration_ms: 0.371625
+  type: 'test'
+  ...
+# Subtest: desktop settings reach the harness and approvals wait for the matching answer
+ok 46 - desktop settings reach the harness and approvals wait for the matching answer
+  ---
+  duration_ms: 14.271583
+  type: 'test'
+  ...
+# Subtest: mac chrome preserves native traffic lights and floating sidebar and chat controls
+ok 47 - mac chrome preserves native traffic lights and floating sidebar and chat controls
+  ---
+  duration_ms: 1315.360708
+  type: 'test'
+  ...
+# Subtest: macOS ICNS includes valid PNG representations at every Dock and Finder size
+ok 48 - macOS ICNS includes valid PNG representations at every Dock and Finder size
+  ---
+  duration_ms: 0.731
+  type: 'test'
+  ...
+# Message actions screenshots: /var/folders/c7/_jc6_hn14psfbfyg5vmlrd380000gp/T/suffice-message-actions-TmkxE2
+# Subtest: saved messages expose floating whole-turn actions and sent image previews without changing layout
+ok 49 - saved messages expose floating whole-turn actions and sent image previews without changing layout
+  ---
+  duration_ms: 2146.864292
+  type: 'test'
+  ...
+# Subtest: a stationary message toolbar follows expanded tool content and later messages
+ok 50 - a stationary message toolbar follows expanded tool content and later messages
+  ---
+  duration_ms: 1866.525875
+  type: 'test'
+  ...
+# Subtest: live turn toolbar waits for completion and copies all message calls
+ok 51 - live turn toolbar waits for completion and copies all message calls
+  ---
+  duration_ms: 733.630375
+  type: 'test'
+  ...
+# Subtest: turn timing and presentation metadata survive multi-call replies, queued steering and branches
+ok 52 - turn timing and presentation metadata survive multi-call replies, queued steering and branches
+  ---
+  duration_ms: 1.732583
+  type: 'test'
+  ...
+# Subtest: legacy attachments reuse persisted image parts and legacy turns do not invent duration
+ok 53 - legacy attachments reuse persisted image parts and legacy turns do not invent duration
+  ---
+  duration_ms: 0.343916
+  type: 'test'
+  ...
+# Subtest: choosing an enabled Grok model clears a stale unavailable-model send guard
+ok 54 - choosing an enabled Grok model clears a stale unavailable-model send guard
+  ---
+  duration_ms: 1146.61525
+  type: 'test'
+  ...
+# Subtest: selected catalog model reaches the harness and unsupported model requests are rejected
+ok 55 - selected catalog model reaches the harness and unsupported model requests are rejected
+  ---
+  duration_ms: 14.567209
+  type: 'test'
+  ...
+# Subtest: thread selection paints immediately, warm transcripts are reused, and project menus never wait for metadata
+ok 56 - thread selection paints immediately, warm transcripts are reused, and project menus never wait for metadata
+  ---
+  duration_ms: 1058.568459
+  type: 'test'
+  ...
+# Subtest: only the advertised loopback callback gets Suffice branding and an embedded selected font
+ok 57 - only the advertised loopback callback gets Suffice branding and an embedded selected font
+  ---
+  duration_ms: 25.90975
+  type: 'test'
+  ...
+# Subtest: split diffs pair replacements and preserve unequal additions and hunk boundaries
+ok 58 - split diffs pair replacements and preserve unequal additions and hunk boundaries
+  ---
+  duration_ms: 1.490167
+  type: 'test'
+  ...
+# Subtest: diff presentation retains source line numbers across multiple hunks
+ok 59 - diff presentation retains source line numbers across multiple hunks
+  ---
+  duration_ms: 0.156
+  type: 'test'
+  ...
+# Subtest: file filtering retains exact matches and ancestors, not similarly prefixed siblings
+ok 60 - file filtering retains exact matches and ancestors, not similarly prefixed siblings
+  ---
+  duration_ms: 0.133792
+  type: 'test'
+  ...
+# Subtest: file filtering resets visibility and keeps only the first enabled match tabbable
+ok 61 - file filtering resets visibility and keeps only the first enabled match tabbable
+  ---
+  duration_ms: 0.08375
+  type: 'test'
+  ...
+# Subtest: file filtering agrees with the previous matching semantics
+ok 62 - file filtering agrees with the previous matching semantics
+  ---
+  duration_ms: 0.120292
+  type: 'test'
+  ...
+# Subtest: large matching trees use a bounded number of path reads per row
+ok 63 - large matching trees use a bounded number of path reads per row
+  ---
+  duration_ms: 7.7195
+  type: 'test'
+  ...
+# Subtest: file selections preserve the explorer, cache previews, clear stale diffs and fade tree edges
+ok 64 - file selections preserve the explorer, cache previews, clear stale diffs and fade tree edges
+  ---
+  duration_ms: 8071.87075
+  type: 'test'
+  ...
+# Subtest: thread panels, file views, tabs and drafts restore independently, including across reload
+ok 65 - thread panels, file views, tabs and drafts restore independently, including across reload
+  ---
+  duration_ms: 3659.972208
+  type: 'test'
+  ...
+# Subtest: new product defaults preserve explicit existing choices
+ok 66 - new product defaults preserve explicit existing choices
+  ---
+  duration_ms: 2.986125
+  type: 'test'
+  ...
+# Feature screenshot: /var/folders/c7/_jc6_hn14psfbfyg5vmlrd380000gp/T/suffice-pi-ui-Xl0BkE/diagrams-dark.png
+# Subtest: desktop routes empty models to providers, shares icons, renders diagrams and forks safely
+ok 67 - desktop routes empty models to providers, shares icons, renders diagrams and forks safely
+  ---
+  duration_ms: 2488.080792
+  type: 'test'
+  ...
+# Subtest: additional provider aliases resolve bundled monochrome marks
+ok 68 - additional provider aliases resolve bundled monochrome marks
+  ---
+  duration_ms: 8.35825
+  type: 'test'
+  ...
+# Subtest: pickers retain full-width rows, overlay rails and scroll fades; worktree is switch-only
+ok 69 - pickers retain full-width rows, overlay rails and scroll fades; worktree is switch-only
+  ---
+  duration_ms: 1681.547833
+  type: 'test'
+  ...
+# Presentation screenshots: /var/folders/c7/_jc6_hn14psfbfyg5vmlrd380000gp/T/suffice-presentation-review-6cKhkI
+# Subtest: custom wallpaper, light horizon, rich Spotlight and safe mathematics work in the real renderer
+ok 70 - custom wallpaper, light horizon, rich Spotlight and safe mathematics work in the real renderer
+  ---
+  duration_ms: 20656.2205
+  type: 'test'
+  ...
+# Subtest: project menus edit identity, move conversations, hide removed projects and restore on re-add
+ok 71 - project menus edit identity, move conversations, hide removed projects and restore on re-add
+  ---
+  duration_ms: 5531.79775
+  type: 'test'
+  ...
+# Subtest: project identity persists; removing hides rather than deletes and re-adding restores it
+ok 72 - project identity persists; removing hides rather than deletes and re-adding restores it
+  ---
+  duration_ms: 5.121125
+  type: 'test'
+  ...
+# Subtest: moving a chat changes only its cwd header and preserves message bytes
+ok 73 - moving a chat changes only its cwd header and preserves message bytes
+  ---
+  duration_ms: 1.347917
+  type: 'test'
+  ...
+# Subtest: moving a legacy chat rebinds Git metadata to the destination and retains prior context
+ok 74 - moving a legacy chat rebinds Git metadata to the destination and retains prior context
+  ---
+  duration_ms: 226.53725
+  type: 'test'
+  ...
+# Subtest: connected providers, modal cancellation and model visibility persist into the picker
+ok 75 - connected providers, modal cancellation and model visibility persist into the picker
+  ---
+  duration_ms: 4109.514916
+  type: 'test'
+  ...
+# Subtest: provider settings delegate discovery and authentication to Pi without exposing credentials
+ok 76 - provider settings delegate discovery and authentication to Pi without exposing credentials
+  ---
+  duration_ms: 2.240042
+  type: 'test'
+  ...
+# Subtest: cancelling login rejects pending prompt and permits another connection
+ok 77 - cancelling login rejects pending prompt and permits another connection
+  ---
+  duration_ms: 2.364625
+  type: 'test'
+  ...
+# Subtest: real Pi ChatGPT OAuth reaches browser authorization with the shared installation ID
+ok 78 - real Pi ChatGPT OAuth reaches browser authorization with the shared installation ID
+  ---
+  duration_ms: 268.136667
+  type: 'test'
+  ...
+# Subtest: provider errors expose useful causes without forwarding credential-bearing SDK responses
+ok 79 - provider errors expose useful causes without forwarding credential-bearing SDK responses
+  ---
+  duration_ms: 0.322125
+  type: 'test'
+  ...
+# Subtest: cancelling while lazy runtime initializes prevents a late authentication attempt
+ok 80 - cancelling while lazy runtime initializes prevents a late authentication attempt
+  ---
+  duration_ms: 0.36975
+  type: 'test'
+  ...
+# Subtest: composer queue, send contrast, transcript files and shared editor preferences
+ok 81 - composer queue, send contrast, transcript files and shared editor preferences
+  ---
+  duration_ms: 8150.523167
+  type: 'test'
+  ...
+# Subtest: real utility-process failure recovers saved chats without replay and relaunch restores drafts
+ok 82 - real utility-process failure recovers saved chats without replay and relaunch restores drafts
+  ---
+  duration_ms: 3554.072208
+  type: 'test'
+  ...
+# Subtest: native view backups validate keys, serialize writes and restore independently of browser cache
+ok 83 - native view backups validate keys, serialize writes and restore independently of browser cache
+  ---
+  duration_ms: 517.785875
+  type: 'test'
+  ...
+# Subtest: worker exit rejects pending work, later requests restart, and sent actions are never replayed
+ok 84 - worker exit rejects pending work, later requests restart, and sent actions are never replayed
+  ---
+  duration_ms: 1.77875
+  type: 'test'
+  ...
+# Subtest: interrupted final journal writes are readable without modifying saved bytes
+ok 85 - interrupted final journal writes are readable without modifying saved bytes
+  ---
+  duration_ms: 63.0235
+  type: 'test'
+  ...
+# Subtest: closing or disposing a pending terminal does not spawn an orphan
+ok 86 - closing or disposing a pending terminal does not spawn an orphan
+  ---
+  duration_ms: 0.605583
+  type: 'test'
+  ...
+# Subtest: native backup flush drains coalesced snapshots before their timer
+ok 87 - native backup flush drains coalesced snapshots before their timer
+  ---
+  duration_ms: 6.855458
+  type: 'test'
+  ...
+# Resource screenshots: /var/folders/c7/_jc6_hn14psfbfyg5vmlrd380000gp/T/suffice-resource-ui-FXtCIn
+# Subtest: desktop manages resources through real native IPC and shared settings surfaces
+ok 88 - desktop manages resources through real native IPC and shared settings surfaces
+  ---
+  duration_ms: 2299.043791
+  type: 'test'
+  ...
+# Subtest: resource configuration persists Markdown and toggles without running extensions
+ok 89 - resource configuration persists Markdown and toggles without running extensions
+  ---
+  duration_ms: 14.91575
+  type: 'test'
+  ...
+# Subtest: real shared Pi session loads skills, templates, extension tools and MCP tools
+ok 90 - real shared Pi session loads skills, templates, extension tools and MCP tools
+  ---
+  duration_ms: 144.601542
+  type: 'test'
+  ...
+# Subtest: project MCP overrides remain gated by trust
+ok 91 - project MCP overrides remain gated by trust
+  ---
+  duration_ms: 0.770459
+  type: 'test'
+  ...
+# Subtest: Pi MCP CLI checks a disabled connection using the Suffice home
+ok 92 - Pi MCP CLI checks a disabled connection using the Suffice home
+  ---
+  duration_ms: 140.357625
+  type: 'test'
+  ...
+# Subtest: project extension loading requires explicit project trust
+ok 93 - project extension loading requires explicit project trust
+  ---
+  duration_ms: 12.229916
+  type: 'test'
+  ...
+# Subtest: package resources are inspected without importing extension code and imported templates edit in place
+ok 94 - package resources are inspected without importing extension code and imported templates edit in place
+  ---
+  duration_ms: 11.150916
+  type: 'test'
+  ...
+# Subtest: extension commands use the desktop dialog bridge without a model request
+ok 95 - extension commands use the desktop dialog bridge without a model request
+  ---
+  duration_ms: 16.403292
+  type: 'test'
+  ...
+# Subtest: Pi project extensions, settings and MCP configuration are not discovered
+ok 96 - Pi project extensions, settings and MCP configuration are not discovered
+  ---
+  duration_ms: 6.003458
+  type: 'test'
+  ...
+# Subtest: premature stream errors name the selected provider without changing unrelated errors
+ok 97 - premature stream errors name the selected provider without changing unrelated errors
+  ---
+  duration_ms: 0.358375
+  type: 'test'
+  ...
+# {"before":{"top":2062,"height":2954,"viewport":892,"gap":0},"clamped":{"top":1878,"height":2770,"viewport":892,"gap":0},"after":{"top":1910,"height":2802,"viewport":892,"gap":0},"events":[{"top":1878,"height":2770,"viewport":892,"time":271.2999999523163},{"top":1910,"height":2802,"viewport":892,"time":279.1999999284744}]}
+# {"viewportClamp":{"top":1830,"height":2802,"viewport":972,"gap":0},"events":[{"top":1878,"height":2770,"viewport":892,"time":271.2999999523163},{"top":1910,"height":2802,"viewport":892,"time":279.1999999284744},{"top":1830,"height":2802,"viewport":972,"time":313.5}]}
+# Subtest: transcript follows output across layout clamps and preserves upward intent
+ok 98 - transcript follows output across layout clamps and preserves upward intent
+  ---
+  duration_ms: 695.935875
+  type: 'test'
+  ...
+# Subtest: every editable setting persists through the validated desktop store
+ok 99 - every editable setting persists through the validated desktop store
+  ---
+  duration_ms: 51.448208
+  type: 'test'
+  ...
+# Subtest: exports exclude credentials; retention preserves active and fresh conversations
+ok 100 - exports exclude credentials; retention preserves active and fresh conversations
+  ---
+  duration_ms: 3.11575
+  type: 'test'
+  ...
+# Subtest: approval policy gates actions and detected pushes while preserving read-only tools
+ok 101 - approval policy gates actions and detected pushes while preserving read-only tools
+  ---
+  duration_ms: 0.181
+  type: 'test'
+  ...
+# Subtest: surface opacity accepts its full percentage range and persists
+ok 102 - surface opacity accepts its full percentage range and persists
+  ---
+  duration_ms: 1.255375
+  type: 'test'
+  ...
+# Subtest: settings persist real preferences, preserve chats and use Pi provider registry
+ok 103 - settings persist real preferences, preserve chats and use Pi provider registry
+  ---
+  duration_ms: 4783.523875
+  type: 'test'
+  ...
+# Subtest: Windows shell selection works without ProgramFiles and never falls back to WSL
+ok 104 - Windows shell selection works without ProgramFiles and never falls back to WSL
+  ---
+  duration_ms: 0.582458
+  type: 'test'
+  ...
+# Subtest: global sidebar state survives app restart and temporary settings expansion
+ok 105 - global sidebar state survives app restart and temporary settings expansion
+  ---
+  duration_ms: 1578.165916
+  type: 'test'
+  ...
+# Subtest: project icons use local assets, explicit overrides and stable monograms
+ok 106 - project icons use local assets, explicit overrides and stable monograms
+  ---
+  duration_ms: 75.219541
+  type: 'test'
+  ...
+# Subtest: informational sidebar rows, hover detail and themed states
+ok 107 - informational sidebar rows, hover detail and themed states
+  ---
+  duration_ms: 5994.161542
+  type: 'test'
+  ...
+# Subtest: Spotlight searches all threads, switches scopes, navigates and leaves the app backdrop untouched
+ok 108 - Spotlight searches all threads, switches scopes, navigates and leaves the app backdrop untouched
+  ---
+  duration_ms: 2111.60675
+  type: 'test'
+  ...
+# Subtest: terminal manager validates input, scopes processes, buffers output and cleans up
+ok 109 - terminal manager validates input, scopes processes, buffers output and cleans up
+  ---
+  duration_ms: 1.94825
+  type: 'test'
+  ...
+# Subtest: real native terminals stream commands, stay independent and survive tab/chat switches
+ok 110 - real native terminals stream commands, stay independent and survive tab/chat switches
+  ---
+  duration_ms: 7560.605083
+  type: 'test'
+  ...
+# Subtest: thread context actions persist and archived chats restore from settings
+ok 111 - thread context actions persist and archived chats restore from settings
+  ---
+  duration_ms: 2822.656
+  type: 'test'
+  ...
+# Subtest: dialog matches composer in both themes, Escape respects pointer modality, and confirmed deletion removes only the saved fixture
+ok 112 - dialog matches composer in both themes, Escape respects pointer modality, and confirmed deletion removes only the saved fixture
+  ---
+  duration_ms: 2451.646458
+  type: 'test'
+  ...
+# Subtest: router isolates concurrent sessions, steering, cancellation and view selection
+ok 113 - router isolates concurrent sessions, steering, cancellation and view selection
+  ---
+  duration_ms: 1.831541
+  type: 'test'
+  ...
+# Subtest: opening a saved transcript never creates another host or lists every thread
+ok 114 - opening a saved transcript never creates another host or lists every thread
+  ---
+  duration_ms: 0.238375
+  type: 'test'
+  ...
+# Subtest: saved transcripts are read without modification and resume their original engine context
+ok 115 - saved transcripts are read without modification and resume their original engine context
+  ---
+  duration_ms: 64.177708
+  type: 'test'
+  ...
+# Subtest: a read-only router view resumes its original saved session lazily on the first send
+ok 116 - a read-only router view resumes its original saved session lazily on the first send
+  ---
+  duration_ms: 45.820042
+  type: 'test'
+  ...
+# Subtest: saved compaction checkpoints distinguish automatic/manual and interruptions without summaries
+ok 117 - saved compaction checkpoints distinguish automatic/manual and interruptions without summaries
+  ---
+  duration_ms: 0.970791
+  type: 'test'
+  ...
+# Subtest: worker forwards compaction and returns a normal interrupted result for user stop
+ok 118 - worker forwards compaction and returns a normal interrupted result for user stop
+  ---
+  duration_ms: 23.195208
+  type: 'test'
+  ...
+# Checkpoint screenshots: /var/folders/c7/_jc6_hn14psfbfyg5vmlrd380000gp/T/suffice-checkpoint-ui-AF5SY2
+# Subtest: live transcript checkpoints update in place and stopping preserves partial output
+ok 119 - live transcript checkpoints update in place and stopping preserves partial output
+  ---
+  duration_ms: 7741.007666
+  type: 'test'
+  ...
+# Subtest: scrolling up releases following even within the bottom threshold
+ok 120 - scrolling up releases following even within the bottom threshold
+  ---
+  duration_ms: 0.601583
+  type: 'test'
+  ...
+# Subtest: a queued stationary scroll event cannot undo upward wheel intent
+ok 121 - a queued stationary scroll event cannot undo upward wheel intent
+  ---
+  duration_ms: 0.123625
+  type: 'test'
+  ...
+# Subtest: a layout clamp preserves following without overriding upward intent
+ok 122 - a layout clamp preserves following without overriding upward intent
+  ---
+  duration_ms: 0.088208
+  type: 'test'
+  ...
+# Subtest: following resumes only when scrolling down to the end
+ok 123 - following resumes only when scrolling down to the end
+  ---
+  duration_ms: 0.826833
+  type: 'test'
+  ...
+# Subtest: UI SDK navigation preserves menus, editable searches and tab state
+ok 124 - UI SDK navigation preserves menus, editable searches and tab state
+  ---
+  duration_ms: 2655.069834
+  type: 'test'
+  ...
+# Subtest: Pi usage separates cumulative tokens from the current context window
+ok 125 - Pi usage separates cumulative tokens from the current context window
+  ---
+  duration_ms: 0.580334
+  type: 'test'
+  ...
+# Subtest: drafts, tabs, sizing, model and scroll state stay isolated and survive a reload
+ok 126 - drafts, tabs, sizing, model and scroll state stay isolated and survive a reload
+  ---
+  duration_ms: 0.560833
+  type: 'test'
+  ...
+# Subtest: approval modes remain isolated across chats, reloads and session adoption
+ok 127 - approval modes remain isolated across chats, reloads and session adoption
+  ---
+  duration_ms: 0.129417
+  type: 'test'
+  ...
+# Subtest: macOS uses native traffic lights; the development preview never spoofs the platform
+ok 128 - macOS uses native traffic lights; the development preview never spoofs the platform
+  ---
+  duration_ms: 0.498458
+  type: 'test'
+  ...
+# Caption screenshots: /var/folders/c7/_jc6_hn14psfbfyg5vmlrd380000gp/T/suffice-caption-aVsdNE
+# Subtest: mac caption clamps old widths and preserves sidebar controls across states
+ok 129 - mac caption clamps old widths and preserves sidebar controls across states
+  ---
+  duration_ms: 1633.6935
+  type: 'test'
+  ...
+# Subtest: ignored filtering checks only the requested entries and keeps tracked exceptions
+ok 130 - ignored filtering checks only the requested entries and keeps tracked exceptions
+  ---
+  duration_ms: 58.780208
+  type: 'test'
+  ...
+# Subtest: workspace browsing rejects escapes and shows real tracked, renamed and untracked changes
+ok 131 - workspace browsing rejects escapes and shows real tracked, renamed and untracked changes
+  ---
+  duration_ms: 91.682
+  type: 'test'
+  ...
+# Subtest: change counts describe net edits, renames, binary files and unborn repositories
+ok 132 - change counts describe net edits, renames, binary files and unborn repositories
+  ---
+  duration_ms: 86.863541
+  type: 'test'
+  ...
+# Subtest: explicit linked previews can read outside the project while tree browsing stays scoped
+ok 133 - explicit linked previews can read outside the project while tree browsing stays scoped
+  ---
+  duration_ms: 0.775334
+  type: 'test'
+  ...
+1..133
+# tests 133
+# suites 0
+# pass 131
+# fail 0
+# cancelled 0
+# skipped 2
+# todo 0
+# duration_ms 158289.332083

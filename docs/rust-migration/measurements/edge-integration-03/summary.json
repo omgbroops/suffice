@@ -1,0 +1,71 @@
+{
+  "date": "2026-11-15",
+  "branch": "arya/rust-migration",
+  "checkpointParent": "801387e9960735e3ce0b05b7fdd86d5e42059abd",
+  "upstreamParent": "91646057d4a44b628aa9c164f374cadfb096328d",
+  "mergeBase": "7168eaec89408417a94d41af9ae3e029af3fa522",
+  "nodeTests": {
+    "edge-merge-03-core-final.txt": {
+      "tests": 130,
+      "pass": 127,
+      "fail": 0,
+      "skipped": 3
+    },
+    "edge-merge-03-desktop-verified.txt": {
+      "tests": 133,
+      "pass": 131,
+      "fail": 0,
+      "skipped": 2
+    },
+    "edge-merge-03-bridge-verified.txt": {
+      "tests": 4,
+      "pass": 4,
+      "fail": 0,
+      "skipped": 0
+    },
+    "edge-merge-03-session-pi.txt": {
+      "tests": 22,
+      "pass": 22,
+      "fail": 0,
+      "skipped": 0
+    },
+    "edge-merge-03-native-files.txt": {
+      "tests": 5,
+      "pass": 4,
+      "fail": 0,
+      "skipped": 1
+    }
+  },
+  "rustSessionTests": 13,
+  "rustHostTests": 7,
+  "nativeViewerInheritedTests": 8,
+  "package": {
+    "packaged": true,
+    "defaultApp": false,
+    "version": "0.1.0-preview.20261115.1",
+    "platform": "darwin",
+    "arch": "arm64",
+    "appPath": "/Users/aryasalem/Downloads/Programming/suffice/release/mac-arm64/Suffice.app/Contents/Resources/app",
+    "taskbar": null,
+    "terminal": true,
+    "providers": true,
+    "transcript": true,
+    "nativeTraversal": true,
+    "errors": []
+  },
+  "packageSourceComparison": {
+    "checked": 1980,
+    "differences": [],
+    "note": "Byte comparison of renderer, assets, host, CLI and harness source in actual packaged application against merged checkout."
+  },
+  "signature": "codesign --verify --deep --strict passed; ad hoc; no notarization",
+  "performanceMeasurement": false,
+  "publication": false,
+  "remaining": [
+    "Full Rust rewrite remains partial",
+    "Windows runtime and hosted CI not refreshed",
+    "Wry product is Windows-gated; no macOS Wry runtime claim",
+    "Rust native file icon extraction unsupported; upstream nullable fallback exercised"
+  ],
+  "frozenHistoricalChanges": ""
+}

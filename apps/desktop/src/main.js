@@ -1,6 +1,6 @@
 import {connectSettingsPrivacy} from './settings-privacy.js';
 import {threadViewState,restoreThreadViews} from './thread-view-state.js';
-import {preference,initializePreferences} from './settings-preferences.js';
+import {preference,savePreference,initializePreferences} from './settings-preferences.js';
 import {createSettings} from './settings.js';
 import {createSpotlight} from './spotlight.js';
 import {sidebarPreferences} from './sidebar-preferences.js';
@@ -21,6 +21,8 @@ import './right-panel.css';
 import './composer-files.css';
 import './thread-row.css';
 import './window-chrome.css';
+import './edge-to-edge-experiment.css';
+import {connectSharedChrome} from './shared-chrome.js';
 import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/500.css';
 
@@ -105,7 +107,10 @@ document.querySelector('#app').innerHTML = `
 
     <canvas class="atmosphere" aria-hidden="true"></canvas><div class="atmosphere-shade" aria-hidden="true"></div>
 
-    ${button('Open sidebar', { icon: 'panel', className: 'sidebar-reopen', action: 'toggle-sidebar' })}
+    <div class="sidebar-collapsed-tools" role="group" aria-label="Sidebar and search">
+      ${button('Open sidebar', { icon: 'panel', className: 'sidebar-reopen', action: 'toggle-sidebar' })}
+      ${button('Search sessions', { icon: 'search', action: 'search-sessions' })}
+    </div>
 
     <div class="home">
 
@@ -169,6 +174,7 @@ document.querySelector('#app').innerHTML = `
 
 `;
 
+connectSharedChrome(document.querySelector('.workspace'));
 let unmountAtmosphere = mountAtmosphere(document.querySelector('.atmosphere'));
 
 const prompt = document.querySelector('#prompt');
@@ -182,18 +188,23 @@ const { open: menu, close: closeMenu } = createMenu(popover);
 const dialog = document.querySelector('dialog');
 
 
-let toastTimeout;
+let toastTimeout,toastMotion=[];
 
 const escapeHtml = (s) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
+document.addEventListener('suffice-toast',event=>toast(event.detail));
 function toast(message) {
-
-  const el = document.querySelector('.toast');
-
-  el.textContent = message; el.hidden = false;
-
-  clearTimeout(toastTimeout); toastTimeout = setTimeout(() => { el.hidden = true; }, 3500);
-
+ const el=document.querySelector('.toast');clearTimeout(toastTimeout);toastMotion.forEach(animation=>animation.cancel());toastMotion=[];
+ if(el.parentElement!==document.body)document.body.append(el);
+ // Preserve Chromium's standard property: CSS minification retains only the WebKit alias.
+ el.style.backdropFilter='var(--shared-chrome-filter)';
+ el.setAttribute('popover','manual');el.innerHTML=`<div class="toast-content">${icon(/error|failed|unsuccessful|unavailable|could not|unknown/i.test(String(message))?'warning':'info')}<span class="toast-message"></span><button type="button" class="toast-dismiss">Okay</button></div>`;el.querySelector('.toast-message').textContent=String(message);
+ el.hidden=false;if(!el.matches(':popover-open'))el.showPopover();
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const close=()=>{clearTimeout(toastTimeout);toastMotion.forEach(animation=>animation.cancel());if(reduced){el.hidePopover();el.hidden=true;return;}const motion=el.animate([{transform:'translateY(0)'},{transform:'translateY(10px)'}],{duration:130,easing:'ease-in',fill:'forwards'});toastMotion=[motion,el.firstElementChild.animate([{opacity:1},{opacity:0}],{duration:120,fill:'forwards'})];motion.onfinish=()=>{el.hidePopover();el.hidden=true;};};
+ el.querySelector('.toast-dismiss').onclick=close;
+ if(!reduced)toastMotion=[el.animate([{transform:'translateY(12px)'},{transform:'translateY(0)'}],{duration:200,easing:'cubic-bezier(.2,.8,.2,1)'}),el.firstElementChild.animate([{opacity:0},{opacity:1}],{duration:150})];
+ toastTimeout=setTimeout(close,6000);
 }
 
 function showDialog(title, content) {
@@ -310,7 +321,7 @@ document.addEventListener('click', (e) => {
 
     case 'new': prompt.value = ''; send.disabled = true; document.querySelector('.composer').attachments?.clear(); prompt.focus(); if (innerWidth < 700) document.body.classList.remove('sidebar-open'); break;
 
-    case 'toggle-sidebar': if (innerWidth < 700) document.body.classList.toggle('sidebar-open'); else document.body.classList.toggle('sidebar-collapsed'); break;
+    case 'toggle-sidebar': if (innerWidth < 700) document.body.classList.toggle('sidebar-open'); else {const collapsed=document.body.classList.toggle('sidebar-collapsed');void savePreference('sidebar-collapsed',collapsed).catch(error=>toast(error.message));} break;
 
 
     case 'model-menu': menu(control, ['Normal Fast', 'Normal', 'Deep'].map(label => ({ label, detail: { 'Normal Fast': 'Quick, everyday tasks', Normal: 'Balanced reasoning', Deep: 'Complex, considered work' }[label], action: `model:${label}`, selected: label === document.querySelector('#model-label').textContent }))); break;

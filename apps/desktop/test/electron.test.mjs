@@ -35,7 +35,7 @@ test('Electron loads the unchanged shell and reaches the real isolated harness',
       assert.equal(await page.locator('html').getAttribute('data-window-chrome'),'macos-native');
       assert.equal(await page.locator('.window-control').count(),0);
     }
-    assert.match(await page.locator('.composer').evaluate(el=>getComputedStyle(el).backdropFilter),/blur\(24px\)/);
+    const sharedFilter=await page.locator('.composer').evaluate(el=>getComputedStyle(el).backdropFilter);assert.match(sharedFilter,/blur\(20px\)/);
     if(process.platform!=='darwin'){
       await page.getByRole('button',{name:'Maximize or restore'}).click();
       await page.getByRole('button',{name:'Maximize or restore'}).click();
@@ -75,7 +75,7 @@ test('Electron loads the unchanged shell and reaches the real isolated harness',
     await electron.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].webContents.send('suffice:event',{event:'usage',usage:{cost:.42,totalTokens:456753,windowTokens:63847,windowPercent:16}}));
     await page.waitForFunction(()=>document.querySelector('.context-ring').style.getPropertyValue('--context-percent')==='16');
     assert.match(await page.locator('.context-usage-details').innerText(),/63,847/);
-    assert.match(await page.locator('.context-usage-details').evaluate(el=>getComputedStyle(el).backdropFilter),/blur\(24px\)/);
+    assert.equal(await page.locator('.context-usage-details').evaluate(el=>getComputedStyle(el).backdropFilter),sharedFilter);
     assert.match(await page.locator('.context-usage-details').innerText(),/456,753/);
     await page.waitForFunction(()=>getComputedStyle(document.querySelector('.context-ring-value')).strokeDasharray==='16px, 100px');
     await page.screenshot({path:resolve('apps/desktop/desktop-context-details.png')});
@@ -87,12 +87,12 @@ test('Electron loads the unchanged shell and reaches the real isolated harness',
     const canvasAfter=await page.locator('.workspace').boundingBox();
     const rightPanel=await page.getByRole('complementary',{name:'Right panel'}).boundingBox();
     assert.equal(canvasBefore.x,canvasAfter.x);
-    assert.ok(Math.abs(canvasBefore.width-canvasAfter.width-472)<2);
-    assert.ok(Math.abs(canvasAfter.x+canvasAfter.width-rightPanel.x)<2);
+    assert.ok(Math.abs(canvasBefore.width-canvasAfter.width-rightPanel.width)<2);
+    assert.ok(Math.abs(rightPanel.x-(canvasAfter.x+canvasAfter.width)-4)<2);
     assert.equal(await page.locator('#right-sidebar').evaluate(el=>getComputedStyle(el).backgroundColor),await page.locator('.sidebar').evaluate(el=>getComputedStyle(el).backgroundColor));
     assert.match(await page.locator('#right-sidebar').innerText(),/Files/);
     assert.match(await page.locator('#right-sidebar').innerText(),/Changes/);
-    assert.equal(await page.locator('.workspace').evaluate(el=>getComputedStyle(el).transitionDuration),'0s');
+    assert.equal(await page.locator('.workspace').evaluate(el=>getComputedStyle(el).transitionProperty),'background-color');
     const resize=page.getByRole('separator',{name:'Resize right panel'});
     const edgeColors=()=>page.locator('.workspace').evaluate(el=>{const s=getComputedStyle(el,'::after');return {left:s.borderLeftColor,right:s.borderRightColor};});
     await page.mouse.move(700,650);const neutralEdges=await edgeColors();
@@ -124,7 +124,7 @@ test('Electron loads the unchanged shell and reaches the real isolated harness',
     await page.waitForTimeout(350);
     assert.equal(await page.locator('.custom-tooltip').isVisible(),false);
     await page.getByRole('menuitemradio',{name:'Moonlit lake',exact:true}).waitFor();
-    assert.match(await page.locator('.settings-select-menu').evaluate(el=>getComputedStyle(el).backdropFilter),/blur\(24px\)/);
+    assert.equal(await page.locator('.settings-select-menu').evaluate(el=>getComputedStyle(el).backdropFilter),sharedFilter);
     await page.screenshot({path:resolve('apps/desktop/desktop-glass.png')});
     await page.keyboard.press('Escape');await page.keyboard.press('Escape');
     assert.equal(status.authenticated,false);assert.ok(Number(status.node.split('.')[0])>=24);
@@ -136,14 +136,11 @@ test('Electron loads the unchanged shell and reaches the real isolated harness',
     assert.equal(await page.locator('.new-session').getAttribute('aria-current'),null);
     await page.waitForFunction(()=>getComputedStyle(document.querySelector('.new-session')).backgroundColor==='rgba(0, 0, 0, 0)');
     assert.equal(await page.locator('.new-session').evaluate(el=>getComputedStyle(el).backgroundColor),'rgba(0, 0, 0, 0)');
-    const surfaceBrightness=()=>page.evaluate(()=>{
-      const value=selector=>getComputedStyle(document.querySelector(selector)).backgroundColor.match(/[\d.]+/g).slice(0,3).reduce((sum,value)=>sum+Number(value),0)/3;
-      return {sidebar:value('.sidebar'),thread:value('.workspace')};
-    });
-    const darkSurfaces=await surfaceBrightness();assert.ok(darkSurfaces.thread<darkSurfaces.sidebar);
+    const wallpaperSurface=()=>page.evaluate(()=>({workspace:getComputedStyle(document.querySelector('.workspace')).backgroundColor,dim:getComputedStyle(document.querySelector('.app-wallpaper'),'::after').backgroundColor}));
+    const darkSurfaces=await wallpaperSurface();assert.equal(darkSurfaces.workspace,'rgba(0, 0, 0, 0)');assert.equal(darkSurfaces.dim,'rgb(0, 0, 0)');
     assert.equal(await page.evaluate(()=>document.documentElement.scrollHeight>innerHeight),false);
     await page.evaluate(()=>{document.documentElement.dataset.theme='light';});
-    const lightSurfaces=await surfaceBrightness();assert.ok(lightSurfaces.thread>lightSurfaces.sidebar);
+    const lightSurfaces=await wallpaperSurface();assert.equal(lightSurfaces.workspace,'rgba(0, 0, 0, 0)');assert.equal(lightSurfaces.dim,'rgb(255, 255, 255)');
     if(process.platform!=='darwin')assert.equal(await page.locator('.window-controls').evaluate(el=>getComputedStyle(el).backgroundColor),await page.locator('.sidebar').evaluate(el=>getComputedStyle(el).backgroundColor));
     await page.screenshot({path:resolve('apps/desktop/desktop-thread-light.png')});
     await page.evaluate(()=>{document.documentElement.dataset.theme='dark';});
@@ -192,8 +189,8 @@ test('Electron loads the unchanged shell and reaches the real isolated harness',
     await page.locator('.thread-status').filter({hasText:'Inspecting theme tokens'}).waitFor();
     assert.equal(await page.locator('.thread-status').textContent(),'Inspecting theme tokens');
     await electron.evaluate(({BrowserWindow})=>{const send=value=>BrowserWindow.getAllWindows()[0].webContents.send('suffice:event',value);send({event:'tool_start',id:'fixture',name:'codemode',input:{code:'return 42;'}});send({event:'tool_output',id:'fixture',result:{content:[{type:'text',text:'partial output'}]}});});
-    await page.locator('.thread-activity > summary').click();
-    await page.locator('.tool-widget > summary').click();
+    if(!await page.locator('.thread-activity').evaluate(el=>el.open))await page.locator('.thread-activity > summary').click();
+    assert.equal(await page.locator('.thread-activity').getAttribute('data-single'),'true');assert.equal(await page.locator('.tool-widget').evaluate(el=>el.open),true);
     await page.locator('.tool-output').filter({hasText:'partial output'}).waitFor();assert.equal(await page.locator('.tool-input').textContent(),'return 42;');
     await electron.evaluate(({BrowserWindow})=>{BrowserWindow.getAllWindows()[0].webContents.send('suffice:event',{event:'text',text:'**Formatted while streaming**'});});
     await page.locator('.thread-assistant strong').filter({hasText:'Formatted while streaming'}).waitFor();

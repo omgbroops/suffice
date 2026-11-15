@@ -1,3 +1,4 @@
+import {syncActivityGroup} from './activity-groups.js';
 import {connectMessageActions} from './message-actions.js';
 import {displayRunError} from '../shared/run-error.mjs';
 import {connectApprovals} from './approvals.js';
@@ -58,11 +59,11 @@ export function connectThreads({api,prompt,send,toast}){
  window.addEventListener('beforeunload',saveView);
  historyObserver.observe(history);
  new ResizeObserver(()=>{transcript.style.setProperty('--transcript-bottom-space',`${form.getBoundingClientRect().height+48}px`);bottom();}).observe(form);
- function threadView(title,animate=false){const change=()=>{if(!workspace.classList.contains('thread-view')){const canvas=workspace.querySelector('.atmosphere');previousMotion=canvas.dataset.motion;canvas.dataset.motion='paused';canvas.dispatchEvent(new Event('motion-change'));}workspace.classList.add('thread-view');newSession.removeAttribute('aria-current');header.textContent=title;header.hidden=false;};if(animate)transition.enter(change);else change();}
+ function threadView(title,animate=false){const change=()=>{if(!workspace.classList.contains('thread-view')){const canvas=document.querySelector('.atmosphere');previousMotion=canvas.dataset.motion;canvas.dataset.motion='paused';canvas.dispatchEvent(new Event('motion-change'));}workspace.classList.add('thread-view');newSession.removeAttribute('aria-current');header.textContent=title;header.hidden=false;};if(animate)transition.enter(change);else change();}
  function clear(){
   const wasThread=workspace.classList.contains('thread-view');
   const change=()=>{
-   if(workspace.classList.contains('thread-view')){const canvas=workspace.querySelector('.atmosphere');if(previousMotion===undefined)delete canvas.dataset.motion;else canvas.dataset.motion=previousMotion;canvas.dispatchEvent(new Event('motion-change'));}
+   if(workspace.classList.contains('thread-view')){const canvas=document.querySelector('.atmosphere');if(previousMotion===undefined)delete canvas.dataset.motion;else canvas.dataset.motion=previousMotion;canvas.dispatchEvent(new Event('motion-change'));}
    sessionStorage.removeItem('suffice-active-thread');workspace.classList.remove('thread-view');newSession.setAttribute('aria-current','page');header.hidden=true;showHistory(document.createElement('div'));history.className='thread-messages';activeId=null;viewState.select(null);restoreView();syncRunning();
    list.querySelectorAll('.thread-row').forEach(row=>row.setAttribute('aria-pressed','false'));
   };
@@ -98,7 +99,7 @@ export function connectThreads({api,prompt,send,toast}){
    const text=entry.displayText??entry.content.filter(part=>part.type==='text'&&part.text?.trim()).map(part=>part.text).join('\n\n');
    for(const part of entry.content){
     if(part.type==='action'){
-     detail('Work',part.output||part.text||'No output')?.remove();activityLog.append(createToolWidget(part).element);continue;
+     detail('Work',part.output||part.text||'No output')?.remove();activityLog.append(createToolWidget(part).element);syncActivityGroup(activity);continue;
     }
     // Reasoning is a live status, not a permanent transcript entry.
     if(part.type==='thinking'||(entry.role==='user'&&part.type==='image'))continue;
@@ -125,6 +126,12 @@ export function connectThreads({api,prompt,send,toast}){
  viewState.subscribe(event=>{if(event.type==='update'&&event.changed?.some(key=>['draft','sidebar'].includes(key)))drawThreads();});
  const metadata=id=>viewState.read(id).sidebar||{};
  const updateMetadata=(id,patch)=>viewState.updateFor(id,{sidebar:{...metadata(id),...patch}});
+ // The caption stays the same node so window chrome can move it between layouts.
+ header.contentEditable='plaintext-only';header.tabIndex=0;header.setAttribute('role','textbox');header.setAttribute('aria-label','Chat title');header.setAttribute('aria-multiline','false');header.spellcheck=false;
+ let titleEdit=null;
+ header.addEventListener('focus',()=>{titleEdit={id:activeId,title:header.textContent};});
+ header.addEventListener('keydown',event=>{event.stopPropagation();if(event.key==='Enter'){event.preventDefault();header.blur();}else if(event.key==='Escape'){event.preventDefault();if(titleEdit)header.textContent=titleEdit.title;titleEdit=null;header.blur();}});
+ header.addEventListener('blur',()=>{const edit=titleEdit;titleEdit=null;if(!edit)return;const title=header.textContent.replace(/\s+/g,' ').trim().slice(0,200);if(!title){header.textContent=edit.title;return;}header.textContent=title;if(edit.id&&edit.id===activeId&&title!==edit.title)updateMetadata(edit.id,{title});});
  const isViewing=id=>activeId===id&&document.hasFocus()&&document.visibilityState==='visible'&&!document.documentElement.classList.contains('settings-open');
  const markViewed=()=>{if(activeId&&isViewing(activeId)&&metadata(activeId).unread)updateMetadata(activeId,{unread:false});};
  const sameProject=(a,b)=>projectPathKey(a)===projectPathKey(b);
@@ -139,7 +146,7 @@ export function connectThreads({api,prompt,send,toast}){
  async function refresh(){
   const version=++refreshVersion,threads=await api.threads();if(version!==refreshVersion)return;
   const previous=new Map(savedThreads.map(t=>[t.id,t]));for(const thread of threads)if(thread.status==='done'&&previous.has(thread.id)&&thread.modified>previous.get(thread.id).modified&&!jobs.has(thread.id))updateMetadata(thread.id,{unread:!isViewing(thread.id)});
-  savedThreads=threads;const selected=threads.find(thread=>thread.id===activeId);if(selected&&!header.hidden)header.textContent=metadata(selected.id).title||selected.title;for(const thread of threads)optimisticThreads.delete(thread.id);drawThreads();
+  savedThreads=threads;const selected=threads.find(thread=>thread.id===activeId);if(selected&&!header.hidden&&document.activeElement!==header)header.textContent=metadata(selected.id).title||selected.title;for(const thread of threads)optimisticThreads.delete(thread.id);drawThreads();
  }
  connectThreadFork(list,{api,toast,onFork:async fork=>{await refresh();const thread=savedThreads.find(thread=>thread.id===fork.id);if(thread)await openSavedThread(thread);}});
  async function openSavedThread(thread){
@@ -173,10 +180,10 @@ export function connectThreads({api,prompt,send,toast}){
   const scroll=list.scrollTop;
   const prefs=sidebarPreferences.get();
   const all=[...optimisticThreads.values(),...savedThreads.filter(thread=>!optimisticThreads.has(thread.id))].map(thread=>({...thread,title:metadata(thread.id).title||thread.title}));
-  if(activeId&&!header.hidden){const active=all.find(t=>t.id===activeId);if(active)header.textContent=active.title;}
+  if(activeId&&!header.hidden&&document.activeElement!==header){const active=all.find(t=>t.id===activeId);if(active)header.textContent=active.title;}
   const unread=thread=>!!metadata(thread.id).unread;
   const status=thread=>{const job=jobs.get(thread.id);return job?(job.running?(job.approvalRequests.size?'approval':'working'):job.failed?'failed':'done'):thread.status;};
-  updateThreadDirectory(all.map(thread=>{const job=jobs.get(thread.id);return {...thread,status:status(thread),unread:unread(thread),...(job?{provider:job.provider||thread.provider,startedAt:job.startedAt,...(job.diff?{diff:job.diff}:{})}: {})};}),openSavedThread);
+  updateThreadDirectory(all.map(thread=>{const job=jobs.get(thread.id);return {...thread,status:status(thread),unread:unread(thread),...(job?{provider:job.provider||thread.provider,startedAt:job.startedAt,turnDiff:job.turnDiff,...(job.diff?{diff:job.diff}:{})}: {})};}),openSavedThread);
   const threads=all.filter(thread=>prefs.filter==='archived'?metadata(thread.id).archived:!metadata(thread.id).archived&&(prefs.filter==='all'||prefs.filter==='working'&&status(thread)==='working'||prefs.filter==='attention'&&['approval','input','failed'].includes(status(thread))||prefs.filter==='unread'&&unread(thread)||prefs.filter==='draft'&&!!viewState.read(thread.id).draft)).sort((a,b)=>Number(!!b.projectPinned)-Number(!!a.projectPinned)||Number(!!metadata(b.id).pinned)-Number(!!metadata(a.id).pinned)||(prefs.sort==='name'?a.title.localeCompare(b.title):b.modified-a.modified));
   sectionLabel.textContent=prefs.group==='project'?'Threads':prefs.filter==='all'?'Threads':({working:'Running',attention:'Needs attention',unread:'Unread',draft:'Drafts',archived:'Archived'})[prefs.filter];
   list.dataset.compact=String(prefs.compact);list.dataset.group=prefs.group;
@@ -218,7 +225,7 @@ export function connectThreads({api,prompt,send,toast}){
    if(event.event==='compaction_end'){if(compaction){if(event.completed)compaction.update('compacted',event.reason!=='manual');else compaction.remove();compaction=null;}if(event.errorMessage)status(event.errorMessage);if(node===history)bottom();return;}
    if(event.event==='approval'){job.approvalRequests.add(event.requestId);status('Waiting for approval');drawThreads();}
    if(event.event==='approval_resolved'){job.approvalRequests.delete(event.requestId);status(job.approvalRequests.size?'Waiting for approval':'Working');drawThreads();}
-   if(event.event==='changes'){job.diff=event.diff;drawThreads();}
+   if(event.event==='changes'){job.diff=event.diff;job.turnDiff=event.turnDiff;drawThreads();}
    if(event.event==='assistant_start'){reasoning='';if(streamed){current=null;streamed='';}status('Working');}
    if(event.event==='text'){streamed+=event.text;if(preference('stream-markdown',true))markdown(response(),streamed);else response().textContent=streamed;messageActions.assistant(response(),job.turn,streamed);statusLine.hidden=true;}
    if(event.event==='reasoning'){reasoning+=event.text||'';if(preference('show-reasoning',true))status(plainReasoning(reasoning));}
@@ -226,16 +233,18 @@ export function connectThreads({api,prompt,send,toast}){
    if(event.event==='tool_start'){
     if(/bash|shell|terminal/.test(event.name)){job.terminalCount++;drawThreads();}
     current=null;streamed='';if(!group){group=document.createElement('details');group.className='thread-activity';const summary=document.createElement('summary');summary.textContent='Work';log=document.createElement('div');log.className='thread-activity-log';group.append(summary,log);node.insertBefore(group,statusLine);messageActions.work(group,job.turn);}
-    const widget=createToolWidget({name:event.name,text:JSON.stringify(event.input||{},null,2),done:false});if(!preference('collapse-work',true))group.open=true;tools.set(event.id,widget);log.append(widget.element);status(`Running ${event.name}`);reasoning='';
+    const widget=createToolWidget({name:event.name,text:JSON.stringify(event.input||{},null,2),done:false});if(!preference('collapse-work',true))group.open=true;tools.set(event.id,widget);log.append(widget.element);syncActivityGroup(group);status(`Running ${event.name}`);reasoning='';
    }
    if(event.event==='tool_output'||event.event==='tool_end'){tools.get(event.id)?.update(toolOutput(event.result),event.isError,event.event!=='tool_end');if(event.event==='tool_end'){status('Working');if(job.terminalCount){job.terminalCount--;drawThreads();}}}
    if(event.event==='text')group=log=null;
    if(node===history)bottom();
   };
-  job.finish=(result,error)=>{if(!job.running)return;const interrupted=result?.interrupted||isInterruption(error);if(compaction){compaction.remove();compaction=null;}if(interrupted){node.insertBefore(transcriptDivider('interrupted'),statusLine);error=null;}else if(error){current=null;streamed='';response().textContent=displayRunError(error.message,job.provider);messageActions.assistant(current,job.turn,current.textContent);}else if(result?.text){markdown(response(),result.text);messageActions.assistant(response(),job.turn,result.text);}messageActions.complete(job.turn,{...result?.presentation,endedAt:result?.presentation?.endedAt||Date.now()});statusLine.remove();if(preference('collapse-work',true))node.querySelectorAll('.thread-activity').forEach(group=>group.open=false);approvals.clear(job.id);job.approvalRequests.clear();job.running=false;job.failed=!!error;job.error=error?displayRunError(error.message,job.provider):undefined;job.terminalCount=0;if(!error)updateMetadata(job.id,{unread:!isViewing(job.id)});if(node===history&&isViewing(job.id))localStorage.setItem('suffice-thread-seen:'+job.id,String(Date.now()));drawThreads();if(node===history){syncRunning();saveView();bottom();document.dispatchEvent(new Event('suffice:usage-change'));}document.dispatchEvent(new Event('suffice:thread-updated'));void refresh().catch(()=>{});};
+  job.finish=(result,error)=>{if(!job.running)return;const interrupted=result?.interrupted||isInterruption(error);if(compaction){compaction.remove();compaction=null;}if(interrupted){node.insertBefore(transcriptDivider('interrupted'),statusLine);error=null;}else if(error){current=null;streamed='';response().textContent=displayRunError(error.message,job.provider);messageActions.assistant(current,job.turn,current.textContent);}else if(result?.text){markdown(response(),result.text);messageActions.assistant(response(),job.turn,result.text);}messageActions.complete(job.turn,{...result?.presentation,endedAt:result?.presentation?.endedAt||Date.now()});statusLine.remove();if(preference('collapse-work',true))node.querySelectorAll('.thread-activity').forEach(group=>group.open=false);approvals.clear(job.id);job.approvalRequests.clear();job.running=false;job.failed=!!error;job.error=error?displayRunError(error.message,job.provider):undefined;job.terminalCount=0;if(!error)updateMetadata(job.id,{unread:!isViewing(job.id)});if(node===history&&isViewing(job.id))localStorage.setItem('suffice-thread-seen:'+job.id,String(Date.now()));drawThreads();if(node===history){syncRunning();saveView();bottom();document.dispatchEvent(new Event('suffice:usage-change'));}document.dispatchEvent(new Event('suffice:thread-updated'));void refresh().catch(()=>{});document.dispatchEvent(new CustomEvent('suffice-run-finished',{detail:{id:job.id,completed:!error&&!interrupted}}));};
   return job;
  }
- function adoptJob(job,id){if(!id||id===job.id)return;const previous=job.id;jobs.delete(previous);jobs.set(id,job);job.id=id;adoptOptimistic(previous,id);if(activeId===previous){activeId=id;viewState.adopt(id);sessionStorage.setItem('suffice-active-thread',id);}drawThreads();}
+ form.steerQueuedMessage=async(item,id)=>{const target=jobs.get(id);if(!target?.running)throw new Error('This chat is no longer running');await api.steer({threadId:id,prompt:item.prompt,attachments:item.attachments});target.addSteering(item.prompt,item.attachments);if(activeId===id)bottom(true);};
+ form.runQueuedMessage=(item,id)=>{const previous=jobs.get(id);if(!previous||previous.running)throw new Error('Chat is not ready for a queued message');const node=previous.history,user=document.createElement('article');user.className='thread-message thread-user';user.textContent=item.prompt;node.append(user);messageActions.user(user,{text:item.prompt,timestamp:Date.now(),attachments:item.attachments});const job=createJob(id,previous.title,node);job.provider=item.selection?.provider;job.model=item.selection?.model;job.turn=messageActions.turn({...item.selection,startedAt:job.startedAt},true);if(activeId===id){syncRunning();bottom(true);}drawThreads();void api.run({prompt:item.prompt,...item.selection,effort:item.selection?.effort||'low',approvalMode:item.approvalMode,attachments:item.attachments,threadId:id,clientId:id}).then(result=>{adoptJob(job,result.threadId);job.finish(result);}).catch(error=>job.finish(null,error));};
+ function adoptJob(job,id){if(!id||id===job.id)return;const previous=job.id;jobs.delete(previous);jobs.set(id,job);job.id=id;adoptOptimistic(previous,id);if(activeId!==previous&&viewState.read(previous).approvalMode)viewState.updateFor(id,{approvalMode:viewState.read(previous).approvalMode});if(activeId===previous){activeId=id;viewState.adopt(id);sessionStorage.setItem('suffice-active-thread',id);}drawThreads();}
  api.onClearCache?.(()=>{savedHistories.clear();});
  document.addEventListener('suffice-preference',event=>{if(event.detail.id==='collapse-work')document.querySelectorAll('.thread-activity').forEach(group=>group.open=!event.detail.value);if(event.detail.id==='new-project'&&!activeId)form.dataset.requireProject=String(event.detail.value==='Ask each time');});
  document.addEventListener('suffice-project-selected',()=>{delete form.dataset.requireProject;});
@@ -266,24 +275,25 @@ export function connectThreads({api,prompt,send,toast}){
   if(busy&&!prompt.value.trim()&&!form.attachments?.count){await api.abort(activeId).catch(error=>toast(error.message));return;}
   if(opening)return;
   const text=prompt.value.trim()||(form.attachments?.count?'Please review the attached files.':'');if(!text)return;
-  if(form.modelsDisabled){toast('Enable a model in Settings → Models first');return;}if(form.dataset.requireProject==='true'){toast('Choose a project above the composer first');return;}const inBackground=form.backgroundSubmit||form.backgroundIntent;if(inBackground&&!preference('background-agents',true)){toast('Background agents are disabled in settings');return;}form.backgroundSubmit=false;
+  if(form.modelsDisabled){toast('Enable a model in Settings → Models first');return;}if(form.dataset.requireProject==='true'){toast('Choose a project above the composer first');return;}const inBackground=form.backgroundSubmit||form.backgroundIntent;if(!busy&&inBackground&&!preference('background-agents',true)){toast('Background agents are disabled in settings');return;}form.backgroundSubmit=false;
   let attachments;opening=true;try{attachments=await form.attachments?.payload();}catch(error){toast(error.message);return;}finally{opening=false;}
   if(busy){
-   const textToSteer=prompt.value.trim();if(!textToSteer)return;
+   const textToSteer=text;if(form.workingSendMode==='Queue'){form.queueMessage({prompt:textToSteer,attachments,selection:{...form.modelSelection},approvalMode:form.approvalMode});prompt.value='';form.attachments?.clear();saveView();form.resizePrompt?.();syncRunning();return;}
    const target=visibleJob(),origin=activeId;
    prompt.value='';form.attachments?.clear();saveView();form.resizePrompt?.();syncRunning();
    try{await api.steer({threadId:origin,prompt:textToSteer,attachments});const bubble=target.addSteering(textToSteer,attachments);if(activeId===origin){transition.reveal(bubble,'user',0);bottom(true);}}catch(error){toast(error.message);if(activeId===origin&&!prompt.value){prompt.value=textToSteer;prompt.dispatchEvent(new Event('input'));}}return;
   }
   const entering=!workspace.classList.contains('thread-view'),origin=viewState.id;
   const id=inBackground||entering?'pending:'+crypto.randomUUID():activeId;
-  const selection=form.modelSelection||{effort:'low'};saveView();
+  const approvalMode=form.approvalMode||preference('approval-mode','Never ask');void form.recordAccessModeUsed?.(approvalMode);
+  const selection=form.modelSelection||{effort:'low'};saveView();viewState.updateFor(id,{approvalMode});
   const node=inBackground?document.createElement('div'):history;node.className='thread-messages';
   const user=document.createElement('article');user.className='thread-message thread-user';user.textContent=text;node.append(user);messageActions.user(user,{text,timestamp:Date.now(),attachments});
   const job=createJob(id,header.hidden?text.slice(0,90):header.textContent,node);
-  if(entering||inBackground)addOptimistic(id,text);
+  if(entering||inBackground)addOptimistic(id,text);if(entering)viewState.updateFor(origin,{draft:''});
   if(!inBackground){if(entering){transition.cancel();viewState.select(id);viewState.update({model:selection});activeId=id;}threadView(job.title,entering);transition.reveal(user,'user',entering?undefined:0);}
   prompt.value='';form.attachments?.clear();viewState.update({draft:''});form.resizePrompt?.();syncRunning();bottom(true);
-  const payload={prompt:text,...selection,attachments,clientId:id,...(!id.startsWith('pending:')?{threadId:id}:{})};
+  const payload={prompt:text,...selection,approvalMode,attachments,clientId:id,...(!id.startsWith('pending:')?{threadId:id}:{})};
   void selectionReady.catch(()=>{}).then(()=>form.projectSelection).then(()=>(inBackground?api.runBackground(payload):api.run(payload))).then(result=>{adoptJob(job,result.threadId);job.finish(result);}).catch(error=>{
    if(job.id.startsWith('pending:')){optimisticThreads.delete(job.id);drawThreads();}job.finish(null,error);
    if(inBackground&&!isInterruption(error)){toast(error.message);if(viewState.id===origin&&!prompt.value){prompt.value=text;prompt.dispatchEvent(new Event('input'));}}

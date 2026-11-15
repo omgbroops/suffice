@@ -39,3 +39,8 @@ test('change counts describe net edits, renames, binary files and unborn reposit
  await writeFile(resolve(root,'initial.txt'),'staged\n');await git(['add','initial.txt']);await writeFile(resolve(root,'initial.txt'),'final\n');await writeFile(resolve(root,'image.dat'),Buffer.from([0,1,2]));const entries=(await files.changes(root)).entries;const modified=entries.find(entry=>entry.path==='initial.txt');assert.deepEqual([modified.added,modified.removed],[1,1]);assert.equal(entries.find(entry=>entry.path==='image.dat').binary,true);const diff=await files.diff(root,'initial.txt');assert.match(diff.text,/-initial/);assert.doesNotMatch(diff.text,/staged/);
  const renamed=files.parseNumstat('0\t0\t\0old name.ts\0new name.ts\0-\t-\timage.png\0');assert.deepEqual(renamed.get('new name.ts'),{added:0,removed:0,binary:false});assert.equal(renamed.get('image.png').binary,true);
 });
+
+test('explicit linked previews can read outside the project while tree browsing stays scoped',async()=>{
+ const root=await mkdtemp(resolve(tmpdir(),'suffice-preview-root-')),outside=await mkdtemp(resolve(tmpdir(),'suffice-preview-outside-')),file=resolve(outside,'linked.txt');await writeFile(file,'external linked file');
+ await assert.rejects(files.read(root,file));assert.equal((await files.read(root,file,{external:true})).text,'external linked file');await assert.rejects(files.list(root,file));
+});

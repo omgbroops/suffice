@@ -1,0 +1,50 @@
+✔ mac chrome preserves native traffic lights and floating sidebar and chat controls (1333.286625ms)
+✔ macOS ICNS includes valid PNG representations at every Dock and Finder size (0.514583ms)
+Message actions screenshots: /var/folders/c7/_jc6_hn14psfbfyg5vmlrd380000gp/T/suffice-message-actions-4Q4ItJ
+✔ saved messages expose floating whole-turn actions and sent image previews without changing layout (2194.337833ms)
+✔ a stationary message toolbar follows expanded tool content and later messages (1919.907959ms)
+✔ live turn toolbar waits for completion and copies all message calls (727.365417ms)
+✖ project menus edit identity, move conversations, hide removed projects and restore on re-add (35539.763291ms)
+✖ dialog matches composer in both themes, Escape respects pointer modality, and confirmed deletion removes only the saved fixture (2345.068875ms)
+✔ macOS uses native traffic lights; the development preview never spoofs the platform (1.026333ms)
+Caption screenshots: /var/folders/c7/_jc6_hn14psfbfyg5vmlrd380000gp/T/suffice-caption-OtAojX
+✔ mac caption clamps old widths and preserves sidebar controls across states (1627.748541ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 7
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 46567.625791
+
+✖ failing tests:
+
+test at apps/desktop/test/project-management-ui.test.mjs:2:1
+✖ project menus edit identity, move conversations, hide removed projects and restore on re-add (35539.763291ms)
+  locator.waitFor: Timeout 30000ms exceeded.
+  Call log:
+  [2m  - waiting for locator('.thread-row').filter({ hasText: 'Managed conversation' }) to be visible[22m
+  
+      at TestContext.<anonymous> (/Users/aryasalem/Downloads/Programming/suffice/apps/desktop/test/project-management-ui.test.mjs:16:263) {
+    name: 'TimeoutError',
+    log: [ "  - waiting for locator('.thread-row').filter({ hasText: 'Managed conversation' }) to be visible" ]
+  }
+
+test at apps/desktop/test/thread-delete-dialog.test.mjs:2:1
+✖ dialog matches composer in both themes, Escape respects pointer modality, and confirmed deletion removes only the saved fixture (2345.068875ms)
+  AssertionError [ERR_ASSERTION]: Error invoking remote method 'suffice:delete-thread': Error: Unexpected deletion target
+  Okay
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (file:///Users/aryasalem/Downloads/Programming/suffice/apps/desktop/test/thread-delete-dialog.test.mjs:14:149)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

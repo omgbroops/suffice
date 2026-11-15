@@ -1,3 +1,8 @@
+import {fileLinkPath} from './file-links.js';
+import {connectComposerOverflow} from './composer-overflow.js';
+import {connectQueuedMessages} from './queued-messages.js';
+import {connectChatChangesWidget} from './chat-changes-widget.js';
+import {connectAccessModePicker} from './access-mode-picker.js';
 import { connectThreads } from './threads-ui.js';
 import { connectProjects } from './projects-ui.js';
 import {connectModels} from './models-ui.js';
@@ -8,6 +13,10 @@ export function connectDesktop({prompt,send,toast,escapeHtml}) {
   const api=window.sufficeDesktop;
   if(!api)return;
   document.documentElement.classList.add('desktop-app');
+  document.addEventListener('click',event=>{const anchor=event.target.closest('a[href]');if(!anchor)return;const raw=anchor.dataset.sufficeFile||anchor.getAttribute('href');if(raw.startsWith('#'))return;const path=fileLinkPath(raw);if(anchor.closest('.thread-assistant')&&path!==null){event.preventDefault();document.dispatchEvent(new CustomEvent('suffice-open-file',{detail:{path}}));return;}if(!/^(https?:|mailto:)/i.test(anchor.href))return;event.preventDefault();void api.openExternal(anchor.href).catch(error=>toast(error.message));});
+  // Escape the workspace stacking context so the caption drag region cannot intercept navigation.
+  const collapsedTools=document.querySelector('.sidebar-collapsed-tools');
+  if(collapsedTools)document.body.append(collapsedTools);
   const mode=api.windowChrome||'windows',mac=mode.startsWith('macos');
   document.documentElement.dataset.windowChrome=mode;
   const chrome=document.createElement('div');chrome.className='window-controls';chrome.setAttribute('role','group');chrome.setAttribute('aria-label','Window controls');
@@ -19,9 +28,25 @@ export function connectDesktop({prompt,send,toast,escapeHtml}) {
   chrome.addEventListener('click',event=>{const control=event.target.closest('[data-window]');if(control)void api.windowControl(control.dataset.window);});document.body.append(chrome);
   const drag=document.createElement('div');drag.className='window-drag-region';drag.setAttribute('aria-hidden','true');document.body.prepend(drag);
   connectThreads({api,prompt,send,toast});
+  connectAccessModePicker(prompt.form);
+  connectQueuedMessages(prompt.form,prompt,toast);
   connectProjects({api,toast});
   connectModels({api,toast});
+  connectComposerOverflow(prompt.form);
   connectWorkspaceTools(api);
+  connectChatChangesWidget();
+  {
+    const title=document.querySelector('.thread-header'),tools=document.querySelector('.workspace-tools');
+    const chatTools=document.createElement('div');chatTools.className='caption-chat-tools'+(mac?' caption-chat-tools-macos':'');chatTools.append(title,tools);
+    function placeChatTools(){const detached=document.body.classList.contains('right-panel-open');chatTools.classList.toggle('caption-chat-tools-detached',detached);if(detached||mac){if(chatTools.parentElement!==document.body)document.body.append(chatTools);}else if(chatTools.parentElement!==chrome)chrome.prepend(chatTools);}
+    new MutationObserver(placeChatTools).observe(document.body,{attributes:true,attributeFilter:['class']});placeChatTools();
+    if(!mac)new ResizeObserver(entries=>{const size=entries[0].borderBoxSize?.[0]?.inlineSize||chrome.offsetWidth;document.documentElement.style.setProperty('--window-controls-width',`${size}px`);}).observe(chrome);
+  }
+  if(mode==='macos-preview'){
+    const traffic=document.createElement('div');traffic.className='mac-traffic-buttons';traffic.append(...chrome.querySelectorAll('.window-control'));chrome.prepend(traffic);
+    const placeTraffic=()=>{const collapsed=document.body.classList.contains('sidebar-collapsed');const target=collapsed?collapsedTools:chrome;if(target&&traffic.parentElement!==target)target.prepend(traffic);};
+    new MutationObserver(placeTraffic).observe(document.body,{attributes:true,attributeFilter:['class']});placeTraffic();
+  }
   for(const panel of document.querySelectorAll('.sidebar,.right-sidebar')){
     const drag=document.createElement('div');drag.className='panel-drag-region';drag.setAttribute('aria-hidden','true');panel.prepend(drag);
   }

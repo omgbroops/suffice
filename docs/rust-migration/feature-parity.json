@@ -3,16 +3,16 @@
   "method": "Static source inventory; settings imported from pure data; handlers, preload members and tool names use literal regex, not a complete JS parser. Dynamic, aliased, generated or indirectly registered members may be missed. Test references are literal name matches or manually identified, not coverage evidence. Existing sources are authoritative.",
   "counts": {
     "automation-tool": 25,
-    "capability": 19,
+    "capability": 28,
     "cli-command": 10,
     "cli-option": 17,
-    "desktop-ipc-handler": 49,
+    "desktop-ipc-handler": 51,
     "native-tool": 5,
     "navigation-tool": 3,
     "package-script": 18,
-    "preload-member": 55,
+    "preload-member": 58,
     "script-entrypoint": 58,
-    "settings": 83,
+    "settings": 85,
     "settings-page": 18
   },
   "rows": [
@@ -189,7 +189,9 @@
       "source": [
         "packages/cli/src/automation.mjs"
       ],
-      "testReferences": [],
+      "testReferences": [
+        "apps/desktop/test/action-display.test.mjs"
+      ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "tools/automation",
       "compatibility": "Preserve current inputs, outputs, errors, ordering, security and lifecycle behavior; inspect implementation for detailed contract.",
@@ -321,7 +323,9 @@
       "source": [
         "packages/cli/src/automation.mjs"
       ],
-      "testReferences": [],
+      "testReferences": [
+        "packages/cli/test/automation.test.mjs"
+      ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "tools/automation",
       "compatibility": "Preserve current inputs, outputs, errors, ordering, security and lifecycle behavior; inspect implementation for detailed contract.",
@@ -383,7 +387,9 @@
       "source": [
         "packages/cli/src/automation.mjs"
       ],
-      "testReferences": [],
+      "testReferences": [
+        "packages/cli/test/automation.test.mjs"
+      ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "tools/automation",
       "compatibility": "Preserve current inputs, outputs, errors, ordering, security and lifecycle behavior; inspect implementation for detailed contract.",
@@ -468,6 +474,54 @@
     },
     {
       "category": "capability",
+      "id": "Custom accent picker preview save and cancel",
+      "classification": "product",
+      "source": [
+        "apps/desktop/src/accent-color-picker.js",
+        "apps/desktop/test/accent-picker.test.mjs"
+      ],
+      "testReferences": [],
+      "testReferenceBasis": "literal name matches only; possible false positives and omissions",
+      "proposedRustModule": "ui/settings",
+      "compatibility": "Inspect source contracts, retained Pi behavior and platform-specific handling; preserve output, security and failure semantics.",
+      "verification": "Perform targeted differential and integration tests; include negative cases, and manual platform/accessibility checks where relevant.",
+      "migrationStatus": "retained-js-pending"
+    },
+    {
+      "category": "capability",
+      "id": "Dedicated macOS app icon packaging",
+      "classification": "product",
+      "source": [
+        "apps/desktop/electron/build-macos-icon.mjs",
+        "scripts/desktop/package.mjs",
+        "apps/desktop/assets/suffice-logo-macos.icns"
+      ],
+      "testReferences": [],
+      "testReferenceBasis": "literal name matches only; possible false positives and omissions",
+      "proposedRustModule": "platform/package",
+      "compatibility": "Inspect source contracts, retained Pi behavior and platform-specific handling; preserve output, security and failure semantics.",
+      "verification": "Perform targeted differential and integration tests; include negative cases, and manual platform/accessibility checks where relevant.",
+      "migrationStatus": "retained-js-pending"
+    },
+    {
+      "category": "capability",
+      "id": "Edge-to-edge shared wallpaper and glass chrome",
+      "classification": "product",
+      "source": [
+        "apps/desktop/src/edge-to-edge-experiment.css",
+        "apps/desktop/src/shared-chrome.js",
+        "apps/desktop/src/glass-content-motion.js",
+        "apps/desktop/test/background-visibility.test.mjs"
+      ],
+      "testReferences": [],
+      "testReferenceBasis": "literal name matches only; possible false positives and omissions",
+      "proposedRustModule": "ui/chrome",
+      "compatibility": "Inspect source contracts, retained Pi behavior and platform-specific handling; preserve output, security and failure semantics.",
+      "verification": "Perform targeted differential and integration tests; include negative cases, and manual platform/accessibility checks where relevant.",
+      "migrationStatus": "retained-js-pending"
+    },
+    {
+      "category": "capability",
       "id": "Frozen historical research data",
       "classification": "historical",
       "source": [
@@ -513,6 +567,23 @@
     },
     {
       "category": "capability",
+      "id": "Local file links application choices and external URL routing",
+      "classification": "product",
+      "source": [
+        "apps/desktop/src/file-links.js",
+        "apps/desktop/src/file-open-menu.js",
+        "apps/desktop/electron/file-openers.cjs",
+        "apps/desktop/electron/external-links.cjs"
+      ],
+      "testReferences": [],
+      "testReferenceBasis": "literal name matches only; possible false positives and omissions",
+      "proposedRustModule": "host/files",
+      "compatibility": "Inspect source contracts, retained Pi behavior and platform-specific handling; preserve output, security and failure semantics.",
+      "verification": "Perform targeted differential and integration tests; include negative cases, and manual platform/accessibility checks where relevant.",
+      "migrationStatus": "retained-js-pending"
+    },
+    {
+      "category": "capability",
       "id": "Markdown and streaming",
       "classification": "product",
       "source": [
@@ -537,6 +608,22 @@
       "testReferences": [],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "ui/presentation",
+      "compatibility": "Inspect source contracts, retained Pi behavior and platform-specific handling; preserve output, security and failure semantics.",
+      "verification": "Perform targeted differential and integration tests; include negative cases, and manual platform/accessibility checks where relevant.",
+      "migrationStatus": "retained-js-pending"
+    },
+    {
+      "category": "capability",
+      "id": "Per-turn changes and grouped tool activity",
+      "classification": "product",
+      "source": [
+        "apps/desktop/src/chat-changes-widget.js",
+        "apps/desktop/src/activity-groups.js",
+        "apps/desktop/electron/chat-changes.mjs"
+      ],
+      "testReferences": [],
+      "testReferenceBasis": "literal name matches only; possible false positives and omissions",
+      "proposedRustModule": "ui/activity",
       "compatibility": "Inspect source contracts, retained Pi behavior and platform-specific handling; preserve output, security and failure semantics.",
       "verification": "Perform targeted differential and integration tests; include negative cases, and manual platform/accessibility checks where relevant.",
       "migrationStatus": "retained-js-pending"
@@ -618,6 +705,39 @@
     },
     {
       "category": "capability",
+      "id": "Queued message editing and steering",
+      "classification": "product",
+      "source": [
+        "apps/desktop/src/queued-messages.js",
+        "apps/desktop/src/threads-ui.js",
+        "apps/desktop/test/queue-messages.test.mjs"
+      ],
+      "testReferences": [],
+      "testReferenceBasis": "literal name matches only; possible false positives and omissions",
+      "proposedRustModule": "runtime/queue",
+      "compatibility": "Inspect source contracts, retained Pi behavior and platform-specific handling; preserve output, security and failure semantics.",
+      "verification": "Perform targeted differential and integration tests; include negative cases, and manual platform/accessibility checks where relevant.",
+      "migrationStatus": "retained-js-pending"
+    },
+    {
+      "category": "capability",
+      "id": "Remembered per-thread access and working-send preferences",
+      "classification": "product",
+      "source": [
+        "apps/desktop/src/access-mode-picker.js",
+        "apps/desktop/src/settings-preferences.js",
+        "apps/desktop/src/thread-view-state.js",
+        "apps/desktop/test/view-state.test.mjs"
+      ],
+      "testReferences": [],
+      "testReferenceBasis": "literal name matches only; possible false positives and omissions",
+      "proposedRustModule": "storage/preferences",
+      "compatibility": "Inspect source contracts, retained Pi behavior and platform-specific handling; preserve output, security and failure semantics.",
+      "verification": "Perform targeted differential and integration tests; include negative cases, and manual platform/accessibility checks where relevant.",
+      "migrationStatus": "retained-js-pending"
+    },
+    {
+      "category": "capability",
       "id": "Repository traversal filesIn",
       "classification": "product",
       "source": [
@@ -636,6 +756,39 @@
       "compatibility": "Rust traversal preserves original ordered path outputs and filesystem error behavior through JavaScript fallback. Acorn/TypeScript parsing and the rest of the engine remain JavaScript. Other platforms remain unverified.",
       "verification": "Rebuild locked release addon; run native-files tests, verify-installed, packaged smoke, compare-walk, measure-addon and verify-rollback; retain raw outputs. See delivery.md for measured CPU/memory tradeoffs.",
       "migrationStatus": "rust-optional-verified-windows"
+    },
+    {
+      "category": "capability",
+      "id": "Suffice resource isolation and deferred web research",
+      "classification": "product",
+      "source": [
+        "packages/cli/src/resource-scope.mjs",
+        "packages/cli/src/web-tools.mjs",
+        "packages/cli/src/session.mjs",
+        "packages/cli/test/web-tools.test.mjs"
+      ],
+      "testReferences": [],
+      "testReferenceBasis": "literal name matches only; possible false positives and omissions",
+      "proposedRustModule": "runtime/resources",
+      "compatibility": "Inspect source contracts, retained Pi behavior and platform-specific handling; preserve output, security and failure semantics.",
+      "verification": "Perform targeted differential and integration tests; include negative cases, and manual platform/accessibility checks where relevant.",
+      "migrationStatus": "retained-js-pending"
+    },
+    {
+      "category": "capability",
+      "id": "Task-directed file access beyond the project working directory",
+      "classification": "product",
+      "source": [
+        "packages/cli/src/workspace.mjs",
+        "packages/cli/src/tools.mjs",
+        "packages/cli/test/access.test.mjs"
+      ],
+      "testReferences": [],
+      "testReferenceBasis": "literal name matches only; possible false positives and omissions",
+      "proposedRustModule": "tools/repository",
+      "compatibility": "Inspect source contracts, retained Pi behavior and platform-specific handling; preserve output, security and failure semantics.",
+      "verification": "Perform targeted differential and integration tests; include negative cases, and manual platform/accessibility checks where relevant.",
+      "migrationStatus": "retained-js-pending"
     },
     {
       "category": "capability",
@@ -744,6 +897,8 @@
       "testReferences": [
         "packages/cli/test/cli.test.mjs",
         "apps/desktop/test/desktop-profile.test.mjs",
+        "apps/desktop/test/project-management-ui.test.mjs",
+        "apps/desktop/test/project-management.test.mjs",
         "apps/desktop/test/resources.test.mjs",
         "apps/desktop/test/sidebar.test.mjs"
       ],
@@ -779,8 +934,10 @@
       "testReferences": [
         "apps/desktop/test/pi-desktop-features.test.mjs",
         "apps/desktop/test/provider-model-ui.test.mjs",
+        "apps/desktop/test/resources.test.mjs",
         "apps/desktop/test/settings-engine.test.mjs",
-        "apps/desktop/test/settings.test.mjs"
+        "apps/desktop/test/settings.test.mjs",
+        "apps/desktop/test/thread-actions.test.mjs"
       ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "cli/interactive",
@@ -970,7 +1127,8 @@
         "packages/cli/src/options.mjs"
       ],
       "testReferences": [
-        "packages/cli/test/cli.test.mjs"
+        "packages/cli/test/cli.test.mjs",
+        "packages/cli/test/session-limits.test.mjs"
       ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "cli/options",
@@ -1046,7 +1204,8 @@
         "packages/cli/src/options.mjs"
       ],
       "testReferences": [
-        "packages/cli/test/cli.test.mjs"
+        "packages/cli/test/cli.test.mjs",
+        "packages/cli/test/session-limits.test.mjs"
       ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "cli/options",
@@ -1164,6 +1323,9 @@
         "apps/desktop/electron/main.cjs"
       ],
       "testReferences": [
+        "apps/desktop/test/branch-picker.test.mjs",
+        "apps/desktop/test/branches.test.mjs",
+        "apps/desktop/test/chat-git.test.mjs",
         "apps/desktop/test/message-presentation.test.mjs"
       ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
@@ -1188,6 +1350,7 @@
         "apps/desktop/test/fork-thread.test.mjs",
         "apps/desktop/test/panel-preview.test.mjs",
         "apps/desktop/test/panel.test.mjs",
+        "apps/desktop/test/project-management.test.mjs",
         "apps/desktop/test/sidebar.test.mjs",
         "apps/desktop/test/ui-behaviors.test.mjs",
         "apps/desktop/test/view-state.test.mjs",
@@ -1234,7 +1397,9 @@
       "source": [
         "apps/desktop/electron/main.cjs"
       ],
-      "testReferences": [],
+      "testReferences": [
+        "apps/desktop/test/thread-router.test.mjs"
+      ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "host",
       "compatibility": "Preserve current inputs, outputs, errors, ordering, security and lifecycle behavior; inspect implementation for detailed contract.",
@@ -1268,6 +1433,7 @@
         "tests/spec-gate.test.mjs",
         "apps/desktop/test/approvals-ui.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
+        "apps/desktop/test/chat-git.test.mjs",
         "apps/desktop/test/diff-view.test.mjs",
         "apps/desktop/test/message-presentation.test.mjs",
         "apps/desktop/test/panel-content.test.mjs",
@@ -1330,9 +1496,15 @@
         "packages/cli/test/installation-id.test.mjs",
         "packages/cli/test/model-runtime.test.mjs",
         "packages/cli/test/native-files.test.mjs",
+        "packages/cli/test/session-limits.test.mjs",
+        "packages/cli/test/session-title.test.mjs",
+        "apps/desktop/test/action-display.test.mjs",
         "apps/desktop/test/approval-recovery.test.mjs",
         "apps/desktop/test/approvals-ui.test.mjs",
         "apps/desktop/test/attachments.test.mjs",
+        "apps/desktop/test/background-visibility.test.mjs",
+        "apps/desktop/test/branch-picker.test.mjs",
+        "apps/desktop/test/branches.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
         "apps/desktop/test/chat-surface.test.mjs",
         "apps/desktop/test/composer.test.mjs",
@@ -1341,8 +1513,12 @@
         "apps/desktop/test/dev-icon.test.mjs",
         "apps/desktop/test/diff-view.test.mjs",
         "apps/desktop/test/electron.test.mjs",
+        "apps/desktop/test/external-links.test.mjs",
+        "apps/desktop/test/file-links.test.mjs",
+        "apps/desktop/test/file-openers.test.mjs",
         "apps/desktop/test/fork-thread.test.mjs",
         "apps/desktop/test/host.test.mjs",
+        "apps/desktop/test/mac-floating.test.mjs",
         "apps/desktop/test/message-actions.test.mjs",
         "apps/desktop/test/message-presentation.test.mjs",
         "apps/desktop/test/model-selection.test.mjs",
@@ -1350,8 +1526,12 @@
         "apps/desktop/test/panel-preview.test.mjs",
         "apps/desktop/test/panel.test.mjs",
         "apps/desktop/test/pi-desktop-features.test.mjs",
+        "apps/desktop/test/picker-polish.test.mjs",
         "apps/desktop/test/presentation-ui.test.mjs",
+        "apps/desktop/test/project-management-ui.test.mjs",
+        "apps/desktop/test/project-management.test.mjs",
         "apps/desktop/test/provider-model-ui.test.mjs",
+        "apps/desktop/test/queue-messages.test.mjs",
         "apps/desktop/test/recovery-electron.test.mjs",
         "apps/desktop/test/recovery.test.mjs",
         "apps/desktop/test/resources-ui.test.mjs",
@@ -1359,13 +1539,49 @@
         "apps/desktop/test/settings-engine.test.mjs",
         "apps/desktop/test/settings.test.mjs",
         "apps/desktop/test/shell.test.mjs",
+        "apps/desktop/test/sidebar-persistence.test.mjs",
         "apps/desktop/test/sidebar.test.mjs",
         "apps/desktop/test/terminal.test.mjs",
+        "apps/desktop/test/thread-actions.test.mjs",
+        "apps/desktop/test/thread-delete-dialog.test.mjs",
         "apps/desktop/test/threads.test.mjs",
         "apps/desktop/test/transcript-checkpoints.test.mjs",
         "apps/desktop/test/ui-behaviors.test.mjs",
         "apps/desktop/test/view-state.test.mjs",
+        "apps/desktop/test/window-chrome.test.mjs",
         "apps/desktop/test/workspace-files.test.mjs"
+      ],
+      "testReferenceBasis": "literal name matches only; possible false positives and omissions",
+      "proposedRustModule": "host",
+      "compatibility": "Preserve current inputs, outputs, errors, ordering, security and lifecycle behavior; inspect implementation for detailed contract.",
+      "verification": "Add targeted differential fixtures against current implementation; inspect matched tests and cover missing cases.",
+      "migrationStatus": "retained-js-pending"
+    },
+    {
+      "category": "desktop-ipc-handler",
+      "id": "file-open-in",
+      "classification": "product",
+      "source": [
+        "apps/desktop/electron/main.cjs"
+      ],
+      "testReferences": [
+        "apps/desktop/test/queue-messages.test.mjs"
+      ],
+      "testReferenceBasis": "literal name matches only; possible false positives and omissions",
+      "proposedRustModule": "host",
+      "compatibility": "Preserve current inputs, outputs, errors, ordering, security and lifecycle behavior; inspect implementation for detailed contract.",
+      "verification": "Add targeted differential fixtures against current implementation; inspect matched tests and cover missing cases.",
+      "migrationStatus": "retained-js-pending"
+    },
+    {
+      "category": "desktop-ipc-handler",
+      "id": "file-open-options",
+      "classification": "product",
+      "source": [
+        "apps/desktop/electron/main.cjs"
+      ],
+      "testReferences": [
+        "apps/desktop/test/queue-messages.test.mjs"
       ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "host",
@@ -1391,6 +1607,7 @@
         "tests/workspace.test.mjs",
         "packages/cli/test/cli.test.mjs",
         "packages/cli/test/native-files.test.mjs",
+        "apps/desktop/test/action-display.test.mjs",
         "apps/desktop/test/approvals-ui.test.mjs",
         "apps/desktop/test/attachments.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
@@ -1399,10 +1616,13 @@
         "apps/desktop/test/desktop-profile.test.mjs",
         "apps/desktop/test/diff-view.test.mjs",
         "apps/desktop/test/electron.test.mjs",
+        "apps/desktop/test/file-links.test.mjs",
         "apps/desktop/test/message-presentation.test.mjs",
         "apps/desktop/test/panel-preview.test.mjs",
         "apps/desktop/test/panel.test.mjs",
         "apps/desktop/test/presentation-ui.test.mjs",
+        "apps/desktop/test/project-management-ui.test.mjs",
+        "apps/desktop/test/queue-messages.test.mjs",
         "apps/desktop/test/settings.test.mjs",
         "apps/desktop/test/shell.test.mjs",
         "apps/desktop/test/ui-behaviors.test.mjs",
@@ -1460,10 +1680,13 @@
         "packages/cli/test/model-runtime.test.mjs",
         "apps/desktop/test/approval-recovery.test.mjs",
         "apps/desktop/test/approvals-ui.test.mjs",
+        "apps/desktop/test/branch-picker.test.mjs",
         "apps/desktop/test/model-selection.test.mjs",
         "apps/desktop/test/models.test.mjs",
         "apps/desktop/test/pi-desktop-features.test.mjs",
+        "apps/desktop/test/picker-polish.test.mjs",
         "apps/desktop/test/provider-model-ui.test.mjs",
+        "apps/desktop/test/queue-messages.test.mjs",
         "apps/desktop/test/resources.test.mjs",
         "apps/desktop/test/settings-engine.test.mjs",
         "apps/desktop/test/ui-behaviors.test.mjs"
@@ -1481,7 +1704,9 @@
       "source": [
         "apps/desktop/electron/main.cjs"
       ],
-      "testReferences": [],
+      "testReferences": [
+        "apps/desktop/test/project-management.test.mjs"
+      ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "host",
       "compatibility": "Preserve current inputs, outputs, errors, ordering, security and lifecycle behavior; inspect implementation for detailed contract.",
@@ -1526,8 +1751,13 @@
         "apps/desktop/electron/main.cjs"
       ],
       "testReferences": [
+        "apps/desktop/test/accent-picker.test.mjs",
+        "apps/desktop/test/project-management-ui.test.mjs",
         "apps/desktop/test/provider-model-ui.test.mjs",
-        "apps/desktop/test/settings.test.mjs"
+        "apps/desktop/test/queue-messages.test.mjs",
+        "apps/desktop/test/settings.test.mjs",
+        "apps/desktop/test/sidebar-persistence.test.mjs",
+        "apps/desktop/test/thread-actions.test.mjs"
       ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "host",
@@ -1547,22 +1777,30 @@
         "tests/tool-efficiency.test.mjs",
         "packages/cli/test/cli.test.mjs",
         "apps/desktop/test/approval-recovery.test.mjs",
+        "apps/desktop/test/branch-picker.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
+        "apps/desktop/test/chat-git.test.mjs",
         "apps/desktop/test/composer.test.mjs",
         "apps/desktop/test/desktop-profile.test.mjs",
         "apps/desktop/test/diff-view.test.mjs",
         "apps/desktop/test/electron.test.mjs",
+        "apps/desktop/test/file-openers.test.mjs",
         "apps/desktop/test/fork-thread.test.mjs",
         "apps/desktop/test/host.test.mjs",
         "apps/desktop/test/navigation.test.mjs",
         "apps/desktop/test/panel-preview.test.mjs",
         "apps/desktop/test/panel.test.mjs",
+        "apps/desktop/test/picker-polish.test.mjs",
         "apps/desktop/test/presentation-ui.test.mjs",
+        "apps/desktop/test/project-management-ui.test.mjs",
+        "apps/desktop/test/project-management.test.mjs",
+        "apps/desktop/test/queue-messages.test.mjs",
         "apps/desktop/test/resources.test.mjs",
         "apps/desktop/test/settings-engine.test.mjs",
         "apps/desktop/test/sidebar.test.mjs",
         "apps/desktop/test/spotlight.test.mjs",
         "apps/desktop/test/terminal.test.mjs",
+        "apps/desktop/test/thread-actions.test.mjs",
         "apps/desktop/test/threads.test.mjs",
         "apps/desktop/test/transcript-checkpoints.test.mjs",
         "apps/desktop/test/ui-behaviors.test.mjs",
@@ -1583,9 +1821,13 @@
       ],
       "testReferences": [
         "packages/cli/test/cli.test.mjs",
+        "apps/desktop/test/branch-picker.test.mjs",
         "apps/desktop/test/desktop-profile.test.mjs",
         "apps/desktop/test/electron.test.mjs",
         "apps/desktop/test/navigation.test.mjs",
+        "apps/desktop/test/picker-polish.test.mjs",
+        "apps/desktop/test/project-management-ui.test.mjs",
+        "apps/desktop/test/project-management.test.mjs",
         "apps/desktop/test/sidebar.test.mjs",
         "apps/desktop/test/ui-behaviors.test.mjs"
       ],
@@ -1668,6 +1910,7 @@
       ],
       "testReferences": [
         "apps/desktop/test/pi-desktop-features.test.mjs",
+        "apps/desktop/test/picker-polish.test.mjs",
         "apps/desktop/test/provider-model-ui.test.mjs",
         "apps/desktop/test/provider-settings.test.mjs",
         "apps/desktop/test/settings.test.mjs"
@@ -1717,6 +1960,7 @@
       ],
       "testReferences": [
         "apps/desktop/test/approval-recovery.test.mjs",
+        "apps/desktop/test/chat-changes.test.mjs",
         "apps/desktop/test/host.test.mjs",
         "apps/desktop/test/panel-content.test.mjs",
         "apps/desktop/test/sidebar.test.mjs",
@@ -1878,8 +2122,10 @@
         "apps/desktop/test/pi-desktop-features.test.mjs",
         "apps/desktop/test/presentation-ui.test.mjs",
         "apps/desktop/test/recovery.test.mjs",
+        "apps/desktop/test/scroll-layout.test.mjs",
         "apps/desktop/test/sidebar.test.mjs",
         "apps/desktop/test/spotlight.test.mjs",
+        "apps/desktop/test/thread-actions.test.mjs",
         "apps/desktop/test/thread-router.test.mjs",
         "apps/desktop/test/threads.test.mjs",
         "apps/desktop/test/transcript-checkpoints.test.mjs",
@@ -1902,6 +2148,7 @@
         "apps/desktop/test/concurrent-threads.test.mjs",
         "apps/desktop/test/host.test.mjs",
         "apps/desktop/test/message-presentation.test.mjs",
+        "apps/desktop/test/queue-messages.test.mjs",
         "apps/desktop/test/thread-router.test.mjs"
       ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
@@ -1982,6 +2229,7 @@
       "testReferences": [
         "apps/desktop/test/approval-recovery.test.mjs",
         "apps/desktop/test/approvals-ui.test.mjs",
+        "apps/desktop/test/background-visibility.test.mjs",
         "apps/desktop/test/background.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
         "apps/desktop/test/chat-surface.test.mjs",
@@ -1992,6 +2240,7 @@
         "apps/desktop/test/electron.test.mjs",
         "apps/desktop/test/fork-thread.test.mjs",
         "apps/desktop/test/host.test.mjs",
+        "apps/desktop/test/mac-floating.test.mjs",
         "apps/desktop/test/message-actions.test.mjs",
         "apps/desktop/test/model-selection.test.mjs",
         "apps/desktop/test/navigation.test.mjs",
@@ -1999,18 +2248,25 @@
         "apps/desktop/test/panel.test.mjs",
         "apps/desktop/test/pi-desktop-features.test.mjs",
         "apps/desktop/test/presentation-ui.test.mjs",
+        "apps/desktop/test/project-management-ui.test.mjs",
+        "apps/desktop/test/project-management.test.mjs",
+        "apps/desktop/test/queue-messages.test.mjs",
         "apps/desktop/test/recovery-electron.test.mjs",
         "apps/desktop/test/recovery.test.mjs",
         "apps/desktop/test/resources-ui.test.mjs",
+        "apps/desktop/test/scroll-layout.test.mjs",
         "apps/desktop/test/settings.test.mjs",
         "apps/desktop/test/sidebar.test.mjs",
         "apps/desktop/test/spotlight.test.mjs",
         "apps/desktop/test/terminal.test.mjs",
+        "apps/desktop/test/thread-actions.test.mjs",
+        "apps/desktop/test/thread-delete-dialog.test.mjs",
         "apps/desktop/test/thread-router.test.mjs",
         "apps/desktop/test/threads.test.mjs",
         "apps/desktop/test/transcript-checkpoints.test.mjs",
         "apps/desktop/test/ui-behaviors.test.mjs",
-        "apps/desktop/test/view-state.test.mjs"
+        "apps/desktop/test/view-state.test.mjs",
+        "apps/desktop/test/window-chrome.test.mjs"
       ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "host",
@@ -2036,11 +2292,14 @@
         "apps/desktop/test/message-actions.test.mjs",
         "apps/desktop/test/navigation.test.mjs",
         "apps/desktop/test/presentation-ui.test.mjs",
+        "apps/desktop/test/project-management-ui.test.mjs",
+        "apps/desktop/test/queue-messages.test.mjs",
         "apps/desktop/test/recovery-electron.test.mjs",
         "apps/desktop/test/recovery.test.mjs",
         "apps/desktop/test/sidebar.test.mjs",
         "apps/desktop/test/spotlight.test.mjs",
         "apps/desktop/test/terminal.test.mjs",
+        "apps/desktop/test/thread-actions.test.mjs",
         "apps/desktop/test/thread-router.test.mjs",
         "apps/desktop/test/threads.test.mjs",
         "apps/desktop/test/transcript-checkpoints.test.mjs"
@@ -2080,6 +2339,7 @@
         "tests/real-policy.test.mjs",
         "tests/report.test.mjs",
         "tests/watchers.test.mjs",
+        "packages/cli/test/session-limits.test.mjs",
         "apps/desktop/test/approval-recovery.test.mjs",
         "apps/desktop/test/electron.test.mjs",
         "apps/desktop/test/host.test.mjs",
@@ -2118,8 +2378,12 @@
         "tests/workspace.test.mjs",
         "packages/cli/test/automation.test.mjs",
         "packages/cli/test/model-runtime.test.mjs",
+        "packages/cli/test/native-files.test.mjs",
+        "apps/desktop/test/accent-picker.test.mjs",
         "apps/desktop/test/approval-recovery.test.mjs",
         "apps/desktop/test/approvals-ui.test.mjs",
+        "apps/desktop/test/background-visibility.test.mjs",
+        "apps/desktop/test/branch-picker.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
         "apps/desktop/test/chat-surface.test.mjs",
         "apps/desktop/test/composer.test.mjs",
@@ -2128,7 +2392,9 @@
         "apps/desktop/test/dev-icon.test.mjs",
         "apps/desktop/test/diff-view.test.mjs",
         "apps/desktop/test/electron.test.mjs",
+        "apps/desktop/test/external-links.test.mjs",
         "apps/desktop/test/host.test.mjs",
+        "apps/desktop/test/mac-floating.test.mjs",
         "apps/desktop/test/message-actions.test.mjs",
         "apps/desktop/test/model-selection.test.mjs",
         "apps/desktop/test/navigation.test.mjs",
@@ -2136,18 +2402,26 @@
         "apps/desktop/test/panel-preview.test.mjs",
         "apps/desktop/test/panel.test.mjs",
         "apps/desktop/test/pi-desktop-features.test.mjs",
+        "apps/desktop/test/picker-polish.test.mjs",
         "apps/desktop/test/presentation-ui.test.mjs",
+        "apps/desktop/test/project-management-ui.test.mjs",
         "apps/desktop/test/provider-model-ui.test.mjs",
+        "apps/desktop/test/queue-messages.test.mjs",
         "apps/desktop/test/recovery-electron.test.mjs",
         "apps/desktop/test/resources-ui.test.mjs",
+        "apps/desktop/test/scroll-layout.test.mjs",
         "apps/desktop/test/settings.test.mjs",
         "apps/desktop/test/shell.test.mjs",
+        "apps/desktop/test/sidebar-persistence.test.mjs",
         "apps/desktop/test/sidebar.test.mjs",
         "apps/desktop/test/spotlight.test.mjs",
         "apps/desktop/test/terminal.test.mjs",
+        "apps/desktop/test/thread-actions.test.mjs",
+        "apps/desktop/test/thread-delete-dialog.test.mjs",
         "apps/desktop/test/transcript-checkpoints.test.mjs",
         "apps/desktop/test/ui-behaviors.test.mjs",
         "apps/desktop/test/usage.test.mjs",
+        "apps/desktop/test/window-chrome.test.mjs",
         "apps/desktop/test/workspace-files.test.mjs"
       ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
@@ -2168,8 +2442,11 @@
         "tests/oracle-audit.test.mjs",
         "packages/cli/test/access.test.mjs",
         "packages/cli/test/cli.test.mjs",
+        "apps/desktop/test/action-display.test.mjs",
         "apps/desktop/test/approvals-ui.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
+        "apps/desktop/test/chat-git.test.mjs",
+        "apps/desktop/test/project-management.test.mjs",
         "apps/desktop/test/recovery.test.mjs",
         "apps/desktop/test/settings-engine.test.mjs",
         "apps/desktop/test/shell.test.mjs",
@@ -2201,10 +2478,13 @@
         "tests/workspace.test.mjs",
         "packages/cli/test/access.test.mjs",
         "packages/cli/test/cli.test.mjs",
+        "apps/desktop/test/background-visibility.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
         "apps/desktop/test/composer.test.mjs",
         "apps/desktop/test/panel-preview.test.mjs",
         "apps/desktop/test/panel.test.mjs",
+        "apps/desktop/test/project-management-ui.test.mjs",
+        "apps/desktop/test/queue-messages.test.mjs",
         "apps/desktop/test/resources.test.mjs",
         "apps/desktop/test/settings-engine.test.mjs",
         "apps/desktop/test/ui-behaviors.test.mjs",
@@ -2261,11 +2541,20 @@
         "packages/cli/test/cli.test.mjs",
         "packages/cli/test/installation-id.test.mjs",
         "packages/cli/test/model-runtime.test.mjs",
+        "packages/cli/test/session-limits.test.mjs",
+        "packages/cli/test/session-title.test.mjs",
+        "packages/cli/test/tool-observer.test.mjs",
+        "packages/cli/test/web-tools.test.mjs",
+        "apps/desktop/test/action-display.test.mjs",
         "apps/desktop/test/approval-recovery.test.mjs",
         "apps/desktop/test/approvals-ui.test.mjs",
         "apps/desktop/test/attachments.test.mjs",
+        "apps/desktop/test/background-visibility.test.mjs",
         "apps/desktop/test/background.test.mjs",
+        "apps/desktop/test/branch-picker.test.mjs",
+        "apps/desktop/test/branches.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
+        "apps/desktop/test/chat-git.test.mjs",
         "apps/desktop/test/chat-surface.test.mjs",
         "apps/desktop/test/composer.test.mjs",
         "apps/desktop/test/concurrent-threads.test.mjs",
@@ -2274,8 +2563,10 @@
         "apps/desktop/test/dev-icon.test.mjs",
         "apps/desktop/test/diff-view.test.mjs",
         "apps/desktop/test/electron.test.mjs",
+        "apps/desktop/test/file-links.test.mjs",
         "apps/desktop/test/fork-thread.test.mjs",
         "apps/desktop/test/host.test.mjs",
+        "apps/desktop/test/mac-floating.test.mjs",
         "apps/desktop/test/message-actions.test.mjs",
         "apps/desktop/test/message-presentation.test.mjs",
         "apps/desktop/test/model-selection.test.mjs",
@@ -2284,24 +2575,32 @@
         "apps/desktop/test/panel-preview.test.mjs",
         "apps/desktop/test/panel.test.mjs",
         "apps/desktop/test/pi-desktop-features.test.mjs",
+        "apps/desktop/test/picker-polish.test.mjs",
         "apps/desktop/test/presentation-ui.test.mjs",
+        "apps/desktop/test/project-management-ui.test.mjs",
+        "apps/desktop/test/project-management.test.mjs",
         "apps/desktop/test/provider-model-ui.test.mjs",
         "apps/desktop/test/provider-settings.test.mjs",
+        "apps/desktop/test/queue-messages.test.mjs",
         "apps/desktop/test/recovery-electron.test.mjs",
         "apps/desktop/test/recovery.test.mjs",
         "apps/desktop/test/resources-ui.test.mjs",
         "apps/desktop/test/resources.test.mjs",
+        "apps/desktop/test/scroll-layout.test.mjs",
         "apps/desktop/test/settings-engine.test.mjs",
         "apps/desktop/test/settings.test.mjs",
         "apps/desktop/test/sidebar.test.mjs",
         "apps/desktop/test/spotlight.test.mjs",
         "apps/desktop/test/terminal.test.mjs",
+        "apps/desktop/test/thread-actions.test.mjs",
+        "apps/desktop/test/thread-delete-dialog.test.mjs",
         "apps/desktop/test/thread-router.test.mjs",
         "apps/desktop/test/threads.test.mjs",
         "apps/desktop/test/transcript-checkpoints.test.mjs",
         "apps/desktop/test/ui-behaviors.test.mjs",
         "apps/desktop/test/usage.test.mjs",
         "apps/desktop/test/view-state.test.mjs",
+        "apps/desktop/test/window-chrome.test.mjs",
         "apps/desktop/test/workspace-files.test.mjs"
       ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
@@ -2338,7 +2637,13 @@
         "packages/cli/test/installation-id.test.mjs",
         "packages/cli/test/model-runtime.test.mjs",
         "packages/cli/test/native-files.test.mjs",
+        "packages/cli/test/session-limits.test.mjs",
+        "packages/cli/test/tool-observer.test.mjs",
+        "apps/desktop/test/action-display.test.mjs",
         "apps/desktop/test/attachments.test.mjs",
+        "apps/desktop/test/background-visibility.test.mjs",
+        "apps/desktop/test/branch-picker.test.mjs",
+        "apps/desktop/test/branches.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
         "apps/desktop/test/chat-surface.test.mjs",
         "apps/desktop/test/composer.test.mjs",
@@ -2346,14 +2651,19 @@
         "apps/desktop/test/desktop-profile.test.mjs",
         "apps/desktop/test/diff-view.test.mjs",
         "apps/desktop/test/electron.test.mjs",
+        "apps/desktop/test/file-openers.test.mjs",
         "apps/desktop/test/fork-thread.test.mjs",
         "apps/desktop/test/host.test.mjs",
+        "apps/desktop/test/mac-floating.test.mjs",
         "apps/desktop/test/message-actions.test.mjs",
         "apps/desktop/test/oauth-page-branding.test.mjs",
         "apps/desktop/test/panel-preview.test.mjs",
         "apps/desktop/test/panel.test.mjs",
         "apps/desktop/test/pi-desktop-features.test.mjs",
+        "apps/desktop/test/project-management-ui.test.mjs",
+        "apps/desktop/test/project-management.test.mjs",
         "apps/desktop/test/provider-model-ui.test.mjs",
+        "apps/desktop/test/queue-messages.test.mjs",
         "apps/desktop/test/recovery-electron.test.mjs",
         "apps/desktop/test/recovery.test.mjs",
         "apps/desktop/test/resources-ui.test.mjs",
@@ -2362,9 +2672,11 @@
         "apps/desktop/test/settings.test.mjs",
         "apps/desktop/test/sidebar.test.mjs",
         "apps/desktop/test/terminal.test.mjs",
+        "apps/desktop/test/thread-delete-dialog.test.mjs",
         "apps/desktop/test/threads.test.mjs",
         "apps/desktop/test/ui-behaviors.test.mjs",
         "apps/desktop/test/usage.test.mjs",
+        "apps/desktop/test/window-chrome.test.mjs",
         "apps/desktop/test/workspace-files.test.mjs"
       ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
@@ -2437,8 +2749,13 @@
         "packages/cli/test/access.test.mjs",
         "packages/cli/test/automation.test.mjs",
         "packages/cli/test/installation-id.test.mjs",
+        "packages/cli/test/session-limits.test.mjs",
+        "packages/cli/test/session-title.test.mjs",
+        "apps/desktop/test/accent-picker.test.mjs",
         "apps/desktop/test/approval-recovery.test.mjs",
         "apps/desktop/test/approvals-ui.test.mjs",
+        "apps/desktop/test/background-visibility.test.mjs",
+        "apps/desktop/test/branch-picker.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
         "apps/desktop/test/chat-surface.test.mjs",
         "apps/desktop/test/composer.test.mjs",
@@ -2448,26 +2765,36 @@
         "apps/desktop/test/dev-icon.test.mjs",
         "apps/desktop/test/diff-view.test.mjs",
         "apps/desktop/test/electron.test.mjs",
+        "apps/desktop/test/file-links.test.mjs",
         "apps/desktop/test/fork-thread.test.mjs",
         "apps/desktop/test/host.test.mjs",
+        "apps/desktop/test/mac-floating.test.mjs",
         "apps/desktop/test/message-actions.test.mjs",
         "apps/desktop/test/model-selection.test.mjs",
         "apps/desktop/test/navigation.test.mjs",
         "apps/desktop/test/panel-preview.test.mjs",
         "apps/desktop/test/panel.test.mjs",
         "apps/desktop/test/pi-desktop-features.test.mjs",
+        "apps/desktop/test/picker-polish.test.mjs",
         "apps/desktop/test/presentation-ui.test.mjs",
+        "apps/desktop/test/project-management-ui.test.mjs",
         "apps/desktop/test/provider-model-ui.test.mjs",
+        "apps/desktop/test/queue-messages.test.mjs",
         "apps/desktop/test/recovery-electron.test.mjs",
         "apps/desktop/test/resources-ui.test.mjs",
         "apps/desktop/test/resources.test.mjs",
+        "apps/desktop/test/scroll-layout.test.mjs",
         "apps/desktop/test/settings-engine.test.mjs",
         "apps/desktop/test/settings.test.mjs",
+        "apps/desktop/test/sidebar-persistence.test.mjs",
         "apps/desktop/test/sidebar.test.mjs",
         "apps/desktop/test/spotlight.test.mjs",
         "apps/desktop/test/terminal.test.mjs",
+        "apps/desktop/test/thread-actions.test.mjs",
+        "apps/desktop/test/thread-delete-dialog.test.mjs",
         "apps/desktop/test/transcript-checkpoints.test.mjs",
-        "apps/desktop/test/ui-behaviors.test.mjs"
+        "apps/desktop/test/ui-behaviors.test.mjs",
+        "apps/desktop/test/window-chrome.test.mjs"
       ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "build",
@@ -2785,12 +3112,22 @@
         "packages/cli/test/installation-id.test.mjs",
         "packages/cli/test/model-runtime.test.mjs",
         "packages/cli/test/native-files.test.mjs",
+        "packages/cli/test/session-limits.test.mjs",
+        "packages/cli/test/session-title.test.mjs",
+        "packages/cli/test/tool-observer.test.mjs",
+        "packages/cli/test/web-tools.test.mjs",
+        "apps/desktop/test/accent-picker.test.mjs",
+        "apps/desktop/test/action-display.test.mjs",
         "apps/desktop/test/actions.test.mjs",
         "apps/desktop/test/approval-recovery.test.mjs",
         "apps/desktop/test/approvals-ui.test.mjs",
         "apps/desktop/test/attachments.test.mjs",
+        "apps/desktop/test/background-visibility.test.mjs",
         "apps/desktop/test/background.test.mjs",
+        "apps/desktop/test/branch-picker.test.mjs",
+        "apps/desktop/test/branches.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
+        "apps/desktop/test/chat-git.test.mjs",
         "apps/desktop/test/chat-surface.test.mjs",
         "apps/desktop/test/composer.test.mjs",
         "apps/desktop/test/concurrent-threads.test.mjs",
@@ -2799,8 +3136,12 @@
         "apps/desktop/test/dev-icon.test.mjs",
         "apps/desktop/test/diff-view.test.mjs",
         "apps/desktop/test/electron.test.mjs",
+        "apps/desktop/test/external-links.test.mjs",
+        "apps/desktop/test/file-links.test.mjs",
+        "apps/desktop/test/file-openers.test.mjs",
         "apps/desktop/test/fork-thread.test.mjs",
         "apps/desktop/test/host.test.mjs",
+        "apps/desktop/test/mac-floating.test.mjs",
         "apps/desktop/test/message-actions.test.mjs",
         "apps/desktop/test/message-presentation.test.mjs",
         "apps/desktop/test/model-selection.test.mjs",
@@ -2811,20 +3152,28 @@
         "apps/desktop/test/panel-preview.test.mjs",
         "apps/desktop/test/panel.test.mjs",
         "apps/desktop/test/pi-desktop-features.test.mjs",
+        "apps/desktop/test/picker-polish.test.mjs",
         "apps/desktop/test/presentation-ui.test.mjs",
+        "apps/desktop/test/project-management-ui.test.mjs",
+        "apps/desktop/test/project-management.test.mjs",
         "apps/desktop/test/provider-model-ui.test.mjs",
         "apps/desktop/test/provider-settings.test.mjs",
+        "apps/desktop/test/queue-messages.test.mjs",
         "apps/desktop/test/recovery-electron.test.mjs",
         "apps/desktop/test/recovery.test.mjs",
         "apps/desktop/test/resources-ui.test.mjs",
         "apps/desktop/test/resources.test.mjs",
         "apps/desktop/test/run-error.test.mjs",
+        "apps/desktop/test/scroll-layout.test.mjs",
         "apps/desktop/test/settings-engine.test.mjs",
         "apps/desktop/test/settings.test.mjs",
         "apps/desktop/test/shell.test.mjs",
+        "apps/desktop/test/sidebar-persistence.test.mjs",
         "apps/desktop/test/sidebar.test.mjs",
         "apps/desktop/test/spotlight.test.mjs",
         "apps/desktop/test/terminal.test.mjs",
+        "apps/desktop/test/thread-actions.test.mjs",
+        "apps/desktop/test/thread-delete-dialog.test.mjs",
         "apps/desktop/test/thread-router.test.mjs",
         "apps/desktop/test/threads.test.mjs",
         "apps/desktop/test/transcript-checkpoints.test.mjs",
@@ -2832,6 +3181,7 @@
         "apps/desktop/test/ui-behaviors.test.mjs",
         "apps/desktop/test/usage.test.mjs",
         "apps/desktop/test/view-state.test.mjs",
+        "apps/desktop/test/window-chrome.test.mjs",
         "apps/desktop/test/workspace-files.test.mjs"
       ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
@@ -2910,6 +3260,9 @@
         "apps/desktop/electron/preload.cjs"
       ],
       "testReferences": [
+        "apps/desktop/test/branch-picker.test.mjs",
+        "apps/desktop/test/branches.test.mjs",
+        "apps/desktop/test/chat-git.test.mjs",
         "apps/desktop/test/message-presentation.test.mjs"
       ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
@@ -2934,6 +3287,7 @@
         "apps/desktop/test/fork-thread.test.mjs",
         "apps/desktop/test/panel-preview.test.mjs",
         "apps/desktop/test/panel.test.mjs",
+        "apps/desktop/test/project-management.test.mjs",
         "apps/desktop/test/sidebar.test.mjs",
         "apps/desktop/test/ui-behaviors.test.mjs",
         "apps/desktop/test/view-state.test.mjs",
@@ -2996,7 +3350,9 @@
       "source": [
         "apps/desktop/electron/preload.cjs"
       ],
-      "testReferences": [],
+      "testReferences": [
+        "apps/desktop/test/thread-delete-dialog.test.mjs"
+      ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "host",
       "compatibility": "Preserve current inputs, outputs, errors, ordering, security and lifecycle behavior; inspect implementation for detailed contract.",
@@ -3030,6 +3386,7 @@
         "tests/spec-gate.test.mjs",
         "apps/desktop/test/approvals-ui.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
+        "apps/desktop/test/chat-git.test.mjs",
         "apps/desktop/test/diff-view.test.mjs",
         "apps/desktop/test/message-presentation.test.mjs",
         "apps/desktop/test/panel-content.test.mjs",
@@ -3091,9 +3448,15 @@
         "packages/cli/test/installation-id.test.mjs",
         "packages/cli/test/model-runtime.test.mjs",
         "packages/cli/test/native-files.test.mjs",
+        "packages/cli/test/session-limits.test.mjs",
+        "packages/cli/test/session-title.test.mjs",
+        "apps/desktop/test/action-display.test.mjs",
         "apps/desktop/test/approval-recovery.test.mjs",
         "apps/desktop/test/approvals-ui.test.mjs",
         "apps/desktop/test/attachments.test.mjs",
+        "apps/desktop/test/background-visibility.test.mjs",
+        "apps/desktop/test/branch-picker.test.mjs",
+        "apps/desktop/test/branches.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
         "apps/desktop/test/chat-surface.test.mjs",
         "apps/desktop/test/composer.test.mjs",
@@ -3102,8 +3465,12 @@
         "apps/desktop/test/dev-icon.test.mjs",
         "apps/desktop/test/diff-view.test.mjs",
         "apps/desktop/test/electron.test.mjs",
+        "apps/desktop/test/external-links.test.mjs",
+        "apps/desktop/test/file-links.test.mjs",
+        "apps/desktop/test/file-openers.test.mjs",
         "apps/desktop/test/fork-thread.test.mjs",
         "apps/desktop/test/host.test.mjs",
+        "apps/desktop/test/mac-floating.test.mjs",
         "apps/desktop/test/message-actions.test.mjs",
         "apps/desktop/test/message-presentation.test.mjs",
         "apps/desktop/test/model-selection.test.mjs",
@@ -3111,8 +3478,12 @@
         "apps/desktop/test/panel-preview.test.mjs",
         "apps/desktop/test/panel.test.mjs",
         "apps/desktop/test/pi-desktop-features.test.mjs",
+        "apps/desktop/test/picker-polish.test.mjs",
         "apps/desktop/test/presentation-ui.test.mjs",
+        "apps/desktop/test/project-management-ui.test.mjs",
+        "apps/desktop/test/project-management.test.mjs",
         "apps/desktop/test/provider-model-ui.test.mjs",
+        "apps/desktop/test/queue-messages.test.mjs",
         "apps/desktop/test/recovery-electron.test.mjs",
         "apps/desktop/test/recovery.test.mjs",
         "apps/desktop/test/resources-ui.test.mjs",
@@ -3120,14 +3491,32 @@
         "apps/desktop/test/settings-engine.test.mjs",
         "apps/desktop/test/settings.test.mjs",
         "apps/desktop/test/shell.test.mjs",
+        "apps/desktop/test/sidebar-persistence.test.mjs",
         "apps/desktop/test/sidebar.test.mjs",
         "apps/desktop/test/terminal.test.mjs",
+        "apps/desktop/test/thread-actions.test.mjs",
+        "apps/desktop/test/thread-delete-dialog.test.mjs",
         "apps/desktop/test/threads.test.mjs",
         "apps/desktop/test/transcript-checkpoints.test.mjs",
         "apps/desktop/test/ui-behaviors.test.mjs",
         "apps/desktop/test/view-state.test.mjs",
+        "apps/desktop/test/window-chrome.test.mjs",
         "apps/desktop/test/workspace-files.test.mjs"
       ],
+      "testReferenceBasis": "literal name matches only; possible false positives and omissions",
+      "proposedRustModule": "host",
+      "compatibility": "Preserve current inputs, outputs, errors, ordering, security and lifecycle behavior; inspect implementation for detailed contract.",
+      "verification": "Add targeted differential fixtures against current implementation; inspect matched tests and cover missing cases.",
+      "migrationStatus": "retained-js-pending"
+    },
+    {
+      "category": "preload-member",
+      "id": "fileOpenOptions",
+      "classification": "product",
+      "source": [
+        "apps/desktop/electron/preload.cjs"
+      ],
+      "testReferences": [],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "host",
       "compatibility": "Preserve current inputs, outputs, errors, ordering, security and lifecycle behavior; inspect implementation for detailed contract.",
@@ -3152,6 +3541,7 @@
         "tests/workspace.test.mjs",
         "packages/cli/test/cli.test.mjs",
         "packages/cli/test/native-files.test.mjs",
+        "apps/desktop/test/action-display.test.mjs",
         "apps/desktop/test/approvals-ui.test.mjs",
         "apps/desktop/test/attachments.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
@@ -3160,10 +3550,13 @@
         "apps/desktop/test/desktop-profile.test.mjs",
         "apps/desktop/test/diff-view.test.mjs",
         "apps/desktop/test/electron.test.mjs",
+        "apps/desktop/test/file-links.test.mjs",
         "apps/desktop/test/message-presentation.test.mjs",
         "apps/desktop/test/panel-preview.test.mjs",
         "apps/desktop/test/panel.test.mjs",
         "apps/desktop/test/presentation-ui.test.mjs",
+        "apps/desktop/test/project-management-ui.test.mjs",
+        "apps/desktop/test/queue-messages.test.mjs",
         "apps/desktop/test/settings.test.mjs",
         "apps/desktop/test/shell.test.mjs",
         "apps/desktop/test/ui-behaviors.test.mjs",
@@ -3219,10 +3612,13 @@
         "packages/cli/test/model-runtime.test.mjs",
         "apps/desktop/test/approval-recovery.test.mjs",
         "apps/desktop/test/approvals-ui.test.mjs",
+        "apps/desktop/test/branch-picker.test.mjs",
         "apps/desktop/test/model-selection.test.mjs",
         "apps/desktop/test/models.test.mjs",
         "apps/desktop/test/pi-desktop-features.test.mjs",
+        "apps/desktop/test/picker-polish.test.mjs",
         "apps/desktop/test/provider-model-ui.test.mjs",
+        "apps/desktop/test/queue-messages.test.mjs",
         "apps/desktop/test/resources.test.mjs",
         "apps/desktop/test/settings-engine.test.mjs",
         "apps/desktop/test/ui-behaviors.test.mjs"
@@ -3240,7 +3636,9 @@
       "source": [
         "apps/desktop/electron/preload.cjs"
       ],
-      "testReferences": [],
+      "testReferences": [
+        "apps/desktop/test/project-management.test.mjs"
+      ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "host",
       "compatibility": "Preserve current inputs, outputs, errors, ordering, security and lifecycle behavior; inspect implementation for detailed contract.",
@@ -3333,6 +3731,20 @@
     },
     {
       "category": "preload-member",
+      "id": "openFileIn",
+      "classification": "product",
+      "source": [
+        "apps/desktop/electron/preload.cjs"
+      ],
+      "testReferences": [],
+      "testReferenceBasis": "literal name matches only; possible false positives and omissions",
+      "proposedRustModule": "host",
+      "compatibility": "Preserve current inputs, outputs, errors, ordering, security and lifecycle behavior; inspect implementation for detailed contract.",
+      "verification": "Add targeted differential fixtures against current implementation; inspect matched tests and cover missing cases.",
+      "migrationStatus": "retained-js-pending"
+    },
+    {
+      "category": "preload-member",
       "id": "openProjectFolder",
       "classification": "product",
       "source": [
@@ -3363,14 +3775,53 @@
     },
     {
       "category": "preload-member",
+      "id": "platform",
+      "classification": "product",
+      "source": [
+        "apps/desktop/electron/preload.cjs"
+      ],
+      "testReferences": [
+        "tests/native-artifact.test.mjs",
+        "tests/workspace.test.mjs",
+        "packages/cli/test/access.test.mjs",
+        "packages/cli/test/automation.test.mjs",
+        "packages/cli/test/cli.test.mjs",
+        "packages/cli/test/native-files.test.mjs",
+        "apps/desktop/test/chat-changes.test.mjs",
+        "apps/desktop/test/chat-git.test.mjs",
+        "apps/desktop/test/crash-recovery.test.mjs",
+        "apps/desktop/test/dev-icon.test.mjs",
+        "apps/desktop/test/electron.test.mjs",
+        "apps/desktop/test/fork-thread.test.mjs",
+        "apps/desktop/test/mac-floating.test.mjs",
+        "apps/desktop/test/panel.test.mjs",
+        "apps/desktop/test/provider-settings.test.mjs",
+        "apps/desktop/test/settings.test.mjs",
+        "apps/desktop/test/terminal.test.mjs",
+        "apps/desktop/test/window-chrome.test.mjs",
+        "apps/desktop/test/workspace-files.test.mjs"
+      ],
+      "testReferenceBasis": "literal name matches only; possible false positives and omissions",
+      "proposedRustModule": "host",
+      "compatibility": "Preserve current inputs, outputs, errors, ordering, security and lifecycle behavior; inspect implementation for detailed contract.",
+      "verification": "Add targeted differential fixtures against current implementation; inspect matched tests and cover missing cases.",
+      "migrationStatus": "retained-js-pending"
+    },
+    {
+      "category": "preload-member",
       "id": "preferences",
       "classification": "product",
       "source": [
         "apps/desktop/electron/preload.cjs"
       ],
       "testReferences": [
+        "apps/desktop/test/accent-picker.test.mjs",
+        "apps/desktop/test/project-management-ui.test.mjs",
         "apps/desktop/test/provider-model-ui.test.mjs",
-        "apps/desktop/test/settings.test.mjs"
+        "apps/desktop/test/queue-messages.test.mjs",
+        "apps/desktop/test/settings.test.mjs",
+        "apps/desktop/test/sidebar-persistence.test.mjs",
+        "apps/desktop/test/thread-actions.test.mjs"
       ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "host",
@@ -3387,9 +3838,13 @@
       ],
       "testReferences": [
         "packages/cli/test/cli.test.mjs",
+        "apps/desktop/test/branch-picker.test.mjs",
         "apps/desktop/test/desktop-profile.test.mjs",
         "apps/desktop/test/electron.test.mjs",
         "apps/desktop/test/navigation.test.mjs",
+        "apps/desktop/test/picker-polish.test.mjs",
+        "apps/desktop/test/project-management-ui.test.mjs",
+        "apps/desktop/test/project-management.test.mjs",
         "apps/desktop/test/sidebar.test.mjs",
         "apps/desktop/test/ui-behaviors.test.mjs"
       ],
@@ -3466,6 +3921,7 @@
       ],
       "testReferences": [
         "apps/desktop/test/pi-desktop-features.test.mjs",
+        "apps/desktop/test/picker-polish.test.mjs",
         "apps/desktop/test/provider-model-ui.test.mjs",
         "apps/desktop/test/provider-settings.test.mjs",
         "apps/desktop/test/settings.test.mjs"
@@ -3513,6 +3969,7 @@
       ],
       "testReferences": [
         "apps/desktop/test/approval-recovery.test.mjs",
+        "apps/desktop/test/chat-changes.test.mjs",
         "apps/desktop/test/host.test.mjs",
         "apps/desktop/test/panel-content.test.mjs",
         "apps/desktop/test/sidebar.test.mjs",
@@ -3671,8 +4128,10 @@
         "apps/desktop/test/pi-desktop-features.test.mjs",
         "apps/desktop/test/presentation-ui.test.mjs",
         "apps/desktop/test/recovery.test.mjs",
+        "apps/desktop/test/scroll-layout.test.mjs",
         "apps/desktop/test/sidebar.test.mjs",
         "apps/desktop/test/spotlight.test.mjs",
+        "apps/desktop/test/thread-actions.test.mjs",
         "apps/desktop/test/thread-router.test.mjs",
         "apps/desktop/test/threads.test.mjs",
         "apps/desktop/test/transcript-checkpoints.test.mjs",
@@ -3695,6 +4154,7 @@
         "apps/desktop/test/concurrent-threads.test.mjs",
         "apps/desktop/test/host.test.mjs",
         "apps/desktop/test/message-presentation.test.mjs",
+        "apps/desktop/test/queue-messages.test.mjs",
         "apps/desktop/test/thread-router.test.mjs"
       ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
@@ -3777,11 +4237,14 @@
         "apps/desktop/test/message-actions.test.mjs",
         "apps/desktop/test/navigation.test.mjs",
         "apps/desktop/test/presentation-ui.test.mjs",
+        "apps/desktop/test/project-management-ui.test.mjs",
+        "apps/desktop/test/queue-messages.test.mjs",
         "apps/desktop/test/recovery-electron.test.mjs",
         "apps/desktop/test/recovery.test.mjs",
         "apps/desktop/test/sidebar.test.mjs",
         "apps/desktop/test/spotlight.test.mjs",
         "apps/desktop/test/terminal.test.mjs",
+        "apps/desktop/test/thread-actions.test.mjs",
         "apps/desktop/test/thread-router.test.mjs",
         "apps/desktop/test/threads.test.mjs",
         "apps/desktop/test/transcript-checkpoints.test.mjs"
@@ -3821,6 +4284,7 @@
         "tests/real-policy.test.mjs",
         "tests/report.test.mjs",
         "tests/watchers.test.mjs",
+        "packages/cli/test/session-limits.test.mjs",
         "apps/desktop/test/approval-recovery.test.mjs",
         "apps/desktop/test/electron.test.mjs",
         "apps/desktop/test/host.test.mjs",
@@ -3858,7 +4322,10 @@
       "source": [
         "apps/desktop/electron/preload.cjs"
       ],
-      "testReferences": [],
+      "testReferences": [
+        "apps/desktop/test/mac-floating.test.mjs",
+        "apps/desktop/test/window-chrome.test.mjs"
+      ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "host",
       "compatibility": "Preserve current inputs, outputs, errors, ordering, security and lifecycle behavior; inspect implementation for detailed contract.",
@@ -4744,7 +5211,7 @@
         "id": null,
         "label": "Harness",
         "type": "text",
-        "default": "Suffice · Pi",
+        "default": "Suffice",
         "options": []
       }
     },
@@ -4778,7 +5245,10 @@
       "source": [
         "apps/desktop/src/settings-data.js"
       ],
-      "testReferences": [],
+      "testReferences": [
+        "apps/desktop/test/accent-picker.test.mjs",
+        "apps/desktop/test/branch-picker.test.mjs"
+      ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "ui/settings",
       "compatibility": "Preserve displayed value, choices, persistence, validation and actual host behavior; a displayed setting does not itself prove implementation.",
@@ -4833,7 +5303,8 @@
         "apps/desktop/test/presentation-ui.test.mjs",
         "apps/desktop/test/resources.test.mjs",
         "apps/desktop/test/settings-engine.test.mjs",
-        "apps/desktop/test/sidebar.test.mjs"
+        "apps/desktop/test/sidebar.test.mjs",
+        "apps/desktop/test/view-state.test.mjs"
       ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "ui/settings",
@@ -4848,36 +5319,6 @@
         "type": "toggle",
         "default": true,
         "options": []
-      }
-    },
-    {
-      "category": "settings",
-      "id": "approval-mode",
-      "classification": "product",
-      "source": [
-        "apps/desktop/src/settings-data.js"
-      ],
-      "testReferences": [
-        "apps/desktop/test/host.test.mjs",
-        "apps/desktop/test/settings-engine.test.mjs"
-      ],
-      "testReferenceBasis": "literal name matches only; possible false positives and omissions",
-      "proposedRustModule": "ui/settings",
-      "compatibility": "Preserve displayed value, choices, persistence, validation and actual host behavior; a displayed setting does not itself prove implementation.",
-      "verification": "Add targeted differential fixtures against current implementation; inspect matched tests and cover missing cases.",
-      "migrationStatus": "retained-js-pending",
-      "detail": {
-        "section": "agent",
-        "group": "Execution",
-        "id": "approval-mode",
-        "label": "Approvals",
-        "type": "select",
-        "default": "Never ask",
-        "options": [
-          "Ask when needed",
-          "Ask before every action",
-          "Never ask"
-        ]
       }
     },
     {
@@ -4915,7 +5356,9 @@
         "apps/desktop/src/settings-data.js"
       ],
       "testReferences": [
+        "apps/desktop/test/background-visibility.test.mjs",
         "apps/desktop/test/background.test.mjs",
+        "apps/desktop/test/branch-picker.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
         "apps/desktop/test/chat-surface.test.mjs",
         "apps/desktop/test/composer.test.mjs",
@@ -4923,12 +5366,19 @@
         "apps/desktop/test/message-actions.test.mjs",
         "apps/desktop/test/panel.test.mjs",
         "apps/desktop/test/pi-desktop-features.test.mjs",
+        "apps/desktop/test/picker-polish.test.mjs",
         "apps/desktop/test/presentation-ui.test.mjs",
+        "apps/desktop/test/project-management-ui.test.mjs",
         "apps/desktop/test/provider-model-ui.test.mjs",
+        "apps/desktop/test/queue-messages.test.mjs",
         "apps/desktop/test/resources-ui.test.mjs",
+        "apps/desktop/test/settings-engine.test.mjs",
         "apps/desktop/test/settings.test.mjs",
+        "apps/desktop/test/sidebar.test.mjs",
         "apps/desktop/test/spotlight.test.mjs",
         "apps/desktop/test/terminal.test.mjs",
+        "apps/desktop/test/thread-actions.test.mjs",
+        "apps/desktop/test/thread-delete-dialog.test.mjs",
         "apps/desktop/test/ui-behaviors.test.mjs"
       ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
@@ -4978,6 +5428,31 @@
     },
     {
       "category": "settings",
+      "id": "background-dimming",
+      "classification": "product",
+      "source": [
+        "apps/desktop/src/settings-data.js"
+      ],
+      "testReferences": [
+        "apps/desktop/test/settings-engine.test.mjs"
+      ],
+      "testReferenceBasis": "literal name matches only; possible false positives and omissions",
+      "proposedRustModule": "ui/settings",
+      "compatibility": "Preserve displayed value, choices, persistence, validation and actual host behavior; a displayed setting does not itself prove implementation.",
+      "verification": "Add targeted differential fixtures against current implementation; inspect matched tests and cover missing cases.",
+      "migrationStatus": "retained-js-pending",
+      "detail": {
+        "section": "appearance",
+        "group": "Background visibility",
+        "id": "background-dimming",
+        "label": "Background dimming",
+        "type": "range",
+        "default": 35,
+        "options": []
+      }
+    },
+    {
+      "category": "settings",
       "id": "background-motion",
       "classification": "product",
       "source": [
@@ -5006,7 +5481,9 @@
       "source": [
         "apps/desktop/src/settings-data.js"
       ],
-      "testReferences": [],
+      "testReferences": [
+        "apps/desktop/test/background-visibility.test.mjs"
+      ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "ui/settings",
       "compatibility": "Preserve displayed value, choices, persistence, validation and actual host behavior; a displayed setting does not itself prove implementation.",
@@ -5398,19 +5875,23 @@
         "tests/code-graph.test.mjs",
         "tests/report.test.mjs",
         "packages/cli/test/access.test.mjs",
-        "packages/cli/test/cli.test.mjs",
         "packages/cli/test/native-files.test.mjs",
+        "apps/desktop/test/accent-picker.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
         "apps/desktop/test/chat-surface.test.mjs",
         "apps/desktop/test/electron.test.mjs",
         "apps/desktop/test/message-actions.test.mjs",
         "apps/desktop/test/navigation.test.mjs",
         "apps/desktop/test/panel.test.mjs",
+        "apps/desktop/test/picker-polish.test.mjs",
         "apps/desktop/test/presentation-ui.test.mjs",
         "apps/desktop/test/provider-model-ui.test.mjs",
         "apps/desktop/test/resources.test.mjs",
         "apps/desktop/test/settings.test.mjs",
+        "apps/desktop/test/sidebar.test.mjs",
         "apps/desktop/test/spotlight.test.mjs",
+        "apps/desktop/test/thread-actions.test.mjs",
+        "apps/desktop/test/thread-delete-dialog.test.mjs",
         "apps/desktop/test/ui-behaviors.test.mjs",
         "apps/desktop/test/workspace-files.test.mjs"
       ],
@@ -5593,7 +6074,9 @@
       "testReferences": [
         "apps/desktop/test/approvals-ui.test.mjs",
         "apps/desktop/test/electron.test.mjs",
-        "apps/desktop/test/provider-settings.test.mjs"
+        "apps/desktop/test/provider-settings.test.mjs",
+        "apps/desktop/test/queue-messages.test.mjs",
+        "apps/desktop/test/scroll-layout.test.mjs"
       ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "ui/settings",
@@ -5831,24 +6314,34 @@
         "packages/cli/test/automation.test.mjs",
         "packages/cli/test/cli.test.mjs",
         "packages/cli/test/model-runtime.test.mjs",
+        "packages/cli/test/session-limits.test.mjs",
+        "packages/cli/test/session-title.test.mjs",
+        "packages/cli/test/web-tools.test.mjs",
+        "apps/desktop/test/action-display.test.mjs",
         "apps/desktop/test/actions.test.mjs",
         "apps/desktop/test/approval-recovery.test.mjs",
         "apps/desktop/test/approvals-ui.test.mjs",
+        "apps/desktop/test/background-visibility.test.mjs",
+        "apps/desktop/test/branch-picker.test.mjs",
         "apps/desktop/test/electron.test.mjs",
         "apps/desktop/test/host.test.mjs",
+        "apps/desktop/test/mac-floating.test.mjs",
         "apps/desktop/test/message-actions.test.mjs",
         "apps/desktop/test/message-presentation.test.mjs",
         "apps/desktop/test/model-selection.test.mjs",
         "apps/desktop/test/models.test.mjs",
         "apps/desktop/test/pi-desktop-features.test.mjs",
+        "apps/desktop/test/picker-polish.test.mjs",
         "apps/desktop/test/presentation-ui.test.mjs",
         "apps/desktop/test/provider-model-ui.test.mjs",
+        "apps/desktop/test/queue-messages.test.mjs",
         "apps/desktop/test/resources.test.mjs",
         "apps/desktop/test/settings-engine.test.mjs",
         "apps/desktop/test/settings.test.mjs",
         "apps/desktop/test/sidebar.test.mjs",
         "apps/desktop/test/ui-behaviors.test.mjs",
-        "apps/desktop/test/view-state.test.mjs"
+        "apps/desktop/test/view-state.test.mjs",
+        "apps/desktop/test/window-chrome.test.mjs"
       ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "ui/settings",
@@ -5877,6 +6370,7 @@
         "apps/desktop/src/settings-data.js"
       ],
       "testReferences": [
+        "packages/cli/test/session-title.test.mjs",
         "apps/desktop/test/host.test.mjs"
       ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
@@ -6185,7 +6679,9 @@
         "apps/desktop/test/model-selection.test.mjs",
         "apps/desktop/test/models.test.mjs",
         "apps/desktop/test/provider-model-ui.test.mjs",
+        "apps/desktop/test/queue-messages.test.mjs",
         "apps/desktop/test/resources-ui.test.mjs",
+        "apps/desktop/test/scroll-layout.test.mjs",
         "apps/desktop/test/settings-engine.test.mjs",
         "apps/desktop/test/settings.test.mjs",
         "apps/desktop/test/terminal.test.mjs",
@@ -6218,7 +6714,9 @@
       "source": [
         "apps/desktop/src/settings-data.js"
       ],
-      "testReferences": [],
+      "testReferences": [
+        "apps/desktop/test/background-visibility.test.mjs"
+      ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "ui/settings",
       "compatibility": "Preserve displayed value, choices, persistence, validation and actual host behavior; a displayed setting does not itself prove implementation.",
@@ -6633,6 +7131,31 @@
     },
     {
       "category": "settings",
+      "id": "surface-opacity",
+      "classification": "product",
+      "source": [
+        "apps/desktop/src/settings-data.js"
+      ],
+      "testReferences": [
+        "apps/desktop/test/settings-engine.test.mjs"
+      ],
+      "testReferenceBasis": "literal name matches only; possible false positives and omissions",
+      "proposedRustModule": "ui/settings",
+      "compatibility": "Preserve displayed value, choices, persistence, validation and actual host behavior; a displayed setting does not itself prove implementation.",
+      "verification": "Add targeted differential fixtures against current implementation; inspect matched tests and cover missing cases.",
+      "migrationStatus": "retained-js-pending",
+      "detail": {
+        "section": "appearance",
+        "group": "Theme",
+        "id": "surface-opacity",
+        "label": "Surface opacity",
+        "type": "range",
+        "default": 72,
+        "options": []
+      }
+    },
+    {
+      "category": "settings",
       "id": "tab-size",
       "classification": "product",
       "source": [
@@ -6847,6 +7370,34 @@
     },
     {
       "category": "settings",
+      "id": "working-send",
+      "classification": "product",
+      "source": [
+        "apps/desktop/src/settings-data.js"
+      ],
+      "testReferences": [
+        "apps/desktop/test/queue-messages.test.mjs"
+      ],
+      "testReferenceBasis": "literal name matches only; possible false positives and omissions",
+      "proposedRustModule": "ui/settings",
+      "compatibility": "Preserve displayed value, choices, persistence, validation and actual host behavior; a displayed setting does not itself prove implementation.",
+      "verification": "Add targeted differential fixtures against current implementation; inspect matched tests and cover missing cases.",
+      "migrationStatus": "retained-js-pending",
+      "detail": {
+        "section": "general",
+        "group": "Conversations",
+        "id": "working-send",
+        "label": "While agent is working",
+        "type": "select",
+        "default": "Steer",
+        "options": [
+          "Queue",
+          "Steer"
+        ]
+      }
+    },
+    {
+      "category": "settings",
       "id": "worktree-location",
       "classification": "product",
       "source": [
@@ -6878,7 +7429,9 @@
       "source": [
         "apps/desktop/src/settings-data.js"
       ],
-      "testReferences": [],
+      "testReferences": [
+        "apps/desktop/test/queue-messages.test.mjs"
+      ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "ui/settings",
       "compatibility": "Preserve displayed value, choices, persistence, validation and actual host behavior; a displayed setting does not itself prove implementation.",
@@ -6927,6 +7480,8 @@
         "packages/cli/test/automation.test.mjs",
         "packages/cli/test/cli.test.mjs",
         "packages/cli/test/model-runtime.test.mjs",
+        "packages/cli/test/session-limits.test.mjs",
+        "packages/cli/test/session-title.test.mjs",
         "apps/desktop/test/approval-recovery.test.mjs",
         "apps/desktop/test/approvals-ui.test.mjs",
         "apps/desktop/test/composer.test.mjs",
@@ -6955,6 +7510,8 @@
         "apps/desktop/src/settings-data.js"
       ],
       "testReferences": [
+        "apps/desktop/test/accent-picker.test.mjs",
+        "apps/desktop/test/background-visibility.test.mjs",
         "apps/desktop/test/chat-surface.test.mjs",
         "apps/desktop/test/composer.test.mjs",
         "apps/desktop/test/electron.test.mjs",
@@ -6980,7 +7537,9 @@
       "source": [
         "apps/desktop/src/settings-data.js"
       ],
-      "testReferences": [],
+      "testReferences": [
+        "apps/desktop/test/thread-actions.test.mjs"
+      ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "ui/settings",
       "compatibility": "Preserve navigation and actual dynamic content; empty or informational pages remain inventoried rather than implying unimplemented functionality.",
@@ -7007,12 +7566,17 @@
         "tests/tasks.test.mjs",
         "packages/cli/test/model-runtime.test.mjs",
         "apps/desktop/test/attachments.test.mjs",
+        "apps/desktop/test/chat-git.test.mjs",
         "apps/desktop/test/chat-surface.test.mjs",
         "apps/desktop/test/electron.test.mjs",
         "apps/desktop/test/host.test.mjs",
         "apps/desktop/test/panel-content.test.mjs",
         "apps/desktop/test/presentation-ui.test.mjs",
+        "apps/desktop/test/project-management-ui.test.mjs",
+        "apps/desktop/test/project-management.test.mjs",
         "apps/desktop/test/resources.test.mjs",
+        "apps/desktop/test/thread-actions.test.mjs",
+        "apps/desktop/test/thread-delete-dialog.test.mjs",
         "apps/desktop/test/threads.test.mjs",
         "apps/desktop/test/transcript-checkpoints.test.mjs",
         "apps/desktop/test/usage.test.mjs"
@@ -7069,6 +7633,7 @@
         "tests/workspace.test.mjs",
         "packages/cli/test/cli.test.mjs",
         "packages/cli/test/native-files.test.mjs",
+        "apps/desktop/test/action-display.test.mjs",
         "apps/desktop/test/approvals-ui.test.mjs",
         "apps/desktop/test/attachments.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
@@ -7077,10 +7642,13 @@
         "apps/desktop/test/desktop-profile.test.mjs",
         "apps/desktop/test/diff-view.test.mjs",
         "apps/desktop/test/electron.test.mjs",
+        "apps/desktop/test/file-links.test.mjs",
         "apps/desktop/test/message-presentation.test.mjs",
         "apps/desktop/test/panel-preview.test.mjs",
         "apps/desktop/test/panel.test.mjs",
         "apps/desktop/test/presentation-ui.test.mjs",
+        "apps/desktop/test/project-management-ui.test.mjs",
+        "apps/desktop/test/queue-messages.test.mjs",
         "apps/desktop/test/settings.test.mjs",
         "apps/desktop/test/shell.test.mjs",
         "apps/desktop/test/ui-behaviors.test.mjs",
@@ -7105,9 +7673,12 @@
         "apps/desktop/src/settings-data.js"
       ],
       "testReferences": [
+        "apps/desktop/test/picker-polish.test.mjs",
         "apps/desktop/test/provider-model-ui.test.mjs",
         "apps/desktop/test/settings.test.mjs",
-        "apps/desktop/test/ui-behaviors.test.mjs"
+        "apps/desktop/test/sidebar-persistence.test.mjs",
+        "apps/desktop/test/ui-behaviors.test.mjs",
+        "apps/desktop/test/window-chrome.test.mjs"
       ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "ui/settings",
@@ -7155,10 +7726,13 @@
         "packages/cli/test/model-runtime.test.mjs",
         "apps/desktop/test/approval-recovery.test.mjs",
         "apps/desktop/test/approvals-ui.test.mjs",
+        "apps/desktop/test/branch-picker.test.mjs",
         "apps/desktop/test/model-selection.test.mjs",
         "apps/desktop/test/models.test.mjs",
         "apps/desktop/test/pi-desktop-features.test.mjs",
+        "apps/desktop/test/picker-polish.test.mjs",
         "apps/desktop/test/provider-model-ui.test.mjs",
+        "apps/desktop/test/queue-messages.test.mjs",
         "apps/desktop/test/resources.test.mjs",
         "apps/desktop/test/settings-engine.test.mjs",
         "apps/desktop/test/ui-behaviors.test.mjs"
@@ -7218,9 +7792,13 @@
       ],
       "testReferences": [
         "packages/cli/test/cli.test.mjs",
+        "apps/desktop/test/branch-picker.test.mjs",
         "apps/desktop/test/desktop-profile.test.mjs",
         "apps/desktop/test/electron.test.mjs",
         "apps/desktop/test/navigation.test.mjs",
+        "apps/desktop/test/picker-polish.test.mjs",
+        "apps/desktop/test/project-management-ui.test.mjs",
+        "apps/desktop/test/project-management.test.mjs",
         "apps/desktop/test/sidebar.test.mjs",
         "apps/desktop/test/ui-behaviors.test.mjs"
       ],
@@ -7243,6 +7821,7 @@
       ],
       "testReferences": [
         "apps/desktop/test/pi-desktop-features.test.mjs",
+        "apps/desktop/test/picker-polish.test.mjs",
         "apps/desktop/test/provider-model-ui.test.mjs",
         "apps/desktop/test/provider-settings.test.mjs",
         "apps/desktop/test/settings.test.mjs"
@@ -7265,6 +7844,7 @@
         "apps/desktop/src/settings-data.js"
       ],
       "testReferences": [
+        "packages/cli/test/automation.test.mjs",
         "apps/desktop/test/composer.test.mjs"
       ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
@@ -7334,6 +7914,7 @@
         "apps/desktop/src/settings-data.js"
       ],
       "testReferences": [
+        "apps/desktop/test/queue-messages.test.mjs",
         "apps/desktop/test/recovery-electron.test.mjs",
         "apps/desktop/test/recovery.test.mjs",
         "apps/desktop/test/run-error.test.mjs",

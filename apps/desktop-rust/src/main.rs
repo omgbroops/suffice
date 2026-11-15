@@ -182,13 +182,18 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .build(&event_loop)?;
     let mut context = wry::WebContext::new(Some(profile));
     // The original preload runs inside a closure with a narrow lexical Electron shim.
+    let platform = match std::env::consts::OS {
+        "macos" => "darwin",
+        "windows" => "win32",
+        other => other,
+    };
     let mut shim = format!(
         r#"(()=>{{ if(window.top!==window || location.origin!=='http://suffice.localhost')return;
       let seq=0; const pending=new Map(), listeners=new Map();
       const ipcRenderer={{invoke:(channel,...args)=>new Promise((resolve,reject)=>{{const id=++seq;pending.set(id,{{resolve,reject}});window.ipc.postMessage(JSON.stringify({{type:'invoke',id,channel,args}}));}}),on:(channel,fn)=>{{if(!listeners.has(channel))listeners.set(channel,new Set());listeners.get(channel).add(fn);}},removeListener:(channel,fn)=>listeners.get(channel)?.delete(fn)}};
       const contextBridge={{exposeInMainWorld:(name,value)=>Object.defineProperty(window,name,{{value, configurable:false}})}};
       const require=(name)=>{{if(name!=='electron')throw Error('unsupported preload module');return {{contextBridge,ipcRenderer}}}};
-      const process={{argv:[]}};
+      const process={{argv:[],platform:{platform:?}}};
       Object.defineProperty(window,'__sufficeReceive',{{value:(m)=>{{if(m.type==='reply'){{const p=pending.get(m.id);if(p){{pending.delete(m.id);m.ok?p.resolve(m.result):p.reject(new Error(String(m.error?.message||m.error||'IPC failed')));}}}}else if(m.type==='event'){{for(const f of listeners.get(m.channel)||[])f({{}},...(m.args||[]));}}}},configurable:false}});
       (()=>{{ {preload} }})();
     }})();"#

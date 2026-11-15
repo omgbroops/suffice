@@ -1,0 +1,47 @@
+✖ Electron loads the unchanged shell and reaches the real isolated harness (4793.1005ms)
+✖ thread panels, file views, tabs and drafts restore independently, including across reload (1718.235291ms)
+✔ settings persist real preferences, preserve chats and use Pi provider registry (4761.023583ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 1
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11794.13525
+
+✖ failing tests:
+
+test at apps/desktop/test/electron.test.mjs:10:1
+✖ Electron loads the unchanged shell and reaches the real isolated harness (4793.1005ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(darkSurfaces.thread<darkSurfaces.sidebar)
+  
+      at TestContext.<anonymous> (file:///Users/aryasalem/Downloads/Programming/suffice/apps/desktop/test/electron.test.mjs:143:57)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at apps/desktop/test/panel.test.mjs:12:1
+✖ thread panels, file views, tabs and drafts restore independently, including across reload (1718.235291ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  12.5 !== 12
+  
+      at TestContext.<anonymous> (file:///Users/aryasalem/Downloads/Programming/suffice/apps/desktop/test/panel.test.mjs:48:191)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 12.5,
+    expected: 12,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

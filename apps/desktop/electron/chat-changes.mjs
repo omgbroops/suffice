@@ -13,6 +13,7 @@ export async function readChatChanges(home,id){const path=ledgerPath(home,id);if
 // Local snapshots are receipts only: no stash, index writes, checkout or reset.
 export function createChatChangeTracker({cwd,home,getId,onChange=()=>{}}){
  let state={version:1,root:resolve(cwd),files:{},partial:false},loading,tail=Promise.resolve();
+ let turnState={files:{},partial:false};
  let canonicalRoot,key,operations;
  async function initialize(){canonicalRoot??=await realpath(cwd);key=process.platform==='win32'?canonicalRoot.toLowerCase():canonicalRoot;operations=resolve(home,'chat-change-activity',createHash('sha256').update(key).digest('hex'));}
  const overlaps=(a,b)=>!a||!b||a.some(path=>b.includes(path));
@@ -34,14 +35,16 @@ export function createChatChangeTracker({cwd,home,getId,onChange=()=>{}}){
   for(const name of names.slice(0,maxFiles)){const value=await text(name);if(value===null){partial=true;continue;}bytes+=Buffer.byteLength(value);if(bytes>maxTotal){partial=true;break;}values.set(name,value);}
   return {values,partial};
  }
- async function save(){const path=ledgerPath(home,getId());if(!path)return;state.summary=totals(state);const value=JSON.stringify(state);const summary=state.summary;tail=tail.catch(()=>{}).then(async()=>{await mkdir(resolve(home,'chat-changes'),{recursive:true,mode:0o700});const temporary=path+'.tmp';await writeFile(temporary,value,{mode:0o600});await rename(temporary,path);const summaryPath=path.replace('.json','.summary.json');await writeFile(summaryPath+'.tmp',JSON.stringify(summary),{mode:0o600});await rename(summaryPath+'.tmp',summaryPath);onChange(summary);});await tail;}
+ async function save(){const path=ledgerPath(home,getId());if(!path)return;state.summary=totals(state);const value=JSON.stringify(state);const summary=state.summary;tail=tail.catch(()=>{}).then(async()=>{await mkdir(resolve(home,'chat-changes'),{recursive:true,mode:0o700});const temporary=path+'.tmp';await writeFile(temporary,value,{mode:0o600});await rename(temporary,path);const summaryPath=path.replace('.json','.summary.json');await writeFile(summaryPath+'.tmp',JSON.stringify(summary),{mode:0o600});await rename(summaryPath+'.tmp',summaryPath);onChange(summary,{...totals(turnState),scope:'turn'});});await tail;}
  return {
+  async beginTurn(){await tail;turnState={files:{},partial:false};},
   async before(name,args){if(!['write','edit','bash','powershell'].includes(name))return null;await initialize();await load();const names=['bash','powershell'].includes(name)?null:[relative(canonicalRoot,await toolTarget(args.path)).split(sep).join('/')];const token={names,conflict:false,operation:randomUUID()};const others=active.get(key)||new Set();for(const other of others){if(!names||!other.names||names.some(path=>other.names.includes(path)))token.conflict=other.conflict=true;}others.add(token);active.set(key,others);
    try{await mkdir(operations,{recursive:true,mode:0o700});await writeFile(resolve(operations,token.operation+'.json'),JSON.stringify({pid:process.pid,names}),{mode:0o600});await peers(token);token.before=await snapshot(names);}catch{token.before={values:new Map(),partial:true};token.conflict=true;}return token;
   },
-  async after(token){if(!token)return;try{const after=await snapshot(token.names);await peers(token);state.partial ||= token.before.partial||after.partial||token.conflict;
-   for(const name of new Set([...token.before.values.keys(),...after.values.keys()])){const before=token.before.values.get(name)??'',current=after.values.get(name)??'';if(before===current)continue;if(token.conflict||!token.before.values.has(name)&&token.before.partial||!after.values.has(name)&&after.partial){delete state.files[name];state.partial=true;continue;}
-    const record=state.files[name];if(record&&record.after!==before){delete state.files[name];state.partial=true;continue;}const next={before:record?.before??before,after:current};const bytes=Object.entries(state.files).reduce((n,[path,r])=>path===name?n:n+Buffer.byteLength(r.before)+Buffer.byteLength(r.after),0)+Buffer.byteLength(next.before)+Buffer.byteLength(next.after);if(bytes>maxTotal){delete state.files[name];state.partial=true;continue;}state.files[name]=next;
+  async after(token){if(!token)return;try{const after=await snapshot(token.names);await peers(token);state.partial ||= token.before.partial||after.partial||token.conflict;turnState.partial ||= token.before.partial||after.partial||token.conflict;
+   for(const name of new Set([...token.before.values.keys(),...after.values.keys()])){const before=token.before.values.get(name)??'',current=after.values.get(name)??'';if(before===current)continue;for(const ledger of [state,turnState]){if(token.conflict||!token.before.values.has(name)&&token.before.partial||!after.values.has(name)&&after.partial){delete ledger.files[name];ledger.partial=true;continue;}
+    const record=ledger.files[name];if(record&&record.after!==before){delete ledger.files[name];ledger.partial=true;continue;}const next={before:record?.before??before,after:current};const bytes=Object.entries(ledger.files).reduce((n,[path,r])=>path===name?n:n+Buffer.byteLength(r.before)+Buffer.byteLength(r.after),0)+Buffer.byteLength(next.before)+Buffer.byteLength(next.after);if(bytes>maxTotal){delete ledger.files[name];ledger.partial=true;continue;}ledger.files[name]=next;
+}
    }await save();
   }catch{state.partial=true;await save().catch(()=>{});}finally{await Promise.all([rm(resolve(operations,token.operation+'.json'),{force:true}),rm(resolve(operations,token.operation+'.conflict'),{force:true})]).catch(()=>{});active.get(key)?.delete(token);if(!active.get(key)?.size)active.delete(key);}},
   async flush(){await load();await save();return state.summary;}

@@ -216,6 +216,17 @@ fn show_in_folder(path: &str) -> Result<(), String> {
     }
 }
 
+fn external_url(target: &str) -> Result<url::Url, String> {
+    let parsed = url::Url::parse(target).map_err(|_| "invalid URL")?;
+    if !matches!(parsed.scheme(), "http" | "https" | "mailto")
+        || !parsed.username().is_empty()
+        || parsed.password().is_some()
+    {
+        return Err("only credential-free HTTP, HTTPS and mailto URLs are allowed".into());
+    }
+    Ok(parsed)
+}
+
 pub fn handle(window: &Window, method: &str, args: &Value) -> Result<Value, String> {
     match method {
         "window.show" => {
@@ -273,15 +284,10 @@ pub fn handle(window: &Window, method: &str, args: &Value) -> Result<Value, Stri
             )
         }
         "dialog.showMessageBox" => open_message(option_arg(args)),
+        "app.getFileIcon" => Err("native file icon extraction is unsupported".into()),
         "shell.openExternal" => {
             let target = path_arg(args)?;
-            let parsed = url::Url::parse(target).map_err(|_| "invalid URL")?;
-            if parsed.scheme() != "https"
-                || !parsed.username().is_empty()
-                || parsed.password().is_some()
-            {
-                return Err("only credential-free HTTPS URLs are allowed".into());
-            }
+            let parsed = external_url(target)?;
             open_target(parsed.as_str())?;
             Ok(Value::Null)
         }
@@ -306,6 +312,25 @@ pub fn handle(window: &Window, method: &str, args: &Value) -> Result<Value, Stri
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn external_url_matches_shared_scheme_and_credential_policy() {
+        for target in [
+            "http://example.com/path",
+            "https://example.com",
+            "mailto:person@example.com",
+        ] {
+            assert!(external_url(target).is_ok(), "{target}");
+        }
+        for target in [
+            "https://user@example.com",
+            "http://user:pass@example.com",
+            "file:///tmp/file",
+            "javascript:alert(1)",
+            "not a url",
+        ] {
+            assert!(external_url(target).is_err(), "{target}");
+        }
+    }
     #[test]
     fn parses_message_cancel_and_maps_response() {
         let (buttons, cancel) =

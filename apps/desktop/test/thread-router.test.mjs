@@ -22,6 +22,7 @@ test('router isolates concurrent sessions, steering, cancellation and view selec
  const second=route({id:4,action:'run',payload:{prompt:'two',clientId:'pending:two'}});
  while(!hosts.some(h=>h.thread==='two'))await new Promise(r=>setTimeout(r,1));
  await route({id:5,action:'thread',payload:{id:'one'}});assert.equal(messages.find(m=>m.id===5&&!m.event).result.running,true);
+ await route({id:50,action:'delete-thread',payload:{id:'one'}});assert.match(messages.find(m=>m.id===50&&!m.event).error,/Stop this thread/);
  await route({id:6,action:'steer',payload:{threadId:'one',prompt:'inspect tests'}});
  assert.equal(hosts.find(h=>h.thread==='one').steering,'inspect tests');assert.equal(hosts.find(h=>h.thread==='two').steering,undefined);
  await route({id:7,action:'abort',payload:{threadId:'two'}});await second;

@@ -1,0 +1,66 @@
+✖ Electron loads the unchanged shell and reaches the real isolated harness (2250.896208ms)
+✖ thread panels, file views, tabs and drafts restore independently, including across reload (1543.318959ms)
+✖ settings persist real preferences, preserve chats and use Pi provider registry (30580.116167ms)
+✔ Spotlight searches all threads, switches scopes, navigates and leaves the app backdrop untouched (2103.982584ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 1
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 37211.23825
+
+✖ failing tests:
+
+test at apps/desktop/test/electron.test.mjs:10:1
+✖ Electron loads the unchanged shell and reaches the real isolated harness (2250.896208ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(Math.abs(canvasBefore.width-canvasAfter.width-472)<2)
+  
+      at TestContext.<anonymous> (file:///Users/aryasalem/Downloads/Programming/suffice/apps/desktop/test/electron.test.mjs:90:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at apps/desktop/test/panel.test.mjs:12:1
+✖ thread panels, file views, tabs and drafts restore independently, including across reload (1543.318959ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      25,
+      25,
+      '5px',
+  +   '5px'
+  -   '9px'
+    ]
+  
+      at TestContext.<anonymous> (file:///Users/aryasalem/Downloads/Programming/suffice/apps/desktop/test/panel.test.mjs:35:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 25, 25, '5px', '5px' ],
+    expected: [ 25, 25, '5px', '9px' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at apps/desktop/test/settings.test.mjs:9:1
+✖ settings persist real preferences, preserve chats and use Pi provider registry (30580.116167ms)
+  locator.waitFor: Timeout 30000ms exceeded.
+  Call log:
+  [2m  - waiting for locator('.sidebar > .sidebar-scroll-rail') to be visible[22m
+  
+      at TestContext.<anonymous> (/Users/aryasalem/Downloads/Programming/suffice/apps/desktop/test/settings.test.mjs:14:444) {
+    name: 'TimeoutError',
+    log: [ "  - waiting for locator('.sidebar > .sidebar-scroll-rail') to be visible" ]
+  }

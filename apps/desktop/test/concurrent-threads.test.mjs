@@ -38,6 +38,7 @@ test('threads keep independent live runs and accept steering without aborting',{
   assert.deepEqual(await app.evaluate(()=>globalThis.aborts),[]);
   await app.evaluate(()=>globalThis.runs.get('two').resolve({threadId:'two',text:'Second completed'}));
   await page.getByRole('button',{name:'Stop task',exact:true}).waitFor();
+  await page.locator('.thread-row').filter({hasText:'two'}).getByLabel('Unread response',{exact:true}).waitFor();
   await emit({event:'assistant_start',threadId:'one'});await emit({event:'text',threadId:'one',text:'Following your steering'});
   await app.evaluate(()=>globalThis.runs.get('one').resolve({threadId:'one',text:'Following your steering'}));
   await page.waitForFunction(()=>document.querySelector('.composer').dataset.running==='false');

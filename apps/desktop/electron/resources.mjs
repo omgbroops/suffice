@@ -1,3 +1,4 @@
+import {filterSufficeResources,isolateSufficeResourceLoader} from '../../../packages/cli/src/resource-scope.mjs';
 import {mkdir,readFile,writeFile,rename,realpath} from 'node:fs/promises';
 import {resolve,join,relative} from 'node:path';
 import {randomUUID} from 'node:crypto';
@@ -8,11 +9,11 @@ export function createResourceService(home,{choosePath}={}){
  const save=(file,value)=>{const job=tail.then(async()=>{await mkdir(home,{recursive:true});const target=resolve(home,file),temporary=target+'.'+randomUUID()+'.tmp';await writeFile(temporary,JSON.stringify(value,null,2),{mode:0o600});await rename(temporary,target);});tail=job.catch(()=>{});return job;};
  async function list(){
   const {SettingsManager,DefaultPackageManager,DefaultResourceLoader}=await import('@earendil-works/pi-coding-agent');
-  const settings=SettingsManager.create(home,home),mcp=await json('mcp.json'),state=await json('resource-state.json');
+  const settings=SettingsManager.create(home,home,{projectTrusted:false}),mcp=await json('mcp.json'),state=await json('resource-state.json');
   const manager=new DefaultPackageManager({cwd:home,agentDir:home,settingsManager:settings});
   // Inspection never installs a missing package or imports an extension.
-  const resolved=await manager.resolve(async()=> 'skip');
-  const loader=new DefaultResourceLoader({cwd:home,agentDir:home,settingsManager:settings,packageManager:{resolve:async()=>resolved,resolveExtensionSources:async()=>({extensions:[],skills:[],prompts:[],themes:[]})},noExtensions:true,noThemes:true,noContextFiles:true});
+  const resolved=filterSufficeResources(await manager.resolve(async()=> 'skip'),home);
+  const loader=isolateSufficeResourceLoader(new DefaultResourceLoader({cwd:home,agentDir:home,settingsManager:settings,packageManager:{resolve:async()=>resolved,resolveExtensionSources:async()=>({extensions:[],skills:[],prompts:[],themes:[]})},noExtensions:true,noThemes:true,noContextFiles:true}),home);
   await loader.reload();
   return {mcp:mcp.mcpServers||{},skills:loader.getSkills().skills.map(s=>({name:s.name,description:s.description,path:s.filePath,enabled:state.skills?.[s.name]!==false})),templates:loader.getPrompts().prompts.map(p=>({name:p.name,description:p.description,path:p.filePath,enabled:state.templates?.[p.name]!==false})),extensions:resolved.extensions.filter(e=>!e.path.startsWith('builtin:')).map(e=>({path:e.path,enabled:e.enabled,...e.metadata})),packages:settings.getSettings().packages||[],diagnostics:[...loader.getSkills().diagnostics,...loader.getPrompts().diagnostics],settings:settings.getSettings()};
  }
@@ -34,7 +35,7 @@ export function createResourceService(home,{choosePath}={}){
   }else settings.extensions=[...(settings.extensions||[]).filter(x=>x!==p.path&&x!=='-'+p.path),p.enabled?p.path:'-'+p.path];
   await save('settings.json',settings);return list();
  }
- if(['install','update','remove'].includes(p.action)){if(typeof p.source!=='string'||p.source.length>1000||!p.source.trim())throw new Error('Enter a package source');const {SettingsManager,DefaultPackageManager}=await import('@earendil-works/pi-coding-agent');const settings=SettingsManager.create(home,home),manager=new DefaultPackageManager({cwd:home,agentDir:home,settingsManager:settings});if(p.action==='install')await manager.installAndPersist(p.source);if(p.action==='update')await manager.update(p.source);if(p.action==='remove')await manager.removeAndPersist(p.source);await settings.flush();return list();}
+ if(['install','update','remove'].includes(p.action)){if(typeof p.source!=='string'||p.source.length>1000||!p.source.trim())throw new Error('Enter a package source');const {SettingsManager,DefaultPackageManager}=await import('@earendil-works/pi-coding-agent');const settings=SettingsManager.create(home,home,{projectTrusted:false}),manager=new DefaultPackageManager({cwd:home,agentDir:home,settingsManager:settings});if(p.action==='install')await manager.installAndPersist(p.source);if(p.action==='update')await manager.update(p.source);if(p.action==='remove')await manager.removeAndPersist(p.source);await settings.flush();return list();}
  if(['mcp-check','mcp-login','mcp-logout'].includes(p.action)){const args=p.action==='mcp-check'?['mcp','list']:['mcp',p.action==='mcp-login'?'login':'logout',p.name];if(p.name&&!/^[a-zA-Z0-9_-]+$/.test(p.name))throw new Error('Invalid server');const entry=(await import('node:url')).fileURLToPath(import.meta.resolve('@earendil-works/pi-coding-agent'));const cli=resolve(entry,'..','bundle','cli.js');return new Promise((resolveResult,reject)=>{const child=spawn(process.execPath,[cli,...args],{cwd:home,env:{...process.env,ELECTRON_RUN_AS_NODE:'1',PI_CODING_AGENT_DIR:home},windowsHide:true,stdio:['ignore','pipe','pipe']});children.add(child);child.once('close',()=>children.delete(child));let output='';const take=chunk=>{output=(output+chunk.toString()).slice(-60000);};child.stdout.on('data',take);child.stderr.on('data',take);child.on('error',error=>{clearTimeout(timer);reject(error);});const timer=setTimeout(()=>child.kill(),p.action==='mcp-login'?180000:30000);child.on('exit',code=>{clearTimeout(timer);resolveResult({output,ok:code===0});});});}
  throw new Error('Unknown resource action');}
  return {list,dispose(){for(const child of children)child.kill();children.clear();},action:payload=>{const job=mutations.then(()=>action(payload));mutations=job.catch(()=>{});return job;}};
