@@ -1,0 +1,103 @@
+{
+  "date": "2026-11-15",
+  "sourceCheckpoint": "5abd622",
+  "platform": "macOS 26.5.2 arm64",
+  "versions": {
+    "node": "v24.22.2",
+    "bun": "1.4.4",
+    "rustc": "rustc 1.92.0 (ded5c06cf 2025-12-08)",
+    "cargo": "cargo 1.92.0 (344c4567c 2025-10-21)"
+  },
+  "nodeTests": {
+    "macos-core-01.txt": {
+      "tests": 124,
+      "pass": 121,
+      "fail": 0,
+      "skipped": 3
+    },
+    "macos-desktop-01.txt": {
+      "tests": 99,
+      "pass": 92,
+      "fail": 5,
+      "skipped": 2
+    },
+    "macos-desktop-02.txt": {
+      "tests": 99,
+      "pass": 96,
+      "fail": 1,
+      "skipped": 2
+    },
+    "macos-platform-ui-02.txt": {
+      "tests": 5,
+      "pass": 5,
+      "fail": 0,
+      "skipped": 0
+    },
+    "macos-bridge-02.txt": {
+      "tests": 4,
+      "pass": 4,
+      "fail": 0,
+      "skipped": 0
+    },
+    "macos-providers-02.txt": {
+      "tests": 5,
+      "pass": 5,
+      "fail": 0,
+      "skipped": 0
+    },
+    "macos-native-files-02.txt": {
+      "tests": 5,
+      "pass": 4,
+      "fail": 0,
+      "skipped": 1
+    },
+    "session-differential-01.txt": {
+      "tests": 20,
+      "pass": 20,
+      "fail": 0,
+      "skipped": 0
+    }
+  },
+  "nativeViewer": {
+    "testsPassed": 6,
+    "releaseBuild": true,
+    "clippyWarningsDenied": true,
+    "smoke": {
+      "ok": true,
+      "events": [
+        {
+          "event": "discovered",
+          "sessions": 1,
+          "experimental": true
+        },
+        {
+          "event": "ready",
+          "sessions": 1,
+          "experimental": true,
+          "ui_updated": true
+        },
+        {
+          "event": "selection",
+          "messages": 1000,
+          "marker_found": true,
+          "layout_completed": true
+        },
+        {
+          "event": "shutdown",
+          "ok": true
+        }
+      ],
+      "fixtureUnchanged": true
+    }
+  },
+  "wryHost": {
+    "testsPassed": 6,
+    "releaseBuild": true,
+    "clippyWarningsDenied": true,
+    "operationalPlatform": "Windows only; macOS compiled/tested only"
+  },
+  "knownFailure": "Desktop wallpaper pixel checksum after reload; reproducible on isolated fixtures, unresolved.",
+  "performanceComparison": false,
+  "routing": "Two Terra Medium implementation lanes, Terra High regression diagnosis, Sol High review; effective child routing metadata unavailable.",
+  "publication": false
+}

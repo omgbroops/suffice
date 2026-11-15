@@ -1,5 +1,17 @@
 use serde_json::{json, Value};
-use std::io::{self, Read};
+use std::io::{self, Read, Write};
+use std::path::Path;
+use suffice_session::{ReadLimits, SessionStore};
+
+const MAX_WIRE_BYTES: usize = 128 * 1024 * 1024;
+
+fn store(v: &Value) -> Result<SessionStore, String> {
+    SessionStore::open(
+        Path::new(v["root"].as_str().ok_or("root must be a string")?),
+        ReadLimits::default(),
+    )
+    .map_err(|error| error.to_string())
+}
 fn run(v: Value) -> Result<Value, String> {
     match v["op"].as_str() {
         Some("project") => suffice_session::project(
@@ -9,24 +21,97 @@ fn run(v: Value) -> Result<Value, String> {
         Some("journal") => Ok(json!(suffice_session::read_journal(
             v["source"].as_str().ok_or("source must be a string")?
         )?)),
-        Some("discover") => Ok(json!(suffice_session::discover(std::path::Path::new(
-            v["root"].as_str().ok_or("root must be a string")?
-        ))?)),
+        Some("discover") | Some("discover_confined") => {
+            let discovery = store(&v)?.discover().map_err(|error| error.to_string())?;
+            if v["op"] == "discover" {
+                return Ok(json!(discovery
+                    .sessions
+                    .into_iter()
+                    .map(|info| info.summary)
+                    .collect::<Vec<_>>()));
+            }
+            Ok(
+                json!({"sessions": discovery.sessions.into_iter().map(|info| {
+                // Non-UTF-8 paths cannot be represented faithfully in JSON.
+                let relative = info.relative_path.to_str().ok_or("Session path is not UTF-8")?;
+                Ok(json!({"relativePath":relative,"summary":info.summary}))
+            }).collect::<Result<Vec<_>,String>>()?, "skipped":discovery.skipped}),
+            )
+        }
+        Some("read_session") => {
+            let entries = store(&v)?
+                .read(Path::new(
+                    v["relativePath"]
+                        .as_str()
+                        .ok_or("relativePath must be a string")?,
+                ))
+                .map_err(|error| error.to_string())?;
+            let projection = suffice_session::project_journal(&entries, v.get("leaf"))?;
+            Ok(json!({"entries":entries,"projection":projection}))
+        }
         _ => Err("unknown operation".into()),
     }
 }
 fn main() {
-    let mut s = String::new();
+    let mut input = Vec::new();
     let result = io::stdin()
-        .read_to_string(&mut s)
+        .take(MAX_WIRE_BYTES as u64 + 1)
+        .read_to_end(&mut input)
         .map_err(|e| e.to_string())
-        .and_then(|_| serde_json::from_str(&s).map_err(|e| e.to_string()))
+        .and_then(|_| {
+            if input.len() > MAX_WIRE_BYTES {
+                return Err("Request exceeds 128 MiB wire limit".to_owned());
+            }
+            serde_json::from_slice(&input).map_err(|e| e.to_string())
+        })
         .and_then(run);
-    println!(
-        "{}",
-        match result {
-            Ok(v) => json!({"ok":true,"result":v}),
-            Err(e) => json!({"ok":false,"error":e}),
+    let mut response = match result {
+        Ok(v) => json!({"ok":true,"result":v}),
+        Err(e) => json!({"ok":false,"error":e}),
+    };
+    suffice_session::javascript_json_order(&mut response);
+    let mut output = BoundedOutput {
+        bytes: Vec::new(),
+        // Reserve the terminating newline inside the total wire budget.
+        limit: MAX_WIRE_BYTES - 1,
+    };
+    if serde_json::to_writer(&mut output, &response).is_err() {
+        output.bytes = b"{\"ok\":false,\"error\":\"Response exceeds 128 MiB wire limit\"}".to_vec();
+    }
+    output.bytes.push(b'\n');
+    if let Err(error) = io::stdout().lock().write_all(&output.bytes) {
+        eprintln!("Session response failed: {error}");
+        std::process::exit(1);
+    }
+}
+
+struct BoundedOutput {
+    bytes: Vec<u8>,
+    limit: usize,
+}
+impl Write for BoundedOutput {
+    fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
+        if bytes.len() > self.limit.saturating_sub(self.bytes.len()) {
+            return Err(io::Error::other("response byte limit"));
         }
-    );
+        self.bytes.extend_from_slice(bytes);
+        Ok(bytes.len())
+    }
+    fn flush(&mut self) -> io::Result<()> {
+        Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn serialization_buffer_never_exceeds_the_wire_byte_limit() {
+        let mut output = BoundedOutput {
+            bytes: Vec::new(),
+            limit: 8,
+        };
+        assert!(serde_json::to_writer(&mut output, &json!("larger than the limit")).is_err());
+        assert!(output.bytes.len() <= 8);
+    }
 }

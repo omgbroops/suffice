@@ -1,0 +1,31 @@
+{"expectedBefore":{"sum":41108578,"effect":"Scanlines","first":[108,77,85,255,109,77,85,255,109,77,85,255,109,77,85,255,109,77,85,255,109,77,85,255,109,77,85,255,109,77,84,255],"imageSize":29878,"frame":{"x":0.44212962962962965,"y":0.396523178807947,"zoom":1.8}},"expectedAfter":{"sum":41108578,"effect":"Scanlines","first":[108,77,85,255,109,77,85,255,109,77,85,255,109,77,85,255,109,77,85,255,109,77,85,255,109,77,85,255,109,77,84,255],"imageSize":29878,"frame":{"x":0.44212962962962965,"y":0.396523178807947,"zoom":1.8}},"persisted":41012650,"actual":41108578,"before":{"theme":"dark","width":1152,"height":879},"after":{"theme":"dark","width":1152,"height":879},"changed":1391692,"max":2,"total":1463017,"firstBefore":[108,75,85,255,108,75,84,255,108,75,84,255,108,75,84,255,108,75,84,255,108,75,84,255,108,75,84,255,108,75,84,255],"firstAfter":[108,77,85,255,109,77,85,255,109,77,85,255,109,77,85,255,109,77,85,255,109,77,85,255,109,77,85,255,109,77,84,255]}
+✖ custom wallpaper, light horizon, rich Spotlight and safe mathematics work in the real renderer (18188.928292ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 18370.3885
+
+✖ failing tests:
+
+test at apps/desktop/test/wallpaper-diagnostic.test.mjs:8:1
+✖ custom wallpaper, light horizon, rich Spotlight and safe mathematics work in the real renderer (18188.928292ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 41108578
+  - 41012650
+  
+      at TestContext.<anonymous> (file:///Users/aryasalem/Downloads/Programming/suffice/apps/desktop/test/wallpaper-diagnostic.test.mjs:31:3867)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 41108578,
+    expected: 41012650,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

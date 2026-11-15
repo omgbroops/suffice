@@ -70,6 +70,22 @@ jobs:
           cargo clippy --locked --manifest-path crates/suffice-fs-addon/Cargo.toml --all-targets -- -D warnings
           cargo test --locked --manifest-path crates/suffice-fs/Cargo.toml
           cargo test --locked --manifest-path crates/suffice-fs-addon/Cargo.toml
+      - name: Check experimental session core and native viewer
+        env:
+          PI_OFFLINE: '1'
+        run: |
+          set -o pipefail
+          cargo fmt --manifest-path crates/suffice-session/Cargo.toml -- --check
+          cargo clippy --locked --manifest-path crates/suffice-session/Cargo.toml --all-targets -- -D warnings
+          cargo test --locked --manifest-path crates/suffice-session/Cargo.toml
+          # Rebuild before the Pi differential suite: never test a stale executable.
+          cargo build --locked --manifest-path crates/suffice-session/Cargo.toml
+          node --test crates/suffice-session/tests/differential.test.mjs 2>&1 | tee .ci-logs/session.log
+          cargo fmt --manifest-path apps/desktop-native/Cargo.toml -- --check
+          cargo clippy --locked --manifest-path apps/desktop-native/Cargo.toml --all-targets -- -D warnings
+          cargo test --locked --manifest-path apps/desktop-native/Cargo.toml
+          cargo build --release --locked --manifest-path apps/desktop-native/Cargo.toml
+          node --test apps/desktop-bridge/*.test.mjs 2>&1 | tee .ci-logs/bridge.log
       - name: Core and CLI tests
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |

@@ -27,7 +27,7 @@ test('cancelling login rejects pending prompt and permits another connection',as
 });
 
 test('real Pi ChatGPT OAuth reaches browser authorization with the shared installation ID',{timeout:15000},async()=>{
- const previous=process.env.PI_OFFLINE,previousHost=process.env.PI_OAUTH_CALLBACK_HOST;process.env.PI_OFFLINE='1';process.env.PI_OAUTH_CALLBACK_HOST='127.0.0.2';const home=await mkdtemp(resolve(tmpdir(),'suffice-chatgpt-auth-'));let authorization;
+ const previous=process.env.PI_OFFLINE,previousHost=process.env.PI_OAUTH_CALLBACK_HOST;process.env.PI_OFFLINE='1';process.env.PI_OAUTH_CALLBACK_HOST=process.platform==='darwin'?'127.0.0.1':'127.0.0.2';const home=await mkdtemp(resolve(tmpdir(),'suffice-chatgpt-auth-'));let authorization;
  const service=createProviderSettings({home,emit(){},openBrowser(url){authorization=new URL(url);service.cancel();}});
  try{
   await assert.rejects(service.login({provider:'openai',type:'oauth'}),/cancelled|aborted/i);

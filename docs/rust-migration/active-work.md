@@ -4,7 +4,20 @@ The user's persistent goal remains active: a concretely verified, demonstrably
 lighter app and continued work toward full Rust across all original features.
 The earlier delivery report is a historical checkpoint, not completion.
 
-Latest continuation: see `continuation-process-session.md`. Core/CLI now has
+Latest continuation: [`continuation-session-store.md`](continuation-session-store.md).
+Rust now supplies retained capability-relative, bounded discovery/reads to the
+native viewer; 13 Rust session tests, 22 Pi/wire tests and 8 native tests pass.
+The macOS desktop suite is now 97 passed, 0 failed, 2 Windows-only skips after
+the wallpaper gate was resolved with controlled rendering evidence. Production
+Pi reads and the full migration/performance/platform obligations remain open.
+
+Previous macOS continuation: [`continuation-macos.md`](continuation-macos.md).
+This supersedes the resume pointers below: session wire/missing-field
+compatibility, combined native-viewer builds, platform tests and CI are being
+qualified on macOS arm64. Original Windows measurements remain unchanged and
+are not macOS performance evidence. The paused checkpoint remains historical.
+
+Previous Windows continuation: see `continuation-process-session.md`. Core/CLI has
 121 pass/2 opt-in skips and desktop has 99/99 pass in independent full runs.
 The Rust host has suspended startup, a Windows Job and an independent bridge
 exit monitor, bounded input/output queues and execution-based acknowledgment.

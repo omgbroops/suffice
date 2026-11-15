@@ -2,15 +2,18 @@ import {createRequire} from 'node:module';
 import Module from 'node:module';
 import {EventEmitter} from 'node:events';
 import {fork} from 'node:child_process';
-import {mkdirSync} from 'node:fs';
+import {mkdirSync,realpathSync} from 'node:fs';
 import path from 'node:path';
 import readline from 'node:readline';
 import {format} from 'node:util';
 import {AsyncLocalStorage} from 'node:async_hooks';
 
 const option = name => { const i=process.argv.indexOf(name); return i<0 ? null : process.argv[i+1]; };
-const root=option('--root'), profile=option('--profile');
-if (!root || !profile || !process.env.SUFFICE_HOME || !path.isAbsolute(root) || !path.isAbsolute(profile) || !path.isAbsolute(process.env.SUFFICE_HOME)) throw new Error('Absolute --root, --profile and SUFFICE_HOME are required');
+const requestedRoot=option('--root'), profile=option('--profile');
+if (!requestedRoot || !profile || !process.env.SUFFICE_HOME || !path.isAbsolute(requestedRoot) || !path.isAbsolute(profile) || !path.isAbsolute(process.env.SUFFICE_HOME)) throw new Error('Absolute --root, --profile and SUFFICE_HOME are required');
+// CommonJS reports canonical parent filenames (including macOS /private/var).
+// Use that same identity when confining the Electron shim to this checkout.
+const root=realpathSync(requestedRoot);
 mkdirSync(profile,{recursive:true});
 const send=message=>{const frame=JSON.stringify(message)+'\n';if(process.stdout.writableLength+Buffer.byteLength(frame)>64*1024*1024)throw new Error('Bridge output backpressure limit reached');return process.stdout.write(frame);};
 for (const name of ['log','info','warn','error','debug']) console[name]=(...args)=>process.stderr.write(format(...args)+'\n');

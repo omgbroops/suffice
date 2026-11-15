@@ -14,11 +14,17 @@ entries.push({type:'session_info',id:'name',parentId:'m999',timestamp,name:title
 const file=join(sessions,'fixture.jsonl'); await writeFile(file,entries.map(JSON.stringify).join('\n')+'\n');
 const hash=b=>createHash('sha256').update(b).digest('hex'); const before=hash(await readFile(file));
 try {
- const exe=resolve('apps/desktop-native/target/release/suffice-desktop-native.exe');
+ const binary=`suffice-desktop-native${process.platform==='win32'?'.exe':''}`;
+ const exe=resolve('apps/desktop-native/target/release',binary);
  const child=spawn(exe,['--home',join(root,'home'),'--project',project,'--smoke','--hold-seconds','2'],{stdio:['ignore','pipe','pipe']});
  let out='',err=''; child.stdout.on('data',x=>out+=x); child.stderr.on('data',x=>err+=x);
- const timer=setTimeout(()=>child.kill(),60000); const code=await new Promise((res,rej)=>{child.on('error',rej);child.on('exit',res)});clearTimeout(timer);
- assert.equal(code,0,err); const events=out.trim().split('\n').map(JSON.parse);
- assert(events.some(e=>e.event==='ready' && e.sessions===1)); assert(events.some(e=>e.event==='selection' && e.messages===1000 && e.marker_found && e.layout_completed)); assert(events.some(e=>e.event==='shutdown' && e.ok)); assert.equal(hash(await readFile(file)),before);
+ const code=await new Promise((resolveExit,rejectExit)=>{
+  let timedOut=false,forceTimer;
+  const timer=setTimeout(()=>{timedOut=true;child.kill();forceTimer=setTimeout(()=>child.kill('SIGKILL'),5000);},60000);
+  child.once('error',error=>{clearTimeout(timer);clearTimeout(forceTimer);rejectExit(error);});
+  child.once('close',code=>{clearTimeout(timer);clearTimeout(forceTimer);if(timedOut)rejectExit(new Error(`native smoke timed out: ${err}`));else resolveExit(code);});
+ });
+ assert.equal(code,0,err); const events=out.trim().split('\n').filter(Boolean).map(JSON.parse);
+ assert(events.some(e=>e.event==='discovered' && e.sessions===1)); assert(events.some(e=>e.event==='ready' && e.sessions===1 && e.ui_updated)); assert(events.some(e=>e.event==='selection' && e.messages===1000 && e.marker_found && e.layout_completed)); assert(events.some(e=>e.event==='shutdown' && e.ok)); assert.equal(hash(await readFile(file)),before);
  console.log(JSON.stringify({ok:true,events,fixtureUnchanged:true}));
 } finally {await rm(root,{recursive:true,force:true});}

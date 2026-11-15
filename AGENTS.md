@@ -15,6 +15,13 @@ assuming that research behavior is production behavior.
   historical evidence byte for byte. JavaScript subject repositories stay JavaScript.
 - `scripts/rust-migration`, `docs/rust-migration`: reproducible offline migration
   measurements, parity inventories and evidence. Do not overwrite earlier samples.
+- `crates/suffice-session`: experimental read-only Pi session projection; rebuild
+  its executable before running the installed-Pi differential tests. New file-read
+  integrations must retain `SessionStore` directory capabilities and enforce
+  byte/line/catalog budgets, rather than reopen canonical ambient file paths.
+- `apps/desktop-native`: experimental eframe viewer of synthetic sessions.
+- `apps/desktop-rust`, `apps/desktop-bridge`: experimental Wry host and transitional
+  Node business logic. Process containment currently requires Windows.
 
 ## Verified baseline commands (Windows)
 
@@ -59,3 +66,26 @@ Done means parity and rollback checks, release builds, matched repeated performa
 measurements including process trees, preservation checks, independent review and
 an explicit account of retained non-Rust components. A partial migration stays
 explicitly partial.
+
+## macOS continuation
+
+Use the same pinned Node/Bun/Rust versions above. Read the latest continuation
+linked from `docs/rust-migration/active-work.md` for observed macOS failures and
+qualification limits. The Windows baseline manifest contains CRLF checkout bytes;
+macOS LF text can differ while preserving the identical historical Git blobs.
+Report that distinction instead of rewriting evidence or normalizing the manifest.
+
+Experimental offline checks (after frozen dependency installation):
+
+```text
+cargo build --locked --manifest-path crates/suffice-session/Cargo.toml
+cargo test --locked --manifest-path crates/suffice-session/Cargo.toml
+node --test crates/suffice-session/tests/differential.test.mjs
+cargo test --locked --manifest-path apps/desktop-native/Cargo.toml
+cargo build --release --locked --manifest-path apps/desktop-native/Cargo.toml
+node apps/desktop-native/smoke.mjs
+node --test apps/desktop-bridge/*.test.mjs
+```
+
+Native viewer smoke needs an interactive desktop and synthetic fixtures only.
+Headless egui input tests validate widget state, not OS presentation/accessibility.

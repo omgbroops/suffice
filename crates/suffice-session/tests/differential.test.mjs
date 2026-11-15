@@ -41,8 +41,19 @@ test('malformed projection errors match Pi failure',()=>{
   assert.throws(()=>oracle(entries)); assert.equal(rust({op:'project',entries}).ok,false);
  }
 });
-test('timestamp null, missing, number and date-only match Pi',()=>{
- for(const stamp of [null,0,123456789,'2020-01-02',undefined]){
+test('missing projection fields preserve Pi undefined behavior',()=>{
+ const cases=[
+  [{type:'thinking_level_change',id:'t',parentId:null}],
+  [{type:'model_change',id:'m',parentId:null}],
+  [{type:'message',id:'a',parentId:null,message:{role:'assistant',content:[]}}],
+  [msg('u',null,'user','x'),{type:'context_edit',id:'e',parentId:'u',targetId:'u',replacement:{}}],
+ ];
+ for(const entries of cases)assert.deepEqual(rust({op:'project',entries}).result,oracle(entries));
+ const missing=[msg('u',null,'user','x'),{type:'context_edit',id:'e',parentId:'u',targetId:'u'}];
+ assert.throws(()=>oracle(missing));assert.equal(rust({op:'project',entries:missing}).ok,false);
+});
+test('timestamp null, missing, primitives, date-only and bounded JSON coercions match Pi',()=>{
+ for(const stamp of [null,true,false,0,123456789,'2020-01-02','2020-01-02T03:04:05.000Z',['2020-01-02'],[],{},undefined]){
   const e={type:'custom_message',id:'x',parentId:null,content:'x',...(stamp===undefined?{}:{timestamp:stamp})};
   assert.deepEqual(rust({op:'project',entries:[e]}).result,oracle([e]));
  }
@@ -107,10 +118,53 @@ test('integer-like and duplicate keys match Pi after journal and projection',()=
  const journal=JSON.parse(journalWire).result;
  const piArgs=pi.buildSessionProjection([piEntry]).messages[0].content[0].arguments;
  assert.equal(JSON.stringify(journal[0].message.content[0].arguments),JSON.stringify(piArgs));
+ assert.ok(journalWire.includes('"arguments":{"2":"two","10":"ten","z":9,"01":"leading","a":1,"nested":{"1":1,"3":3,"y":1,"b":2}}'));
  const projectionWire=rustRaw(`{"op":"project","entries":[${entry}]}`);
  const rustArgs=JSON.parse(projectionWire).result.messages[0].content[0].arguments;
  assert.equal(JSON.stringify(rustArgs),JSON.stringify(piArgs));
- // On the wire, insertion order remains intact even when JS subsequently
- // enumerates integer-index keys first; duplicate z keeps its first position.
- assert.ok(projectionWire.includes('"arguments":{"z":9,"10":"ten","2":"two","01":"leading","a":1,"nested":{"3":3,"1":1,"y":1,"b":2}}'));
+ // The raw Rust wire follows JSON.stringify's integer-index enumeration too;
+ // duplicate z retains its original non-index insertion slot.
+ assert.ok(projectionWire.includes('"arguments":{"2":"two","10":"ten","z":9,"01":"leading","a":1,"nested":{"1":1,"3":3,"y":1,"b":2}}'));
+});
+test('raw wire uses JavaScript integer-index boundaries',()=>{
+ const argumentsText='{"00":"double","4294967295":"not-index","0":"zero","+1":"plus","4294967294":"last-index","-0":"minus"}';
+ const entry=`{"type":"message","id":"a","parentId":null,"message":{"role":"assistant","content":[{"type":"toolCall","id":"t","name":"tool","arguments":${argumentsText}}]}}`;
+ const expected='{"0":"zero","4294967294":"last-index","00":"double","4294967295":"not-index","+1":"plus","-0":"minus"}';
+ const journalWire=rustRaw(JSON.stringify({op:'journal',source:entry+'\n'}));
+ const projectionWire=rustRaw(`{"op":"project","entries":[${entry}]}`);
+ assert.ok(journalWire.includes('"arguments":'+expected),journalWire);
+ assert.ok(projectionWire.includes('"arguments":'+expected),projectionWire);
+});
+
+test('confined read preserves raw journal provenance and Pi body projection without writes',async()=>{
+ const directory=await mkdtemp(resolve(tmpdir(),'suffice-confined-wire-'));
+ try{
+  const group=resolve(directory,'group');await mkdir(group);
+  const entries=[{type:'session',id:'metadata',timestamp:t},msg('u',null,'user','question'),msg('a','u','assistant','answer')];
+  const file=resolve(group,'saved.jsonl'),source=entries.map(JSON.stringify).join('\r\n')+'\r\n';
+  await writeFile(file,source);const before=await readFile(file);
+  const discovery=rust({op:'discover_confined',root:directory});assert.equal(discovery.ok,true);assert.deepEqual(discovery.result.skipped,[]);
+  assert.equal(discovery.result.sessions.length,1);
+  const relativePath=discovery.result.sessions[0].relativePath;
+  for(const leaf of [undefined,null,'u']){
+   const got=rust({op:'read_session',root:directory,relativePath,...(leaf===undefined?{}:{leaf})});assert.equal(got.ok,true);
+   const expected=oracle(entries.slice(1),leaf);expected.entries=expected.entries.map(entry=>({...entry,sourceIndex:entry.sourceIndex+1}));
+   assert.deepEqual(got.result.entries,entries);assert.deepEqual(got.result.projection,expected);
+   for(const entry of got.result.projection.entries)assert.equal(entries[entry.sourceIndex].type,'message');
+  }
+  assert.equal(rust({op:'read_session',root:directory,relativePath:'../saved.jsonl'}).ok,false);
+  assert.deepEqual(await readFile(file),before);
+ }finally{await rm(directory,{recursive:true,force:true});}
+});
+
+test('confined read rejects middle corruption and keeps crash-tail recovery',async()=>{
+ const directory=await mkdtemp(resolve(tmpdir(),'suffice-confined-tail-'));
+ try{
+  await mkdir(resolve(directory,'group'));const file=resolve(directory,'group','saved.jsonl');
+  const header=JSON.stringify({type:'session',id:'metadata',timestamp:t});
+  await writeFile(file,header+'\n'+JSON.stringify(msg('u',null,'user','saved'))+'\n{"partial"');
+  assert.equal(rust({op:'read_session',root:directory,relativePath:'group/saved.jsonl'}).result.entries.length,2);
+  await writeFile(file,header+'\nBAD\n');
+  assert.match(rust({op:'read_session',root:directory,relativePath:'group/saved.jsonl'}).error,/line 2/);
+ }finally{await rm(directory,{recursive:true,force:true});}
 });

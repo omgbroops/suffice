@@ -16,8 +16,11 @@ const addon=path?createRequire(import.meta.url)(path):null;
 test('addon asynchronously matches the JS walk across mutations and locale ties', {skip:!addon}, async t=>{
   const root=await mkdtemp(resolve(tmpdir(),'suffice-native-fs-'));
   t.after(()=>rm(root,{recursive:true,force:true}));
-  for(const dir of ['a dir','a.dir','node_modules','.hidden','é'])await mkdir(resolve(root,dir));
-  for(const name of ['z.js','é','é/inside','a dir/inside','a.dir/z','node_modules/ignored','.hidden/ignored'])await writeFile(resolve(root,name),'x');
+  for(const dir of ['a dir','a.dir','node_modules','.hidden','é-dir'])await mkdir(resolve(root,dir));
+  for(const name of ['z.js','é.txt','é-dir/inside','a dir/inside','a.dir/z','node_modules/ignored','.hidden/ignored'])await writeFile(resolve(root,name),'x');
+  // APFS can alias canonically equivalent spellings. Exercise both names on
+  // filesystems that distinguish them without colliding a file with a directory.
+  try {await writeFile(resolve(root,'é.txt'),'x',{flag:'wx'});}catch(e){if(e.code!=='EEXIST')throw e;t.diagnostic('Filesystem aliases NFC/NFD names; comparing its retained spelling');}
   try {await symlink(resolve(root,'a dir'),resolve(root,'link'),'dir');}catch(e){if(!['EPERM','EACCES','ENOTSUP'].includes(e.code))throw e;}
   assert.equal('é'.localeCompare('é'),0);
   const helper=createNativeFiles({load:()=>addon});

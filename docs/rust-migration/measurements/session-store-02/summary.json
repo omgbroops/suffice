@@ -1,0 +1,52 @@
+{
+  "sourceCheckpoint": "5abd622",
+  "platform": "macOS26.5.2 arm64",
+  "versions": {
+    "node": "24.22.2",
+    "bun": "1.4.4",
+    "rust": "1.92.0"
+  },
+  "checks": {
+    "rustSessionTests": 13,
+    "piWireTests": 22,
+    "nativeViewerTests": 8,
+    "desktop": {
+      "passed": 97,
+      "failed": 0,
+      "skipped": 2
+    },
+    "nativeSmoke": {
+      "ok": true,
+      "events": [
+        {
+          "event": "discovered",
+          "sessions": 1,
+          "experimental": true
+        },
+        {
+          "event": "ready",
+          "sessions": 1,
+          "experimental": true,
+          "ui_updated": true
+        },
+        {
+          "event": "selection",
+          "messages": 1000,
+          "marker_found": true,
+          "layout_completed": true
+        },
+        {
+          "event": "shutdown",
+          "ok": true
+        }
+      ],
+      "fixtureUnchanged": true
+    }
+  },
+  "knownLimits": [
+    "Input/work/wire caps are not heap/RSS or wall-time guarantees",
+    "Concurrent mutation is not an atomic snapshot",
+    "Windows/Linux runtime and full product parity/performance remain open"
+  ],
+  "routing": "Terra Medium discovery/native, Terra High wallpaper, Sol High independent review; effective runtime routing unverified"
+}

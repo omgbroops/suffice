@@ -29,10 +29,17 @@ test('Electron loads the unchanged shell and reaches the real isolated harness',
     const composerShadow=await page.locator('.composer').evaluate(el=>getComputedStyle(el).boxShadow);
     for(const selector of ['.sidebar-heading','.right-panel-header','.window-drag-region','.sidebar .panel-drag-region','.right-sidebar .panel-drag-region']){assert.equal(await page.locator(selector).evaluate(el=>getComputedStyle(el).getPropertyValue('-webkit-app-region')),'drag');assert.equal(await page.locator(selector).evaluate(el=>getComputedStyle(el).userSelect),'none');}
     assert.equal(await page.getByRole('button',{name:'Search sessions',exact:true}).evaluate(el=>getComputedStyle(el).getPropertyValue('-webkit-app-region')),'no-drag');
+    if(process.platform!=='darwin'){
     const hitPoints=await page.evaluate(()=>{const center=selector=>{const r=document.querySelector(selector).getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};};return [center('.sidebar .brand-wordmark'),center('.sidebar [data-action="search-sessions"]'),center('.window-controls button'),center('.window-drag-region')];});const hits=await nativeHitTests(electron,hitPoints);if(hits)assert.deepEqual(hits,[1,1,1,2]);
+    }else{
+      assert.equal(await page.locator('html').getAttribute('data-window-chrome'),'macos-native');
+      assert.equal(await page.locator('.window-control').count(),0);
+    }
     assert.match(await page.locator('.composer').evaluate(el=>getComputedStyle(el).backdropFilter),/blur\(24px\)/);
-    await page.getByRole('button',{name:'Maximize or restore'}).click();
-    await page.getByRole('button',{name:'Maximize or restore'}).click();
+    if(process.platform!=='darwin'){
+      await page.getByRole('button',{name:'Maximize or restore'}).click();
+      await page.getByRole('button',{name:'Maximize or restore'}).click();
+    }
     const originalBounds=await electron.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].getBounds());
     const oldWidth=await page.evaluate(()=>innerWidth);await electron.evaluate(({BrowserWindow})=>{const win=BrowserWindow.getAllWindows()[0];win.setSize(win.getBounds().width-80,win.getBounds().height);});await page.waitForFunction(width=>innerWidth===width-80,oldWidth);await electron.evaluate(({BrowserWindow},bounds)=>BrowserWindow.getAllWindows()[0].setBounds(bounds),originalBounds);await page.waitForFunction(width=>innerWidth===width,oldWidth);
     await electron.evaluate(({BrowserWindow})=>{const win=BrowserWindow.getAllWindows()[0];win.unmaximize();win.setContentSize(1440,900);win.setPosition(0,0);});
@@ -49,14 +56,18 @@ test('Electron loads the unchanged shell and reaches the real isolated harness',
     assert.equal(await page.getByRole('button',{name:'Session options'}).isVisible(),false);
     const centers=await page.evaluate(()=>{const cy=el=>{const r=el.getBoundingClientRect();return r.top+r.height/2;};return {left:cy(document.querySelector('.sidebar .sidebar-tools button')),right:[...document.querySelectorAll('.workspace-tool')].map(cy)};});
     assert.ok(centers.right.every(y=>Math.abs(y-centers.left)<.5));
+    if(process.platform!=='darwin'){
     const cornerGaps=await page.locator('.window-control').last().evaluate(el=>{const r=el.getBoundingClientRect();return {top:r.top,right:innerWidth-r.right};});
     assert.ok(Math.abs(cornerGaps.top-cornerGaps.right)<.5);
+    }
     assert.equal(await page.locator('.workspace-tools > button:last-child svg').innerHTML(),await page.locator('[data-action="toggle-sidebar"] svg').first().innerHTML());
+    if(process.platform!=='darwin'){
     const chrome=await page.locator('.window-controls').evaluate(el=>{const s=getComputedStyle(el);return {color:s.backgroundColor,shadow:s.boxShadow,padding:s.padding,gap:s.gap,radii:[s.borderTopLeftRadius,s.borderTopRightRadius,s.borderBottomRightRadius,s.borderBottomLeftRadius]};});
     assert.equal(chrome.color,await page.locator('.sidebar').evaluate(el=>getComputedStyle(el).backgroundColor));
     assert.equal(chrome.color,await page.locator('body').evaluate(el=>getComputedStyle(el).backgroundColor));
     assert.deepEqual(chrome.radii,['0px','0px','0px','12px']);
     assert.equal(chrome.shadow,'none');assert.equal(chrome.padding,'5px 6px 7px 8px');assert.equal(chrome.gap,'4px');
+    }
     const contextButton=page.locator('.context-ring');
     // Focus avoids the deliberate pointer hover delay, and tests keyboard access.
     await contextButton.focus();
@@ -133,7 +144,7 @@ test('Electron loads the unchanged shell and reaches the real isolated harness',
     assert.equal(await page.evaluate(()=>document.documentElement.scrollHeight>innerHeight),false);
     await page.evaluate(()=>{document.documentElement.dataset.theme='light';});
     const lightSurfaces=await surfaceBrightness();assert.ok(lightSurfaces.thread>lightSurfaces.sidebar);
-    assert.equal(await page.locator('.window-controls').evaluate(el=>getComputedStyle(el).backgroundColor),await page.locator('.sidebar').evaluate(el=>getComputedStyle(el).backgroundColor));
+    if(process.platform!=='darwin')assert.equal(await page.locator('.window-controls').evaluate(el=>getComputedStyle(el).backgroundColor),await page.locator('.sidebar').evaluate(el=>getComputedStyle(el).backgroundColor));
     await page.screenshot({path:resolve('apps/desktop/desktop-thread-light.png')});
     await page.evaluate(()=>{document.documentElement.dataset.theme='dark';});
     const bubble=await page.locator('.thread-user').boundingBox();assert.ok(bubble.width<100&&bubble.height<=44);

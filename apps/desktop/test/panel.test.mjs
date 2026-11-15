@@ -71,7 +71,8 @@ test('thread panels, file views, tabs and drafts restore independently, includin
   await page.getByRole('button',{name:'Add panel tab'}).click();assert.equal(await page.getByRole('menuitem',{name:'Close tab',exact:true}).count(),0);await page.getByRole('menu',{name:'Panel options'}).getByRole('menuitem',{name:'Changes',exact:true}).click();
   const tabAlignment=await page.evaluate(()=>{const cy=el=>{const r=el.getBoundingClientRect();return r.top+r.height/2;};return {window:cy(document.querySelector('.workspace-tool')),tabs:[...document.querySelectorAll('[role="tab"]')].map(cy),header:document.querySelector('.right-panel-header').getBoundingClientRect().toJSON(),controls:document.querySelector('.window-controls').getBoundingClientRect().toJSON()};});
   assert.ok(tabAlignment.tabs.every(y=>Math.abs(y-tabAlignment.window)<.5));
-  assert.ok(tabAlignment.header.right<=tabAlignment.controls.x-6);
+  if(process.platform==='darwin')assert.ok(tabAlignment.header.x>=tabAlignment.controls.right+6);
+  else assert.ok(tabAlignment.header.right<=tabAlignment.controls.x-6);
   await page.locator('.panel-path').filter({hasText:'changed files'}).waitFor();
   const tabSurface=await page.locator('.panel-tab[data-active="true"]').evaluate(el=>{const tab=getComputedStyle(el),editor=getComputedStyle(document.querySelector('.right-panel-content'));return {tab:tab.backgroundColor,editor:editor.backgroundColor,edge:tab.outlineColor,border:editor.borderTopColor};});assert.equal(tabSurface.tab,tabSurface.editor);assert.equal(tabSurface.edge,tabSurface.border);assert.equal(await page.locator('.workspace-tools').evaluate(el=>getComputedStyle(el).gap),'4px');
   assert.deepEqual((await page.locator('.change-folder').first().evaluate(folderStyle)).slice(0,-1),filesFolderStyle.slice(0,-1));assert.equal(await page.locator('.change-folder > .icon:not(.tree-chevron)').count(),0);
