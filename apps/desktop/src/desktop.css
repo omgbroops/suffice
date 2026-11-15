@@ -195,3 +195,13 @@
 .thread-diagram svg { max-width:100%; max-height:420px; height:auto; }
 .thread-diagram .diagram-link { cursor:pointer; }
 .thread-diagram .diagram-link:hover { opacity:.8; }
+
+/* Quiet transcript checkpoints with edges that dissolve into the chat. */
+.thread-divider { display:flex; align-items:center; justify-content:center; gap:8px; margin:18px 0 22px; color:var(--text-muted); font-size:12px; line-height:18px; }
+.thread-divider::before,.thread-divider::after { content:''; flex:1; min-width:12px; height:1px; background:linear-gradient(to right,transparent,color-mix(in srgb,var(--text-muted) 26%,transparent)); }
+.thread-divider::after { transform:scaleX(-1); }
+.thread-divider .icon { width:13px; height:13px; flex:none; }
+.thread-divider span { flex:0 1 auto; text-align:center; }
+.thread-divider[aria-busy=true] .icon { animation:compaction-pulse 1.4s ease-in-out infinite; }
+@keyframes compaction-pulse { 50% { opacity:.35; } }
+@media(prefers-reduced-motion:reduce) { .thread-divider[aria-busy=true] .icon { animation:none; } }

@@ -1,3 +1,4 @@
+import {transcriptDivider,isInterruption} from './transcript-divider.js';
 import {connectExtensionUI} from './extension-ui.js';
 import {connectThreadFork} from './thread-fork.js';
 import {preference} from './settings-preferences.js';
@@ -86,6 +87,7 @@ export function connectThreads({api,prompt,send,toast}){
    const pre=document.createElement('pre');pre.textContent=text;item.append(summary,pre);activityLog.append(item);return item;
   }
   for(const entry of groupActions(messages)){
+   if(entry.role==='status'){activity=activityLog=null;const divider=transcriptDivider(entry.kind);divider.update(entry.kind,entry.automatic);history.append(divider);continue;}
    if(entry.role==='user')activity=null;
    const text=entry.content.filter(part=>part.type==='text'&&part.text?.trim()).map(part=>part.text).join('\n\n');
    for(const part of entry.content){
@@ -178,13 +180,15 @@ export function connectThreads({api,prompt,send,toast}){
  }
  function createJob(id,title,node){
   const job={id,title,history:node,running:true,startedAt:Date.now(),provider:form.modelSelection?.provider,model:form.modelSelection?.model,terminalCount:0};jobs.set(id,job);
-  let current=null,streamed='',reasoning='',group=null,log=null;const tools=new Map();
+  let current=null,streamed='',reasoning='',group=null,log=null,compaction=null;const tools=new Map();
   const statusLine=document.createElement('div');statusLine.className='thread-status';statusLine.setAttribute('role','status');statusLine.textContent='Working';node.append(statusLine);
   const status=text=>{statusLine.textContent=text;statusLine.hidden=false;};
   const response=()=>{if(!current){current=document.createElement('article');current.className='thread-message thread-assistant';node.insertBefore(current,statusLine);}return current;};
   // The status is the live insertion point, not a footer below queued messages.
   job.addSteering=text=>{const bubble=document.createElement('article');bubble.className='thread-message thread-user';bubble.textContent=text;node.insertBefore(bubble,statusLine);group=log=null;return bubble;};
   job.event=event=>{
+   if(event.event==='compaction_start'){group=log=null;statusLine.hidden=true;if(!compaction){compaction=transcriptDivider('compacting');node.insertBefore(compaction,statusLine);}if(node===history)bottom();return;}
+   if(event.event==='compaction_end'){if(compaction){if(event.completed)compaction.update('compacted',event.reason!=='manual');else compaction.remove();compaction=null;}if(event.errorMessage)status(event.errorMessage);if(node===history)bottom();return;}
    if(event.event==='changes'){job.diff=event.diff;drawThreads();}
    if(event.event==='assistant_start'){reasoning='';if(streamed){current=null;streamed='';}status('Working');}
    if(event.event==='text'){streamed+=event.text;if(preference('stream-markdown',true))markdown(response(),streamed);else response().textContent=streamed;statusLine.hidden=true;}
@@ -199,7 +203,7 @@ export function connectThreads({api,prompt,send,toast}){
    if(event.event==='text')group=log=null;
    if(node===history)bottom();
   };
-  job.finish=(result,error)=>{if(error)response().textContent=error.message;else if(result?.text)markdown(response(),result.text);statusLine.remove();if(preference('collapse-work',true))node.querySelectorAll('.thread-activity').forEach(group=>group.open=false);job.running=false;job.failed=!!error;job.terminalCount=0;if(node===history)localStorage.setItem('suffice-thread-seen:'+job.id,String(Date.now()));drawThreads();if(node===history){syncRunning();saveView();bottom();document.dispatchEvent(new Event('suffice:usage-change'));}document.dispatchEvent(new Event('suffice:thread-updated'));void refresh().catch(()=>{});};
+  job.finish=(result,error)=>{const interrupted=result?.interrupted||isInterruption(error);if(compaction){compaction.remove();compaction=null;}if(interrupted){node.insertBefore(transcriptDivider('interrupted'),statusLine);error=null;}else if(error){current=null;streamed='';response().textContent=error.message;}else if(result?.text)markdown(response(),result.text);statusLine.remove();if(preference('collapse-work',true))node.querySelectorAll('.thread-activity').forEach(group=>group.open=false);job.running=false;job.failed=!!error;job.terminalCount=0;if(node===history)localStorage.setItem('suffice-thread-seen:'+job.id,String(Date.now()));drawThreads();if(node===history){syncRunning();saveView();bottom();document.dispatchEvent(new Event('suffice:usage-change'));}document.dispatchEvent(new Event('suffice:thread-updated'));void refresh().catch(()=>{});};
   return job;
  }
  function adoptJob(job,id){if(!id||id===job.id)return;const previous=job.id;jobs.delete(previous);jobs.set(id,job);job.id=id;adoptOptimistic(previous,id);if(activeId===previous){activeId=id;viewState.adopt(id);}drawThreads();}
@@ -252,7 +256,7 @@ export function connectThreads({api,prompt,send,toast}){
   const payload={prompt:text,...selection,attachments,clientId:id,...(!id.startsWith('pending:')?{threadId:id}:{})};
   void selectionReady.catch(()=>{}).then(()=>form.projectSelection).then(()=>(inBackground?api.runBackground(payload):api.run(payload))).then(result=>{adoptJob(job,result.threadId);job.finish(result);}).catch(error=>{
    if(job.id.startsWith('pending:')){optimisticThreads.delete(job.id);drawThreads();}job.finish(null,error);
-   if(inBackground){toast(error.message);if(viewState.id===origin&&!prompt.value){prompt.value=text;prompt.dispatchEvent(new Event('input'));}}
+   if(inBackground&&!isInterruption(error)){toast(error.message);if(viewState.id===origin&&!prompt.value){prompt.value=text;prompt.dispatchEvent(new Event('input'));}}
   });
  },true);
  prompt.addEventListener('input',()=>{if(busy)send.disabled=false;});

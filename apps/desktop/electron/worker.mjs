@@ -77,6 +77,11 @@ async function receive(message) {
       if(newlyCreated&&agent.session.setSessionName)agent.session.setSessionName(threadTitle(payload.prompt,options.desktopSettings.naming));
       if(abortRequested){await agent.dispose();agent=null;throw new Error('Cancelled');}
       agent.session.subscribe(event=>{
+        if(event.type==='compaction_start')send({event:'compaction_start',reason:event.reason});
+        if(event.type==='compaction_end'){
+          if(event.result){const entry=agent.session.sessionManager?.getEntries().findLast(entry=>entry.type==='compaction');agent.session.sessionManager?.appendCustomEntry('suffice:compaction',{entryId:entry?.id,reason:event.reason});}
+          send({event:'compaction_end',reason:event.reason,completed:!!event.result,aborted:event.aborted,errorMessage:event.errorMessage});
+        }
         if(['message_end','tool_execution_end','agent_end'].includes(event.type))send({event:'usage',usage:sessionUsage(agent.session)});
         if(event.type==='message_update'&&event.assistantMessageEvent?.type==='text_delta')send({event:'text',text:event.assistantMessageEvent.delta});
         if(event.type==='message_start'&&event.message?.role==='assistant')send({event:'assistant_start'});
@@ -90,7 +95,7 @@ async function receive(message) {
     const text=await agent.run(payload.prompt,{images:payload.images});
     await changeTracker?.flush().catch(()=>{});if(payload.desktopSettings?.['remember-context'])await rememberProject(home,cwd,text);
     send({id,ok:true,result:{text,sessionPath:agent.sessionPath(),threadId:agent.sessionPath()?threadId(agent.sessionPath()):null,usage:agent.totals}});
-  } catch(error){if(ownsRun)await changeTracker?.flush().catch(()=>{});send({id,ok:false,error:error.message});}
+  } catch(error){if(ownsRun)await changeTracker?.flush().catch(()=>{});if(ownsRun&&abortRequested){agent?.session.sessionManager?.appendCustomEntry('suffice:interrupted');send({id,ok:true,result:{interrupted:true,threadId:agent?.sessionPath()?threadId(agent.sessionPath()):null}});}else send({id,ok:false,error:error.message});}
   finally {if(ownsRun)busy=false;}
 }
 return receive;
