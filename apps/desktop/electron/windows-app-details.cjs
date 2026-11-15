@@ -1,7 +1,7 @@
 const path=require('node:path');
 const {mkdirSync,readFileSync,writeFileSync,existsSync}=require('node:fs');
 const {createHash}=require('node:crypto');
-exports.windowsAppId=packaged=>packaged?'com.suffice.desktop':'com.suffice.desktop.development';
+exports.windowsAppId=packaged=>packaged?'com.suffice.app':'com.suffice.desktop.development';
 function shellIcon(userData,source){
  const bytes=readFileSync(source),digest=createHash('sha256').update(bytes).digest('hex').slice(0,16);
  const directory=path.join(userData,'app-icons'),file=path.join(directory,`suffice-${digest}.ico`);
