@@ -1,6 +1,7 @@
 // Shared primitives: every control and surface is assembled from these helpers.
 export { mark } from './brand.js';
 const paths = {
+  copy:'<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"/>',
   plug:'<path d="M8 3v4m8-4v4M5 7h14v4a7 7 0 0 1-14 0V7Zm7 11v4"/>',
   puzzle:'<path d="M8 3h8v5a2 2 0 1 1 4 0h1v7h-5a2 2 0 1 0 0 4v2H9v-5a2 2 0 1 1-4 0H3V9h5a2 2 0 1 0 0-4V3Z"/>',
   home:'<g transform="translate(1.2 1.2) scale(.9)"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z"/></g>',
