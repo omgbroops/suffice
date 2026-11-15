@@ -2,6 +2,7 @@ const {externalLink}=require('./external-links.cjs');
 const {app,BrowserWindow,ipcMain,dialog,utilityProcess,clipboard,shell,Notification,nativeImage}=require('electron');
 const path=require('node:path');
 const packaged=require('./launch-mode.cjs').isInstalledApp(app);
+require('./desktop-profile.cjs').configureDesktopProfile(app,{packaged});
 const appIcon=path.join(__dirname,process.platform==='darwin'?'../assets/suffice-logo-macos.png':'../assets/suffice-logo.png');
 if(process.platform==='win32')app.setAppUserModelId(require('./windows-app-details.cjs').windowsAppId(packaged));
 const {pathToFileURL}=require('node:url');
