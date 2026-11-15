@@ -6,7 +6,7 @@ import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import {_electron} from 'playwright-core';
 test('thread selection paints immediately, warm transcripts are reused, and project menus never wait for metadata',{timeout:60000},async()=>{
- const home=await mkdtemp(resolve(tmpdir(),'suffice-navigation-')),env={...process.env,SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
+ const home=await mkdtemp(resolve(tmpdir(),'suffice-navigation-')),env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
  const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
  try{const page=await app.firstWindow();await page.locator('.composer').waitFor();await page.emulateMedia({reducedMotion:'reduce'});
  await app.evaluate(({ipcMain})=>{ipcMain.removeHandler('suffice:projects');ipcMain.handle('suffice:projects',()=>new Promise(resolve=>{globalThis.finishProjects=resolve;}));ipcMain.removeHandler('suffice:threads');ipcMain.handle('suffice:threads',()=>['one','two'].map(id=>({id,title:'Thread '+id,project:'Project',cwd:process.cwd(),modified:id==='one'?2:1})));ipcMain.removeHandler('suffice:thread');ipcMain.handle('suffice:thread',(_event,id)=>new Promise(resolve=>{globalThis.finishThread=()=>resolve({id,title:'Thread '+id,cwd:process.cwd(),messages:[{role:'assistant',content:[{type:'text',text:'Response for '+id}]}]});}));});await page.reload();await page.locator('[data-thread="one"]').waitFor();

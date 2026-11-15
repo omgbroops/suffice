@@ -21,7 +21,7 @@ test('thread panels, file views, tabs and drafts restore independently, includin
   {type:'message',id:'user',parentId:null,timestamp,message:{role:'user',content:[{type:'text',text:'Thread '+id}],timestamp:Date.now()}},
   {type:'message',id:'assistant',parentId:'user',timestamp,message:{role:'assistant',content:[{type:'text',text:'Reply '+id+'\n\n'+'A paragraph for checking scroll restoration.\n\n'.repeat(50)}],timestamp:Date.now(),stopReason:'stop'}},
  ].map(entry=>JSON.stringify(entry)).join('\n')+'\n');}
- const env={...process.env,SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
+ const env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
  const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
  try{
   const page=await app.firstWindow();await page.locator('.thread-row').filter({hasText:'Thread one'}).waitFor();

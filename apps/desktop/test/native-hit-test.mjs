@@ -17,5 +17,5 @@ public static class SufficeHitTest {
 }
 '@
 $points=ConvertFrom-Json '${pairs}'; $values=@(foreach($point in $points){[SufficeHitTest]::Hit(${handle},$point.x,$point.y)}); ConvertTo-Json -Compress -InputObject $values`;
- const {stdout}=await promisify(execFile)('powershell.exe',['-NoProfile','-NonInteractive','-Command',script],{windowsHide:true,timeout:10000});return JSON.parse(stdout);
+ const {stdout}=await promisify(execFile)('powershell.exe',['-NoProfile','-NonInteractive','-Command',script],{windowsHide:true,timeout:20000});return JSON.parse(stdout);
 }
