@@ -1,3 +1,4 @@
+import {displayRunError} from '../shared/run-error.mjs';
 import {connectApprovals} from './approvals.js';
 import {transcriptDivider,isInterruption} from './transcript-divider.js';
 import {connectExtensionUI} from './extension-ui.js';
@@ -153,7 +154,7 @@ export function connectThreads({api,prompt,send,toast}){
   const all=[...optimisticThreads.values(),...savedThreads.filter(thread=>!optimisticThreads.has(thread.id))];
   updateThreadDirectory(all,openSavedThread);
   const unread=thread=>thread.id!==activeId&&thread.modified>Number(localStorage.getItem('suffice-thread-seen:'+thread.id)||0);
-  const status=thread=>jobs.get(thread.id)?.running?'working':jobs.has(thread.id)?(jobs.get(thread.id).failed?'failed':'done'):thread.status;
+  const status=thread=>{const job=jobs.get(thread.id);return job?(job.running?(job.approvalRequests.size?'approval':'working'):job.failed?'failed':'done'):thread.status;};
   const threads=all.filter(thread=>prefs.filter==='all'||prefs.filter==='working'&&status(thread)==='working'||prefs.filter==='attention'&&['approval','input','failed'].includes(status(thread))||prefs.filter==='unread'&&unread(thread)||prefs.filter==='draft'&&!!viewState.read(thread.id).draft).sort((a,b)=>prefs.sort==='name'?a.title.localeCompare(b.title):b.modified-a.modified);
   sectionLabel.textContent=prefs.group==='project'?'Threads':prefs.filter==='all'?'Threads':({working:'Running',attention:'Needs attention',unread:'Unread',draft:'Drafts'})[prefs.filter];
   list.dataset.compact=String(prefs.compact);list.dataset.group=prefs.group;
@@ -173,14 +174,14 @@ export function connectThreads({api,prompt,send,toast}){
     }target=groups.get(key);
    }
    const row=document.createElement('button');row.type='button';row.className='thread-row session-row session-row--sidebar';row.dataset.thread=thread.id;row.dataset.project=thread.project;row.setAttribute('aria-pressed',String(thread.id===activeId));row.title=`${thread.title} · ${thread.project}`;
-   const job=jobs.get(thread.id);const details={...thread,...(job?{status:job.running?'working':job.failed?'failed':'done',startedAt:job.startedAt,provider:job.provider||thread.provider,model:job.model||thread.model,terminalCount:job.terminalCount,...(job.diff?{diff:job.diff}:{})}: {})};populateThreadRow(row,details,{draft:!!viewState.read(thread.id).draft,unread:thread.id!==activeId&&thread.modified>Number(localStorage.getItem('suffice-thread-seen:'+thread.id)||0)});
+   const job=jobs.get(thread.id);const details={...thread,...(job?{status:status(thread),error:job.failed?job.error:undefined,startedAt:job.startedAt,provider:job.provider||thread.provider,model:job.model||thread.model,terminalCount:job.terminalCount,...(job.diff?{diff:job.diff}:{})}: {})};populateThreadRow(row,details,{draft:!!viewState.read(thread.id).draft,unread:thread.id!==activeId&&thread.modified>Number(localStorage.getItem('suffice-thread-seen:'+thread.id)||0)});
    row.addEventListener('click',()=>void openSavedThread(thread));target.append(row);
   }
   if(!threads.length){const empty=document.createElement('div');empty.className='sidebar-empty';empty.textContent=all.length?'No matching threads':'No threads yet';list.append(empty);}
   tickThreadTimes(list);list.scrollTop=scroll;
  }
  function createJob(id,title,node){
-  const job={id,title,history:node,running:true,startedAt:Date.now(),provider:form.modelSelection?.provider,model:form.modelSelection?.model,terminalCount:0};jobs.set(id,job);
+  const job={id,title,history:node,running:true,approvalRequests:new Set(),startedAt:Date.now(),provider:form.modelSelection?.provider,model:form.modelSelection?.model,terminalCount:0};jobs.set(id,job);
   let current=null,streamed='',reasoning='',group=null,log=null,compaction=null;const tools=new Map();
   const statusLine=document.createElement('div');statusLine.className='thread-status';statusLine.setAttribute('role','status');statusLine.textContent='Working';node.append(statusLine);
   const status=text=>{statusLine.textContent=text;statusLine.hidden=false;};
@@ -190,8 +191,8 @@ export function connectThreads({api,prompt,send,toast}){
   job.event=event=>{
    if(event.event==='compaction_start'){group=log=null;statusLine.hidden=true;if(!compaction){compaction=transcriptDivider('compacting');node.insertBefore(compaction,statusLine);}if(node===history)bottom();return;}
    if(event.event==='compaction_end'){if(compaction){if(event.completed)compaction.update('compacted',event.reason!=='manual');else compaction.remove();compaction=null;}if(event.errorMessage)status(event.errorMessage);if(node===history)bottom();return;}
-   if(event.event==='approval')status('Waiting for approval');
-   if(event.event==='approval_resolved')status('Working');
+   if(event.event==='approval'){job.approvalRequests.add(event.requestId);status('Waiting for approval');drawThreads();}
+   if(event.event==='approval_resolved'){job.approvalRequests.delete(event.requestId);status(job.approvalRequests.size?'Waiting for approval':'Working');drawThreads();}
    if(event.event==='changes'){job.diff=event.diff;drawThreads();}
    if(event.event==='assistant_start'){reasoning='';if(streamed){current=null;streamed='';}status('Working');}
    if(event.event==='text'){streamed+=event.text;if(preference('stream-markdown',true))markdown(response(),streamed);else response().textContent=streamed;statusLine.hidden=true;}
@@ -206,7 +207,7 @@ export function connectThreads({api,prompt,send,toast}){
    if(event.event==='text')group=log=null;
    if(node===history)bottom();
   };
-  job.finish=(result,error)=>{const interrupted=result?.interrupted||isInterruption(error);if(compaction){compaction.remove();compaction=null;}if(interrupted){node.insertBefore(transcriptDivider('interrupted'),statusLine);error=null;}else if(error){current=null;streamed='';response().textContent=error.message;}else if(result?.text)markdown(response(),result.text);statusLine.remove();if(preference('collapse-work',true))node.querySelectorAll('.thread-activity').forEach(group=>group.open=false);approvals.clear(job.id);job.running=false;job.failed=!!error;job.terminalCount=0;if(node===history)localStorage.setItem('suffice-thread-seen:'+job.id,String(Date.now()));drawThreads();if(node===history){syncRunning();saveView();bottom();document.dispatchEvent(new Event('suffice:usage-change'));}document.dispatchEvent(new Event('suffice:thread-updated'));void refresh().catch(()=>{});};
+  job.finish=(result,error)=>{const interrupted=result?.interrupted||isInterruption(error);if(compaction){compaction.remove();compaction=null;}if(interrupted){node.insertBefore(transcriptDivider('interrupted'),statusLine);error=null;}else if(error){current=null;streamed='';response().textContent=displayRunError(error.message,job.provider);}else if(result?.text)markdown(response(),result.text);statusLine.remove();if(preference('collapse-work',true))node.querySelectorAll('.thread-activity').forEach(group=>group.open=false);approvals.clear(job.id);job.approvalRequests.clear();job.running=false;job.failed=!!error;job.error=error?displayRunError(error.message,job.provider):undefined;job.terminalCount=0;if(node===history)localStorage.setItem('suffice-thread-seen:'+job.id,String(Date.now()));drawThreads();if(node===history){syncRunning();saveView();bottom();document.dispatchEvent(new Event('suffice:usage-change'));}document.dispatchEvent(new Event('suffice:thread-updated'));void refresh().catch(()=>{});};
   return job;
  }
  function adoptJob(job,id){if(!id||id===job.id)return;const previous=job.id;jobs.delete(previous);jobs.set(id,job);job.id=id;adoptOptimistic(previous,id);if(activeId===previous){activeId=id;viewState.adopt(id);}drawThreads();}
