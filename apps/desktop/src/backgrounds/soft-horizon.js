@@ -18,9 +18,9 @@ export function mountSoftHorizon(canvas){
    image.data[i+1]=(12+sky*106+warm*85+rim*27+dusk*4+grain)*shade;
    image.data[i+2]=(23+sky*119+warm*39+rim*19+dusk*5+grain)*shade;
    if(light){
-    image.data[i]=235+v*10-sky*24+warm*10+rim*7+grain*.38;
-    image.data[i+1]=242-sky*12-warm*16+rim*6+grain*.38;
-    image.data[i+2]=250-v*5-warm*32+rim*5+grain*.38;
+    image.data[i]=230+v*12-sky*45+warm*18+rim*7+grain*.38;
+    image.data[i+1]=238-sky*22-warm*26+rim*6+grain*.38;
+    image.data[i+2]=250-v*5-warm*50+rim*5+grain*.38;
    }
    image.data[i+3]=255;
   }
