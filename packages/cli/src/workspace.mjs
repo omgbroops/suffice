@@ -1,21 +1,13 @@
-import {readFile, readdir, realpath, stat} from 'node:fs/promises';
-import {resolve, relative, isAbsolute, dirname, sep} from 'node:path';
+import {readFile, readdir, stat} from 'node:fs/promises';
+import {resolve} from 'node:path';
 import {createHash} from 'node:crypto';
 
 export const hash=value=>createHash('sha256').update(value).digest('hex');
 export async function repositoryPath(workspace, path) {
   if(typeof path!=='string' || !path || path.includes('\0')) throw new Error('A repository file path is required');
-  const logicalRoot=resolve(workspace),root=await realpath(logicalRoot),logicalTarget=resolve(logicalRoot,path),suffix=relative(logicalRoot,logicalTarget);
-  const insideLogical=suffix===''||(!isAbsolute(suffix)&&suffix!=='..'&&!suffix.startsWith('..'+sep));
-  const target=insideLogical?resolve(root,suffix):logicalTarget;
-  const within=p=>{const r=relative(root,p);return r==='' || (!isAbsolute(r) && r!=='..' && !r.startsWith('..'+sep));};
-  if(!within(target)) throw new Error('Path is outside the authorized repository');
-  let current=target;
-  while(true) {
-    try { if(!within(await realpath(current))) throw new Error('Resolved path leaves the authorized repository'); break; }
-    catch(e) { if(e.code!=='ENOENT') throw e; current=dirname(current); }
-  }
-  return target;
+  // The project is a working directory, not a filesystem boundary.
+  // Keep absolute paths and resolve relative paths using the selected project.
+  return resolve(workspace,path);
 }
 export async function readText(root,path) {
   const target=await repositoryPath(root,path);

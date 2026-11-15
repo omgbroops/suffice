@@ -20,7 +20,7 @@ test('access allowlists compose with native tools and reject invalid levels',asy
  assert.throws(()=>parseOptions(['--access','admin']),/Invalid access/);
 });
 
-test('native file tools receive checked absolute paths without expanding literal @ or ~ names',async()=>{
+test('native file tools preserve literal @ and ~ names and allow explicit external paths',async()=>{
  const workspace=await mkdtemp(resolve(tmpdir(),'suffice-literal-'));
  const tools=repositoryTools({workspace}),write=tools.find(t=>t.name==='write'),read=tools.find(t=>t.name==='read');
  for(const name of ['@literal.txt','~/literal.txt']){
@@ -28,7 +28,7 @@ test('native file tools receive checked absolute paths without expanding literal
   assert.equal(await readFile(resolve(workspace,name),'utf8'),'inside');
   const result=await read.execute('read',{path:name},undefined,()=>{});assert.match(result.content[0].text,/inside/);
  }
- await assert.rejects(write.execute('escape',{path:'../outside',content:'denied'},undefined,()=>{}),/outside/);
+ const outside=workspace+'-outside.txt';await write.execute('external',{path:outside,content:'allowed'},undefined,()=>{});assert.equal(await readFile(outside,'utf8'),'allowed');
 });
 
 async function gateFixture(source){
@@ -57,10 +57,10 @@ test('restricted sessions never register deferred browser or desktop escape capa
  }
 });
 
- test('absolute workspace aliases map into the authorized root while outside links remain denied',async()=>{
+ test('workspace aliases and external directory links remain usable',async()=>{
  const root=await mkdtemp(resolve(tmpdir(),'suffice-tool-alias-')),workspace=resolve(root,'alias'),canonical=await mkdtemp(resolve(tmpdir(),'suffice-tool-root-')),outside=await mkdtemp(resolve(tmpdir(),'suffice-tool-outside-'));
  await symlink(canonical,workspace,process.platform==='win32'?'junction':'dir');await symlink(outside,resolve(canonical,'escape'),process.platform==='win32'?'junction':'dir');
  const write=repositoryTools({workspace}).find(tool=>tool.name==='write');
  for(const path of [resolve(workspace,'alias.txt'),resolve(await realpath(canonical),'canonical.txt')])await write.execute('inside',{path,content:'inside'},undefined,()=>{});
- assert.equal(await readFile(resolve(canonical,'alias.txt'),'utf8'),'inside');await assert.rejects(write.execute('escape',{path:resolve(workspace,'escape','outside.txt'),content:'denied'},undefined,()=>{}),/leaves/);
+ assert.equal(await readFile(resolve(canonical,'alias.txt'),'utf8'),'inside');await write.execute('external',{path:resolve(workspace,'escape','outside.txt'),content:'allowed'},undefined,()=>{});assert.equal(await readFile(resolve(outside,'outside.txt'),'utf8'),'allowed');
  });
