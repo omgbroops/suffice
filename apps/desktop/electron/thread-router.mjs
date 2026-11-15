@@ -18,7 +18,7 @@ export function createThreadRouter({send,createHost,createRuntime}) {
  return async ({id,action,payload={}})=>{
   try{
    let result;
-   if(action==='shutdown'){await Promise.all([...records].map(record=>record.request('abort')));result=null;}
+   if(action==='shutdown'){await Promise.all([...records].map(record=>record.request('shutdown')));result=null;}
    else if(['status','models','threads'].includes(action)){await catalog.ready;result=await catalog.request(action,payload);if(action==='threads')result=result.map(thread=>{const run=byThread.get(thread.id);return run?{...thread,status:run.busy?'working':run.failed?'failed':thread.status,startedAt:run.startedAt,provider:run.provider??thread.provider,model:run.model??thread.model}:thread;});}
    else if(action==='thread-location'){await catalog.ready;result=await catalog.request(action,payload);}
    else if(action==='thread'){
@@ -36,7 +36,7 @@ export function createThreadRouter({send,createHost,createRuntime}) {
      const target=record??create();selected=target;target.busy=true;target.clientId=payload.clientId;target.startedAt=Date.now();target.provider=payload.provider;target.model=payload.model;target.failed=false;target.cwd=payload.cwd;target.title=payload.prompt.slice(0,90);if(payload.clientId)byThread.set(payload.clientId,target);
      try{await target.ready;const resumeId=payload.threadId||(!payload.clientId?viewedThread:null);if(!record&&resumeId){await target.request('thread',{id:resumeId});target.threadId=resumeId;byThread.set(resumeId,target);}result=await target.request('run',payload);}catch(error){target.failed=true;throw error;}finally{target.busy=false;}
     }else if(action==='usage'){result=record?await record.request('usage'):viewedThread?await catalog.request('usage'):null;}
-    else if(['abort','steer','approval-answer'].includes(action)){if(!record)throw new Error('No active thread');result=await record.request(action,payload);}
+    else if(['abort','steer','approval-answer','agent-action','extension-answer'].includes(action)){if(!record)throw new Error('No active thread');result=await record.request(action,payload);}
     else throw new Error('Unknown harness action');
    }
    send({id,ok:true,result});

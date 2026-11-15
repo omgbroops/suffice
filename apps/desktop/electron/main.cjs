@@ -10,7 +10,7 @@ let background,terminals;
 let win,project=null,selectedProject=null,running=0;
 const attachmentGroups=new Map();
 let harness;
-function request(action,payload){return harness.request(action,payload);}
+function request(action,payload){return (['approval-answer','extension-answer','abort','agent-action','steer'].includes(action)&&background?.request?.(action,payload))||harness.request(action,payload);}
 const primary=app.requestSingleInstanceLock();
 if(!primary)app.quit();
 else app.on('second-instance',()=>{
@@ -21,12 +21,13 @@ if(primary)app.whenReady().then(async()=>{
   const {parseOptions}=await import('@suffice/harness');
   const settingsHome=parseOptions([]).home;
   const settings=(await import('./settings-store.mjs')).createSettingsStore(settingsHome);
-  background=require('./background-tasks.cjs').createBackgroundTasks({fork:(...args)=>utilityProcess.fork(...args),entry:path.join(__dirname,'worker-entry.mjs'),emit:message=>{if(win&&!win.isDestroyed())win.webContents.send('suffice:event',message);}});
+  function onHarnessEvent(message){if(message.event==='thread_started'&&attachmentGroups.has(message.clientId))attachmentGroups.set(message.id,attachmentGroups.get(message.clientId));if(message.event==='approval'){void notify('approval','Agent needs approval');void dialog.showMessageBox(win,{type:'question',title:'Allow agent action?',message:message.name,detail:JSON.stringify(message.input,null,2).slice(0,8000),buttons:['Deny','Allow'],defaultId:0,cancelId:0}).then(answer=>request('approval-answer',{threadId:message.threadId||message.clientId,requestId:message.requestId,allow:answer.response===1}));return;}if(message.event==='thread_started'&&threadLocations.has(message.clientId))threadLocations.set(message.id,threadLocations.get(message.clientId));if(win&&!win.isDestroyed())win.webContents.send('suffice:event',message);return;}
+  background=require('./background-tasks.cjs').createBackgroundTasks({fork:(...args)=>utilityProcess.fork(...args),entry:path.join(__dirname,'worker-entry.mjs'),emit:onHarnessEvent});
   const {projectIdentityMetadata}=await import('./sidebar-metadata.mjs');
   const projects=require('./projects.cjs').createProjectStore(app.getPath('userData'));if(process.env.SUFFICE_START_PROJECT){const start=await require('node:fs/promises').realpath(process.env.SUFFICE_START_PROJECT);await projects.add(start);project=selectedProject=start;}function openProjectWindow(folder){const profileRoot=process.env.SUFFICE_PROFILE_ROOT||app.getPath('userData');const profile=path.join(profileRoot,'project-windows',createHash('sha256').update(folder).digest('hex').slice(0,16));const child=require('node:child_process').spawn(process.execPath,[...(app.isPackaged?[]:[app.getAppPath()]),'--user-data-dir='+profile],{detached:true,stdio:'ignore',windowsHide:true,env:{...process.env,SUFFICE_START_PROJECT:folder,SUFFICE_PROFILE_ROOT:profileRoot,ELECTRON_RUN_AS_NODE:undefined}});child.unref();}
   harness=require('./worker-client.cjs').createWorkerClient({
    fork:()=>utilityProcess.fork(path.join(__dirname,'worker-entry.mjs'),[],{serviceName:'Suffice harness',stdio:'pipe'}),
-   onEvent:message=>{if(message.event==='thread_started'&&attachmentGroups.has(message.clientId))attachmentGroups.set(message.id,attachmentGroups.get(message.clientId));if(message.event==='approval'){void notify('approval','Agent needs approval');void dialog.showMessageBox(win,{type:'question',title:'Allow agent action?',message:message.name,detail:JSON.stringify(message.input,null,2).slice(0,8000),buttons:['Deny','Allow'],defaultId:0,cancelId:0}).then(answer=>request('approval-answer',{threadId:message.threadId,requestId:message.requestId,allow:answer.response===1}));return;}if(message.event==='thread_started'&&threadLocations.has(message.clientId))threadLocations.set(message.id,threadLocations.get(message.clientId));if(win&&!win.isDestroyed())win.webContents.send('suffice:event',message);return;},
+   onEvent:onHarnessEvent,
    onStderr:data=>process.stderr.write(data)
   });
   win=new BrowserWindow({icon:appIcon,show:process.env.SUFFICE_TEST_HIDE_WINDOW!=='1',width:1440,height:900,minWidth:720,minHeight:540,frame:false,backgroundColor:'#0e0e0e',title:'Suffice',autoHideMenuBar:true,webPreferences:{preload:path.join(__dirname,'preload.cjs'),contextIsolation:true,nodeIntegration:false,sandbox:true}});
@@ -39,6 +40,11 @@ if(primary)app.whenReady().then(async()=>{
   handle('save-view-state',payload=>views.save(payload));
   const {createProviderSettings,providerLoginErrorMessage}=await import('./provider-settings.mjs');
   const providerSettings=createProviderSettings({onCatalog:catalog=>{if(!win.isDestroyed())win.webContents.send('suffice:event',{event:'models_changed',catalog});},emit:event=>{if(!win.isDestroyed())win.webContents.send('suffice:provider-auth',event);},openBrowser:url=>shell.openExternal(url)});
+  const resources=(await import('./resources.mjs')).createResourceService(settingsHome,{choosePath:async kind=>{const result=await dialog.showOpenDialog(win,{title:'Add '+kind,properties:kind==='extensions'?['openFile']:['openDirectory']});return result.canceled?null:result.filePaths[0];}});
+  handle('resources',()=>resources.list());
+  handle('resource-action',payload=>resources.action(payload));
+  handle('agent-action',payload=>request('agent-action',payload));
+  handle('extension-answer',payload=>request('extension-answer',payload));
   handle('providers',()=>providerSettings.list());
   handle('refresh-models',()=>providerSettings.refresh({force:true}));
   handle('provider-login',async payload=>{try{return await providerSettings.login(payload);}catch(error){throw new Error(providerLoginErrorMessage(error));}});
@@ -106,7 +112,7 @@ if(primary)app.whenReady().then(async()=>{
   });
   function shutdownWindow(){
     const shutdown=(async()=>{
-      background.stop();terminals?.dispose();
+      await background.stop();terminals?.dispose();
       await views.flush().catch(()=>{});
       await request('shutdown').catch(()=>{});
       const until=Date.now()+3000;while(running&&Date.now()<until)await new Promise(resolve=>setTimeout(resolve,25));
