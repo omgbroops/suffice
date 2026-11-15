@@ -27,9 +27,7 @@
 .window-control[data-window='close']:hover { background: #b64949; color: white; }
 .window-drag-region { position: fixed; top: 0; left: var(--sidebar-width); right: var(--window-controls-width); height: 30px; z-index: 80; -webkit-app-region: drag; }
 .desktop-app .sidebar-heading > .brand-wordmark { -webkit-app-region: drag; }
-.desktop-app .new-session { background: transparent; transition: color 100ms ease; }
-.desktop-app .new-session[aria-current='page'] { background: var(--surface-nav); }
-.desktop-app .new-session:hover { background: var(--surface-hover-strong); }
+.desktop-app .new-session { background: transparent; transition: background-color 150ms var(--ease-out),color 150ms var(--ease-out),transform 150ms var(--ease-out); }
 @media(max-width:699px){.repo-button{display:inline-flex}}
 .sidebar-sessions { overflow-y: auto; min-height: 0; }
 .session-section { min-height: 0; overflow-y: auto; }
@@ -187,6 +185,23 @@
 .desktop-app .workspace.background-none .project-bar :is(.project-picker,.git-pill) { background: transparent; border-color: transparent; outline: none; box-shadow: none; }
 
 .project-list-status { padding: 8px 10px; color: var(--text-faint); font-size: 12px; }
+
+.git-pill { font-family:inherit; cursor:pointer; }
+.git-pill:disabled { opacity:1; cursor:default; }
+.branch-worktree > .project-name { flex:1; text-align:left; }
+.branch-worktree { display:flex; align-items:center; gap:8px; padding:7px 9px; }
+.project-options { --fade-top:0px; --fade-bottom:0px; mask-image:linear-gradient(to bottom,transparent,#000 var(--fade-top),#000 calc(100% - var(--fade-bottom)),transparent); }
+.project-options[data-overflow=true] { padding-inline-end:3px; }
+.project-options[data-fade-top=true] { --fade-top:10px; }
+.project-options[data-fade-bottom=true] { --fade-bottom:10px; }
+/* Independent rails preserve full-width options when the list overflows. */
+.popover.overlay-scroll-host { position:fixed; }
+.popover :is(.project-options,.menu-options) { scrollbar-width:none; scrollbar-gutter:auto; }
+.popover :is(.project-options,.menu-options)::-webkit-scrollbar { display:none; }
+.menu-scroll-rail { position:absolute; right:0; width:7px; z-index:4; touch-action:none; }
+.menu-scroll-rail[hidden] { display:none; }
+.menu-scroll-thumb { width:3px; margin-left:3px; border-radius:8px; background:var(--scrollbar-thumb); }
+.menu-scroll-rail:hover .menu-scroll-thumb,.menu-scroll-rail.dragging .menu-scroll-thumb { background:var(--scrollbar-thumb-hover); }
 
 /* Let code scrollbars hug the widget while preserving the text inset. */
 .tool-widget .tool-input,.tool-widget .tool-output { margin-right:-9px; padding-right:9px; }

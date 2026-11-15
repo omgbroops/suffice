@@ -1,6 +1,5 @@
 import {mountWallpaperSettings} from './wallpaper-settings.js';
 import {mountResourceSettings} from './resource-settings.js';
-import {providerIcon} from './provider-icons.js';
 import {setProjectGroupExpanded} from './project-group-motion.js';
 import {createProviderConnectModal} from './provider-connect-modal.js';
 import {icon} from './ui.js';
@@ -10,6 +9,9 @@ import {connectScrollEdges} from './components/ui/scroll-edges.js';
 import './settings.css';
 import {preference,savePreference,supportedSettings} from './settings-preferences.js';
 import {backgroundPresets} from './backgrounds/presets.js';
+import {providerIcon} from './provider-icons.js';
+import {threadViewState} from './thread-view-state.js';
+import {getThreadDirectory} from './thread-directory.js';
 
 const escape=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const accents=['#7b9ed5','#a995d6','#d799aa','#d59c77','#c5b56f','#7cb59b'];
@@ -47,6 +49,7 @@ export function createSettings(){
   const current=value(row),label=escape(row.label);
   if(['toggle','select','segment','palette','action'].includes(row.type)&&!supportedSettings.has(row.id))return '<span class="settings-unavailable">Not available yet</span>';
   switch(row.type){
+   case 'archived-thread':return `<div class="archived-thread-actions"><button type="button" class="provider-dialog-button" data-restore-thread="${escape(row.threadId)}" aria-label="Restore ${label}">Restore</button><button type="button" class="button" data-delete-thread="${escape(row.threadId)}" aria-label="Delete ${label}">${icon('trash')}</button></div>`;
    case 'model':return `<button type="button" class="settings-switch" role="switch" aria-label="${label}" aria-checked="${!preference('disabled-models',[]).includes(row.id)}" data-model="${escape(row.id)}"><span></span></button>`;
    case 'toggle':return `<button type="button" class="settings-switch" role="switch" aria-label="${label}" aria-checked="${!!current}" data-value="${row.id}"><span></span></button>`;
    case 'select':return `<button type="button" class="settings-select" aria-label="${label}" aria-haspopup="menu" aria-expanded="false" data-select="${row.id}"><span>${escape(display(row,current))}</span>${icon('chevron')}</button>`;
@@ -60,6 +63,7 @@ export function createSettings(){
  }
  function render(animate=false){
   menu.close();const query=search.value.trim().toLowerCase();
+  settingsSections.find(section=>section.id==='archived').groups=[{title:'Archived threads',empty:'No archived threads. Archive a chat from its right-click menu.',rows:getThreadDirectory().threads.filter(thread=>threadViewState.read(thread.id).sidebar?.archived).map(thread=>({type:'archived-thread',threadId:thread.id,label:threadViewState.read(thread.id).sidebar?.title||thread.title,detail:thread.project||'No project'}))}];
   const matches=(section,row)=>`${section.title} ${row.label} ${row.detail||''}`.toLowerCase().includes(query);
   let category='';nav.innerHTML=settingsSections.filter(section=>!query||section.title.toLowerCase().includes(query)||section.groups.some(group=>group.rows.some(row=>matches(section,row)))).map(section=>{
    const heading=category!==section.category?`<div class="settings-nav-label">${section.category}</div>`:'';category=section.category;
@@ -75,6 +79,10 @@ export function createSettings(){
  }
  function filterModels(){const query=modelQuery.toLowerCase().trim();for(const group of content.querySelectorAll('.settings-model-group')){let count=0;for(const row of group.querySelectorAll('.settings-option')){row.hidden=!row.textContent.toLowerCase().includes(query)&&!row.querySelector('[data-model]').dataset.model.toLowerCase().includes(query);if(!row.hidden)count++;}group.hidden=!!query&&!count;const toggle=group.querySelector('[data-model-group]'),body=group.querySelector('.settings-model-group-body');if(query&&count){body.hidden=false;body.inert=false;toggle.setAttribute('aria-expanded','true');}else if(toggle){const collapsed=collapsedModels.has(toggle.dataset.modelGroup);body.hidden=collapsed;body.inert=collapsed;toggle.setAttribute('aria-expanded',String(!collapsed));}}}
  main.addEventListener('input',event=>{if(event.target.matches('.settings-model-search input')){modelQuery=event.target.value;filterModels();}});
+ main.addEventListener('click',event=>{const restore=event.target.closest('[data-restore-thread]');if(!restore)return;const id=restore.dataset.restoreThread;threadViewState.updateFor(id,{sidebar:{...threadViewState.read(id).sidebar,archived:false}});render();});
+ main.addEventListener('click',event=>{const button=event.target.closest('[data-delete-thread]');if(button)document.dispatchEvent(new CustomEvent('suffice-delete-thread',{detail:{id:button.dataset.deleteThread}}));});
+ document.addEventListener('suffice-thread-deleted',()=>{if(active&&selected==='archived')render();});
+ threadViewState.subscribe(event=>{if(active&&selected==='archived'&&event.changed?.includes('sidebar'))render();});
  const findRow=id=>settingsSections.flatMap(section=>section.groups.flatMap(group=>group.rows)).find(row=>row.id===id);
  async function handleClick(event){
   const refreshButton=event.target.closest('[data-refresh-models]');if(refreshButton){refreshButton.disabled=true;refreshButton.setAttribute('aria-busy','true');catalogStatus='Refreshing…';try{const result=await api.refreshModels();catalogStatus=result.offline?'Offline · using saved models':result.aborted?'Refresh timed out · using saved models':result.failedProviders?.length?'Some providers could not refresh':'';await refreshProviders();render();}catch{catalogStatus='Could not refresh · using saved models';render();}finally{refreshButton.disabled=false;}return;}

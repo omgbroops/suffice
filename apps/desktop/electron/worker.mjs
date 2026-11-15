@@ -3,6 +3,7 @@ import {createSufficeModelRuntime,modelRuntimeOptions} from '../../../packages/c
 import {projectContext,rememberProject,threadTitle} from './engine-settings.mjs';
 import {invalidateProjectMetadata} from './sidebar-metadata.mjs';
 import {createChatChangeTracker} from './chat-changes.mjs';
+import {createChatGitTracker} from './chat-git.mjs';
 import {createThreadRouter} from './thread-router.mjs';
 import {sessionUsage} from './usage.mjs';
 import {randomUUID,createHash} from 'node:crypto';
@@ -33,8 +34,8 @@ async function receive(message) {
     if(action==='approval-answer'){approvals.get(payload.requestId)?.(!!payload.allow);approvals.delete(payload.requestId);send({id,ok:true});return;}
     if(action==='abort'){abortRequested=true;for(const finish of extensionPrompts.values())finish(undefined);for(const resolve of approvals.values())resolve(false);approvals.clear();agent?.abort();send({id,ok:true});return;}
     if(action==='usage'){send({id,ok:true,result:sessionUsage(agent?.session)??viewedUsage});return;}
-    if(action==='thread-location'){send({id,ok:true,result:await threads.location(payload.id)});return;}
     if(action==='threads'){send({id,ok:true,result:await threads.list()});return;}
+    if(action==='thread-location'){send({id,ok:true,result:await threads.location(payload.id)});return;}
     if(busy)throw new Error('A task is already running. Stop it before changing sessions.');
     if(action==='reset'){viewRevision++;await agent?.dispose();agent=null;resumePath=null;viewedUsage=null;send({event:'usage',usage:null});send({id,ok:true});return;}
     if(action==='models'){
@@ -70,12 +71,15 @@ async function receive(message) {
       workspace=cwd;
       const options=parseOptions(['--cwd',cwd]);
       options.effort=payload.effort;
-      options.home=home;options.additionalContext=await projectContext(home,cwd,payload.desktopSettings||{});const newlyCreated=!resumePath;options.desktopSettings=payload.desktopSettings||{};if(options.desktopSettings['allow-network']===false){options.browser=false;options.desktop=false;}
+      options.home=home;options.additionalContext=await projectContext(home,cwd,payload.desktopSettings||{});const newlyCreated=!resumePath;options.desktopSettings=payload.desktopSettings||{};options.onTitleChanged=()=>send({event:'history_changed'});if(options.desktopSettings['allow-network']===false){options.browser=false;options.desktop=false;}
       if(selected){options.model=selected.id;options.modelObject=selected;}
       if(resumePath)options.sessionManager=SessionManager.open(resumePath,dirname(resumePath));
       changeTracker=createChatChangeTracker({cwd,home,getId:()=>agent?.sessionPath()?threadId(agent.sessionPath()):null,onChange:diff=>{invalidateProjectMetadata(cwd);send({event:'changes',diff});}});
       options.extensionBindings=(base,session)=>({mode:'rpc',commandContextActions:{waitForIdle:()=>session.agent.waitForIdle(),reload:()=>session.reload(),navigateTree:(id,opts)=>session.navigateTree(id,opts),newSession:async()=>{throw new Error('Use the New session button to create a desktop conversation');},fork:async()=>{throw new Error('Use Fork thread in the conversation menu');},switchSession:async()=>{throw new Error('Choose the conversation from the desktop sidebar');}},onError:error=>send({event:'extension_ui',kind:'notice',message:error.error,type:'error'}),uiContext:createDesktopExtensionUI({base,emit:value=>send({event:'extension_ui',...value}),request:(value,opts)=>new Promise(resolvePrompt=>{const requestId=++extensionSequence;let timer;const finish=value=>{clearTimeout(timer);opts?.signal?.removeEventListener('abort',cancel);extensionPrompts.delete(requestId);send({event:'extension_ui',kind:'dismiss',requestId});resolvePrompt(value);};const cancel=()=>finish(undefined);extensionPrompts.set(requestId,finish);if(opts?.signal?.aborted){finish(undefined);return;}opts?.signal?.addEventListener('abort',cancel,{once:true});if(opts?.timeout)timer=setTimeout(cancel,opts.timeout);send({event:'extension_ui',requestId,...value});})})});
-      agent=await createSession(options,runtime,{onTool:name=>send({event:'tool',name}),toolObserver:changeTracker,onApproval:(name,input)=>new Promise(resolve=>{const requestId=++approvalSequence;approvals.set(requestId,allow=>{send({event:'approval_resolved',requestId});resolve(allow);});send({event:'approval',requestId,name,input});})});
+      const gitTracker=createChatGitTracker({cwd,home,getId:()=>agent?.sessionPath()?threadId(agent.sessionPath()):null,onChange:()=>send({event:'history_changed'})});
+      const toolObserver={before:(...args)=>changeTracker.before(...args),after:async(token,result)=>{await changeTracker.after(token);await gitTracker.after(token,result);}};
+      agent=await createSession(options,runtime,{onTool:name=>send({event:'tool',name}),toolObserver,onApproval:(name,input)=>new Promise(resolve=>{const requestId=++approvalSequence;approvals.set(requestId,allow=>{send({event:'approval_resolved',requestId});resolve(allow);});send({event:'approval',requestId,name,input});})});
+      await gitTracker.initialize(newlyCreated);
       if(newlyCreated&&agent.session.setSessionName)agent.session.setSessionName(threadTitle(payload.prompt,options.desktopSettings.naming));
       if(abortRequested){await agent.dispose();agent=null;throw new Error('Cancelled');}
       agent.session.subscribe(event=>{

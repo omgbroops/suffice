@@ -20,6 +20,7 @@ import './tactile.css';
 import './right-panel.css';
 import './composer-files.css';
 import './thread-row.css';
+import './window-chrome.css';
 import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/500.css';
 
@@ -87,7 +88,7 @@ function heatmap() {
 document.querySelector('#app').innerHTML = `
 
   <aside class="sidebar" id="session-sidebar" aria-label="Session navigation">
-    <div class="sidebar-resizer" role="separator" tabindex="0" aria-label="Resize sidebar" aria-orientation="vertical" aria-controls="session-sidebar" aria-valuemin="190" aria-valuemax="400" aria-valuenow="200"></div>
+    <div class="sidebar-resizer" role="separator" tabindex="0" aria-label="Resize sidebar" aria-orientation="vertical" aria-controls="session-sidebar" aria-valuemin="280" aria-valuemax="400" aria-valuenow="280"></div>
 
     <div class="sidebar-heading"><button type="button" class="brand-wordmark brand-home" data-action="brand-home" aria-label="Suffice home">[suffice]</button><div class="sidebar-tools">${button('Settings', { icon: 'gear', action: 'settings' })}${button('Search sessions', { icon: 'search', action: 'search-sessions' })}${button('Collapse sidebar', { icon: 'panel', action: 'toggle-sidebar' })}</div></div>
 
@@ -305,7 +306,7 @@ document.addEventListener('click', (e) => {
 
   switch (action) {
 
-    case 'brand-home': Promise.resolve(settingsPage?.close()).then(()=>document.querySelector('.new-session').click()); break;
+    case 'brand-home': if(settingsPage?.isOpen)void settingsPage.close();else document.querySelector('.new-session').click(); break;
 
     case 'new': prompt.value = ''; send.disabled = true; document.querySelector('.composer').attachments?.clear(); prompt.focus(); if (innerWidth < 700) document.body.classList.remove('sidebar-open'); break;
 
@@ -414,8 +415,9 @@ document.addEventListener('suffice-preference',event=>{const {id,value}=event.de
 document.querySelector('.atmosphere').dataset.motion=preference('background-motion',true)&&!preference('reduced-motion',false)?'running':'paused';
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!event.defaultPrevented&&preference('escape',false)&&!document.querySelector('.settings-main:not([hidden])')&&document.querySelector('.composer')?.dataset.running==='true')void window.sufficeDesktop.abort(threadViewState.id);});
 
-document.addEventListener('keydown',event=>{if(!(event.ctrlKey||event.metaKey))return;if(event.key.toLowerCase()==='n'){event.preventDefault();document.querySelector('.brand-home').click();}if(event.key.toLowerCase()==='b'){event.preventDefault();document.querySelector('[data-action=toggle-sidebar]').click();}});
+document.addEventListener('keydown',event=>{if(!(event.ctrlKey||event.metaKey))return;if(event.key.toLowerCase()==='n'){event.preventDefault();Promise.resolve(settingsPage?.close()).then(()=>document.querySelector('.new-session').click());}if(event.key.toLowerCase()==='b'){event.preventDefault();document.querySelector('[data-action=toggle-sidebar]').click();}});
 
 window.sufficeDesktop?.onNotification?.(event=>{if(!event.play)return;const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;const audio=new Audio(),oscillator=audio.createOscillator(),gain=audio.createGain(),duration=event.sound==='Click'?.05:event.sound==='Chime'?.3:.16;oscillator.frequency.value=event.sound==='Click'?180:event.sound==='Chime'?740:440;gain.gain.setValueAtTime(.06,audio.currentTime);gain.gain.exponentialRampToValueAtTime(.001,audio.currentTime+duration);oscillator.connect(gain);gain.connect(audio.destination);oscillator.start();oscillator.stop(audio.currentTime+duration);oscillator.onended=()=>audio.close();});
 
 connectSettingsPrivacy();
+import './focus-modality.js';

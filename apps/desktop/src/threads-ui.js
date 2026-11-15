@@ -5,6 +5,8 @@ import {transcriptDivider,isInterruption} from './transcript-divider.js';
 import {connectExtensionUI} from './extension-ui.js';
 import {connectThreadFork} from './thread-fork.js';
 import {preference} from './settings-preferences.js';
+import {connectThreadContextMenu} from './thread-context-menu.js';
+import {connectProjectManagement,projectPathKey} from './project-management.js';
 import {updateThreadDirectory} from './thread-directory.js';
 import {setProjectGroupExpanded} from './project-group-motion.js';
 import {sidebarPreferences} from './sidebar-preferences.js';
@@ -120,14 +122,24 @@ export function connectThreads({api,prompt,send,toast}){
  sidebarPreferences.subscribe(drawThreads);
  connectThreadHover(list);
  setInterval(()=>tickThreadTimes(list),1000);
- viewState.subscribe(event=>{if(event.type==='update'&&event.changed?.includes('draft'))drawThreads();});
+ viewState.subscribe(event=>{if(event.type==='update'&&event.changed?.some(key=>['draft','sidebar'].includes(key)))drawThreads();});
+ const metadata=id=>viewState.read(id).sidebar||{};
+ const updateMetadata=(id,patch)=>viewState.updateFor(id,{sidebar:{...metadata(id),...patch}});
+ const isViewing=id=>activeId===id&&document.hasFocus()&&document.visibilityState==='visible'&&!document.documentElement.classList.contains('settings-open');
+ const markViewed=()=>{if(activeId&&isViewing(activeId)&&metadata(activeId).unread)updateMetadata(activeId,{unread:false});};
+ const sameProject=(a,b)=>projectPathKey(a)===projectPathKey(b);
+ const projectManagement=connectProjectManagement(list,{api,toast,archiveProject:async folder=>{for(const thread of [...savedThreads,...optimisticThreads.values()])if(sameProject(thread.cwd,folder)&&!jobs.get(thread.id)?.running){updateMetadata(thread.id,{archived:true});if(activeId===thread.id)clear();}},removedProject:async folder=>{if(sameProject(savedThreads.find(t=>t.id===activeId)?.cwd,folder))clear();await refresh();},movedThread:async id=>{if(activeId===id)clear();jobs.delete(id);savedHistories.delete(id);await refresh();}});
+ document.addEventListener('suffice-projects-updated',()=>void refresh().catch(error=>toast(error.message)));
+ window.addEventListener('focus',markViewed);document.addEventListener('visibilitychange',markViewed);new MutationObserver(markViewed).observe(document.documentElement,{attributes:true,attributeFilter:['class']});
+ connectThreadContextMenu(list,{projectManagement,isGrouped:()=>sidebarPreferences.get().group==='project',getThread:id=>{const thread=[...optimisticThreads.values(),...savedThreads].find(t=>t.id===id);return thread?{...thread,title:metadata(id).title||thread.title,running:!!jobs.get(id)?.running}:null;},metadata,update:updateMetadata,onArchive:id=>{if(activeId===id)clear();},onDelete:async id=>{await api.deleteThread(id);if(activeId===id)clear();savedThreads=savedThreads.filter(thread=>thread.id!==id);optimisticThreads.delete(id);savedHistories.delete(id);jobs.delete(id);viewState.remove(id);drawThreads();document.dispatchEvent(new Event('suffice-thread-deleted'));},toast});
  function addOptimistic(id,title,project=document.querySelector('.project-picker')?.textContent.trim()||'Project'){
   optimisticThreads.set(id,{id,title:title.slice(0,90),project,modified:Date.now()});drawThreads();
  }
  function adoptOptimistic(previous,id){const thread=optimisticThreads.get(previous);if(thread){optimisticThreads.delete(previous);optimisticThreads.set(id,{...thread,id});}}
  async function refresh(){
   const version=++refreshVersion,threads=await api.threads();if(version!==refreshVersion)return;
-  savedThreads=threads;for(const thread of threads)optimisticThreads.delete(thread.id);drawThreads();
+  const previous=new Map(savedThreads.map(t=>[t.id,t]));for(const thread of threads)if(thread.status==='done'&&previous.has(thread.id)&&thread.modified>previous.get(thread.id).modified&&!jobs.has(thread.id))updateMetadata(thread.id,{unread:!isViewing(thread.id)});
+  savedThreads=threads;const selected=threads.find(thread=>thread.id===activeId);if(selected&&!header.hidden)header.textContent=metadata(selected.id).title||selected.title;for(const thread of threads)optimisticThreads.delete(thread.id);drawThreads();
  }
  connectThreadFork(list,{api,toast,onFork:async fork=>{await refresh();const thread=savedThreads.find(thread=>thread.id===fork.id);if(thread)await openSavedThread(thread);}});
  async function openSavedThread(thread){
@@ -140,7 +152,7 @@ export function connectThreads({api,prompt,send,toast}){
   const reusable=job?.history||(cached?.modified===thread.modified?cached.node:null);
   showHistory(reusable||document.createElement('div'));history.className='thread-messages';
   transcript.setAttribute('aria-busy',String(!reusable));
-  threadView(thread.title,entering);restoreView();syncRunning();
+  threadView(metadata(thread.id).title||thread.title,entering);restoreView();syncRunning();updateMetadata(thread.id,{unread:false});
   localStorage.setItem('suffice-thread-seen:'+thread.id,String(Date.now()));
   for(const row of list.querySelectorAll('.thread-row')){row.setAttribute('aria-pressed',String(row.dataset.thread===activeId));if(row.dataset.thread===activeId)row.dataset.unread='false';}
   try{
@@ -160,12 +172,13 @@ export function connectThreads({api,prompt,send,toast}){
  function drawThreads(){
   const scroll=list.scrollTop;
   const prefs=sidebarPreferences.get();
-  const all=[...optimisticThreads.values(),...savedThreads.filter(thread=>!optimisticThreads.has(thread.id))];
-  const unread=thread=>thread.id!==activeId&&thread.modified>Number(localStorage.getItem('suffice-thread-seen:'+thread.id)||0);
+  const all=[...optimisticThreads.values(),...savedThreads.filter(thread=>!optimisticThreads.has(thread.id))].map(thread=>({...thread,title:metadata(thread.id).title||thread.title}));
+  if(activeId&&!header.hidden){const active=all.find(t=>t.id===activeId);if(active)header.textContent=active.title;}
+  const unread=thread=>!!metadata(thread.id).unread;
   const status=thread=>{const job=jobs.get(thread.id);return job?(job.running?(job.approvalRequests.size?'approval':'working'):job.failed?'failed':'done'):thread.status;};
   updateThreadDirectory(all.map(thread=>{const job=jobs.get(thread.id);return {...thread,status:status(thread),unread:unread(thread),...(job?{provider:job.provider||thread.provider,startedAt:job.startedAt,...(job.diff?{diff:job.diff}:{})}: {})};}),openSavedThread);
-  const threads=all.filter(thread=>prefs.filter==='all'||prefs.filter==='working'&&status(thread)==='working'||prefs.filter==='attention'&&['approval','input','failed'].includes(status(thread))||prefs.filter==='unread'&&unread(thread)||prefs.filter==='draft'&&!!viewState.read(thread.id).draft).sort((a,b)=>prefs.sort==='name'?a.title.localeCompare(b.title):b.modified-a.modified);
-  sectionLabel.textContent=prefs.group==='project'?'Threads':prefs.filter==='all'?'Threads':({working:'Running',attention:'Needs attention',unread:'Unread',draft:'Drafts'})[prefs.filter];
+  const threads=all.filter(thread=>prefs.filter==='archived'?metadata(thread.id).archived:!metadata(thread.id).archived&&(prefs.filter==='all'||prefs.filter==='working'&&status(thread)==='working'||prefs.filter==='attention'&&['approval','input','failed'].includes(status(thread))||prefs.filter==='unread'&&unread(thread)||prefs.filter==='draft'&&!!viewState.read(thread.id).draft)).sort((a,b)=>Number(!!b.projectPinned)-Number(!!a.projectPinned)||Number(!!metadata(b.id).pinned)-Number(!!metadata(a.id).pinned)||(prefs.sort==='name'?a.title.localeCompare(b.title):b.modified-a.modified));
+  sectionLabel.textContent=prefs.group==='project'?'Threads':prefs.filter==='all'?'Threads':({working:'Running',attention:'Needs attention',unread:'Unread',draft:'Drafts',archived:'Archived'})[prefs.filter];
   list.dataset.compact=String(prefs.compact);list.dataset.group=prefs.group;
   for(const field of ['branch','provider','diff'])list.dataset[field]=String(prefs[field]);
   list.replaceChildren();
@@ -176,14 +189,14 @@ export function connectThreads({api,prompt,send,toast}){
     const key=thread.cwd||thread.project||'__none';
     if(!groups.has(key)){
      const group=document.createElement('section');group.className='thread-project-group';
-     const label=document.createElement('button');label.type='button';label.className='thread-group-toggle';label.setAttribute('aria-expanded',String(!collapsedProjects.has(key)));label.innerHTML=icon('chevron');
-     const name=document.createElement('span');name.className='thread-group-name';name.textContent=thread.project||'No project';const count=document.createElement('span');count.className='thread-group-count';count.textContent=String(threads.filter(t=>(t.cwd||t.project||'__none')===key).length);label.append(projectBadge(thread),name);
+     const label=document.createElement('button');label.type='button';label.className='thread-group-toggle';label.dataset.projectPath=thread.cwd||'';label.setAttribute('aria-expanded',String(!collapsedProjects.has(key)));label.innerHTML=icon('chevron');
+     const name=document.createElement('span');name.className='thread-group-name';name.textContent=thread.project||'No project';const count=document.createElement('span');count.className='thread-group-count';count.textContent=String(threads.filter(t=>(t.cwd||t.project||'__none')===key).length);label.append(projectBadge(thread),name);if(thread.projectPinned){const pin=document.createElement('span');pin.className='project-pin';pin.setAttribute('aria-label','Pinned project');pin.innerHTML=icon('pin');label.append(pin);}
      if(thread.projectDiff&&(thread.projectDiff.added||thread.projectDiff.removed)){const diff=document.createElement('span');diff.className='thread-project-diff';diff.setAttribute('aria-label',thread.projectDiff.scope==='branch'?'Project branch changes, including uncommitted edits':'Project uncommitted changes');const added=document.createElement('span'),removed=document.createElement('span');added.className='thread-added';removed.className='thread-removed';added.textContent='+'+thread.projectDiff.added;removed.textContent='\u2212'+thread.projectDiff.removed;diff.append(added,removed);label.append(diff);}label.append(count);
      const body=document.createElement('div');body.className='thread-group-rows';body.hidden=collapsedProjects.has(key);body.inert=body.hidden;label.addEventListener('click',()=>{if(collapsedProjects.has(key))collapsedProjects.delete(key);else collapsedProjects.add(key);try{localStorage.setItem('suffice-sidebar-collapsed-v1',JSON.stringify([...collapsedProjects]));}catch{}const expanded=!collapsedProjects.has(key);label.setAttribute('aria-expanded',String(expanded));setProjectGroupExpanded(body,expanded);});group.append(label,body);list.append(group);groups.set(key,body);
     }target=groups.get(key);
    }
    const row=document.createElement('button');row.type='button';row.className='thread-row session-row session-row--sidebar';row.dataset.thread=thread.id;row.dataset.project=thread.project;row.setAttribute('aria-pressed',String(thread.id===activeId));row.title=`${thread.title} · ${thread.project}`;
-   const job=jobs.get(thread.id);const details={...thread,...(job?{status:status(thread),error:job.failed?job.error:undefined,startedAt:job.startedAt,provider:job.provider||thread.provider,model:job.model||thread.model,terminalCount:job.terminalCount,...(job.diff?{diff:job.diff}:{})}: {})};populateThreadRow(row,details,{draft:!!viewState.read(thread.id).draft,unread:thread.id!==activeId&&thread.modified>Number(localStorage.getItem('suffice-thread-seen:'+thread.id)||0)});
+   const job=jobs.get(thread.id);const details={...thread,...(job?{status:status(thread),error:job.failed?job.error:undefined,startedAt:job.startedAt,provider:job.provider||thread.provider,model:job.model||thread.model,terminalCount:job.terminalCount,...(job.diff?{diff:job.diff}:{})}: {})};populateThreadRow(row,details,{draft:!!viewState.read(thread.id).draft,unread:unread(thread),pinned:!!metadata(thread.id).pinned});
    row.addEventListener('click',()=>void openSavedThread(thread));target.append(row);
   }
   if(!threads.length){const empty=document.createElement('div');empty.className='sidebar-empty';empty.textContent=all.length?'No matching threads':'No threads yet';list.append(empty);}
@@ -219,7 +232,7 @@ export function connectThreads({api,prompt,send,toast}){
    if(event.event==='text')group=log=null;
    if(node===history)bottom();
   };
-  job.finish=(result,error)=>{if(!job.running)return;const interrupted=result?.interrupted||isInterruption(error);if(compaction){compaction.remove();compaction=null;}if(interrupted){node.insertBefore(transcriptDivider('interrupted'),statusLine);error=null;}else if(error){current=null;streamed='';response().textContent=displayRunError(error.message,job.provider);messageActions.assistant(current,job.turn,current.textContent);}else if(result?.text){markdown(response(),result.text);messageActions.assistant(response(),job.turn,result.text);}messageActions.complete(job.turn,{...result?.presentation,endedAt:result?.presentation?.endedAt||Date.now()});statusLine.remove();if(preference('collapse-work',true))node.querySelectorAll('.thread-activity').forEach(group=>group.open=false);approvals.clear(job.id);job.approvalRequests.clear();job.running=false;job.failed=!!error;job.error=error?displayRunError(error.message,job.provider):undefined;job.terminalCount=0;if(node===history)localStorage.setItem('suffice-thread-seen:'+job.id,String(Date.now()));drawThreads();if(node===history){syncRunning();saveView();bottom();document.dispatchEvent(new Event('suffice:usage-change'));}document.dispatchEvent(new Event('suffice:thread-updated'));void refresh().catch(()=>{});};
+  job.finish=(result,error)=>{if(!job.running)return;const interrupted=result?.interrupted||isInterruption(error);if(compaction){compaction.remove();compaction=null;}if(interrupted){node.insertBefore(transcriptDivider('interrupted'),statusLine);error=null;}else if(error){current=null;streamed='';response().textContent=displayRunError(error.message,job.provider);messageActions.assistant(current,job.turn,current.textContent);}else if(result?.text){markdown(response(),result.text);messageActions.assistant(response(),job.turn,result.text);}messageActions.complete(job.turn,{...result?.presentation,endedAt:result?.presentation?.endedAt||Date.now()});statusLine.remove();if(preference('collapse-work',true))node.querySelectorAll('.thread-activity').forEach(group=>group.open=false);approvals.clear(job.id);job.approvalRequests.clear();job.running=false;job.failed=!!error;job.error=error?displayRunError(error.message,job.provider):undefined;job.terminalCount=0;if(!error)updateMetadata(job.id,{unread:!isViewing(job.id)});if(node===history&&isViewing(job.id))localStorage.setItem('suffice-thread-seen:'+job.id,String(Date.now()));drawThreads();if(node===history){syncRunning();saveView();bottom();document.dispatchEvent(new Event('suffice:usage-change'));}document.dispatchEvent(new Event('suffice:thread-updated'));void refresh().catch(()=>{});};
   return job;
  }
  function adoptJob(job,id){if(!id||id===job.id)return;const previous=job.id;jobs.delete(previous);jobs.set(id,job);job.id=id;adoptOptimistic(previous,id);if(activeId===previous){activeId=id;viewState.adopt(id);sessionStorage.setItem('suffice-active-thread',id);}drawThreads();}

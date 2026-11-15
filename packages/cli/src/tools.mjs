@@ -18,8 +18,10 @@ export function repositoryTools({workspace, commandTimeout=180, shellPath, prefe
         // Optional product instrumentation sees nested codemode calls as well.
         let observation;
         try { observation=await toolObserver?.before(tool.name,args); } catch {}
-        try { return await tool.execute(id,args,signal,onUpdate); }
-        finally { try { await toolObserver?.after(observation); } catch {} }
+        let result,error;
+        try { result=await tool.execute(id,args,signal,onUpdate);return result; }
+        catch(failure){error=failure;throw failure;}
+        finally { try { await toolObserver?.after(observation,{name:tool.name,args,result,error}); } catch {} }
       }
     })),
     ...createNavigation({workspace,includeTypeScript:true}).map(tool=>({...tool,

@@ -20,6 +20,8 @@ export function createThreadViewStore(storage){
   get id(){return active;},get state(){return read(active);},read,
   select(id){active=id??null;notify({type:'select',id:active,state:read(active)});},
   update(patch){const state=normalize({...read(active),...patch});write(active,state);notify({type:'update',id:active,state,changed:Object.keys(patch)});},
+  updateFor(id,patch){const state=normalize({...read(id),...patch});write(id,state);notify({type:'update',id,state,changed:Object.keys(patch)});},
+  remove(id){cache.delete(key(id));try{storage.removeItem(prefix+key(id));}catch{}notify({type:'remove',id});},
   adopt(id){if(!id||id===active)return;const previous=active;write(id,read(active));try{storage.removeItem(prefix+key(previous));}catch{}cache.delete(key(previous));active=id;notify({type:'adopt',id,state:read(id)});},
   subscribe(listener){listeners.add(listener);return()=>listeners.delete(listener);},
  };

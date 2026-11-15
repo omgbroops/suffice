@@ -14,6 +14,6 @@ function createBackgroundTasks({fork,entry,emit}){
   finally{await shutdown(request('shutdown'));for(const [key,value] of sessions)if(value===route)sessions.delete(key);worker.kill();workers.delete(worker);}
  }
  async function stop(){await Promise.all([...new Set(sessions.values())].map(session=>shutdown(session.request('shutdown'))));for(const worker of workers)worker.kill();workers.clear();sessions.clear();}
- return {run,stop,request:(action,payload)=>sessions.get(payload?.threadId||payload?.clientId)?.request(action,payload)};
+ return {run,stop,has:id=>sessions.has(id),request:(action,payload)=>sessions.get(payload?.threadId||payload?.clientId)?.request(action,payload)};
 }
 module.exports={createBackgroundTasks};

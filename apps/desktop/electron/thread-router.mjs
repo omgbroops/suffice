@@ -29,6 +29,12 @@ export function createThreadRouter({send,createHost,createRuntime}) {
    let result;
    if(action==='shutdown'){await Promise.all([...records].map(record=>record.request('shutdown')));result=null;}
    else if(['status','models','threads'].includes(action)){await catalog.ready;result=await catalog.request(action,payload);if(action==='threads')result=result.map(thread=>{const run=byThread.get(thread.id);return run?{...thread,status:run.busy?(run.approvals.size?'approval':'working'):run.failed?'failed':thread.status,startedAt:run.startedAt,provider:run.provider??thread.provider,model:run.model??thread.model}:thread;});}
+   else if(['delete-thread','release-thread'].includes(action)){
+    const target=byThread.get(payload.id);if(target?.busy)throw new Error('Stop this thread before deleting it');
+    await catalog.ready;result=await catalog.request('thread-location',payload);
+    if(target){await target.request('reset');for(const [key,value] of byThread)if(value===target)byThread.delete(key);records.delete(target);if(selected===target)selected=null;}
+    if(viewedThread===payload.id){selectionRevision++;viewedThread=null;await catalog.request('reset');}
+   }
    else if(action==='thread-location'){await catalog.ready;result=await catalog.request(action,payload);}
    else if(action==='thread'){
     const revision=++selectionRevision,live=byThread.get(payload.id);

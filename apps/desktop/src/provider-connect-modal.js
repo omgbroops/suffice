@@ -2,7 +2,7 @@ import {icon} from './ui.js';
 import {preference} from './settings-preferences.js';
 
 export function createProviderConnectModal(api){
- const dialog=document.createElement('dialog');dialog.className='provider-dialog';dialog.setAttribute('aria-labelledby','provider-dialog-title');
+ const dialog=document.createElement('dialog');dialog.className='provider-dialog provider-connect-dialog';dialog.setAttribute('aria-labelledby','provider-dialog-title');
  dialog.innerHTML=`<header><h2 id="provider-dialog-title">Connect provider</h2><button type="button" class="button button--ghost" aria-label="Close connection">${icon('close')}</button></header><div class="provider-dialog-body"></div><footer class="provider-dialog-footer"></footer>`;
  document.body.append(dialog);const body=dialog.querySelector('.provider-dialog-body'),footer=dialog.querySelector('footer'),title=dialog.querySelector('h2');let connecting=false;
  function open(name='Settings'){title.textContent=name;if(!dialog.open){dialog.showModal();if(!preference('reduced-motion',false)&&!matchMedia('(prefers-reduced-motion:reduce)').matches)dialog.animate([{opacity:0,transform:'translateY(6px) scale(.98)'},{opacity:1,transform:'none'}],{duration:160,easing:'cubic-bezier(.23,1,.32,1)'});}}

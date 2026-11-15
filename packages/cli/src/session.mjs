@@ -1,3 +1,4 @@
+import {Type} from 'typebox';
 import {readFileSync} from 'node:fs';
 import {mcpConfig} from './mcp-config.mjs';
 import {requiresDesktopApproval} from './desktop-policy.mjs';
@@ -29,8 +30,9 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
   const log=event=>{tail=tail.then(()=>appendFile(eventPath,JSON.stringify({at:new Date().toISOString(),...event})+'\n',{mode:0o600})).catch(e=>{logError??=e; void session?.abort();});};
   const manager=options.sessionManager??(options.continue?SessionManager.continueRecent(workspace,sessionDir):SessionManager.create(workspace,sessionDir));
   const automation=createAutomation({home:options.home,sessionId:hash(manager.getSessionFile()??randomUUID()).slice(0,32),browser:externalAccess&&options.browser!==false,desktop:externalAccess&&options.desktop!==false,headless:options.browserHeadless===true});
-  const systemPrompt=SUFFICE_IDENTITY+'\n\n'+PROMPT+(options.additionalContext||'')+(options.desktopSettings?.signoff?'\nUse git commit --signoff when committing changes.':'')+(automation.prompt?'\nWhen explicitly requested, operating websites and native apps is also within scope. '+automation.prompt:'');
-  const tools=[...repositoryTools({workspace,access,shellPath:options.shellPath,preferredShell:options.desktopSettings?.['execution-shell'],toolObserver}),...automation.tools];
+  const automaticNaming=options.desktopSettings?.naming==='Automatic';
+  const systemPrompt=SUFFICE_IDENTITY+'\n\n'+PROMPT+(automaticNaming&&!options.sessionManager&&!options.continue?'\nBefore doing the task, call set_session_title through codemode to give this conversation a concise descriptive title based on the user request. Do not include the title in your reply.':'')+(options.additionalContext||'')+(options.desktopSettings?.signoff?'\nUse git commit --signoff when committing changes.':'')+(automation.prompt?'\nWhen explicitly requested, operating websites and native apps is also within scope. '+automation.prompt:'');
+  const tools=[...repositoryTools({workspace,access,shellPath:options.shellPath,preferredShell:options.desktopSettings?.['execution-shell'],toolObserver}),...automation.tools,...(automaticNaming?[{name:'set_session_title',label:'Name session',description:'Set a concise descriptive title for this conversation.',parameters:Type.Object({title:Type.String({minLength:1,maxLength:90})}),async execute(_id,{title}){if(typeof title!=='string'||!title.trim()||title.length>90||/[\r\n\x00-\x1f]/.test(title))throw new Error('A single-line title of 1-90 characters is required');session.setSessionName(title.trim());options.onTitleChanged?.(title.trim());return {content:[{type:'text',text:'Session title saved.'}],details:{title:title.trim()}};}}]:[])];
   const names=tools.filter(t=>t.exposure!=='deferred').map(t=>t.name);
   const contextWindow=options.modelObject?.contextWindow||runtime.getModel?.('openai',options.model)?.contextWindow||128000;
   const trust=new ProjectTrustStore(options.home);let trusted=trust.get(workspace)===true;
@@ -43,14 +45,15 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
       if(onApproval&&requiresDesktopApproval(options.desktopSettings,e.toolName,e.input)&&!await onApproval(e.toolName,e.input))return {block:true,reason:'User denied this action'};
       log({type:'tool_call',name:e.toolName,input:e.input,callId:e.toolCallId,parentCallId:e.parentToolCallId});
       onTool(e.toolName,e.input);
-      if(allowance && (++allowance.calls>240 || allowance.reason || logError)) {
-        stop(logError?'receipt_error':'tool_limit'); return {block:true,reason:'Task allowance exhausted'};
+      if(allowance)allowance.calls++;
+      if(allowance && (allowance.reason || logError)) {
+        stop(logError?'receipt_error':allowance.reason); return {block:true,reason:'Task stopped'};
       }
     });
     pi.on('tool_result',e=>log({type:'tool_result',name:e.toolName,callId:e.toolCallId,parentCallId:e.parentToolCallId,isError:e.isError,content:e.content,details:e.details}));
     pi.on('before_provider_request',e=>{
       if(logError) throw logError;
-      if(allowance && (allowance.reason || allowance.spent>=options.maxCost || allowance.turns>=60)) throw new Error('Task allowance exhausted');
+      if(allowance && (allowance.reason || (options.maxCost!=null&&allowance.spent>=options.maxCost))) throw new Error('Task allowance exhausted');
       log({type:'provider_request',model:e.payload.model,reasoning:e.payload.reasoning,bytes:JSON.stringify(e.payload).length});
     });
     pi.on('provider_stream_event',e=>{if(e.data?.response?.usage) log({type:'provider_usage',responseId:e.data.response.id,usage:e.data.response.usage});});
@@ -81,7 +84,7 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
   function begin(){
     if(allowance) return;
     allowance={turns:0,calls:0,spent:0};
-    taskTimer=setTimeout(()=>stop('timeout'),options.timeout*1000);
+    if(options.timeout!=null)taskTimer=setTimeout(()=>stop('timeout'),options.timeout*1000);
   };
   function finish(){clearTimeout(taskTimer);if(allowance) log({type:'task_end',...allowance,totals});allowance=undefined;};
   session.subscribe(e=>{
@@ -98,8 +101,7 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
     if(allowance) {
       allowance.turns++; allowance.spent+=known?u.cost.total:0;
       if(m.content.some(c=>c.type==='toolCall')) {
-        if(allowance.spent>=options.maxCost) stop('cost_limit');
-        else if(allowance.turns>=60) stop('turn_limit');
+        if(options.maxCost!=null&&allowance.spent>=options.maxCost) stop('cost_limit');
       }
     }
     onAssistant(m);

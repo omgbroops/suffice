@@ -1,7 +1,7 @@
 .desktop-app .sidebar-sessions { gap: 4px; }
 .desktop-app .thread-row.thread-card { display: flex; flex-direction: column; align-items: stretch; gap: 3px; padding: 9px 12px; min-height: 76px; width: 100%; border-radius: 7px; text-align: left; background: transparent; color: var(--text); font-weight: 400; }
-.desktop-app .thread-card[aria-pressed='true'] { background: var(--surface-active); }
-.desktop-app .thread-card:hover { background: var(--hover-fill); }
+.desktop-app :is(.thread-card[aria-pressed='true'],.new-session[aria-current='page']) { background: var(--surface-active); }
+.desktop-app :is(.thread-card,.new-session):hover { background: var(--hover-fill); }
 .thread-card-heading,.thread-project-line,.thread-branch-line { display: flex; align-items: center; min-width: 0; gap: 6px; }
 .desktop-app .thread-card .row-title { flex: 1; min-width: 0; font-size: 13px; line-height: 20px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .thread-card[data-unread='true'] .row-title { color: var(--text-strong); }
@@ -65,7 +65,7 @@
 .desktop-app .sidebar { --scrollbar-thumb: #ffffff1a; --scrollbar-thumb-hover: #ffffff29; }
 .desktop-app[data-theme='light'] .sidebar { --scrollbar-thumb: #0000001f; --scrollbar-thumb-hover: #00000033; }
 .desktop-app .session-section { display: flex; flex-direction: column; overflow: hidden; }
-.desktop-app .session-section > .section-label { flex-shrink: 0; }
+.desktop-app .session-section > .section-label { flex-shrink: 0; padding-right: 3px; }
 .desktop-app .sidebar-sessions { overflow-y: auto; scrollbar-gutter: stable; padding-right: 6px; margin-right: -2px; }
 .thread-no-branch .icon { width: 12px; height: 12px; flex-shrink: 0; }
 
@@ -79,7 +79,7 @@
 .sidebar-scroll-thumb { width: 3px; margin-left: 3px; border-radius: 8px; background: var(--scrollbar-thumb); }
 .sidebar-scroll-rail:hover .sidebar-scroll-thumb,.sidebar-scroll-rail.dragging .sidebar-scroll-thumb { background: var(--scrollbar-thumb-hover); }
 .desktop-app .session-section { overflow: visible; }
-.sidebar-options { margin-left: auto; width: 24px; height: 24px; padding: 5px; border: 0; border-radius: 6px; background: transparent; color: var(--text-faint); cursor: pointer; -webkit-app-region: no-drag; }
+.sidebar-options { display: grid; place-items: center; margin-left: auto; width: 25px; height: 25px; padding: 5px; border: 0; border-radius: 6px; background: transparent; color: var(--text-faint); cursor: pointer; -webkit-app-region: no-drag; }
 .sidebar-options:hover,.sidebar-options[aria-expanded='true'] { background: var(--hover-fill); color: var(--text-muted); }
 .sidebar-options .icon { width: 14px; height: 14px; }
 .thread-project-group { display: flex; flex-direction: column; gap: 2px; }
@@ -102,7 +102,16 @@
 .menu-item[data-menu-action^='sidebar:'][aria-checked='true']::after { content: '✓'; margin-left: auto; color: var(--text-muted); font-size: 12px; }
 
 /* Completed checks add noise to single-line rows; active and attention states stay visible. */
-[data-compact='true'] .thread-card[data-status='done'] .thread-state { display: none; }
+[data-compact='true'] .thread-card[data-status='done']:not([data-unread='true']) .thread-state { display: none; }
+.thread-unread-dot { width:7px; height:7px; display:block; border-radius:50%; background:var(--blue); }
+.thread-pin { display:flex; align-items:center; color:var(--text-faint); }
+.thread-pin .icon { width:12px; height:12px; }
+.project-pin .icon { width:12px; height:12px; transform:none!important; color:var(--text-faint); }
+.thread-context-menu { z-index:160; }
+.thread-context-menu > .popover-heading { display:none; }
+.thread-context-menu .menu-item { justify-content:flex-start; gap:9px; }
+.thread-context-menu .menu-label { flex:1; }
+.thread-rename-dialog form { display:flex; flex-direction:column; }
 .thread-group-toggle > .thread-project-icon { flex: 0 0 14px; }
 .thread-group-toggle > .thread-project-icon + span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
@@ -131,13 +140,14 @@
 .desktop-app .sidebar-sessions > .thread-card + .thread-card { margin-top: 3px; }
 .thread-group-rows { gap: 3px; }
 .desktop-app .thread-card[aria-pressed='true'] .row-title { color: var(--text-strong); }
+.desktop-app .thread-card[data-unread='true'] .row-title { color:var(--text-strong); }
 
 .thread-group-name { flex: 1; min-width: 0; }
 .thread-project-diff { display: inline-flex; gap: 3px; flex-shrink: 0; font-size: 10px; font-variant-numeric: tabular-nums; }
 .thread-project-diff + .thread-group-count { margin-left: 3px; }
 
+.desktop-app .new-session[aria-current='page'] { color:var(--text-strong); }
+
 .thread-provider .settings-provider-placeholder,.message-turn-model .settings-provider-placeholder { width:13px; height:13px; flex:0 0 13px; font-size:8px; line-height:13px; border-radius:3px; }
 
 .spotlight-result .settings-provider-placeholder { width:13px; height:13px; flex:0 0 13px; font-size:8px; line-height:13px; border-radius:3px; }
-
-.thread-unread-dot { display:block; width:6px; height:6px; margin:4px; border-radius:50%; background:var(--blue); }

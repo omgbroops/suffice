@@ -1,5 +1,12 @@
 const {contextBridge,ipcRenderer}=require('electron');
 contextBridge.exposeInMainWorld('sufficeDesktop',{
+  windowChrome:process.argv.find(arg=>/^--suffice-window-chrome=(windows|macos-native|macos-preview)$/.test(arg))?.split('=')[1]||'windows',
+  deleteThread:id=>ipcRenderer.invoke('suffice:delete-thread',id),
+  updateProject:payload=>ipcRenderer.invoke('suffice:update-project',payload),
+  removeProject:folder=>ipcRenderer.invoke('suffice:remove-project',folder),
+  openProjectFolder:folder=>ipcRenderer.invoke('suffice:open-project-folder',folder),
+  chooseProjectImage:()=>ipcRenderer.invoke('suffice:choose-project-image'),
+  moveThread:payload=>ipcRenderer.invoke('suffice:move-thread',payload),
   viewStates:()=>ipcRenderer.invoke('suffice:view-states'),
   saveViewState:payload=>ipcRenderer.invoke('suffice:save-view-state',payload),
   refreshModels:()=>ipcRenderer.invoke('suffice:refresh-models'),
@@ -37,6 +44,8 @@ contextBridge.exposeInMainWorld('sufficeDesktop',{
   openThread:id=>ipcRenderer.invoke('suffice:thread',id),
   initialProject:()=>ipcRenderer.invoke('suffice:initial-project'),
   chooseProject:()=>ipcRenderer.invoke('suffice:project'),
+  branches:()=>ipcRenderer.invoke('suffice:branches'),
+  selectBranch:payload=>ipcRenderer.invoke('suffice:select-branch',payload),
   projects:()=>ipcRenderer.invoke('suffice:projects'),
   selectProject:(id,options)=>ipcRenderer.invoke('suffice:select-project',id,options),
   run:payload=>ipcRenderer.invoke('suffice:run',payload),

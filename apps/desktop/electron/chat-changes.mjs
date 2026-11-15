@@ -12,7 +12,7 @@ function totals(state){let added=0,removed=0,files=0,partial=state.partial;for(c
 export async function readChatChanges(home,id){const path=ledgerPath(home,id);if(!path)return null;try{const state=JSON.parse(await readFile(path.replace('.json','.summary.json'),'utf8'));return state?.scope==='chat'?state:null;}catch{return null;}}
 // Local snapshots are receipts only: no stash, index writes, checkout or reset.
 export function createChatChangeTracker({cwd,home,getId,onChange=()=>{}}){
- let state={version:1,files:{},partial:false},loading,tail=Promise.resolve();
+ let state={version:1,root:resolve(cwd),files:{},partial:false},loading,tail=Promise.resolve();
  let canonicalRoot,key,operations;
  async function initialize(){canonicalRoot??=await realpath(cwd);key=process.platform==='win32'?canonicalRoot.toLowerCase():canonicalRoot;operations=resolve(home,'chat-change-activity',createHash('sha256').update(key).digest('hex'));}
  const overlaps=(a,b)=>!a||!b||a.some(path=>b.includes(path));
@@ -27,7 +27,7 @@ export function createChatChangeTracker({cwd,home,getId,onChange=()=>{}}){
   try{await lstat(resolve(operations,token.operation+'.conflict'));token.conflict=true;}catch{}
  }
 
- async function load(){if(!loading)loading=(async()=>{try{const path=ledgerPath(home,getId());if(path){const saved=JSON.parse(await readFile(path,'utf8'));if(saved.version===1&&saved.files&&typeof saved.files==='object')state=saved;}}catch{}})();await loading;}
+ async function load(){if(!loading)loading=(async()=>{try{const path=ledgerPath(home,getId());if(path){const saved=JSON.parse(await readFile(path,'utf8'));if(saved.version===1&&saved.files&&typeof saved.files==='object')state=saved.root&&resolve(saved.root)!==resolve(cwd)?{version:1,root:resolve(cwd),files:{},partial:true}:{...saved,root:resolve(cwd)};}}catch{}})();await loading;}
  async function text(name){const path=resolve(cwd,name),rel=relative(cwd,path);if(isAbsolute(rel)||rel==='..'||rel.startsWith('..'+sep))return null;try{const info=await lstat(path);if(!info.isFile()||info.isSymbolicLink()||info.size>maxFile)return null;const actual=await realpath(path),inside=relative(canonicalRoot,actual);if(isAbsolute(inside)||inside==='..'||inside.startsWith('..'+sep))return null;const bytes=await readFile(path);if(bytes.length>maxFile||bytes.includes(0))return null;return new TextDecoder('utf-8',{fatal:true}).decode(bytes);}catch(error){if(error.code==='ENOENT')return '';return null;}}
  async function snapshot(names){let partial=false;if(!names){try{const {stdout}=await exec('git',['-C',cwd,'ls-files','--cached','--others','--exclude-standard','-z'],{windowsHide:true,timeout:5000,maxBuffer:8*1024*1024});names=[...new Set(stdout.split('\0').filter(Boolean))];}catch{names=[];const walk=async dir=>{for(const entry of await readdir(resolve(cwd,dir),{withFileTypes:true})){if(excluded.has(entry.name)||entry.isSymbolicLink())continue;const name=dir?dir+'/'+entry.name:entry.name;if(names.length>=maxFiles){partial=true;return;}if(entry.isDirectory())await walk(name);else if(entry.isFile())names.push(name);}};await walk('');}}
   const values=new Map();let bytes=0;if(names.length>maxFiles)partial=true;
