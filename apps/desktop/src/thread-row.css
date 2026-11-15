@@ -16,11 +16,11 @@
 .thread-branch .icon { width: 12px; height: 12px; flex-shrink: 0; }
 .thread-state { display: inline-flex; color: #34b698; flex-shrink: 0; }
 .thread-state .icon { width: 14px; height: 14px; }
-.thread-card[data-status='working'] .thread-state { color: #60a5fa; }
-.thread-card[data-status='working'] .thread-state svg { animation: thread-working 1.2s linear infinite; }
-.thread-card[data-status='failed'] .thread-state { color: #f87171; }
-.thread-card:is([data-status='approval'],[data-status='input']) .thread-state { color: #fbbf24; }
-.thread-card:is([data-status='idle'],[data-status='waiting']) .thread-state { color: var(--text-faint); }
+:is(.thread-card,.thread-hover-card)[data-status='working'] .thread-state { color: #60a5fa; }
+:is(.thread-card,.thread-hover-card)[data-status='working'] .thread-state svg { animation: thread-working 1.2s linear infinite; }
+:is(.thread-card,.thread-hover-card)[data-status='failed'] .thread-state { color: #f87171; }
+:is(.thread-card,.thread-hover-card):is([data-status='approval'],[data-status='input']) .thread-state { color: #fbbf24; }
+:is(.thread-card,.thread-hover-card):is([data-status='idle'],[data-status='waiting']) .thread-state { color: var(--text-faint); }
 .desktop-app .thread-card .thread-age { font-size: 11px; line-height: 16px; font-variant-numeric: tabular-nums; color: var(--text-faint); }
 .thread-card[data-status='working'] .thread-age { color: #60a5fa; }
 .thread-provider,.thread-terminal,.thread-pr,.thread-diff { display: inline-flex; align-items: center; gap: 3px; flex-shrink: 0; }
