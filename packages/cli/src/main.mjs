@@ -1,19 +1,16 @@
-import {mkdir, readFile, writeFile, realpath, stat} from 'node:fs/promises';
-import {resolve} from 'node:path';
-import {randomUUID} from 'node:crypto';
+import {createSufficeModelRuntime,modelRuntimeOptions} from './model-runtime.mjs';
+import {mkdir, realpath, stat} from 'node:fs/promises';
+import {installationId} from './installation-id.mjs';
 import {spawn} from 'node:child_process';
 import {createInterface} from 'node:readline/promises';
-import {ModelRuntime} from '@earendil-works/pi-coding-agent';
+
 import {VERSION} from './options.mjs';
 import {createSufficeSession} from './session.mjs';
 import {repositoryTools} from './tools.mjs';
 import {setupAutomation} from './automation.mjs';
 
 async function login(runtime,options,sharedReader) {
-  const identity=resolve(options.home,'host-id');
-  let deviceId;
-  try {deviceId=(await readFile(identity,'utf8')).trim();}
-  catch(e) {if(e.code!=='ENOENT') throw e;deviceId=randomUUID();await writeFile(identity,deviceId,{mode:0o600});}
+  const deviceId=await installationId(options.home);
   const controller=new AbortController();
   const cancel=()=>controller.abort();process.on('SIGINT',cancel);
   const timer=setTimeout(cancel,15*60_000);let reader=sharedReader;
@@ -40,11 +37,12 @@ async function login(runtime,options,sharedReader) {
 }
 
 export async function main(options) {
+  process.env.PI_CODING_AGENT_DIR=options.home;
   if(options.command==='setup-automation') {console.log(await setupAutomation());return;}
   options.cwd=await realpath(options.cwd);
   if(!(await stat(options.cwd)).isDirectory()) throw new Error('--cwd must be a directory');
   await mkdir(options.home,{recursive:true,mode:0o700});
-  const runtime=await ModelRuntime.create({authPath:resolve(options.home,'auth.json'),modelsPath:null,modelsStorePath:resolve(options.home,'catalog.json'),allowModelNetwork:false});
+  const runtime=await createSufficeModelRuntime(modelRuntimeOptions(options.home));
   if(options.command==='login') return login(runtime,options);
   if(options.command==='doctor') {
     const tools=repositoryTools({workspace:options.cwd});
