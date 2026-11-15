@@ -30,6 +30,7 @@ export const backgroundPresets = Object.freeze({
     }),
   }),
   softHorizon: Object.freeze({label:'Soft horizon',type:'soft-horizon'}),
+  custom: Object.freeze({label:'Custom',type:'custom'}),
   horizon: Object.freeze({ label: 'Pixel horizon', type: 'horizon' }),
   dusk: Object.freeze({
     label: 'Dusk', type: 'horizon',

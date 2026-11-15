@@ -1,11 +1,12 @@
 import {observeBackgroundResize} from './resize.js';
-// A smooth navy atmosphere, cool haze and a broad amber glow. Static grain avoids shimmer.
+// Theme-specific atmospheres share a soft horizon and stable grain without shimmer.
 export function mountSoftHorizon(canvas){
- const host=canvas.parentElement,context=canvas.getContext('2d',{alpha:false});let frame,drawn=false;
+ const host=canvas.parentElement,context=canvas.getContext('2d',{alpha:false});let frame,drawnTheme;
  const bell=(distance,spread)=>Math.exp(-distance*distance/(2*spread*spread));
  function draw(){
   const width=Math.max(1,Math.ceil(host.clientWidth/1.25)),height=Math.max(1,Math.ceil(host.clientHeight/1.25));
-  if(canvas.width===width&&canvas.height===height&&drawn)return;
+  const light=document.documentElement.dataset.theme==='light';
+  if(canvas.width===width&&canvas.height===height&&drawnTheme===light)return;
   canvas.width=width;canvas.height=height;canvas.style.imageRendering='auto';
   const image=context.createImageData(width,height);let seed=48123;
   const noise=()=>{seed=(Math.imul(seed,1664525)+1013904223)|0;return (seed>>>0)/4294967296-.5;};
@@ -16,10 +17,16 @@ export function mountSoftHorizon(canvas){
    image.data[i]=(7+sky*91+warm*143+rim*33+dusk*15+grain)*shade;
    image.data[i+1]=(12+sky*106+warm*85+rim*27+dusk*4+grain)*shade;
    image.data[i+2]=(23+sky*119+warm*39+rim*19+dusk*5+grain)*shade;
+   if(light){
+    image.data[i]=235+v*10-sky*24+warm*10+rim*7+grain*.38;
+    image.data[i+1]=242-sky*12-warm*16+rim*6+grain*.38;
+    image.data[i+2]=250-v*5-warm*32+rim*5+grain*.38;
+   }
    image.data[i+3]=255;
   }
-  context.putImageData(image,0,0);drawn=true;
+  context.putImageData(image,0,0);drawnTheme=light;
  }
- const observer=observeBackgroundResize(host,()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(draw);});draw();
- return ()=>{observer.disconnect();cancelAnimationFrame(frame);canvas.style.removeProperty('image-rendering');};
+ const schedule=()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(draw);};
+ const observer=observeBackgroundResize(host,schedule),themeObserver=new MutationObserver(schedule);themeObserver.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});draw();
+ return ()=>{observer.disconnect();themeObserver.disconnect();cancelAnimationFrame(frame);canvas.style.removeProperty('image-rendering');};
 }
