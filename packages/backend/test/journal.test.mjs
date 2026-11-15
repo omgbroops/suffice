@@ -101,3 +101,35 @@ test('listRuns reports first, last and ended', async (t) => {
   ]);
   assert.deepEqual(await listRuns(path.join(dir, 'missing')), []);
 });
+
+test('corrupt middle line is skipped, later events kept, nothing truncated', async (t) => {
+  const dir = await tmp(t);
+  const f = path.join(dir, 'r.jsonl');
+  const line = (seq) => JSON.stringify({ seq, ts: 1, runId: 'r', type: 't' });
+  await fs.writeFile(f, `${line(1)}\n{garbage\n${line(2)}\n${line(3)}\n`);
+  const j = createJournal({ dir, runId: 'r', clock: clock() });
+  assert.deepEqual((await j.read()).map((e) => e.seq), [1, 2, 3]);
+  assert.deepEqual(await j.stats(), { skipped: 1 });
+  assert.equal((await j.append({ type: 'n' })).seq, 4);
+  const text = await fs.readFile(f, 'utf8');
+  assert.ok(text.includes('{garbage\n') && text.includes(line(3)));
+  assert.deepEqual((await j.read()).map((e) => e.seq), [1, 2, 3, 4]);
+});
+
+test('two instances on one runId share a queue and keep seq unique', async (t) => {
+  const dir = await tmp(t);
+  const a = createJournal({ dir, runId: 'r', clock: clock() });
+  const b = createJournal({ dir, runId: 'r', clock: clock() });
+  await Promise.all(Array.from({ length: 20 }, (_, i) => (i % 2 ? a : b).append({ type: 'x', data: i })));
+  assert.deepEqual((await a.read()).map((e) => e.seq), Array.from({ length: 20 }, (_, i) => i + 1));
+});
+
+test('values JSON.stringify would alter are rejected', async (t) => {
+  const dir = await tmp(t);
+  const j = createJournal({ dir, runId: 'r', clock: clock() });
+  for (const data of [{ a: undefined }, [undefined], { a: { b: () => 1 } }, { s: Symbol('x') }, NaN, { n: Infinity }, [-Infinity]])
+    await assert.rejects(j.append({ type: 'x', data }), TypeError);
+  assert.deepEqual(await j.read(), []);
+  await j.append({ type: 'x', data: { a: null, b: [1, 'x', { c: false }] } });
+  assert.equal((await j.read()).length, 1);
+});

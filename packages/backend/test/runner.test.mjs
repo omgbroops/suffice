@@ -202,3 +202,84 @@ test('withDefaults: fills missing usage, keeps given usage', async () => {
   const r2 = await reg.withDefaults({ run: async () => ({ ok: true, usage: { inputTokens: 4 } }) }).run({ prompt: 'p' });
   assert.deepEqual(r2.usage, { inputTokens: 4, outputTokens: 0 });
 });
+
+const stubRunner = (stdout) => createCommandRunner({ exec: async () => ({ code: 0, stdout, stderr: '', timedOut: false }), command: 'x' });
+const sch = { type: 'object', required: [] };
+
+test('lastJsonObject: terminates and picks the last parseable object', { timeout: 5000 }, async () => {
+  const v = async (s) => (await stubRunner(s).run({ prompt: 'p', schema: sch }));
+  assert.equal((await v('no braces')).ok, false);
+  assert.equal((await v('{oops} {nope} }{')).ok, false);
+  assert.deepEqual((await v('{"a":1} x {oops}')).value, { a: 1 });
+  assert.deepEqual((await v('{"a":{"b":{"c":1}}}')).value, { a: { b: { c: 1 } } });
+  assert.deepEqual((await v('{"a":"}{ {\\"x"} tail')).value, { a: '}{ {"x' });
+  assert.deepEqual((await v('{oops {"a":2}}')).value, { a: 2 });
+});
+
+test('lastJsonObject: 1 MiB inputs finish fast', { timeout: 5000 }, async () => {
+  const t0 = Date.now();
+  for (const s of ['{'.repeat(1 << 20), '{oops}'.repeat(1 << 17), '{"a":1} ' + ' '.repeat(1 << 20) + '{"b":2}']) {
+    await stubRunner(s).run({ prompt: 'p', schema: sch });
+  }
+  assert.ok(Date.now() - t0 < 2000);
+});
+
+const gone = async (pid) => {
+  for (let i = 0; i < 25; i++) {
+    try { process.kill(pid, 0); } catch { return true; }
+    await new Promise((r) => setTimeout(r, 20));
+  }
+  return false;
+};
+
+test('exec: timeout kills the whole process group', { timeout: 5000 }, async () => {
+  const t0 = Date.now();
+  const r = await exec('sh', ['-c', 'sleep 4 & echo $!; wait'], { timeoutMs: 300 });
+  assert.ok(Date.now() - t0 < 1500);
+  assert.equal(r.timedOut, true);
+  assert.ok(await gone(Number(r.stdout.trim())));
+});
+
+test('exec: child ignoring SIGTERM is SIGKILLed', { timeout: 5000 }, async () => {
+  const code = 'process.on("SIGTERM",()=>{});console.log(process.pid);setInterval(()=>{},1000)';
+  const r = await exec(node, ['-e', code], { timeoutMs: 500 });
+  assert.equal(r.timedOut, true);
+  assert.ok(await gone(Number(r.stdout.trim())));
+});
+
+test('exec: abort signal kills the process group', { timeout: 5000 }, async () => {
+  const ac = new AbortController();
+  const p = exec('sh', ['-c', 'sleep 4 & echo $!; wait'], { signal: ac.signal });
+  setTimeout(() => ac.abort(), 200);
+  const r = await p;
+  assert.ok(await gone(Number(r.stdout.trim())));
+  const pre = AbortSignal.abort();
+  const r2 = await exec('sh', ['-c', 'sleep 4 & echo $!; wait'], { signal: pre });
+  assert.ok(await gone(Number(r2.stdout.trim() || 0)) || r2.stdout === '');
+});
+
+test('exec: output cap is exactly 1 MiB plus marker', async () => {
+  const r = await exec(node, ['-e', 'process.stdout.write("x".repeat(3*1024*1024))']);
+  assert.equal(r.stdout.length, 1024 * 1024 + '\n[truncated]'.length);
+});
+
+test('command runner: forwards req.signal to exec', async () => {
+  let seen;
+  const r = createCommandRunner({ exec: async (c, a, o) => { seen = o.signal; return { code: 0, stdout: '', stderr: '', timedOut: false }; }, command: 'x' });
+  const ac = new AbortController();
+  await r.run({ prompt: 'p', signal: ac.signal });
+  assert.equal(seen, ac.signal);
+});
+
+test('withDefaults: timed-out attempt is aborted before the retry starts', async () => {
+  const timer = fakeTimer();
+  const reg = createRunnerRegistry({ clock: fakeClock(), timer });
+  const sigs = [];
+  const hang = { run: (req) => { sigs.push(req.signal); if (sigs.length === 2) assert.equal(sigs[0].aborted, true); return new Promise(() => {}); } };
+  const p = reg.withDefaults(hang, { timeoutMs: 50, retries: 1 }).run({ prompt: 'p' });
+  await tick(); timer.fireAll();
+  await tick(); timer.fireAll();
+  await p;
+  assert.equal(sigs.length, 2);
+  assert.equal(sigs[1].aborted, true);
+});

@@ -28,7 +28,8 @@ async function setup(t, over = {}) {
   const runner = over.runner || { async run(req) { calls.push(req.prompt); return { ok: true, text: `out:${req.prompt}`, usage: { inputTokens: 3, outputTokens: 4 }, ms: 0 }; } };
   const engine = createEngine({
     journalFor: (id) => { if (!journals.has(id)) journals.set(id, fakeJournal(id)); return journals.get(id); },
-    runners: { get: () => runner },
+    runners: over.runners || { get: () => runner },
+    exec: over.exec,
     budget: over.budget || { check: () => ({ allow: true, remaining: 1e9 }), record: (u) => recorded.push(u) },
     bus: { on() { return () => {}; }, emit: (type, p) => emitted.push([type, p]) },
     clock: { now: () => 0 },
@@ -208,7 +209,7 @@ test('step keys do not depend on completion order', async (t) => {
     gates[1 - firstDone].resolve();
     await run;
     const m = {};
-    for (const e of s.journals.get(id).events) if (e.type === 'step.result') m[e.data] = e.stepKey;
+    for (const e of s.journals.get(id).events) if (e.type === 'step.result') m[e.data.value] = e.stepKey;
     return m;
   }
   const k1 = await keysFor('r', 0);
@@ -222,4 +223,111 @@ test('bad inputs throw TypeError', async (t) => {
   const { engine } = await setup(t);
   await assert.rejects(engine.run('', () => {}, null, {}), TypeError);
   await assert.rejects(engine.run('r', 'nope', null, {}), TypeError);
+});
+
+const sh = (code, stdout = '') => ({ code, stdout, stderr: '', timedOut: false });
+
+test('exec is memoized, journals an exec event, and the gate reads the exit code only', async (t) => {
+  let n = 0;
+  const { engine, journals } = await setup(t, { exec: async () => { n++; return sh(1, 'all tests passed'); } });
+  const wf = async (api) => { const r = await api.exec('npm', ['test'], { cwd: '/x' }); await api.gate('tests', r); };
+  const r1 = await engine.run('r', wf, null, {});
+  assert.equal(r1.ok, false);
+  assert.match(r1.error, /tests/);
+  assert.deepEqual(journals.get('r').events.find((e) => e.type === 'exec').data, { command: 'npm', args: ['test'], code: 1, timedOut: false });
+  assert.equal((await engine.run('r', wf, null, {})).ok, false);
+  assert.equal(n, 1);
+  assert.equal(journals.get('r').events.filter((e) => e.type === 'exec').length, 1);
+});
+
+test('exec without an injected exec throws a TypeError', async (t) => {
+  const { engine } = await setup(t);
+  const r = await engine.run('r', (api) => api.exec('ls', []), null, {});
+  assert.equal(r.ok, false);
+  assert.match(r.error, /exec/);
+});
+
+test('agent step.result carries usage, and replay returns the bare value', async (t) => {
+  const { engine, journals, calls } = await setup(t);
+  const wf = (api) => api.agent('p');
+  await engine.run('r', wf, null, {});
+  const ev = journals.get('r').events.find((e) => e.type === 'step.result');
+  assert.deepEqual(ev.data, { value: 'out:p', usage: { inputTokens: 3, outputTokens: 4 } });
+  assert.equal((await engine.run('r', wf, null, {})).value, 'out:p');
+  assert.equal(calls.length, 1);
+});
+
+test('GateError, ApprovalDenied and BudgetError in parallel or pipeline end the run; ordinary errors stay null', async (t) => {
+  const { engine } = await setup(t, { approve: async () => false });
+  const bad = {
+    gate: (api) => api.gate('g', sh(1)),
+    approval: (api) => api.approval('a', {}),
+  };
+  for (const [name, fn] of Object.entries(bad)) {
+    const p = await engine.run(`p-${name}`, (api) => api.parallel([async () => 1, () => fn(api)]), null, {});
+    assert.equal(p.ok, false, `parallel ${name}`);
+    const l = await engine.run(`l-${name}`, (api) => api.pipeline([1, 2], async (x) => { if (x === 2) await fn(api); return x; }), null, {});
+    assert.equal(l.ok, false, `pipeline ${name}`);
+  }
+  const o = await engine.run('o', (api) => api.pipeline([1, 2], async (x) => { if (x === 2) throw new Error('plain'); return x; }), null, {});
+  assert.deepEqual(o, { ok: true, value: [1, null] });
+});
+
+test('a denied approval is memoized: resume does not ask again and fails the same way', async (t) => {
+  let asked = 0;
+  const { engine } = await setup(t, { approve: async () => { asked++; return false; } });
+  const wf = (api) => api.approval('ship', {});
+  const r1 = await engine.run('r', wf, null, {});
+  const r2 = await engine.run('r', wf, null, {});
+  assert.equal(asked, 1);
+  assert.deepEqual(r2, r1);
+  assert.equal(r2.ok, false);
+  assert.match(r2.error, /denied/);
+});
+
+test('approval journals a request without an answer before asking', async (t) => {
+  const seen = [];
+  const { engine, journals } = await setup(t, { approve: async () => { seen.push(journals.get('r').events.filter((e) => e.type === 'approval').length); return true; } });
+  await engine.run('r', (api) => api.approval('ship', {}), null, {});
+  assert.deepEqual(seen, [1]);
+  const ev = journals.get('r').events.filter((e) => e.type === 'approval');
+  assert.equal(ev[0].data.approved, undefined);
+  assert.equal(ev[1].data.approved, true);
+  assert.equal(ev[0].stepKey, ev[1].stepKey);
+});
+
+test('a failed agent step re-runs on resume', async (t) => {
+  let fail = true, n = 0;
+  const runner = { async run() { n++; return fail ? { ok: false, error: 'bad', usage: { inputTokens: 0, outputTokens: 0 }, ms: 0 } : { ok: true, text: 'ok', usage: { inputTokens: 0, outputTokens: 0 }, ms: 0 }; } };
+  const { engine } = await setup(t, { runner });
+  assert.equal((await engine.run('r', (api) => api.agent('p'), null, {})).ok, false);
+  fail = false;
+  assert.equal((await engine.run('r', (api) => api.agent('p'), null, {})).value, 'ok');
+  assert.equal(n, 2);
+});
+
+test('runners.get that throws ends the run with a clear error, even inside parallel', async (t) => {
+  const { engine } = await setup(t, { runners: { get: (n) => { throw new Error(`no such runner ${n}`); } } });
+  const r = await engine.run('r', (api) => api.parallel([() => api.agent('p', { runner: 'zzz' })]), null, {});
+  assert.equal(r.ok, false);
+  assert.match(r.error, /zzz/);
+  const u = await setup(t, { runners: { get: () => undefined } });
+  assert.match((await u.engine.run('r', (api) => api.agent('p'), null, {})).error, /default/);
+});
+
+test('budget.reserve runs before the agent and settle after; failures release', async (t) => {
+  const order = [];
+  let tags;
+  const budget = {
+    check() { throw new Error('check must not be used when reserve exists'); }, record() {},
+    reserve(n, tg) { tags = tg; order.push(`reserve ${n}`); return { allow: true, remaining: 1, release: () => order.push('release'), settle: (u) => order.push(`settle ${u.inputTokens}`) }; },
+  };
+  const runner = { async run(req) { order.push('run'); if (req.prompt === 'boom') throw new Error('x'); return { ok: true, text: 't', usage: { inputTokens: 3, outputTokens: 4 }, ms: 0 }; } };
+  const { engine } = await setup(t, { budget, runner });
+  await engine.run('rid', (api) => api.agent('p', { estimateTokens: 50 }), null, {});
+  assert.deepEqual(order, ['reserve 50', 'run', 'settle 3']);
+  assert.equal(tags.runId, 'rid');
+  order.length = 0;
+  await engine.run('rid2', (api) => api.agent('boom'), null, {});
+  assert.deepEqual(order, ['reserve 20000', 'run', 'release']);
 });

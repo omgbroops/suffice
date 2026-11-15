@@ -2,17 +2,27 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { assertShape } from '../contract.mjs';
 
-// Parse JSONL, dropping any unparseable line; `good` is the byte length of the valid prefix.
+// Parse JSONL: skip corrupt lines, count them; `partial` is the byte length of an unparseable final line with no newline.
 function parse(text) {
+  const lines = text.split('\n');
+  const last = lines.pop();
   const events = [];
-  let good = 0;
-  for (const line of text.split('\n')) {
-    if (line === '') { good += 1; continue; }
-    try { events.push(JSON.parse(line)); } catch { break; } // a bad line can only be the crashed tail
-    good += Buffer.byteLength(line) + 1;
+  let skipped = 0, partial = 0;
+  for (const line of lines) {
+    if (line === '') continue;
+    try { events.push(JSON.parse(line)); } catch { skipped++; }
   }
-  return { events, good: Math.min(good, Buffer.byteLength(text)) };
+  if (last) { try { events.push(JSON.parse(last)); } catch { partial = Buffer.byteLength(last); } }
+  return { events, skipped, partial, needsNl: !!last && !partial };
 }
+
+// Reject what JSON.stringify would silently change (undefined, functions, symbols, NaN/Infinity).
+function check(v) {
+  if (v === undefined || typeof v === 'function' || typeof v === 'symbol' || (typeof v === 'number' && !Number.isFinite(v))) throw new TypeError('journal.append: data holds a value JSON cannot keep');
+  if (v && typeof v === 'object' && typeof v.toJSON !== 'function') Object.values(v).forEach(check);
+}
+
+const shared = new Map(); // abs file -> {queue, seq}; instances on one file share both
 
 const load = (file) => fs.readFile(file, 'utf8').catch((e) => { if (e.code === 'ENOENT') return ''; throw e; });
 
@@ -22,22 +32,28 @@ export function createJournal({ dir, runId, clock }) {
     throw new TypeError('journal: runId must be a non-empty string without path separators');
   assertShape('clock', clock, ['now']);
   const file = path.join(dir, `${runId}.jsonl`);
-  let seq = null;
-  let queue = Promise.resolve();
+  const key = path.resolve(file);
+  if (!shared.has(key)) shared.set(key, { queue: Promise.resolve(), seq: null });
+  const sh = shared.get(key);
 
-  const serial = (fn) => { const p = queue.then(fn); queue = p.catch(() => {}); return p; };
+  const serial = (fn) => { const p = sh.queue.then(fn); sh.queue = p.catch(() => {}); return p; };
 
   async function init() {
-    if (seq !== null) return;
+    const size = await fs.stat(file).then((x) => x.size, () => 0);
+    if (sh.seq !== null && size === sh.size) return; // size drift = someone else wrote (or crashed mid-line): re-scan
     const text = await load(file);
-    const { events, good } = parse(text);
-    if (good < Buffer.byteLength(text)) await fs.truncate(file, good); // drop the crashed partial line
-    seq = events.length ? events[events.length - 1].seq : 0;
+    const { events, partial, needsNl } = parse(text);
+    if (partial) await fs.truncate(file, Buffer.byteLength(text) - partial); // only a crashed final line is dropped
+    else if (needsNl) await fs.appendFile(file, '\n');
+    sh.size = Buffer.byteLength(text) - partial + (needsNl ? 1 : 0);
+    sh.seq = events.reduce((m, e) => Math.max(m, Number.isInteger(e?.seq) ? e.seq : 0), 0);
   }
 
   async function read() {
     return serial(async () => parse(await load(file)).events);
   }
+
+  const stats = () => serial(async () => ({ skipped: parse(await load(file)).skipped }));
 
   async function append(e) {
     if (!e || typeof e.type !== 'string' || !e.type) throw new TypeError('journal.append: type must be a non-empty string');
@@ -45,15 +61,16 @@ export function createJournal({ dir, runId, clock }) {
     const base = { ts: clock.now(), runId, type: e.type };
     if (e.stepKey !== undefined) base.stepKey = e.stepKey;
     if (e.data !== undefined) base.data = e.data;
-    let probe;
-    try { probe = JSON.stringify(base.data); } catch (err) { throw new TypeError(`journal.append: data is not JSON-serialisable (${err.message})`); }
-    if (base.data !== undefined && probe === undefined) throw new TypeError('journal.append: data is not JSON-serialisable');
+    try { JSON.stringify(base.data); } catch (err) { throw new TypeError(`journal.append: data is not JSON-serialisable (${err.message})`); }
+    if (base.data !== undefined) check(base.data);
     return serial(async () => {
       await fs.mkdir(dir, { recursive: true });
       await init();
-      const ev = { seq: seq + 1, ...base };
-      await fs.appendFile(file, JSON.stringify(ev) + '\n');
-      seq++;
+      const ev = { seq: sh.seq + 1, ...base };
+      const line = JSON.stringify(ev) + '\n';
+      await fs.appendFile(file, line);
+      sh.seq++;
+      sh.size += Buffer.byteLength(line);
       return ev;
     });
   }
@@ -63,7 +80,7 @@ export function createJournal({ dir, runId, clock }) {
     return last?.type === 'step.result' ? { hit: true, value: last.data } : { hit: false };
   }
 
-  return { append, read, lookup, runId };
+  return { append, read, lookup, stats, runId };
 }
 
 export async function step(journal, stepKey, fn) {

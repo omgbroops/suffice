@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { createBudget, createFileStore, ceilingAt } from '../src/budget/index.mjs';
+import { createBudget, createFileStore, ceilingAt, windowStart } from '../src/budget/index.mjs';
 
 const memStore = () => { let s = null; return { load: () => s && structuredClone(s), save: (x) => { s = structuredClone(x); } }; };
 const mkClock = (iso) => { let t = Date.parse(iso); return { now: () => t, set: (i) => { t = Date.parse(i); } }; };
@@ -168,4 +168,61 @@ test('negative or non-finite usage and estimates are rejected', () => {
     assert.throws(() => b.record(u), TypeError);
   for (const e of [-1, NaN, Infinity, '5']) assert.throws(() => b.check(e), TypeError);
   assert.equal(b.check(1).remaining, 100);
+});
+
+test('reserve: ten parallel agents against 25000 tokens at estimate 20000 admit exactly one', () => {
+  const b = createBudget({ clock: mkClock('2026-11-16T10:00:00Z'), store: memStore(), limits: [{ name: 'd', tokens: 25000, period: 'day' }] });
+  const rs = Array.from({ length: 10 }, () => b.reserve(20000));
+  assert.equal(rs.filter((r) => r.allow).length, 1);
+  assert.match(rs[1].reason, /d/);
+  assert.equal(b.check(1).remaining, 5000, 'check sees holds but does not add one');
+  assert.equal(b.check(1).remaining, 5000);
+});
+
+test('reserve: release frees the hold, settle swaps it for actual usage', () => {
+  const b = createBudget({ clock: mkClock('2026-11-16T10:00:00Z'), store: memStore(), limits: [{ name: 'd', tokens: 25000, period: 'day' }] });
+  const a = b.reserve(20000);
+  a.release(); a.release();
+  const c = b.reserve(20000);
+  assert.equal(c.allow, true);
+  c.settle({ inputTokens: 1000, outputTokens: 500 }); c.settle({ inputTokens: 1000, outputTokens: 500 });
+  assert.equal(b.status()[0].used, 1500, 'settle is once-only');
+  assert.equal(b.reserve(20000).allow, true);
+});
+
+test('reserve honours tags and rejects a bad estimate', () => {
+  const b = createBudget({ clock: mkClock('2026-11-16T10:00:00Z'), store: memStore(), limits: [{ name: 'h', tokens: 10, period: 'day', tag: { key: 'model', value: 'haiku' } }] });
+  assert.equal(b.reserve(10, { model: 'haiku' }).allow, true);
+  assert.equal(b.reserve(10, { model: 'haiku' }).allow, false);
+  assert.equal(b.reserve(10, { model: 'sonnet' }).allow, true);
+  assert.throws(() => b.reserve(-1), TypeError);
+});
+
+test('run period is scoped to tags.runId and persisted per run id', () => {
+  const clock = mkClock('2026-11-16T10:00:00Z'), store = memStore();
+  const limits = [{ name: 'r', tokens: 10, period: 'run' }];
+  const b = createBudget({ clock, store, limits });
+  b.record(use(10), { runId: 'a' });
+  assert.equal(b.check(1, { runId: 'a' }).allow, false);
+  assert.equal(b.check(10, { runId: 'b' }).allow, true);
+  assert.equal(createBudget({ clock, store, limits }).check(1, { runId: 'a' }).allow, false);
+  assert.equal(createBudget({ clock, store, limits }).check(10, { runId: 'b' }).allow, true);
+  const r = b.reserve(10, { runId: 'b' });
+  assert.equal(b.check(1, { runId: 'b' }).allow, false, 'hold counts inside its run');
+  assert.equal(b.check(10, { runId: 'c' }).allow, true, 'hold does not leak to another run');
+  r.release();
+  b.setLimits(limits);
+  assert.equal(b.check(1, { runId: 'a' }).allow, false, 'setLimits keeps per-run usage');
+});
+
+test('windowStart floors correctly for instants before the epoch (negative modulo)', () => {
+  const H = 3600000, D = 24 * H;
+  assert.equal(windowStart({ period: 'hour' }, -1), -H);
+  assert.equal(windowStart({ period: 'day' }, -1), -D);
+  assert.equal(windowStart({ period: 'day', utcOffsetMinutes: -360 }, -1), -D + 6 * H);
+  // 1969-12-31 is a Wednesday; the Sunday-midnight week containing it starts 4 days before the epoch
+  assert.equal(windowStart({ period: 'week', weekStart: { weekday: 0, hour: 0 } }, -1), -4 * D);
+  // before this week's start hour: falls back one week
+  const thu = Date.parse('2026-11-19T10:00:00Z');
+  assert.equal(windowStart({ period: 'week', weekStart: { weekday: 4, hour: 12 } }, thu), Date.parse('2026-11-12T12:00:00Z'));
 });

@@ -87,6 +87,7 @@
  * @typedef {Object} Budget
  * @property {(estimateTokens: number, tags?: Object) => BudgetDecision} check
  * @property {(usage: {inputTokens: number, outputTokens: number}, tags?: Object) => void} record
+ * @property {(estimateTokens: number, tags?: Object) => (BudgetDecision & {release: () => void, settle: (usage: {inputTokens: number, outputTokens: number}) => void})} reserve   holds the estimate so parallel callers cannot all pass one check
  */
 
 /**

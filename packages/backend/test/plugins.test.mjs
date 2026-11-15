@@ -4,6 +4,7 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { validateManifest, createPluginHost } from '../src/plugins/index.mjs';
+import { createBus } from '../src/journal/index.mjs';
 
 const good = { name: 'hello', version: '1.2.3', main: 'index.mjs' };
 const clock = { now: () => 1 };
@@ -164,4 +165,61 @@ test('activate rejects unknown and invalid plugins', async (t) => {
   await assert.rejects(h.activate('nope'), TypeError);
   await assert.rejects(h.activate('inv'), TypeError);
   await assert.rejects(h.activate(5), TypeError);
+});
+
+test('concurrent activate is single-flight', async (t) => {
+  const a = await tmp(t);
+  globalThis.__pluginsCount = 0;
+  t.after(() => delete globalThis.__pluginsCount);
+  await plugin(a, 'sf', { ...good, name: 'sf' },
+    `export async function activate() { globalThis.__pluginsCount++; await new Promise((r) => setTimeout(r, 20)); }`);
+  const h = host([a]);
+  await h.discover();
+  await Promise.all([h.activate('sf'), h.activate('sf')]);
+  assert.equal(globalThis.__pluginsCount, 1);
+  assert.equal(h.status('sf').state, 'active');
+});
+
+test('main symlinked outside the plugin folder is rejected', async (t) => {
+  const a = await tmp(t), out = await tmp(t);
+  const marker = path.join(out, 'm.txt');
+  await fs.writeFile(path.join(out, 'evil.mjs'), `import fs from 'node:fs'; fs.writeFileSync(${JSON.stringify(marker)}, 'x'); export function activate() {}`);
+  const dir = await plugin(a, 'link', { ...good, name: 'link', main: 'link.mjs' });
+  await fs.symlink(path.join(out, 'evil.mjs'), path.join(dir, 'link.mjs'));
+  const h = host([a]);
+  await h.discover();
+  await assert.rejects(h.activate('link'), /escapes/);
+  assert.equal(h.status('link').state, 'failed');
+  await assert.rejects(fs.access(marker));
+});
+
+test('hung activate times out and is marked failed', async (t) => {
+  const a = await tmp(t);
+  await plugin(a, 'hang', { ...good, name: 'hang' }, `export function activate() { return new Promise(() => {}); }`);
+  let fire, ms, cleared = false;
+  const timer = { set: (fn, n) => { fire = fn; ms = n; return 1; }, clear: () => { cleared = true; } };
+  const h = createPluginHost({ dirs: [a], bus, grant: () => true, clock, timer });
+  await h.discover();
+  const p = h.activate('hang');
+  while (!fire) await new Promise((r) => setImmediate(r));
+  assert.equal(ms, 10000);
+  fire();
+  await assert.rejects(p, /timed out/);
+  assert.equal(h.status('hang').state, 'failed');
+  assert.ok(cleared);
+  assert.throws(() => createPluginHost({ dirs: [], bus, grant() {}, clock, activateTimeoutMs: 0 }), TypeError);
+});
+
+test('autoFire: plugin.event on the bus activates matching plugins', async (t) => {
+  const a = await tmp(t);
+  await plugin(a, 'auto', { ...good, name: 'auto', activation: ['onEvent:ping'] });
+  const b = createBus();
+  const h = createPluginHost({ dirs: [a], bus: b, grant: () => true, clock, autoFire: true });
+  await h.discover();
+  const done = new Promise((r) => b.on('plugin.activated', r));
+  b.emit('plugin.event', { event: 'onEvent:ping' });
+  assert.deepEqual(await done, { name: 'auto' });
+  const h2 = createPluginHost({ dirs: [a], bus: createBus(), grant: () => true, clock });
+  await h2.discover();
+  assert.equal(h2.status('auto').state, 'inactive');
 });

@@ -35,11 +35,12 @@ export function validateManifest(obj) {
   return { ok: errors.length === 0, errors };
 }
 
-export function createPluginHost({ dirs, bus, grant, clock } = {}) {
+export function createPluginHost({ dirs, bus, grant, clock, autoFire = false, activateTimeoutMs = 10000, timer = { set: setTimeout, clear: clearTimeout } } = {}) {
   if (!isStrArray(dirs)) throw new TypeError('dirs: expected an array of folder paths');
   assertShape('bus', bus, ['on', 'emit']);
   assertShape('clock', clock, ['now']);
   if (typeof grant !== 'function') throw new TypeError('grant: expected a function');
+  if (!(activateTimeoutMs > 0)) throw new TypeError('activateTimeoutMs: expected a positive number');
 
   const found = new Map(); // name -> {name, version, dir, valid, errors, manifest}
   const state = new Map(); // name -> {state, error?, at?, mod?, regs}
@@ -78,12 +79,20 @@ export function createPluginHost({ dirs, bus, grant, clock } = {}) {
     return out;
   }
 
+  const inflight = new Map(); // name -> promise; concurrent callers share one activation
   async function activate(name) {
     assert(typeof name === 'string', 'name: expected a string');
     const rec = found.get(name);
     assert(rec, `unknown plugin: ${name}`);
     assert(rec.valid, `invalid plugin ${name}: ${rec.errors.join('; ')}`);
     if (st(name).state === 'active') return;
+    if (inflight.has(name)) return inflight.get(name);
+    const p = doActivate(name, rec).finally(() => inflight.delete(name));
+    inflight.set(name, p);
+    return p;
+  }
+
+  async function doActivate(name, rec) {
     const s = { state: 'inactive', regs: [] };
     state.set(name, s);
     const { manifest } = rec;
@@ -93,7 +102,11 @@ export function createPluginHost({ dirs, bus, grant, clock } = {}) {
       const mainPath = path.resolve(rec.dir, manifest.main);
       const rel = path.relative(rec.dir, mainPath);
       if (rel.startsWith('..') || path.isAbsolute(rel)) throw new Error('main escapes the plugin folder');
-      s.mod = await import(pathToFileURL(mainPath).href);
+      // a symlinked main can point outside the folder even when the lexical path does not
+      const real = await fs.realpath(mainPath);
+      const relReal = path.relative(await fs.realpath(rec.dir), real);
+      if (relReal.startsWith('..') || path.isAbsolute(relReal)) throw new Error('main escapes the plugin folder');
+      s.mod = await import(pathToFileURL(real).href);
       if (typeof s.mod.activate !== 'function') throw new Error('main must export activate(ctx)');
       const contributes = manifest.contributes ?? {};
       const ctx = {
@@ -107,7 +120,9 @@ export function createPluginHost({ dirs, bus, grant, clock } = {}) {
           s.regs.push([kind, full]);
         },
       };
-      await s.mod.activate(ctx);
+      let h;
+      const timeout = new Promise((_, rej) => { h = timer.set(() => rej(new Error(`activate timed out after ${activateTimeoutMs}ms`)), activateTimeoutMs); });
+      try { await Promise.race([s.mod.activate(ctx), timeout]); } finally { timer.clear(h); }
       s.state = 'active';
       s.at = clock.now();
       bus.emit('plugin.activated', { name });
@@ -135,6 +150,8 @@ export function createPluginHost({ dirs, bus, grant, clock } = {}) {
     }
     return done;
   }
+
+  if (autoFire) bus.on('plugin.event', (payload) => { fire(payload?.event).catch(() => {}); });
 
   return {
     discover, activate, deactivate, fire,

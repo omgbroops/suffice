@@ -62,36 +62,53 @@ export function createBudget({ clock, store, limits }) {
   const saved = store.load();
   let used = { ...(saved?.windows ?? {}) }; // name -> {start, used}
 
-  // A window whose start moved since last seen starts again at zero.
-  const view = (l, now) => {
-    const start = windowStart(l, now), w = used[l.name];
+  // A window whose start moved since last seen starts again at zero; 'run' windows are one slot per runId.
+  const slot = (l, tags) => (l.period === 'run' ? `${l.name}\0${tags?.runId ?? ''}` : l.name);
+  const view = (l, now, tags) => {
+    const start = windowStart(l, now), w = used[slot(l, tags)];
     return { start, used: w && w.start === start ? w.used : 0 };
   };
   const applies = (l, tags) => !l.tag || tags?.[l.tag.key] === l.tag.value;
   const persist = () => store.save({ windows: used });
+  const holds = new Set(); // in-flight reservations: {n, tags}
+  const held = (l, tags) => {
+    let n = 0;
+    for (const h of holds) if (applies(l, h.tags) && (l.period !== 'run' || (h.tags?.runId ?? '') === (tags?.runId ?? ''))) n += h.n;
+    return n;
+  };
+
+  function check(estimate, tags) {
+    count(estimate, 'estimate');
+    const now = clock.now();
+    let tight = null;
+    for (const l of lim) {
+      if (!applies(l, tags)) continue;
+      const room = ceilingAt(l, now) - view(l, now, tags).used - held(l, tags);
+      if (!tight || room < tight.room) tight = { l, room };
+    }
+    if (!tight) return { allow: true, remaining: Infinity };
+    const remaining = Math.max(0, tight.room);
+    if (estimate <= remaining) return { allow: true, remaining };
+    return { allow: false, remaining, reason: `Window "${tight.l.name}" (${tight.l.period}) has ${remaining} tokens left and this needs ${estimate}.` };
+  }
+  function record(usage, tags) {
+    if (!usage || typeof usage !== 'object') fail('usage must be an object');
+    const n = count(usage.inputTokens, 'inputTokens') + count(usage.outputTokens, 'outputTokens');
+    const now = clock.now();
+    for (const l of lim) if (applies(l, tags)) { const v = view(l, now, tags); used[slot(l, tags)] = { start: v.start, used: v.used + n }; }
+    persist();
+  }
+  // check + hold in one synchronous step, so parallel callers cannot all pass the same peek
+  function reserve(estimate, tags) {
+    const d = check(estimate, tags);
+    if (!d.allow) return { ...d, release() {}, settle() {} };
+    const h = { n: estimate, tags };
+    holds.add(h);
+    return { ...d, release: () => { holds.delete(h); }, settle(usage) { if (holds.delete(h)) record(usage, tags); } };
+  }
 
   return {
-    check(estimate, tags) {
-      count(estimate, 'estimate');
-      const now = clock.now();
-      let tight = null;
-      for (const l of lim) {
-        if (!applies(l, tags)) continue;
-        const room = ceilingAt(l, now) - view(l, now).used;
-        if (!tight || room < tight.room) tight = { l, room };
-      }
-      if (!tight) return { allow: true, remaining: Infinity };
-      const remaining = Math.max(0, tight.room);
-      if (estimate <= remaining) return { allow: true, remaining };
-      return { allow: false, remaining, reason: `Window "${tight.l.name}" (${tight.l.period}) has ${remaining} tokens left and this needs ${estimate}.` };
-    },
-    record(usage, tags) {
-      if (!usage || typeof usage !== 'object') fail('usage must be an object');
-      const n = count(usage.inputTokens, 'inputTokens') + count(usage.outputTokens, 'outputTokens');
-      const now = clock.now();
-      for (const l of lim) if (applies(l, tags)) { const v = view(l, now); used[l.name] = { start: v.start, used: v.used + n }; }
-      persist();
-    },
+    check, record, reserve,
     status() {
       const now = clock.now();
       return lim.map((l) => {
@@ -101,7 +118,7 @@ export function createBudget({ clock, store, limits }) {
     },
     setLimits(next) { // keeps usage of windows whose name survives
       lim = validate(next);
-      used = Object.fromEntries(Object.entries(used).filter(([k]) => lim.some((l) => l.name === k)));
+      used = Object.fromEntries(Object.entries(used).filter(([k]) => lim.some((l) => k === l.name || k.startsWith(`${l.name}\0`))));
       persist();
     },
   };

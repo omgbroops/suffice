@@ -9,16 +9,19 @@ const norm = (s) => s.replace(/\s+/g, ' ').trim();
 const isZeroDiff = (d) =>
   d === 0 || (d && typeof d === 'object' && Object.keys(d).length > 0 && Object.values(d).every((v) => v === 0));
 
-/** Pure: does the journal back a success claim? Failure claims are never flagged (reverse case). */
-export function verifyClaim(claim, events) {
+/** Pure: does the journal back a success claim? Failure claims are never flagged (reverse case).
+ *  `at` = {seq, stepKey} of the claim: only exec events at or before it count, and a claim without a command needs one from its own step. */
+export function verifyClaim(claim, events, at) {
   if (!claim || typeof claim !== 'object') throw new TypeError('claim: expected an object');
   if (!Array.isArray(events)) throw new TypeError('events: expected an array');
   const isExit = claim.kind === 'exit' && claim.code === 0;
   const isTests = claim.kind === 'tests' && claim.passed === true;
   if (!isExit && !isTests) return { ok: true };
-  // tests claims may omit the command: then the latest exec of any command is the evidence
-  const execs = events.filter((e) => e.type === 'exec' && (!claim.command || e.data?.command === claim.command));
-  const last = execs.at(-1);
+  const line = (d) => [d?.command, ...(d?.args ?? [])].join(' ');
+  const execs = events.filter((e) => e.type === 'exec'
+    && (at?.seq === undefined || e.seq <= at.seq)
+    && (claim.command ? e.data?.command === claim.command || line(e.data) === claim.command : at?.stepKey === undefined || e.stepKey === at.stepKey));
+  const last = execs.reduce((m, e) => (!m || !(e.seq < m.seq) ? e : m), null); // newest by seq, whatever the arrival order
   if (!last) return { ok: false, reason: 'no exec event backs this claim', claim };
   if (last.data.code !== 0) return { ok: false, reason: `exec exited ${last.data.code}`, claim, execSeq: last.seq };
   return { ok: true };
@@ -44,11 +47,11 @@ export function createWatchdog({ clock, bus, thresholds } = {}) {
 
   const runs = new Map();
   const run = (id) => {
-    if (!runs.has(id)) runs.set(id, { events: [], seen: new Set(), steps: new Map(), keys: new Set(), found: [], zeroStreak: 0 });
+    if (!runs.has(id)) runs.set(id, { events: [], seen: new Set(), steps: new Map(), keys: new Set(), found: [], zeroStreak: 0, ended: false });
     return runs.get(id);
   };
   const step = (r, k) => {
-    if (!r.steps.has(k)) r.steps.set(k, { open: false, last: 0, tokens: 0, actions: [] });
+    if (!r.steps.has(k)) r.steps.set(k, { open: false, waiting: false, last: 0, tokens: 0, actions: [] });
     return r.steps.get(k);
   };
 
@@ -63,11 +66,12 @@ export function createWatchdog({ clock, bus, thresholds } = {}) {
     bus.emit('watchdog.finding', f);
   }
 
+  // same action n times, or an alternation of two full cycles (A,B,A,B)
   function looped(actions, n) {
     const t = actions.slice(-n);
-    if (t.length < n) return false;
-    if (t.every((a) => a === t[0])) return true;
-    return t[0] !== t[1] && t.every((a, i) => a === t[i % 2]);
+    if (t.length === n && t.every((a) => a === t[0])) return true;
+    const w = actions.slice(-Math.max(n, 4));
+    return w.length === Math.max(n, 4) && w[0] !== w[1] && w.every((a, i) => a === w[i % 2]);
   }
 
   function observe(e) {
@@ -75,8 +79,9 @@ export function createWatchdog({ clock, bus, thresholds } = {}) {
     if (typeof e.runId !== 'string' || typeof e.type !== 'string') throw new TypeError('event: runId and type must be strings');
     if (!Number.isInteger(e.seq)) throw new TypeError('event.seq: expected an integer');
     const r = run(e.runId);
-    if (r.seen.has(e.seq)) return [];
-    r.seen.add(e.seq);
+    const id = `${e.seq}:${e.type}:${e.stepKey}`; // a second writer may reuse a seq; only an identical event is a duplicate
+    if (r.seen.has(id)) return [];
+    r.seen.add(id);
     r.events.push(e);
     const out = [];
     const d = e.data ?? {};
@@ -85,7 +90,10 @@ export function createWatchdog({ clock, bus, thresholds } = {}) {
       s.last = e.ts;
       if (e.type === 'step.start') s.open = true;
       if (e.type === 'step.result' || e.type === 'step.error') s.open = false;
+      if (e.type === 'approval') s.waiting = d.approved === undefined; // waiting on a person is not a stall
     }
+
+    if (e.type === 'run.end') r.ended = true;
 
     if (s && typeof d.action === 'string') {
       s.actions.push(norm(d.action));
@@ -100,9 +108,10 @@ export function createWatchdog({ clock, bus, thresholds } = {}) {
     }
 
     if (e.type === 'step.result') {
-      if (Array.isArray(d.claims))
-        d.claims.forEach((c, i) => {
-          const v = verifyClaim(c, r.events);
+      const claims = d.claims ?? d.value?.claims; // the engine nests the step value under data.value
+      if (Array.isArray(claims))
+        claims.forEach((c, i) => {
+          const v = verifyClaim(c, r.events, { seq: e.seq, stepKey: e.stepKey });
           if (!v.ok) add(r, e.runId, `claim:${e.seq}:${i}`, 'claim-mismatch', 'high', e.stepKey, v, out);
         });
       r.zeroStreak = isZeroDiff(d.diffStat) ? r.zeroStreak + 1 : 0;
@@ -117,8 +126,8 @@ export function createWatchdog({ clock, bus, thresholds } = {}) {
     const out = [];
     const now = clock.now();
     for (const [runId, r] of runs)
-      for (const [k, s] of r.steps)
-        if (s.open && now - s.last > thresholds.stallMs)
+      if (!r.ended) for (const [k, s] of r.steps)
+        if (s.open && !s.waiting && now - s.last > thresholds.stallMs)
           add(r, runId, `stall:${k}`, 'stall', 'high', k, { idleMs: now - s.last, stallMs: thresholds.stallMs }, out);
     return out;
   }

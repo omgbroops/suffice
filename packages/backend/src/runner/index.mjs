@@ -10,13 +10,17 @@ const realTimer = { setTimeout: (f, ms) => setTimeout(f, ms), clearTimeout: (h) 
 const toErr = (e) => (e instanceof Error ? e.message : String(e));
 const finish = (r, ms) => ({ ...r, usage: { ...ZERO(), ...r.usage }, ms });
 
-/** @returns {import('../contract.mjs').Exec} */
+const GRACE_MS = 100;
+
+/**
+ * @returns {(cmd: string, args?: string[], opts?: {cwd?: string, timeoutMs?: number, env?: Object, input?: string, signal?: AbortSignal}) => Promise<import('../contract.mjs').ExecResult>}
+ */
 export function createExec({ timer = realTimer } = {}) {
   return (cmd, args = [], opts = {}) => {
     if (typeof cmd !== 'string' || !cmd) throw new TypeError('exec: cmd must be a non-empty string');
     if (!Array.isArray(args)) throw new TypeError('exec: args must be an array');
     return new Promise((resolve, reject) => {
-      const child = spawn(cmd, args, { cwd: opts.cwd, env: opts.env ?? process.env, shell: false });
+      const child = spawn(cmd, args, { cwd: opts.cwd, env: opts.env ?? process.env, shell: false, detached: true }); // own process group so the kill reaches grandchildren
       const out = { stdout: { size: 0, parts: [], cut: false }, stderr: { size: 0, parts: [], cut: false } };
       let timedOut = false, settled = false;
       const collect = (name) => (buf) => {
@@ -29,8 +33,20 @@ export function createExec({ timer = realTimer } = {}) {
       const text = (o) => Buffer.concat(o.parts).toString('utf8') + (o.cut ? MARKER : '');
       child.stdout.on('data', collect('stdout'));
       child.stderr.on('data', collect('stderr'));
-      const timeout = opts.timeoutMs > 0 ? timer.setTimeout(() => { timedOut = true; child.kill('SIGKILL'); }, opts.timeoutMs) : null;
-      const done = (fn, v) => { if (settled) return; settled = true; if (timeout !== null) timer.clearTimeout(timeout); fn(v); };
+      const kill = (sig) => { try { process.kill(-child.pid, sig); } catch { /* group already gone */ } };
+      let grace = null;
+      const stop = () => { kill('SIGTERM'); grace ??= timer.setTimeout(() => kill('SIGKILL'), GRACE_MS); };
+      const timeout = opts.timeoutMs > 0 ? timer.setTimeout(() => { timedOut = true; stop(); }, opts.timeoutMs) : null;
+      const sig = opts.signal;
+      sig?.addEventListener('abort', stop, { once: true });
+      if (sig?.aborted) stop();
+      const done = (fn, v) => {
+        if (settled) return; settled = true;
+        if (timeout !== null) timer.clearTimeout(timeout);
+        if (grace !== null) timer.clearTimeout(grace);
+        sig?.removeEventListener('abort', stop);
+        fn(v);
+      };
       child.on('error', (e) => done(e.code === 'ENOENT' && !opts.cwd ? resolve : reject, e.code === 'ENOENT' && !opts.cwd ? { code: 127, stdout: '', stderr: e.message, timedOut: false } : e));
       child.on('close', (code) => done(resolve, { code: timedOut ? 124 : (code ?? 1), stdout: text(out.stdout), stderr: text(out.stderr), timedOut }));
       child.stdin.on('error', () => {}); // child may exit before reading input
@@ -56,16 +72,27 @@ export function createFakeRunner(script) {
   };
 }
 
-// Last parseable JSON object in text: try each '{' from the end through the last '}'.
+// Last parseable top-level JSON object, one linear pass. Only '{' followed by '"' or '}' can start one.
+// shortcut: an object nested inside a malformed outer one is lost; upgrade if models emit that.
 function lastJsonObject(s) {
-  const end = s.lastIndexOf('}') + 1;
-  for (let i = s.lastIndexOf('{'); i >= 0; i = s.lastIndexOf('{', i - 1)) {
-    try {
-      const v = JSON.parse(s.slice(i, end));
-      if (v && typeof v === 'object' && !Array.isArray(v)) return v;
-    } catch { /* keep scanning */ }
+  const start = /\{\s*["}]/y;
+  const stack = [];
+  let best, inStr = false, esc = false;
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (inStr) { if (esc) esc = false; else if (c === '\\') esc = true; else if (c === '"') inStr = false; }
+    else if (c === '"' && stack.length) inStr = true;
+    else if (c === '{') { start.lastIndex = i; if (stack.length || start.test(s)) stack.push(i); }
+    else if (c === '}' && stack.length) {
+      const from = stack.pop();
+      if (stack.length) continue;
+      try {
+        const v = JSON.parse(s.slice(from, i + 1));
+        if (v && typeof v === 'object' && !Array.isArray(v)) best = v;
+      } catch { /* not JSON, keep scanning */ }
+    }
   }
-  return undefined;
+  return best;
 }
 
 export function createCommandRunner({ exec, command, args = [], promptVia = 'stdin', timeoutMs, clock = realClock } = {}) {
@@ -81,7 +108,7 @@ export function createCommandRunner({ exec, command, args = [], promptVia = 'std
       let r;
       try {
         r = await exec(command, promptVia === 'arg' ? [...args, req.prompt] : args,
-          { cwd: req.cwd, timeoutMs, ...(promptVia === 'stdin' ? { input: req.prompt } : {}) });
+          { cwd: req.cwd, timeoutMs, signal: req.signal, ...(promptVia === 'stdin' ? { input: req.prompt } : {}) });
       } catch (e) { return fail(toErr(e)); }
       if (r.timedOut) return fail(`timed out after ${timeoutMs}ms`);
       if (r.code !== 0) return fail(r.stderr.trim().slice(-2000) || `exit code ${r.code}`);
@@ -123,13 +150,14 @@ export function createRunnerRegistry({ clock = realClock, timer = realTimer } = 
           for (let attempt = 0; attempt <= retries; attempt++) {
             if (sig?.aborted) return end({ ok: false, error: 'aborted' });
             let handle, onAbort;
+            const ac = new AbortController(); // cancels this attempt so a retry never overlaps it
             const guard = new Promise((resolve) => {
-              if (timeoutMs > 0) handle = timer.setTimeout(() => resolve({ timeout: true }), timeoutMs);
-              onAbort = () => resolve({ aborted: true });
+              if (timeoutMs > 0) handle = timer.setTimeout(() => { ac.abort(); resolve({ timeout: true }); }, timeoutMs);
+              onAbort = () => { ac.abort(); resolve({ aborted: true }); };
               sig?.addEventListener('abort', onAbort, { once: true });
             });
             try {
-              const r = await Promise.race([runner.run(req), guard]);
+              const r = await Promise.race([runner.run({ ...req, signal: ac.signal }), guard]);
               if (r.aborted) return end({ ok: false, error: 'aborted' });
               if (r.timeout) last = `timed out after ${timeoutMs}ms`;
               else return end(r);

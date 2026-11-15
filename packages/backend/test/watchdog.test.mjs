@@ -205,3 +205,77 @@ test('rank: severity first, then recency; does not mutate input', () => {
   assert.deepEqual(f, copy);
   assert.throws(() => rank('x'), TypeError);
 });
+
+test('claim mismatch: a later successful exec does not back a claim about an earlier failed run', async (t) => {
+  const { w } = await setup(t);
+  w.observe({ seq: 1, ts: 0, runId: 'r1', type: 'exec', stepKey: 'e1', data: { command: 'npm', args: ['test'], code: 1 } });
+  w.observe({ seq: 3, ts: 0, runId: 'r1', type: 'exec', stepKey: 'e2', data: { command: 'npm', args: ['test'], code: 0 } });
+  w.observe({ seq: 2, ts: 0, runId: 'r1', type: 'step.result', stepKey: 's1', data: { claims: [{ kind: 'exit', command: 'npm', code: 0 }] } });
+  assert.deepEqual(kinds(w), ['claim-mismatch']);
+  const ev = [{ seq: 1, type: 'exec', stepKey: 'a', data: { command: 'x', code: 1 } }, { seq: 3, type: 'exec', stepKey: 'a', data: { command: 'x', code: 0 } }];
+  assert.equal(verifyClaim({ kind: 'exit', command: 'x', code: 0 }, ev, { seq: 2, stepKey: 'a' }).ok, false);
+  assert.equal(verifyClaim({ kind: 'exit', command: 'x', code: 0 }, ev, { seq: 4, stepKey: 'a' }).ok, true);
+});
+
+test('claim mismatch: a tests claim without a command only uses exec events of its own step', async (t) => {
+  const { w, ev } = await setup(t);
+  w.observe(ev('exec', 'other', { command: 'npm', args: ['test'], code: 0 }));
+  w.observe(ev('step.result', 's1', { claims: [{ kind: 'tests', passed: true }] }));
+  assert.deepEqual(kinds(w), ['claim-mismatch']);
+  w.observe(ev('exec', 's2', { command: 'npm', args: ['test'], code: 0 }));
+  w.observe(ev('step.result', 's2', { claims: [{ kind: 'tests', passed: true }] }));
+  assert.equal(w.findings('r1').length, 1);
+});
+
+test('claim mismatch: the command may be the full command line, and claims may sit under data.value', async (t) => {
+  const { w, ev } = await setup(t);
+  w.observe(ev('exec', 'e', { command: 'npm', args: ['test'], code: 1 }));
+  w.observe(ev('step.result', 's1', { value: { claims: [{ kind: 'exit', command: 'npm test', code: 0 }] }, usage: { inputTokens: 1, outputTokens: 1 } }));
+  assert.deepEqual(kinds(w), ['claim-mismatch']);
+});
+
+test('loop: loopRepeats 2 needs the same action twice, not any two different ones', async (t) => {
+  const { w, ev } = await setup(t, { ...TH, loopRepeats: 2 });
+  w.observe(ev('tool', 's1', { action: 'A' }));
+  w.observe(ev('tool', 's1', { action: 'B' }));
+  assert.deepEqual(kinds(w), []);
+  w.observe(ev('tool', 's1', { action: 'A' }));
+  assert.deepEqual(kinds(w), []);
+  w.observe(ev('tool', 's1', { action: 'B' }));
+  assert.deepEqual(kinds(w), ['loop'], 'A,B,A,B is two full cycles');
+  w.observe(ev('tool', 's2', { action: 'X' }));
+  w.observe(ev('tool', 's2', { action: 'X' }));
+  assert.equal(w.findings('r1').filter((f) => f.stepKey === 's2').length, 1);
+});
+
+test('loopRepeats below 2 is rejected at construction', () => {
+  for (const n of [0, 1, -3, 1.5]) assert.throws(() => createWatchdog({ clock: { now: () => 0 }, bus: { emit() {} }, thresholds: { ...TH, loopRepeats: n } }), TypeError);
+});
+
+test('stall: a step waiting on an approval is not stalled until it is answered', async (t) => {
+  const { w, ev, advance } = await setup(t);
+  w.observe(ev('step.start', 's1'));
+  w.observe(ev('approval', 's1', { name: 'ship' }));
+  advance(5000);
+  assert.deepEqual(w.tick(), []);
+  w.observe(ev('approval', 's1', { name: 'ship', approved: true }));
+  advance(1001);
+  assert.deepEqual(w.tick().map((f) => f.kind), ['stall']);
+});
+
+test('stall: a step still open after run.end is not flagged', async (t) => {
+  const { w, ev, advance } = await setup(t);
+  w.observe(ev('step.start', 's1'));
+  w.observe(ev('run.end', undefined, { ok: false }));
+  advance(5000);
+  assert.deepEqual(w.tick(), []);
+});
+
+test('duplicate seq from two writers: only identical (seq, type, stepKey) events collapse', async (t) => {
+  const { w } = await setup(t);
+  const e = (type, stepKey, data) => ({ seq: 2, ts: 0, runId: 'r1', type, stepKey, data });
+  w.observe(e('exec', 'x', { command: 'npm', code: 1 }));
+  w.observe(e('step.result', 's1', { claims: [{ kind: 'exit', command: 'npm', code: 0 }] }));
+  w.observe(e('step.result', 's1', { claims: [{ kind: 'exit', command: 'npm', code: 0 }] }));
+  assert.deepEqual(kinds(w), ['claim-mismatch']);
+});
