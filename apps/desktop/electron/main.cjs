@@ -30,7 +30,9 @@ if(primary)app.whenReady().then(async()=>{
    onEvent:onHarnessEvent,
    onStderr:data=>process.stderr.write(data)
   });
-  win=new BrowserWindow({icon:appIcon,show:process.env.SUFFICE_TEST_HIDE_WINDOW!=='1',width:1440,height:900,minWidth:720,minHeight:540,frame:false,backgroundColor:'#0e0e0e',title:'Suffice',autoHideMenuBar:true,webPreferences:{preload:path.join(__dirname,'preload.cjs'),contextIsolation:true,nodeIntegration:false,sandbox:true}});
+  win=new BrowserWindow({icon:appIcon,show:false,width:1440,height:900,minWidth:720,minHeight:540,frame:false,backgroundColor:'#0e0e0e',title:'Suffice',autoHideMenuBar:true,webPreferences:{preload:path.join(__dirname,'preload.cjs'),contextIsolation:true,nodeIntegration:false,sandbox:true}});
+  if(process.platform==='win32')require('./windows-app-details.cjs').applyWindowsAppDetails({app,win,shell,iconPath:path.join(__dirname,'../assets/suffice-logo.ico')});
+  if(process.env.SUFFICE_TEST_HIDE_WINDOW!=='1')win.show();
   const entry=pathToFileURL(path.join(__dirname,'../dist/index.html')).href;
   win.webContents.setWindowOpenHandler(()=>({action:'deny'}));
   win.webContents.on('will-navigate',(event,url)=>{if(url!==entry)event.preventDefault();});
