@@ -1,0 +1,3 @@
+# 0022: Pi resource integration
+
+Use the public Pi resource loader, MCP extension and package manager rather than parallel registries. Persist resource configuration in Pi-compatible files in Suffice home; preserve native project trust. Explicit desktop add/install actions authorize resources, while inspection never imports extensions. Resource changes require reload or a new session. Reuse existing settings cards, modal surfaces and navigation. MCP calls remain under the shared tool pipeline and approval hook. Terminal-specific extension UI renderers need a web adapter and are not assumed to render in Electron.

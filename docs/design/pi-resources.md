@@ -1,0 +1,3 @@
+# Pi resources in Suffice
+
+Reuse Pi settings.json, mcp.json, skills and prompts under Suffice home. Load resources in the shared harness, retain Pi project trust and make MCP tools reachable through Codemode. Desktop settings use the existing navigation and composer-material cards. Resource discovery in settings must not execute extension code. User actions can add/edit Markdown skills/templates, edit MCP configuration, enable/disable resource paths and install/update/remove Pi packages through its SDK. Existing running agents keep their configuration until explicit reload or the next session. Context tools expose manual compaction, reload, context, tree navigation and queued follow-ups through the active session. No background package installs or project trust bypass.
