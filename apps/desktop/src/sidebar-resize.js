@@ -10,7 +10,7 @@ export function setupPanelResize({handle,panel:sidebar,property,key,side='left',
     handle.setAttribute('aria-valuemax', String(maximum()));
     if (save) try { localStorage.setItem(key, String(value)); } catch { /* Optional preference. */ }
   }
-  try { const saved = Number(localStorage.getItem(key)); if (saved >= minimum) setWidth(saved); } catch { /* Optional preference. */ }
+  try { const saved = Number(localStorage.getItem(key)); if (saved > 0) setWidth(Math.max(minimum,saved)); else if(current()<minimum)setWidth(minimum); } catch { /* Optional preference. */ }
   handle.setAttribute('aria-valuemin', String(Math.min(minimum,maximum())));
   handle.setAttribute('aria-valuenow', String(current()));
   handle.addEventListener('pointerdown', event => {
@@ -50,5 +50,5 @@ export function setupPanelResize({handle,panel:sidebar,property,key,side='left',
 }
 
 export function setupSidebarResize(){
-  setupPanelResize({handle:document.querySelector('.sidebar-resizer'),panel:document.querySelector('.sidebar'),property:'--sidebar-width',key:'suffice-sidebar-width'});
+  setupPanelResize({handle:document.querySelector('.sidebar-resizer'),panel:document.querySelector('.sidebar'),property:'--sidebar-width',key:'suffice-sidebar-width',minimum:280,maximum:()=>Math.min(400,Math.max(280,innerWidth-480))});
 }
