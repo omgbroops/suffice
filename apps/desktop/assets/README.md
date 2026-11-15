@@ -5,3 +5,5 @@ The mark uses the exact outlines of the bundled Geist Pixel Square `[S]` glyphs,
 Electron's window icon and macOS Dock icon use the PNG. No application/profile rename is needed to change the icon.
 
 Windows taskbar relaunch metadata uses `suffice-logo.ico`, containing PNG representations at 16, 24, 32, 48, 64, 128 and 256 pixels rendered from the SVG. The taskbar app ID stays `com.suffice.desktop`; a private profile-local `Suffice.lnk` retains the correct development app and profile paths without exceeding Windows relaunch-property limits. The app does not pin the shortcut or edit Electron executables. The PNG remains the preview/source image.
+
+Windows development launch additionally uses a sibling `Suffice.exe` with the same icon embedded in its PE resources. The shared `electron.exe` is preserved; the copy is refreshed only when its runtime or icon changes. This is a development launcher, not a distributable build.
