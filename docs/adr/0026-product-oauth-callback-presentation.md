@@ -1,0 +1,3 @@
+# 0026: Product OAuth callback presentation
+
+Keep the SDK's OAuth validation, exchange and credential handling. While a desktop login is active, a temporary local HTTP diagnostics subscriber skins only HTML responses at the loopback callback advertised by that login. It replaces the engine mark with the Suffice asset and embeds the allowlisted saved interface font, falling back to Inter. It never changes request parameters, status codes, callback validation or tokens. Unsubscribe on every exit; missing presentation assets must not prevent authentication. Tests cover unrelated routes and cleanup.

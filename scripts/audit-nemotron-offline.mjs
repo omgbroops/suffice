@@ -65,7 +65,7 @@ for(const id of [...receiptIds].sort((a,b)=>a-b)){
   receipts.push({id,kind:r.kind,inputType:r.inputType,status:r.status,model:r.model,dimensions:r.dimensions,tokens:r.usage?.total_tokens,cost:r.usage?.cost,latencyMs:r.latencyMs,valid});
 }
 const supplementary=[];
-for(const path of ['src/workspace.mjs','package.json','package-lock.json']){
+for(const path of ['src/workspace.mjs','package.json','bun.lock']){
   const current=await readFile(resolve(branch,path),'utf8');
   const base=spawnSync('git',['show','37fb5e2:'+path],{cwd:branch,encoding:'utf8',windowsHide:true});
   const unchanged=base.status===0&&current.replaceAll('\r\n','\n')===base.stdout.replaceAll('\r\n','\n');

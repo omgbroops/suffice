@@ -20,12 +20,12 @@ Initial experiments are complete. Read [the results summary](reports/RESULTS.md)
 
 ## Setup
 
-Requires Node.js 24+. Install the locked dependencies:
+Requires Node.js 24+ and Bun. The live CLI and desktop use Pi 1.5.2; the research results below describe their original, frozen Pi versions. Install the locked workspace dependencies:
 
 ```powershell
-npm ci --ignore-scripts
-npm run login
-npm run preflight
+bun install --frozen-lockfile
+bun run login
+bun run preflight
 ```
 
 `login` opens OpenAI's browser OAuth flow. Credentials and a stable installation ID are stored under ignored `.suffice/pi/`. The experiment never reads the existing Codex credential cache. Subscription access is required for main-agent runs; there is no silent OpenAI API-key fallback. `npm run pi` starts the pinned upstream CLI using this same isolated Pi credential directory; the experimental policies are selected through the experiment runner.

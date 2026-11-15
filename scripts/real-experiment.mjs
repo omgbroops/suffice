@@ -17,7 +17,7 @@ const schedule=[];for(let r=0;r<reps;r++)for(const [i,t]of tasks.entries()){
 }
 const directory=resolve(stateDir,'real-runs',campaign);await mkdir(directory,{recursive:true});
 const inputs={};
-for(const file of ['package.json','package-lock.json','scripts/prepare-real.mjs','scripts/real-experiment.mjs','scripts/real-report.mjs','docs/REAL-EXPERIMENT.md',...(await filesIn(resolve(root,'src'))).map(p=>`src/${p}`),...(await filesIn(resolve(root,'benchmarks/real'))).map(p=>`benchmarks/real/${p}`)])inputs[file]=hash(await readFile(resolve(root,file)));
+for(const file of ['package.json','bun.lock','scripts/prepare-real.mjs','scripts/real-experiment.mjs','scripts/real-report.mjs','docs/REAL-EXPERIMENT.md',...(await filesIn(resolve(root,'src'))).map(p=>`src/${p}`),...(await filesIn(resolve(root,'benchmarks/real'))).map(p=>`benchmarks/real/${p}`)])inputs[file]=hash(await readFile(resolve(root,file)));
 const baselineHashes={};for(const t of tasks){baselineHashes[t.id]={};for(const file of await filesIn(t.workspaceDir))baselineHashes[t.id][file]=hash(await readFile(resolve(t.workspaceDir,file)));}
 const config={version:1,campaign,repository,baseRevision,schedule,arms,effort:'low',workerTimeoutMs:360000,reviewTimeoutMs:180000,repairTimeoutMs:240000,maxTurns:24,estimatedCostStopUsd:12,inputs,baselineHashes};
 if(args['--resume']){

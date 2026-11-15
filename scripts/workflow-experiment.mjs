@@ -5,7 +5,7 @@ const args=Object.fromEntries(process.argv.slice(2).map(s=>{const i=s.indexOf('=
 const campaign=args['--campaign'];if(!/^[a-zA-Z0-9_-]+$/.test(campaign??''))throw new Error('Unique campaign required');
 const schedule=[];for(let r=0;r<3;r++)for(const [i,task]of workflowTasks.entries()){const order=[...WORKFLOW_ARMS],shift=(i+r)%3;order.push(...order.splice(0,shift));for(const arm of order)schedule.push({task:task.id,arm:arm.id,repetition:r});}
 const directory=resolve(stateDir,'workflow-runs',campaign);await mkdir(directory,{recursive:true});
-const paths=['package.json','package-lock.json','scripts/workflow-experiment.mjs','scripts/workflow-report.mjs','scripts/prepare-workflow.mjs','scripts/fetch-workflow.mjs','docs/WORKFLOW-EXPERIMENT.md','tests/workflow.test.mjs',...(await filesIn(resolve(root,'src'))).map(p=>'src/'+p),...(await filesIn(resolve(root,'benchmarks/workflow'))).map(p=>'benchmarks/workflow/'+p)];
+const paths=['package.json','bun.lock','scripts/workflow-experiment.mjs','scripts/workflow-report.mjs','scripts/prepare-workflow.mjs','scripts/fetch-workflow.mjs','docs/WORKFLOW-EXPERIMENT.md','tests/workflow.test.mjs',...(await filesIn(resolve(root,'src'))).map(p=>'src/'+p),...(await filesIn(resolve(root,'benchmarks/workflow'))).map(p=>'benchmarks/workflow/'+p)];
 const inputs={};for(const p of paths)inputs[p]=hash(await readFile(resolve(root,p)));
 const baselines={};for(const task of workflowTasks){baselines[task.id]={};for(const p of await filesIn(task.workspaceDir))baselines[task.id][p]=hash(await readFile(resolve(task.workspaceDir,p)));}
 const validationHashes={};for(const task of workflowTasks)validationHashes[task.id]=hash(await readFile(resolve(dirname(task.workspaceDir),'validation.json')));

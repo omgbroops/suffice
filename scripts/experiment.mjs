@@ -23,7 +23,7 @@ loadEnvironment();
 const runtime = await createRuntime();
 if (!runtime.isUsingSubscription('openai')) throw new Error('Run node scripts/login.mjs first.');
 const inputs = {};
-for (const file of ['package.json', 'package-lock.json', 'scripts/experiment.mjs', 'scripts/run-pilot.mjs', 'scripts/freeze-sources.mjs', 'benchmarks/tasks.mjs', 'benchmarks/manifest.json', 'docs/EXPERIMENT.md', ...(await filesIn(resolve(root, 'src'))).map(f => `src/${f}`)]) inputs[file] = hash(await readFile(resolve(root, file)));
+for (const file of ['package.json', 'bun.lock', 'scripts/experiment.mjs', 'scripts/run-pilot.mjs', 'scripts/freeze-sources.mjs', 'benchmarks/tasks.mjs', 'benchmarks/manifest.json', 'docs/EXPERIMENT.md', ...(await filesIn(resolve(root, 'src'))).map(f => `src/${f}`)]) inputs[file] = hash(await readFile(resolve(root, file)));
 for (const task of selectedTasks) {
   inputs[`acceptance:${task.id}`] = hash(await readFile(task.acceptancePath));
   for (const file of await filesIn(task.workspaceDir)) inputs[`task:${task.id}/${file}`] = hash(await readFile(resolve(task.workspaceDir, file)));
