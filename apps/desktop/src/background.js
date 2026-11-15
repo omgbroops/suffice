@@ -16,7 +16,7 @@ export function mountAtmosphere(canvas) {
   try { localStorage.setItem('suffice-background',key); } catch {}
   const preset = backgroundPresets[key];
   canvas.dataset.background = key;
-  canvas.closest('.workspace')?.classList.toggle('background-none',preset.type==='none');
+  (canvas.closest('.workspace')||document.querySelector('.workspace'))?.classList.toggle('background-none',preset.type==='none');
   canvas.hidden=preset.type==='none';
   if(preset.type==='none')return ()=>{};
   if (preset.type === 'oceanic-shimmer') return mountOceanicShimmer(canvas, preset);
