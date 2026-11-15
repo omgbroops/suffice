@@ -7,6 +7,14 @@ import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 import files from '../electron/workspace-files.cjs';
 const exec=promisify(execFile);
+
+test('ignored filtering checks only the requested entries and keeps tracked exceptions',async()=>{
+ const root=await mkdtemp(resolve(tmpdir(),'suffice-ignore-filter-')),git=args=>exec('git',['-C',root,...args],{windowsHide:true});await git(['init','-q']);
+ await writeFile(resolve(root,'.gitignore'),'ignored/\n*.log\n');await mkdir(resolve(root,'ignored'));await mkdir(resolve(root,'visible'));await writeFile(resolve(root,'keep.log'),'tracked\n');await git(['add','-f','keep.log']);await writeFile(resolve(root,'skip.log'),'ignored\n');await writeFile(resolve(root,'visible','nested.log'),'ignored\n');await writeFile(resolve(root,'visible','keep.txt'),'keep\n');
+ const listed=(await files.list(root)).entries,filtered=await files.filterIgnored(root,listed);assert.ok(!filtered.some(entry=>entry.path==='ignored'||entry.path==='skip.log'));assert.ok(filtered.some(entry=>entry.path==='keep.log'));assert.ok(filtered.some(entry=>entry.path==='visible'));
+ const nested=await files.filterIgnored(root,(await files.list(root,'visible')).entries);assert.deepEqual(nested.map(entry=>entry.path),['visible/keep.txt']);assert.deepEqual(await files.filterIgnored(root,[]),[]);
+ const outside=await mkdtemp(resolve(tmpdir(),'suffice-ignore-no-git-'));assert.deepEqual(await files.filterIgnored(outside,listed),listed);
+});
 test('workspace browsing rejects escapes and shows real tracked, renamed and untracked changes',async()=>{
  const root=await mkdtemp(resolve(tmpdir(),'suffice-files-')),outside=await mkdtemp(resolve(tmpdir(),'suffice-outside-'));
  await writeFile(resolve(root,'hello.txt'),'before\n');await writeFile(resolve(root,'old name.txt'),'rename fixture\n');await mkdir(resolve(root,'folder'));

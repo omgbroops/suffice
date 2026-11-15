@@ -3,6 +3,20 @@ const path=require('node:path');
 const {promisify}=require('node:util');
 const exec=promisify(require('node:child_process').execFile);
 const limit=256*1024;
+async function filterIgnored(root,entries){
+ if(!root||!entries.length)return entries;
+ // Ask Git about this directory's entries only. Scanning the whole ignored tree
+ // and searching that list for every row made expanding many folders quadratic.
+ const input=entries.map(entry=>entry.path+(entry.kind==='directory'?'/':'')).join('\0')+'\0';
+ try{
+  const output=await new Promise((resolve,reject)=>{
+   const child=require('node:child_process').execFile('git',['--no-optional-locks','-C',root,'check-ignore','--stdin','-z'],{windowsHide:true,timeout:5000,maxBuffer:2*1024*1024},(error,stdout)=>error&&error.code!==1?reject(error):resolve(stdout));
+   child.stdin.on('error',()=>{});child.stdin.end(input);
+  });
+  const ignored=new Set(output.split('\0').filter(Boolean).map(name=>name.replace(/\/$/,'')));
+  return entries.filter(entry=>!ignored.has(entry.path));
+ }catch{return entries;}
+}
 async function inside(root,name=''){
  if(!root)throw new Error('No project selected');
  if(typeof name!=='string'||name.includes('\0')||path.isAbsolute(name))throw new Error('Invalid workspace path');
@@ -53,4 +67,4 @@ async function diff(root,name){
  let text;try{text=await git(root,[...args,'HEAD','--',...paths]);}catch{if(entry.status.includes('A'))return {...await read(root,name),untracked:true};const unstaged=await git(root,[...args,'--',...paths]),staged=await git(root,[...args,'--cached','--',...paths]);text=[staged,unstaged].filter(Boolean).join('\n');}
  return {path:name,text:text.slice(0,limit),truncated:text.length>limit};
 }
-module.exports={list,read,changes,diff,parseNumstat};
+module.exports={list,read,changes,diff,parseNumstat,filterIgnored};
