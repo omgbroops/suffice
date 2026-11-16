@@ -1,0 +1,13 @@
+warning: method `deadline` is never used
+  --> .ci-logs/../apps/desktop-rust/src/browser.rs:76:12
+   |
+67 | impl Surface {
+   | ------------ method in this implementation
+...
+76 |     pub fn deadline(&self) -> Option<Instant> {
+   |            ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: 1 warning emitted
+

@@ -1,4 +1,7 @@
+#[path = "native_services.rs"]
+mod services;
 use serde_json::{Value, json};
+pub use services::configure_launch;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use tao::window::Window;
@@ -284,7 +287,6 @@ pub fn handle(window: &Window, method: &str, args: &Value) -> Result<Value, Stri
             )
         }
         "dialog.showMessageBox" => open_message(option_arg(args)),
-        "app.getFileIcon" => Err("native file icon extraction is unsupported".into()),
         "shell.openExternal" => {
             let target = path_arg(args)?;
             let parsed = external_url(target)?;
@@ -305,7 +307,123 @@ pub fn handle(window: &Window, method: &str, args: &Value) -> Result<Value, Stri
             show_in_folder(path_arg(args)?)?;
             Ok(Value::Null)
         }
-        _ => Err(format!("unsupported native operation: {method}")),
+        _ => services::handle(method, args),
+    }
+}
+
+/// Clear only HTTP cache data for this WebView's actual profile. Cookies and
+/// application storage are independent browsing-data types on both engines.
+pub fn clear_cache(
+    webview: &wry::WebView,
+    done: impl FnOnce(Result<(), String>) + 'static,
+) -> Result<(), String> {
+    #[cfg(target_os = "macos")]
+    {
+        use objc2_foundation::{NSDate, NSSet};
+        use objc2_web_kit::{WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache};
+        use wry::WebViewExtMacOS;
+        let done = std::cell::RefCell::new(Some(done));
+        let block = block2::RcBlock::new(move || {
+            if let Some(done) = done.borrow_mut().take() {
+                done(Ok(()))
+            }
+        });
+        unsafe {
+            let types =
+                NSSet::from_slice(&[WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache]);
+            webview
+                .webview()
+                .configuration()
+                .websiteDataStore()
+                .removeDataOfTypes_modifiedSince_completionHandler(
+                    &types,
+                    &NSDate::distantPast(),
+                    &block,
+                );
+        }
+        Ok(())
+    }
+    #[cfg(windows)]
+    {
+        use webview2_com::{
+            ClearBrowsingDataCompletedHandler,
+            Microsoft::Web::WebView2::Win32::{
+                COREWEBVIEW2_BROWSING_DATA_KINDS_DISK_CACHE, ICoreWebView2_13,
+                ICoreWebView2Profile2,
+            },
+        };
+        use windows_core::Interface;
+        use wry::WebViewExtWindows;
+        let profile = unsafe {
+            webview
+                .webview()
+                .cast::<ICoreWebView2_13>()
+                .and_then(|v| v.Profile())
+                .and_then(|p| p.cast::<ICoreWebView2Profile2>())
+        }
+        .map_err(|e| e.to_string())?;
+        let handler = ClearBrowsingDataCompletedHandler::create(Box::new(move |result| {
+            done(result.map_err(|e| e.to_string()));
+            Ok(())
+        }));
+        unsafe { profile.ClearBrowsingData(COREWEBVIEW2_BROWSING_DATA_KINDS_DISK_CACHE, &handler) }
+            .map_err(|e| e.to_string())
+    }
+    #[cfg(not(any(windows, target_os = "macos")))]
+    {
+        let _ = (webview, done);
+        Err("cache clearing unavailable on this host".into())
+    }
+}
+
+pub fn show_notification(
+    body: String,
+    delivered: impl FnOnce(Result<(), String>) + Send + 'static,
+    activate: impl FnOnce() + Send + 'static,
+) -> Result<(), String> {
+    if body.is_empty() || body.len() > 2048 {
+        return Err("invalid notification body".into());
+    }
+    #[cfg(any(windows, target_os = "macos"))]
+    {
+        std::thread::Builder::new()
+            .name("desktop-notification".into())
+            .spawn(move || {
+                let sent = (|| {
+                    #[cfg(target_os = "macos")]
+                    {
+                        notify_rust::check_bundle().map_err(|e| e.to_string())?;
+                        if !notify_rust::request_auth_blocking().map_err(|e| e.to_string())? {
+                            return Err("system notification permission denied".into());
+                        }
+                    }
+                    let mut note = notify_rust::Notification::new();
+                    note.summary("Suffice")
+                        .body(&body)
+                        .timeout(std::time::Duration::from_secs(3600));
+                    #[cfg(windows)]
+                    note.app_id("com.suffice.desktop.development");
+                    note.show().map_err(|e| e.to_string())
+                })();
+                match sent {
+                    Ok(note) => {
+                        delivered(Ok(()));
+                        note.wait_for_action(move |action| {
+                            if action == "default" {
+                                activate();
+                            }
+                        });
+                    }
+                    Err(e) => delivered(Err(e)),
+                }
+            })
+            .map_err(|e| e.to_string())?;
+        Ok(())
+    }
+    #[cfg(not(any(windows, target_os = "macos")))]
+    {
+        let _ = (delivered, activate);
+        Err("system notifications unavailable on this host".into())
     }
 }
 

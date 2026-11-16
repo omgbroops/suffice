@@ -6,13 +6,13 @@ import {createHash} from 'node:crypto';
 
 // Retain upstream notices from the exact locked Cargo package sources, including
 // build dependencies. No credentials or user configuration are read here.
-export async function nativeLicenses(manifest){
+export async function nativeLicenses(manifest,{label='Suffice native traversal'}={}){
  const overrides=fileURLToPath(new URL('./license-overrides/',import.meta.url));
  const provenance=JSON.parse(await readFile(join(overrides,'provenance.json'),'utf8'));
  const command=spawnSync('cargo',['metadata','--locked','--format-version','1','--manifest-path',manifest],{encoding:'utf8',windowsHide:true,maxBuffer:16*1024*1024});
  if(command.error||command.status!==0)throw command.error||Error(command.stderr);
  const packages=JSON.parse(command.stdout).packages.filter(p=>p.source).sort((a,b)=>a.name.localeCompare(b.name));
- let text='Suffice native traversal: locked Cargo dependency licenses\nRuntime and build-time packages are included. Upstream text follows unchanged.\n';
+ let text=label+': locked Cargo dependency licenses\nRuntime and build-time packages are included. Upstream text follows unchanged.\n';
  for(const pkg of packages){
   const root=dirname(pkg.manifest_path),files=(await readdir(root,{withFileTypes:true})).filter(f=>f.isFile()&&/^(LICENSE|LICENCE|COPYING|COPYRIGHT|NOTICE)(?:[.\-_]|$)/i.test(f.name)).map(f=>f.name).sort();
   text+=`\n===== ${pkg.name} ${pkg.version} (${pkg.license}) =====\n`;

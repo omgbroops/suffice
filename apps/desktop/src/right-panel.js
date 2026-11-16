@@ -1,3 +1,4 @@
+import {createBrowserPanel} from './browser-panel.js';
 import {preference} from './settings-preferences.js';
 import {icon} from './ui.js';
 import {createCollectionNavigation} from './components/ui/collection-navigation.js';
@@ -6,7 +7,7 @@ import {showPopover,hidePopover,keyboardInteraction} from './popover-motion.js';
 import {threadViewState as store} from './thread-view-state.js';
 import {renderFileTree,renderChanges,renderCode,textElement} from './panel-content.js';
 
-const options={files:{label:'Files',icon:'files'},changes:{label:'Changes',icon:'changes'},terminal:{label:'Terminal',icon:'terminal'}};
+const options={files:{label:'Files',icon:'files'},changes:{label:'Changes',icon:'changes'},terminal:{label:'Terminal',icon:'terminal'},browser:{label:'Browser',icon:'globe'}};
 export function panelIconButton(label,glyph){const button=document.createElement('button');button.type='button';button.className='button button--ghost';button.setAttribute('aria-label',label);button.title=label;button.innerHTML=icon(glyph);return button;}
 const textNode=textElement;
 export function connectRightPanel({sidebar,resize,toggle,api}){
@@ -18,7 +19,7 @@ export function connectRightPanel({sidebar,resize,toggle,api}){
  const menu=document.createElement('div');menu.className='popover panel-tab-menu';menu.hidden=true;menu.setAttribute('role','menu');menu.setAttribute('aria-label','Panel options');document.body.append(menu);
  const body=document.createElement('section');body.id='right-panel-content';body.className='right-panel-content';header.append(tabs,add);sidebar.append(header,body);
  let version=0,scrollTimer,refreshTimer,focusFilter=false,directoryThread=null,tabSignature='',mounted=null,terminalsPromise;
- const directories=new Map();
+ const directories=new Map(),browser=createBrowserPanel(api,panelIconButton);
  const terminalViews=()=>terminalsPromise??=import('./terminal-view.js').then(({createTerminalViews})=>createTerminalViews({api,onLabel:(threadId,id,label)=>{if(store.id===threadId&&store.state.tabs.includes(id)&&store.state.terminals[id]?.label!==label)store.update({terminals:{...store.state.terminals,[id]:{...store.state.terminals[id],label}}});}}));
  const terminalTab=type=>type?.startsWith('terminal:');
  const optionFor=type=>terminalTab(type)?{label:store.state.terminals[type]?.label||'Terminal',icon:'terminal'}:options[type];
@@ -68,9 +69,11 @@ export function connectRightPanel({sidebar,resize,toggle,api}){
  async function load(){
   clearTimeout(scrollTimer);
   const request=++version,state=store.state,type=state.activeTab,id=store.id;
+  browser.sync(id,state.panelOpen,type==='browser',state.tabs.includes('browser'));
   if(!id||!state.panelOpen)return;drawTabs();body.dataset.terminal=String(terminalTab(type));
   if(!type){body.removeAttribute('role');body.removeAttribute('aria-labelledby');body.removeAttribute('aria-busy');body.replaceChildren();const launcher=document.createElement('div');launcher.className='panel-launcher';choices(launcher);body.append(launcher);return;}
   body.setAttribute('role','tabpanel');body.setAttribute('aria-labelledby','panel-tab-'+type);body.setAttribute('aria-busy','true');
+  if(type==='browser'){browser.mount(body,id);body.setAttribute('aria-busy','false');return;}
   if(terminalTab(type)){try{const terminals=await terminalViews();if(request!==version||id!==store.id||!store.state.panelOpen)return;await terminals.mount(body,id,type,state.terminals[type]?.ordinal);}catch(error){if(request===version&&id===store.id)message('Could not open terminal',error.message,true);}finally{if(request===version)body.setAttribute('aria-busy','false');}return;}
   const focusedPath=body.contains(document.activeElement)?document.activeElement.dataset.path:null;
   const view=state[type],layoutKey=JSON.stringify([id,type,view.directory,view.filterOpen,view.explorerOpen,view.expanded]);
@@ -113,6 +116,6 @@ export function connectRightPanel({sidebar,resize,toggle,api}){
  toggle.addEventListener('click',()=>{if(store.id)store.update({panelOpen:!store.state.panelOpen});});
  const saveWidth=()=>{if(store.id)store.update({panelWidth:Math.round(sidebar.getBoundingClientRect().width)});};resize.addEventListener('lostpointercapture',saveWidth);resize.addEventListener('keydown',saveWidth);resize.addEventListener('dblclick',saveWidth);
  api.onEvent(event=>{if(event.event==='tool_end'&&store.state.panelOpen){clearTimeout(refreshTimer);refreshTimer=setTimeout(refreshPanel,300);}});document.addEventListener('suffice:thread-updated',refreshPanel);
- document.addEventListener('keydown',event=>{if(!store.id||!store.state.panelOpen||!store.state.activeTab||terminalTab(store.state.activeTab)||!(event.ctrlKey||event.metaKey))return;const type=store.state.activeTab;if(event.key.toLowerCase()==='p'){event.preventDefault();focusFilter=true;patchView(type,{explorerOpen:true,filterOpen:true});body.querySelector('.panel-filter')?.focus();}if(event.key==='\\'){event.preventDefault();patchView(type,{explorerOpen:store.state[type].explorerOpen===false});}});
+ document.addEventListener('keydown',event=>{if(!store.id||!store.state.panelOpen||!store.state.activeTab||store.state.activeTab==='browser'||terminalTab(store.state.activeTab)||!(event.ctrlKey||event.metaKey))return;const type=store.state.activeTab;if(event.key.toLowerCase()==='p'){event.preventDefault();focusFilter=true;patchView(type,{explorerOpen:true,filterOpen:true});body.querySelector('.panel-filter')?.focus();}if(event.key==='\\'){event.preventDefault();patchView(type,{explorerOpen:store.state[type].explorerOpen===false});}});
  sync();
 }

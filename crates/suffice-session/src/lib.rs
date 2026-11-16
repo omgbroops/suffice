@@ -5,48 +5,15 @@ use std::{
     path::Path,
     time::UNIX_EPOCH,
 };
-use time::{format_description::well_known::Rfc3339, Date, OffsetDateTime};
 
+pub mod js_date;
 mod js_json;
+pub mod persistent;
 mod store;
 pub use js_json::{parse_js_json, to_js_string, write_js_json};
 pub mod presentation;
 pub use presentation::{desktop_messages, saved_usage};
 pub use store::{Discovery, ReadError, ReadLimits, SessionInfo, SessionStore};
-
-fn timestamp(v: Option<&Value>) -> Option<i64> {
-    let v = v?;
-    if v.is_null() {
-        return Some(0);
-    }
-    if let Some(n) = v.as_f64() {
-        return (n.is_finite() && n.abs() <= 8_640_000_000_000_000.0).then_some(n.trunc() as i64);
-    }
-    if let Some(b) = v.as_bool() {
-        return Some(i64::from(b));
-    }
-    // Pi constructs these timestamps with `new Date(value).getTime()`.  This is
-    // intentionally not a general JavaScript Date parser: JSON objects stringify
-    // to "[object Object]" (invalid), and only a one-item string array has a
-    // useful, stable JSON representation for this read-only boundary.
-    if let Some(values) = v.as_array() {
-        return match values.as_slice() {
-            [value @ Value::String(_)] => timestamp(Some(value)),
-            _ => None,
-        };
-    }
-    if v.is_object() {
-        return None;
-    }
-    let s = v.as_str()?;
-    if let Ok(t) = OffsetDateTime::parse(s, &Rfc3339) {
-        return i64::try_from(t.unix_timestamp_nanos().div_euclid(1_000_000)).ok();
-    }
-    let format = time::format_description::parse_borrowed::<2>("[year]-[month]-[day]").ok()?;
-    Date::parse(s, &format)
-        .ok()
-        .map(|d| d.midnight().assume_utc().unix_timestamp() * 1000)
-}
 
 fn integer_index(key: &str) -> Option<u32> {
     if key.is_empty() || (key.len() > 1 && key.starts_with('0')) {
@@ -103,8 +70,11 @@ fn truthy(v: &Value) -> bool {
     }
 }
 fn key(v: Option<&Value>) -> String {
-    v.map(|x| to_js_string(x, false).expect("JSON value serialization"))
-        .unwrap_or_else(|| "<undefined>".into())
+    match v {
+        None => "<undefined>".into(),
+        Some(x @ (Value::Object(_) | Value::Array(_))) => format!("object@{x:p}"),
+        Some(x) => to_js_string(x, false).expect("JSON value serialization"),
+    }
 }
 
 /// Strict desktop transcript parser: only an incomplete last non-newline record is ignored.
@@ -129,7 +99,7 @@ pub fn read_journal(source: &str) -> Result<Vec<Value>, String> {
     Ok(out)
 }
 
-fn object_with(role: &str, entry: &Value, fields: &[&str]) -> Value {
+fn object_with(role: &str, entry: &Value, fields: &[&str]) -> Result<Value, String> {
     let mut obj = Map::new();
     obj.insert("role".into(), json!(role));
     for &field in fields {
@@ -139,9 +109,9 @@ fn object_with(role: &str, entry: &Value, fields: &[&str]) -> Value {
     }
     obj.insert(
         "timestamp".into(),
-        timestamp(entry.get("timestamp")).map_or(Value::Null, |v| json!(v)),
+        js_date::timestamp(entry.get("timestamp"))?.map_or(Value::Null, |v| json!(v)),
     );
-    Value::Object(obj)
+    Ok(Value::Object(obj))
 }
 
 fn model_from(entry: &Value, provider: &str, model_id: &str) -> Value {
@@ -179,7 +149,7 @@ fn entry_messages(e: &Value) -> Result<Vec<Value>, String> {
             vec![m]
         }
         "custom_message" => {
-            let mut m = object_with("custom", e, &["customType", "display", "details"]);
+            let mut m = object_with("custom", e, &["customType", "display", "details"])?;
             m["content"] = e
                 .get("content")
                 .filter(|v| !v.is_null())
@@ -188,7 +158,7 @@ fn entry_messages(e: &Value) -> Result<Vec<Value>, String> {
             vec![m]
         }
         "branch_summary" if truthy(&e["summary"]) => {
-            vec![object_with("branchSummary", e, &["summary", "fromId"])]
+            vec![object_with("branchSummary", e, &["summary", "fromId"])?]
         }
         "compaction" => {
             let mut v = Vec::new();
@@ -199,7 +169,7 @@ fn entry_messages(e: &Value) -> Result<Vec<Value>, String> {
                 "compactionSummary",
                 e,
                 &["summary", "tokensBefore"],
-            ));
+            )?);
             v
         }
         _ => vec![],
@@ -211,12 +181,6 @@ fn entry_messages(e: &Value) -> Result<Vec<Value>, String> {
 pub fn project(entries: &[Value], leaf: Option<&Value>) -> Result<Value, String> {
     if entries.iter().any(Value::is_null) {
         return Err("null entry".into());
-    }
-    if entries
-        .iter()
-        .any(|e| kind(e) == "message" && e.get("message").is_none_or(Value::is_null))
-    {
-        return Err("missing or null message".into());
     }
     let mut by_id = HashMap::new();
     for (i, e) in entries.iter().enumerate() {
@@ -231,7 +195,7 @@ pub fn project(entries: &[Value], leaf: Option<&Value>) -> Result<Value, String>
         _ => entries.len().checked_sub(1),
     };
     let mut path = Vec::new();
-    let mut current = start;
+    let mut current = start.filter(|&i| truthy(&entries[i]));
     let mut seen = HashSet::new();
     while let Some(i) = current {
         if !seen.insert(i) {
@@ -241,13 +205,17 @@ pub fn project(entries: &[Value], leaf: Option<&Value>) -> Result<Value, String>
         current = entries[i]
             .get("parentId")
             .filter(|v| truthy(v))
-            .and_then(|v| by_id.get(&key(Some(v))).copied());
+            .and_then(|v| by_id.get(&key(Some(v))).copied())
+            .filter(|&n| truthy(&entries[n]));
     }
     path.reverse();
     let mut thinking = Some(json!("off"));
     let mut model = Value::Null;
     for &i in &path {
         let e = &entries[i];
+        if kind(e) == "message" && e.get("message").is_none_or(Value::is_null) {
+            return Err("missing or null message".into());
+        }
         match kind(e) {
             "thinking_level_change" => thinking = e.get("thinkingLevel").cloned(),
             "model_change" => model = model_from(e, "provider", "modelId"),
@@ -261,11 +229,17 @@ pub fn project(entries: &[Value], leaf: Option<&Value>) -> Result<Value, String>
         .iter()
         .rposition(|&i| kind(&entries[i]) == "compaction")
     {
-        let comp = path[pos];
+        // Pi finds the first matching ID even when duplicate IDs appear in the path.
+        let latest = path[pos];
+        let pos = path
+            .iter()
+            .position(|&i| key(entries[i].get("id")) == key(entries[latest].get("id")))
+            .unwrap_or(pos);
+        let comp = latest;
         let mut retained = vec![comp];
         let mut found = false;
         for &i in &path[..pos] {
-            if entries[i].get("id") == entries[comp].get("firstKeptEntryId") {
+            if key(entries[i].get("id")) == key(entries[comp].get("firstKeptEntryId")) {
                 found = true;
             }
             if found
@@ -412,10 +386,17 @@ impl SummaryBuilder {
         if !["user", "assistant"].contains(&role) || m.get("content").is_none() {
             return;
         }
-        let t = m["timestamp"]
-            .as_f64()
-            .map(|n| n.trunc() as i64)
-            .or_else(|| timestamp(e.get("timestamp")));
+        let t = if let Some(n) = m["timestamp"].as_f64() {
+            Some(n.trunc() as i64)
+        } else {
+            match js_date::timestamp(e.get("timestamp")) {
+                Ok(t) => t,
+                Err(_) => {
+                    self.valid = false;
+                    return;
+                }
+            }
+        };
         if let Some(t) = t {
             self.activity = Some(self.activity.unwrap_or(0).max(t));
         }
@@ -444,6 +425,7 @@ impl SummaryBuilder {
             return None;
         }
         let header = self.header;
+        let created = js_date::timestamp(header.get("timestamp")).ok()?;
         let modified = self
             .activity
             .filter(|n| *n > 0)
@@ -451,13 +433,13 @@ impl SummaryBuilder {
                 header
                     .get("timestamp")
                     .filter(|v| v.is_string())
-                    .and_then(|v| timestamp(Some(v)))
+                    .and_then(|v| js_date::timestamp(Some(v)).ok().flatten())
             })
             .or(fallback);
         Some(json!({"path":path.to_string_lossy(),"id":header.get("id"),
             "cwd":header["cwd"].as_str().unwrap_or(""),"name":self.name,
             "parentSessionPath":header.get("parentSession"),
-            "created":timestamp(header.get("timestamp")),"modified":modified,
+            "created":created,"modified":modified,
             "messageCount":self.count,"firstMessage":if self.first.is_empty(){"(no messages)"}else{&self.first},
             "allMessagesText":self.all.join(" ")}))
     }

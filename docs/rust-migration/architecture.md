@@ -4,7 +4,7 @@ This branch is a partial migration. Electron, the web UI and Pi remain the
 production desktop and agent engine. The accepted candidate is read-only
 repository traversal implemented in Rust and loaded as an asynchronous Node-API
 addon. It does not replace parsing, provider transport or session management.
-See `delivery.md` for final measurements and outstanding gates.
+See `delivery.md` for historical traversal measurements and `continuation-desktop-cutover.md` for the latest experimental host boundary and outstanding gates.
 
 ## What full Rust means
 
@@ -80,7 +80,7 @@ projection -> Rust desktop presentation/saved usage -> native rendering. Private
 compaction content and persisted reasoning follow their separate saved-view
 suppression rules. Finite JSON parsing/formatting uses JavaScript number
 conventions. See `continuation-saved-view.md` for direct Node-oracle evidence and
-remaining semantic/platform gaps; production Electron browsing still uses Pi.
+remaining semantic/platform gaps. The default production Electron path still uses Pi; the opt-in Rust saved-history path and experimental full-renderer host are described in `continuation-desktop-cutover.md`.
 
 The installed Pi 1.5.2 source was inspected, including session-manager,
 agent-session, model-runtime, auth-storage, resource-loader, project-trust,
@@ -101,8 +101,7 @@ These Rust engine interfaces are proposed work, not implemented stubs.
 
 ## Persistence and rollback
 
-No persisted-data format changed in this stage, and neither addon nor probes
-opens user session state. Original sessions, preferences, trust decisions,
+No persisted-data format changed in the original traversal stage. The experimental session addon now reads explicitly granted session directories; browsing is read-only, and Send deliberately hands a validated location back to Pi. Original sessions, preferences, trust decisions,
 credentials, receipts and view-state stores remain owned by the existing code.
 Old Pi session open can rewrite v1/v2 data; compatibility tests must use independent
 verified copies. Stop writers, snapshot the relevant directory, hash it, exercise

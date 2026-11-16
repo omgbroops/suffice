@@ -1,0 +1,254 @@
+{
+  "checks": 1500,
+  "mismatchCount": 21,
+  "uniqueMismatchValues": 7,
+  "mismatches": [
+    {
+      "tz": "UTC",
+      "v": [
+        {},
+        {
+          "a": {
+            "a": {
+              "a": {
+                "a": null,
+                "toString": "",
+                "valueOf": false
+              },
+              "valueOf": {
+                "valueOf": ""
+              }
+            },
+            "toString": "0"
+          }
+        },
+        true,
+        "2024-01-02"
+      ],
+      "expected": {
+        "ok": true,
+        "result": 1704153600000
+      },
+      "actual": {
+        "ok": true,
+        "result": null
+      }
+    },
+    {
+      "tz": "UTC",
+      "v": [
+        {
+          "valueOf": {
+            "valueOf": {
+              "valueOf": true
+            }
+          }
+        },
+        [],
+        -1.9
+      ],
+      "expected": {
+        "ok": true,
+        "result": 978998400000
+      },
+      "actual": {
+        "ok": true,
+        "result": null
+      }
+    },
+    {
+      "tz": "UTC",
+      "v": [
+        {
+          "a": null
+        },
+        [],
+        "2024-01-02"
+      ],
+      "expected": {
+        "ok": true,
+        "result": 1704153600000
+      },
+      "actual": {
+        "ok": true,
+        "result": null
+      }
+    },
+    {
+      "tz": "UTC",
+      "v": [
+        -1.9
+      ],
+      "expected": {
+        "ok": true,
+        "result": 978998400000
+      },
+      "actual": {
+        "ok": true,
+        "result": null
+      }
+    },
+    {
+      "tz": "UTC",
+      "v": [
+        {
+          "valueOf": {
+            "valueOf": {
+              "valueOf": ""
+            },
+            "toString": []
+          }
+        },
+        {
+          "a": {
+            "a": {
+              "a": {
+                "a": -1.9,
+                "toString": "0",
+                "valueOf": "2024-01-02"
+              },
+              "valueOf": {
+                "valueOf": "nonsense"
+              }
+            },
+            "toString": "0"
+          }
+        },
+        -1.9
+      ],
+      "expected": {
+        "ok": true,
+        "result": 978998400000
+      },
+      "actual": {
+        "ok": true,
+        "result": null
+      }
+    },
+    {
+      "tz": "UTC",
+      "v": [
+        {
+          "valueOf": {
+            "valueOf": {
+              "valueOf": {
+                "valueOf": true
+              }
+            },
+            "toString": [
+              {
+                "valueOf": 8640000000000000
+              },
+              {}
+            ]
+          }
+        },
+        {
+          "a": {
+            "a": {
+              "a": {
+                "valueOf": 1
+              }
+            }
+          },
+          "valueOf": {
+            "valueOf": {
+              "valueOf": {
+                "valueOf": "0"
+              }
+            },
+            "toString": [
+              null,
+              null
+            ]
+          }
+        },
+        {
+          "a": {
+            "a": "nonsense"
+          }
+        },
+        "0"
+      ],
+      "expected": {
+        "ok": true,
+        "result": 946684800000
+      },
+      "actual": {
+        "ok": true,
+        "result": null
+      }
+    },
+    {
+      "tz": "UTC",
+      "v": [
+        {
+          "a": {
+            "a": {
+              "a": {
+                "a": false,
+                "toString": 8640000000000000,
+                "valueOf": 8640000000000000
+              },
+              "valueOf": {
+                "valueOf": 8640000000000000
+              }
+            },
+            "toString": [
+              {
+                "valueOf": -1.9
+              }
+            ],
+            "valueOf": {
+              "valueOf": -1.9
+            }
+          }
+        },
+        {
+          "valueOf": 1
+        },
+        -1.9,
+        []
+      ],
+      "expected": {
+        "ok": true,
+        "result": 978998400000
+      },
+      "actual": {
+        "ok": true,
+        "result": null
+      }
+    },
+    {
+      "tz": "America/New_York",
+      "v": [
+        {},
+        {
+          "a": {
+            "a": {
+              "a": {
+                "a": null,
+                "toString": "",
+                "valueOf": false
+              },
+              "valueOf": {
+                "valueOf": ""
+              }
+            },
+            "toString": "0"
+          }
+        },
+        true,
+        "2024-01-02"
+      ],
+      "expected": {
+        "ok": true,
+        "result": 1704171600000
+      },
+      "actual": {
+        "ok": true,
+        "result": null
+      }
+    }
+  ]
+}

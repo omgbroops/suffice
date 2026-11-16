@@ -1,14 +1,19 @@
-# Active migration goal — continued 2026-11-15
+# Active migration work — continued 2026-11-15
 
-The user's persistent goal remains active: a concretely verified, demonstrably
-lighter app and continued work toward full Rust across all original features.
-The earlier delivery report is a historical checkpoint, not completion.
+The user asked to continue the full migration and preserve all features. This
+is ongoing work; no persistent goal handle is being asserted here. The earlier
+reports and paused checkpoint are historical, not completion.
 
-Latest continuation: [`continuation-saved-view.md`](continuation-saved-view.md).
-The native viewer now consumes Rust saved-transcript presentation and usage,
-including private-summary/reasoning suppression and finite JSON number parity.
-42 Node/Pi comparisons, 15 Rust tests and 9 native tests pass. Production
-Electron browsing/resume and the full migration/performance gates remain open.
+Latest continuation: [`continuation-desktop-cutover.md`](continuation-desktop-cutover.md).
+The experimental full-renderer Wry host now runs on macOS as well as the earlier
+Windows path. Saved browsing uses a persistent Rust reader with an explicit Pi
+compatibility adapter for legacy/unrepresentable journals. Large replies are
+fragmented without losing UTF-16 data. Native browser, OS adapters, profile
+ownership and managed process cleanup are implemented and under qualification.
+The original Electron/Pi production path remains available. Full Rust ownership,
+Windows runtime and matched whole-product performance gates remain open.
+
+Previous saved-view continuation: [`continuation-saved-view.md`](continuation-saved-view.md).
 
 Previous integration: [`edge-to-edge-integration.md`](edge-to-edge-integration.md).
 The user requested `experiment/edge-to-edge-chat`; upstream `9164605` was merged

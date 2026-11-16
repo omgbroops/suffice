@@ -1,0 +1,27 @@
+✔ guest web addresses and native bounds are limited (0.615417ms)
+stage await click(popup);await page.getByText
+stage await click(popup);await eventually
+stage await click(finish);
+stage await click(download);await page.getByText
+✖ isolated native panel browses a frame-denying site, edits it, and follows the panel lifecycle (9941.319459ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 1
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10115.474334
+
+✖ failing tests:
+
+test at apps/desktop/test/browser.test.mjs:18:1
+✖ isolated native panel browses a frame-denying site, edits it, and follows the panel lifecycle (9941.319459ms)
+  locator.waitFor: Timeout 6000ms exceeded.
+  Call log:
+  [2m  - waiting for getByText('Download cancelled.', { exact: true }) to be visible[22m
+  
+      at TestContext.<anonymous> (/Users/aryasalem/Downloads/Programming/suffice/apps/desktop/test/browser.test.mjs:66:148) {
+    name: 'TimeoutError',
+    log: [ "  - waiting for getByText('Download cancelled.', { exact: true }) to be visible" ]
+  }

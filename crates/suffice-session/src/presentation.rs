@@ -28,22 +28,112 @@ fn copy(dst: &mut Map<String, Value>, target: &str, src: &Value, key: &str) {
         dst.insert(target.into(), v.clone());
     }
 }
-fn text_of(m: &Value) -> String {
+fn text_of(m: &Value) -> Result<String, String> {
     if let Some(t) = m.get("content").and_then(Value::as_str) {
-        return t.into();
+        return Ok(t.into());
     }
-    m.get("content")
-        .and_then(Value::as_array)
-        .map(|a| {
-            a.iter()
-                .filter(|p| s(p, "type") == Some("text"))
-                .map(|p| p.get("text").and_then(Value::as_str).unwrap_or(""))
-                .collect::<Vec<_>>()
-                .join("\n\n")
+    let Some(content) = m.get("content").filter(|v| truth(Some(v))) else {
+        return Ok(String::new());
+    };
+    let parts = content.as_array().ok_or("user content is not filterable")?;
+    parts
+        .iter()
+        .map(|p| {
+            if p.is_null() {
+                return Err("null content block".into());
+            }
+            if s(p, "type") != Some("text") {
+                return Ok(None);
+            }
+            let text = p.get("text").filter(|v| truth(Some(v)));
+            text.map(|v| js_string(Some(v)))
+                .transpose()
+                .map(|v| Some(v.unwrap_or_default()))
         })
-        .unwrap_or_default()
+        .filter_map(|r| match r {
+            Ok(None) => None,
+            Ok(Some(s)) => Some(Ok(s)),
+            Err(e) => Some(Err(e)),
+        })
+        .collect::<Result<Vec<_>, _>>()
+        .map(|parts| parts.join("\n\n"))
 }
-fn normalized(m: &Value, turn: Option<&Value>) -> Value {
+fn js_string(v: Option<&Value>) -> Result<String, String> {
+    Ok(match v {
+        None => "undefined".into(),
+        Some(Value::Null) => "null".into(),
+        Some(Value::String(s)) => s.clone(),
+        Some(Value::Bool(b)) => b.to_string(),
+        Some(Value::Number(n)) => {
+            crate::to_js_string(&Value::Number(n.clone()), false).map_err(|e| e.to_string())?
+        }
+        Some(Value::Array(a)) => a
+            .iter()
+            .map(|x| {
+                if x.is_null() {
+                    Ok(String::new())
+                } else {
+                    js_string(Some(x))
+                }
+            })
+            .collect::<Result<Vec<_>, _>>()?
+            .join(","),
+        Some(Value::Object(o)) => {
+            if o.contains_key("toString") {
+                return Err("Cannot convert object to primitive value".into());
+            }
+            "[object Object]".into()
+        }
+    })
+}
+fn boxed_string_text(text: &str, turn: Option<&Value>) -> Result<String, String> {
+    let mut output = String::from("{\n");
+    for (index, unit) in text.encode_utf16().enumerate() {
+        let value = if (0xd800..=0xdfff).contains(&unit) {
+            format!("\"\\u{unit:04x}\"")
+        } else {
+            crate::to_js_string(
+                &json!(char::from_u32(u32::from(unit)).unwrap().to_string()),
+                false,
+            )
+            .map_err(|error| error.to_string())?
+        };
+        output.push_str(&format!("  \"{index}\": {value},\n"));
+        if output.len() > 128 * 1024 * 1024 {
+            return Err("saved display exceeds wire limit".into());
+        }
+    }
+    let turn = crate::to_js_string(turn.unwrap_or(&Value::Null), true)
+        .map_err(|error| error.to_string())?;
+    output.push_str("  \"turn\": ");
+    output.push_str(&turn.replace('\n', "\n  "));
+    output.push_str("\n}");
+    Ok(output)
+}
+
+fn normalized(
+    m: &Value,
+    turn: Option<&Value>,
+    boxed_string: Option<&str>,
+) -> Result<Value, String> {
+    // Explicit turns predeclare these fields in JS, even when initially undefined;
+    // legacy backfill must not change their eventual JSON property ordering.
+    let ordered_turn = turn.map(|turn| {
+        let mut object = Map::new();
+        for key in [
+            "id",
+            "startedAt",
+            "endedAt",
+            "provider",
+            "model",
+            "modelName",
+            "effort",
+        ] {
+            copy(&mut object, key, turn, key);
+        }
+        Value::Object(object)
+    });
+    let turn = ordered_turn.as_ref();
     let mut o = Map::new();
     for k in [
         "role",
@@ -65,58 +155,68 @@ fn normalized(m: &Value, turn: Option<&Value>) -> Value {
     if s(m, "role") == Some("status") {
         o.remove("turn");
     }
-    let content = match m.get("content") {
-        Some(Value::String(t)) => vec![json!({"type":"text","text":t})],
-        Some(Value::Array(a)) => a
-            .iter()
-            .map(|p| {
-                let typ = s(p, "type").unwrap_or("undefined");
-                let mut part = Map::new();
-                copy(&mut part, "type", p, "type");
-                match typ {
-                    "text" => copy(&mut part, "text", p, "text"),
-                    "thinking" => {
-                        part.insert("type".into(), json!("thinking"));
-                        copy(&mut part, "text", p, "thinking");
+    let content = if let Some(text) = boxed_string {
+        vec![json!({"type":"text", "text": boxed_string_text(text, turn)?})]
+    } else {
+        match m.get("content") {
+            Some(Value::String(t)) => vec![json!({"type":"text","text":t})],
+            Some(Value::Array(a)) => a
+                .iter()
+                .map(|p| {
+                    if p.is_null() {
+                        return Err("null content block".to_string());
                     }
-                    "toolCall" => {
-                        copy(&mut part, "id", p, "id");
-                        copy(&mut part, "name", p, "name");
-                        if let Some(a) = p.get("arguments") {
+                    let typ = s(p, "type").unwrap_or("undefined");
+                    let mut part = Map::new();
+                    copy(&mut part, "type", p, "type");
+                    match typ {
+                        "text" => copy(&mut part, "text", p, "text"),
+                        "thinking" => {
+                            part.insert("type".into(), json!("thinking"));
+                            copy(&mut part, "text", p, "thinking");
+                        }
+                        "toolCall" => {
+                            copy(&mut part, "id", p, "id");
+                            copy(&mut part, "name", p, "name");
+                            if let Some(a) = p.get("arguments") {
+                                part.insert(
+                                    "text".into(),
+                                    json!(crate::to_js_string(a, true).unwrap()),
+                                );
+                            }
+                        }
+                        "image" => {
+                            copy(&mut part, "data", p, "data");
+                            copy(&mut part, "mimeType", p, "mimeType");
+                        }
+                        _ => {
                             part.insert(
                                 "text".into(),
-                                json!(crate::to_js_string(a, true).unwrap()),
+                                json!(format!("[{}]", js_string(p.get("type"))?)),
                             );
                         }
                     }
-                    "image" => {
-                        copy(&mut part, "data", p, "data");
-                        copy(&mut part, "mimeType", p, "mimeType");
+                    Ok(Value::Object(part))
+                })
+                .collect::<Result<Vec<_>, String>>()?,
+            _ => {
+                let t = if truth(m.get("output")) {
+                    m["output"].clone()
+                } else {
+                    {
+                        let mut presented = m.clone();
+                        if s(m, "role") != Some("status") {
+                            presented["turn"] = turn.cloned().unwrap_or(Value::Null);
+                        }
+                        json!(crate::to_js_string(&presented, true).unwrap())
                     }
-                    _ => {
-                        part.insert("text".into(), json!(format!("[{typ}]")));
-                    }
-                }
-                Value::Object(part)
-            })
-            .collect(),
-        _ => {
-            let t = if truth(m.get("output")) {
-                m["output"].clone()
-            } else {
-                {
-                    let mut presented = m.clone();
-                    if s(m, "role") != Some("status") {
-                        presented["turn"] = turn.cloned().unwrap_or(Value::Null);
-                    }
-                    json!(crate::to_js_string(&presented, true).unwrap())
-                }
-            };
-            vec![json!({"type":"text","text":t})]
+                };
+                vec![json!({"type":"text","text":t})]
+            }
         }
     };
     o.insert("content".into(), Value::Array(content));
-    Value::Object(o)
+    Ok(Value::Object(o))
 }
 fn status(kind: &str, automatic: Option<bool>) -> Value {
     let mut v = json!({"role":"status","kind":kind,"content":[]});
@@ -125,16 +225,18 @@ fn status(kind: &str, automatic: Option<bool>) -> Value {
     }
     v
 }
-fn legacy(m: &mut Value) {
-    let t = text_of(m);
+fn legacy(m: &mut Value) -> Result<(), String> {
+    let t = text_of(m)?;
     let marker = "\n\nAttached local files (user-provided data):\n";
-    let Some(at) = t.rfind(marker) else { return };
+    let Some(at) = t.rfind(marker) else {
+        return Ok(());
+    };
     let parsed: Result<Vec<Value>, _> = t[at + marker.len()..]
         .trim()
         .split('\n')
         .map(|line| crate::parse_js_json(line.as_bytes()))
         .collect();
-    let Ok(files) = parsed else { return };
+    let Ok(files) = parsed else { return Ok(()) };
     if files.len() > 20
         || !files.iter().all(|f| {
             s(f, "name").is_some()
@@ -144,12 +246,13 @@ fn legacy(m: &mut Value) {
                     .is_some_and(f64::is_finite)
         })
     {
-        return;
+        return Ok(());
     }
     let mut ix = 0;
     let a:Vec<_>=files.iter().map(|f|{let name=s(f,"name").unwrap();let ext=name.rsplit('.').next().unwrap_or("").to_lowercase();let typ=match ext.as_str(){"png"=>Some("image/png"),"jpg"|"jpeg"=>Some("image/jpeg"),"gif"=>Some("image/gif"),"webp"=>Some("image/webp"),_=>None};let mut x=json!({"name":name,"size":f["size"],"type":typ.unwrap_or("application/octet-stream")});if typ.is_some(){x["imageIndex"]=json!(ix);ix+=1;}x}).collect();
     m["displayText"] = json!(&t[..at]);
     m["attachments"] = json!(a);
+    Ok(())
 }
 
 pub fn desktop_messages(entries: &[Value], leaf: Option<&Value>) -> Result<Value, String> {
@@ -192,7 +295,7 @@ pub fn desktop_messages(entries: &[Value], leaf: Option<&Value>) -> Result<Value
     let mut cache: HashMap<String, Option<usize>> = HashMap::new();
     let mut legacy_turn = None;
     let mut seq = 0;
-    let mut output: Vec<(Value, Option<usize>)> = Vec::new();
+    let mut output: Vec<(Value, Option<usize>, Option<String>)> = Vec::new();
     for p in projected {
         let i = p["sourceIndex"].as_u64().ok_or("invalid index")? as usize;
         let e = &entries[i];
@@ -204,12 +307,12 @@ pub fn desktop_messages(entries: &[Value], leaf: Option<&Value>) -> Result<Value
             let auto = reasons
                 .get(&id)
                 .is_some_and(|r| r.as_ref().and_then(Value::as_str) != Some("manual"));
-            output.push((status("compacted", Some(auto)), None));
+            output.push((status("compacted", Some(auto)), None, None));
             cp += 1;
         }
         if s(e, "type") == Some("custom") && s(e, "customType") == Some("suffice:interrupted") {
             if output.last().and_then(|x| s(&x.0, "kind")) != Some("interrupted") {
-                output.push((status("interrupted", None), None));
+                output.push((status("interrupted", None), None, None));
             }
             continue;
         }
@@ -311,9 +414,31 @@ pub fn desktop_messages(entries: &[Value], leaf: Option<&Value>) -> Result<Value
                     }
                 }
             }
-            let mut msg = m.clone();
+            // Object spread boxes primitive messages and copies enumerable string indices.
+            let mut msg = match m {
+                Value::Object(_) => m.clone(),
+                Value::Array(items) => Value::Object(
+                    items
+                        .iter()
+                        .enumerate()
+                        .map(|(index, value)| (index.to_string(), value.clone()))
+                        .collect(),
+                ),
+                _ => json!({}),
+            };
             if s(m, "role") == Some("user") {
-                let hash = format!("{:x}", Sha256::digest(text_of(m).as_bytes()));
+                if let Some(content) = m.get("content") {
+                    if truth(Some(content)) && !content.is_string() && !content.is_array() {
+                        return Err("user content is not filterable".into());
+                    }
+                    if content
+                        .as_array()
+                        .is_some_and(|a| a.iter().any(Value::is_null))
+                    {
+                        return Err("null content block".into());
+                    }
+                }
+                let hash = format!("{:x}", Sha256::digest(text_of(m)?.as_bytes()));
                 let mut node = by_id.get(&identity(e.get("parentId"))).copied();
                 let mut crossed = false;
                 let mut seen = HashSet::new();
@@ -356,15 +481,15 @@ pub fn desktop_messages(entries: &[Value], leaf: Option<&Value>) -> Result<Value
                         json!([])
                     };
                 } else {
-                    legacy(&mut msg);
+                    legacy(&mut msg)?;
                 }
             }
-            output.push((msg, turn));
+            output.push((msg, turn, m.as_str().map(str::to_owned)));
         }
         if messages.last().is_some_and(|m| {
             s(m, "role") == Some("assistant") && s(m, "stopReason") == Some("aborted")
         }) {
-            output.push((status("interrupted", None), None));
+            output.push((status("interrupted", None), None, None));
         }
     }
     while cp < checkpoints.len() {
@@ -372,14 +497,14 @@ pub fn desktop_messages(entries: &[Value], leaf: Option<&Value>) -> Result<Value
         let auto = reasons
             .get(&id)
             .is_some_and(|r| r.as_ref().and_then(Value::as_str) != Some("manual"));
-        output.push((status("compacted", Some(auto)), None));
+        output.push((status("compacted", Some(auto)), None, None));
         cp += 1;
     }
     Ok(Value::Array(
         output
             .iter()
-            .map(|(m, t)| normalized(m, t.map(|i| &turns[i])))
-            .collect(),
+            .map(|(m, t, boxed)| normalized(m, t.map(|i| &turns[i]), boxed.as_deref()))
+            .collect::<Result<Vec<_>, _>>()?,
     ))
 }
 

@@ -1,13 +1,28 @@
 # Transitional desktop bridge
 
-This starts the existing Electron main process business logic under Node using a narrowly scoped Electron compatibility shim. The worker is the original Pi worker entry, launched with Node IPC. The renderer still invokes the original `suffice:*` handlers and receives their original events. This is an experimental bridge, not Electron parity.
+The bridge runs Suffice’s existing Electron main-process handlers under Node. The Rust host launches it via `apps/desktop-rust/start-bridge.mjs` with `SUFFICE_SESSION_BACKEND=rust`. The startup wrapper verifies the receipt-backed native reader for the selected Node executable. Use the [host instructions](../desktop-rust/README.md) to start the assembled desktop.
 
-Run `node apps/desktop-bridge/main.mjs --root ABSOLUTE_REPO --profile ABSOLUTE_PROFILE` with an explicitly set absolute `SUFFICE_HOME`. It expects JSON lines on stdin and reserves stdout for JSON lines. `PI_OFFLINE=1` can be used for offline testing. The host owns the profile and must choose scratch paths when testing.
+## Saved history
 
-With `--wait-for-host`, the bridge emits `bootstrap-ready` after installing stdin handlers and waits for a single `host-start` message before loading the desktop main module. Invocations received before the desktop is ready return `not ready`. Duplicate starts are ignored, and shutdown or EOF before start exits cleanly. This gate lets the host establish process containment before desktop code can start workers. Without the flag, startup remains immediate.
+Ordinary list and open requests use the Rust reader before loading the live Pi worker. Compatibility reads for older or unusual journals use capability-verified source pages and the original Pi/desktop JavaScript projection. Browsing preserves journal bytes. Send validates the selected source, releases reader handles and hands the path to Pi. Model registry and status requests can also load Pi.
 
-Input messages: `host-start` (for gated startup), `invoke` with `id`, `channel` and `args`; `native-reply` with `id`, `ok`, and `result` or `error`; `window-state` with state booleans `focused`, `minimized`, `maximized`, `visible`; and `shutdown`. Output messages: `ready`, `reply`, `event`, and `native`. Native messages contain a request id, method and args. Shutdown asks owned worker processes to stop, then closes terminals, flushes views and terminates remaining workers. A disconnected stdin initiates the same cleanup.
+Catalog scans share a 256 MiB read budget across native and compatibility attempts, with limits of 50,000 directory entries and 10,000 candidate sessions. The sidebar uses the final 512 KiB within the same scan. The selected-source limits are 256 MiB per file, 64 MiB per record and 250,000 records. Deferred or oversized rows expose their state. Resume requires a complete qualified source.
 
-Known gaps: native file icon extraction is unsupported by the Rust host; file-open choices fall back to null icons. Clipboard file reads, native image transforms, login-at-startup and notifications are unavailable. Native dialogs, shell operations, cache clearing and window operations require a host implementation; errors are surfaced to the caller. Window state depends on updates from the host. Native window operations outside an invoke (such as startup show) are asynchronous. Electron-specific taskbar shortcut metadata is unavailable. Multi-window project launch is not adapted and must not be treated as working. Browser security and renderer isolation are the responsibility of the native host; the shim supplies the trusted frame only to calls received over its private protocol. This prototype must not be shipped or described as full desktop parity.
+## Host protocol
 
-Offline verification: `node --test apps/desktop-bridge/*.test.mjs` creates separate temporary profile and session files, opens the saved session, checks the original session bytes, exercises a real PTY, rejects unsupported operations and shuts down. It does not invoke a model or connect to a provider.
+The bridge reads newline-delimited JSON on stdin and reserves stdout for protocol frames. With `--wait-for-host`, it emits `bootstrap-ready` and waits for `host-start` before loading desktop handlers. Rust negotiates `fragments-v1` at this gate. Renderer calls made before readiness receive an error. EOF or shutdown drains the owned workers and terminals.
+
+Renderer replies and events carry opaque JSON in ordered base64 fragments of up to 768 KiB raw bytes. This preserves JSON escapes for unpaired UTF-16 code units as well as large image payloads. The host acknowledges executed fragments and binds replies to the originating document. The logical output queue has a 512 MiB byte cap. Individual renderer invocations have a 64 MiB limit.
+
+The bridge forwards native service requests and waits for the host’s result. Root/guest WebView isolation, browser consent, profile activation, OS close handling and process supervision belong to the host. The CLI browser automation uses its own external browser context.
+
+## Offline checks
+
+From the checkout, use the pinned toolchains and frozen dependencies in the [local run guide](../../docs/rust-migration/local-run.md). Rebuild the addon before tests that exercise its real binding.
+
+```sh
+node scripts/rust-migration/build-session-native.mjs
+node --test apps/desktop-bridge/*.test.mjs apps/desktop-bridge/test/*.test.mjs
+```
+
+For protocol fixtures without a Wry UI, the direct entry point accepts `--root` and `--profile` and requires an absolute `SUFFICE_HOME`. Use disposable absolute paths. Normal host launch inherits `PI_OFFLINE`; the migration smoke sets it to `1`.

@@ -2,6 +2,8 @@ const {contextBridge,ipcRenderer}=require('electron');
 contextBridge.exposeInMainWorld('sufficeDesktop',{
   platform:process.platform,
   windowChrome:process.argv.find(arg=>/^--suffice-window-chrome=(windows|macos-native|macos-preview)$/.test(arg))?.split('=')[1]||'windows',
+  browser:payload=>ipcRenderer.invoke('suffice:browser',payload),
+  onBrowserState:callback=>{const listener=(_event,value)=>callback(value);ipcRenderer.on('suffice:browser-state',listener);return()=>ipcRenderer.removeListener('suffice:browser-state',listener);},
   deleteThread:id=>ipcRenderer.invoke('suffice:delete-thread',id),
   updateProject:payload=>ipcRenderer.invoke('suffice:update-project',payload),
   removeProject:folder=>ipcRenderer.invoke('suffice:remove-project',folder),

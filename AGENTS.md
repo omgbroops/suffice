@@ -16,13 +16,18 @@ assuming that research behavior is production behavior.
 - `scripts/rust-migration`, `docs/rust-migration`: reproducible offline migration
   measurements, parity inventories and evidence. Do not overwrite earlier samples.
 - `crates/suffice-session`: experimental read-only Pi/session presentation and
-  saved usage, plus JavaScript-compatible finite JSON number handling; rebuild
+  saved usage, plus JavaScript-compatible JSON number/date handling; rebuild
   its executable before running the installed-Pi differential tests. New file-read
   integrations must retain `SessionStore` directory capabilities and enforce
   byte/line/catalog budgets, rather than reopen canonical ambient file paths.
+- `crates/suffice-session-addon`: persistent capability-backed saved-history
+  reader. Its separately receipted experimental artifact stays under
+  `apps/desktop-bridge/native`, outside production traversal packaging.
 - `apps/desktop-native`: experimental eframe viewer of synthetic sessions.
 - `apps/desktop-rust`, `apps/desktop-bridge`: experimental Wry host and transitional
-  Node business logic. Process containment currently requires Windows.
+  Node business logic. Windows uses a kernel Job; macOS has an independent
+  guardian for managed Node/PTY launch paths (not a native-extension sandbox).
+  Each guest browser must have its own store and no app preload/IPC authority.
 
 The imported edge-to-edge production file API intentionally treats the project
 as a working directory for task-directed local access; preserve access-mode and

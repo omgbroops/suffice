@@ -28,11 +28,16 @@ export async function projectMetadata(cwd){
  return {projectDiff,branch,worktree:!!(dir&&common&&resolve(cwd,dir)!==resolve(cwd,common)),diff,pr,...identity};
  })();cache.set(cwd,{until:Date.now()+30000,value});return value;
 }
+export function sidebarFromSessionTail(source){try{
+ const entries=source.split('\n').filter(Boolean).flatMap(line=>{try{return [JSON.parse(line)];}catch{return [];}}),messages=entries.filter(e=>e.type==='message').map(e=>e.message),last=[...messages].reverse().find(m=>m.role==='assistant');
+ const value={provider:last?.provider,model:last?.model,providerHistory:[...new Set(messages.filter(m=>m.role==='assistant'&&m.provider).map(m=>m.provider))],status:['error','aborted','length'].includes(last?.stopReason)?'failed':last?'done':'idle',error:last?.errorMessage};
+ return value;
+ }catch{return {};}}
+
 export async function sessionMetadata(path){try{
  const info=await stat(path),key=`${info.mtimeMs}:${info.size}`;if(sessionCache.get(path)?.key===key)return sessionCache.get(path).value;
  const {open}=await import('node:fs/promises');const file=await open(path,'r');let source;try{const size=Math.min(info.size,512*1024),buffer=Buffer.alloc(size);await file.read(buffer,0,size,info.size-size);source=buffer.toString('utf8');if(info.size>size)source=source.slice(source.indexOf('\n')+1);}finally{await file.close();}
- const entries=source.split('\n').filter(Boolean).flatMap(line=>{try{return [JSON.parse(line)];}catch{return [];}}),messages=entries.filter(e=>e.type==='message').map(e=>e.message),last=[...messages].reverse().find(m=>m.role==='assistant');
- const value={provider:last?.provider,model:last?.model,providerHistory:[...new Set(messages.filter(m=>m.role==='assistant'&&m.provider).map(m=>m.provider))],status:['error','aborted','length'].includes(last?.stopReason)?'failed':last?'done':'idle',error:last?.errorMessage};sessionCache.set(path,{key,value});return value;
+ const value=sidebarFromSessionTail(source);sessionCache.set(path,{key,value});return value;
  }catch{return {};}}
 
 export function invalidateProjectMetadata(cwd){cache.delete(cwd);}

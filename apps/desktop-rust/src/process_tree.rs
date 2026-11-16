@@ -1,4 +1,5 @@
 //! Own the bridge and descendants before its host-start gate is released.
+#[cfg(not(target_os = "macos"))]
 use std::{io, process::Child};
 
 #[cfg(windows)]
@@ -141,9 +142,9 @@ impl Drop for ProcessTree {
     }
 }
 
-#[cfg(not(windows))]
+#[cfg(not(any(windows, target_os = "macos")))]
 pub struct ProcessTree;
-#[cfg(not(windows))]
+#[cfg(not(any(windows, target_os = "macos")))]
 impl ProcessTree {
     pub fn attach(_: &Child) -> io::Result<Self> {
         Err(io::Error::other(
@@ -242,3 +243,9 @@ mod tests {
         let _ = parent.wait().unwrap();
     }
 }
+
+#[cfg(target_os = "macos")]
+#[path = "process_macos.rs"]
+mod macos;
+#[cfg(target_os = "macos")]
+pub use macos::{ProcessTree, helper_mode, spawn_macos};

@@ -1,0 +1,45 @@
+   Compiling suffice-desktop-rust v0.1.0 (/Users/aryasalem/Downloads/Programming/suffice/apps/desktop-rust)
+error: value assigned to `root` is never read
+  --> examples/browser_profile_fixture.rs:33:20
+   |
+33 |     let mut root = None;
+   |                    ^^^^
+   |
+   = help: maybe it is overwritten before being read?
+   = note: `-D unused-assignments` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(unused_assignments)]`
+
+error: value assigned to `window` is never read
+  --> examples/browser_profile_fixture.rs:34:22
+   |
+34 |     let mut window = None;
+   |                      ^^^^
+   |
+   = help: maybe it is overwritten before being read?
+
+error: could not compile `suffice-desktop-rust` (example "browser_profile_fixture") due to 2 previous errors
+warning: build failed, waiting for other jobs to finish...
+error: this `if` statement can be collapsed
+   --> src/instance.rs:137:17
+    |
+137 | /                 if BufReader::new((&mut socket).take(128))
+138 | |                     .read_line(&mut request)
+139 | |                     .is_ok()
+140 | |                     && request == format!("{token} activate\n")
+...   |
+145 | |                 }
+    | |_________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.92.0/index.html#collapsible_if
+    = note: `-D clippy::collapsible-if` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::collapsible_if)]`
+help: collapse nested if block
+    |
+140 ~                     && request == format!("{token} activate\n")
+141 ~                     && on_activate() {
+142 |                         let _ = socket.write_all(b"ok\n");
+143 ~                     }
+    |
+
+error: could not compile `suffice-desktop-rust` (bin "suffice-desktop-rust") due to 1 previous error
+error: could not compile `suffice-desktop-rust` (bin "suffice-desktop-rust" test) due to 1 previous error

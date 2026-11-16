@@ -1,0 +1,22 @@
+✔ desktop history reads Rust rows and cached views before loading any live host or Pi SDK (444.089209ms)
+✖ Send resumes the validated original Pi journal and preserves a second saved selection (1108.919792ms)
+✔ a replaced root denies cached views, host locations and Send without ambient fallback (134.795291ms)
+✔ experimental desktop reports legacy formats without opening or rewriting them (172.301667ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 3
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2000.914417
+
+✖ failing tests:
+
+test at apps/desktop-bridge/test/worker-history.test.mjs:67:1
+✖ Send resumes the validated original Pi journal and preserves a second saved selection (1108.919792ms)
+  Error: agent?.abort is not a function
+      at Object.request (file:///Users/aryasalem/Downloads/Programming/suffice/apps/desktop-bridge/test/worker-history.test.mjs:36:22)
+      at async TestContext.<anonymous> (file:///Users/aryasalem/Downloads/Programming/suffice/apps/desktop-bridge/test/worker-history.test.mjs:90:11)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)

@@ -4,7 +4,6 @@ import {projectContext,rememberProject,threadTitle} from './engine-settings.mjs'
 import {invalidateProjectMetadata} from './sidebar-metadata.mjs';
 import {createChatChangeTracker} from './chat-changes.mjs';
 import {createChatGitTracker} from './chat-git.mjs';
-import {createThreadRouter} from './thread-router.mjs';
 import {sessionUsage} from './usage.mjs';
 import {randomUUID,createHash} from 'node:crypto';
 import {mkdir,realpath,stat} from 'node:fs/promises';
@@ -15,14 +14,15 @@ import {createSufficeSession,parseOptions} from '@suffice/harness';
 import {getSupportedThinkingLevels} from '@earendil-works/pi-ai/compat';
 
 process.env.PI_CODING_AGENT_DIR=parseOptions([]).home;
-const port=process.parentPort;
-const send=value=>port?port.postMessage(value):process.send?.(value);
 export function createHarnessHost({send,createRuntime=options=>createSufficeModelRuntime(options,{onRefresh:result=>send({event:'models_changed',catalog:result})}),createSession=createSufficeSession,home=parseOptions([]).home,threadStore}) {
 let agent,runtime,workspace,changeTracker,busy=false,abortRequested=false;
 const extensionPrompts=new Map();let extensionSequence=0;
 const approvals=new Map();let approvalSequence=0,preferencesKey='';
-let resumePath=null,viewedUsage=null,viewRevision=0;
+let resumePath=null,resumeId=null,viewedUsage=null,viewRevision=0;
 const threads=threadStore??createThreadStore(home);
+// The catalog hashes the configured root spelling. Pi opens the verified
+// canonical spelling, which can differ for the same file on macOS.
+const currentThreadId=()=>resumeId||(agent?.sessionPath()?threadId(agent.sessionPath()):null);
 async function receive(message) {
   const {id,action,payload={}}=message;
   let ownsRun=false,turnPresentation;
@@ -37,7 +37,7 @@ async function receive(message) {
     if(action==='threads'){send({id,ok:true,result:await threads.list()});return;}
     if(action==='thread-location'){send({id,ok:true,result:await threads.location(payload.id)});return;}
     if(busy)throw new Error('A task is already running. Stop it before changing sessions.');
-    if(action==='reset'){viewRevision++;await agent?.dispose();agent=null;resumePath=null;viewedUsage=null;send({event:'usage',usage:null});send({id,ok:true});return;}
+    if(action==='reset'){viewRevision++;await agent?.dispose();agent=null;resumePath=null;resumeId=null;viewedUsage=null;send({event:'usage',usage:null});send({id,ok:true});return;}
     if(action==='models'){
       if(!runtime)throw new Error('Harness is not ready');
       await runtime.refresh?.({allowNetwork:false});
@@ -46,7 +46,7 @@ async function receive(message) {
     }
     if(action==='thread'){
       const revision=++viewRevision,thread=await threads.open(payload.id,(provider,model)=>runtime?.getModel?.(provider,model));
-      if(revision===viewRevision){await agent?.dispose();agent=null;resumePath=thread.path;workspace=thread.cwd;viewedUsage=thread.usage;send({event:'usage',usage:viewedUsage});}
+      if(revision===viewRevision){await agent?.dispose();agent=null;resumeId=threads.prepareResume?thread.id:null;resumePath=thread.path;workspace=thread.cwd;viewedUsage=thread.usage;send({event:'usage',usage:viewedUsage});}
       const {path,...view}=thread;send({id,ok:true,result:view});return;
     }
     if(action==='status'){
@@ -65,18 +65,23 @@ async function receive(message) {
     if(payload.model){selected=(await runtime.getAvailable()).find(model=>model.id===payload.model&&model.provider===payload.provider);if(!selected)throw new Error('Model unavailable. Connect this provider in Settings.');if(!(selected.reasoning?getSupportedThinkingLevels(selected):['off']).includes(payload.effort))throw new Error('Unsupported effort for this model');}
     const cwd=await realpath(payload.cwd);
     if(!(await stat(cwd)).isDirectory())throw new Error('Choose a project directory');
-    busy=true;ownsRun=true;abortRequested=false;const nextPreferences=JSON.stringify(payload.desktopSettings||{});if(agent&&preferencesKey!==nextPreferences){resumePath=agent.sessionPath();await agent.dispose();agent=null;}preferencesKey=nextPreferences;
+    busy=true;ownsRun=true;abortRequested=false;const nextPreferences=JSON.stringify(payload.desktopSettings||{});if(agent&&preferencesKey!==nextPreferences){const path=agent.sessionPath();
+      if(threads.prepareResume){resumeId??=path?threadId(path):null;}else{resumePath=path;}
+      await agent.dispose();agent=null;}preferencesKey=nextPreferences;
     if(agent&&workspace!==cwd){await agent.dispose();agent=null;}
     if(!agent){
       workspace=cwd;
       const options=parseOptions(['--cwd',cwd]);
       options.effort=payload.effort;
-      options.home=home;options.additionalContext=await projectContext(home,cwd,payload.desktopSettings||{});const newlyCreated=!resumePath;options.desktopSettings=payload.desktopSettings||{};options.onTitleChanged=()=>send({event:'history_changed'});if(options.desktopSettings['allow-network']===false){options.browser=false;options.desktop=false;}
+      options.home=home;options.additionalContext=await projectContext(home,cwd,payload.desktopSettings||{});const newlyCreated=!resumePath&&!resumeId;options.desktopSettings=payload.desktopSettings||{};options.onTitleChanged=()=>send({event:'history_changed'});if(options.desktopSettings['allow-network']===false){options.browser=false;options.desktop=false;}
       if(selected){options.model=selected.id;options.modelObject=selected;}
-      if(resumePath)options.sessionManager=SessionManager.open(resumePath,dirname(resumePath));
-      changeTracker=createChatChangeTracker({cwd,home,getId:()=>agent?.sessionPath()?threadId(agent.sessionPath()):null,onChange:(diff,turnDiff)=>{invalidateProjectMetadata(cwd);send({event:'changes',diff,turnDiff});}});
+      if(resumeId){
+        const receipt=await threads.prepareResume(resumeId);
+        options.sessionManager=SessionManager.open(receipt.absolutePath,dirname(receipt.absolutePath));
+      }else if(resumePath)options.sessionManager=SessionManager.open(resumePath,dirname(resumePath));
+      changeTracker=createChatChangeTracker({cwd,home,getId:currentThreadId,onChange:(diff,turnDiff)=>{invalidateProjectMetadata(cwd);send({event:'changes',diff,turnDiff});}});
       options.extensionBindings=(base,session)=>({mode:'rpc',commandContextActions:{waitForIdle:()=>session.agent.waitForIdle(),reload:()=>session.reload(),navigateTree:(id,opts)=>session.navigateTree(id,opts),newSession:async()=>{throw new Error('Use the New session button to create a desktop conversation');},fork:async()=>{throw new Error('Use Fork thread in the conversation menu');},switchSession:async()=>{throw new Error('Choose the conversation from the desktop sidebar');}},onError:error=>send({event:'extension_ui',kind:'notice',message:error.error,type:'error'}),uiContext:createDesktopExtensionUI({base,emit:value=>send({event:'extension_ui',...value}),request:(value,opts)=>new Promise(resolvePrompt=>{const requestId=++extensionSequence;let timer;const finish=value=>{clearTimeout(timer);opts?.signal?.removeEventListener('abort',cancel);extensionPrompts.delete(requestId);send({event:'extension_ui',kind:'dismiss',requestId});resolvePrompt(value);};const cancel=()=>finish(undefined);extensionPrompts.set(requestId,finish);if(opts?.signal?.aborted){finish(undefined);return;}opts?.signal?.addEventListener('abort',cancel,{once:true});if(opts?.timeout)timer=setTimeout(cancel,opts.timeout);send({event:'extension_ui',requestId,...value});})})});
-      const gitTracker=createChatGitTracker({cwd,home,getId:()=>agent?.sessionPath()?threadId(agent.sessionPath()):null,onChange:()=>send({event:'history_changed'})});
+      const gitTracker=createChatGitTracker({cwd,home,getId:currentThreadId,onChange:()=>send({event:'history_changed'})});
       const toolObserver={before:(...args)=>changeTracker.before(...args),after:async(token,result)=>{await changeTracker.after(token);await gitTracker.after(token,result);}};
       agent=await createSession(options,runtime,{onTool:name=>send({event:'tool',name}),toolObserver,onApproval:(name,input)=>new Promise(resolve=>{const requestId=++approvalSequence;approvals.set(requestId,allow=>{send({event:'approval_resolved',requestId});resolve(allow);});send({event:'approval',requestId,name,input});})});
       await gitTracker.initialize(newlyCreated);
@@ -97,19 +102,15 @@ async function receive(message) {
         if(event.type==='tool_execution_end')send({event:'tool_end',id:event.toolCallId,result:event.result,isError:event.isError});
       });
     } else {if(selected&&(agent.session.model?.id!==selected.id||agent.session.model?.provider!==selected.provider))await agent.session.setModel(selected);agent.session.setThinkingLevel(payload.effort);}
-    const sessionPath=agent.sessionPath();if(sessionPath)send({event:'thread_started',id:threadId(sessionPath)});
+    const idForRun=currentThreadId();if(idForRun)send({event:'thread_started',id:idForRun});
     turnPresentation={id:randomUUID(),startedAt:payload.turnStartedAt||Date.now(),provider:agent.session.model?.provider||payload.provider,model:agent.session.model?.id||payload.model,modelName:agent.session.model?.name,effort:agent.session.thinkingLevel||payload.effort};
     agent.session.sessionManager?.appendCustomEntry?.('suffice:turn-start',{...turnPresentation,promptHash:createHash('sha256').update(payload.prompt).digest('hex'),displayPrompt:payload.displayPrompt??payload.prompt,attachments:payload.attachmentMetadata||[]});send({event:'turn_started',presentation:turnPresentation});
     await changeTracker?.beginTurn();
     const text=await agent.run(payload.prompt,{images:payload.images});finishPresentation('completed');
     await changeTracker?.flush().catch(()=>{});if(payload.desktopSettings?.['remember-context'])await rememberProject(home,cwd,text);
-    send({id,ok:true,result:{text,presentation:turnPresentation,sessionPath:agent.sessionPath(),threadId:agent.sessionPath()?threadId(agent.sessionPath()):null,usage:agent.totals}});
-  } catch(error){finishPresentation(abortRequested?'interrupted':'failed');if(ownsRun)await changeTracker?.flush().catch(()=>{});if(ownsRun&&abortRequested){agent?.session.sessionManager?.appendCustomEntry('suffice:interrupted');send({id,ok:true,result:{interrupted:true,presentation:turnPresentation,threadId:agent?.sessionPath()?threadId(agent.sessionPath()):null}});}else send({id,ok:false,error:error.message});}
+    send({id,ok:true,result:{text,presentation:turnPresentation,...(threads.prepareResume?{}:{sessionPath:agent.sessionPath()}),threadId:currentThreadId(),usage:agent.totals}});
+  } catch(error){finishPresentation(abortRequested?'interrupted':'failed');if(ownsRun)await changeTracker?.flush().catch(()=>{});if(ownsRun&&abortRequested){agent?.session.sessionManager?.appendCustomEntry('suffice:interrupted');send({id,ok:true,result:{interrupted:true,presentation:turnPresentation,threadId:currentThreadId()}});}else send({id,ok:false,error:error.message});}
   finally {if(ownsRun)busy=false;}
 }
 return receive;
 }
-const sharedThreads=createThreadStore(parseOptions([]).home);
-const receive=createThreadRouter({send,createHost:options=>createHarnessHost({...options,threadStore:sharedThreads}),createRuntime:options=>createSufficeModelRuntime(options,{onRefresh:result=>send({event:'models_changed',catalog:result})})});
-if(port)port.on('message',event=>void receive(event.data));
-else if(process.send)process.on('message',message=>void receive(message));

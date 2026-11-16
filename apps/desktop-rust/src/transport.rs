@@ -9,6 +9,63 @@ use std::{
     },
 };
 const MAX_BYTES: usize = 64 * 1024 * 1024;
+// Validate ordering and bounds on the ASCII envelope only. The opaque data
+// may contain JSON strings that cannot be represented by a Rust String.
+#[derive(Default)]
+pub struct FragmentStream {
+    transfer: u64,
+    total: u64,
+    received: u64,
+    discard: bool,
+}
+impl FragmentStream {
+    pub fn reset_document(&mut self) {
+        self.discard = self.received < self.total;
+    }
+    pub fn accept(&mut self, frame: &Value) -> io::Result<bool> {
+        let invalid = || io::Error::other("invalid renderer fragment");
+        let number = |key: &str| frame[key].as_u64().ok_or_else(invalid);
+        let id = number("transfer")?;
+        let offset = number("offset")?;
+        let total = number("total")?;
+        let data = frame["data"].as_str().ok_or_else(invalid)?.as_bytes();
+        if data.is_empty()
+            || data.len() > 1024 * 1024
+            || data.len() % 4 != 0
+            || total == 0
+            || total > 512 * 1024 * 1024
+        {
+            return Err(invalid());
+        }
+        let padding = data.iter().rev().take_while(|c| **c == b'=').count();
+        if padding > 2
+            || !data[..data.len() - padding]
+                .iter()
+                .all(|c| c.is_ascii_alphanumeric() || matches!(c, b'+' | b'/'))
+        {
+            return Err(invalid());
+        }
+        let len = (data.len() / 4 * 3 - padding) as u64;
+        if offset == 0 {
+            if id != self.transfer + 1 || self.received != self.total {
+                return Err(invalid());
+            }
+            self.transfer = id;
+            self.received = 0;
+            self.total = total;
+            self.discard = false;
+        }
+        if id != self.transfer
+            || self.total != total
+            || offset != self.received
+            || len > total - self.received
+        {
+            return Err(invalid());
+        }
+        self.received += len;
+        Ok(!self.discard)
+    }
+}
 #[derive(Debug, Default)]
 struct Usage {
     bytes: AtomicUsize,
@@ -125,6 +182,24 @@ impl Sender {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn ordered_fragments_are_bounded_and_discarded_after_navigation() {
+        let part = |transfer, offset, total, data| serde_json::json!({"transfer":transfer,"offset":offset,"total":total,"data":data});
+        let mut s = FragmentStream::default();
+        assert!(s.accept(&part(1, 0, 5, "YWJj")).unwrap());
+        assert!(s.accept(&part(1, 2, 5, "ZGU=")).is_err());
+        s.reset_document();
+        assert!(!s.accept(&part(1, 3, 5, "ZGU=")).unwrap());
+        assert!(s.accept(&part(2, 0, 1, "YQ==")).unwrap());
+        for bad in [
+            part(3, 0, 2, "@@@@"),
+            part(3, 0, 1, "===="),
+            part(3, 0, 536870913, "YQ=="),
+            part(4, 0, 1, "YQ=="),
+        ] {
+            assert!(s.accept(&bad).is_err());
+        }
+    }
     #[test]
     fn budget_releases_after_consumption() {
         let b = Budget::default();

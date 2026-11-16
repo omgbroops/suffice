@@ -14,6 +14,9 @@ fn store(v: &Value) -> Result<SessionStore, String> {
 }
 fn run(v: Value) -> Result<Value, String> {
     match v["op"].as_str() {
+        Some("date") => {
+            suffice_session::js_date::timestamp(v.get("value")).map(|value| json!(value))
+        }
         Some("present") => {
             let entries = v["entries"].as_array().ok_or("entries must be an array")?;
             let messages = suffice_session::desktop_messages(entries, v.get("leaf"))?;

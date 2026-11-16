@@ -1,0 +1,26 @@
+   Compiling suffice-desktop-rust v0.1.0 (/Users/aryasalem/Downloads/Programming/suffice/apps/desktop-rust)
+warning: struct `NativeDialogs` is never constructed
+  --> examples/../src/browser.rs:53:8
+   |
+53 | struct NativeDialogs;
+   |        ^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: associated items `new` and `deadline` are never used
+   --> examples/../src/browser.rs:329:12
+    |
+328 | impl Surface {
+    | ------------ associated items in this implementation
+329 |     pub fn new(profile: PathBuf) -> Self {
+    |            ^^^
+...
+345 |     pub fn deadline(&self) -> Option<Instant> {
+    |            ^^^^^^^^
+
+warning: `suffice-desktop-rust` (example "browser_consent_fixture") generated 2 warnings
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.44s
+     Running `apps/desktop-rust/target/debug/examples/browser_consent_fixture /tmp/suffice-wk-consent.1EfTel`
+Download failed with error: cancelled
+Download failed with error: cancelled
+FAIL: state={"canBack":false,"canForward":false,"error":"Only web addresses can open in this browser.","loading":false,"popupDepth":1,"title":"Popup","token":"fixture","url":"http://127.0.0.1:56919/popup"} receipts=["opener", "POST-true", "POST-true"] popups=2 saves=0 popup_seen=true

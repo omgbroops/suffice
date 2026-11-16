@@ -1,12 +1,32 @@
-# Experimental Rust desktop host
+# Experimental Wry desktop host
 
-This is an incomplete Windows-only transition experiment. It loads the built desktop renderer and delegates the existing Electron handlers and utility process to `apps/desktop-bridge/main.mjs`. It is not a replacement or parity claim. It requires WebView2 and explicit, disposable, non-overlapping absolute `--home` and `--profile` directories. Do not point either at existing user data: opening a Pi session can rewrite it. Run only against verified copies.
+This source-built host runs Suffice’s Vite renderer in WKWebView on macOS and WebView2 on Windows. It runs the trusted desktop handlers through a Node bridge. Rust owns the native windows, OS integrations, process supervision and ordinary saved-history reads. Pi still owns live sessions, model calls and journal writes.
 
-```powershell
-cargo build --release --manifest-path apps/desktop-rust/Cargo.toml
-apps/desktop-rust/target/release/suffice-desktop-rust.exe --root <absolute-repository> --node <absolute-node-24> --home <absolute-scratch-home> --profile <absolute-scratch-profile> --smoke
+## Run locally
+
+Use Node 24.22.2, Bun 1.4.4 and Rust 1.92.0. From the checkout on macOS, use an interactive desktop and fresh, non-overlapping home and profile directories.
+
+```sh
+bun install --frozen-lockfile
+bun run desktop:build
+node scripts/rust-migration/build-session-native.mjs
+cargo +1.92.0 build --locked --release --manifest-path apps/desktop-rust/Cargo.toml
+scratch=$(mktemp -d)
+PI_OFFLINE=1 apps/desktop-rust/target/release/suffice-desktop-rust \
+  --root "$PWD" --node "$(command -v node)" \
+  --home "$scratch/home" --profile "$scratch/profile"
 ```
 
-`--smoke` is deliberately specific to the migration fixture: it requires 30 rendered thread rows, selects `Rust host large transcript`, and checks for `Rust host fixture message 999` in the rendered transcript. It exits after five seconds on success, or reports failure and exits nonzero. It does not call a model. It is not a substitute for feature, security, accessibility, performance, or recovery testing.
+Normal launch inherits `PI_OFFLINE`. The command above sets it for local checks. The host selects `SUFFICE_SESSION_BACKEND=rust` and verifies the current Node platform’s addon, integrity receipt, licenses and reader export. For Windows commands and rollback, see the [local run guide](../../docs/rust-migration/local-run.md).
 
-The host serves `apps/desktop/dist` through a confined custom protocol, denies external navigation and popups, wraps the actual preload in a lexical shim, and proxies its messages to the bridge. It implements folder/file dialogs, save dialog, selected window operations, dragging, and credential-free HTTPS external links. Unsupported bridge operations fail explicitly. Known gaps include clipboard, image processing, message boxes, shell file operations, native resize, window lifecycle parity, message bounds/backpressure, and process-tree containment on forced termination. Shutdown requests bridge cleanup and then kills the direct child after a deadline; descendant cleanup under crashes or forced termination is not proven. Asset confinement and renderer isolation require independent security review before any production use. Node, the original renderer, and the Pi utility process remain non-Rust components.
+A kernel lock owns each canonical profile. Launching the same profile again activates its owner through an authenticated loopback channel. Login registration and project-window launch reuse the startup executable, Node binary, checkout, home and primary profile captured at launch. A project window shares the home and receives a profile under the primary profile’s `project-windows` directory.
+
+## Native behavior
+
+The trusted document receives the Suffice preload. The in-app browser uses a separate guest view without that preload or Node access. On macOS, the root and guest use distinct named WebKit data stores. The browser supports navigation, history, resizing, consented popups and Save As for the original download request, including authenticated POST responses.
+
+Rust supplies clipboard file/image reads, thumbnail generation, icons, recoverable Trash, dialogs, cache clearing, startup registration and notification requests. OS close requests go through the desktop tray and shutdown preferences. Source-run notification delivery and clicks require a suitable application bundle and OS authorization. Restart-at-login and Windows runtime behavior still require platform checks.
+
+Windows starts the bridge suspended and attaches it to a kernel Job. On macOS an independent guardian registers the bridge before user preloads and follows managed detached launches and PTY jobs. Native extensions or shell programs that create independent sessions fall outside that guarantee. LaunchServices applications retain their own lifecycle.
+
+`--smoke` forces offline catalog behavior. It requires the seeded fixture with 30 threads and checks message 999 in the selected 1,000-message transcript. Use fresh verified copies for resume testing because Pi can upgrade older journals. The assembled macOS smoke and platform qualification limits are recorded in the [cutover report](../../docs/rust-migration/continuation-desktop-cutover.md).

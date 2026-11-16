@@ -1,0 +1,108 @@
+{
+  "message": "A",
+  "ok": true,
+  "equal": true,
+  "expected": [
+    {
+      "turn": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"0\": \"A\",\n  \"turn\": null\n}"
+        }
+      ]
+    }
+  ],
+  "actual": [
+    {
+      "turn": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"0\": \"A\",\n  \"turn\": null\n}"
+        }
+      ]
+    }
+  ]
+}
+{
+  "message": "é",
+  "ok": true,
+  "equal": true,
+  "expected": [
+    {
+      "turn": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"0\": \"é\",\n  \"turn\": null\n}"
+        }
+      ]
+    }
+  ],
+  "actual": [
+    {
+      "turn": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"0\": \"é\",\n  \"turn\": null\n}"
+        }
+      ]
+    }
+  ]
+}
+{
+  "message": "😀",
+  "ok": true,
+  "equal": false,
+  "expected": [
+    {
+      "turn": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"0\": \"\\ud83d\",\n  \"1\": \"\\ude00\",\n  \"turn\": null\n}"
+        }
+      ]
+    }
+  ],
+  "actual": [
+    {
+      "turn": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"0\": \"😀\",\n  \"turn\": null\n}"
+        }
+      ]
+    }
+  ]
+}
+{
+  "message": "a😀b",
+  "ok": true,
+  "equal": false,
+  "expected": [
+    {
+      "turn": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"0\": \"a\",\n  \"1\": \"\\ud83d\",\n  \"2\": \"\\ude00\",\n  \"3\": \"b\",\n  \"turn\": null\n}"
+        }
+      ]
+    }
+  ],
+  "actual": [
+    {
+      "turn": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"0\": \"a\",\n  \"1\": \"😀\",\n  \"2\": \"b\",\n  \"turn\": null\n}"
+        }
+      ]
+    }
+  ]
+}

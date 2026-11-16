@@ -1,0 +1,33 @@
+✔ desktop history reads Rust rows and cached views before loading any live host or Pi SDK (79.640584ms)
+✔ Send resumes the validated original Pi journal and preserves a second saved selection (500.297084ms)
+✔ a replaced root denies cached views, host locations and Send without ambient fallback (76.920625ms)
+✔ experimental desktop reports legacy formats without opening or rewriting them (67.801708ms)
+✔ reset lazily restores previously listed identities and release revokes a mutation target (71.650333ms)
+✖ the desktop projection hides private compaction summaries and keeps context usage unknown (73.008667ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 5
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 914.2415
+
+✖ failing tests:
+
+test at apps/desktop-bridge/test/worker-history.test.mjs:145:1
+✖ the desktop projection hides private compaction summaries and keeps context usage unknown (73.008667ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(view.messages.some(message=>message.kind==='compaction'))
+  
+      at TestContext.<anonymous> (file:///Users/aryasalem/Downloads/Programming/suffice/apps/desktop-bridge/test/worker-history.test.mjs:152:78)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

@@ -1,7 +1,7 @@
 # Local build, packaging and rollback
 
-Verified platform: Windows x64, Node 24.22.2, Bun 1.4.4, Rust/Cargo 1.92.0,
-Visual Studio C++ build tools and Windows SDK. PowerShell 7 is needed for the
+Use Node 24.22.2, Bun 1.4.4 and Rust/Cargo 1.92.0. The historical Windows x64
+installer checks used Visual Studio C++ build tools and the Windows SDK. PowerShell 7 is needed for the
 peak-memory harness. `powershell.exe`/CIM supplies process-tree snapshots. No
 account credentials or paid provider calls are needed for the checks below.
 
@@ -30,6 +30,55 @@ authentication and UI remain Pi/Node/Electron. `--max-cost` is API-equivalent
 accounting after usage, not a guaranteed pre-spend ceiling. Live evaluation has
 not been authorized with a new budget in this migration.
 
+## Experimental Rust desktop host
+
+Build with the pinned Node and matching Rust architecture in the same checkout. The installed desktop dependencies and built renderer are prerequisites. macOS uses WKWebView. Windows requires WebView2.
+
+```sh
+bun install --frozen-lockfile
+bun run desktop:build
+node scripts/rust-migration/build-session-native.mjs
+cargo +1.92.0 test --locked --manifest-path apps/desktop-rust/Cargo.toml
+cargo +1.92.0 build --locked --release --manifest-path apps/desktop-rust/Cargo.toml
+```
+
+Launch on macOS with a fresh home/profile pair.
+
+```sh
+scratch=$(mktemp -d)
+PI_OFFLINE=1 apps/desktop-rust/target/release/suffice-desktop-rust \
+  --root "$PWD" --node "$(command -v node)" \
+  --home "$scratch/home" --profile "$scratch/profile"
+```
+
+For a Windows source run after the same build, use PowerShell.
+
+```powershell
+$checkout = (Resolve-Path .).Path
+$scratch = Join-Path ([System.IO.Path]::GetTempPath()) ([guid]::NewGuid().ToString())
+$env:PI_OFFLINE = '1'
+& "$checkout/apps/desktop-rust/target/release/suffice-desktop-rust.exe" --root $checkout --node (Get-Command node).Source --home "$scratch/home" --profile "$scratch/profile"
+```
+
+Both examples explicitly select offline behavior. Normal Wry launch inherits the caller’s setting. The fixture-specific `--smoke` flag forces offline catalog behavior. Each canonical profile has one owner. Relaunching it activates that process. New project windows use canonical startup paths, the shared home and a separate child profile. Keep home and profile paths absolute and non-overlapping.
+
+The host selects the Rust saved-session backend. Its matching addon, SHA-256 receipt and license bundle are generated under `apps/desktop-bridge/native/`. Rust checks session capabilities and versions and computes sidebar metadata during discovery. Legacy or unusual sessions use the original projection over verified source pages. Catalog work, including native read-ahead and compatibility reads, shares 256 MiB. A selected source is bounded at 256 MiB, 64 MiB per record and 250,000 records. Pi opens a validated path separately at Send, leaving a pathname race. ReFS uses 128-bit file identifiers while the current identity API exposes 64 bits.
+
+To roll back the session backend, close the Wry host, unset `SUFFICE_SESSION_BACKEND` and launch the Electron desktop with an independent verified copy. Browse requires no schema conversion. Pi can upgrade old journals on resume. Preserve original copies and reconcile any new writes before restoring.
+
+## Cutover verification
+
+Use isolated absolute scratch homes for tests. The real session binding and installed-Pi oracle require both the native addon build above and the Rust core executable.
+
+```sh
+cargo +1.92.0 build --locked --manifest-path crates/suffice-session/Cargo.toml
+node --test crates/suffice-session/tests/*.test.mjs crates/suffice-session-addon/tests/*.test.mjs
+node --test apps/desktop-bridge/*.test.mjs apps/desktop-bridge/test/*.test.mjs
+node --test apps/desktop-rust/start-bridge.test.mjs apps/desktop-rust/owned-process-hook.test.mjs
+```
+
+On macOS the assembled host smoke rendered all 30 rows and message 999 and preserved the fixture. Separate WKWebView runs covered isolated data stores, popup consent, POST downloads and opaque fragmented JSON carrying full images and unpaired UTF-16. The native relaunch fixture exercised a changed working directory and an empty startup PATH. The Node session run recorded 197 passes and one opt-in Wry UI skip. These receipts cover different entry points. Windows runtime, notification delivery and click handling, restart-at-login, accessibility, release packaging and matched whole-app performance measurements remain open. See the [cutover report](continuation-desktop-cutover.md).
+
 ## Release checks and local artifacts
 
 ```powershell
@@ -54,8 +103,9 @@ inside the installed Electron main process. `verify-installed.mjs` checks the
 adapter and actual repository navigation tools without a provider.
 
 CI now builds/formats/lints/tests the Rust boundary before the existing tests.
-Only Windows was run here; macOS arm64, Linux, clean-machine CRT availability,
-signing/notarization and installed-machine qualification remain outstanding.
+The historical Windows package receipts and macOS source-host checks cover
+different artifacts. Clean-machine CRT availability, signing/notarization and
+installed-machine qualification remain outstanding.
 Consult `delivery.md` for exact observed failures and reruns rather than assuming
 every listed command passes on every platform.
 
@@ -91,3 +141,27 @@ For future schema changes, independently copy and hash sessions before opening
 them with either implementation: Pi v1/v2 sessions may be rewritten on open.
 Test migration and restore on copies first, retain an untouched backup and
 reconcile any new data before replacing a user's store.
+
+### macOS process lifecycle for the experimental Wry host
+
+The macOS host starts a separate guardian before Node executes any preload.
+It prepends its Node process hook to existing `NODE_OPTIONS`. Ordinary children
+inherit the bridge session. Detached Node launches and node-pty shells register
+their own sessions before executing the requested program. A small process in
+each session pins its identity while jobs survive. The guardian watches the host
+lifetime pipe and bridge exit using kqueue. On shutdown it finds same-session
+processes across terminal foreground/background groups, checks their start
+identities, and signals using macOS process audit tokens. Opening an application
+through LaunchServices leaves its normal system-managed lifetime intact.
+
+This lifecycle covers the managed Node and terminal launch paths. Trusted native
+extensions and shell commands can independently create new sessions, and macOS
+permits a user to terminate the guardian itself. Windows uses a kernel Job Object.
+The macOS checks below exercise host and bridge SIGKILL, graceful shutdown, a
+detached subprocess from a user preload, Node fork IPC, a real interactive PTY,
+an unrelated same-user sentinel, and the stale-identity signal guard.
+
+```sh
+node --test apps/desktop-rust/owned-process-hook.test.mjs
+cargo test --locked --manifest-path apps/desktop-rust/Cargo.toml --example guardian_fixture
+```

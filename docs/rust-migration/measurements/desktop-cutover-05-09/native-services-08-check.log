@@ -1,0 +1,32 @@
+    Checking objc2-core-graphics v0.3.2
+    Checking objc2-app-kit v0.3.2
+    Checking objc2-web-kit v0.3.2
+    Checking rfd v0.15.4
+    Checking file_icon_provider v1.0.2
+    Checking tao v0.37.1
+    Checking wry v0.57.2
+    Checking suffice-desktop-rust v0.1.0 (/Users/aryasalem/Downloads/Programming/suffice/apps/desktop-rust)
+warning: unnecessary `unsafe` block
+   --> src/native_services.rs:183:23
+    |
+183 |         .and_then(|u| unsafe { u.path() })
+    |                       ^^^^^^ unnecessary `unsafe` block
+    |
+    = note: `#[warn(unused_unsafe)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `clear_cache` is never used
+   --> src/native.rs:370:8
+    |
+370 | pub fn clear_cache(
+    |        ^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `show_notification` is never used
+   --> src/native.rs:433:8
+    |
+433 | pub fn show_notification(
+    |        ^^^^^^^^^^^^^^^^^
+
+warning: `suffice-desktop-rust` (bin "suffice-desktop-rust") generated 3 warnings
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.43s

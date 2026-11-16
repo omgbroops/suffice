@@ -1,0 +1,20 @@
+    Checking suffice-desktop-rust v0.1.0 (/Users/aryasalem/Downloads/Programming/suffice/apps/desktop-rust)
+error: value assigned to `root` is never read
+  --> examples/browser_profile_fixture.rs:33:20
+   |
+33 |     let mut root = None;
+   |                    ^^^^
+   |
+   = help: maybe it is overwritten before being read?
+   = note: `-D unused-assignments` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(unused_assignments)]`
+
+error: value assigned to `window` is never read
+  --> examples/browser_profile_fixture.rs:34:22
+   |
+34 |     let mut window = None;
+   |                      ^^^^
+   |
+   = help: maybe it is overwritten before being read?
+
+error: could not compile `suffice-desktop-rust` (example "browser_profile_fixture") due to 2 previous errors

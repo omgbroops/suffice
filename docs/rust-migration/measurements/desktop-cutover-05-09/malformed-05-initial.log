@@ -1,0 +1,176 @@
+✔ project malformed corpus 0 (292.876583ms)
+✔ present malformed corpus 0 (5.496458ms)
+✔ project malformed corpus 1 (4.040416ms)
+✔ present malformed corpus 1 (2.278541ms)
+✔ project malformed corpus 2 (1.957209ms)
+✔ present malformed corpus 2 (2.627666ms)
+✔ project malformed corpus 3 (2.587167ms)
+✔ present malformed corpus 3 (2.119833ms)
+✔ project malformed corpus 4 (1.876625ms)
+✔ present malformed corpus 4 (2.436958ms)
+✔ project malformed corpus 5 (2.102792ms)
+✔ present malformed corpus 5 (1.843ms)
+✔ project malformed corpus 6 (1.684791ms)
+✔ present malformed corpus 6 (2.554083ms)
+✔ project malformed corpus 7 (1.736ms)
+✔ present malformed corpus 7 (1.798125ms)
+✔ project malformed corpus 8 (1.633833ms)
+✔ present malformed corpus 8 (1.808333ms)
+✔ project malformed corpus 9 (1.625875ms)
+✔ present malformed corpus 9 (1.568708ms)
+✔ project malformed corpus 10 (1.532916ms)
+✔ present malformed corpus 10 (1.612584ms)
+✔ project malformed corpus 11 (1.642ms)
+✔ present malformed corpus 11 (1.5875ms)
+✔ project malformed corpus 12 (1.683583ms)
+✔ present malformed corpus 12 (1.622583ms)
+✔ project malformed corpus 13 (1.590209ms)
+✔ present malformed corpus 13 (1.519708ms)
+✔ project malformed corpus 14 (1.495458ms)
+✔ present malformed corpus 14 (1.528709ms)
+✔ project malformed corpus 15 (1.469208ms)
+✔ present malformed corpus 15 (1.455125ms)
+✔ project malformed corpus 16 (1.401833ms)
+✔ present malformed corpus 16 (1.448542ms)
+✔ project malformed corpus 17 (1.379917ms)
+✖ present malformed corpus 17 (2.704959ms)
+✔ project malformed corpus 18 (1.446125ms)
+✖ present malformed corpus 18 (1.518208ms)
+✔ project malformed corpus 19 (1.395709ms)
+✔ present malformed corpus 19 (1.400542ms)
+✔ project malformed corpus 20 (1.419167ms)
+✔ present malformed corpus 20 (1.473833ms)
+✔ project malformed corpus 21 (1.331958ms)
+✔ present malformed corpus 21 (1.305542ms)
+✔ project malformed corpus 22 (1.372166ms)
+✖ present malformed corpus 22 (1.684041ms)
+✔ project malformed corpus 23 (1.237333ms)
+✖ present malformed corpus 23 (1.338583ms)
+✔ project malformed corpus 24 (1.272833ms)
+✔ present malformed corpus 24 (1.322917ms)
+✔ project malformed corpus 25 (1.257292ms)
+✔ present malformed corpus 25 (1.269958ms)
+✔ project malformed corpus 26 (1.277083ms)
+✔ present malformed corpus 26 (1.416334ms)
+✔ project malformed corpus 27 (1.271625ms)
+✔ present malformed corpus 27 (1.186ms)
+ℹ tests 56
+ℹ suites 0
+ℹ pass 52
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 878.505209
+
+✖ failing tests:
+
+test at crates/suffice-session/tests/malformed.test.mjs:21:83
+✖ present malformed corpus 17 (2.704959ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+      messages: [
+        {
+          content: [
+            {
+  +           text: '[undefined]',
+  -           text: '[4]',
+              type: 4
+            }
+          ],
+          role: 'unknown',
+          turn: null
+  
+      at TestContext.<anonymous> (file:///Users/aryasalem/Downloads/Programming/suffice/crates/suffice-session/tests/malformed.test.mjs:23:280)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { messages: [ [Object] ], usage: { cost: null, totalTokens: null, windowTokens: null, windowPercent: null } },
+    expected: { messages: [ [Object] ], usage: { cost: null, totalTokens: null, windowTokens: null, windowPercent: null } },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at crates/suffice-session/tests/malformed.test.mjs:21:83
+✖ present malformed corpus 18 (1.518208ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+      messages: [
+        {
+          content: [
+            {
+  +           text: '[undefined]',
+  -           text: '[null]',
+              type: null
+            }
+          ],
+          role: 'unknown',
+          turn: null
+  
+      at TestContext.<anonymous> (file:///Users/aryasalem/Downloads/Programming/suffice/crates/suffice-session/tests/malformed.test.mjs:23:280)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { messages: [ [Object] ], usage: { cost: null, totalTokens: null, windowTokens: null, windowPercent: null } },
+    expected: { messages: [ [Object] ], usage: { cost: null, totalTokens: null, windowTokens: null, windowPercent: null } },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at crates/suffice-session/tests/malformed.test.mjs:21:83
+✖ present malformed corpus 22 (1.684041ms)
+  AssertionError [ERR_ASSERTION]: oracle error TypeError: (message.content || []).filter is not a function but Rust {"ok":true,"result":{"messages":[{"role":"user","turn":{"id":"x"},"content":[{"type":"text","text":"{\n  \"role\": \"user\",\n  \"content\": {},\n  \"turn\": {\n    \"id\": \"x\"\n  }\n}"}]}],"usage":{"cost":null,"totalTokens":null,"windowTokens":null,"windowPercent":null}}}
+  
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///Users/aryasalem/Downloads/Programming/suffice/crates/suffice-session/tests/malformed.test.mjs:23:157)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at crates/suffice-session/tests/malformed.test.mjs:21:83
+✖ present malformed corpus 23 (1.338583ms)
+  AssertionError [ERR_ASSERTION]: oracle error TypeError: (message.content || []).filter is not a function but Rust {"ok":true,"result":{"messages":[{"role":"user","turn":{"id":"x"},"content":[{"type":"text","text":"{\n  \"role\": \"user\",\n  \"content\": true,\n  \"turn\": {\n    \"id\": \"x\"\n  }\n}"}]}],"usage":{"cost":null,"totalTokens":null,"windowTokens":null,"windowPercent":null}}}
+  
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///Users/aryasalem/Downloads/Programming/suffice/crates/suffice-session/tests/malformed.test.mjs:23:157)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

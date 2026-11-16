@@ -1,0 +1,213 @@
+    Checking suffice-session v0.1.0 (/Users/aryasalem/Downloads/Programming/suffice/crates/suffice-session)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.33s
+   Compiling suffice-session v0.1.0 (/Users/aryasalem/Downloads/Programming/suffice/crates/suffice-session)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.78s
+     Running unittests src/lib.rs (crates/suffice-session/target/debug/deps/suffice_session-734b394aed0e2aff)
+
+running 6 tests
+test persistent::tests::node_interop_only_simplifies_drive_and_unc_namespaces ... ok
+test js_json::tests::pretty_format_keeps_source_keys_and_sorts_array_indexes ... ok
+test js_json::tests::finite_numbers_use_javascript_rounding_and_spelling ... ok
+test store::tests::rejected_candidates_charge_buffered_read_ahead_to_the_total ... ok
+test store::tests::file_growth_after_metadata_still_stops_at_the_stream_budget ... ok
+test persistent::tests::cleanup_recovers_poisoned_reader_by_revoking_and_releasing_handles ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (crates/suffice-session/target/debug/deps/suffice_session-5e14ad03b4ead03a)
+
+running 1 test
+test tests::serialization_buffer_never_exceeds_the_wire_byte_limit ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/store.rs (crates/suffice-session/target/debug/deps/store-4c5abff2dbbffd56)
+
+running 10 tests
+test rejects_absolute_parent_and_non_session_paths ... ok
+test line_size_and_count_are_enforced_before_unbounded_accumulation ... ok
+test sparse_oversized_files_are_reported_without_reading_them ... ok
+test callers_cannot_disable_hard_caps ... ok
+test exact_byte_boundary_and_crash_tail_recovery ... ok
+test retained_root_cannot_be_redirected_by_replacing_its_path ... ok
+test discovery_and_strict_reads_preserve_original_bytes ... ok
+test group_and_file_symlinks_cannot_redirect_a_saved_selection ... ok
+test global_scan_budgets_fail_instead_of_returning_a_partial_catalog ... ok
+test special_files_are_skipped_without_blocking_for_a_writer ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+   Doc-tests suffice_session
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.02s
+   Compiling suffice-session v0.1.0 (/Users/aryasalem/Downloads/Programming/suffice/crates/suffice-session)
+   Compiling suffice-session-addon v0.1.0 (/Users/aryasalem/Downloads/Programming/suffice/crates/suffice-session-addon)
+    Finished `release` profile [optimized] target(s) in 1.75s
+{"experimental":true,"directory":"/Users/aryasalem/Downloads/Programming/suffice/apps/desktop-bridge/native","schemaVersion":1,"platform":"darwin","arch":"arm64","nodeApi":6,"source":"crates/suffice-session-addon/Cargo.toml","profile":"release","locked":true,"bytes":1840976,"sha256":"ddbbdb3e3ff310f30b75702305b252cf106fdfd112b746fba8805c0d4a8d3349","licensesBytes":1090944,"licensesSha256":"eefae4719b8433693d2d41b0106aacac826813a4fa91ca3aefed61c5e899765c"}
+✔ real native catalog keeps IDs private and validates cache/model views without writes (176.666792ms)
+✔ close drains, resume releases handles and reopen requires a fresh known catalog (12.935791ms)
+✔ unknown native legacy formats remain explicit and never trigger ambient fallback (7.396625ms)
+✔ cached views still reject a replacement symlink (9.010958ms)
+✔ catalog construction requires an explicit root (0.165584ms)
+✔ close also cancels an open that already entered the real native method (4.780417ms)
+✔ a later close wins over a pending reopen (6.55125ms)
+✔ validated location leaves the reader usable and an explicit grant is needed for a replacement root (10.937708ms)
+✔ a validated cache hit recomputes usage against the current model registry (8.027542ms)
+✔ sidebar tail uses the same byte window, malformed-line rules and provider order as desktop (13.865583ms)
+✔ tied activity rows match the desktop store across groups, locale-sensitive names, and different mtimes (641.166083ms)
+✔ resume requires a qualified version and a current saved view can qualify an append (12.534917ms)
+✔ missing and unreceipted host addons fail before starting a bridge (6.300167ms)
+✔ catalog, view, cache, bytes and stale tokens (15.102292ms)
+✔ replacement revokes and resume releases handles (5.35325ms)
+✔ missing root and symlink replacement (4.943834ms)
+✔ root swap and close drains concurrent list (5.139375ms)
+✔ normal append invalidates cache and stock custom entries remain eligible (6.415542ms)
+✔ malformed stock journal is not native eligible (4.966375ms)
+✔ queued completion is canceled at close and reopening changes authority (53.173834ms)
+✔ repeated close drains and request limits reject (2.463958ms)
+✔ prepareResume cancels an earlier queued completion at admission (305.93075ms)
+✔ cache versions distinguish pre-1970 file modification times (14.180417ms)
+✔ an admitted malformed resume request still releases the reader (7.675792ms)
+✔ Date conversion against Node in UTC (777.874708ms)
+✔ Date conversion against Node in America/New_York (254.180125ms)
+✔ Date conversion against Node in Asia/Kolkata (185.906541ms)
+✔ projection differential 0 (23.465375ms)
+✔ projection differential 1 (20.389541ms)
+✔ projection differential 2 (14.054875ms)
+✔ projection differential 3 (11.894167ms)
+✔ projection differential 4 (14.440334ms)
+✔ projection differential 5 (15.4345ms)
+✔ projection differential 6 (14.464041ms)
+✔ projection differential 7 (11.092ms)
+✔ strict parsing and cycle detection (9.396875ms)
+✔ listing oracle and bytes unchanged for legacy sessions (16.437542ms)
+✔ missing retained entry and latest edit win (4.425459ms)
+✔ v2 browse preserves file bytes and does not migrate hook role (10.801583ms)
+✔ malformed projection errors match Pi failure (9.504292ms)
+✔ missing projection fields preserve Pi undefined behavior (14.988875ms)
+✔ timestamp null, missing, primitives, date-only and bounded JSON coercions match Pi (34.758875ms)
+✔ seeded valid trees with compaction and context edits match Pi (574.180209ms)
+✔ root discovery matches Pi for ties, malformed records and timestamps (10.613334ms)
+✔ opaque tool arguments preserve Pi serialization through direct projection and edits (5.400875ms)
+✔ integer-like and duplicate keys match Pi after journal and projection (5.768167ms)
+✔ raw wire uses JavaScript integer-index boundaries (3.810125ms)
+✔ confined read preserves raw journal provenance and Pi body projection without writes (12.992917ms)
+✔ confined read rejects middle corruption and keeps crash-tail recovery (5.915625ms)
+✔ project malformed corpus 0 (7.775667ms)
+✔ present malformed corpus 0 (5.406958ms)
+✔ project malformed corpus 1 (6.14125ms)
+✔ present malformed corpus 1 (4.971167ms)
+✔ project malformed corpus 2 (6.634ms)
+✔ present malformed corpus 2 (7.514542ms)
+✔ project malformed corpus 3 (3.848292ms)
+✔ present malformed corpus 3 (2.790541ms)
+✔ project malformed corpus 4 (3.087917ms)
+✔ present malformed corpus 4 (3.706542ms)
+✔ project malformed corpus 5 (2.781583ms)
+✔ present malformed corpus 5 (2.993625ms)
+✔ project malformed corpus 6 (2.270584ms)
+✔ present malformed corpus 6 (3.3845ms)
+✔ project malformed corpus 7 (2.769792ms)
+✔ present malformed corpus 7 (3.362208ms)
+✔ project malformed corpus 8 (3.3615ms)
+✔ present malformed corpus 8 (2.5895ms)
+✔ project malformed corpus 9 (4.32625ms)
+✔ present malformed corpus 9 (4.552834ms)
+✔ project malformed corpus 10 (4.206375ms)
+✔ present malformed corpus 10 (3.088208ms)
+✔ project malformed corpus 11 (4.341334ms)
+✔ present malformed corpus 11 (4.076458ms)
+✔ project malformed corpus 12 (3.984792ms)
+✔ present malformed corpus 12 (3.183583ms)
+✔ project malformed corpus 13 (3.662458ms)
+✔ present malformed corpus 13 (3.675833ms)
+✔ project malformed corpus 14 (2.922709ms)
+✔ present malformed corpus 14 (3.346125ms)
+✔ project malformed corpus 15 (2.640041ms)
+✔ present malformed corpus 15 (2.545541ms)
+✔ project malformed corpus 16 (3.39075ms)
+✔ present malformed corpus 16 (3.558959ms)
+✔ project malformed corpus 17 (4.220333ms)
+✔ present malformed corpus 17 (4.17075ms)
+✔ project malformed corpus 18 (3.772833ms)
+✔ present malformed corpus 18 (3.086208ms)
+✔ project malformed corpus 19 (2.551459ms)
+✔ present malformed corpus 19 (4.4715ms)
+✔ project malformed corpus 20 (3.688167ms)
+✔ present malformed corpus 20 (5.012875ms)
+✔ project malformed corpus 21 (3.339917ms)
+✔ present malformed corpus 21 (3.225834ms)
+✔ project malformed corpus 22 (2.283ms)
+✔ present malformed corpus 22 (3.610625ms)
+✔ project malformed corpus 23 (3.619ms)
+✔ present malformed corpus 23 (3.514916ms)
+✔ project malformed corpus 24 (2.882208ms)
+✔ present malformed corpus 24 (2.231625ms)
+✔ project malformed corpus 25 (2.210625ms)
+✔ present malformed corpus 25 (3.218333ms)
+✔ project malformed corpus 26 (3.248417ms)
+✔ present malformed corpus 26 (2.758583ms)
+✔ project malformed corpus 27 (3.741666ms)
+✔ present malformed corpus 27 (2.712583ms)
+✔ project malformed corpus 28 (3.221834ms)
+✔ present malformed corpus 28 (3.151708ms)
+✔ project malformed corpus 29 (2.276958ms)
+✔ present malformed corpus 29 (3.664583ms)
+✔ project malformed corpus 30 (3.302ms)
+✔ present malformed corpus 30 (2.885167ms)
+✔ project malformed corpus 31 (3.845792ms)
+✔ present malformed corpus 31 (3.502375ms)
+✔ project malformed corpus 32 (4.024959ms)
+✔ present malformed corpus 32 (2.561417ms)
+✔ project malformed corpus 33 (2.836042ms)
+✔ present malformed corpus 33 (3.382708ms)
+✔ project malformed corpus 34 (2.514333ms)
+✔ present malformed corpus 34 (3.747875ms)
+✔ project malformed corpus 35 (2.867125ms)
+✔ present malformed corpus 35 (3.245542ms)
+✔ project malformed corpus 36 (4.604375ms)
+✔ present malformed corpus 36 (3.292ms)
+✔ project malformed corpus 37 (5.678458ms)
+✔ present malformed corpus 37 (4.080667ms)
+✔ project malformed corpus 38 (3.101583ms)
+✔ present malformed corpus 38 (2.313834ms)
+✔ project malformed corpus 39 (4.206792ms)
+✔ present malformed corpus 39 (2.331458ms)
+✔ project malformed corpus 40 (2.437208ms)
+✔ present malformed corpus 40 (3.352959ms)
+✔ project malformed corpus 41 (2.776459ms)
+✔ present malformed corpus 41 (2.472834ms)
+✔ project malformed corpus 42 (3.40425ms)
+✔ present malformed corpus 42 (2.395416ms)
+✔ raw wire matches JSON.parse/stringify at finite numeric boundaries (7.223709ms)
+✔ seeded finite double corpus uses the same raw decimal wire as JavaScript (11.152875ms)
+✔ numeric session IDs use JavaScript Number identity after parsing (5.918083ms)
+✔ tool argument display uses exact two-space JSON.stringify numeric formatting (7.059916ms)
+✔ desktop presentation and usage 0 (17.770166ms)
+✔ desktop presentation and usage 1 (8.771583ms)
+✔ desktop presentation and usage 2 (6.695291ms)
+✔ desktop presentation and usage 3 (6.657ms)
+✔ desktop presentation and usage 4 (6.788292ms)
+✔ saved file presentation leaves bytes unchanged (10.987417ms)
+✔ turn aliases backfill and latest end metadata (4.521041ms)
+✔ unmatched display hash and invalid attachment marker remain visible (8.455333ms)
+✔ usage missing, aborted and compaction behavior (15.70675ms)
+✔ fallback content serializes the final presented message (3.619333ms)
+✔ Pi context arithmetic handles null and nonnumeric totals (9.116459ms)
+✔ off-branch compaction reason does not change selected checkpoint status (4.423959ms)
+✔ undefined backfill and missing display prompt override old nullable fields (2.34875ms)
+✔ cumulative usage preserves per-entry floating-point grouping (3.224125ms)
+✔ turn IDs keep JavaScript scalar identity and latest end metadata (4.447166ms)
+✔ null undefined and object turn identities do not alias accidentally (19.359ms)
+ℹ tests 155
+ℹ suites 0
+ℹ pass 155
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1493.093166

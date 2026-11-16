@@ -3,14 +3,14 @@
   "method": "Static source inventory; settings imported from pure data; handlers, preload members and tool names use literal regex, not a complete JS parser. Dynamic, aliased, generated or indirectly registered members may be missed. Test references are literal name matches or manually identified, not coverage evidence. Existing sources are authoritative.",
   "counts": {
     "automation-tool": 25,
-    "capability": 28,
+    "capability": 32,
     "cli-command": 10,
     "cli-option": 17,
-    "desktop-ipc-handler": 51,
+    "desktop-ipc-handler": 52,
     "native-tool": 5,
     "navigation-tool": 3,
-    "package-script": 18,
-    "preload-member": 58,
+    "package-script": 19,
+    "preload-member": 60,
     "script-entrypoint": 58,
     "settings": 85,
     "settings-page": 18
@@ -444,6 +444,23 @@
     },
     {
       "category": "capability",
+      "id": "Capability-bound saved browsing and legacy compatibility",
+      "classification": "product",
+      "source": [
+        "crates/suffice-session/src/persistent.rs",
+        "crates/suffice-session-addon/src/lib.rs",
+        "apps/desktop-bridge/session-catalog.mjs",
+        "apps/desktop/electron/threads-native.mjs"
+      ],
+      "testReferences": [],
+      "testReferenceBasis": "literal name matches only; possible false positives and omissions",
+      "proposedRustModule": "storage/sessions",
+      "compatibility": "Inspect source contracts, retained Pi behavior and platform-specific handling; preserve output, security and failure semantics.",
+      "verification": "Perform targeted differential and integration tests; include negative cases, and manual platform/accessibility checks where relevant.",
+      "migrationStatus": "retained-js-pending"
+    },
+    {
+      "category": "capability",
       "id": "Code blocks syntax highlighting and copy",
       "classification": "product",
       "source": [
@@ -537,6 +554,24 @@
     },
     {
       "category": "capability",
+      "id": "Isolated in-app browser navigation popups and downloads",
+      "classification": "product",
+      "source": [
+        "apps/desktop/src/browser-panel.js",
+        "apps/desktop/electron/browser-surface.cjs",
+        "apps/desktop-rust/src/browser.rs",
+        "apps/desktop/test/browser.test.mjs",
+        "apps/desktop/test/browser-profile.test.mjs"
+      ],
+      "testReferences": [],
+      "testReferenceBasis": "literal name matches only; possible false positives and omissions",
+      "proposedRustModule": "host/browser",
+      "compatibility": "Inspect source contracts, retained Pi behavior and platform-specific handling; preserve output, security and failure semantics.",
+      "verification": "Perform targeted differential and integration tests; include negative cases, and manual platform/accessibility checks where relevant.",
+      "migrationStatus": "retained-js-pending"
+    },
+    {
+      "category": "capability",
       "id": "KaTeX math rendering",
       "classification": "product",
       "source": [
@@ -584,6 +619,22 @@
     },
     {
       "category": "capability",
+      "id": "macOS managed process guardian and Windows Job lifecycle",
+      "classification": "product",
+      "source": [
+        "apps/desktop-rust/src/process_tree.rs",
+        "apps/desktop-rust/src/process_macos.rs",
+        "apps/desktop-rust/owned-process-hook.cjs"
+      ],
+      "testReferences": [],
+      "testReferenceBasis": "literal name matches only; possible false positives and omissions",
+      "proposedRustModule": "process/lifecycle",
+      "compatibility": "Inspect source contracts, retained Pi behavior and platform-specific handling; preserve output, security and failure semantics.",
+      "verification": "Perform targeted differential and integration tests; include negative cases, and manual platform/accessibility checks where relevant.",
+      "migrationStatus": "retained-js-pending"
+    },
+    {
+      "category": "capability",
       "id": "Markdown and streaming",
       "classification": "product",
       "source": [
@@ -608,6 +659,23 @@
       "testReferences": [],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "ui/presentation",
+      "compatibility": "Inspect source contracts, retained Pi behavior and platform-specific handling; preserve output, security and failure semantics.",
+      "verification": "Perform targeted differential and integration tests; include negative cases, and manual platform/accessibility checks where relevant.",
+      "migrationStatus": "retained-js-pending"
+    },
+    {
+      "category": "capability",
+      "id": "Native clipboard trash icons startup notifications and profile windows",
+      "classification": "product",
+      "source": [
+        "apps/desktop-rust/src/native.rs",
+        "apps/desktop-rust/src/native_services.rs",
+        "apps/desktop-rust/src/instance.rs",
+        "apps/desktop-bridge/native-services.mjs"
+      ],
+      "testReferences": [],
+      "testReferenceBasis": "literal name matches only; possible false positives and omissions",
+      "proposedRustModule": "host/native",
       "compatibility": "Inspect source contracts, retained Pi behavior and platform-specific handling; preserve output, security and failure semantics.",
       "verification": "Perform targeted differential and integration tests; include negative cases, and manual platform/accessibility checks where relevant.",
       "migrationStatus": "retained-js-pending"
@@ -1336,6 +1404,47 @@
     },
     {
       "category": "desktop-ipc-handler",
+      "id": "browser",
+      "classification": "product",
+      "source": [
+        "apps/desktop/electron/main.cjs"
+      ],
+      "testReferences": [
+        "packages/cli/test/access.test.mjs",
+        "packages/cli/test/automation.test.mjs",
+        "packages/cli/test/session-limits.test.mjs",
+        "packages/cli/test/session-title.test.mjs",
+        "apps/desktop/test/action-display.test.mjs",
+        "apps/desktop/test/approval-recovery.test.mjs",
+        "apps/desktop/test/approvals-ui.test.mjs",
+        "apps/desktop/test/browser-profile.test.mjs",
+        "apps/desktop/test/browser.test.mjs",
+        "apps/desktop/test/chat-surface.test.mjs",
+        "apps/desktop/test/concurrent-threads.test.mjs",
+        "apps/desktop/test/electron.test.mjs",
+        "apps/desktop/test/external-links.test.mjs",
+        "apps/desktop/test/host.test.mjs",
+        "apps/desktop/test/message-actions.test.mjs",
+        "apps/desktop/test/provider-model-ui.test.mjs",
+        "apps/desktop/test/provider-settings.test.mjs",
+        "apps/desktop/test/queue-messages.test.mjs",
+        "apps/desktop/test/recovery.test.mjs",
+        "apps/desktop/test/resources-ui.test.mjs",
+        "apps/desktop/test/resources.test.mjs",
+        "apps/desktop/test/scroll-layout.test.mjs",
+        "apps/desktop/test/settings.test.mjs",
+        "apps/desktop/test/terminal.test.mjs",
+        "apps/desktop/test/transcript-checkpoints.test.mjs",
+        "apps/desktop/test/window-chrome.test.mjs"
+      ],
+      "testReferenceBasis": "literal name matches only; possible false positives and omissions",
+      "proposedRustModule": "host",
+      "compatibility": "Preserve current inputs, outputs, errors, ordering, security and lifecycle behavior; inspect implementation for detailed contract.",
+      "verification": "Add targeted differential fixtures against current implementation; inspect matched tests and cover missing cases.",
+      "migrationStatus": "retained-js-pending"
+    },
+    {
+      "category": "desktop-ipc-handler",
       "id": "changes",
       "classification": "product",
       "source": [
@@ -1505,6 +1614,8 @@
         "apps/desktop/test/background-visibility.test.mjs",
         "apps/desktop/test/branch-picker.test.mjs",
         "apps/desktop/test/branches.test.mjs",
+        "apps/desktop/test/browser-profile.test.mjs",
+        "apps/desktop/test/browser.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
         "apps/desktop/test/chat-surface.test.mjs",
         "apps/desktop/test/composer.test.mjs",
@@ -1610,6 +1721,7 @@
         "apps/desktop/test/action-display.test.mjs",
         "apps/desktop/test/approvals-ui.test.mjs",
         "apps/desktop/test/attachments.test.mjs",
+        "apps/desktop/test/browser-profile.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
         "apps/desktop/test/chat-surface.test.mjs",
         "apps/desktop/test/composer.test.mjs",
@@ -1778,6 +1890,7 @@
         "packages/cli/test/cli.test.mjs",
         "apps/desktop/test/approval-recovery.test.mjs",
         "apps/desktop/test/branch-picker.test.mjs",
+        "apps/desktop/test/browser.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
         "apps/desktop/test/chat-git.test.mjs",
         "apps/desktop/test/composer.test.mjs",
@@ -2116,6 +2229,7 @@
         "apps/desktop/test/approval-recovery.test.mjs",
         "apps/desktop/test/approvals-ui.test.mjs",
         "apps/desktop/test/background.test.mjs",
+        "apps/desktop/test/browser.test.mjs",
         "apps/desktop/test/electron.test.mjs",
         "apps/desktop/test/host.test.mjs",
         "apps/desktop/test/models.test.mjs",
@@ -2231,6 +2345,7 @@
         "apps/desktop/test/approvals-ui.test.mjs",
         "apps/desktop/test/background-visibility.test.mjs",
         "apps/desktop/test/background.test.mjs",
+        "apps/desktop/test/browser.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
         "apps/desktop/test/chat-surface.test.mjs",
         "apps/desktop/test/composer.test.mjs",
@@ -2261,6 +2376,7 @@
         "apps/desktop/test/terminal.test.mjs",
         "apps/desktop/test/thread-actions.test.mjs",
         "apps/desktop/test/thread-delete-dialog.test.mjs",
+        "apps/desktop/test/thread-router-admission.test.mjs",
         "apps/desktop/test/thread-router.test.mjs",
         "apps/desktop/test/threads.test.mjs",
         "apps/desktop/test/transcript-checkpoints.test.mjs",
@@ -2384,6 +2500,7 @@
         "apps/desktop/test/approvals-ui.test.mjs",
         "apps/desktop/test/background-visibility.test.mjs",
         "apps/desktop/test/branch-picker.test.mjs",
+        "apps/desktop/test/browser.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
         "apps/desktop/test/chat-surface.test.mjs",
         "apps/desktop/test/composer.test.mjs",
@@ -2479,6 +2596,7 @@
         "packages/cli/test/access.test.mjs",
         "packages/cli/test/cli.test.mjs",
         "apps/desktop/test/background-visibility.test.mjs",
+        "apps/desktop/test/browser.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
         "apps/desktop/test/composer.test.mjs",
         "apps/desktop/test/panel-preview.test.mjs",
@@ -2553,6 +2671,7 @@
         "apps/desktop/test/background.test.mjs",
         "apps/desktop/test/branch-picker.test.mjs",
         "apps/desktop/test/branches.test.mjs",
+        "apps/desktop/test/browser.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
         "apps/desktop/test/chat-git.test.mjs",
         "apps/desktop/test/chat-surface.test.mjs",
@@ -2594,6 +2713,7 @@
         "apps/desktop/test/terminal.test.mjs",
         "apps/desktop/test/thread-actions.test.mjs",
         "apps/desktop/test/thread-delete-dialog.test.mjs",
+        "apps/desktop/test/thread-router-admission.test.mjs",
         "apps/desktop/test/thread-router.test.mjs",
         "apps/desktop/test/threads.test.mjs",
         "apps/desktop/test/transcript-checkpoints.test.mjs",
@@ -2644,6 +2764,8 @@
         "apps/desktop/test/background-visibility.test.mjs",
         "apps/desktop/test/branch-picker.test.mjs",
         "apps/desktop/test/branches.test.mjs",
+        "apps/desktop/test/browser-profile.test.mjs",
+        "apps/desktop/test/browser.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
         "apps/desktop/test/chat-surface.test.mjs",
         "apps/desktop/test/composer.test.mjs",
@@ -2756,6 +2878,7 @@
         "apps/desktop/test/approvals-ui.test.mjs",
         "apps/desktop/test/background-visibility.test.mjs",
         "apps/desktop/test/branch-picker.test.mjs",
+        "apps/desktop/test/browser.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
         "apps/desktop/test/chat-surface.test.mjs",
         "apps/desktop/test/composer.test.mjs",
@@ -3046,6 +3169,23 @@
     },
     {
       "category": "package-script",
+      "id": "session:native:build",
+      "classification": "experimental",
+      "source": [
+        "package.json"
+      ],
+      "testReferences": [],
+      "testReferenceBasis": "literal name matches only; possible false positives and omissions",
+      "proposedRustModule": "build",
+      "compatibility": "Preserve current inputs, outputs, errors, ordering, security and lifecycle behavior; inspect implementation for detailed contract.",
+      "verification": "Add targeted differential fixtures against current implementation; inspect matched tests and cover missing cases.",
+      "migrationStatus": "retained-js-pending",
+      "detail": {
+        "command": "node scripts/rust-migration/build-session-native.mjs"
+      }
+    },
+    {
+      "category": "package-script",
       "id": "smoke:models",
       "classification": "experimental",
       "source": [
@@ -3126,6 +3266,8 @@
         "apps/desktop/test/background.test.mjs",
         "apps/desktop/test/branch-picker.test.mjs",
         "apps/desktop/test/branches.test.mjs",
+        "apps/desktop/test/browser-profile.test.mjs",
+        "apps/desktop/test/browser.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
         "apps/desktop/test/chat-git.test.mjs",
         "apps/desktop/test/chat-surface.test.mjs",
@@ -3174,6 +3316,7 @@
         "apps/desktop/test/terminal.test.mjs",
         "apps/desktop/test/thread-actions.test.mjs",
         "apps/desktop/test/thread-delete-dialog.test.mjs",
+        "apps/desktop/test/thread-router-admission.test.mjs",
         "apps/desktop/test/thread-router.test.mjs",
         "apps/desktop/test/threads.test.mjs",
         "apps/desktop/test/transcript-checkpoints.test.mjs",
@@ -3264,6 +3407,47 @@
         "apps/desktop/test/branches.test.mjs",
         "apps/desktop/test/chat-git.test.mjs",
         "apps/desktop/test/message-presentation.test.mjs"
+      ],
+      "testReferenceBasis": "literal name matches only; possible false positives and omissions",
+      "proposedRustModule": "host",
+      "compatibility": "Preserve current inputs, outputs, errors, ordering, security and lifecycle behavior; inspect implementation for detailed contract.",
+      "verification": "Add targeted differential fixtures against current implementation; inspect matched tests and cover missing cases.",
+      "migrationStatus": "retained-js-pending"
+    },
+    {
+      "category": "preload-member",
+      "id": "browser",
+      "classification": "product",
+      "source": [
+        "apps/desktop/electron/preload.cjs"
+      ],
+      "testReferences": [
+        "packages/cli/test/access.test.mjs",
+        "packages/cli/test/automation.test.mjs",
+        "packages/cli/test/session-limits.test.mjs",
+        "packages/cli/test/session-title.test.mjs",
+        "apps/desktop/test/action-display.test.mjs",
+        "apps/desktop/test/approval-recovery.test.mjs",
+        "apps/desktop/test/approvals-ui.test.mjs",
+        "apps/desktop/test/browser-profile.test.mjs",
+        "apps/desktop/test/browser.test.mjs",
+        "apps/desktop/test/chat-surface.test.mjs",
+        "apps/desktop/test/concurrent-threads.test.mjs",
+        "apps/desktop/test/electron.test.mjs",
+        "apps/desktop/test/external-links.test.mjs",
+        "apps/desktop/test/host.test.mjs",
+        "apps/desktop/test/message-actions.test.mjs",
+        "apps/desktop/test/provider-model-ui.test.mjs",
+        "apps/desktop/test/provider-settings.test.mjs",
+        "apps/desktop/test/queue-messages.test.mjs",
+        "apps/desktop/test/recovery.test.mjs",
+        "apps/desktop/test/resources-ui.test.mjs",
+        "apps/desktop/test/resources.test.mjs",
+        "apps/desktop/test/scroll-layout.test.mjs",
+        "apps/desktop/test/settings.test.mjs",
+        "apps/desktop/test/terminal.test.mjs",
+        "apps/desktop/test/transcript-checkpoints.test.mjs",
+        "apps/desktop/test/window-chrome.test.mjs"
       ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "host",
@@ -3457,6 +3641,8 @@
         "apps/desktop/test/background-visibility.test.mjs",
         "apps/desktop/test/branch-picker.test.mjs",
         "apps/desktop/test/branches.test.mjs",
+        "apps/desktop/test/browser-profile.test.mjs",
+        "apps/desktop/test/browser.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
         "apps/desktop/test/chat-surface.test.mjs",
         "apps/desktop/test/composer.test.mjs",
@@ -3544,6 +3730,7 @@
         "apps/desktop/test/action-display.test.mjs",
         "apps/desktop/test/approvals-ui.test.mjs",
         "apps/desktop/test/attachments.test.mjs",
+        "apps/desktop/test/browser-profile.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
         "apps/desktop/test/chat-surface.test.mjs",
         "apps/desktop/test/composer.test.mjs",
@@ -3639,6 +3826,20 @@
       "testReferences": [
         "apps/desktop/test/project-management.test.mjs"
       ],
+      "testReferenceBasis": "literal name matches only; possible false positives and omissions",
+      "proposedRustModule": "host",
+      "compatibility": "Preserve current inputs, outputs, errors, ordering, security and lifecycle behavior; inspect implementation for detailed contract.",
+      "verification": "Add targeted differential fixtures against current implementation; inspect matched tests and cover missing cases.",
+      "migrationStatus": "retained-js-pending"
+    },
+    {
+      "category": "preload-member",
+      "id": "onBrowserState",
+      "classification": "product",
+      "source": [
+        "apps/desktop/electron/preload.cjs"
+      ],
+      "testReferences": [],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "host",
       "compatibility": "Preserve current inputs, outputs, errors, ordering, security and lifecycle behavior; inspect implementation for detailed contract.",
@@ -3787,6 +3988,7 @@
         "packages/cli/test/automation.test.mjs",
         "packages/cli/test/cli.test.mjs",
         "packages/cli/test/native-files.test.mjs",
+        "apps/desktop/test/browser-profile.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
         "apps/desktop/test/chat-git.test.mjs",
         "apps/desktop/test/crash-recovery.test.mjs",
@@ -4122,6 +4324,7 @@
         "apps/desktop/test/approval-recovery.test.mjs",
         "apps/desktop/test/approvals-ui.test.mjs",
         "apps/desktop/test/background.test.mjs",
+        "apps/desktop/test/browser.test.mjs",
         "apps/desktop/test/electron.test.mjs",
         "apps/desktop/test/host.test.mjs",
         "apps/desktop/test/models.test.mjs",
@@ -5877,6 +6080,7 @@
         "packages/cli/test/access.test.mjs",
         "packages/cli/test/native-files.test.mjs",
         "apps/desktop/test/accent-picker.test.mjs",
+        "apps/desktop/test/browser.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
         "apps/desktop/test/chat-surface.test.mjs",
         "apps/desktop/test/electron.test.mjs",
@@ -5997,7 +6201,8 @@
         "packages/cli/test/native-files.test.mjs",
         "apps/desktop/test/pi-desktop-features.test.mjs",
         "apps/desktop/test/provider-settings.test.mjs",
-        "apps/desktop/test/sidebar.test.mjs"
+        "apps/desktop/test/sidebar.test.mjs",
+        "apps/desktop/test/thread-router-admission.test.mjs"
       ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "ui/settings",
@@ -6671,6 +6876,7 @@
       "testReferences": [
         "apps/desktop/test/approval-recovery.test.mjs",
         "apps/desktop/test/approvals-ui.test.mjs",
+        "apps/desktop/test/browser.test.mjs",
         "apps/desktop/test/composer.test.mjs",
         "apps/desktop/test/concurrent-threads.test.mjs",
         "apps/desktop/test/electron.test.mjs",
@@ -6685,6 +6891,7 @@
         "apps/desktop/test/settings-engine.test.mjs",
         "apps/desktop/test/settings.test.mjs",
         "apps/desktop/test/terminal.test.mjs",
+        "apps/desktop/test/thread-router-admission.test.mjs",
         "apps/desktop/test/thread-router.test.mjs",
         "apps/desktop/test/threads.test.mjs",
         "apps/desktop/test/transcript-checkpoints.test.mjs"
@@ -7454,7 +7661,9 @@
       "source": [
         "apps/desktop/src/settings-data.js"
       ],
-      "testReferences": [],
+      "testReferences": [
+        "apps/desktop/test/browser.test.mjs"
+      ],
       "testReferenceBasis": "literal name matches only; possible false positives and omissions",
       "proposedRustModule": "ui/settings",
       "compatibility": "Preserve navigation and actual dynamic content; empty or informational pages remain inventoried rather than implying unimplemented functionality.",
@@ -7636,6 +7845,7 @@
         "apps/desktop/test/action-display.test.mjs",
         "apps/desktop/test/approvals-ui.test.mjs",
         "apps/desktop/test/attachments.test.mjs",
+        "apps/desktop/test/browser-profile.test.mjs",
         "apps/desktop/test/chat-changes.test.mjs",
         "apps/desktop/test/chat-surface.test.mjs",
         "apps/desktop/test/composer.test.mjs",

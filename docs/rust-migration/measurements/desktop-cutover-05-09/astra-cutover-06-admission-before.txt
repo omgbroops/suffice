@@ -1,0 +1,62 @@
+✖ first Send reserves a saved ID and its pending alias while independent IDs run concurrently (2.660667ms)
+✔ failed view admission releases the saved ID so retry opens its own host (0.462459ms)
+✖ failed resume admission releases the saved ID so retry opens its own host (0.32225ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 1
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 39.4395
+
+✖ failing tests:
+
+test at apps/desktop/test/thread-router-admission.test.mjs:34:1
+✖ first Send reserves a saved ID and its pending alias while independent IDs run concurrently (2.660667ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      'saved-A',
+  +   'saved-A',
+      'saved-B'
+    ]
+  
+      at TestContext.<anonymous> (file:///Users/aryasalem/Downloads/Programming/suffice/apps/desktop/test/thread-router-admission.test.mjs:42:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'saved-A', 'saved-A', 'saved-B' ],
+    expected: [ 'saved-A', 'saved-B' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at apps/desktop/test/thread-router-admission.test.mjs:51:40
+✖ failed resume admission releases the saved ID so retry opens its own host (0.32225ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      {
+        host: 1,
+        id: 'saved'
+      },
+  -   {
+  -     host: 2,
+  -     id: 'saved'
+  -   }
+    ]
+  
+      at TestContext.<anonymous> (file:///Users/aryasalem/Downloads/Programming/suffice/apps/desktop/test/thread-router-admission.test.mjs:57:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ { host: 1, id: 'saved' } ],
+    expected: [ { host: 1, id: 'saved' }, { host: 2, id: 'saved' } ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
