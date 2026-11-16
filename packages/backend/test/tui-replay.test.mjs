@@ -88,3 +88,24 @@ test('eachLine skips lines over 5 MB and counts them', async () => {
     assert.equal(st.skippedLong, 1);
   } finally { fs.rmSync(d, { recursive: true, force: true }); }
 });
+
+test('thinking metric counts distinct shown blocks; blob history and re-written lines are reported separately', async () => {
+  const home = fs.mkdtempSync(path.join(os.tmpdir(), 'tui-replay-think-'));
+  try {
+    const proj = path.join(home, '.claude', 'projects', 'p1');
+    fs.mkdirSync(proj, { recursive: true });
+    const a = (uuid, s) => ({ type: 'assistant', uuid, timestamp: T(s), sessionId: 's2', message: { id: 'm1', model: 'claude-test', content: [{ type: 'thinking', thinking: 'plan the work', signature: 'sig' }] } });
+    fs.writeFileSync(path.join(proj, 's2.jsonl'), J(
+      { type: 'user', uuid: 'u1', timestamp: T(1), entrypoint: 'cli', promptSource: 'typed', cwd: '/x', sessionId: 's2', message: { role: 'user', content: 'hi' } },
+      a('a1', 2), a('a2', 3),
+      { type: 'api-request-blob', sessionId: 's2', hash: 'h', message: { role: 'assistant', content: [{ type: 'thinking', thinking: 'plan the work', signature: 'sig' }] } },
+    ));
+    const rep = buildReport(await run({ home, minutes: 1 }), home), t = rep.claude.thinking;
+    assert.equal(t.nonEmpty, 1);
+    assert.equal(t.duplicatesSuppressed, 1);
+    assert.equal(t.skippedLineType, 1);
+    assert.ok(t.itemsEmitted >= 1);
+    assert.equal(rep.claude.mapperErrors, 0);
+    assert.ok(!buildFindings(rep).some((l) => l.includes('non-empty thinking blocks not emitted')));
+  } finally { fs.rmSync(home, { recursive: true, force: true }); }
+});

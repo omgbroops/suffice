@@ -1,7 +1,7 @@
 // Replays real Claude Code + Codex chat history through the TUI mappers and reports what they drop or get wrong.
 // PRIVACY: chat files are read locally only. The report holds key names, enum-like type values, counts and lengths, nothing else.
 // Every string that reaches the report passes san() and the whole report passes leakCheck() before anything is written.
-// Throws inside mapLine are swallowed by both mappers (try/catch) and cannot be observed from outside: reported as a finding.
+// Throws inside mapLine are counted per file through each mapper's mapperHealth(state): error totals and class names only.
 // Usage: node replay.mjs [--home DIR] [--minutes 15] [--max-sub 400] [--max-headless 400] [--out DIR]
 import fs from 'node:fs';
 import os from 'node:os';
@@ -11,8 +11,8 @@ import { fileURLToPath } from 'node:url';
 import { createHistory } from '../../src/history/index.mjs';
 import claudeCode from '../../src/history/sources/claude-code.mjs';
 import codexSrc from '../../src/history/sources/codex.mjs';
-import { createClaudeMapper } from '../../src/tui/claude.mjs';
-import { createCodexMapper } from '../../src/tui/codex.mjs';
+import { createClaudeMapper, mapperHealth as claudeHealth } from '../../src/tui/claude.mjs';
+import { createCodexMapper, mapperHealth as codexHealth } from '../../src/tui/codex.mjs';
 import { itemProblem } from '../../src/tui/model.mjs';
 
 const MAX_LINE = 5 * 1024 * 1024;
@@ -97,7 +97,7 @@ function newAgg() {
     orphanResults: 0, noticeByCode: map0(), noticeByTrigger: map0(), noticeTotal: 0, userItems: 0, noticePerUser: new Dist(), chatsNoticeNoUser: 0,
     assistantLines: 0, assistantNoMsgId: 0, assistantNoUsage: 0, msgIds: 0, usageEmissions: 0, usageIds: 0, usageEventsNoInfo: 0,
     collisions: map0(), updates: map0(), outOfOrder: 0, tsZero: 0, firstSeen: 0,
-    thinking: { blocksSeen: 0, nonEmpty: 0, empty: 0, emptyWithSignature: 0, redacted: 0, itemsEmitted: 0, blockKeys: map0(), chatsWithBlocks: 0, chatsWithItems: 0 },
+    mapperErrors: 0, errorClasses: map0(), thinking: { duplicatesSuppressed: 0, skippedLineType: 0, blocksSeen: 0, nonEmpty: 0, empty: 0, emptyWithSignature: 0, redacted: 0, itemsEmitted: 0, blockKeys: map0(), chatsWithBlocks: 0, chatsWithItems: 0 },
     dist: { itemsPerChat: new Dist(), toolOutLen: new Dist(), diffPerEdit: new Dist(), assistantLen: new Dist(), thinkingLen: new Dist(), notices: new Dist() },
     kindChats: map0(), typesByFile: map0(), sidechainLines: map0(), itemKeys: map0(),
     sub: { calls: 0, noAgentId: 0, exact: 0, otherName: 0, notFound: 0, resultKeys: map0(), resultStatus: map0(), callInputKeys: map0(), childIdWithoutCall: 0 },
@@ -123,7 +123,7 @@ function items(agg, ch, out, trigger) {
       diffN: Array.isArray(it.output?.diff) ? it.output.diff.length : -1, textLen: typeof it.text === 'string' ? it.text.length : 0 });
     if (it.kind === 'notice') { agg.noticeTotal++; ch.notices++; inc(agg.noticeByCode, san(it.code)); inc(agg.noticeByTrigger, `${trigger}~${san(it.code)}`); }
     if (it.kind === 'usage') { agg.usageEmissions++; ch.usageIds.add(id); }
-    if (it.kind === 'thinking') { agg.thinking.itemsEmitted++; ch.thinkItems++; }
+    if (it.kind === 'thinking' && prev === undefined) { agg.thinking.itemsEmitted++; ch.thinkItems++; } // distinct items: an update of the same id is not a new block
   }
 }
 
@@ -199,7 +199,11 @@ function claudeLine(agg, ch, obj, state, out, opts) {
     } else if (b?.type === 'thinking' || b?.type === 'redacted_thinking') {
       const t = agg.thinking; t.blocksSeen++; ch.thinkBlocks++;
       if (b.type === 'redacted_thinking') t.redacted++;
-      else if (typeof b.thinking === 'string' && b.thinking.length) t.nonEmpty++;
+      else if (typeof b.thinking === 'string' && b.thinking.length) {
+        // only lines the mapper shows (assistant) count; api-request-blob etc. replay history already seen on assistant lines. Distinct per (message id, text).
+        if (obj.type !== 'assistant') t.skippedLineType++;
+        else { const k = `${typeof obj.message?.id === 'string' ? obj.message.id : uuid}|${createHash('sha256').update(b.thinking).digest('hex').slice(0, 16)}`; (ch.thinkSeen ??= new Set()).has(k) ? t.duplicatesSuppressed++ : (ch.thinkSeen.add(k), t.nonEmpty++); }
+      }
       else { t.empty++; if (typeof b.signature === 'string' && b.signature.length) t.emptyWithSignature++; }
       keysOf(t, 'blockKeys', b);
       made = uuid && state.emitted.has(`${uuid}:${i}`);
@@ -325,6 +329,7 @@ export async function run({ home = os.homedir(), maxSub = 400, maxHeadless = 400
     if (stopped) { partial[g]++; timedOut = true; }
     isCodex ? codexFinish(a, ch, codexIds) : claudeFinish(a, ch, e.path, kind);
     if (isCodex) for (const id of ch.subIds ?? []) { /* child lookup below */ }
+    { const h = (isCodex ? codexHealth : claudeHealth)(state); a.mapperErrors += h.errors; if (h.errors) inc(a.errorClasses, san(h.lastClass)); }
     finishChat(a, ch, mapper.meta(state));
     done[g]++;
   }
@@ -348,7 +353,7 @@ function aggOut(a) {
   const runRef = {}; for (const [t, ks] of Object.entries(lineKeys)) for (const [k, n] of Object.entries(ks)) if (/agent|sidechain|parent|task|sub|child|spawn/i.test(k)) runRef[`${t}.${k}`] = n;
   return {
     chats: a.chats, lines: a.lines, parseFail: a.parseFail, sidechainLines: a.sidechainLines,
-    throwsObserved: 0, throwsNote: 'throws are swallowed by mapLine try/catch and not observable',
+    mapperErrors: a.mapperErrors, errorClassesLastPerFile: a.errorClasses,
     invalidItems: a.invalid, lineCoverage: covOut(a.lineCov), shapeCoverage: covOut(a.shapeCov), blockCoverage: covOut(a.blockCov), lineKeys, runReferenceKeys: runRef,
     tools: Object.fromEntries(Object.entries(a.tools).sort((x, y) => y[1].calls - x[1].calls)), orphanResults: a.orphanResults,
     notices: { total: a.noticeTotal, userItems: a.userItems, perUserOverall: a.userItems ? Math.round((a.noticeTotal / a.userItems) * 100) / 100 : 0, perUserPerChat: a.noticePerUser.sum(), chatsWithNoticesNoUser: a.chatsNoticeNoUser, byCode: sortObj(a.noticeByCode), byTrigger: sortObj(a.noticeByTrigger) },
@@ -371,8 +376,7 @@ export function buildFindings(rep) {
   const add = (score, agent, what, count, of, shape, fix) => F.push({ score, line: `${agent}: ${what} | ${count}${of ? ` of ${of} (${pct(count, of)}%)` : ''} | input: ${shape} | fix: ${fix}` });
   for (const agent of ['claude', 'codex']) {
     const a = rep[agent];
-    add(a.lines, agent, 'mapLine swallows every throw in try/catch, so crashes cannot be counted', 0, 0, 'any line', 'return or record an error counter from mapLine instead of discarding it');
-    F[F.length - 1].score = 1e4;
+    if (a.mapperErrors) { add(1e4, agent, `mapLine threw (classes: ${Object.keys(a.errorClassesLastPerFile).join(',')})`, a.mapperErrors, a.lines, 'any line', 'fix the thrown class'); }
     for (const [t, label] of [[a.lineCoverage, 'line type'], [a.shapeCoverage, 'line shape'], [a.blockCoverage, 'content block']])
       for (const [k, c] of Object.entries(t)) if (c.none > 0) add(BY_DESIGN.has(k) ? 0 : c.none, agent, `${label} produced no item`, c.none, c.seen, k, 'add a handler, or confirm the drop is intended');
     for (const [k, n] of Object.entries(a.invalidItems)) add(n * 10, agent, 'invalid item by itemProblem', n, 0, k, 'fix the emitting branch in the mapper');
