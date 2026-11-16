@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { slashCommands, filterCommands, models, efforts, modelControl, modes, modeControl, KNOWN_AT } from '../src/tui/commands.mjs';
+import { slashCommands, filterCommands, models, efforts, modelControl, pressesToRow, modes, modeControl, KNOWN_AT } from '../src/tui/commands.mjs';
 
 function fakeHome() {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'tui-cmd-'));
@@ -64,9 +64,30 @@ test('models and efforts shape', () => {
   assert.deepEqual(models('nope'), []);
 });
 
-test('modelControl strings', () => {
-  assert.equal(modelControl('claude', 'opus'), '/model opus\r');
-  assert.match(modelControl('codex', 'gpt-x'), /^\/model gpt-x\r$/);
+test('modelControl plan: Claude never types /model <alias>, Codex saves default', () => {
+  const p = modelControl('claude', 'opus');
+  assert.equal(p.savesDefault, false);
+  assert.deepEqual(p.steps.map((s) => Object.keys(s)[0]), ['send', 'waitPicker', 'selectLabelMatching', 'key']);
+  assert.equal(p.steps[0].send, '/model');
+  assert.equal(p.steps[3].key, 's');
+  for (const s of p.steps) assert.ok(!/^\/model\s+\S/.test(s.send || ''));
+  const re = new RegExp(p.steps[2].selectLabelMatching, 'i');
+  assert.ok(re.test('Opus 5.5') && !re.test('Default (recommended) Opus 5.5'));
+  assert.ok(new RegExp(modelControl('claude', 'haiku').steps[2].selectLabelMatching, 'i').test('Haiku 5.5'));
+  assert.throws(() => modelControl('claude', 'nope'), RangeError);
+  const c = modelControl('codex', 'gpt-x');
+  assert.equal(c.savesDefault, true);
+  assert.deepEqual(c.steps, [{ send: '/model gpt-x', enter: true }]);
+});
+
+test('pressesToRow: target above, below, absent', () => {
+  const opts = ['Default (recommended) Opus 5.5', 'Opus 5.5', 'Fable 5.2', 'Sonnet 5.5', 'Haiku 5.5'].map((label, i) => ({ index: i + 1, label }));
+  assert.equal(pressesToRow(opts, 5, '^Sonnet'), -1);
+  assert.equal(pressesToRow(opts, 5, '^Opus\\b'), -3);
+  assert.equal(pressesToRow(opts, 2, '^Haiku'), 3);
+  assert.equal(pressesToRow(opts, 4, '^Sonnet'), 0);
+  assert.equal(pressesToRow(opts, 4, '^Nope'), null);
+  assert.equal(pressesToRow(opts, 9, '^Sonnet'), null);
 });
 
 const CLAUDE_IDS = ['default', 'acceptEdits', 'plan', 'bypassPermissions', 'auto'];

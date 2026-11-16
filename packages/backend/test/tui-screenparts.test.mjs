@@ -114,3 +114,11 @@ test('real: parsePicker finds the /model dialog and rejects transcripts and idle
   for (const f of ['07-help', '04-ready', '08-slash-menu', '01-trust']) assert.equal(parsePicker(real('model-switch', f)), null, f);
   assert.equal(parsePicker(real('at-mention', '05-at-picker')), null);
 });
+
+test('parsePicker: an earlier "❯ /model" input echo above the picker is not the selected row', () => {
+  const scr = ['❯ /model', '  ⎿  Set model to Sonnet 5.5 for this session only', '▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔', '   Select model', '   Switch between Claude models.', '', '     1.  Default (recommended)  Haiku 5.5', '     2.  Opus 5.5', '   ❯ 3.  Sonnet 5.5 ✔', '     4.  Haiku 5.5', '', '   Enter to set as default · s to use this session only · Esc to cancel'].join('\n');
+  const p = parsePicker(scr);
+  assert.equal(p.title, 'Select model');
+  assert.equal(p.selected, 3);
+  assert.equal(p.options.length, 4);
+});

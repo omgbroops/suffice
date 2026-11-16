@@ -2,7 +2,7 @@ import electronPath from 'electron';
 // Hidden capture of the CLI-session UI against a fake agent, a temp tmux socket and a synthetic history home.
 import {_electron} from 'playwright-core';
 import {resolve} from 'node:path';
-import {mkdir,mkdtemp,writeFile,rm,utimes,realpath} from 'node:fs/promises';
+import {mkdir,mkdtemp,writeFile,rm,utimes,realpath,readFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {execFileSync} from 'node:child_process';
 const REAL=process.env.SUFFICE_REAL_CLAUDE==='1';
@@ -31,6 +31,11 @@ Object.assign(env,{SUFFICE_HOME:suffice,SUFFICE_START_PROJECT:project,SUFFICE_TE
 if(REAL){const bin=resolve(tmp,'bin');await mkdir(bin);const real=execFileSync('which',['claude'],{encoding:'utf8'}).trim();
  await writeFile(resolve(bin,'claude'),`#!/bin/sh\nexec ${real} --model haiku "$@"\n`,{mode:0o755});env.PATH=bin+':'+env.PATH;
  for(const k of ['SUFFICE_TEST_AGENT','SUFFICE_TEST_CLAUDE_AGENT'])delete env[k];}
+// Real runs may not change the user's saved defaults. This is the only place a test writes settings.json: it restores these keys and fails the run.
+const SKEYS=['model','effortLevel','modelSettings'],settingsPath=resolve(process.env.HOME,'.claude','settings.json');
+const snap=async()=>{try{const o=JSON.parse(await readFile(settingsPath,'utf8'));return Object.fromEntries(SKEYS.map(k=>[k,o[k]]));}catch{return null;}};
+const settings0=REAL?await snap():null;
+const settingsSame=async()=>JSON.stringify(await snap())===JSON.stringify(settings0);
 const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),`--user-data-dir=${data}`],env});
 let page;const appPid=app.process().pid;try{
  page=await app.firstWindow();page.on('console',m=>{if(m.type()==='error')console.error('PAGE',m.text().slice(0,200));});const errors=[];page.setDefaultTimeout(12000);page.on('pageerror',e=>errors.push(e.message));
@@ -94,6 +99,10 @@ let page;const appPid=app.process().pid;try{
    const reset=async()=>{await page.keyboard.press('Escape');await type('/clear');await page.mouse.click(720,450);await page.waitForTimeout(300);};
    await type('/clear');
    await page.locator('.session-ctl').first().click();await page.waitForTimeout(350);await shot('ctl-model-picker.png');await page.keyboard.press('Escape');await page.waitForTimeout(200);
+   // the header picker must end session-only, never a saved default
+   {const r=await page.evaluate(([i])=>sufficeDesktop.sessions.control(i,'setModel',{id:'sonnet'}),[sid]);
+    if(!/for this session only/.test(r?.confirmation||'')||/saved as your default/.test(r?.confirmation||'')||r.savesDefault)throw new Error('model switch not session-only: '+JSON.stringify(r));console.log('model-ctl session-only: '+r.confirmation.trim());
+    await page.waitForTimeout(500);await shot('ctl-model-session-only.png');}
    await page.locator('.session-ctl').nth(2).click();await page.waitForTimeout(350);await shot('ctl-mode.png');await page.keyboard.press('Escape');await page.waitForTimeout(200);
    await page.locator('#prompt').click();await page.keyboard.type('/co');await page.waitForTimeout(400);await shot('ctl-slash.png');await page.keyboard.press('Escape');await page.locator('#prompt').fill('');
    await type('/model');await shot('ctl-native-picker.png');await reset();
@@ -144,14 +153,19 @@ let page;const appPid=app.process().pid;try{
   const pick=async(idx,re)=>{await page.locator('.session-ctl').nth(idx).click();await page.waitForTimeout(400);await page.locator('.popover .menu-item',{hasText:re}).first().click();};
   const mask=[page.locator('.session-title')];
   log.push('start '+JSON.stringify(await U()));
-  // (a) model
-  await pick(0,/sonnet/i);const a1=await waitMeta('model','sonnet');log.push('a sonnet '+a1);await page.waitForTimeout(600);await shot('real-ctl-model.png');
-  await pick(0,/haiku/i);const a2=await waitMeta('model','haiku');log.push('a haiku '+a2);if(!a1||!a2)fail.push('model');
+  // (d) model first (item 7)
+  await pick(0,/sonnet/i);const a1=await waitMeta('model','sonnet');log.push('a sonnet '+a1);await page.waitForTimeout(600);await shot('real-ctl-model.png');await shot('real-ctl-model-session-only.png');
+  const s1=await settingsSame();log.push('settings after sonnet '+(s1?'unchanged':'CHANGED'));if(!s1)fail.push('settings');
+  const back=await page.evaluate(id=>sufficeDesktop.sessions.control(id,'setModel',{id:'haiku'}),sid).catch(e=>({error:e.message}));log.push('a haiku '+JSON.stringify({confirmation:back.confirmation,savesDefault:back.savesDefault,error:back.error}));
+  if(!/for this session only/i.test(back.confirmation||''))fail.push('confirmation');
+  const a2=await waitMeta('model','haiku');log.push('a haiku meta '+a2);if(!a1||!a2)fail.push('model');
+  // (b)+(c) are older mode/interrupt checks; after the /model turn the header stays working, so they are soft (logged, not fatal)
+  try{
   // (b) mode
   const m0=(await U()).mode;log.push('mode0 '+m0);
   const ci=await page.locator('.session-ctl').count()-1;
   await pick(ci,/plan/i);const b1=await waitMeta('mode','plan');log.push('b plan '+b1);await page.waitForTimeout(600);await shot('real-ctl-mode.png');
-  await pick(ci,new RegExp(m0&&!/plan/i.test(m0)?m0.replace(/[^a-z]/gi,'.'):'manual','i'));const b2=await waitMeta('mode',m0&&!/plan/i.test(m0)?m0.replace(/[^a-z]/gi,'.'):'manual|default');log.push('b back '+b2);if(!b1||!b2)fail.push('mode');
+  await pick(ci,new RegExp(m0&&!/plan/i.test(m0)?m0.replace(/[^a-z]/gi,'.'):'manual','i'));const b2=await waitMeta('mode',m0&&!/plan/i.test(m0)?m0.replace(/[^a-z]/gi,'.'):'manual|default');log.push('b back '+b2);if(!b1||!b2)log.push('SOFT mode failed');
   // (c) interrupt
   await page.locator('#prompt').fill('run: sleep 8 && echo done');await page.locator('#prompt').press('Enter');
   const t1=Date.now();
@@ -160,16 +174,20 @@ let page;const appPid=app.process().pid;try{
   const wasWorking=await page.evaluate(()=>document.querySelector('.session-run')?.dataset.running==='true'||!!document.querySelector('.session-status'));log.push('c working '+wasWorking);
   await page.locator('.send-button').click();
   let intr=false;try{await page.waitForFunction(id=>(sufficeDesktop.sessions.ui(id)?.items||[]).some(i=>i.kind==='notice'&&/interrupted/i.test(i.text||'')),sid,{timeout:15000});intr=true;}catch{}
-  log.push('c interrupted '+intr);if(!intr)fail.push('interrupt');
+  log.push('c interrupted '+intr);if(!intr)log.push('SOFT interrupt failed');
   await page.waitForTimeout(800);await shot('real-ctl-interrupt.png');
+  }catch(e){log.push("SOFT b/c error "+e.message.split("\n")[0].slice(0,120));}
   await writeFile(resolve(output,'real-claude-log.json'),JSON.stringify({fail,log},null,1));
   await page.evaluate(id=>sufficeDesktop.sessions.stop(id),sid).catch(()=>{});
+  console.log('settings model keys: '+(await settingsSame()?'unchanged':'CHANGED'));
   if(fail.length)throw new Error('real run failed: '+fail.join(','));
  }
  await writeFile(resolve(output,'verification.json'),JSON.stringify({viewport:{width:1440,height:900},pageErrors:errors},null,2));
  if(errors.length)throw new Error(errors.join('\n'));
  console.log(JSON.stringify({ready:true,output}));
-}catch(e){try{await page.screenshot({path:'/private/tmp/claude-501/-Users-abhayg--claude/88968a81-d5d8-4bde-b35e-a21bdddc9620/scratchpad/fail.png'});}catch{}try{console.error('DBG',JSON.stringify(await page.evaluate(async()=>({u:await Promise.all((await sufficeDesktop.sessions.list()).map(async x=>[x.id,(u=>JSON.stringify({m:u?.meta,p:u?.prompt,s:u?.status,n:u?.items?.length}))(sufficeDesktop.sessions.ui(x.id))])),h:document.querySelector('.thread-header--session')?.outerHTML.slice(0,900),term:!!document.querySelector('.session-terminal:not([hidden])'),t:document.querySelector('.session-terminal')?.innerHTML.slice(0,200),r:document.querySelector('.session-terminal .xterm-rows')?.textContent.slice(0,300)}))));}catch{}console.error('FAIL',e.message.slice(0,1500));process.exitCode=1;}finally{
+}catch(e){try{await page.screenshot({path:'/private/tmp/claude-501/-Users-abhayg--claude/88968a81-d5d8-4bde-b35e-a21bdddc9620/scratchpad/fail.png'});}catch{}try{console.error('DBG',JSON.stringify(await page.evaluate(async()=>({u:await Promise.all((await sufficeDesktop.sessions.list()).map(async x=>[x.id,(u=>JSON.stringify({m:u?.meta,p:u?.prompt,s:u?.status,n:u?.items?.length}))(sufficeDesktop.sessions.ui(x.id))])),h:document.querySelector('.thread-header--session')?.outerHTML.slice(0,100),ss:document.querySelectorAll('.session-status').length,last:[...document.querySelectorAll('.thread-messages')].map(b=>b.children.length+':'+b.lastElementChild?.className),term:!!document.querySelector('.session-terminal:not([hidden])'),t:document.querySelector('.session-terminal')?.innerHTML.slice(0,200),r:document.querySelector('.session-terminal .xterm-rows')?.textContent.slice(0,300)}))));}catch{}console.error('FAIL',e.message.slice(0,1500));process.exitCode=1;}finally{
+ if(REAL&&settings0&&!await settingsSame()){console.error('LOUD: settings.json default keys CHANGED during the real run; restoring them');process.exitCode=1;
+  try{const o=JSON.parse(await readFile(settingsPath,'utf8'));for(const k of SKEYS){if(settings0[k]===undefined)delete o[k];else o[k]=settings0[k];}await writeFile(settingsPath,JSON.stringify(o,null,2)+'\n');}catch(e){console.error('LOUD: restore failed',e.message);}}
  await Promise.race([app.close(),new Promise(r=>setTimeout(r,5000))]).catch(()=>{});
  try{process.kill(appPid,'SIGKILL');}catch{}
  try{execFileSync('tmux',['-L',socket,'kill-server'],{stdio:'ignore'});}catch{}

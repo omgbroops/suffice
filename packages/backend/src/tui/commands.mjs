@@ -315,10 +315,28 @@ export function efforts(agent, modelId) {
 
 const noCtl = (s) => { if (/[\x00-\x1f\x7f]/.test(s)) throw new RangeError('control characters not allowed'); return s; };
 
-// Text to type into the TUI to switch model. Empty/undefined id on Codex opens the picker.
+// Claude row labels in the /model picker, by model id. `^Opus` skips the "Default (recommended) Opus" row.
+const CLAUDE_ROW = { default: '^Default\\b', fable: '^Fable\\b', opus: '^Opus\\b', sonnet: '^Sonnet\\b', haiku: '^Haiku\\b', 'sonnet[1m]': '^Sonnet\\b.*1M', 'opus[1m]': '^Opus\\b.*1M', opusplan: '^Opus\\s*Plan\\b' };
+
+// Signed Up/Down presses from the selected option to the first option whose label matches pattern: positive = Down. null = no such row.
+export function pressesToRow(options, selected, pattern) {
+  const re = pattern instanceof RegExp ? pattern : new RegExp(pattern, 'i');
+  const at = options.findIndex((o) => re.test(o.label));
+  const from = options.findIndex((o) => o.index === selected);
+  return at < 0 || from < 0 ? null : at - from;
+}
+
+// Plan to switch model; the caller executes the steps against the live screen.
+// Claude docs (code.claude.com/docs/en/model-config.md): "Typing `/model <name>` directly behaves like `Enter`" (saves the default),
+// and "To switch for this session only, open the picker with `/model` and press `s` on the model's row." So Claude never gets `/model <alias>`.
+// Codex 0.159 (model_popups.rs -> PersistModelSelection): picking in the /model popup always saves to config; no session-only path found.
 export function modelControl(agent, id) {
-  if (agent === 'claude') return dec(createClaudeMapper().controls.setModel(id));
-  if (agent === 'codex') return codexControls.setModel(id && noCtl(id));
+  if (agent === 'claude') {
+    const row = CLAUDE_ROW[id];
+    if (!row) throw new RangeError(`unknown claude model ${id}`);
+    return { agent, savesDefault: false, steps: [{ send: '/model', enter: true }, { waitPicker: 'model' }, { selectLabelMatching: row }, { key: 's' }], verify: { model: id } };
+  }
+  if (agent === 'codex') return { agent, savesDefault: true, steps: [{ send: id ? `/model ${noCtl(id)}` : '/model', enter: true }], verify: { model: id || null } };
   throw new RangeError(`unknown agent ${agent}`);
 }
 

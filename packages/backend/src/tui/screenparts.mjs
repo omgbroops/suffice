@@ -114,7 +114,9 @@ export function parsePicker(screen) {
   const ls = linesOf(screen);
   while (ls.length && !ls[ls.length - 1].trim()) ls.pop();
   if (!ls.some((l) => NAV_HINT.test(l))) return null;
-  const sel = ls.findIndex((l) => /^\s*[❯›]\s+\S/.test(l));
+  const hint = ls.findLastIndex((l) => NAV_HINT.test(l)); // the picker is the ❯ row nearest above its hint: an earlier "❯ /model" input echo is not a row
+  let sel = -1;
+  for (let i = hint; i >= 0; i--) if (/^\s*[❯›]\s+\S/.test(ls[i])) { sel = i; break; }
   if (sel < 0) return null;
   const col = ls[sel].search(/[❯›]/) + 2;
   const parse = (l) => {

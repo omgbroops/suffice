@@ -81,6 +81,36 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
   const p=row.agent==='fakeclaude'?path.join(dataDir,'fakeclaude-transcript.jsonl'):row.transcriptPath;if(!p)return;
   t.subs=true;t.unsubs.push(subTracker.attach(p,list=>send({type:'slot',id:`session:${row.id}:subagents`,value:list})));};
  const trackAll=rows=>{for(const r of rows||[]){track(r);attachSubs(r);}return rows;};
+ // Read-only view of the CLI's saved defaults. The app never writes this file.
+ const defaultsOf=()=>{try{const s=JSON.parse(fs.readFileSync(path.join(env.SUFFICE_HISTORY_HOME||process.env.HOME||'','.claude','settings.json'),'utf8'));return {model:s.model??null,effortLevel:s.effortLevel??null,modelSettings:s.modelSettings??null};}catch{return null;}};
+ // Resolves with pred(screenText) the first time it is truthy after a screen event, or null after ms.
+ const waitScreen=(sid,pred,ms)=>new Promise(resolve=>{let done=false,unsub=null,timer=null;
+  const fin=v=>{if(done)return;done=true;clearTimeout(timer);unsub?.();resolve(v||null);};
+  const test=async()=>{if(done)return;try{const {text}=await backend.sessions.screen(sid);const v=pred(text);if(v)fin(v);}catch{}};
+  timer=setTimeout(()=>fin(null),ms);
+  Promise.resolve(backend.sessions.stream(sid,()=>void test())).then(u=>{if(done)u();else unsub=u;}).catch(()=>{});void test();});
+ const KEYS={up:'\x1b[A',down:'\x1b[B',enter:'\r',esc:'\x1b'};
+ // Runs a commands.mjs plan. Claude never gets `/model <alias>` (it saves a default); any failure presses Esc and throws.
+ const runPlan=async(sid,t,plan)=>{
+  const tx=s=>backend.sessions.send(sid,s,{enter:false});
+  const bail=async msg=>{await tx(KEYS.esc).catch(()=>{});throw new Error(msg);};
+  let pk=null,want=null;const ackRe=/Set model to .*/g,seen=new Set((await backend.sessions.screen(sid).catch(()=>({text:''}))).text.match(ackRe)||[]); // ignore acks already on screen
+  for(const st of plan.steps){
+   if(st.send!==undefined)await tx(st.send+(st.enter?'\r':''));
+   else if(st.waitPicker){pk=await waitScreen(sid,x=>{const p=screenparts.parsePicker(x);return p&&/model/i.test(p.title||'')?p:null;},5000);if(!pk)await bail('Model picker did not open');}
+   else if(st.selectLabelMatching){const n=commands.pressesToRow(pk.options,pk.selected,new RegExp(st.selectLabelMatching,'i'));
+    if(n===null)await bail('That model is not in the picker');
+    want=pk.options[pk.options.findIndex(o=>o.index===pk.selected)+n].index;
+    if(n)await tx((n>0?KEYS.down:KEYS.up).repeat(Math.abs(n)));
+    if(!await waitScreen(sid,x=>screenparts.parsePicker(x)?.selected===want,3000))await bail('Could not move to the model row');}
+   else if(st.key){await tx(st.key);}
+  }
+  if(plan.agent!=='claude')return null;
+  const line=await waitScreen(sid,x=>!screenparts.parsePicker(x)&&(x.match(ackRe)||[]).find(l=>!seen.has(l)),5000);
+  if(!line)throw new Error('No confirmation from the terminal');
+  if(/saved as your default/i.test(line))throw new Error('Default model was changed by the agent CLI');
+  return line;
+ };
  const control=async(sid,action,args={})=>{
   const t=tracked.get(sid);if(!t)throw new Error('Unknown session');
   const run=async out=>{if(out instanceof Uint8Array)await backend.sessions.sendBytes(sid,out);else await backend.sessions.send(sid,String(out),{enter:false});};
@@ -89,8 +119,15 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
   if(action==='interrupt')return run(t.kind==='codex'?codexControls.interrupt():t.mapper.controls.interrupt().bytes);
   if(action==='slash'&&typeof args.command==='string')return run(t.kind==='codex'?codexControls.slash(args.command):t.mapper.controls.slash(args.command).bytes);
   const agent=t.kind;
-  if(action==='setModel'&&str(args.id))return run(commands.modelControl(agent,args.id));
-  if(action==='setEffort'&&agent==='claude'&&/^[a-z]+$/.test(args.level||''))return run(`/effort ${args.level}\r`);
+  if(action==='setModel'&&str(args.id)){
+   const plan=commands.modelControl(agent,args.id),before=agent==='claude'?defaultsOf():null;
+   let confirmation=null,err=null;try{confirmation=await runPlan(sid,t,plan);}catch(e){err=e;}
+   const after=agent==='claude'?defaultsOf():null,changed=!!before&&!!after&&JSON.stringify(before)!==JSON.stringify(after);
+   if(changed){const it={id:`app:default-changed:${Date.now()}`,ts:Date.now(),kind:'notice',level:'error',code:'error',text:'Default model was changed by the agent CLI'};t.order.push(it.id);t.byId.set(it.id,it);t.dirty=false;send({type:'slot',id:slot(sid),value:{items:t.order.map(i=>t.byId.get(i)),prompt:t.prompt,status:t.status,meta:t.screenMeta}});}
+   if(err)throw err;
+   return {savesDefault:plan.savesDefault,confirmation,settings:{changed,before,after}};}
+  // Typed `/effort <level>` and Enter in the slider both save effortLevel as the default (model-config.md); the session-only slider path is unprobed.
+  if(action==='setEffort'&&agent==='claude')throw new Error('Effort changes save as your default: use the terminal');
   if(action==='setMode'){const o=commands.modeControl(agent,String(args.from),String(args.to));return o?run(o):undefined;}
   if(action==='compact')return run(agent==='codex'?codexControls.slash('/compact'):t.mapper.controls.compact().bytes);
   if(action==='keys'&&Array.isArray(args.keys)){const K={up:'\x1b[A',down:'\x1b[B',enter:'\r',esc:'\x1b'};return run(args.keys.map(k=>K[k]||'').join(''));}
@@ -107,7 +144,7 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
    },
    'sessions-catalog':p=>{const t=tracked.get(id(p));if(!t)throw new Error('Unknown session');const a=t.kind;
     let cmds=[];try{cmds=commands.slashCommands(a,{home:env.SUFFICE_HISTORY_HOME||process.env.HOME,cwd:t.state?.cwd});}catch{}
-    return {agent:a,commands:cmds,models:commands.models(a),modes:commands.modes(a),efforts:commands.efforts(a)};},
+    return {agent:a,commands:cmds,savesDefault:{model:a==='codex',effort:a==='claude'},models:commands.models(a),modes:commands.modes(a),efforts:commands.efforts(a)};},
    'sessions-start':async p=>{await ready;const args=Array.isArray(p?.args)&&p.args.every(str)?p.args:undefined;const r=await call({type:'sessions.start',agent:agentName(p?.agent),cwd:folder(p?.cwd),...(args&&{args})});track(r);attachSubs(r);return r;},
    'sessions-list':async()=>{await ready;return trackAll(await call({type:'sessions.list'}));},
    'sessions-control':p=>control(id(p?.id),String(p?.action),p?.args),

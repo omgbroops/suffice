@@ -61,7 +61,7 @@ if(process.stdin.isTTY)process.stdin.setRawMode(true);
 // Typed commands print screens modelled on the recorded fixtures (tui-real/claude): /model /mode /queue /bg /plan /ask /ctx /clear.
 const R='\x1b[2J\x1b[H',foot=m=>`\n${'─'.repeat(100)}\n❯ \n${'─'.repeat(100)}\n\n  ${m}`;
 const SC={
- model:()=>`${R}\n   Select model\n   Switch between Claude models.\n\n     Default (recommended)\n     Opus 5.5\n   ❯ Haiku 5.5 ✔\n\n   ↑/↓ to navigate · Esc to exit`,
+ model:()=>pickerScreen(),
  mode:()=>R+foot('⏵⏵ accept edits on (shift+tab to cycle) · ← for agents'),
  queue:()=>`${R}✻ Newspapering… (6s · ↓ 388 tokens)\n\nQueued messages\n  ↳ also update the README\n${foot('⏸ manual mode on')}`,
  bg:()=>`${R}⏺ sleep 20 is running in the background (task bti9b799g).\n\n✻ Sautéed for 3s · 1 shell still running\n${foot('⏸ manual mode on · 1 shell · ← for agents')}`,
@@ -70,11 +70,20 @@ const SC={
  ctx:()=>`${R}Context low (12% remaining) · run /compact\n${foot('⏸ manual mode on')}`,
  clear:()=>R+foot('⏸ manual mode on'),
 };
+// /model picker modelled on tui-real/claude/model-switch: arrows move, s = session only, Enter = saved default, Esc closes.
+const ROWS=['Default (recommended) Opus 5.5','Opus 5.5','Fable 5.2','Sonnet 5.5','Haiku 5.5'];let cur=4,sel=4,picker=false;
+const pickerScreen=()=>`${R}\n   Select model\n   Switch between Claude models.\n\n${ROWS.map((r,i)=>`   ${i===sel?'❯':' '} ${i+1}. ${r}${i===cur?' ✔':''}`).join('\n')}\n     ▸ More models\n\n   Enter to set as default · s to use this session only · Esc to cancel`;
+const pick=k=>{
+ if(k==='\x1b[A')sel=Math.max(0,sel-1);else if(k==='\x1b[B')sel=Math.min(ROWS.length-1,sel+1);
+ else if(k==='s'||k==='\r'){cur=sel;picker=false;const name=ROWS[sel].replace(/^Default \(recommended\) /,'');console.log(`${R}  ⎿  Set model to ${name}${k==='\r'?' and saved as your default for new sessions':' for this session only'}\n${foot('⏸ manual mode on')}`);return;}
+ else if(k==='\x1b'){picker=false;console.log(R+foot('⏸ manual mode on'));return;}
+ console.log(pickerScreen());};
 let buf='';
 const key=async k=>{
- if(k==='\r'&&buf){const c=buf.replace(/^\//,'').trim().split(' ')[0];buf='';if(SC[c])console.log(SC[c]());return;}
+ if(picker)return pick(k);
+ if(k==='\r'&&buf){const c=buf.replace(/^\//,'').trim().split(' ')[0];buf='';if(c==='model'){picker=true;sel=cur;}if(SC[c])console.log(SC[c]());return;}
  if(k.length===1&&k>=' '&&k!=='\x7f'&&!(buf===''&&/[123]/.test(k))){buf+=k;return;}
  if(k==='1'||k==='\r'){console.log('\x1b[2J\x1b[H(approved)');res('t6','',{stdout:'',stderr:''});asst([{type:'text',text:'Build output removed.'}]);line({type:'system',subtype:'turn_duration',durationMs:61000});console.log('\n> ');}
  else if(k==='3'||k==='\x1b'){console.log('\n(declined)');res('t6','The user doesn\'t want to proceed with this tool use. The tool use was rejected',{},true);console.log('\n> ');}};
-process.stdin.on('data',async d=>{const s=String(d);if(s.startsWith('\x1b'))return key(s.length===1?s:'\x1b');for(const k of s)await key(k);}); // a paste arrives as one chunk: replay it per key
+process.stdin.on('data',async d=>{const s=String(d);if(picker){for(const k of s.match(/\x1b\[[AB]|[\s\S]/g))pick(k);return;}if(s.startsWith('\x1b'))return key(s.length===1?s:'\x1b');for(const k of s)await key(k);}); // a paste arrives as one chunk: replay it per key
 setInterval(()=>{},1e6);
