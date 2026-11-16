@@ -43,3 +43,9 @@ body:has(.session-row) .sidebar-empty { display: none; }
 .session-status { display: flex; align-items: center; gap: 8px; padding: 4px 0; color: var(--text-muted); font-size: 13px; }
 .session-status .thread-state { color: #60a5fa; }
 .session-status .thread-state svg { animation: thread-working 1.2s linear infinite; }
+.session-sub-sum { flex-wrap: wrap; }
+.session-sub-head { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.session-sub-stats { flex: 0 0 100%; padding-left: 15px; color: var(--text-muted); font-size: 12px; font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.session-sub-body { display: flex; flex-direction: column; gap: 4px; }
+.session-sub-body > .button { align-self: flex-start; }
+.session-sub-flat { margin-left: 0; }

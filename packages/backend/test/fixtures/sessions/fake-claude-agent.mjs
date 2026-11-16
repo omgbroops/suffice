@@ -29,8 +29,30 @@ res('t2','ok',{filePath:'/tmp/example-project/greet.js',structuredPatch:[{oldSta
 use('t3','Bash',{command:'node missing.js'});
 res('t3','Exit code 1\nError: Cannot find module missing.js',{stdout:'',stderr:'Error: Cannot find module missing.js'},true);
 use('t4','TodoWrite',{todos:[{content:'Remove build output',status:'in_progress'},{content:'Fix greeting',status:'completed'},{content:'Run tests',status:'pending'}]});
-use('t5','Task',{subagent_type:'Explore',prompt:'Find other typos in greet.js'});
-res('t5','No other typos.',{agentId:'a1'});
+// two parallel subagents: a1 finished (with nested child a3), a2 still running; children live in <transcript>/subagents/
+const sub=file.replace(/\.jsonl$/,'')+'/subagents';fs.mkdirSync(sub,{recursive:true});
+const kid=(id,type,desc,toolUseId,rows,extra={})=>{let k=0,t=Date.parse('2026-11-15T10:00:10Z');
+ fs.writeFileSync(`${sub}/agent-${id}.meta.json`,JSON.stringify({agentType:type,description:desc,toolUseId,...extra}));
+ for(const r of rows)fs.appendFileSync(`${sub}/agent-${id}.jsonl`,JSON.stringify({sessionId:'s1',isSidechain:true,agentId:id,uuid:id+(++k),timestamp:new Date(t+=1200).toISOString(),...r})+'\n');};
+const kasst=c=>({type:'assistant',message:{id:'k'+Math.random(),model:'claude-haiku-4-5',content:c,usage:{input_tokens:900,output_tokens:60}}});
+const kres=(id,c,tur)=>({type:'user',message:{content:[{type:'tool_result',tool_use_id:id,content:c,is_error:false}]},toolUseResult:tur});
+kid('a1','Explore','Find other typos in greet.js','t5a',[
+ {type:'user',message:{content:'Find other typos in greet.js'}},
+ kasst([{type:'tool_use',id:'c1',name:'Grep',input:{pattern:'helo',path:'/tmp/example-project'}}]),kres('c1','No matches',{}),
+ kasst([{type:'tool_use',id:'c2',name:'Read',input:{file_path:'/tmp/example-project/greet.js'}}]),kres('c2','const who',{}),
+ kasst([{type:'tool_use',id:'n1',name:'Task',input:{subagent_type:'general-purpose',prompt:'Check the README for the same typo'}}]),
+ kres('n1','README is clean.',{agentId:'a3'}),
+ kasst([{type:'text',text:'No other typos in greet.js.'}])]);
+kid('a3','general-purpose','Check README for typos','n1',[
+ {type:'user',message:{content:'Check the README for the same typo'}},
+ kasst([{type:'tool_use',id:'d1',name:'Read',input:{file_path:'/tmp/example-project/README.txt'}}]),kres('d1','Hello',{}),
+ kasst([{type:'text',text:'README is clean.'}])],{parentAgentId:'a1',spawnDepth:2});
+kid('a2','Plan','Plan the cleanup of build output','t5b',[
+ {type:'user',message:{content:'Plan the cleanup of build output'}},
+ kasst([{type:'tool_use',id:'e1',name:'Bash',input:{command:'ls build',description:'List build'}}]),kres('e1','a.o\nb.o',{stdout:'a.o\nb.o',stderr:''}),
+ kasst([{type:'tool_use',id:'e2',name:'Glob',input:{pattern:'**/*.o'}}])]);
+asst([{type:'tool_use',id:'t5a',name:'Task',input:{subagent_type:'Explore',description:'Find other typos in greet.js',prompt:'Find other typos in greet.js'}},{type:'tool_use',id:'t5b',name:'Task',input:{subagent_type:'Plan',description:'Plan the cleanup of build output',prompt:'Plan the cleanup of build output'}}]);
+res('t5a','No other typos.',{status:'completed',agentId:'a1',agentType:'Explore',totalToolUseCount:3,totalTokens:14200,totalDurationMs:21000});
 line({type:'system',subtype:'compact_boundary',compactMetadata:{preTokens:90000,postTokens:12000}});
 line({type:'system',subtype:'turn_duration',durationMs:42000});
 use('t6','Bash',{command:'rm -rf build',description:'Remove build output'});

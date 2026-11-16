@@ -81,6 +81,9 @@ function emitCall(state, out, callId) {
   if (CAT[c.name] === 'subagent') {
     const it = { id: `sub:${callId}`, ts: c.ts, kind: 'subagent', callId, name: str(input.subagent_type) || c.name, prompt: str(input.prompt), status: !r ? 'running' : r.isError ? 'error' : 'ok' };
     if (str(r?.tur?.agentId)) it.childSessionId = r.tur.agentId; // child lines: <project>/<session>/subagents/agent-<id>.jsonl
+    if (str(input.description)) it.description = input.description;
+    if (str(r?.tur?.agentId)) it.agentId = r.tur.agentId;
+    for (const k of ['totalToolUseCount', 'totalTokens', 'totalDurationMs']) if (typeof r?.tur?.[k] === 'number') it[k] = r.tur[k];
     return emit(state, out, it);
   }
   const { category, title } = classify(c.name, input);
@@ -253,7 +256,7 @@ function parsePrompt(screen) {
   for (let j = rows[0].i - 1; j >= 0; j--) if (lines[j].includes('?')) { ti = j; break; }
   if (ti < 0) ti = Math.max(0, rows[0].i - 1);
   const title = trust ? 'Is this a project you created or one you trust?' : lines[ti].trim();
-  const body = lines.slice(Math.max(0, ti - 6), ti).map((l) => l.trim()).join('\n');
+  const body = lines.slice(Math.max(0, ti - 6), ti).filter((l) => !SPIN.test(l)).map((l) => l.trim()).join('\n');
   const promptId = createHash('sha1').update(`${title}\n${options.map((o) => o.label).join('\n')}`).digest('hex').slice(0, 12);
   return { promptId, type, title, ...(body ? { body } : {}), options, selected };
 }

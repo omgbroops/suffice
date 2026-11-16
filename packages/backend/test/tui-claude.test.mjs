@@ -273,3 +273,19 @@ test('statusProblem rejects bad shapes', () => {
   assert.ok(statusProblem({ verb: 'A', elapsedSec: 1, tokenDirection: 'left' }));
   assert.equal(statusProblem({ verb: 'A', elapsedSec: 0 }), null);
 });
+
+test('subagent item carries description, agentId and result stats', () => {
+  const st = m.newState();
+  const mk = (o) => m.mapLine({ timestamp: '2026-01-01T00:00:00Z', ...o }, st);
+  mk({ type: 'assistant', uuid: 'a', message: { id: 'm', role: 'assistant', content: [{ type: 'tool_use', id: 'tu', name: 'Task', input: { subagent_type: 'Explore', description: 'Find typos', prompt: 'p' } }] } });
+  const out = mk({ type: 'user', uuid: 'u', toolUseResult: { agentId: 'abc', totalToolUseCount: 3, totalTokens: 900, totalDurationMs: 4000 }, message: { role: 'user', content: [{ type: 'tool_result', tool_use_id: 'tu', content: 'done' }] } });
+  const it = out.find((i) => i.kind === 'subagent');
+  assert.equal(itemProblem(it), null);
+  assert.deepEqual([it.description, it.agentId, it.totalToolUseCount, it.totalTokens, it.totalDurationMs], ['Find typos', 'abc', 3, 900, 4000]);
+});
+
+test('parsePrompt: spinner line above the dialog is not in the body', () => {
+  const p = P(['Edit file', '', '✻ Newspapering… (6s · ↓ 388 tokens · thought for 4s)', '', ' Do you want to make this edit?', ' ❯ 1. Yes', '   2. No'].join('\n'));
+  assert.equal(p.title, 'Do you want to make this edit?');
+  assert.equal(p.body, 'Edit file');
+});

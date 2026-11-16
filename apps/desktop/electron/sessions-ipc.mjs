@@ -3,6 +3,7 @@ import path from 'node:path';
 import {createBackend} from '../../../packages/backend/src/app/backend.mjs';
 import {createIpcBridge} from '../../../packages/backend/src/app/ipc.mjs';
 import {createClaudeMapper} from '../../../packages/backend/src/tui/claude.mjs';
+import {createSubagentTracker} from '../../../packages/backend/src/tui/subagents.mjs';
 import {createCodexMapper,controls as codexControls} from '../../../packages/backend/src/tui/codex.mjs';
 
 const LABELS={claude:'Claude Code',codex:'Codex',fake:'Fake agent',fakeclaude:'Fake Claude'};
@@ -65,7 +66,12 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
   void check();soon();
  }
  const untrack=sid=>{const t=tracked.get(sid);if(!t)return;tracked.delete(sid);clearTimeout(t.timer);for(const u of t.unsubs)try{u();}catch{}};
- const trackAll=rows=>{for(const r of rows||[])track(r);return rows;};
+ // Subagent feed: child transcripts live beside the parent transcript; attached once its path is known (list rows carry it lazily).
+ const subTracker=createSubagentTracker({fs});
+ const attachSubs=row=>{const t=tracked.get(row?.id);if(!t||t.kind!=='claude'||t.subs)return;
+  const p=row.agent==='fakeclaude'?path.join(dataDir,'fakeclaude-transcript.jsonl'):row.transcriptPath;if(!p)return;
+  t.subs=true;t.unsubs.push(subTracker.attach(p,list=>send({type:'slot',id:`session:${row.id}:subagents`,value:list})));};
+ const trackAll=rows=>{for(const r of rows||[]){track(r);attachSubs(r);}return rows;};
  const control=async(sid,action,args={})=>{
   const t=tracked.get(sid);if(!t)throw new Error('Unknown session');
   const run=async out=>{if(out instanceof Uint8Array)await backend.sessions.sendBytes(sid,out);else await backend.sessions.send(sid,String(out),{enter:false});};
@@ -84,7 +90,7 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
     if(!caps?.ok)return {ok:false,reason:caps?.reason==='tmux not found'?'Needs tmux':caps?.reason||'Unavailable',agents:[]};
     return {ok:true,agents:['claude','codex',...Object.keys(sessionAgents)].map(a=>({id:a,label:LABELS[a]||a,missing:!(sessionAgents[a]||onPath(a))}))};
    },
-   'sessions-start':async p=>{await ready;const r=await call({type:'sessions.start',agent:agentName(p?.agent),cwd:folder(p?.cwd)});track(r);return r;},
+   'sessions-start':async p=>{await ready;const r=await call({type:'sessions.start',agent:agentName(p?.agent),cwd:folder(p?.cwd)});track(r);attachSubs(r);return r;},
    'sessions-list':async()=>{await ready;return trackAll(await call({type:'sessions.list'}));},
    'sessions-control':p=>control(id(p?.id),String(p?.action),p?.args),
    'sessions-stop':p=>{untrack(id(p));return call({type:'sessions.stop',id:id(p)});},
@@ -92,7 +98,7 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
    'sessions-attach-command':p=>call({type:'sessions.attachCommand',id:id(p)}),
    'history-list':async p=>{await call({type:'history.scan'});return call({type:'history.list',opts:{limit:200,...(str(p?.query)&&{query:p.query})}});},
    'history-read':p=>call({type:'history.read',entry:{source:String(p?.source),path:String(p?.path)}}),
-   'sessions-resume':async p=>{const agent=AGENT_BY_SOURCE[p?.source];if(!agent||!str(p?.sessionId)||!str(p?.cwd))throw new Error('Cannot resume this chat');await ready;const r=await call({type:'sessions.resume',agent,cwd:folder(p.cwd),sessionId:p.sessionId});track(r);return r;},
+   'sessions-resume':async p=>{const agent=AGENT_BY_SOURCE[p?.source];if(!agent||!str(p?.sessionId)||!str(p?.cwd))throw new Error('Cannot resume this chat');await ready;const r=await call({type:'sessions.resume',agent,cwd:folder(p.cwd),sessionId:p.sessionId});track(r);attachSubs(r);return r;},
   },
   dispose:()=>{for(const k of [...tracked.keys()])untrack(k);return backend.dispose();},
  };

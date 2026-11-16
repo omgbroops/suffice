@@ -29,10 +29,10 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  if(!sx)return {leave(){},isActive:()=>false,stop:()=>false,send(){}};
  const side=el('div','sidebar-cli-sessions');
  document.querySelector('.sidebar-sessions').before(side);
- const rows=new Map(),states=new Map(),labels=new Map(),titles=new Map();
+ const rows=new Map(),states=new Map(),prompts=new Map(),subs=new Map(),labels=new Map(),titles=new Map();
  const name=s=>titles.get(s.id)||`${labels.get(s.id)||s.agent} session`;
  let active=null,mode='chat',unsubs=[],termEl=null,views=null,viewPromise=null,import_=null;
- let ui=null,statusEl=null,uiUnsub=null,box=null,useItems=false,lastMsgs=[],card=null,cardSig='',metaEl=null,termBtn=null;const cache=new Map();
+ let ui=null,statusEl=null,uiUnsub=null,subUnsub=null,box=null,useItems=false,lastMsgs=[],card=null,cardSig='',metaEl=null,termBtn=null;const cache=new Map();
  const termIds=new Map();
  form.addEventListener('submit',e=>{if(card){e.preventDefault();e.stopImmediatePropagation();}},true);
 
@@ -41,7 +41,8 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   const seen=new Set();
   for(const s of list){
    seen.add(s.id);labels.set(s.id,avail.agents.find(a=>a.id===s.agent)?.label||s.agent);
-   if(!states.has(s.id)){states.set(s.id,'starting');sx.onState(s.id,v=>{states.set(s.id,v?.state||'starting');paint(s);if(active?.id===s.id){paintHeader();syncRun();}});}
+   if(!states.has(s.id)){states.set(s.id,'starting');sx.onState(s.id,v=>{states.set(s.id,v?.state||'starting');paint(s);if(active?.id===s.id){paintHeader();syncRun();}});
+    sx.onUi(s.id,u=>{const had=prompts.get(s.id);prompts.set(s.id,u?!!u.prompt:undefined);if(had!==prompts.get(s.id))paint(s);});}
    paint(s);
   }
   for(const [id,row] of rows)if(!seen.has(id)){row.remove();rows.delete(id);}
@@ -50,7 +51,8 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   let row=rows.get(s.id);
   if(!row){row=el('button','thread-row session-row session-row--sidebar');row.type='button';row.addEventListener('click',()=>open(row._s));rows.set(s.id,row);side.append(row);}
   row._s=s;
-  const state=states.get(s.id)||'starting';
+  let state=states.get(s.id)||'starting';
+  if(state==='needs_permission'&&prompts.get(s.id)===false)state='working'; // badge follows the screen: no prompt on it, no "?"
   populateThreadRow(row,{id:'session-'+s.id,title:name(s),project:base(s.cwd),status:STATUS[state]||'working',modified:(s.created&&s.created<1e12?s.created*1000:s.created)||Date.now()});
   const label=labels.get(s.id);const noGit=row.querySelector('.thread-no-branch span');if(noGit)noGit.textContent=label+' CLI';
   row.setAttribute('aria-pressed',String(active?.id===s.id));row.title=`${name(s)} (${label} CLI)`;
@@ -89,30 +91,59 @@ export function connectSessions({toast,form,workspace,header,hooks}){
    for(const d of o.diff){const c=el('div','tool-diff');body.append(c);later.push(()=>renderCode(c,{text:patchOf(d),path:d.path},true));}}
   return w.element;
  }
- function build(it,later){
+ function build(it,later,depth=0){
   if(it.kind==='user'||it.kind==='assistant'){const a=el('article',`thread-message thread-${it.kind}`);if(it.kind==='assistant')hooks.markdown(a,it.text);else a.textContent=it.text;return a;}
   if(it.kind==='thinking'){const d=el('details','thread-activity');const log=el('div','thread-activity-log');log.append(el('div','thread-reasoning',it.text));d.append(el('summary','','Reasoning'),log);return d;}
   if(it.kind==='tool')return buildTool(it,later);
   if(it.kind==='todo'){const d=el('details','thread-activity');d.open=true;const log=el('div','thread-activity-log');
    const done=it.items.filter(i=>i.status==='done').length;d.append(el('summary','',`Plan ${done}/${it.items.length}`),log);
    for(const i of it.items)log.append(el('div','session-todo',(i.status==='done'?'✓ ':i.status==='active'?'› ':'○ ')+i.text));return d;}
-  if(it.kind==='subagent'){const d=el('details','thread-detail tool-widget');d.dataset.status=it.status==='running'?'pending':it.status==='error'?'error':'completed';
-   const s=el('summary','',`${it.name} · ${it.status==='running'?'running':it.status==='error'?'failed':'done'}`);if(it.status==='running')s.prepend(threadState({status:'working'}));
-   const b=el('div','tool-widget-body');b.append(el('pre','tool-input',it.prompt||''));d.append(s,b);return d;}
+  if(it.kind==='subagent')return buildSub(it,later,depth);
   if(it.kind==='notice')return el('div',`session-notice session-notice--quiet${it.level==='info'?'':' is-'+it.level}`,it.text);
   return null;
  }
+ // Subagent block: header + quiet stats line; children (same renderers) are built only when opened, last 200 shown.
+ const SHOW=200,subLimit=new Map(),kfmt=n=>n>=1000?(n/1000).toFixed(1).replace(/\.0$/,'')+'k':String(n);
+ const plural=(n,w)=>`${n} ${w}${n===1?'':'s'}`;
+ function subStats(it){
+  const run=it.status==='running',bits=[plural(it.toolUses??0,'tool use'),it.tokens!=null&&`${kfmt(it.tokens)} tokens`];
+  if(run)bits.push(it.lastAction);else if(it.endedAt&&it.startedAt)bits.push(dur(Math.max(0,Math.round((it.endedAt-it.startedAt)/1000))));
+  return (run?'':it.status==='error'?'Failed · ':'Done · ')+bits.filter(Boolean).join(' · ');
+ }
+ function fillSub(it,body,depth){
+  const later=[],all=it.items||[],key=it.callId,lim=subLimit.get(key)||SHOW,vis=all.slice(-lim);
+  body.replaceChildren();
+  if(all.length>vis.length){const b=el('button','button button--subtle',`Show ${all.length-vis.length} earlier`);b.type='button';b.addEventListener('click',()=>{subLimit.set(key,lim+SHOW);fillSub(it,body,depth);});body.append(b);}
+  if(depth>=3)body.append(el('div','session-notice--quiet session-notice',`Level ${depth+2}`));
+  renderRuns(vis,body,later,depth+1);for(const f of later)f();
+ }
+ function renderRuns(items,into,later,depth){
+  const entries=[];for(const it of items){if(it.kind==='usage')continue;const l=entries.at(-1);
+   if(RUN.has(it.kind)){if(l?.run)l.run.push(it);else entries.push({run:[it]});}else entries.push({it});}
+  for(const e of entries){const n=e.run?buildRun(e.run,later,null,depth):build(e.it,later,depth);if(n)into.append(n);}
+ }
+ function buildSub(it,later,depth){
+  const d=el('details','thread-detail tool-widget session-sub');d.dataset.status=it.status==='running'?'pending':it.status==='error'?'error':'completed';
+  const s=el('summary','session-sub-sum'),head=el('span','session-sub-head',it.description?`${it.type||it.name} · ${it.description}`:(it.type||it.name));
+  if(it.status==='running')s.prepend(threadState({status:'working'}));
+  s.append(head,el('span','session-sub-stats',subStats(it)));
+  const b=el('div',depth>=3?'tool-widget-body session-sub-body session-sub-flat':'thread-activity-log session-sub-body');
+  if(!it.items?.length&&it.prompt)b.append(el('pre','tool-input',it.prompt));
+  d.append(s,b);
+  d.addEventListener('toggle',()=>{if(d.open&&it.items?.length&&!b._built){b._built=true;fillSub(it,b,depth);}});
+  return d;
+ }
  const RUN=new Set(['tool','todo','subagent']),isRun=it=>it.kind==='tool'?it.status==='running':it.status==='running';
  // A maximal run of tool/todo/subagent items is one disclosure labelled by summarizeTools; running = open at its latest row, done = collapsed.
- function buildRun(run,later,old){
+ function buildRun(run,later,old,depth=0){
   const running=run.some(isRun),d=el('details','session-run thread-detail');d.dataset.running=String(running);
   const sum=el('summary','',summarizeTools(run).text);if(running)sum.prepend(threadState({status:'working'}));
-  const body=el('div','session-run-body');run.forEach((it,i)=>{const n=build(it,later);if(!n)return;if(running&&i<run.length-1)n.hidden=true;body.append(n);});
+  const body=el('div','session-run-body');run.forEach((it,i)=>{const n=build(it,later,depth);if(!n)return;if(running&&i<run.length-1&&it.kind!=='subagent')n.hidden=true;body.append(n);});
   d.append(sum,body);d.open=running?true:old&&old.dataset.running==='false'?old.open:false;return d;
  }
  function drawItems(){
   if(!box||!ui)return;const later=[];let prev=null;
-  const entries=[];for(const it of ui.items){if(it.kind==='usage')continue;const l=entries.at(-1);
+  const entries=[];for(let it of ui.items){if(it.kind==='usage')continue;if(it.kind==='subagent'&&subs.get(it.callId))it={...it,...subs.get(it.callId)};const l=entries.at(-1);
    if(RUN.has(it.kind)){if(l?.run)l.run.push(it);else entries.push({id:'run:'+it.id,run:[it]});}else entries.push({id:it.id,it});}
   for(const e of entries){
    const sg=JSON.stringify(e.run||e.it),c=cache.get(e.id);let node=c?.el;
@@ -244,10 +275,11 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   form.hidden=false;form.dataset.session='';prompt().placeholder=`Message ${labels.get(s.id)||'the agent'}`;
   ui=null;cardSig='';paintHeader();showChat();
   uiUnsub=sx.onUi(s.id,u=>{ui=u;paintMeta();if(mode==='chat')drawChat();drawPrompt();});
+  subs.clear();subLimit.clear();subUnsub=sx.onSubagents?.(s.id,l=>{subs.clear();for(const x of l||[])subs.set(x.callId,x);if(mode==='chat')drawChat();});
  }
  function leave(){
   if(!active&&!import_)return;
-  unsubs.forEach(f=>f());unsubs=[];uiUnsub?.();uiUnsub=null;ui=null;drawPrompt();active=null;form.setRunning?.(false);
+  unsubs.forEach(f=>f());unsubs=[];uiUnsub?.();uiUnsub=null;subUnsub?.();subUnsub=null;ui=null;drawPrompt();active=null;form.setRunning?.(false);
   venomEnd();if(termEl){termEl.hidden=true;delete termEl.dataset.solid;}
   form.hidden=false;delete form.dataset.session;prompt().placeholder=PH;
   header.className='thread-header';delete header.dataset.status;

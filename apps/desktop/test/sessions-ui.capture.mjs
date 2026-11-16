@@ -69,8 +69,17 @@ let page;const appPid=app.process().pid;try{
   await page.locator('.composer-approval button',{hasText:/^\s*(1\.\s*)?Yes\s*$/}).first().click();await page.waitForTimeout(300);if(await page.locator('dialog.detail-dialog[open]').count())throw new Error('detail dialog opened after Yes');
   await page.waitForFunction(()=>!document.querySelector('.session-status')&&document.querySelector('.session-run')?.dataset.running==='false',null,{timeout:15000});await page.waitForTimeout(500);
   await shot('chat-summary-collapsed.png');
-  await page.locator('.session-run:has(.tool-diff) > summary').first().click();await page.waitForTimeout(400);
+  {const r=page.locator('.session-run:has(.tool-diff)').first();if(!await r.evaluate(e=>e.open)){await r.locator('> summary').click();await page.waitForTimeout(400);}}
   await shot('chat-summary-open.png');
+  // subagent blocks: a2 running, a1 done with a nested child
+  const subs=page.locator('.session-sub'),scrollTo=l=>l.evaluate(e=>e.scrollIntoView({block:'center'}));
+  if(await subs.count()!==2)throw new Error('expected 2 subagent blocks, got '+await subs.count());
+  const runText=await page.locator('.session-run:has(.session-sub) > summary').first().textContent();if(!/ran 1 subagent.*running 1 subagent/.test(runText))throw new Error('run summary: '+runText);
+  await scrollTo(subs.nth(1));await page.waitForTimeout(200);await shot('subagent-running.png');
+  await scrollTo(subs.nth(0));await page.waitForTimeout(200);await shot('subagent-done-collapsed.png');
+  await subs.nth(0).locator('> summary').click();await page.waitForTimeout(400);await scrollTo(subs.nth(0));await shot('subagent-open.png');
+  await subs.nth(0).locator('.session-run:has(.session-sub)').first().locator('> summary').click();await page.waitForTimeout(300);
+  await subs.nth(0).locator('.session-sub').first().locator('> summary').click();await page.waitForTimeout(400);await scrollTo(subs.nth(0).locator('.session-sub').first());await shot('subagent-nested.png');
   await page.locator('.tool-widget:has(.tool-diff) summary').first().click().catch(()=>{});
   await page.waitForTimeout(400);
   await page.locator('.thread-messages').evaluate(e=>{e.querySelector('.tool-diff')?.scrollIntoView({block:'center'});});await page.waitForTimeout(300);
