@@ -8,6 +8,7 @@
 //     AskUserQuestion screen wording, whether a digit key selects AND submits, "Exit code N" prefix on Bash errors,
 //     the denial wording regex, the 200000 context window.
 import { createHash } from 'node:crypto';
+import { parseDuration } from './model.mjs';
 
 const CAP = 100000;
 const str = (v) => (typeof v === 'string' ? v : '');
@@ -257,6 +258,31 @@ function parsePrompt(screen) {
   return { promptId, type, title, ...(body ? { body } : {}), options, selected };
 }
 
+// ---- screen -> Status ----
+// Spinner row: "<glyph> <Verb>… (6s · ↓ 388 tokens · thought for 4s)"; older builds: "(esc to interrupt)" / "ctrl+c to interrupt".
+// Glyph cycle seen in Claude Code: · ✢ ✳ ✶ ✻ ✽ (and * on terminals without them). Parts after the verb vary, so each is matched on its own.
+const SPIN = /^\s*[·✢✳✶✻✽*●]\s+(\p{L}[\p{L}'-]*(?: \p{L}[\p{L}'-]*)?)…\s*\((.*)\)\s*$/u;
+const toks = (n, k) => Math.round(parseFloat(n.replace(/,/g, '')) * ({ k: 1e3, m: 1e6 }[k?.toLowerCase()] || 1));
+export function parseStatus(screen) {
+  const lines = stripAnsi(str(screen)).split('\n').filter((l) => l.trim()).slice(-12);
+  for (let i = lines.length - 1; i >= 0; i--) {
+    const m = SPIN.exec(lines[i]);
+    if (!m) continue;
+    const out = { verb: m[1], elapsedSec: 0 };
+    let known = false;
+    for (const raw of m[2].split('·')) {
+      const part = raw.trim();
+      let t;
+      if (/interrupt/i.test(part)) { out.hint = part; known = true; }
+      else if ((t = parseDuration(part)) !== null) { out.elapsedSec = t; known = true; }
+      else if ((t = /^([↓↑])?\s*([\d.,]+)\s*([km])?\s*tokens?$/i.exec(part))) { out.tokens = toks(t[2], t[3]); if (t[1]) out.tokenDirection = t[1] === '↓' ? 'down' : 'up'; known = true; }
+      else if ((t = /^thought for (.+)$/i.exec(part)) && (t = parseDuration(t[1])) !== null) { out.thoughtSec = t; known = true; }
+    }
+    if (known) return out; // a row with parentheses but no recognised part is ordinary text
+  }
+  return null;
+}
+
 // ---- controls -> bytes ----
 const enc = (s) => ({ bytes: new TextEncoder().encode(s) });
 const clean = (s) => { if (/[\x00-\x1f\x7f]/.test(s)) throw new RangeError('control characters not allowed'); return s; };
@@ -336,7 +362,7 @@ const coverage = [
   r('Resume picker (/resume)', 'terminal-only', 'no', 'interactive picker'),
   r('Cost and usage dashboards (/cost, /usage, /context)', 'terminal-only', 'no', 'rendered only on screen'),
   r('Settings and manager menus (/config, /mcp, /agents, /permissions, /hooks, /help)', 'terminal-only', 'no', 'interactive menus'),
-  r('Spinner and status line', 'terminal-only', 'no', 'screen only; meta carries model, mode, context'),
+  r('Spinner and status line', 'chat', 'n/a', 'parseStatus reads the spinner row from the screen; meta carries model, mode, context'),
   r('Prompt editing: vim mode, history search (Ctrl+R), editor handoff (Ctrl+G), image paste', 'terminal-only', 'no', 'input-line features'),
   r('Thinking and fast-mode toggles (Option+T, Option+O)', 'terminal-only', 'no', 'key toggles with no transcript record'),
   r('Login and auth flows', 'terminal-only', 'no', 'never driven: compliance rule'),
@@ -368,6 +394,7 @@ export function createClaudeMapper({ contextWindow = 200000, includeSidechain = 
     },
     meta: (state) => meta(ensure(state)),
     parsePrompt,
+    parseStatus,
     controls,
     coverage,
   };

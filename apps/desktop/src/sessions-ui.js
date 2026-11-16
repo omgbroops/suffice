@@ -3,6 +3,7 @@ import {populateThreadRow,tickThreadTimes,threadState} from './thread-row.js';
 import {showPopover,hidePopover} from './popover-motion.js';
 import {createToolWidget} from './tool-widget.js';
 import {renderCode} from './panel-content.js';
+import {summarizeTools} from '../../../packages/backend/src/tui/summary.mjs';
 import './sessions.css';
 
 const sx=window.sufficeDesktop?.sessions;
@@ -31,7 +32,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  const rows=new Map(),states=new Map(),labels=new Map(),titles=new Map();
  const name=s=>titles.get(s.id)||`${labels.get(s.id)||s.agent} session`;
  let active=null,mode='chat',unsubs=[],termEl=null,views=null,viewPromise=null,import_=null;
- let ui=null,uiUnsub=null,box=null,useItems=false,lastMsgs=[],card=null,cardSig='',metaEl=null,termBtn=null;const cache=new Map();
+ let ui=null,statusEl=null,uiUnsub=null,box=null,useItems=false,lastMsgs=[],card=null,cardSig='',metaEl=null,termBtn=null;const cache=new Map();
  const termIds=new Map();
  form.addEventListener('submit',e=>{if(card){e.preventDefault();e.stopImmediatePropagation();}},true);
 
@@ -68,15 +69,20 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   const b=el('button','button button--subtle','Open terminal');b.type='button';b.addEventListener('click',()=>setMode('terminal'));n.append(b);
   box.append(n);
  };
+ // Display-only path shortening: cwd-relative, home as ~, one path over 80 chars elided in the middle. Full text goes in a tooltip.
+ const short=t=>String(t).replace(/\/[\w.@+~-]+(?:\/[\w.@+~ -]*[\w.@+~-])+/g,p=>{const cwd=active?.s.cwd||'',home=sx.home||'';
+  let r=cwd&&p.startsWith(cwd+'/')?p.slice(cwd.length+1):home&&p.startsWith(home+'/')?'~'+p.slice(home.length):p;
+  if(r.length>80){const seg=r.split('/');r='…/'+seg.slice(-2).join('/');}return r;});
  // Items feed (Claude/Codex): one element per item id, replaced in place when its content changes.
  const cap=t=>{t=String(t||'');return t.length>4000?t.slice(0,4000)+'\n… output truncated':t;};
  const patchOf=d=>{if(d.patch)return d.patch;const o=d.oldText?d.oldText.split('\n'):[],n=(d.newText||'').split('\n');return `@@ -1,${o.length} +1,${n.length} @@\n`+[...o.map(l=>'-'+l),...n.map(l=>'+'+l)].join('\n');};
  function buildTool(it,later){
   const o=it.output||{},edit=it.category==='edit'||it.category==='write',shell=it.category==='shell';
-  const text=shell?String(it.input?.command||''):edit?'':JSON.stringify(it.input??{},null,2).slice(0,2000);
+  const full=shell?String(it.input?.command||''):edit?'':JSON.stringify(it.input??{},null,2).slice(0,2000),text=short(full);
   const err=it.status==='error'||it.status==='denied'||(o.exitCode??0)!==0;
   const w=createToolWidget({name:shell?'bash':it.name,text,output:cap(o.text)+(o.truncated&&!/truncated$/.test(cap(o.text))?'\n… output truncated':''),isError:err,done:it.status!=='running'});
-  const sum=w.element.querySelector('summary');sum.textContent=it.title||it.name;
+  const sum=w.element.querySelector('summary');sum.textContent=short(it.title||it.name);sum.title=it.title||it.name;
+  const inp=w.element.querySelector('.tool-input');if(shell&&inp){inp.classList.add('tool-cmd');inp.title=full;}
   if(it.status==='running')sum.prepend(threadState({status:'working'}));
   if(o.exitCode)sum.append(el('span','tool-exit',`exit ${o.exitCode}`));
   if(edit&&o.diff?.length){const body=w.element.querySelector('.tool-widget-body');
@@ -96,25 +102,45 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   if(it.kind==='notice')return el('div',`session-notice session-notice--quiet${it.level==='info'?'':' is-'+it.level}`,it.text);
   return null;
  }
+ const RUN=new Set(['tool','todo','subagent']),isRun=it=>it.kind==='tool'?it.status==='running':it.status==='running';
+ // A maximal run of tool/todo/subagent items is one disclosure labelled by summarizeTools; running = open at its latest row, done = collapsed.
+ function buildRun(run,later,old){
+  const running=run.some(isRun),d=el('details','session-run thread-detail');d.dataset.running=String(running);
+  const sum=el('summary','',summarizeTools(run).text);if(running)sum.prepend(threadState({status:'working'}));
+  const body=el('div','session-run-body');run.forEach((it,i)=>{const n=build(it,later);if(!n)return;if(running&&i<run.length-1)n.hidden=true;body.append(n);});
+  d.append(sum,body);d.open=running?true:old&&old.dataset.running==='false'?old.open:false;return d;
+ }
  function drawItems(){
   if(!box||!ui)return;const later=[];let prev=null;
-  for(const it of ui.items){
-   if(it.kind==='usage')continue;
-   const sg=JSON.stringify(it),c=cache.get(it.id);let node=c?.el;
-   if(!c||c.sig!==sg){const n=build(it,later);if(!n)continue;if(c?.el){if(c.el.tagName==='DETAILS'&&n.tagName==='DETAILS')n.open=c.el.open;c.el.replaceWith(n);}node=n;cache.set(it.id,{sig:sg,el:n});}
+  const entries=[];for(const it of ui.items){if(it.kind==='usage')continue;const l=entries.at(-1);
+   if(RUN.has(it.kind)){if(l?.run)l.run.push(it);else entries.push({id:'run:'+it.id,run:[it]});}else entries.push({id:it.id,it});}
+  for(const e of entries){
+   const sg=JSON.stringify(e.run||e.it),c=cache.get(e.id);let node=c?.el;
+   if(!c||c.sig!==sg){const n=e.run?buildRun(e.run,later,c?.el):build(e.it,later);if(!n)continue;if(c?.el){if(!e.run&&c.el.tagName==='DETAILS'&&n.tagName==='DETAILS')n.open=c.el.open;c.el.replaceWith(n);}node=n;cache.set(e.id,{sig:sg,el:n});}
    if(node.parentNode!==box||(prev?prev.nextSibling!==node:box.firstChild!==node))box.insertBefore(node,prev?prev.nextSibling:box.firstChild);
    prev=node;
   }
   for(const f of later)f();
   const t=ui.items.find(i=>i.kind==='user')?.text?.trim().replace(/\s+/g,' ').slice(0,60);
   if(t&&titles.get(active.id)!==t){titles.set(active.id,t);paint(active.s);paintHeader();}
-  hooks.bottom();
+  paintStatus();
+ }
+ // One live row at the bottom: "Newspapering… 6s · ↓388 · thought 4s". Text is updated in place; the row only adds or removes its own height.
+ const dur=n=>n<60?n+'s':Math.floor(n/60)+'m '+String(n%60).padStart(2,'0')+'s';
+ function paintStatus(){
+  if(!box)return;const st=ui?.status;
+  if(!st){if(statusEl?.parentNode){statusEl.remove();hooks.bottom();}return;}
+  if(!statusEl){statusEl=el('div','session-status');statusEl.append(threadState({status:'working'}),el('span','session-status-text'));}
+  const k=st.tokens,tok=k==null?'':(st.tokenDirection==='up'?'↑':'↓')+(k>=1000?(k/1000).toFixed(1).replace(/\.0$/,'')+'k':k);
+  statusEl.lastChild.textContent=[`${st.verb}… ${dur(st.elapsedSec||0)}`,tok,st.thoughtSec!=null&&`thought ${dur(st.thoughtSec)}`].filter(Boolean).join(' · ');
+  const added=statusEl.parentNode!==box||box.lastChild!==statusEl;if(added)box.append(statusEl);
+  if(added)hooks.bottom();
  }
  function drawChat(){
   if(!box||!active)return;
   const items=!!ui?.items?.length;
   if(items!==useItems||(!items&&!cache.size&&false)){useItems=items;box.replaceChildren();cache.clear();}
-  if(items)drawItems();else{renderChat(box,lastMsgs);if(states.get(active.id)==='needs_permission'&&!ui?.prompt)notice(box,active.s);}
+  if(items)drawItems();else{renderChat(box,lastMsgs);if(states.get(active.id)==='needs_permission'&&!ui?.prompt)notice(box,active.s);paintStatus();}
  }
  function paintMeta(){
   if(!metaEl||!active)return;const m=ui?.meta||{};

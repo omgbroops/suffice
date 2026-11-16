@@ -4,7 +4,7 @@
 // Rollout formats handled: "item mode" (event_msg/item_completed ThreadItems, what 0.159 writes),
 // legacy *_begin/*_end events (protocol source only, not seen in real files), and a response_item
 // fallback for sessions that carry neither.
-import { itemProblem } from './model.mjs';
+import { itemProblem, parseDuration } from './model.mjs';
 
 const text = (v) => (typeof v === 'string' ? v : '');
 const blocksText = (c) => (Array.isArray(c) ? c.map((b) => text(b?.text)).filter(Boolean).join('\n') : text(c));
@@ -320,7 +320,7 @@ export function createCodexMapper() {
     return m;
   }
 
-  return { mapLine, meta, parsePrompt, controls, coverage, itemProblem };
+  return { mapLine, meta, parsePrompt, parseStatus, controls, coverage, itemProblem };
 }
 
 // ---- prompts -------------------------------------------------------------------------------
@@ -370,6 +370,21 @@ export function parsePrompt(screen) {
   return { promptId: `codex:${type}:${title}`.slice(0, 120), type, title, ...(body ? { body } : {}), options, selected };
 }
 
+// ---- status --------------------------------------------------------------------------------
+// tui/src/status_indicator_widget.rs:255-269 + motion.rs: "[• |◦ |◌ ]<header> (<elapsed> • <key> to interrupt)[ · message]",
+// elapsed from fmt_elapsed_compact (:79): "59s", "1m 05s", "1h 02m 03s". Header defaults to "Working". Without the hint the row is "(<elapsed>)",
+// which is only trusted when it starts with the activity glyph.
+const WORKING = /^\s*([•◦◌])?\s*([A-Z][\w' -]{0,40}?)\s+\((\d+h \d+m \d+s|\d+m \d+s|\d+s)(?: • (.+?) to interrupt)?\)(?: · .*)?\s*$/;
+export function parseStatus(screen) {
+  const lines = text(screen).replace(/\x1b\[[0-9;?]*[ -/]*[@-~]/g, '').split('\n').filter((l) => l.trim()).slice(-12);
+  for (let i = lines.length - 1; i >= 0; i--) {
+    const m = WORKING.exec(lines[i]);
+    if (!m || (!m[4] && !m[1])) continue;
+    return { verb: m[2], elapsedSec: parseDuration(m[3]), ...(m[4] && { hint: `${m[4]} to interrupt` }) };
+  }
+  return null;
+}
+
 // ---- controls ------------------------------------------------------------------------------
 // Default keys: tui/src/keymap.rs:1664 (interrupt Esc), :1935-1939 (approval y/a/p/d, Esc|n decline),
 // :2468 (shift+tab cycles collaboration mode), :1681 (Tab queues). Slash names: tui/src/slash_command.rs.
@@ -416,6 +431,7 @@ export const coverage = [
   C('/resume, /fork pickers', 'terminal-only', 'no', 'full-screen session lists; use sessions API'),
   C('/theme, /keymap, /vim, /tui, /statusline, /title, /pets', 'terminal-only', 'no', 'local TUI appearance settings, no chat content'),
   C('/diff, /copy, /export, /raw, /mention', 'terminal-only', 'no', 'pager or clipboard overlays'),
+  C('working line', 'chat', 'n/a', 'parseStatus reads "Working (12s • esc to interrupt)" from the screen'),
   C('/status, /usage, /ps, /debug-config', 'terminal-only', 'no', 'status panels rendered only in the terminal'),
   C('/mcp, /apps, /plugins, /skills, /hooks, /ide', 'terminal-only', 'no', 'management panels'),
   C('/logout, /feedback, /setup-default-sandbox, /experimental', 'terminal-only', 'no', 'account and setup flows'),

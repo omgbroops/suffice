@@ -40,9 +40,9 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
   const sid=row?.id;if(!sid||tracked.has(sid))return;
   const kind=row.agent==='codex'?'codex':row.agent==='claude'||row.agent==='fakeclaude'?'claude':null;if(!kind)return;
   const mapper=kind==='codex'?createCodexMapper():createClaudeMapper();
-  const t={kind,mapper,state:mapper.newState?.()??{},order:[],byId:new Map(),prompt:null,screenMeta:{},unsubs:[],timer:null,last:0,dirty:false,pending:null};
+  const t={kind,mapper,state:mapper.newState?.()??{},order:[],byId:new Map(),prompt:null,status:null,screenMeta:{},unsubs:[],timer:null,last:0,dirty:false,pending:null};
   tracked.set(sid,t);
-  const publish=()=>{t.dirty=false;send({type:'slot',id:slot(sid),value:{items:t.order.map(i=>t.byId.get(i)),prompt:t.prompt,meta:{...(mapper.meta?.(t.state)||{}),...t.screenMeta}}});};
+  const publish=()=>{t.dirty=false;send({type:'slot',id:slot(sid),value:{items:t.order.map(i=>t.byId.get(i)),prompt:t.prompt,status:t.status,meta:{...(mapper.meta?.(t.state)||{}),...t.screenMeta}}});};
   const soon=()=>{if(!t.dirty){t.dirty=true;setTimeout(publish,30).unref?.();}};
   const reset=()=>{t.state=mapper.newState?.()??{};t.order=[];t.byId=new Map();soon();};
   const onLine=line=>{let o;try{o=JSON.parse(line);}catch{return;}
@@ -55,11 +55,11 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
    if(wait>0){if(!t.timer){t.timer=setTimeout(()=>{t.timer=null;void check();},wait);t.timer.unref?.();}return;}
    t.last=Date.now();
    try{const {text}=await backend.sessions.screen(sid);
-    const p=(kind==='codex'?mapper.parsePrompt:mapper.parsePrompt)(text)||null;
+    const p=mapper.parsePrompt(text)||null,st=mapper.parseStatus?.(text)||null;
     const v=/Claude Code v(\d[\w.]*)/.exec(text)?.[1],e=/with (\w+) effort/.exec(text)?.[1];
     const sm={...t.screenMeta,...(v&&{version:v}),...(e&&{effort:e})};
-    const changed=JSON.stringify(p)!==JSON.stringify(t.prompt)||JSON.stringify(sm)!==JSON.stringify(t.screenMeta);
-    t.prompt=p;t.screenMeta=sm;if(changed)soon();}catch{}
+    const changed=JSON.stringify(p)!==JSON.stringify(t.prompt)||JSON.stringify(sm)!==JSON.stringify(t.screenMeta)||JSON.stringify(st)!==JSON.stringify(t.status);
+    t.prompt=p;t.status=st;t.screenMeta=sm;if(changed)soon();}catch{}
   };
   Promise.resolve(backend.sessions.stream(sid,()=>void check())).then(u=>{if(tracked.get(sid)===t)t.unsubs.push(u);else u();}).catch(()=>{});
   void check();soon();

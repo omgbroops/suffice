@@ -24,6 +24,9 @@
 // Meta: what a TUI shows in its status area.
 //   { agent, model?, mode?, cwd?, branch?, contextUsedPct?, sessionId? }
 //
+// Status: the live "working" line a TUI draws only on its screen (spinner row), or null when idle. Mappers expose parseStatus(screen).
+//   { verb, elapsedSec, tokens?, tokenDirection?: 'down'|'up', thoughtSec?, hint? }
+//
 // Control: what the desktop UI can ask a session to do. A mapper declares which it supports.
 //   'interrupt' | 'answerPrompt' {index} | 'setMode' {mode} | 'setModel' {model} | 'slash' {command}
 //   | 'compact' | 'clear' | 'attach' {path}
@@ -56,6 +59,24 @@ export function itemProblem(it) {
     case 'notice': return ['info', 'warn', 'error'].includes(it.level) && NOTICE_CODES.includes(it.code) && str(it.text) ? null : 'bad notice';
     case 'usage': return num(it.inputTokens) && num(it.outputTokens) ? null : 'bad usage';
   }
+  return null;
+}
+
+/** Seconds from "6s", "1m 6s", "1h 2m 03s"; null when the text is not a duration. */
+export function parseDuration(t) {
+  const m = /^(?:(\d+)h\s*)?(?:(\d+)m\s*)?(?:(\d+)s)?$/.exec(String(t).trim());
+  if (!m || (!m[1] && !m[2] && !m[3])) return null;
+  return (+m[1] || 0) * 3600 + (+m[2] || 0) * 60 + (+m[3] || 0);
+}
+
+export function statusProblem(s) {
+  if (!s || typeof s !== 'object') return 'not an object';
+  if (!str(s.verb) || !s.verb) return 'verb missing';
+  if (!num(s.elapsedSec) || s.elapsedSec < 0) return 'elapsedSec missing';
+  if (s.tokens !== undefined && (!num(s.tokens) || s.tokens < 0)) return 'bad tokens';
+  if (s.tokenDirection !== undefined && !['down', 'up'].includes(s.tokenDirection)) return 'bad tokenDirection';
+  if (s.thoughtSec !== undefined && !num(s.thoughtSec)) return 'bad thoughtSec';
+  if (s.hint !== undefined && !str(s.hint)) return 'bad hint';
   return null;
 }
 

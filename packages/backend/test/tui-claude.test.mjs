@@ -234,6 +234,42 @@ test('coverage rows are complete and map every model entry', () => {
 });
 test('coverage totals', () => {
   const chat = cov.filter((r) => r.shown === 'chat'), term = cov.filter((r) => r.shown === 'terminal-only');
-  assert.deepEqual([cov.length, chat.length, term.length, cov.filter((r) => r.driven === 'yes').length], [49, 38, 11, 10]);
+  assert.deepEqual([cov.length, chat.length, term.length, cov.filter((r) => r.driven === 'yes').length], [49, 39, 10, 10]);
   assert.ok(term.every((r) => r.driven === 'no'));
+});
+
+import { parseStatus } from '../src/tui/claude.mjs';
+import { statusProblem } from '../src/tui/model.mjs';
+
+test('parseStatus: spinner row variants', () => {
+  const cases = [
+    ['✽ Newspapering… (6s · ↓ 388 tokens · thought for 4s)', { verb: 'Newspapering', elapsedSec: 6, tokens: 388, tokenDirection: 'down', thoughtSec: 4 }],
+    ['✻ Pondering… (1m 6s · ↑ 1.2k tokens)', { verb: 'Pondering', elapsedSec: 66, tokens: 1200, tokenDirection: 'up' }],
+    ['* Thinking… (12s · esc to interrupt)', { verb: 'Thinking', elapsedSec: 12, hint: 'esc to interrupt' }],
+    ['· Running… (esc to interrupt · 3s · ↓ 5 tokens)', { verb: 'Running', elapsedSec: 3, tokens: 5, tokenDirection: 'down', hint: 'esc to interrupt' }],
+    ['\x1b[38;5;174m✶\x1b[39m Cogitating… (2s)', { verb: 'Cogitating', elapsedSec: 2 }],
+  ];
+  for (const [line, want] of cases) {
+    const got = parseStatus(`some output\n\n${line}\n\n╭────╮\n│ > │\n╰────╯\n  ? for shortcuts`);
+    assert.deepEqual(got, want, line);
+    assert.equal(statusProblem(got), null);
+  }
+});
+
+test('parseStatus: idle and look-alike screens give null', () => {
+  assert.equal(parseStatus(''), null);
+  assert.equal(parseStatus(undefined), null);
+  assert.equal(parseStatus('╭────╮\n│ > │\n╰────╯\n  ? for shortcuts'), null);
+  assert.equal(parseStatus('The build finished… (3s) and then stopped'), null);
+  assert.equal(parseStatus('Loading… (6s · ↓ 388 tokens)'), null); // no spinner glyph
+  assert.equal(parseStatus('✽ Note… (see docs)'), null); // glyph but nothing recognised
+  assert.equal(parseStatus('✽ Newspapering… (6s)\n' + 'x\n'.repeat(20)), null); // scrolled out of the last 12 lines
+});
+
+test('statusProblem rejects bad shapes', () => {
+  assert.ok(statusProblem(null));
+  assert.ok(statusProblem({ verb: '', elapsedSec: 1 }));
+  assert.ok(statusProblem({ verb: 'A', elapsedSec: -1 }));
+  assert.ok(statusProblem({ verb: 'A', elapsedSec: 1, tokenDirection: 'left' }));
+  assert.equal(statusProblem({ verb: 'A', elapsedSec: 0 }), null);
 });

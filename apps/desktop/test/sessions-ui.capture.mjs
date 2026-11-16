@@ -65,6 +65,12 @@ let page;const appPid=app.process().pid;try{
   await page.locator('[data-menu-action="cli-session:fakeclaude"]').click();
   await page.locator('.composer-approval:not([hidden])').waitFor({timeout:20000});await page.waitForTimeout(600);
   await shot('chat-prompt.png');
+  await page.locator('.session-status').waitFor({timeout:5000});await shot('chat-working.png');
+  await page.locator('.composer-approval button',{hasText:/^\s*(1\.\s*)?Yes\s*$/}).first().click();await page.waitForTimeout(300);if(await page.locator('dialog.detail-dialog[open]').count())throw new Error('detail dialog opened after Yes');
+  await page.waitForFunction(()=>!document.querySelector('.session-status')&&document.querySelector('.session-run')?.dataset.running==='false',null,{timeout:15000});await page.waitForTimeout(500);
+  await shot('chat-summary-collapsed.png');
+  await page.locator('.session-run:has(.tool-diff) > summary').first().click();await page.waitForTimeout(400);
+  await shot('chat-summary-open.png');
   await page.locator('.tool-widget:has(.tool-diff) summary').first().click().catch(()=>{});
   await page.waitForTimeout(400);
   await page.locator('.thread-messages').evaluate(e=>{e.querySelector('.tool-diff')?.scrollIntoView({block:'center'});});await page.waitForTimeout(300);

@@ -36,3 +36,10 @@ body:has(.session-row) .sidebar-empty { display: none; }
 .session-notice--quiet { border: 0; padding: 2px 4px; color: var(--text-muted); font-size: 12px; justify-content: flex-start; }
 .session-todo { color: var(--text-muted); font-size: 13px; padding: 1px 0; }
 .tool-diff { margin-top: 6px; }
+.session-run { margin: 2px 0; }
+.session-run > summary { cursor: pointer; }
+.session-run-body { display: flex; flex-direction: column; gap: 4px; padding-top: 4px; }
+.tool-widget .tool-cmd { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; white-space: pre-wrap; overflow-wrap: anywhere; }
+.session-status { display: flex; align-items: center; gap: 8px; padding: 4px 0; color: var(--text-muted); font-size: 13px; }
+.session-status .thread-state { color: #60a5fa; }
+.session-status .thread-state svg { animation: thread-working 1.2s linear infinite; }

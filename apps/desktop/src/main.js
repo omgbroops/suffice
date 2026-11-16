@@ -221,7 +221,7 @@ document.querySelector('form').addEventListener('submit', (e) => {
 
 document.addEventListener('click', (e) => {
 
-  const session = e.target.closest('[data-session]');
+  const session = e.target.closest('.session-row[data-session]');
 
   if (session) { const s = sessions[Number(session.dataset.session)]; showDialog(escapeHtml(s.title), `<div class="session-detail-meta">${icon('folder')}${s.repo}<span>·</span>${s.time}</div><p>${s.description}</p><div class="sample-note">Sample session · prototype data</div>`); return; }
 

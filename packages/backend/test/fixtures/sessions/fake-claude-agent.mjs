@@ -34,9 +34,9 @@ res('t5','No other typos.',{agentId:'a1'});
 line({type:'system',subtype:'compact_boundary',compactMetadata:{preTokens:90000,postTokens:12000}});
 line({type:'system',subtype:'turn_duration',durationMs:42000});
 use('t6','Bash',{command:'rm -rf build',description:'Remove build output'});
-dialog();
+console.log('✻ Newspapering… (6s · ↓ 388 tokens · thought for 4s)');dialog();
 if(process.stdin.isTTY)process.stdin.setRawMode(true);
 process.stdin.on('data',async d=>{const k=String(d);
- if(k==='1'||k==='\r'){console.log('\n(approved)');res('t6','',{stdout:'',stderr:''});asst([{type:'text',text:'Build output removed.'}]);line({type:'system',subtype:'turn_duration',durationMs:61000});console.log('\n> ');}
+ if(k==='1'||k==='\r'){console.log('\x1b[2J\x1b[H(approved)');res('t6','',{stdout:'',stderr:''});asst([{type:'text',text:'Build output removed.'}]);line({type:'system',subtype:'turn_duration',durationMs:61000});console.log('\n> ');}
  else if(k==='3'||k==='\x1b'){console.log('\n(declined)');res('t6','The user doesn\'t want to proceed with this tool use. The tool use was rejected',{},true);console.log('\n> ');}});
 setInterval(()=>{},1e6);

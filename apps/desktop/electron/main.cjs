@@ -38,7 +38,7 @@ if(primary)app.whenReady().then(async()=>{
   win=new BrowserWindow({icon:appIcon,show:false,width:1440,height:900,minWidth:720,minHeight:540,...chrome.options,backgroundColor:'#0e0e0e',title:'Suffice',autoHideMenuBar:true,webPreferences:{additionalArguments:['--suffice-window-chrome='+chrome.mode],preload:path.join(__dirname,'preload.cjs'),contextIsolation:true,nodeIntegration:false,sandbox:true}});
   if(process.platform==='win32')require('./windows-app-details.cjs').applyWindowsAppDetails({app,win,shell,iconPath:path.join(__dirname,'../assets/suffice-logo.ico')});
   if(process.env.SUFFICE_TEST_HIDE_WINDOW!=='1')win.show();else app.dock?.hide();
-  const entry=pathToFileURL(path.join(__dirname,'../dist/index.html')).href;
+  const entry=pathToFileURL(path.join(process.env.SUFFICE_TEST_DIST||path.join(__dirname,'../dist'),'index.html')).href;
   win.webContents.setWindowOpenHandler(()=>({action:'deny'}));
   win.webContents.on('will-navigate',(event,url)=>{if(url!==entry)event.preventDefault();});
   function handle(name,handler){ipcMain.handle(`suffice:${name}`,(event,...args)=>{if(event.senderFrame!==win.webContents.mainFrame)throw new Error('Untrusted frame');if(branchBusy&&['select-project','thread','project','reset'].includes(name))throw new Error('Wait for the branch change to finish');return handler(...args);});}
@@ -135,7 +135,7 @@ if(primary)app.whenReady().then(async()=>{
   });
   async function enforceRetention(days){if(running||![30,90].includes(days))return;const actions=await import('./settings-data-actions.mjs'),files=await actions.sessionFiles(settingsHome),active=new Set(files.filter(file=>createHash('sha256').update(process.platform==='win32'?path.resolve(file.path).toLowerCase():path.resolve(file.path)).digest('hex').slice(0,32)===viewedThreadId).map(file=>file.path));const count=await actions.expireSessions(settingsHome,days,{trash:file=>shell.trashItem(file),active});if(count&&!win.isDestroyed())win.webContents.send('suffice:event',{event:'history_changed'});}
   const retentionTimer=setInterval(()=>void settings.get().then(prefs=>enforceRetention(parseInt(prefs['history-retention']))).catch(()=>{}),3600000);retentionTimer.unref();
-  await win.loadFile(path.join(__dirname,'../dist/index.html'));void settings.get().then(prefs=>enforceRetention(parseInt(prefs['history-retention']))).catch(()=>{});
+  await win.loadFile(path.join(process.env.SUFFICE_TEST_DIST||path.join(__dirname,'../dist'),'index.html'));void settings.get().then(prefs=>enforceRetention(parseInt(prefs['history-retention']))).catch(()=>{});
   let closing=false,flushed=false;app.on('before-quit',event=>{closing=true;if(flushed)return;event.preventDefault();void views.flush().catch(()=>{}).finally(()=>{flushed=true;app.quit();});});
   win.on('close',event=>{
     if(closing)return;event.preventDefault();void settings.get().then(prefs=>{if(prefs.tray){win.hide();return;}closing=true;shutdownWindow();});

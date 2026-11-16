@@ -218,3 +218,18 @@ test('coverage table is complete', () => {
   assert.equal(new Set(coverage.map((r) => r.element)).size, coverage.length);
   assert.ok(coverage.some((r) => r.shown === 'terminal-only') && coverage.some((r) => r.shown === 'chat'));
 });
+
+import { parseStatus as codexStatus } from '../src/tui/codex.mjs';
+
+test('codex parseStatus: working line variants', () => {
+  assert.deepEqual(codexStatus('out\n• Working (12s • esc to interrupt)\n\n› prompt'), { verb: 'Working', elapsedSec: 12, hint: 'esc to interrupt' });
+  assert.deepEqual(codexStatus('Working (1m 05s • esc to interrupt) · hook ran'), { verb: 'Working', elapsedSec: 65, hint: 'esc to interrupt' });
+  assert.deepEqual(codexStatus('◦ Thinking (1h 02m 03s)'), { verb: 'Thinking', elapsedSec: 3723 });
+});
+
+test('codex parseStatus: idle and look-alikes give null', () => {
+  assert.equal(codexStatus(''), null);
+  assert.equal(codexStatus('› Ask Codex\n  ? for shortcuts'), null);
+  assert.equal(codexStatus('Done (12s)'), null); // no hint, no glyph
+  assert.equal(codexStatus('lowercase text (12s • esc to interrupt)'), null);
+});
