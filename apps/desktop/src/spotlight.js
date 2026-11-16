@@ -34,7 +34,7 @@ export function createSpotlight({commands}){
   items=items.slice(0,100);
   if(!items.length){const empty=span('spotlight-empty','No results');empty.role='status';list.append(empty);}
   tickThreadTimes(list);highlight(selected);list.scrollTop=0;updateFade();
-  if(animate&&!reduce())list.animate([{opacity:.65},{opacity:1}],{duration:100,easing:'ease-out'});
+  if(animate&&!document.documentElement.classList.contains('reduce-motion')&&!matchMedia('(prefers-reduced-motion: reduce)').matches)list.animate([{opacity:.65},{opacity:1}],{duration:100,easing:'ease-out'});
  }
  function updateFade(){list.dataset.top=String(list.scrollTop>1);list.dataset.bottom=String(list.scrollHeight-list.scrollTop-list.clientHeight>1);}
  new ResizeObserver(updateFade).observe(list);list.addEventListener('scroll',updateFade,{passive:true});
