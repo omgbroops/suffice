@@ -1,0 +1,286 @@
+{
+ "name": "worktree-enter-exit",
+ "unverified": true,
+ "beats": [
+  {
+   "screen": {
+    "rows": [
+     " ▝▝   ▝▝   /tmp/PROJECT",
+     "",
+     "❯ Work in a worktree",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "❯ ",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "",
+     "  Sonnet 5.5 (medium) | USER:PROJECT",
+     "  ⏸ manual mode on",
+     "",
+     "",
+     "",
+     ""
+    ]
+   },
+   "transcript": [
+    {
+     "type": "user",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "role": "user",
+      "content": "Work in a worktree"
+     }
+    }
+   ]
+  },
+  {
+   "screen": {
+    "rows": [
+     " ▝▝   ▝▝   /tmp/PROJECT",
+     "",
+     "❯ Work in a worktree",
+     "",
+     "⏺ EnterWorktree",
+     "  ⎿  Created worktree at /tmp/PROJECT/.claude/worktrees/w1",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "❯ ",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "",
+     "  Sonnet 5.5 (medium) | USER:PROJECT",
+     "  ⏸ manual mode on",
+     "",
+     "",
+     "",
+     ""
+    ]
+   },
+   "working": {
+    "seconds": 0.2,
+    "cont": false
+   },
+   "transcript": [
+    {
+     "type": "assistant",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "id": "msg_0017",
+      "role": "assistant",
+      "model": "claude-sonnet-5-5",
+      "content": [
+       {
+        "type": "tool_use",
+        "id": "toolu_wt1",
+        "name": "EnterWorktree",
+        "input": {
+         "name": "w1"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "type": "user",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "role": "user",
+      "content": [
+       {
+        "type": "tool_result",
+        "tool_use_id": "toolu_wt1",
+        "content": "Created worktree at /tmp/PROJECT/.claude/worktrees/w1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "screen": {
+    "rows": [
+     " ▝▝   ▝▝   /tmp/PROJECT",
+     "",
+     "❯ Work in a worktree",
+     "",
+     "⏺ EnterWorktree",
+     "  ⎿  Created worktree at /tmp/PROJECT/.claude/worktrees/w1",
+     "",
+     "⏺ ExitWorktree",
+     "  ⎿  Returned to /tmp/PROJECT",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "❯ ",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "",
+     "  Sonnet 5.5 (medium) | USER:PROJECT",
+     "  ⏸ manual mode on",
+     "",
+     "",
+     "",
+     ""
+    ]
+   },
+   "working": {
+    "seconds": 0.2,
+    "cont": true
+   },
+   "transcript": [
+    {
+     "type": "assistant",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "id": "msg_0018",
+      "role": "assistant",
+      "model": "claude-sonnet-5-5",
+      "content": [
+       {
+        "type": "tool_use",
+        "id": "toolu_wt2",
+        "name": "ExitWorktree",
+        "input": {
+         "action": "keep"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "type": "user",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "role": "user",
+      "content": [
+       {
+        "type": "tool_result",
+        "tool_use_id": "toolu_wt2",
+        "content": "Returned to /tmp/PROJECT"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "screen": {
+    "rows": [
+     " ▝▝   ▝▝   /tmp/PROJECT",
+     "",
+     "❯ Work in a worktree",
+     "",
+     "⏺ EnterWorktree",
+     "  ⎿  Created worktree at /tmp/PROJECT/.claude/worktrees/w1",
+     "",
+     "⏺ ExitWorktree",
+     "  ⎿  Returned to /tmp/PROJECT",
+     "",
+     "⏺ Worktree entered and left.",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "❯ ",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "",
+     "  Sonnet 5.5 (medium) | USER:PROJECT",
+     "  ⏸ manual mode on",
+     "",
+     "",
+     "",
+     ""
+    ]
+   },
+   "working": false,
+   "transcript": [
+    {
+     "type": "assistant",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "id": "msg_0019",
+      "role": "assistant",
+      "model": "claude-sonnet-5-5",
+      "content": [
+       {
+        "type": "text",
+        "text": "Worktree entered and left."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "wait": 0.2,
+   "working": false
+  }
+ ]
+}

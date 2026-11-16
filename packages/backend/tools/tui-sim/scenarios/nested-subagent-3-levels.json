@@ -1,0 +1,340 @@
+{
+ "name": "nested-subagent-3-levels",
+ "unverified": true,
+ "beats": [
+  {
+   "screen": {
+    "rows": [
+     " ▝▝   ▝▝   /tmp/PROJECT",
+     "",
+     "❯ Delegate three levels deep",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "❯ ",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "",
+     "  Sonnet 5.5 (medium) | USER:PROJECT",
+     "  ⏸ manual mode on",
+     "",
+     "",
+     "",
+     ""
+    ]
+   },
+   "transcript": [
+    {
+     "type": "user",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "role": "user",
+      "content": "Delegate three levels deep"
+     }
+    }
+   ]
+  },
+  {
+   "screen": {
+    "rows": [
+     " ▝▝   ▝▝   /tmp/PROJECT",
+     "",
+     "❯ Delegate three levels deep",
+     "",
+     "⏺ agent level 1 running",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "❯ ",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "",
+     "  Sonnet 5.5 (medium) | USER:PROJECT",
+     "  ⏸ manual mode on",
+     "",
+     "",
+     "",
+     ""
+    ]
+   },
+   "working": {
+    "seconds": 0.3,
+    "cont": false
+   },
+   "transcript": [
+    {
+     "type": "assistant",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "id": "msg_0031",
+      "role": "assistant",
+      "model": "claude-sonnet-5-5",
+      "content": [
+       {
+        "type": "tool_use",
+        "id": "toolu_ns1",
+        "name": "Task",
+        "input": {
+         "subagent_type": "general-purpose",
+         "description": "level 1",
+         "prompt": "Spawn level 2"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "type": "assistant",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "id": "msg_0032",
+      "role": "assistant",
+      "model": "claude-sonnet-5-5",
+      "content": [
+       {
+        "type": "tool_use",
+        "id": "toolu_ns2",
+        "name": "Task",
+        "input": {
+         "subagent_type": "general-purpose",
+         "description": "level 2",
+         "prompt": "Spawn level 3"
+        }
+       }
+      ]
+     },
+     "isSidechain": true
+    },
+    {
+     "type": "assistant",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "id": "msg_0033",
+      "role": "assistant",
+      "model": "claude-sonnet-5-5",
+      "content": [
+       {
+        "type": "tool_use",
+        "id": "toolu_ns3",
+        "name": "Task",
+        "input": {
+         "subagent_type": "general-purpose",
+         "description": "level 3",
+         "prompt": "Report"
+        }
+       }
+      ]
+     },
+     "isSidechain": true
+    },
+    {
+     "type": "user",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "role": "user",
+      "content": [
+       {
+        "type": "tool_result",
+        "tool_use_id": "toolu_ns3",
+        "content": "level 3 done"
+       }
+      ]
+     },
+     "toolUseResult": {
+      "agentId": "ns3"
+     },
+     "isSidechain": true
+    },
+    {
+     "type": "user",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "role": "user",
+      "content": [
+       {
+        "type": "tool_result",
+        "tool_use_id": "toolu_ns2",
+        "content": "level 2 done"
+       }
+      ]
+     },
+     "toolUseResult": {
+      "agentId": "ns2"
+     },
+     "isSidechain": true
+    }
+   ]
+  },
+  {
+   "screen": {
+    "rows": [
+     " ▝▝   ▝▝   /tmp/PROJECT",
+     "",
+     "❯ Delegate three levels deep",
+     "",
+     "⏺ agent level 1 running",
+     "",
+     "⏺ agent level 1 finished",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "❯ ",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "",
+     "  Sonnet 5.5 (medium) | USER:PROJECT",
+     "  ⏸ manual mode on",
+     "",
+     "",
+     "",
+     ""
+    ]
+   },
+   "working": false,
+   "transcript": [
+    {
+     "type": "user",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "role": "user",
+      "content": [
+       {
+        "type": "tool_result",
+        "tool_use_id": "toolu_ns1",
+        "content": "level 1 done"
+       }
+      ]
+     },
+     "toolUseResult": {
+      "agentId": "ns1"
+     }
+    }
+   ]
+  },
+  {
+   "screen": {
+    "rows": [
+     " ▝▝   ▝▝   /tmp/PROJECT",
+     "",
+     "❯ Delegate three levels deep",
+     "",
+     "⏺ agent level 1 running",
+     "",
+     "⏺ agent level 1 finished",
+     "",
+     "⏺ Three levels done.",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "❯ ",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "",
+     "  Sonnet 5.5 (medium) | USER:PROJECT",
+     "  ⏸ manual mode on",
+     "",
+     "",
+     "",
+     ""
+    ]
+   },
+   "transcript": [
+    {
+     "type": "assistant",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "id": "msg_0034",
+      "role": "assistant",
+      "model": "claude-sonnet-5-5",
+      "content": [
+       {
+        "type": "text",
+        "text": "Three levels done."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "wait": 0.2,
+   "working": false
+  }
+ ]
+}

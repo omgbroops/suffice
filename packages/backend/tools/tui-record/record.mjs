@@ -7,7 +7,7 @@ import { createSessions } from '../../src/sessions/index.mjs';
 import { createExec } from '../../src/runner/index.mjs';
 import { createScrubber } from './scrub.mjs';
 
-const OUT = fileURLToPath(new URL('../../test/fixtures/tui-real/claude/', import.meta.url));
+const OUT = process.env.SFX_OUT ?? fileURLToPath(new URL('../../test/fixtures/tui-real/claude/', import.meta.url));
 const sock = `sfx-rec-${process.pid}`;
 const T0 = Date.now(); const MAX_RUN = 45 * 60e3; const MAX_SESS = 25; const MAX_SCEN = 180e3;
 const S = createSessions({ exec: createExec(), clock: { now: Date.now }, socketName: sock });
@@ -60,6 +60,22 @@ const SCEN = [
     await r.send('@gre', { enter: false, noWait: true }); await sleep(1500); await r.snap('at-picker'); await r.bytes('ctrl-u', CTRLU); await sleep(500); await r.snap('cleared');
   }],
   ['resume', async (r) => { await r.turn('Say ok.'); await r.stop(); await r.start(true); await sleep(1500); await r.snap('resumed'); }],
+  ['parallel-subagents-3', async (r) => { await r.turn('Launch 3 Task subagents in parallel, in one message. They reply one, two, three. Wait, then list.'); }],
+  ['subagent-permission', async (r) => { await r.turn('Use the Task tool to launch one subagent that creates sub.txt containing the single line hi using the Write tool. Wait for it.'); }],
+  ['multi-select-question', async (r) => {
+    await r.send('Use the AskUserQuestion tool with multiSelect true to ask which toppings I want: Cheese, Olives or Ham. Then reply with my choices.'); await r.untilDialog(); await r.snap('dialog');
+    await r.bytes('space', Uint8Array.from([0x20])); await sleep(500); await r.snap('toggled'); await r.bytes('down', DOWN); await sleep(300); await r.bytes('space', Uint8Array.from([0x20])); await sleep(500); await r.snap('toggled2');
+    await r.bytes('right', Uint8Array.from([0x1b, 0x5b, 0x43])); await sleep(700); await r.snap('submit-tab'); await r.bytes('enter', ENTER); await sleep(1000); await r.snap('after-enter'); await r.untilIdle();
+  }],
+  ['at-file-mention', async (r) => { await r.turn('Explain @greet.js in one sentence.'); }],
+  ['plan-mode-enter-exit', async (r) => {
+    for (let i = 0; i < 2; i++) { await r.bytes('shift-tab', BTAB); await sleep(700); await r.snap(`mode-${i + 1}`); }
+    await r.turn('Plan a tiny change: add one comment line at the top of util.js.', [/^Yes/]);
+  }],
+  ['background-shell', async (r) => { await r.turn('Run `sleep 40` in the background with Bash run_in_background, then read its output with BashOutput, then stop it with KillShell.'); }],
+  ['long-output-truncated', async (r) => { await r.turn('Run exactly: seq 1 400'); }],
+  ['skill-invoke', async (r) => { await r.turn('Use the Skill tool to invoke the skill named hello.'); }, { skill: true }],
+  ['resize-narrow', async (r) => { await r.turn('Say hello.'); await r.resize(50, 30); await sleep(1500); await r.snap('narrow'); await r.turn('Say it again.'); await r.snap('narrow-after'); }],
   ['status-idle', async (r) => {
     await r.snap('idle');
     for (const c of ['/status', '/cost', '/usage']) { await r.send(c, { noWait: true }); await sleep(1500); await r.snap(c.slice(1)); await r.bytes('esc', ESC); await sleep(800); }
@@ -67,8 +83,9 @@ const SCEN = [
 ];
 
 async function run(name, fn, o = {}) {
-  const cwd = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'sfxrec-')));
+  const cwd = fs.realpathSync(fs.mkdtempSync(path.join(process.env.SFX_BASE ?? os.tmpdir(), 'sfxrec-')));
   for (const [f, c] of Object.entries(files)) { fs.mkdirSync(path.dirname(path.join(cwd, f)), { recursive: true }); fs.writeFileSync(path.join(cwd, f), c); }
+  if (o.skill) { fs.mkdirSync(path.join(cwd, '.claude/skills/hello'), { recursive: true }); fs.writeFileSync(path.join(cwd, '.claude/skills/hello/SKILL.md'), '---\nname: hello\ndescription: Say hello in French\n---\nReply with exactly: bonjour\n'); }
   const sc = createScrubber({ cwd });
   const dir = path.join(OUT, name); fs.rmSync(dir, { recursive: true, force: true }); fs.mkdirSync(path.join(dir, 'screens'), { recursive: true });
   const sessionId = crypto.randomUUID(); const projDir = path.join(os.homedir(), '.claude', 'projects', cwd.replace(/[^a-zA-Z0-9]/g, '-'));
@@ -89,6 +106,7 @@ async function run(name, fn, o = {}) {
       check(); const s = await scr();
       if (/trust this folder/.test(s.text)) {
         await snap('trust', s);
+        if (process.env.SFX_BASE) throw new Error('trust dialog appeared: not answering it');
         const mk = s.text.split('\n').find((l) => /^\s*❯/.test(l)) ?? '';
         if (/Yes/.test(mk)) { await bytes('enter', ENTER); step('answer', { label: 'Yes, I trust this folder' }); await sleep(2000); } else await bytes('down', DOWN);
       } else if (isIdle(s.text)) return snap('ready', s);
@@ -126,8 +144,8 @@ async function run(name, fn, o = {}) {
     }
   };
   const sleepSampling = async (ms) => { const e = Date.now() + ms; while (Date.now() < e) { await tick(); const s = await scr(); if (isBusy(s.text)) await sample(s); } };
-  const r = { send, turn, choose, snap, bytes, untilDialog, untilIdle, sleepSampling, stop, start, note: (m) => { notes.push(m); step('note', { m }); } };
-  try { await start(); await fn(r); } catch (e) { status = 'failed'; error = String(e.message); try { if (cur) await snap('failure'); } catch {} }
+  const r = { resize: async (c, w) => { await S.resize(cur.id, c, w); step('resize', { c, w }); }, send, turn, choose, snap, bytes, untilDialog, untilIdle, sleepSampling, stop, start, note: (m) => { notes.push(m); step('note', { m }); } };
+  try { await start(); if (process.env.SFX_BASE) await sleep(4000); await fn(r); } catch (e) { status = 'failed'; error = String(e.message); try { if (cur) await snap('failure'); } catch {} }
   finally {
     await sleep(1000); await stop();
     try {

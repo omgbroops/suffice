@@ -196,6 +196,7 @@ let input = ''
 let work = null // {start, vbase, verbs, tokens, gl, gen, tickMs}
 let spinGen = 0
 let queue = []
+let ctrlY = false // ctrl-u just cleared a non-empty prompt
 let modeTouched = false, modeIdx = 0
 let dlg = null // {kind, opts:[{row,...}], sel, resolve}
 let inputWaiter = null
@@ -226,7 +227,10 @@ function compose() {
       const s = top - m.length
       if (s >= 0) m.forEach((r, i) => { rows[s + i] = r })
     }
-    if (input) rows[top + 1] = `${GREY}❯ ${OFF}${input}`
+    if (input) {
+      rows[top + 1] = `${GREY}❯ ${OFF}${input}`
+      pl.forEach((p, i) => { if (MODE_RE.test(p)) rows[i] = rows[i].replace(' · ← for agents', '') }) // real Claude drops the agents hint while typing
+    } else if (ctrlY && top >= 1) rows[top - 1] = `${' '.repeat(90)}${GREY}Ctrl+Y to paste deleted text${OFF}`
     let sp = pl.findIndex((p) => /^\s*[·✢✳✶✻✽] \S+…/.test(p))
     if (work) {
       if (sp < 0) sp = pl[top - 2].trim() === '' ? top - 2 : top - 1
@@ -272,7 +276,7 @@ function startWork(w) {
   work = { start: vnow, verbs, vbase: Math.floor(rngS() * verbs.length), tokens: w.tokens ?? 0, gl: 0 }
   const tick = () => {
     if (gen !== spinGen || !work) return
-    work.gl++; work.tokens += 5 + Math.floor(rngS() * 31)
+    if (!work.rec) work.gl++; work.tokens += 5 + Math.floor(rngS() * 31)
     paint(); at(w.tickMs ?? 120, tick)
   }
   at(w.tickMs ?? 120, tick)
@@ -352,6 +356,7 @@ async function runBeat(b) {
   if (b.screen) setBase(b.screen)
   if (b.working === false || b.wait === 'input') stopWork()
   else if (b.working) { startWork(b.working); curInterrupt = b.working.onInterrupt ?? b.onInterrupt ?? null }
+  if (b.screen && work) { const g = GLYPHS.indexOf(base.map(plain).join('\n').match(/^\s*([·✢✳✶✻✽]) \S+…/m)?.[1]); work.rec = g >= 0; if (g >= 0) { work.gl = g; paint() } } // each recorded frame carries its own spinner phase; hold it for the whole beat so a late capture under load sees the same glyph
   if (b.wait !== 'input') { writeTranscript(b.transcript); writeSubagents(b.subagents) }
   if (b.working?.seconds && (await sleepI(b.working.seconds * 1000)) === 'int') return interrupted(curInterrupt)
   if (b.wait === 'input') {
@@ -370,6 +375,7 @@ function onKey(key) {
   if (key === 'ctrlc') return finish(130)
   if (dlg) {
     const d = dlg
+    if (d.kind === 'trust' && A['real-trust'] && !d.keyed && (key === 'up' || key === 'down')) { d.keyed = true; return } // real Claude drops the first arrow key on the trust dialog
     if (key === 'up') { d.sel = Math.max(0, d.sel - 1); drawOpts(d) }
     else if (key === 'down') { d.sel = Math.min(d.opts.length - 1, d.sel + 1); drawOpts(d) }
     else if (/^[1-9]$/.test(key) && d.opts[0]?.num && Number(key) <= d.opts.length) { d.sel = Number(key) - 1; drawOpts(d); d.resolve(d.sel) } // real Claude: a digit selects and confirms
@@ -383,7 +389,8 @@ function onKey(key) {
     else if (input) { input = ''; paint() }
     return
   }
-  if (key === 'ctrlu') { input = ''; return paint() }
+  if (key === 'ctrlu') { ctrlY = !!input; input = ''; return paint() }
+  ctrlY = false
   if (key === 'bs') { input = input.slice(0, -1); return paint() }
   if (key === 'enter') {
     const line = input.trim(); input = ''

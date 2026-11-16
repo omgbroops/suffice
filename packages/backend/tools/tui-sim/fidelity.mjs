@@ -29,7 +29,7 @@ const readJsonl = (f) => { try { return fs.readFileSync(f, 'utf8').split('\n').f
 const findJsonl = (d) => { for (const e of fs.existsSync(d) ? fs.readdirSync(d, { withFileTypes: true, recursive: true }) : []) if (e.isFile() && e.name === `${SID}.jsonl`) return path.join(e.parentPath, e.name) }
 
 function start(scn, cwd, tdir, resume) {
-  const cmd = ['node', SIM, '--scenario', scn, '--speed', SPEED, '--transcript-dir', tdir, '--cwd', cwd, '--session-id', SID, ...(resume ? ['--resume', SID] : [])].map((x) => `'${x}'`).join(' ')
+  const cmd = ['node', SIM, '--scenario', scn, '--speed', SPEED, '--transcript-dir', tdir, '--cwd', cwd, '--session-id', SID, '--real-trust', '1', ...(resume ? ['--resume', SID] : [])].map((x) => `'${x}'`).join(' ')
   tmux('kill-session', '-t', 'f')
   const r = tmux('new-session', '-d', '-s', 'f', '-x', '120', '-y', '32', cmd)
   if (r.status) throw new Error(`tmux: ${r.stderr}`)
@@ -39,31 +39,35 @@ const capture = () => tmux('capture-pane', '-p', '-t', 'f').stdout
 async function run(scn) {
   const { steps } = JSON.parse(fs.readFileSync(path.join(FIX, scn, 'steps.json'), 'utf8'))
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'tuisim-fid-'))
-  const cwd = fs.realpathSync(fs.mkdirSync(path.join(root, 'PROJECT'), { recursive: true }) ?? root) && path.join(fs.realpathSync(root), 'PROJECT')
+  const cwd = fs.mkdtempSync('/tmp/f') // 12 chars, same width as /tmp/PROJECT, so wrapped and truncated lines match
   const tdir = path.join(root, 'tr')
   const frames = []
-  let prevT = 0
+  let t0 = Date.now(), t0s = 0
   start(scn, cwd, tdir, false)
   for (const s of steps) {
-    if (s.type === 'start') { if (s.resume) { start(scn, cwd, tdir, true) } ; prevT = s.t; continue }
-    const gap = Math.min(Math.max((s.t - prevT) / 1000 / SPEED, 0.12), 2)
-    prevT = s.t
+    if (s.type === 'start') { if (s.resume) { start(scn, cwd, tdir, true) } ; t0 = Date.now(); t0s = s.t; continue }
+    // absolute schedule: per-step poll latency must not accumulate into a late frame (a snap polls from 60 ms early)
+    const wait = () => { const d = t0 + (s.t - t0s) / SPEED - Date.now() - (s.type === 'snap' ? 60 : 0); if (d > 8200) t0 -= d - 8200; return sleep(Math.min(Math.max(0, d), 8200)) } // idle gaps clamp to 8.2 s, the longest hold a scenario beat has
     if (s.type === 'snap') {
       const want = norm(fs.readFileSync(path.join(FIX, scn, 'screens', `${s.file}.txt`), 'utf8'), '/tmp/PROJECT')
-      let got, wl, diff = Infinity
-      const end = Date.now() + 4000
+      await wait()
+      let got, wl, diff = Infinity, cur
+      const nx = steps[steps.indexOf(s) + 1] // a miss must not eat the next frame's time
+      const act = nx && nx.type !== 'snap' && nx.t - s.t < 200 // a key sent right after the snap answers this very frame: wait for it
+      const end = act ? Date.now() + 3000 : nx ? Math.min(Date.now() + 4000, Math.max(Date.now() + 200, t0 + (nx.t - t0s) / SPEED - 40)) : Date.now() + 14000
       do {
-        await sleep(100)
-        got = norm(capture(), cwd)
-        wl = want.split('\n'); const gl = got.split('\n')
-        diff = Array.from({ length: Math.max(wl.length, gl.length) }, (_, i) => (wl[i] ?? '') !== (gl[i] ?? '')).filter(Boolean).length
-      } while (diff && Date.now() < end)
+        cur = norm(capture(), cwd)
+        wl = want.split('\n'); const gl = cur.split('\n')
+        const d = Array.from({ length: Math.max(wl.length, gl.length) }, (_, i) => (wl[i] ?? '') !== (gl[i] ?? '')).filter(Boolean).length
+        if (d < diff) { diff = d; got = cur } // report the closest capture in the window, not the last
+      } while (diff && Date.now() < end && (await sleep(30), true))
       const gl = got.split('\n')
       const bad = []
       for (let i = 0; i < Math.max(wl.length, gl.length) && bad.length < 3; i++) if ((wl[i] ?? '') !== (gl[i] ?? '')) bad.push({ row: i, want: wl[i] ?? '', got: gl[i] ?? '' })
+      if (process.env.FID_DUMP && diff > 2) fs.appendFileSync(process.env.FID_DUMP, `## ${scn} ${s.file}\nWANT\n${want}\nGOT\n${got}\n`)
       frames.push({ frame: s.file, diff, bad })
     } else {
-      await sleep(gap * 1000)
+      await wait()
       if (s.type === 'bytes') { if (KEYS[s.label]) tmux('send-keys', '-t', 'f', KEYS[s.label]); else frames.push({ frame: `?key ${s.label}`, diff: 99, bad: [] }) }
       else if (s.type === 'send') { tmux('send-keys', '-t', 'f', '-l', s.text); await sleep(150); if (s.enter) tmux('send-keys', '-t', 'f', 'Enter') }
     }
@@ -73,7 +77,7 @@ async function run(scn) {
   for (let i = 0; i < 40; i++) { await sleep(250); got = seq(readJsonl(findJsonl(tdir) ?? '')); if (got.length >= want.length) break } // late final beat
   const tDiff = Array.from({ length: Math.max(want.length, got.length) }, (_, i) => want[i] !== got[i]).filter(Boolean).length
   tmux('kill-session', '-t', 'f')
-  fs.rmSync(root, { recursive: true, force: true })
+  fs.rmSync(root, { recursive: true, force: true }); fs.rmSync(cwd, { recursive: true, force: true })
   return { scenario: scn, frames, transcript: { want: want.length, got: got.length, diff: tDiff } }
 }
 
@@ -96,4 +100,4 @@ for (const r of results) {
 }
 const worst = all.sort((a, b) => b.diff - a.diff).slice(0, 5)
 console.log('frames:', tot, '\nworst 5:'); for (const w of worst) console.log(` ${w.scenario}/${w.frame} diff=${w.diff}`, JSON.stringify(w.bad[0] ?? ''))
-fs.writeFileSync(path.join(HERE, 'FIDELITY.json'), JSON.stringify({ speed: SPEED, totals: tot, worst, results }, null, 1) + '\n')
+fs.writeFileSync(process.env.FID_OUT || path.join(HERE, 'FIDELITY.json'), JSON.stringify({ speed: SPEED, totals: tot, worst, results }, null, 1) + '\n')

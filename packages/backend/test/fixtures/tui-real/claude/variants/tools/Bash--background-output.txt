@@ -1,0 +1,45 @@
+
+
+❯ Use the Bash tool with run_in_background true to run: node -e "setTimeout(()=>console.log('bgdone'),6000)"
+
+  Ran 1 shell command
+
+⏺ The background command is running. It will print bgdone after 6 seconds, and I'll report when the completion notice
+  arrives.
+
+  » Background node timer started; waiting for its completion notice.
+
+✻ Churned for 2s · done 9:59 AM
+
+⏺ Background command "Run node command that logs bgdone after 6 seconds" completed (exit code 0)
+
+⏺ The background command finished with exit code 0. I did not open its output file, so the bgdone line is not confirmed
+  by me; the exit code is the only result I checked.
+
+  Not checked: the printed output itself. Risk: none.
+
+  » Background timer finished with exit 0; output not read.
+
+✻ Cooked for 1s · done 9:59 AM
+
+❯ Read the output of that background task with the BashOutput or TaskOutput tool.
+
+  Read 1 file
+
+⏺ The output reads bgdone, and the process exited with code 0.
+
+  I have no BashOutput or TaskOutput tool in this session, so I read the task's output file directly.
+
+  » Background task output confirmed: bgdone, exit code 0.
+
+✻ Churned for 2s · done 9:59 AM
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+❯ 
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+  Haiku 5.5 (medium) | user:PROJECT | 👤 user
+  ◐○○○○○○○○○ 0% 000K | wk 00% used · 00% left · used 0.00%/h · can use 0.00%/h (↺ 0d 0h)
+  #00000000-0000-4000-8000-000000000001
+  09:59 ❯ Read the output of that background task with the BashOutp...
+  ⏸ manual mode on

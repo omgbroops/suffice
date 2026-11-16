@@ -1,0 +1,45 @@
+     198
+     199
+     200
+  ⎿  2 PostToolUse hooks ran
+
+                                                                                       09:56 AM claude-haiku-5-5
+⏺ seq 1 200 printed the numbers 1 through 200, one per line, exit 0.
+
+  » Ran seq 1 200; it printed 1 through 200.
+
+✻ Cooked for 2s · done 9:56 AM
+
+❯ Run exactly: sleep 6 && echo finished-sleep
+
+⏺ Bash(sleep 6 && echo finished-sleep)
+  ⎿  finished-sleep
+  ⎿  2 PostToolUse hooks ran
+
+                                                                                       09:57 AM claude-haiku-5-5
+⏺ The command slept 6 seconds and printed finished-sleep.
+
+  » Ran sleep 6 && echo finished-sleep; it printed finished-sleep.
+
+✻ Crunched for 8s · done 9:57 AM
+
+❯ Run the Bash tool with command sleep 30 and the timeout parameter set to 3000 milliseconds.
+
+⏺ Bash(sleep 30)
+  ⎿  Error: Blocked: standalone sleep 30. To wait for a condition, use Monitor with an until-loop (e.g. `until <check>;
+     do sleep 2; done`). To wait for a command you started, use run_in_background: true. Do not chain shorter sleeps to
+     work around this block.
+
+                                                                                       09:57 AM claude-haiku-5-5
+⏺ The Bash call was blocked before it ran. The harness rejects a standalone sleep 30, and it tells me to use Monitor or
+  run_in_background instead. I did not split it into shorter sleeps.
+
+  A 3000 ms timeout would also stop sleep 30 after 3 seconds, so this request cannot finish as written. Tell me if you
+  want a different wait, such as sleep 3 with the same timeout.
+
+  » sleep 30 with a 3000 ms timeout was blocked by the harness; nothing ran.
+
+✻ Cooked for 2s · done 9:57 AM
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  Showing detailed transcript · ctrl+o to toggle · ↑↓ scroll · v to open in vi · ? for shortcuts                verbose

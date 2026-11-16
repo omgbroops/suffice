@@ -1,0 +1,1846 @@
+{
+ "version": "2.1.325",
+ "commands": [
+  {
+   "name": "/loop",
+   "description": "Repeat a prompt or command on an interval (e.g. /loop 5m /foo)"
+  },
+  {
+   "name": "/workflow-authoring",
+   "description": "Load the reference for writing Workflow tool scripts"
+  },
+  {
+   "name": "/suffice-router",
+   "description": "Route coding requests (builds, bugs, refactors, tests, debugging, multi-file) to the cheapest capable Suffice worker; Opus orchestrat…"
+  },
+  {
+   "name": "/plugin-authoring",
+   "description": "Write a mod: a live pane, view or behaviour change in Claude Code"
+  },
+  {
+   "name": "/anthropic-skills:deep-research",
+   "description": "Use this skill when the user's prompt requires (1) researching a topic across multiple sources, comparing options or alternatives, a…"
+  },
+  {
+   "name": "/add-dir",
+   "description": "Add a new working directory"
+  },
+  {
+   "name": "/advisor",
+   "description": "Let Claude consult a stronger model at key moments"
+  },
+  {
+   "name": "/artifacts",
+   "description": "Browse your published and shared artifacts"
+  },
+  {
+   "name": "/auto-mode-setup",
+   "description": "Teach auto mode about your environment, plus optional rule tweaks"
+  },
+  {
+   "name": "/autocompact",
+   "description": "Set how full the context gets before auto-summarizing"
+  },
+  {
+   "name": "/autofix-pr",
+   "description": "Monitor and autofix any issues with the current PR"
+  },
+  {
+   "name": "/background",
+   "description": "Send this session to the background and free the terminal"
+  },
+  {
+   "name": "/branch",
+   "description": "Create a branch of the current conversation at this point"
+  },
+  {
+   "name": "/btw",
+   "description": "Ask a quick side question without interrupting the main conversation"
+  },
+  {
+   "name": "/bug",
+   "description": "Report a bug or share your conversation"
+  },
+  {
+   "name": "/call",
+   "description": "Start or end a live voice call with Claude (local speech); /call mute toggles the mic"
+  },
+  {
+   "name": "/cd",
+   "description": "Move this session to a new working directory"
+  },
+  {
+   "name": "/chrome",
+   "description": "Open Claude in Chrome settings"
+  },
+  {
+   "name": "/clear",
+   "description": "Start a new session with empty context; previous session stays on disk (resumable with /resume)"
+  },
+  {
+   "name": "/color",
+   "description": "Set the prompt bar color for this session"
+  },
+  {
+   "name": "/compact",
+   "description": "Free up context by summarizing the conversation so far"
+  },
+  {
+   "name": "/config",
+   "description": "Open settings"
+  },
+  {
+   "name": "/context",
+   "description": "Visualize current context usage as a colored grid"
+  },
+  {
+   "name": "/copy",
+   "description": "Copy Claude's last response to clipboard (or /copy N for the Nth-latest)"
+  },
+  {
+   "name": "/design-login",
+   "description": "Authorize design-system access for /design-sync with your claude.ai account"
+  },
+  {
+   "name": "/desktop",
+   "description": "Continue the current session in Claude Desktop"
+  },
+  {
+   "name": "/diff",
+   "description": "Toggle the diff panel showing uncommitted changes"
+  },
+  {
+   "name": "/effort",
+   "description": "Set effort level for model usage"
+  },
+  {
+   "name": "/exit",
+   "description": "Exit the CLI"
+  },
+  {
+   "name": "/export",
+   "description": "Export the current conversation to a file or clipboard"
+  },
+  {
+   "name": "/fast",
+   "description": "Toggle fast mode (Opus 5.5)"
+  },
+  {
+   "name": "/feedback",
+   "description": "Send feedback to Anthropic or report a bug"
+  },
+  {
+   "name": "/focus",
+   "description": "Toggle focus view: just your prompt, summary, and response"
+  },
+  {
+   "name": "/fork",
+   "description": "Copy this conversation into a new background session and keep working here"
+  },
+  {
+   "name": "/goal",
+   "description": "Set a goal Claude checks before stopping"
+  },
+  {
+   "name": "/help",
+   "description": "Show help and available commands"
+  },
+  {
+   "name": "/hooks",
+   "description": "View hook configurations for tool events"
+  },
+  {
+   "name": "/ide",
+   "description": "Manage IDE integrations and show status"
+  },
+  {
+   "name": "/import",
+   "description": "Import config from another AI coding agent"
+  },
+  {
+   "name": "/install-github-app",
+   "description": "Set up Claude GitHub Actions for a repository"
+  },
+  {
+   "name": "/install-slack-app",
+   "description": "Install the Claude Slack app"
+  },
+  {
+   "name": "/keybindings",
+   "description": "Open your keyboard shortcuts file"
+  },
+  {
+   "name": "/list-agents",
+   "description": "List subagents, teammates, and other Claude sessions you can message"
+  },
+  {
+   "name": "/login",
+   "description": "Sign in with your Anthropic account"
+  },
+  {
+   "name": "/logout",
+   "description": "Sign out from your Anthropic account"
+  },
+  {
+   "name": "/mcp",
+   "description": "Manage MCP servers"
+  },
+  {
+   "name": "/memory",
+   "description": "Edit CLAUDE.md files and memory settings"
+  },
+  {
+   "name": "/mobile",
+   "description": "Show QR code to download the Claude mobile app"
+  },
+  {
+   "name": "/model",
+   "description": "Set the AI model for Claude Code (currently Haiku 5.5)"
+  },
+  {
+   "name": "/output-style",
+   "description": "List output styles or switch to one"
+  },
+  {
+   "name": "/passes",
+   "description": "Share a free week of Claude Code with friends and earn usage credits"
+  },
+  {
+   "name": "/permissions",
+   "description": "Manage allow and deny tool permission rules"
+  },
+  {
+   "name": "/plan",
+   "description": "Enable plan mode or view the current session plan"
+  },
+  {
+   "name": "/plugin",
+   "description": "Manage Claude Code plugins"
+  },
+  {
+   "name": "/powerup",
+   "description": "Discover Claude Code features through quick interactive lessons"
+  },
+  {
+   "name": "/privacy-settings",
+   "description": "View and update your privacy settings"
+  },
+  {
+   "name": "/radio",
+   "description": "Listen to Claude FM lo-fi radio"
+  },
+  {
+   "name": "/rate-limit-options",
+   "description": "Manage usage limits and upgrade options"
+  },
+  {
+   "name": "/recap",
+   "description": "Generate a one-line session recap now"
+  },
+  {
+   "name": "/release-notes",
+   "description": "View release notes"
+  },
+  {
+   "name": "/reload-plugins",
+   "description": "Activate pending plugin changes in the current session"
+  },
+  {
+   "name": "/reload-skills",
+   "description": "Pick up skills added or changed on disk during this session"
+  },
+  {
+   "name": "/remote-control",
+   "description": "Control this session from your phone or claude.ai/code"
+  },
+  {
+   "name": "/remote-env",
+   "description": "Choose the default environment for cloud agents"
+  },
+  {
+   "name": "/rename",
+   "description": "Rename the current conversation"
+  },
+  {
+   "name": "/restart",
+   "description": "Restart Claude Code and keep this session"
+  },
+  {
+   "name": "/resume",
+   "description": "Resume a previous conversation"
+  },
+  {
+   "name": "/rewind",
+   "description": "Restore the code and/or conversation to a previous point"
+  },
+  {
+   "name": "/sandbox",
+   "description": "◯ sandbox disabled (⏎ to configure)"
+  },
+  {
+   "name": "/scroll-speed",
+   "description": "Adjust mouse wheel scroll speed"
+  },
+  {
+   "name": "/skill-doctor",
+   "description": "Show which loaded skills are unused and costing context"
+  },
+  {
+   "name": "/skills",
+   "description": "List available skills"
+  },
+  {
+   "name": "/status",
+   "description": "Show Claude Code status including version, model, account, API connectivity, and tool statuses"
+  },
+  {
+   "name": "/stickers",
+   "description": "Check Claude Code sticker availability"
+  },
+  {
+   "name": "/subtask",
+   "description": "Send a subagent off with your full context; its result comes back here"
+  },
+  {
+   "name": "/tasks",
+   "description": "View and manage everything running in the background"
+  },
+  {
+   "name": "/teleport",
+   "description": "Send this session to the cloud, or resume one from claude.ai"
+  },
+  {
+   "name": "/terminal-setup",
+   "description": "Install Shift+Enter key binding for newlines"
+  },
+  {
+   "name": "/theme",
+   "description": "Change the theme"
+  },
+  {
+   "name": "/tui",
+   "description": "Set the terminal UI renderer (default | fullscreen)"
+  },
+  {
+   "name": "/ultrareview",
+   "description": "3 free left · Start a cloud agent that finds and verifies bugs in your branch (~5-15 min, $5-$25 USD) · Runs in a cloud session. See …"
+  },
+  {
+   "name": "/upgrade",
+   "description": "Upgrade your plan for higher rate limits and more Opus"
+  },
+  {
+   "name": "/usage",
+   "description": "Show session cost, plan usage, and activity stats"
+  },
+  {
+   "name": "/usage-credits",
+   "description": "Configure usage credits or request them from your admin when you hit a limit"
+  },
+  {
+   "name": "/voice",
+   "description": "Toggle voice mode"
+  },
+  {
+   "name": "/web-setup",
+   "description": "Set up cloud sessions with your GitHub account"
+  },
+  {
+   "name": "/workflows",
+   "description": "Browse running and completed workflows"
+  },
+  {
+   "name": "/animate",
+   "description": "Build animations (purpose, tool, curve, duration, interruption, exit). Use to animate, add motion, make a component feel alive, or …"
+  },
+  {
+   "name": "/awwwards",
+   "description": "Build award-caliber websites from a one-line prompt (Next.js/Astro). Use for portfolios, agency sites, launches, landing pages that must…"
+  },
+  {
+   "name": "/built-in-browser",
+   "description": "Read this skill before the first step that uses the built-in browser, the browser pane inside the Claude desktop app (also calle…"
+  },
+  {
+   "name": "/canvas-design",
+   "description": "Create beautiful visual art in .png and .pdf documents using design philosophy. You should use this skill when the user asks to create …"
+  },
+  {
+   "name": "/cc-reference",
+   "description": "Use when configuring or debugging Claude Code itself: hooks events and JSON, subagent frontmatter, skills, plugins, settings keys, cac…"
+  },
+  {
+   "name": "/chrome-browser",
+   "description": "Read this skill before the first step that uses Claude in Chrome, the browser extension whose tools are named mcp__claude-in-chrome__…"
+  },
+  {
+   "name": "/computer-use",
+   "description": "Read this skill before the first step of any request to do something in an app on the person's own computer (Notes, Finder, System Setti…"
+  },
+  {
+   "name": "/cp-coach",
+   "description": "Competitive-programming + UIL CS (Java) tutor for the owner's 2026-10-31 contest (written + programming). Use for /cp-coach, \"tea…"
+  },
+  {
+   "name": "/declauding",
+   "description": "Load at the start of any task whose deliverable is prose another person will read — a PR description, commit message, README, doc, p…"
+  },
+  {
+   "name": "/decomp",
+   "description": "Decompose Claude Code and Codex token usage, local and model-free. Use to analyze token usage, find what to cut, categorize commands o…"
+  },
+  {
+   "name": "/design-taste-frontend",
+   "description": "Anti-slop web art direction (tasteskill v2) with researched directions and browser checks. Use to build, redesign or polish lan…"
+  },
+  {
+   "name": "/docs",
+   "description": "docs (editable docs people share and comment on; the default for any document, named as a doc or not: a document, report, proposal, resu…"
+  },
+  {
+   "name": "/docx",
+   "description": "Use this skill whenever the user wants to create, read, edit, or manipulate Word documents (.docx) or Word templates (.dotx). Trigge…"
+  },
+  {
+   "name": "/dupe",
+   "description": "Alias for /replicate: build a personal local replica of a cloud app. Use when the owner types /dupe. (user)"
+  },
+  {
+   "name": "/emil-design-eng",
+   "description": "This skill encodes Emil Kowalski's philosophy on UI polish, component design, animation decisions, and the invisible details th…"
+  },
+  {
+   "name": "/extract",
+   "description": "Use when the user runs /extract, or shares a YouTube, X, Instagram or TikTok link and wants its transcript, notes, outline, sections, …"
+  },
+  {
+   "name": "/frontier-research",
+   "description": "Gated, source-verified frontier-research loop for ML training, tool-call, or MoE-routing questions. Use for DeepSeek-level researc…"
+  },
+  {
+   "name": "/google-workspace",
+   "description": "Read this before the first Google Drive, Docs, Sheets or Slides connector call whenever the task creates or changes a Google file. …"
+  },
+  {
+   "name": "/idea-miner",
+   "description": "Use when user runs /idea-miner or asks what to build next, which manual work to automate, or what repeated work the last two days of…"
+  },
+  {
+   "name": "/impeccable",
+   "description": "Improve frontend UI (design, critique, audit, polish, simplify, harden, animate, bolder, quieter, DESIGN.md). Use for websites, das…"
+  },
+  {
+   "name": "/import-memory",
+   "description": "Import a memory export from another AI assistant into Claude's memory — conversationally, additively, and with the content treated…"
+  },
+  {
+   "name": "/learn",
+   "description": "Use this skill when the user wants intellectual understanding — learning how or why something works, not getting a task done or sol…"
+  },
+  {
+   "name": "/morning",
+   "description": "Render the user's morning brief as a styled HTML artifact, or set it up as a recurring weekday task. Use only when the user explicitly a…"
+  },
+  {
+   "name": "/pdf",
+   "description": "Use this skill whenever the user wants to do anything with PDF files. This includes reading or extracting text/tables from PDFs, c…"
+  },
+  {
+   "name": "/pick-ui-library",
+   "description": "Pick a frontend library for a task from a curated list (numbers, OTP, charts, command menus, virtualization, DnD, toasts, state, sty…"
+  },
+  {
+   "name": "/pptx",
+   "description": "Use this skill any time a .pptx or .potx file is involved in any way — as input, output, or both. This includes: creating slide decks, p…"
+  },
+  {
+   "name": "/prototype",
+   "description": "Build several genuinely different versions of a UI piece behind a visual picker to flip through and promote one. Only runs when expli…"
+  },
+  {
+   "name": "/replicate",
+   "description": "Build a personal local replica of an app you own: import its data, rebuild its UI, run on Mac, phone, remotely. Use for /replicate or …"
+  },
+  {
+   "name": "/reverse-engineer-anything",
+   "description": "Reverse-engineer native, managed, Electron, firmware or browser targets with REA. Use for shipped-artifact or runtime evidence: exp…"
+  },
+  {
+   "name": "/review-animations",
+   "description": "Reviews animation and motion code against a high craft bar derived from Emil Kowalski's design engineering philosophy. Default to flag…"
+  },
+  {
+   "name": "/skill-creator",
+   "description": "Create new skills, modify and improve existing skills, and measure skill performance. Use when users want to create a skill from scrat…"
+  },
+  {
+   "name": "/stageshow",
+   "description": "Build faux product UI that looks like a real product, as a still illustration or an animated demo with a cursor. Browser and app win…"
+  },
+  {
+   "name": "/suffice-issue-fix",
+   "description": "Fix a non-trivial bug via Suffice's two-stage workflow: a Haiku writer drafts the minimal patch, then Opus reviews and repairs it. …"
+  },
+  {
+   "name": "/theme-factory",
+   "description": "Toolkit for styling artifacts with a theme. These artifacts can be slides, docs, reportings, HTML landing pages, etc. There are 10 pre…"
+  },
+  {
+   "name": "/validate",
+   "description": "Stress-test an idea, claim, plan, product or decision with 20 Haiku research agents (10 on adjacent fields, then 10 on the subject itse…"
+  },
+  {
+   "name": "/web-artifacts-builder",
+   "description": "Suite of tools for creating elaborate, multi-component claude.ai HTML artifacts using modern frontend web technologies (React, Tailw…"
+  },
+  {
+   "name": "/write-swift",
+   "description": "Modern Swift: value types, Swift 6 concurrency, generics, API design, ARC, Swift Testing, macros. Use when writing, reviewing or …"
+  },
+  {
+   "name": "/xlsx",
+   "description": "Use this skill any time a spreadsheet file is the primary input or output. This means any task where the user wants to: open, read, ed…"
+  },
+  {
+   "name": "/artifact-capabilities",
+   "description": "Runtime capabilities for published Artifacts"
+  },
+  {
+   "name": "/artifact-diagramming",
+   "description": "Diagramming guidance for Artifacts"
+  },
+  {
+   "name": "/batch",
+   "description": "Plan a large change; background agents each open a PR"
+  },
+  {
+   "name": "/claude-api",
+   "description": "Build and debug apps that use the Claude API"
+  },
+  {
+   "name": "/claude-in-chrome",
+   "description": "Let Claude browse and interact with pages in your Chrome"
+  },
+  {
+   "name": "/code-review",
+   "description": "3 free /ultrareview · Review the current diff or a PR for bugs and cleanups"
+  },
+  {
+   "name": "/dataviz",
+   "description": "Chart and dashboard design guidance"
+  },
+  {
+   "name": "/debug",
+   "description": "Turn on debug logging and investigate problems"
+  },
+  {
+   "name": "/deep-research",
+   "description": "[dynamic workflow] Deep research harness — fan-out web searches, fetch sources, adversarially verify claims, synt…"
+  },
+  {
+   "name": "/design",
+   "description": "Make a new Design artifact from a brief"
+  },
+  {
+   "name": "/design-sync",
+   "description": "Push your design system components to claude.ai/design"
+  },
+  {
+   "name": "/doctor",
+   "description": "Health-check your setup and fix issues: installation, unused extensions, duplicated or bloated memory files, slow hooks, updates…"
+  },
+  {
+   "name": "/fewer-permission-prompts",
+   "description": "Pre-approve safe read-only commands based on your usage"
+  },
+  {
+   "name": "/init",
+   "description": "Initialize a new CLAUDE.md file with codebase documentation"
+  },
+  {
+   "name": "/insights",
+   "description": "Generate a report analyzing your Claude Code sessions"
+  },
+  {
+   "name": "/ponytail:ponytail",
+   "description": "(ponytail) Lazy senior dev mode: the smallest change that fully solves the task, and a reply a busy human understands in one read. …"
+  },
+  {
+   "name": "/ponytail:ponytail-audit",
+   "description": "(ponytail) Quality audit of a whole repo: bugs, security holes, what breaks under real load, risky code without tests, slow paths, and w…"
+  },
+  {
+   "name": "/ponytail:ponytail-debt",
+   "description": "(ponytail) List every `shortcut:` comment (and older `ponytail:` ones) as a debt ledger. One-shot report, changes nothing. Use for \"…"
+  },
+  {
+   "name": "/ponytail:ponytail-gain",
+   "description": "(ponytail) Show ponytail's measured savings (code, cost, speed) from the benchmark. One-shot display. Use for /ponytail-gain, \"what does…"
+  },
+  {
+   "name": "/ponytail:ponytail-help",
+   "description": "(ponytail) Quick reference for ponytail levels, skills and commands. One-shot display. Use for /ponytail-help, \"ponytail help\", \"how do …"
+  },
+  {
+   "name": "/ponytail:ponytail-review",
+   "description": "(ponytail) Quality review of a change: is the logic right, is it safe, does it hold under real load, is risky code tested, is it fas…"
+  },
+  {
+   "name": "/run",
+   "description": "Launch this project’s app to see your change working"
+  },
+  {
+   "name": "/run-skill-generator",
+   "description": "Create a skill that knows how to run this project’s app"
+  },
+  {
+   "name": "/schedule",
+   "description": "Create and manage routines: cloud agents on a schedule"
+  },
+  {
+   "name": "/security-review",
+   "description": "Complete a security review of the pending changes on the current branch"
+  },
+  {
+   "name": "/send-to-project",
+   "description": "Send this session's work to a Claude Project"
+  },
+  {
+   "name": "/simplify",
+   "description": "Clean up the changed code without changing behavior"
+  },
+  {
+   "name": "/slides",
+   "description": "Make a new Slides deck artifact from a brief"
+  },
+  {
+   "name": "/statusline",
+   "description": "Set up Claude Code's status line UI"
+  },
+  {
+   "name": "/superpowers:brainstorming",
+   "description": "(superpowers) You MUST use this before any creative work - creating features, building components, adding functionality, modifying beha…"
+  },
+  {
+   "name": "/superpowers:diagnosing-superpowers",
+   "description": "(superpowers) Use when a superpowers session went wrong and your human partner wants to know why — repeated work, ignored plans, stu…"
+  },
+  {
+   "name": "/superpowers:dispatching-parallel-agents",
+   "description": "(superpowers) Use when facing 2+ independent tasks that can be worked on without shared state or sequential dependencies"
+  },
+  {
+   "name": "/superpowers:executing-plans",
+   "description": "(superpowers) Use when executing an implementation plan in the current session as the implementer yourself — your human partner ch…"
+  },
+  {
+   "name": "/superpowers:finishing-a-development-branch",
+   "description": "(superpowers) Use when implementation is complete, all tests pass, and you need to decide how to integrate the work"
+  },
+  {
+   "name": "/superpowers:receiving-code-review",
+   "description": "(superpowers) Use when receiving code review feedback, before implementing suggestions, especially if feedback seems unclear or t…"
+  },
+  {
+   "name": "/superpowers:requesting-code-review",
+   "description": "(superpowers) Use when completing tasks, implementing major features, or before merging to verify work meets requirements"
+  },
+  {
+   "name": "/superpowers:subagent-driven-development",
+   "description": "(superpowers) Use when executing implementation plans with independent tasks in the current session"
+  },
+  {
+   "name": "/superpowers:systematic-debugging",
+   "description": "(superpowers) Use when encountering any bug, test failure, or unexpected behavior, before proposing fixes"
+  },
+  {
+   "name": "/superpowers:test-driven-development",
+   "description": "(superpowers) Use when implementing any feature or bugfix, before writing implementation code"
+  },
+  {
+   "name": "/superpowers:using-git-worktrees",
+   "description": "(superpowers) Use when starting feature work that needs isolation from current workspace or before executing implementation plans - e…"
+  },
+  {
+   "name": "/superpowers:using-superpowers",
+   "description": "(superpowers) Use when starting any conversation - establishes how to find and use skills, requiring skill invocation before ANY respo…"
+  },
+  {
+   "name": "/superpowers:verification-before-completion",
+   "description": "(superpowers) Use when about to claim work is complete, fixed, or passing, before committing or creating PRs - requires running verif…"
+  },
+  {
+   "name": "/superpowers:writing-plans",
+   "description": "(superpowers) Use when you have a spec or requirements for a multi-step task, before touching code"
+  },
+  {
+   "name": "/superpowers:writing-skills",
+   "description": "(superpowers) Use when creating new skills, editing existing skills, or verifying skills work before deployment"
+  },
+  {
+   "name": "/team-onboarding",
+   "description": "Help teammates ramp on Claude Code with a guide from your usage"
+  },
+  {
+   "name": "/update-config",
+   "description": "Change settings: hooks, permissions, environment variables"
+  },
+  {
+   "name": "/verify",
+   "description": "Try your change and report if it works"
+  },
+  {
+   "name": "/whiteboard",
+   "description": "Make a new Whiteboard artifact from a brief"
+  }
+ ],
+ "captures": [
+  {
+   "file": "add-dir.txt",
+   "keys": "/add-dir",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "advisor.txt",
+   "keys": "/advisor",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "agents.txt",
+   "keys": "/agents",
+   "closed": "inline message; no dialog",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "autocompact.txt",
+   "keys": "/autocompact",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "bash-mode.txt",
+   "keys": "!",
+   "closed": "Backspace",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "color.txt",
+   "keys": "/color (executed, set session color; message only)",
+   "closed": "n/a (inline message)",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "context.txt",
+   "keys": "/context",
+   "closed": "inline message; no dialog",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "diff.txt",
+   "keys": "/diff",
+   "closed": "inline message; no dialog",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "effort.txt",
+   "keys": "/effort",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "file-mention.txt",
+   "keys": "@",
+   "closed": "Ctrl+U",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "help-commands.txt",
+   "keys": "/help, Tab",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "help-custom-commands.txt",
+   "keys": "/help, Tab Tab",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "help-general.txt",
+   "keys": "/help",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "history-search.txt",
+   "keys": "Ctrl+R",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "hooks.txt",
+   "keys": "/hooks",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "list-agents.txt",
+   "keys": "/list-agents",
+   "closed": "inline message; no dialog",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "mcp.txt",
+   "keys": "/mcp",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "memory-mode.txt",
+   "keys": "#",
+   "closed": "Backspace/Ctrl+U",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "memory.txt",
+   "keys": "/memory",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "mode-accept-edits.txt",
+   "keys": "Shift+Tab x2",
+   "closed": "Shift+Tab (cycle)",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "mode-auto.txt",
+   "keys": "Shift+Tab x4",
+   "closed": "Shift+Tab (cycle)",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "mode-manual.txt",
+   "keys": "Shift+Tab",
+   "closed": "Shift+Tab (cycle)",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "mode-plan.txt",
+   "keys": "Shift+Tab x3",
+   "closed": "Shift+Tab (cycle)",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "model.txt",
+   "keys": "/model",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "narrow-60-help-general.txt",
+   "keys": "/help at 60 cols",
+   "closed": "Esc",
+   "size": "40x60",
+   "rows": 40,
+   "cols": 60,
+   "version": "2.1.325"
+  },
+  {
+   "file": "narrow-60-model.txt",
+   "keys": "/model at 60 cols",
+   "closed": "Esc",
+   "size": "40x60",
+   "rows": 40,
+   "cols": 60,
+   "version": "2.1.325"
+  },
+  {
+   "file": "narrow-60-slash-popup.txt",
+   "keys": "/ at 60 cols",
+   "closed": "Ctrl+U",
+   "size": "40x60",
+   "rows": 40,
+   "cols": 60,
+   "version": "2.1.325"
+  },
+  {
+   "file": "narrow-60-startup-banner.txt",
+   "keys": "launch at 60 cols",
+   "closed": "n/a (idle)",
+   "size": "40x60",
+   "rows": 40,
+   "cols": 60,
+   "version": "2.1.325"
+  },
+  {
+   "file": "narrow-60-trust-dialog.txt",
+   "keys": "launch at 60 cols",
+   "closed": "Down Enter (Yes)",
+   "size": "40x60",
+   "rows": 40,
+   "cols": 60,
+   "version": "2.1.325"
+  },
+  {
+   "file": "output-style.txt",
+   "keys": "/output-style",
+   "closed": "inline message; no dialog",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "permission-denied-result.txt",
+   "keys": "after answering No",
+   "closed": "n/a (idle)",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "permission-prompt.txt",
+   "keys": "prompt asking to Write note.txt (1 Haiku call)",
+   "closed": "Down Down Enter (No)",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "permissions-allow.txt",
+   "keys": "/permissions",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "permissions-ask.txt",
+   "keys": "/permissions, Tab",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "permissions-auto-mode.txt",
+   "keys": "/permissions, Tab x3",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "permissions-deny.txt",
+   "keys": "/permissions, Tab Tab",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "permissions-recently-blocked.txt",
+   "keys": "/permissions, Tab x5",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "permissions-workspace.txt",
+   "keys": "/permissions, Tab x4",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "plugin.txt",
+   "keys": "/plugin",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "powerup.txt",
+   "keys": "/powerup",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "release-notes.txt",
+   "keys": "/release-notes",
+   "closed": "inline message; no dialog",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "resume.txt",
+   "keys": "/resume",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "rewind-double-esc.txt",
+   "keys": "Esc Esc",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "rewind.txt",
+   "keys": "/rewind",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "sandbox.txt",
+   "keys": "/sandbox",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "scroll-speed.txt",
+   "keys": "/scroll-speed",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "settings-config.txt",
+   "keys": "/config",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "settings-stats-models.txt",
+   "keys": "/stats, Tab",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "settings-stats.txt",
+   "keys": "/stats",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "settings-status.txt",
+   "keys": "/status",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "settings-usage.txt",
+   "keys": "/usage",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "shortcuts-help.txt",
+   "keys": "?",
+   "closed": "Backspace",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "skill-doctor.txt",
+   "keys": "/skill-doctor",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "skills.txt",
+   "keys": "/skills",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "slash-list.txt",
+   "keys": "/",
+   "closed": "Ctrl+U",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "startup-banner.txt",
+   "keys": "launch",
+   "closed": "n/a (idle)",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "tasks.txt",
+   "keys": "/tasks",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "theme.txt",
+   "keys": "/theme",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "transcript-view.txt",
+   "keys": "Ctrl+O",
+   "closed": "Ctrl+O",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "trust-dialog.txt",
+   "keys": "launch in untrusted folder",
+   "closed": "Enter on default No (exits)",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  },
+  {
+   "file": "workflows.txt",
+   "keys": "/workflows",
+   "closed": "Esc",
+   "size": "40x120",
+   "rows": 40,
+   "cols": 120,
+   "version": "2.1.325"
+  }
+ ],
+ "skipped": [
+  {
+   "command": "/login",
+   "reason": "account or data-sending action"
+  },
+  {
+   "command": "/logout",
+   "reason": "account or data-sending action"
+  },
+  {
+   "command": "/upgrade",
+   "reason": "account or data-sending action"
+  },
+  {
+   "command": "/bug",
+   "reason": "account or data-sending action"
+  },
+  {
+   "command": "/feedback",
+   "reason": "account or data-sending action"
+  },
+  {
+   "command": "/usage-credits",
+   "reason": "account or data-sending action"
+  },
+  {
+   "command": "/privacy-settings",
+   "reason": "account or data-sending action"
+  },
+  {
+   "command": "/web-setup",
+   "reason": "account or data-sending action"
+  },
+  {
+   "command": "/install-github-app",
+   "reason": "account or data-sending action"
+  },
+  {
+   "command": "/install-slack-app",
+   "reason": "account or data-sending action"
+  },
+  {
+   "command": "/remote-control",
+   "reason": "account or data-sending action"
+  },
+  {
+   "command": "/remote-env",
+   "reason": "account or data-sending action"
+  },
+  {
+   "command": "/teleport",
+   "reason": "account or data-sending action"
+  },
+  {
+   "command": "/desktop",
+   "reason": "account or data-sending action"
+  },
+  {
+   "command": "/mobile",
+   "reason": "account or data-sending action"
+  },
+  {
+   "command": "/chrome",
+   "reason": "account or data-sending action"
+  },
+  {
+   "command": "/voice",
+   "reason": "account or data-sending action"
+  },
+  {
+   "command": "/ide",
+   "reason": "account or data-sending action"
+  },
+  {
+   "command": "/passes",
+   "reason": "account or data-sending action"
+  },
+  {
+   "command": "/stickers",
+   "reason": "account or data-sending action"
+  },
+  {
+   "command": "/rate-limit-options",
+   "reason": "account or data-sending action"
+  },
+  {
+   "command": "/artifacts",
+   "reason": "account or data-sending action"
+  },
+  {
+   "command": "/radio",
+   "reason": "account or data-sending action"
+  },
+  {
+   "command": "/design-login",
+   "reason": "account or data-sending action"
+  },
+  {
+   "command": "/ultrareview",
+   "reason": "account or data-sending action"
+  },
+  {
+   "command": "/compact",
+   "reason": "calls the model"
+  },
+  {
+   "command": "/btw",
+   "reason": "calls the model"
+  },
+  {
+   "command": "/goal",
+   "reason": "calls the model"
+  },
+  {
+   "command": "/loop",
+   "reason": "calls the model"
+  },
+  {
+   "command": "/recap",
+   "reason": "calls the model"
+  },
+  {
+   "command": "/init",
+   "reason": "calls the model"
+  },
+  {
+   "command": "/insights",
+   "reason": "calls the model"
+  },
+  {
+   "command": "/statusline",
+   "reason": "calls the model"
+  },
+  {
+   "command": "/security-review",
+   "reason": "calls the model"
+  },
+  {
+   "command": "/simplify",
+   "reason": "calls the model"
+  },
+  {
+   "command": "/auto-mode-setup",
+   "reason": "calls the model"
+  },
+  {
+   "command": "/export",
+   "reason": "side effect, editor or session change"
+  },
+  {
+   "command": "/copy",
+   "reason": "side effect, editor or session change"
+  },
+  {
+   "command": "/clear",
+   "reason": "side effect, editor or session change"
+  },
+  {
+   "command": "/plan",
+   "reason": "side effect, editor or session change"
+  },
+  {
+   "command": "/fast",
+   "reason": "side effect, editor or session change"
+  },
+  {
+   "command": "/branch",
+   "reason": "side effect, editor or session change"
+  },
+  {
+   "command": "/fork",
+   "reason": "side effect, editor or session change"
+  },
+  {
+   "command": "/rename",
+   "reason": "side effect, editor or session change"
+  },
+  {
+   "command": "/cd",
+   "reason": "side effect, editor or session change"
+  },
+  {
+   "command": "/restart",
+   "reason": "side effect, editor or session change"
+  },
+  {
+   "command": "/reload-plugins",
+   "reason": "side effect, editor or session change"
+  },
+  {
+   "command": "/reload-skills",
+   "reason": "side effect, editor or session change"
+  },
+  {
+   "command": "/keybindings",
+   "reason": "side effect, editor or session change"
+  },
+  {
+   "command": "/terminal-setup",
+   "reason": "side effect, editor or session change"
+  },
+  {
+   "command": "/tui",
+   "reason": "side effect, editor or session change"
+  },
+  {
+   "command": "/focus",
+   "reason": "side effect, editor or session change"
+  },
+  {
+   "command": "/exit",
+   "reason": "side effect, editor or session change"
+  },
+  {
+   "command": "/subtask",
+   "reason": "side effect, editor or session change"
+  },
+  {
+   "command": "/background",
+   "reason": "side effect, editor or session change"
+  },
+  {
+   "command": "/usage",
+   "reason": "covered by settings-* captures"
+  },
+  {
+   "command": "/config",
+   "reason": "covered by settings-* captures"
+  },
+  {
+   "command": "/status",
+   "reason": "covered by settings-* captures"
+  },
+  {
+   "command": "/stats",
+   "reason": "covered by settings-* captures"
+  },
+  {
+   "command": "/workflow-authoring",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/suffice-router",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/plugin-authoring",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/anthropic-skills:deep-research",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/autofix-pr",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/call",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/help",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/import",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/permissions",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/animate",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/awwwards",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/built-in-browser",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/canvas-design",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/cc-reference",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/chrome-browser",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/computer-use",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/cp-coach",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/declauding",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/decomp",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/design-taste-frontend",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/docs",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/docx",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/dupe",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/emil-design-eng",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/extract",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/frontier-research",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/google-workspace",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/idea-miner",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/impeccable",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/import-memory",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/learn",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/morning",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/pdf",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/pick-ui-library",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/pptx",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/prototype",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/replicate",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/reverse-engineer-anything",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/review-animations",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/skill-creator",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/stageshow",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/suffice-issue-fix",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/theme-factory",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/validate",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/web-artifacts-builder",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/write-swift",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/xlsx",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/artifact-capabilities",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/artifact-diagramming",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/batch",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/claude-api",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/claude-in-chrome",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/code-review",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/dataviz",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/debug",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/deep-research",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/design",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/design-sync",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/doctor",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/fewer-permission-prompts",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/ponytail:ponytail",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/ponytail:ponytail-audit",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/ponytail:ponytail-debt",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/ponytail:ponytail-gain",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/ponytail:ponytail-help",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/ponytail:ponytail-review",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/run",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/run-skill-generator",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/schedule",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/send-to-project",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/slides",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/superpowers:brainstorming",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/superpowers:diagnosing-superpowers",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/superpowers:dispatching-parallel-agents",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/superpowers:executing-plans",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/superpowers:finishing-a-development-branch",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/superpowers:receiving-code-review",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/superpowers:requesting-code-review",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/superpowers:subagent-driven-development",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/superpowers:systematic-debugging",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/superpowers:test-driven-development",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/superpowers:using-git-worktrees",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/superpowers:using-superpowers",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/superpowers:verification-before-completion",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/superpowers:writing-plans",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/superpowers:writing-skills",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/team-onboarding",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/update-config",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/verify",
+   "reason": "skill or plugin command: runs a model prompt"
+  },
+  {
+   "command": "/whiteboard",
+   "reason": "skill or plugin command: runs a model prompt"
+  }
+ ]
+}

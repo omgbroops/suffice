@@ -1,0 +1,204 @@
+{
+ "name": "mcp-tool-error",
+ "unverified": true,
+ "beats": [
+  {
+   "screen": {
+    "rows": [
+     " ▝▝   ▝▝   /tmp/PROJECT",
+     "",
+     "❯ Read the missing doc",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "❯ ",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "",
+     "  Sonnet 5.5 (medium) | USER:PROJECT",
+     "  ⏸ manual mode on",
+     "",
+     "",
+     "",
+     ""
+    ]
+   },
+   "transcript": [
+    {
+     "type": "user",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "role": "user",
+      "content": "Read the missing doc"
+     }
+    }
+   ]
+  },
+  {
+   "screen": {
+    "rows": [
+     " ▝▝   ▝▝   /tmp/PROJECT",
+     "",
+     "❯ Read the missing doc",
+     "",
+     "⏺ docs - read_doc (MCP)(id: \"nope\")",
+     "  ⎿  Error: document not found",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "❯ ",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "",
+     "  Sonnet 5.5 (medium) | USER:PROJECT",
+     "  ⏸ manual mode on",
+     "",
+     "",
+     "",
+     ""
+    ]
+   },
+   "working": {
+    "seconds": 0.2,
+    "cont": false
+   },
+   "transcript": [
+    {
+     "type": "assistant",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "id": "msg_0006",
+      "role": "assistant",
+      "model": "claude-sonnet-5-5",
+      "content": [
+       {
+        "type": "tool_use",
+        "id": "toolu_mcp2",
+        "name": "mcp__docs__read_doc",
+        "input": {
+         "id": "nope"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "type": "user",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "role": "user",
+      "content": [
+       {
+        "type": "tool_result",
+        "tool_use_id": "toolu_mcp2",
+        "content": "Error: document not found",
+        "is_error": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "screen": {
+    "rows": [
+     " ▝▝   ▝▝   /tmp/PROJECT",
+     "",
+     "❯ Read the missing doc",
+     "",
+     "⏺ docs - read_doc (MCP)(id: \"nope\")",
+     "  ⎿  Error: document not found",
+     "",
+     "⏺ That document does not exist.",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "❯ ",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "",
+     "  Sonnet 5.5 (medium) | USER:PROJECT",
+     "  ⏸ manual mode on",
+     "",
+     "",
+     "",
+     ""
+    ]
+   },
+   "working": false,
+   "transcript": [
+    {
+     "type": "assistant",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "id": "msg_0007",
+      "role": "assistant",
+      "model": "claude-sonnet-5-5",
+      "content": [
+       {
+        "type": "text",
+        "text": "That document does not exist."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "wait": 0.2,
+   "working": false
+  }
+ ]
+}

@@ -137,6 +137,6 @@ test('coverage: valid enums, counts, serve-SSE row', () => {
   }
   const n = (k, v) => cov.filter((r) => r[k] === v).length;
   assert.deepEqual([n('shown', 'chat'), n('shown', 'terminal-only')], [28, 5]);
-  assert.deepEqual([n('driven', 'yes'), n('driven', 'no'), n('driven', 'n/a')], [9, 4, 20]);
+  assert.deepEqual([n('driven', 'yes'), n('driven', 'no'), n('driven', 'n/a')], [10, 3, 20]);
   assert.equal(cov.filter((r) => /live feed via opencode serve/.test(r.element)).length, 1);
 });

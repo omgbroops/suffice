@@ -1,0 +1,40 @@
+Real claude 2.1.325, Haiku, recorded by tools/tui-record/record.mjs (scenarios parallel-subagents-3, subagent-permission).
+
+Agent launch (parent transcript)
+  assistant tool_use: name "Agent", input {description, prompt, subagent_type:"general-purpose", model:"haiku"}, caller {type:"direct"}
+  user tool_result: content [{type:"text"}] (launch ack), record fields
+    toolUseResult {isAsync:true, status:"async_launched", agentId, description, resolvedModel, prompt, outputFile, canReadOutputFile, canContinueAgent}
+    sourceToolAssistantUUID, permissionDecision {decision:"accept", source:"config"}
+  system turn_duration carries pendingBackgroundAgentCount (number of running background agents)
+  queue-operation records {operation:"enqueue"|"dequeue", content} appear around completion
+
+Completion notice (parent transcript)
+  type "user", message.content is a STRING (wording scrubbed to "[scrubbed]" in recordings, so NOT verified)
+  fields: origin {kind:"task-notification", producer:"session-task", runId}, promptSource:"system",
+          turnOrigin:"task_notification", turnPosition {promptIndex, turnIndex}, queueSkipAttachments:true,
+          permissionMode, promptId
+  redacted example:
+    {"type":"user","message":{"role":"user","content":"[scrubbed]"},"origin":{"kind":"task-notification","producer":"session-task","runId":"<id>"},
+     "promptSource":"system","turnOrigin":"task_notification","turnPosition":{"promptIndex":1,"turnIndex":2},"queueSkipAttachments":true,"permissionMode":"default","promptId":"<uuid>"}
+  Screen: "⏺ Agent \"<description>\" finished · 5s" appears in the scrollback when the notice is consumed.
+
+Subagent files: subagents/agent-<id>.jsonl + agent-<id>.meta.json
+  meta: {agentType, isBuiltIn, description, toolUseId, spawnDepth:1, requestShape:"background", requestNonInteractive:true, model, pickedEffortModel, finished:true}
+  sidechain records: isSidechain:true, agentId; first is a user record with string content, then attachments.
+
+Permission prompt inside a background subagent
+  Not written to any transcript as a distinct record: the subagent file only holds assistant tool_use (Write) and the later user tool_result.
+  It appears on the PARENT screen as a dialog (parent keeps "⏺ builder(<description>)" / "⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)" above it):
+     ───────────────
+      Create file · from the builder agent
+      sub.txt
+     ╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+       1 hi
+     ╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+      Do you want to create sub.txt?
+      ❯ 1. Yes
+        2. Yes, and switch to accept edits (auto-approve file edits and common file commands) for this session (shift+tab)
+        3. No
+      Esc to cancel · Tab to amend · ctrl+x ctrl+k twice to stop background agents
+  Header pattern: "<Create file|Edit file|...> · from the <agentType> agent".
+  Screen recorded while the dialog was open; answered Yes, subagent then wrote the file (tool_result ok).

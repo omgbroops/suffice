@@ -41,15 +41,22 @@ export function* walk(fs, dir, match, depth = 6) {
 
 export const HEAD_BYTES = 65536; // per-file read cap during a scan: enough for title, cwd, start and kind markers
 const headBuf = Buffer.allocUnsafe(HEAD_BYTES); // shared: scans are synchronous per file
-/** First `max` bytes of a file as text, cut at the last full line when truncated. */
-function readHeadText(fs, file, max = HEAD_BYTES) {
+/** Parsed records of the first HEAD_BYTES of a file, one line at a time (no head-sized string), cut at the last full line when truncated. */
+function* headRecs(fs, file) {
   const fd = fs.openSync(file, 'r');
   try {
-    const n = fs.readSync(fd, headBuf, 0, Math.min(max, HEAD_BYTES), 0);
-    const s = headBuf.toString('utf8', 0, n);
-    return n === Math.min(max, HEAD_BYTES) ? s.slice(0, s.lastIndexOf('\n') + 1) : s;
+    const n = fs.readSync(fd, headBuf, 0, HEAD_BYTES, 0);
+    const end = n === HEAD_BYTES ? headBuf.lastIndexOf(10, n - 1) + 1 : n;
+    for (let s = 0; s < end;) {
+      let e = headBuf.indexOf(10, s); if (e < 0 || e > end) e = end;
+      if (e > s) { try { yield JSON.parse(headBuf.toString('utf8', s, e)); } catch { /* skip */ } }
+      s = e + 1;
+    }
   } finally { fs.closeSync(fd); }
 }
+// meta()/kind() read only these fields; keeping just them stops a scan from holding every parsed head.
+const slim = (r) => (r && (typeof r.cwd === 'string' || typeof r.timestamp === 'string' || typeof r.entrypoint === 'string' || r.isSidechain === true || r.promptSource || r.origin || r.type === 'session_meta')
+  ? { cwd: r.cwd, timestamp: r.timestamp, entrypoint: r.entrypoint, isSidechain: r.isSidechain, promptSource: r.promptSource, origin: r.origin, type: r.type, payload: r.type === 'session_meta' ? r.payload : undefined } : null);
 
 const interned = new Map(); // cwd strings repeat across thousands of files; keep one copy
 const intern = (s) => { if (typeof s !== 'string') return s ?? null; let v = interned.get(s); if (v === undefined) { if (interned.size > 20000) interned.clear(); interned.set(s, s); v = s; } return v; };
@@ -63,6 +70,7 @@ export function jsonlSource({ id, label, root, match, agent, meta, kind }) {
   return {
     id, label,
     detect: ({ home, fs }) => { try { return fs.statSync(dir(home)).isDirectory(); } catch { return false; } },
+    count: ({ home, fs }) => { let n = 0; for (const _ of walk(fs, dir(home), match)) n++; return n; },
     async *list({ home, fs, known }) {
       for (const p of walk(fs, dir(home), match)) {
         let st; try { st = fs.statSync(p); } catch { continue; }
@@ -70,14 +78,13 @@ export function jsonlSource({ id, label, root, match, agent, meta, kind }) {
         const k = known?.(p);
         if (k && k.sig === sig && k.kind) { yield k; continue; }
         try {
-          const recs = []; // only the head of the file: enough for title, cwd and start time
-          for (const l of readHeadText(fs, p).split('\n')) { try { if (l) recs.push(JSON.parse(l)); } catch { /* skip */ } }
-          const m = meta(recs, p);
-          let firstUser = '', typedMessages = 0;
-          for (const r of recs) {
+          const recs = []; let firstUser = '', typedMessages = 0; // only the head of the file: enough for title, cwd and start time
+          for (const r of headRecs(fs, p)) {
+            const sl = slim(r); if (sl) recs.push(sl);
             if (r.isMeta) continue;
-            for (const x of agent.parseLine(r)) if (x.role === 'user' && x.text && !x.text.startsWith('<')) { if (!typedMessages) firstUser = oneLine(x.text, 300); typedMessages++; }
+            for (const x of agent.parseLine(r)) if (x.role === 'user' && x.text && !x.text.startsWith('<')) { if (!typedMessages) firstUser = oneLine(x.text.slice(0, 4000), 300); typedMessages++; }
           }
+          const m = meta(recs, p);
           yield { source: id, sessionId: m.sessionId, path: p, cwd: intern(m.cwd), startedAt: m.startedAt || st.birthtimeMs, updatedAt: st.mtimeMs,
             title: firstUser.slice(0, 80) || '(untitled)', firstUser, kind: kind?.(recs, p) ?? 'unknown', typedMessages, sig };
         } catch { /* unreadable file: skip */ }

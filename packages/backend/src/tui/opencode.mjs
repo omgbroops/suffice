@@ -1,10 +1,13 @@
 // opencode TUI mapper: store rows (session/message/part from opencode.db) -> model items; permission/question dialogs -> Prompt; controls -> bytes.
 // Sources: opencode v1.19.5 packages/schema/src/v1/session.ts (parts), tui routes/session/{permission,question}.tsx, tui config/keybind.ts, core v1/permission.ts.
 import { createHash } from 'node:crypto';
+import { claudeNonPrompt } from './screens.mjs';
 
 const s = (v) => (typeof v === 'string' ? v : '');
 const stripAnsi = (t) => t.replace(/\x1b\[[0-9;?]*[ -/]*[@-~]/g, '');
 const isNum = (v) => typeof v === 'number' && Number.isFinite(v);
+const firstNum = (...v) => v.find(isNum) ?? 0;
+const n0 = (v) => (isNum(v) ? v : 0);
 
 const CATEGORY = { bash: 'shell', read: 'read', glob: 'search', grep: 'search', list: 'search', todowrite: 'todo', todoread: 'todo', webfetch: 'web', websearch: 'web', write: 'write', edit: 'edit', apply_patch: 'edit', patch: 'edit', task: 'subagent' };
 const OTHER = new Set(['question', 'skill', 'lsp', 'plan', 'invalid', 'code-mode']);
@@ -52,11 +55,14 @@ function toolItems(row, d, st, ts) {
 }
 
 function run(row, st, out) {
-  const d = typeof row.data === 'string' ? JSON.parse(row.data) : row.data ?? {};
+  if (!row || typeof row !== 'object' || !s(row.id) || !row.id) return; // every item id derives from the row id
+  let d = row.data;
+  if (typeof d === 'string') { try { d = JSON.parse(d); } catch { return; } } // truncated or non-JSON data column: nothing to map
+  if (!d || typeof d !== 'object') d = {};
   if (row.table === 'session') { st.meta = { ...st.meta, sessionId: row.id, ...(s(row.directory) ? { cwd: row.directory } : {}) }; return; }
   if (row.table === 'message') {
     st.roles[row.id] = d.role;
-    const ts = isNum(row.time_created) ? row.time_created : d.time?.created ?? st.lastTs;
+    const ts = firstNum(row.time_created, d.time?.created, st.lastTs);
     st.lastTs = ts;
     const sid = row.session_id;
     if (sid) st.meta.sessionId = sid;
@@ -64,10 +70,10 @@ function run(row, st, out) {
     if (m) { st.models[row.id] = m; st.meta.model = m; }
     if (s(d.agent) || s(d.mode)) st.meta.mode = s(d.agent) || d.mode; // opencode's agent (build/plan) is the model's mode
     if (s(d.path?.cwd)) st.meta.cwd = d.path.cwd;
-    if (d.role === 'assistant' && d.error) out.push(noticeFor(d.error, d.time?.completed ?? ts, `${row.id}:err`));
+    if (d.role === 'assistant' && d.error) out.push(noticeFor(d.error, firstNum(d.time?.completed, ts), `${row.id}:err`));
     return;
   }
-  const ts = isNum(row.time_created) ? row.time_created : d.time?.start ?? d.time?.created ?? st.lastTs ?? 0;
+  const ts = firstNum(row.time_created, d.time?.start, d.time?.created, st.lastTs);
   st.lastTs = ts;
   const role = st.roles[row.message_id];
   switch (d.type) {
@@ -77,7 +83,7 @@ function run(row, st, out) {
     case 'step-finish': {
       const t = d.tokens ?? {};
       const model = st.models[row.message_id];
-      out.push({ id: row.id, ts, kind: 'usage', inputTokens: t.input ?? 0, outputTokens: t.output ?? 0, cacheReadTokens: t.cache?.read ?? 0, cacheWriteTokens: t.cache?.write ?? 0, ...(isNum(d.cost) ? { costUsd: d.cost } : {}), ...(model ? { model } : {}) });
+      out.push({ id: row.id, ts, kind: 'usage', inputTokens: n0(t.input), outputTokens: n0(t.output), cacheReadTokens: n0(t.cache?.read), cacheWriteTokens: n0(t.cache?.write), ...(isNum(d.cost) ? { costUsd: d.cost } : {}), ...(model ? { model } : {}) });
       break;
     }
     case 'compaction': out.push({ id: row.id, ts, kind: 'notice', level: 'info', code: 'compacted', text: d.auto ? 'Context compacted automatically' : 'Context compacted' }); break;
@@ -98,6 +104,7 @@ const mk = (type, title, body, labels, hotkeys) => {
 };
 
 function parsePrompt(screen) {
+  if (claudeNonPrompt(screen)) return null;
   const lines = stripAnsi(s(screen)).split('\n').map((l) => l.replace(/\s+$/, '')).filter((l) => l.trim()).slice(-25);
   const text = lines.join('\n');
   const btn = lines.findLastIndex((l) => /Allow once\s+Allow always\s+Reject/.test(l));
@@ -144,6 +151,14 @@ const controls = {
   },
 };
 
+// Reject-feedback input (permission.tsx "Reject permission"): the dialog is a text box, so the driver is typed text + Enter, valid only on that dialog.
+export const drivers = {
+  rejectFeedback(prompt, text) {
+    if (prompt?.type !== 'text' || prompt.title !== 'Reject permission') throw new RangeError('not the reject feedback dialog');
+    return enc(`${clean(text)}\r`);
+  },
+};
+
 const r = (element, shown, driven, how) => ({ element, shown, driven, how });
 const coverage = [
   r('user text', 'chat', 'n/a', 'text part by parent message role'),
@@ -167,7 +182,7 @@ const coverage = [
   r('step-start, snapshot, patch parts', 'terminal-only', 'n/a', 'bookkeeping, no item'),
   r('permission dialog (Allow once/always, Reject)', 'chat', 'yes', 'right/l x delta + Enter; selected assumed 0 (colour only)'),
   r('always-allow confirm', 'chat', 'yes', 'Confirm/Cancel buttons'),
-  r('reject feedback input', 'chat', 'no', 'free text; selected-state unreadable, send text then Enter via slash/text'),
+  r('reject feedback input', 'chat', 'yes', 'drivers.rejectFeedback(prompt, text): text + Enter, only while parsePrompt returns the Reject permission text dialog'),
   r('question dialog', 'chat', 'yes', 'digit 1-9 hotkeys'),
   r('question multi-select and Review tab', 'terminal-only', 'no', 'Tab/Enter flow not mapped'),
   r('interrupt', 'chat', 'yes', 'Esc Esc (two presses within 5s)'),
@@ -185,7 +200,9 @@ export function createOpencodeMapper() {
   const newState = fresh;
   const mapRow = (row, state) => {
     const out = [];
-    try { run(row, ensure(state), out); } catch { /* shortcut: a malformed row is dropped, not reported; upgrade if lost rows matter */ }
+    try { run(row, ensure(state), out); } catch (e) { // never throws; counted like claude/codex so a fuzz or health check sees it
+      const st = ensure(state); const er = (st.errors ??= { count: 0, lastClass: null }); er.count++; er.lastClass = String(e?.name || 'Error');
+    }
     return out;
   };
   return { newState, mapRow, mapLine: mapRow, meta: (state) => ({ ...ensure(state).meta, agent: 'opencode' }), parsePrompt, controls, coverage };

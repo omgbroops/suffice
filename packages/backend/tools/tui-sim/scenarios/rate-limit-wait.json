@@ -1,0 +1,178 @@
+{
+ "name": "rate-limit-wait",
+ "unverified": true,
+ "beats": [
+  {
+   "screen": {
+    "rows": [
+     " ▝▝   ▝▝   /tmp/PROJECT",
+     "",
+     "❯ Summarize the repo",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "❯ ",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "",
+     "  Sonnet 5.5 (medium) | USER:PROJECT",
+     "  ⏸ manual mode on",
+     "",
+     "",
+     "",
+     ""
+    ]
+   },
+   "transcript": [
+    {
+     "type": "user",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "role": "user",
+      "content": "Summarize the repo"
+     }
+    }
+   ]
+  },
+  {
+   "screen": {
+    "rows": [
+     " ▝▝   ▝▝   /tmp/PROJECT",
+     "",
+     "❯ Summarize the repo",
+     "",
+     "  Usage limit reached · resets at 3pm",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "❯ ",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "",
+     "  Sonnet 5.5 (medium) | USER:PROJECT",
+     "  ⏸ manual mode on",
+     "",
+     "",
+     "",
+     ""
+    ]
+   },
+   "transcript": [
+    {
+     "type": "assistant",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "id": "msg_0014",
+      "role": "assistant",
+      "model": "claude-sonnet-5-5",
+      "content": [
+       {
+        "type": "text",
+        "text": "Usage limit reached. Your limit will reset at 3pm."
+       }
+      ]
+     },
+     "isApiErrorMessage": true
+    }
+   ]
+  },
+  {
+   "screen": {
+    "rows": [
+     " ▝▝   ▝▝   /tmp/PROJECT",
+     "",
+     "❯ Summarize the repo",
+     "",
+     "  Usage limit reached · resets at 3pm",
+     "",
+     "⏺ Back after the reset: here is the summary.",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "❯ ",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "",
+     "  Sonnet 5.5 (medium) | USER:PROJECT",
+     "  ⏸ manual mode on",
+     "",
+     "",
+     "",
+     ""
+    ]
+   },
+   "transcript": [
+    {
+     "type": "assistant",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "id": "msg_0015",
+      "role": "assistant",
+      "model": "claude-sonnet-5-5",
+      "content": [
+       {
+        "type": "text",
+        "text": "Back after the reset: here is the summary."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "wait": 0.2,
+   "working": false
+  }
+ ]
+}

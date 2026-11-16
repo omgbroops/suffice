@@ -1,0 +1,156 @@
+{
+ "name": "interrupt-during-tool",
+ "unverified": true,
+ "beats": [
+  {
+   "screen": {
+    "rows": [
+     " ▝▝   ▝▝   /tmp/PROJECT",
+     "",
+     "❯ Run sleep 60",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "❯ ",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "",
+     "  Sonnet 5.5 (medium) | USER:PROJECT",
+     "  ⏸ manual mode on",
+     "",
+     "",
+     "",
+     ""
+    ]
+   },
+   "transcript": [
+    {
+     "type": "user",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "role": "user",
+      "content": "Run sleep 60"
+     }
+    }
+   ]
+  },
+  {
+   "screen": {
+    "rows": [
+     " ▝▝   ▝▝   /tmp/PROJECT",
+     "",
+     "❯ Run sleep 60",
+     "",
+     "  ⎿  Interrupted · What should Claude do instead?",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "❯ ",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "",
+     "  Sonnet 5.5 (medium) | USER:PROJECT",
+     "  ⏸ manual mode on",
+     "",
+     "",
+     "",
+     ""
+    ]
+   },
+   "working": {
+    "seconds": 0.3,
+    "cont": false
+   },
+   "transcript": [
+    {
+     "type": "assistant",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "id": "msg_0041",
+      "role": "assistant",
+      "model": "claude-sonnet-5-5",
+      "content": [
+       {
+        "type": "tool_use",
+        "id": "toolu_int",
+        "name": "Bash",
+        "input": {
+         "command": "sleep 60"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "type": "user",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "role": "user",
+      "content": [
+       {
+        "type": "tool_result",
+        "tool_use_id": "toolu_int",
+        "content": "[Request interrupted by user for tool use]",
+        "is_error": true
+       }
+      ]
+     }
+    },
+    {
+     "type": "user",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "role": "user",
+      "content": "[Request interrupted by user for tool use]"
+     }
+    }
+   ]
+  },
+  {
+   "wait": 0.2,
+   "working": false
+  }
+ ]
+}

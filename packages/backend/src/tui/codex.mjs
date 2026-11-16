@@ -5,8 +5,10 @@
 // legacy *_begin/*_end events (protocol source only, not seen in real files), and a response_item
 // fallback for sessions that carry neither.
 import { itemProblem, parseDuration } from './model.mjs';
+import { claudeNonPrompt } from './screens.mjs';
 
 const text = (v) => (typeof v === 'string' ? v : '');
+const n0 = (v) => (typeof v === 'number' && Number.isFinite(v) ? v : 0);
 const blocksText = (c) => (Array.isArray(c) ? c.map((b) => text(b?.text)).filter(Boolean).join('\n') : text(c));
 const injected = (t) => /^\s*</.test(t) || t.includes('# AGENTS.md instructions');
 const stripShell = (c) => text(c).replace(/^\S*\b(?:ba|z)?sh -lc (['"])([\s\S]*)\1$/, '$2');
@@ -243,7 +245,7 @@ export function createCodexMapper() {
           return [tool(c, ts, k, { name: 'apply_patch', category: 'edit', title: diff.map((d) => d.path).join(', ') || 'apply_patch', input: { paths: diff.map((d) => d.path) }, status: 'running', output: { diff } })];
         }
         const isShell = p.name === 'exec_command' || p.name === 'shell';
-        const title = isShell ? cmdStr(args.cmd ?? args.command) : p.name;
+        const title = isShell ? cmdStr(args.cmd ?? args.command) : text(p.name);
         c.calls[k].title = title;
         return [tool(c, ts, k, { name: text(p.name) || 'tool', category: isShell ? 'shell' : 'other', title: title || 'tool', input: args, status: 'running' })];
       }
@@ -291,7 +293,7 @@ export function createCodexMapper() {
           const t = p.thread_token_usage ?? p.turn_token_usage ?? p.usage;
           const last = p.usage?.total_tokens;
           if (last && c.window) c.ctxPct = Math.min(100, Math.round((last / c.window) * 100));
-          if (t) items.push({ id: `codex:usage:${text(p.turn_id) || c.turn}`, ts, kind: 'usage', inputTokens: t.input_tokens ?? 0, outputTokens: t.output_tokens ?? 0, cacheReadTokens: t.cached_input_tokens ?? 0, cacheWriteTokens: t.cache_write_input_tokens ?? 0, ...(c.model ? { model: c.model } : {}) });
+          if (t) items.push({ id: `codex:usage:${text(p.turn_id) || c.turn}`, ts, kind: 'usage', inputTokens: n0(t.input_tokens), outputTokens: n0(t.output_tokens), cacheReadTokens: n0(t.cached_input_tokens), cacheWriteTokens: n0(t.cache_write_input_tokens), ...(c.model ? { model: c.model } : {}) });
           break;
         }
         case 'event_msg':
@@ -313,7 +315,7 @@ export function createCodexMapper() {
               if (p.info?.model_context_window) c.window = p.info.model_context_window;
               const last = p.info?.last_token_usage?.total_tokens;
               if (last && c.window) c.ctxPct = Math.min(100, Math.round((last / c.window) * 100));
-              if (t) items.push({ id: `codex:usage:${c.turn}`, ts, kind: 'usage', inputTokens: t.input_tokens ?? 0, outputTokens: t.output_tokens ?? 0, cacheReadTokens: t.cached_input_tokens ?? 0, cacheWriteTokens: t.cache_write_input_tokens ?? 0, ...(c.model ? { model: c.model } : {}) });
+              if (t) items.push({ id: `codex:usage:${c.turn}`, ts, kind: 'usage', inputTokens: n0(t.input_tokens), outputTokens: n0(t.output_tokens), cacheReadTokens: n0(t.cached_input_tokens), cacheWriteTokens: n0(t.cache_write_input_tokens), ...(c.model ? { model: c.model } : {}) });
               if (p.rate_limits?.rate_limit_reached_type) items.push(note(c, ts, 'warn', 'rate_limit', `Rate limit reached: ${p.rate_limits.rate_limit_reached_type}`));
               break;
             }
@@ -377,6 +379,7 @@ const TITLES = [
 const ROW = /^\s*([›>])?\s*(\d+)\.\s+(.*?)\s*$/;
 
 export function parsePrompt(screen) {
+  if (claudeNonPrompt(screen)) return null;
   const lines = text(screen).split('\n');
   let type = null;
   let title = '';
@@ -435,6 +438,36 @@ export const controls = {
   clear: () => '/clear\r',
 };
 
+// ---- selectable permission options (approval prompts, /permissions presets) -----------------
+// Pure helpers over a parsePrompt() result. Not in `controls`: that key set is pinned to model CONTROLS.
+// Hotkeys y/a/p/d and Esc: tui/src/keymap.rs:1935-1939. Digits select the numbered row (assumed, see answerPrompt).
+const ASK_AGAIN = /don't ask again|for this session|for the rest of/i;
+const DECISION = {
+  allow: (o) => /^Yes/i.test(o.label) && !ASK_AGAIN.test(o.label),
+  always: (o) => /^Yes/i.test(o.label) && ASK_AGAIN.test(o.label),
+  deny: (o) => /^(No|Cancel)\b/i.test(o.label),
+};
+export const approvals = {
+  options: (prompt) => (prompt?.options ?? []).map((o, i) => ({ ...o, selected: i === prompt.selected })),
+  current: (prompt) => prompt?.options?.[prompt.selected]?.label ?? null,
+  // select by label (e.g. a sandbox preset) -> digit to type
+  select(prompt, re) {
+    const o = prompt?.options?.find((x) => re.test(x.label));
+    if (!o) throw new RangeError(`no option matching ${re}`);
+    return String(o.index);
+  },
+  // allow | always | deny -> hotkey when the row shows one, Esc for "(esc)", else the digit
+  decide(prompt, kind) {
+    if (prompt?.type !== 'permission') throw new RangeError('not a permission prompt');
+    if (!DECISION[kind]) throw new RangeError(`unknown decision ${kind}`);
+    const o = prompt.options.find(DECISION[kind]);
+    if (!o) throw new RangeError(`no ${kind} option`);
+    const hk = o.hotkey?.replace(/^\(|\)$/g, '').toLowerCase();
+    if (hk === 'esc') return '\x1b';
+    return hk && /^[a-z]$/.test(hk) ? hk : String(o.index);
+  },
+};
+
 // ---- coverage ------------------------------------------------------------------------------
 const C = (element, shown, driven, how) => ({ element, shown, driven, how });
 export const coverage = [
@@ -458,7 +491,7 @@ export const coverage = [
   C('mode change (approval, sandbox, plan)', 'chat', 'yes', 'settings diff -> notice; shift+tab cycles plan/default, /permissions opens presets'),
   C('exec approval dialog', 'chat', 'yes', 'parsePrompt permission; answerPrompt digit or y/a/p/d/Esc'),
   C('patch approval dialog', 'chat', 'yes', 'parsePrompt permission; same keys'),
-  C('permissions approval dialog', 'chat', 'yes', 'parsePrompt permission; r = strict auto review'),
+  C('permissions approval dialog', 'chat', 'yes', 'parsePrompt permission; approvals.decide allow/always/deny, approvals.select(label); r = strict auto review'),
   C('MCP elicitation dialog', 'chat', 'yes', 'parsePrompt permission; Esc cancels'),
   C('request_user_input question', 'chat', 'yes', 'parsePrompt choice; digit selects'),
   C('trust-directory dialog', 'chat', 'no', 'parsePrompt trust text unverified in source; answer in terminal'),

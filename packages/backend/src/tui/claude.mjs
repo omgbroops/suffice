@@ -9,6 +9,7 @@
 //     the denial wording regex, the 200000 context window.
 import { createHash } from 'node:crypto';
 import { parseDuration } from './model.mjs';
+import { classifyScreen, screenItems, SPIN } from './screens.mjs';
 
 const CAP = 100000;
 const str = (v) => (typeof v === 'string' ? v : '');
@@ -27,12 +28,14 @@ const TODO_STATUS = { pending: 'pending', in_progress: 'active', completed: 'don
 
 const fresh = () => ({ emitted: new Map(), calls: new Map(), results: new Map(), queue: [], lastTs: 0, lastUser: null, model: null, mode: null,
   cwd: null, branch: null, sessionId: null, ctxTokens: 0, sidechainSkipped: 0,
-  dropped: {}, fileHistory: 0, errors: { count: 0, lastClass: null }, title: null, agentName: null, costUsd: null, uiMode: null, tasks: {}, pendingAtt: [] });
+  dropped: {}, skipped: {}, agentNames: {}, fileHistory: 0, errors: { count: 0, lastClass: null }, title: null, agentName: null, costUsd: null, uiMode: null, tasks: {}, pendingAtt: [] });
 const drop = (state, k) => { state.dropped[k] = (state.dropped[k] || 0) + 1; };
+// skip = a record that carries nothing new (repeat value, replayed line, empty field): counted in state.skipped[<type>.<why>], never silent
+const skip = (state, k) => { state.skipped[k] = (state.skipped[k] || 0) + 1; };
 
 function emit(state, out, it) {
   const sig = JSON.stringify(it);
-  if (state.emitted.get(it.id) === sig) return; // same id + same content = duplicate line; changed content replaces by id
+  if (state.emitted.get(it.id) === sig) return skip(state, `dup.${it.kind}`); // same id + same content = duplicate line; changed content replaces by id
   state.emitted.set(it.id, sig);
   out.push(it);
 }
@@ -41,7 +44,7 @@ const fmtDur = (ms) => { const s = Math.round(ms / 1000); return s < 60 ? `${s}s
 const notice = (state, out, id, ts, level, code, text) => {
   if (level === 'error') {
     const l = state.lastErr;
-    if (l && l.code === code && Math.abs(ts - l.ts) <= 5000 && l.id !== id) return;
+    if (l && l.code === code && Math.abs(ts - l.ts) <= 5000 && l.id !== id) return skip(state, 'notice.coalesced'); // api_error + its synthetic assistant line = one event
     state.lastErr = { id, code, ts };
   }
   emit(state, out, { id, ts, kind: 'notice', level, code, text });
@@ -69,7 +72,7 @@ function output(c, r, category, status) {
   if (category === 'shell' && (str(tur.stdout) || str(tur.stderr))) text = str(tur.stdout) + str(tur.stderr);
   else if (category === 'read' && str(tur.file?.content)) text = tur.file.content; // images: file.base64 is never copied
   const o = { text: cap(text) };
-  if (text.length > CAP || /\btruncated\b/i.test(r.text.slice(-200))) o.truncated = true;
+  if (text.length > CAP || /\btruncated\b/i.test(r.text.slice(-200))) { o.truncated = true; o.lines = text.split('\n').length; }
   if (category === 'shell') {
     const m = /^Exit code (\d+)/.exec(r.text);
     if (m) o.exitCode = Number(m[1]); else if (status === 'ok') o.exitCode = 0;
@@ -108,24 +111,37 @@ function emitCall(state, out, callId) {
   if (c.name === 'AskUserQuestion') it.title = firstLine(input.questions?.[0]?.question) || c.name;
   if (r) {
     it.output = output(c, r, it.category, status);
+    if (status === 'denied') { const fb = /the user said:\n([\s\S]*?)\n\nNote:/.exec(r.text); if (fb) it.output.feedback = fb[1].trim(); } // plain denials and deny-rule blocks carry no feedback
     if (c.name === 'ExitPlanMode') { it.output.plan = str(r.tur?.plan) || str(input.plan); it.output.decision = r.denied || r.isError ? 'rejected' : 'approved'; }
     if (c.name === 'AskUserQuestion' && !r.isError && !r.denied) {
       const a = r.tur?.answers && typeof r.tur.answers === 'object' ? r.tur.answers : null;
       if (a) { const v = Object.values(a).map(str); it.output.answer = v.length === 1 ? v[0] : a; }
     }
   }
+  const bg = c.name === 'Bash' && r && status === 'ok' ? /^Command running in background with ID: (\w+)/.exec(r.text) : null;
+  if (bg) { it.status = 'background'; it.output.taskId = bg[1]; (state.bg ??= new Map()).set(bg[1], it); } // the later task-output Read attaches below
+  const task = c.name === 'Read' && r ? /\/tasks\/(\w+)\.output$/.exec(str(input.file_path)) : null;
+  if (task && state.bg?.has(task[1])) { const b = state.bg.get(task[1]); b.output.later = cap(it.output.text); emit(state, out, b); }
   emit(state, out, it);
 }
 
-function setMode(state, out, mode, ts) {
-  if (!str(mode)) return;
-  if (state.mode && state.mode !== mode) notice(state, out, `mode:${ts}:${mode}`, ts, 'info', 'mode_changed', `Mode  ${modeName(state.mode)} → ${modeName(mode)}`);
+function setMode(state, out, mode, ts, why) { // why: skip counter name for a standalone record (user records pass none: they repeat the value by design)
+  if (!str(mode)) return why && skip(state, `${why}.empty`);
+  if (state.mode === mode) return why && skip(state, `${why}.unchanged`);
+  if (state.mode) notice(state, out, `mode:${ts}:${mode}`, ts, 'info', 'mode_changed', `Mode  ${modeName(state.mode)} → ${modeName(mode)}`);
   state.mode = mode;
+}
+function setUiMode(state, out, mode, ts) { // the 'mode' record: a second axis next to permission-mode, shown to the mode picker via state.uiMode
+  if (!str(mode)) return skip(state, 'mode.empty');
+  if (state.uiMode === mode) return skip(state, 'mode.unchanged');
+  // no notice: the view mode is a picker axis, and tui-claude 'item 1' requires zero notices for it
+  state.uiMode = mode;
 }
 
 function userText(state, out, text, id, ts, images) {
   const tag = (n) => new RegExp(`<${n}>([\\s\\S]*?)</${n}>`).exec(text)?.[1];
   if (text.includes('<local-command-caveat>')) return drop(state, 'user.caveat');
+  if (!text.trim() && !images.length) return skip(state, 'user.empty'); // empty text and no image: nothing to show
   const cmd = tag('command-name');
   if (cmd) {
     const name = cmd.trim().replace(/^\//, '');
@@ -135,14 +151,19 @@ function userText(state, out, text, id, ts, images) {
   }
   const so = tag('local-command-stdout');
   if (so !== undefined) {
-    if (!so.trim()) return;
+    if (!so.trim()) return skip(state, 'user.empty-stdout');
     const code = /Set model to/.test(so) ? 'model_changed' : /Compacted/.test(so) ? 'compacted' : 'other';
     return notice(state, out, id, ts, 'info', code, so.trim());
   }
   if (text.startsWith('[Request interrupted by user')) return notice(state, out, id, ts, 'info', 'interrupted', text.trim());
-  if (text.includes('<task-notification>')) { // assumed tags: task-id, status, summary
+  if (text.includes('<task-notification>')) { // real tags: task-id, tool-use-id, output-file, status, summary, note, result, usage{subagent_tokens,tool_uses,duration_ms}
     const tid = str(tag('task-id')).trim() || id;
-    state.tasks[tid] = { id: tid, label: str(tag('summary')).trim() || tid, status: str(tag('status')).trim() || 'unknown' };
+    const num = (n) => { const v = Number(str(tag(n)).trim()); return Number.isFinite(v) && str(tag(n)).trim() !== '' ? v : undefined; };
+    const t = { id: tid, label: str(tag('summary')).trim() || tid, status: str(tag('status')).trim() || 'unknown', toolUseId: str(tag('tool-use-id')).trim(), ts,
+      result: str(tag('result')).trim(), usage: { tokens: num('subagent_tokens'), toolUses: num('tool_uses'), durationMs: num('duration_ms') } };
+    const same = (a, b) => JSON.stringify({ ...a, ts: 0 }) === JSON.stringify({ ...b, ts: 0 }); // a repeated notification (only ts differs) is not a change
+    if (state.tasks[tid] && same(state.tasks[tid], t)) return skip(state, 'user.task-notification.unchanged');
+    state.tasks[tid] = t;
     return;
   }
   const bash = tag('bash-input');
@@ -172,11 +193,20 @@ function run(obj, state, out, opts) {
   const c = obj.message?.content;
 
   switch (obj.type) {
-    case 'permission-mode': return setMode(state, out, obj.permissionMode, ts);
-    case 'mode': if (str(obj.mode)) state.uiMode = obj.mode; return; // always 'normal' in recordings, a different axis than permission-mode: not fed to meta.mode
-    case 'ai-title': if (str(obj.aiTitle)) state.title = obj.aiTitle; return;
-    case 'agent-name': if (str(obj.agentName)) state.agentName = obj.agentName; return;
-    case 'cost-state': if (Number.isFinite(obj.totalCostUSD)) state.costUsd = obj.totalCostUSD; return;
+    case 'permission-mode': return setMode(state, out, obj.permissionMode, ts, 'permission-mode');
+    case 'mode': return setUiMode(state, out, obj.mode, ts);
+    case 'ai-title': // latest wins, no chat item
+      if (!str(obj.aiTitle) || obj.aiTitle === state.title) return skip(state, `ai-title.${str(obj.aiTitle) ? 'unchanged' : 'empty'}`);
+      state.title = obj.aiTitle; return;
+    case 'agent-name': { // names the agent the line belongs to (agentId when present, else the session's main agent); no chat item
+      const who = str(obj.agentId);
+      if (!str(obj.agentName) || (who ? state.agentNames[who] : state.agentName) === obj.agentName) return skip(state, `agent-name.${str(obj.agentName) ? 'unchanged' : 'empty'}`);
+      if (who) state.agentNames[who] = obj.agentName; else state.agentName = obj.agentName;
+      return;
+    }
+    case 'cost-state':
+      if (!Number.isFinite(obj.totalCostUSD) || obj.totalCostUSD === state.costUsd) return skip(state, 'cost-state.unchanged');
+      state.costUsd = obj.totalCostUSD; return;
     case 'file-history-delta': state.fileHistory++; return;
     case 'queue-operation':
       if (obj.operation === 'enqueue') state.queue.push(str(obj.content));
@@ -185,6 +215,7 @@ function run(obj, state, out, opts) {
     case 'user': {
       if (obj.isMeta || obj.isCompactSummary || obj.isVisibleInTranscriptOnly) return drop(state, 'user.meta');
       setMode(state, out, obj.permissionMode, ts);
+      if (obj.origin?.kind === 'task-notification' && !(typeof c === 'string' && c.includes('<task-notification>'))) return drop(state, 'user.task-notification'); // saved transcripts may scrub the body: still never a chat message
       if (typeof c === 'string') return userText(state, out, c, `${uuid}:0`, ts, []);
       if (!Array.isArray(c)) return;
       const images = c.filter((b) => b?.type === 'image').map(() => ({ type: 'image', name: 'image' }));
@@ -261,18 +292,23 @@ function run(obj, state, out, opts) {
       if (a.type === 'hook_cancelled') return notice(state, out, id, ts, 'info', 'other', `Hook ${str(a.hookEvent)} cancelled`);
       if (a.type === 'task_status') {
         const tid = str(a.taskId) || id;
-        state.tasks[tid] = { id: tid, label: str(a.description) || tid, status: str(a.status) };
+        const t = { id: tid, label: str(a.description) || tid, status: str(a.status) };
+        if (JSON.stringify(state.tasks[tid]) === JSON.stringify(t)) return skip(state, 'attachment.task_status.unchanged');
+        state.tasks[tid] = t;
         return;
       }
+      if (a.type === 'file' && !str(a.filename)) return skip(state, 'attachment.file.nameless'); // nothing to name it by
       if ((a.type === 'file' && str(a.filename)) || a.type === 'image') {
         const f = a.type === 'file' ? { type: 'file', name: base(a.filename), path: a.filename } : { type: 'image', name: str(a.filename) ? base(a.filename) : 'image' };
         const dup = (x) => x.type === f.type && x.name === f.name && x.path === f.path;
         if (state.lastUser) {
           const att = [...(state.lastUser.attachments ?? [])];
-          if (!att.some(dup)) att.push(f);
+          if (att.some(dup)) return skip(state, `attachment.${f.type}.dup`);
+          att.push(f);
           state.lastUser = { ...state.lastUser, attachments: att };
           emit(state, out, state.lastUser);
-        } else if (!state.pendingAtt.some(dup)) state.pendingAtt.push(f);
+        } else if (state.pendingAtt.some(dup)) skip(state, `attachment.${f.type}.dup`);
+        else state.pendingAtt.push(f);
         return;
       }
       return drop(state, `attachment.${str(a.type) || 'unknown'}`);
@@ -282,66 +318,165 @@ function run(obj, state, out, opts) {
 }
 
 // ---- screen -> Prompt ----
-function parsePrompt(screen) {
-  const lines = stripAnsi(str(screen)).split('\n').map((l) => l.replace(/\s+$/, '')).filter((l) => l.trim()).slice(-25);
-  const text = lines.join('\n');
-  let rows = [];
-  let group = [];
-  lines.forEach((l, i) => { // numbered rows; a "1." starts a new group so a numbered plan above the options is ignored
-    const m = /^\s*(❯)?\s*(\d+)\.\s+(\S.*)$/.exec(l);
-    if (!m) return;
-    if (Number(m[2]) === 1) group = [];
-    group.push({ i, n: Number(m[2]), label: m[3].trim(), marked: !!m[1] });
-  });
-  const cue = /Do you want|Would you like|Allow\b|Esc to cancel|trust|proceed/i.test(text);
-  if (group.length >= 2 && group.every((r, k) => r.n === k + 1) && (cue || group.some((r) => r.marked))) rows = group.map((r) => ({ ...r, hotkey: String(r.n) }));
-  const footer = lines.findLastIndex((l) => /Enter to (confirm|select)|Esc to cancel/.test(l));
-  if (!rows.length && footer > 0) { // unnumbered list (trust dialog): ❯ row plus rows indented 3+ spaces, directly above the footer
-    const up = [];
-    for (let i = footer - 1; i >= 0 && (/^\s*❯\s*\S/.test(lines[i]) || /^\s{3,}\S/.test(lines[i])); i--) up.unshift({ i, label: lines[i].replace(/^\s*❯?\s*/, '').trim(), marked: /^\s*❯/.test(lines[i]) });
-    // shortcut: a screen with a multi-line option label is not handled, upgrade when one shows up
-    if (up.length >= 2 && up.some((r) => r.marked)) rows = up;
+function parsePrompt(screen) { // only a classified permission / question / plan / trust dialog yields options; every other screen is null
+  const c = classifyScreen(str(screen));
+  const p = c.prompt && ['permission', 'question', 'plan', 'trust'].includes(c.kind) ? c.prompt : null;
+  if (!p || !(p.type === 'permission' || /Would you like to proceed/.test(p.title))) return p;
+  const full = stripAnsi(str(screen)).split('\n').map((l) => l.replace(/\s+$/, '')).filter((l) => l.trim());
+  return { ...p, ...promptTool(full, full.findLastIndex((l) => l.trim() === p.title), p.title, p.options) }; // tool, target, diff, alwaysAllow
+}
+
+// Tool, target and always-allow option of a tool permission dialog. The dialog block runs from the last solid rule to the title.
+function promptTool(full, ti, title, options) {
+  let st = -1;
+  for (let j = Math.min(ti, full.length) - 1; j >= 0; j--) if (/^\s*─{20,}\s*$/.test(full[j])) { st = j; break; }
+  const block = full.slice(st + 1, Math.max(ti, 0)).map((l) => l.trim());
+  const head = block[0] ?? '';
+  const blockText = block.join('\n');
+  const out = {};
+  if (/^Bash command$/.test(head)) out.tool = 'Bash';
+  else if (/^Edit notebook$/.test(head)) out.tool = 'NotebookEdit';
+  else if (/^Edit file$/.test(head)) out.tool = 'Edit';
+  else if (/^Create file$|^Overwrite file$|to overwrite /.test(head + '\n' + title) || /^Do you want to create /.test(title)) out.tool = 'Write';
+  else if (/search the web for/.test(blockText)) out.tool = 'WebSearch';
+  else if (/fetch this content/.test(title)) out.tool = 'WebFetch';
+  else if (/Would you like to proceed/.test(title)) out.tool = 'ExitPlanMode';
+  if (!out.tool) return out;
+  if (out.tool === 'Bash') {
+    const body = block.slice(1).filter((l) => l && !/^[╌─\s]+$/.test(l) && !/^Tip:/.test(l) && !/requires? approval/.test(l));
+    const cmd = body.filter((l) => l.startsWith('│')).map((l) => l.replace(/^│ ?/, ''));
+    const other = body.filter((l) => !l.startsWith('│'));
+    if (cmd.length) { out.command = cmd.join('\n'); if (other.length) out.description = other.join(' '); }
+    else if (other.length > 1) { out.description = other[0]; out.command = other.slice(1).join('\n'); }
+    else out.command = other[0] ?? '';
+    out.target = out.command;
+  } else if (out.tool === 'WebSearch') {
+    out.target = /search the web for:\s*(.*)$/m.exec(blockText)?.[1]?.trim() ?? '';
+  } else if (out.tool === 'WebFetch') {
+    const url = full.slice(0, ti).findLast((l) => /⏺ Fetch\(/.test(l));
+    out.target = url ? /Fetch\((?:url:\s*")?([^")\s]+)/.exec(url)?.[1] ?? '' : '';
+  } else if (out.tool !== 'ExitPlanMode') {
+    out.target = /(?:edit to|create|overwrite) (\S+?)\?$/.exec(title)?.[1] ?? '';
   }
-  if (rows.length < 2) return null;
-  const options = rows.map((r, k) => ({ index: k, label: r.label, ...(r.hotkey ? { hotkey: r.hotkey } : {}) }));
-  const selected = Math.max(0, rows.findIndex((r) => r.marked));
-  const trust = /trust this folder|Quick safety check/.test(text);
-  const type = trust ? 'trust' : /Would you like to proceed|keep planning/.test(text) ? 'choice' : /Do you want to|Allow\b/.test(text) ? 'permission' : 'choice';
-  let ti = -1;
-  for (let j = rows[0].i - 1; j >= 0; j--) if (lines[j].includes('?')) { ti = j; break; }
-  if (ti < 0) ti = Math.max(0, rows[0].i - 1);
-  const title = trust ? 'Is this a project you created or one you trust?' : lines[ti].trim();
-  let above = lines.slice(Math.max(0, ti - 6), ti).filter((l) => !SPIN.test(l));
-  const rl = above.map((l, k) => (/^[\s╌─━╍-]{3,}$/.test(l) ? k : -1)).filter((k) => k >= 0); // diff/preview panel sits between rules: not dialog text
-  if (rl.length) above = [...above.slice(0, rl[0]), ...above.slice(rl.length > 1 ? rl.at(-1) + 1 : rl[0] + 1).filter(() => rl.length > 1)];
-  const body = above.map((l) => l.trim()).join('\n');
-  const promptId = createHash('sha1').update(`${title}\n${options.map((o) => o.label).join('\n')}`).digest('hex').slice(0, 12);
-  return { promptId, type, title, ...(body ? { body } : {}), options, selected };
+  if (out.tool === 'Edit' || out.tool === 'Write' || out.tool === 'NotebookEdit') {
+    let added = 0, removed = 0;
+    for (const l of block) { const m = /^\d+\s+([+-])/.exec(l); if (m) m[1] === '+' ? added++ : removed++; }
+    if (!added && !removed && out.tool === 'Write') added = block.filter((l) => /^\d+\s+\S/.test(l)).length; // created file: rows carry no +
+    out.diff = { added, removed };
+  }
+  const aa = options.find((o) => /don.t ask again for:?\s*/i.test(o.label)) ?? options.find((o) => /switch to accept edits/i.test(o.label));
+  if (aa) out.alwaysAllow = { index: aa.index, label: aa.label, scope: /don.t ask again for:?\s*(.*)$/i.exec(aa.label)?.[1] ?? /switch to (.*)$/i.exec(aa.label)?.[1] ?? '' };
+  return out;
+}
+
+// ---- screen -> tool items ----
+// Rows: "⏺ Update(path)" + "  ⎿  result" (+ 5-space continuation rows); collapsed groups ("Ran 1 shell command"); live "Running <desc> · 2s" / "⏺ Reading 1 file…"
+// with a "⎿  $ cmd" row; "No result recorded for N call" + "⎿  Interrupted". Items come in order of appearance.
+const ROW_NAME = { Update: 'Edit', Edit: 'Edit', Fetch: 'WebFetch', 'Web Search': 'WebSearch', Bash: 'Bash', Read: 'Read', Write: 'Write', Agent: 'Agent', Skill: 'Skill', Glob: 'Glob', Grep: 'Grep', NotebookEdit: 'NotebookEdit' };
+const GROUP = { 'shell command': ['Bash', 'shell'], file: ['Read', 'read'], pattern: ['Grep', 'search'], directory: ['Glob', 'search'] };
+const plural = (n) => (n == null ? undefined : Number(n));
+function applyResult(it, text, more) {
+  const o = (it.output ??= { text: '' });
+  o.text = [text, ...more].join('\n').trim();
+  let m;
+  if ((m = /^Error: Exit code (\d+)/.exec(text))) { it.status = 'error'; o.exitCode = Number(m[1]); }
+  else if (/^Error:/.test(text)) it.status = 'error';
+  else if (/^User rejected|Not run · permission denied|doesn't want to proceed/.test(text)) it.status = 'denied';
+  else if (/^Interrupted/.test(text)) it.status = 'interrupted';
+  else if (/^\d+ PostToolUse hooks? ran/.test(text) || /^Tip:/.test(text)) { o.text = ''; return; }
+  else if (it.status === 'running' || it.status === 'background') { if (it.status === 'running') it.status = 'ok'; }
+  if (it.status === 'ok' && it.category === 'shell' && o.exitCode == null) o.exitCode = 0;
+  if ((m = /^Added (\d+) lines?(?:, removed (\d+) lines?)?/.exec(text))) { o.added = Number(m[1]); o.removed = Number(m[2] ?? 0); }
+  else if ((m = /^Removed (\d+) lines?/.exec(text))) { o.added = 0; o.removed = Number(m[1]); }
+  else if ((m = /^Wrote (\d+) lines?/.exec(text))) { o.added = Number(m[1]); o.removed = 0; }
+  if ((m = /^Read (\d+) lines?/.exec(text))) o.lines = Number(m[1]);
+  if ((m = /^… \+(\d+) lines?/m.exec(o.text))) { o.truncated = true; o.hiddenLines = Number(m[1]); o.lines = more.filter((l) => !/^… \+/.test(l)).length + 1 + o.hiddenLines; }
+  else if (/\btruncated\b/i.test(text)) o.truncated = true;
+}
+export function parseToolRows(screen) {
+  const lines = stripAnsi(str(screen)).split('\n').map((l) => l.replace(/\s+$/, ''));
+  const items = [];
+  const mk = (name, arg, status = 'running') => { const it = { kind: 'tool', name, category: CAT[name] ?? 'other', title: arg, status }; items.push(it); return it; };
+  let cur = null;
+  for (let i = 0; i < lines.length; i++) {
+    const l = lines[i];
+    let m;
+    if ((m = /^\s*⏺ (Update|Edit|Fetch|Web Search|Bash|Read|Write|Agent|Skill|Glob|Grep|NotebookEdit)\((.*?)\)?$/.exec(l))) { cur = mk(ROW_NAME[m[1]], m[1] === 'Web Search' ? m[2].replace(/^"|"$/g, '') : /^url: "/.test(m[2]) ? /^url: "([^"]+)"/.exec(m[2])[1] : m[2]); continue; }
+    if ((m = /^\s*⏺ Reading (\d+) files?…$/.exec(l))) { cur = mk('Read', ''); cur.count = Number(m[1]); continue; }
+    if ((m = /^\s*⏺ Background command "(.*)" completed \(exit code (\d+)\)/.exec(l))) {
+      const it = items.findLast((x) => x.name === 'Bash' && x.status === 'background') ?? items.findLast((x) => x.name === 'Bash' && x.title === m[1]);
+      if (it) { it.status = 'background'; (it.output ??= { text: '' }).exitCode = Number(m[2]); it.output.text = `completed (exit code ${m[2]})`; it.done = true; }
+      else { cur = mk('Bash', m[1], 'background'); cur.output = { text: `completed (exit code ${m[2]})`, exitCode: Number(m[2]) }; cur.done = true; }
+      continue;
+    }
+    if ((m = /^\s+Running (.+?)(?: · \d+\w*)?$/.exec(l)) && /^\s+⎿\s+\$ /.test(lines[i + 1] ?? '')) { cur = mk('Bash', m[1]); continue; }
+    if ((m = /^\s+No result recorded for (\d+) calls?$/.exec(l))) { cur = mk('Bash', '', 'interrupted'); continue; }
+    if ((m = /^\s{2}(?:Listed|Read|Searched for|Ran)\b.*\b(?:shell commands?|files?|patterns?|directory|directories)$/.exec(l))) {
+      for (const g of l.trim().split(/, /)) {
+        const gm = /^(?:Listed|Read|Searched for|Ran) (\d+) (shell command|file|pattern|director)/.exec(g);
+        if (!gm) continue;
+        const [name] = GROUP[gm[2] === 'director' ? 'directory' : gm[2]];
+        for (let k = 0; k < Number(gm[1]); k++) { const it = mk(name, '', 'ok'); it.collapsed = true; }
+      }
+      cur = items.at(-1)?.collapsed ? items.at(-1) : null; // a following ⎿ row (Not run, Error) belongs to the last collapsed call
+      continue;
+    }
+    if ((m = /^\s+⎿\s+(.*)$/.exec(l)) && cur) {
+      const text = m[1];
+      if (/^\$ /.test(text) && !cur.output) { cur.title = text.slice(2); if (cur.name === 'Bash') cur.category = 'shell'; continue; }
+      if (cur.name === 'Read' && cur.status === 'running' && cur.count && !cur.output && !/^(Error|Read |Tip:|\d+ PostToolUse)/.test(text)) { cur.title = text; continue; }
+      const more = [];
+      while (i + 1 < lines.length && /^ {5,}\S|^\s+… \+\d+ lines?/.test(lines[i + 1])) more.push(lines[++i].trim());
+      if (cur.done) continue;
+      if (cur.status === 'interrupted' && cur.output) continue;
+      if (cur.output && !/^(Interrupted|Error)/.test(text)) { if (/^\d+ PostToolUse/.test(text)) continue; }
+      applyResult(cur, text, more);
+      continue;
+    }
+    if (/^\s*⏺ /.test(l) || /^❯ /.test(l)) cur = null; // prose or a new prompt ends the current call
+  }
+  const pr = parsePrompt(screen); // a pending permission prompt is the live call
+  if (pr?.tool && pr.target && !items.some((x) => x.name === pr.tool && x.status === 'running' && x.title === pr.target)) {
+    const it = mk(pr.tool, pr.target);
+    if (pr.diff) it.output = { text: '', added: pr.diff.added, removed: pr.diff.removed };
+  }
+  return items;
 }
 
 // ---- screen -> Status ----
 // Spinner row: "<glyph> <Verb>… (6s · ↓ 388 tokens · thought for 4s)"; older builds: "(esc to interrupt)" / "ctrl+c to interrupt".
 // Glyph cycle seen in Claude Code: · ✢ ✳ ✶ ✻ ✽ (and * on terminals without them). Parts after the verb vary, so each is matched on its own.
-const SPIN = /^\s*[·✢✳✶✻✽*●]\s+(\p{L}[\p{L}'-]*(?: \p{L}[\p{L}'-]*)?)…\s*\((.*)\)\s*$/u;
 const toks = (n, k) => Math.round(parseFloat(n.replace(/,/g, '')) * ({ k: 1e3, m: 1e6 }[k?.toLowerCase()] || 1));
-export function parseStatus(screen) {
+// Structure, not a verb list: glyph + verb + "…" + optional "(parts · in · any order)". Bare "✽ Sprouting…" has no parts; "*" and "●" rows need the parentheses (bullets end in "…" too).
+const WORK = /^\s*([·✢✳✶✻✽*●])\s+(\p{L}[\p{L}'-]*(?: \p{L}[\p{L}'-]*)?)…(?:\s*\((.*)\))?\s*$/u;
+/** Full shape, nulls when absent: { verb, elapsedSec, tokens, interruptible, thinking, ... }. */
+export function parseWorking(screen) {
   const lines = stripAnsi(str(screen)).split('\n').filter((l) => l.trim()).slice(-12);
   for (let i = lines.length - 1; i >= 0; i--) {
-    const m = SPIN.exec(lines[i]);
+    const m = WORK.exec(lines[i]);
     if (!m) continue;
-    const out = { verb: m[1], elapsedSec: 0 };
-    let known = false;
-    for (const raw of m[2].split('·')) {
+    if (m[3] === undefined && /[*●]/.test(m[1])) continue;
+    const out = { verb: m[2], elapsedSec: null, tokens: null, interruptible: null, thinking: false };
+    let known = m[3] === undefined;
+    for (const raw of (m[3] ?? '').split('·')) {
       const part = raw.trim();
       let t;
-      if (/interrupt/i.test(part)) { out.hint = part; known = true; }
+      if (/interrupt/i.test(part)) { out.hint = part; out.interruptible = true; known = true; }
       else if ((t = parseDuration(part)) !== null) { out.elapsedSec = t; known = true; }
       else if ((t = /^([↓↑])?\s*([\d.,]+)\s*([km])?\s*tokens?$/i.exec(part))) { out.tokens = toks(t[2], t[3]); if (t[1]) out.tokenDirection = t[1] === '↓' ? 'down' : 'up'; known = true; }
       else if ((t = /^thought for (.+)$/i.exec(part)) && (t = parseDuration(t[1])) !== null) { out.thoughtSec = t; known = true; }
+      else if (/^thinking$/i.test(part)) { out.thinking = true; known = true; }
     }
     if (known) return out; // a row with parentheses but no recognised part is ordinary text
   }
   return null;
+}
+/** Legacy shape (model.mjs Status): elapsedSec 0 when unknown, absent keys omitted. */
+export function parseStatus(screen) {
+  const w = parseWorking(screen);
+  if (!w) return null;
+  const { elapsedSec, tokens, interruptible, thinking, ...rest } = w;
+  return { ...rest, elapsedSec: elapsedSec ?? 0, ...(tokens !== null && { tokens }), ...(thinking && { thinking }) };
 }
 
 // ---- controls -> bytes ----
@@ -440,6 +575,7 @@ function meta(state) {
   if (state.agentName) m.agentName = state.agentName;
   if (state.costUsd !== null) m.costUsd = state.costUsd;
   if (state.uiMode) m.uiMode = state.uiMode;
+  if (Object.keys(state.agentNames).length) m.agentNames = { ...state.agentNames };
   const bg = Object.values(state.tasks);
   if (bg.length) m.backgroundTasks = bg;
   if (state.ctxTokens) m.contextUsedPct = Math.min(100, Math.round((state.ctxTokens / state.contextWindow) * 100));
@@ -449,7 +585,7 @@ function meta(state) {
 /** { ok, errors, lastClass, dropped }: lines the mapper threw on (class name only) and counts of lines it deliberately did not show. */
 export function mapperHealth(state) {
   const e = state?.errors ?? { count: 0, lastClass: null };
-  return { ok: e.count === 0, errors: e.count, lastClass: e.lastClass, dropped: { ...(state?.dropped ?? {}) } };
+  return { ok: e.count === 0, errors: e.count, lastClass: e.lastClass, dropped: { ...(state?.dropped ?? {}) }, skipped: { ...(state?.skipped ?? {}) } };
 }
 
 /** Turn-end footer on screen, "✻ Sautéed for 2s · done 12:13 AM" (any verb) -> { verb, seconds } or null. */
@@ -484,6 +620,9 @@ export function createClaudeMapper({ contextWindow = 200000, includeSidechain = 
     },
     meta: (state) => meta(ensure(state)),
     parsePrompt,
+    classifyScreen,
+    screenItems,
+    parseToolRows,
     parseStatus,
     controls,
     coverage,

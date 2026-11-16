@@ -1,0 +1,173 @@
+COVERAGE: Claude Code transcript record shapes vs src/tui/claude.mjs (structure only; no content)
+distinct signatures 969 | records 4051286 | files 39083 | tool names 39 | block types 8 | sidechain records 1212762 | unparsed lines 0 | oversize lines skipped 0
+records: handled 4051286 (100.00%) | dropped 0 (0.00%) | invalid 0 (0.00%) | threw 0 (0.00%)
+signatures with every record handled: 969 of 969 (100.00%); with some dropped 0, invalid 0, threw 0
+handled = valid item, a counted documented skip, or absorbed into mapper state (title, cost, results). dropped = nothing emitted, no skip counter, no state change.
+
+TOP 30 UNHANDLED SIGNATURES by unhandled record count
+
+RECORD TYPES
+attachment 1198890
+assistant 855392
+user 541620
+api-request-blob 391712
+api-request 372326
+atis-latch 133734
+last-prompt 128546
+queue-operation 110878
+session-owner 57052
+api-request-shape 44759
+system 37718
+mode 32778
+cost-state 28288
+ai-title 27646
+permission-mode 27051
+agent-name 9648
+custom-title 8428
+file-history-snapshot 8189
+frame-link 7659
+started 6134
+result 5967
+pr-link 5203
+tools-used 5077
+bridge-session 2244
+file-history-delta 1855
+relocated 1325
+artifact-autoreact-ledger 405
+artifact-comment-monitor 251
+launched 211
+undefined 142
+dev-mods 89
+failed 43
+fork-context-ref 22
+continued-in 2
+agent-color 2
+
+BLOCK TYPES
+tool_use 635300
+tool_result 562024
+text 476968
+thinking 355151
+string 89865
+tool_addition 8394
+image 304
+tool_removal 21
+
+SYSTEM SUBTYPES
+turn_duration 14073
+stop_hook_summary 13919
+compact_boundary 6725
+away_summary 1164
+scheduled_task_fire 890
+api_error 423
+local_command 251
+informational 243
+model_refusal_fallback 16
+bridge_status 10
+agents_killed 3
+model_refusal_no_fallback 1
+
+ATTACHMENT KINDS
+hook_success 273262
+total_tokens_reminder 159875
+hook_additional_context 94545
+prompt_snapshot 90445
+environment 54487
+budget_usd 47921
+date 45810
+model 45603
+session_context 45563
+credential_org 45488
+deferred_tools_record 39726
+mcp_instructions_delta 33333
+remote_session_change 32797
+deferred_tools_delta 31804
+instructions 29043
+skill_listing 21559
+file 14603
+queued_command 13164
+agent_listing_delta 12412
+auto_mode 11894
+silent_turn_reminder 9020
+compact_file_reference 7554
+hook_cancelled 6536
+task_status 6014
+output_style 5454
+thinking_drop 4782
+structured_output 4706
+hook_non_blocking_error 4650
+edited_text_file 3489
+invoked_skills 856
+goal_status 835
+task_reminder 508
+session_cron_carry 243
+command_permissions 194
+output_style_instructions 155
+batching_reminder_sent 127
+nested_memory 87
+context_sections 81
+diagnostics 78
+read_truncation_notice 59
+plan_file_reference 28
+max_turns_reached 23
+ultra_effort_enter 23
+plan_mode_exit 13
+skill_mention 11
+auto_mode_exit 8
+ultra_effort_exit 6
+hook_system_message 5
+plan_mode 4
+unknown_command_fallback 2
+hook_blocking_error 2
+dynamic_skill 2
+workflow_keyword_request 1
+
+HOOK / NOTIFICATION KINDS
+attachment+hook_success 273262
+attachment+hook_additional_context 94545
+system+stop_hook_summary 13919
+attachment+hook_cancelled 6536
+attachment+hook_non_blocking_error 4650
+attachment+hook_system_message 5
+attachment+hook_blocking_error 2
+
+TOOL NAMES (count | mapper rendering, probed by feeding a tool_use through the mapper)
+Bash 381944 | tool/shell | specific
+Read 109910 | tool/read | specific
+Edit 42553 | tool/edit | specific
+WebFetch 19410 | tool/web | specific
+Write 17984 | tool/write | specific
+WebSearch 13744 | tool/web | specific
+mcp__<server>__<tool> 12735 | tool/mcp | specific
+Agent 10192 | subagent | specific
+Monitor 8708 | tool/shell | specific
+StructuredOutput 4818 | tool/other | generic
+ToolSearch 4303 | tool/other | generic
+SendMessage 4181 | tool/other | generic
+TaskStop 1189 | tool/other | generic
+Grep 950 | tool/search | specific
+bash 396 | tool/other | generic
+Artifact 364 | tool/other | generic
+ScheduleWakeup 358 | tool/other | generic
+Workflow 326 | tool/other | generic
+ListAgents 272 | tool/other | generic
+SubagentHandback 240 | tool/other | generic
+Skill 175 | tool/other | generic
+Glob 148 | tool/search | specific
+AskUserQuestion 90 | tool/other | generic
+SendUserFile 88 | tool/other | generic
+CronCreate 58 | tool/other | generic
+CronDelete 48 | tool/other | generic
+PushNotification 27 | tool/other | generic
+bash_placeholder 19 | tool/other | generic
+ReportFindings 18 | tool/other | generic
+CronList 17 | tool/other | generic
+ExitPlanMode 11 | tool/other | generic
+SendFeedback 6 | tool/other | generic
+ReadNotifications 5 | tool/other | generic
+bash-placeholder 3 | tool/other | generic
+ArtifactComments 3 | tool/other | generic
+Create 2 | tool/other | generic
+ArtifactData 2 | tool/other | generic
+CrossSessionMessage 2 | tool/other | generic
+bash_placeholder_unused 1 | tool/other | generic

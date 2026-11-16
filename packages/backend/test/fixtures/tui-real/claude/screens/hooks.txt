@@ -1,0 +1,40 @@
+
+  ⎿  Interrupted · What should Claude do instead?
+▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔ ◐ medium · /effort ▔
+   Hooks
+   22 hooks on 11 events
+
+   This menu is read-only. To add or change a hook, edit settings.json or ask Claude. Learn more
+
+     PreToolUse  before tool execution
+   ❯ [User]   /bin/bash "$HOME/.claude/hooks/thermal-notify.sh"…   * · command
+     [User]   /bin/bash "$HOME/.claude/hooks/siteblock-guard.sh"   * · command
+     [User]   /bin/bash "$HOME/.claude/hooks/no-focus-steal.sh"    Bash · command
+
+     PostToolUse  after tool execution
+     [User]   /opt/homebrew/bin/node --disable-warning=Experime…   command
+     [User]   python3 -I ~/decomp-v2/guard/hook.py … Bash · command
+
+     PostToolUseFailure  after tool execution fails
+     [User]   /opt/homebrew/bin/node --disable-warning=Experime…   command
+
+     UserPromptSubmit  when the user submits a prompt
+     [User]   node "$HOME/.claude/hooks/usage-guard.mjs" context   command
+     [User]   /opt/homebrew/bin/node --disable-warning=Experime…   command
+     [User]   /bin/bash "$HOME/.claude/hooks/thermal-notify.sh"…   command
+     [Plugin] node -e "require(require('path').join(process.env…   <redacted> · command
+
+     SessionStart  when a new session is started
+     [User]   node "$HOME/.claude/hooks/usage-guard.mjs" context   command
+     [User]   PATH="/opt/homebrew/bin:$HOME/.local/share/mise/i…   command
+     [User]   /opt/homebrew/bin/node --disable-warning=Experime…   command
+     [Plugin] "${CLAUDE_PLUGIN_ROOT}/hooks/run-hook.cmd" sessio…   <redacted>
+     [Plugin] node -e "require(require('path').join(process.env…   <redacted> · startup|resume|clear|compact
+
+     Stop  right before Claude concludes its response
+     [User]   /opt/homebrew/bin/node --disable-warning=Experime…   command
+
+     SubagentStart  when a subagent (Agent tool call) is started
+     ↓ 7 more
+
+   Enter to view · Esc to close

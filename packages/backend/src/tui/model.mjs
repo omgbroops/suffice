@@ -9,11 +9,11 @@
 //   { kind: 'thinking',  text }
 //   { kind: 'tool', callId, name, category, title, input, status, output? }
 //       category: 'shell'|'edit'|'write'|'read'|'search'|'web'|'todo'|'subagent'|'mcp'|'other'
-//       status:   'running'|'ok'|'error'|'denied'
+//       status:   'running'|'ok'|'error'|'denied'|'interrupted'|'background'
 //       input:    the tool's own arguments (plain JSON)
 //       output:   { text?, exitCode?, truncated?, diff?: [{ path, oldText?, newText?, patch? }] }
 //   { kind: 'todo',     items: [{ text, status: 'pending'|'active'|'done' }] }
-//   { kind: 'subagent', callId, name, prompt, status: 'running'|'ok'|'error', childSessionId? }
+//   { kind: 'subagent', callId, name, prompt, status: 'running'|'ok'|'error'|'stopped', childSessionId? }
 //   { kind: 'notice',   level: 'info'|'warn'|'error', code, text }
 //       code: 'compacted'|'interrupted'|'model_changed'|'mode_changed'|'rate_limit'|'error'|'other'
 //   { kind: 'usage',    inputTokens, outputTokens, cacheReadTokens?, cacheWriteTokens?, costUsd?, model? }
@@ -32,7 +32,7 @@
 //   | 'compact' | 'clear' | 'attach' {path}
 export const ITEM_KINDS = ['user', 'assistant', 'thinking', 'tool', 'todo', 'subagent', 'notice', 'usage'];
 export const TOOL_CATEGORIES = ['shell', 'edit', 'write', 'read', 'search', 'web', 'todo', 'subagent', 'mcp', 'other'];
-export const TOOL_STATUS = ['running', 'ok', 'error', 'denied'];
+export const TOOL_STATUS = ['running', 'ok', 'error', 'denied', 'interrupted', 'background'];
 export const NOTICE_CODES = ['compacted', 'interrupted', 'model_changed', 'mode_changed', 'rate_limit', 'error', 'other'];
 export const PROMPT_TYPES = ['permission', 'trust', 'choice', 'text'];
 export const CONTROLS = ['interrupt', 'answerPrompt', 'setMode', 'setModel', 'slash', 'compact', 'clear', 'attach'];
@@ -55,7 +55,7 @@ export function itemProblem(it) {
       if (it.output?.diff && !it.output.diff.every((d) => str(d.path))) return 'diff entry without path';
       return null;
     case 'todo': return Array.isArray(it.items) && it.items.every((t) => str(t.text) && ['pending', 'active', 'done'].includes(t.status)) ? null : 'bad todo items';
-    case 'subagent': return str(it.callId) && str(it.name) && ['running', 'ok', 'error'].includes(it.status) ? null : 'bad subagent';
+    case 'subagent': return str(it.callId) && str(it.name) && ['running', 'ok', 'error', 'stopped'].includes(it.status) ? null : 'bad subagent';
     case 'notice': return ['info', 'warn', 'error'].includes(it.level) && NOTICE_CODES.includes(it.code) && str(it.text) ? null : 'bad notice';
     case 'usage': return num(it.inputTokens) && num(it.outputTokens) ? null : 'bad usage';
   }

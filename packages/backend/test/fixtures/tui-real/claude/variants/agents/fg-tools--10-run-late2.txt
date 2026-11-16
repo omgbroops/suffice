@@ -1,0 +1,32 @@
+  directory, run wc -l a.txt with Bash, then Edit a.txt replacing "alpha" with "ALPHA", then report what it did. Wait
+  for it. Use the haiku model for the agent.
+
+⏺ Agent(Read, grep, count, and edit a.txt)
+  ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
+
+⏺ The subagent is running in the background, so I don't have its result yet. It is a Haiku general-purpose agent, and it
+  will read a.txt, grep for "beta" in the project directory, run wc -l a.txt, and replace "alpha" with "ALPHA" in
+  a.txt. I'll report what it did when its completion notice arrives.
+
+  Not checked: whether a.txt exists in /tmp/PROJECT. The agent will say so if it doesn't.
+
+  » Haiku agent running: read, grep, wc, and alpha→ALPHA edit on a.txt; result pending.
+
+✻ Waiting for 1 background agent to finish
+
+⏺ Agent "Read, grep, count, and edit a.txt" finished · 6s
+
+  Verifying a.txt contents and line count after the edit
+
+✻ Recombobulating… (running PostToolUse hooks… 1/2 · 2s · ↓ 163 tokens · thought for 2s)
+                     tmux detected · scroll with PgUp/PgDn · or add 'set -g mouse on' to ~/.tmux.conf for wheel scroll
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+❯
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+  Haiku 5.5 (medium) | USER:PROJECT | 👤 user@example.com
+  ◐○○○○○○○○○ 0% 000K | wk 00% used · 00% left · used 0.00%/h · can use 0.00%/h (↺ 0d 0h)
+  +1 -1 lines | #00000000-0000-4000-8000-000000000001
+  ✓ general-purpose: Read, grep, count, and edit a.txt
+  09:54 ❯ Use the Agent tool to launch one foreground subagent (gen...
+  ⏵⏵ accept edits on (shift+tab to cycle) · /tasks to see subagents

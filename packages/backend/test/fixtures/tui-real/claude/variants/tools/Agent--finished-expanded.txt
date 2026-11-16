@@ -1,0 +1,45 @@
+
+❯ Use the TodoWrite tool (or the task list tool) to make a 3 item todo list: a, b, c, then mark the first done.
+
+                                                                                       10:04 AM claude-haiku-5-5
+⏺ No todo tool is available in this session. TodoWrite isn't in the tool list, and the ToolSearch lookups for it and for
+  a task-list tool returned nothing. Here is the list in chat instead:
+
+  ┌─────┬─────────────┬─────────┐
+  │  #  │    Item     │ Status  │
+  ├─────┼─────────────┼─────────┤
+  │ a   │ First item  │ Done    │
+  ├─────┼─────────────┼─────────┤
+  │ b   │ Second item │ Pending │
+  ├─────┼─────────────┼─────────┤
+  │ c   │ Third item  │ Pending │
+  └─────┴─────────────┴─────────┘
+
+  The request didn't say what a, b, and c are, so I used placeholder names. Send the real task names and I'll fill them
+  in.
+
+  » No todo tool in this session; list shown in chat with item a done.
+
+✻ Cooked for 18s · done 10:04 AM
+
+❯ Use the Agent tool to launch a subagent that reads a.txt and reports its content.
+
+⏺ Agent(Read a.txt and report content)
+  ⎿  Backgrounded agent
+  ⎿  Prompt:
+       Read the file a.txt in the directory /tmp/PROJECT (full path:
+       /tmp/PROJECT/a.txt). Do not modify anything. Report its full content verbatim in your final
+       message. If the file does not exist, say so and list the files in /tmp/PROJECT so the caller
+       can see what is there. Keep the report to the content itself, with no commentary.
+  ⎿  1 PostToolUse hook ran
+
+                                                                                       10:04 AM claude-haiku-5-5
+⏺ I launched a Haiku subagent to read /tmp/PROJECT/a.txt and report its content. It is still running, and
+  I'll relay the content when it finishes.
+
+  » Subagent reading a.txt in the background; content report pending.
+
+✻ Waiting for 1 background agent to finish
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  Showing detailed transcript · ctrl+o to toggle · ↑↓ scroll · v to open in vi · ? for shortcuts                verbose

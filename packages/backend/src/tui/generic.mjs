@@ -1,5 +1,6 @@
 // Fallback mapper for CLIs with no own mapper (amp, aider, crush ...). No screen-to-chat parsing: only prompts are read from the screen.
 import { createHash } from 'node:crypto';
+import { claudeNonPrompt } from './screens.mjs';
 
 const stripAnsi = (t) => t.replace(/\x1b\[[0-9;?]*[ -/]*[@-~]/g, '');
 const HINT = /enter|return|esc|↑|↓|arrow|tab\b|space|navigate|select|confirm|cancel/i;
@@ -17,6 +18,7 @@ const finish = (title, body, labels, selected, hotkeys) => {
 };
 
 function parsePrompt(screen) {
+  if (claudeNonPrompt(screen)) return null;
   const all = stripAnsi(typeof screen === 'string' ? screen : '').split('\n').map((l) => l.replace(/\s+$/, '')).filter((l) => l.trim()).slice(-25);
   if (!all.length) return null;
   const last = all[all.length - 1].trim();

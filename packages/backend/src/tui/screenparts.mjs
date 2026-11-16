@@ -30,6 +30,7 @@ export function parseModeLine(screen) {
 
 // ---- queued messages ----
 // Header "Queued messages" (Codex: "Queued follow-up messages"), items under it start with ↳ - • or ❯. // assumed
+const QUEUE_HINT = 'Press up to edit queued messages';
 export function parseQueued(screen) {
   const ls = linesOf(screen);
   for (let i = ls.length - 1; i >= 0; i--) {
@@ -42,7 +43,16 @@ export function parseQueued(screen) {
     }
     return messages.length ? { messages } : null;
   }
-  return null;
+  // Claude 2.1: queued messages are "❯ text" rows after the last ⏺/⎿ row, with "ctrl+x ctrl+s to send now" under the last; the input box shows the edit hint.
+  const sent = ls.findLastIndex((l) => /^\s*[⏺⎿]/.test(l));
+  const messages = [];
+  let hint = false;
+  ls.forEach((l, i) => {
+    if (i <= sent || RULE.test(l)) return;
+    if (/^\s*ctrl\+x ctrl\+s to send now/i.test(l)) hint = true;
+    else if (!hint) { const m = /^❯\s+(\S.*?)\s*$/.exec(l); if (m && m[1] !== QUEUE_HINT) messages.push(m[1]); }
+  });
+  return hint && messages.length ? { messages } : null;
 }
 
 // ---- input draft ----
@@ -69,6 +79,7 @@ export function parseInputDraft(screen) {
   if (!first || MENU_ROW.test(body[0])) return null;
   const parts = [first[2], ...body.slice(1).map((l) => l.replace(/^\s*(?:│\s?)?\s{0,2}/, '').replace(/\s*│\s*$/, ''))];
   const text = parts.join('\n').replace(/\s+$/, '');
+  if (text === QUEUE_HINT) return { text: '' }; // hint row, not a draft: the messages are queued above
   if (PLACEHOLDER.test(text)) return { text: '', placeholder: true };
   return { text };
 }

@@ -1,0 +1,299 @@
+{
+ "name": "plan-mode-enter-exit",
+ "beats": [
+  {
+   "screen": {
+    "rows": [
+     " ▝▝   ▝▝   /tmp/PROJECT",
+     "",
+     "  ⏸ plan mode on (shift+tab to cycle) · ← for agents",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "❯ ",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "",
+     "  Sonnet 5.5 (medium) | USER:PROJECT",
+     "  ⏸ manual mode on",
+     "",
+     "",
+     "",
+     ""
+    ]
+   },
+   "transcript": [
+    {
+     "type": "permission-mode",
+     "permissionMode": "plan",
+     "sessionId": "00000000-0000-4000-8000-000000000001"
+    }
+   ]
+  },
+  {
+   "screen": {
+    "rows": [
+     " ▝▝   ▝▝   /tmp/PROJECT",
+     "",
+     "  ⏸ plan mode on (shift+tab to cycle) · ← for agents",
+     "",
+     "❯ Plan a tiny change: add one comment line at the top of util.js",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "❯ ",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "",
+     "  Sonnet 5.5 (medium) | USER:PROJECT",
+     "  ⏸ manual mode on",
+     "",
+     "",
+     "",
+     ""
+    ]
+   },
+   "transcript": [
+    {
+     "type": "user",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "role": "user",
+      "content": "Plan a tiny change: add one comment line at the top of util.js"
+     }
+    }
+   ]
+  },
+  {
+   "screen": {
+    "rows": [
+     " ▝▝   ▝▝   /tmp/PROJECT",
+     "",
+     "  ⏸ plan mode on (shift+tab to cycle) · ← for agents",
+     "",
+     "❯ Plan a tiny change: add one comment line at the top of util.js",
+     "",
+     "  Claude has written up a plan and is ready to execute. Would you like to proceed?",
+     "  ❯ 1. Yes, and use auto mode",
+     "    2. Yes, manually approve edits",
+     "    3. Tell Claude what to change",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "❯ ",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "",
+     "  Sonnet 5.5 (medium) | USER:PROJECT",
+     "  ⏸ manual mode on",
+     "",
+     "",
+     "",
+     ""
+    ]
+   },
+   "working": {
+    "seconds": 0.2,
+    "cont": false
+   },
+   "transcript": [
+    {
+     "type": "assistant",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "id": "msg_0010",
+      "role": "assistant",
+      "model": "claude-sonnet-5-5",
+      "content": [
+       {
+        "type": "tool_use",
+        "id": "toolu_plan",
+        "name": "ExitPlanMode",
+        "input": {
+         "plan": "# Add a comment line to util.js",
+         "planFilePath": "/p/.claude/plans/plan.md"
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "screen": {
+    "rows": [
+     " ▝▝   ▝▝   /tmp/PROJECT",
+     "",
+     "  ⏸ plan mode on (shift+tab to cycle) · ← for agents",
+     "",
+     "❯ Plan a tiny change: add one comment line at the top of util.js",
+     "",
+     "  Claude has written up a plan and is ready to execute. Would you like to proceed?",
+     "  ❯ 1. Yes, and use auto mode",
+     "    2. Yes, manually approve edits",
+     "    3. Tell Claude what to change",
+     "",
+     "  ⏵⏵ auto mode on (shift+tab to cycle)",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "❯ ",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "",
+     "  Sonnet 5.5 (medium) | USER:PROJECT",
+     "  ⏸ manual mode on",
+     "",
+     "",
+     "",
+     ""
+    ]
+   },
+   "working": false,
+   "transcript": [
+    {
+     "type": "user",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "role": "user",
+      "content": [
+       {
+        "type": "tool_result",
+        "tool_use_id": "toolu_plan",
+        "content": "User has approved your plan."
+       }
+      ]
+     },
+     "toolUseResult": {
+      "plan": "# Add a comment line to util.js",
+      "planFilePath": "/p/.claude/plans/plan.md",
+      "isAgent": false,
+      "filePath": "/p/.claude/plans/plan.md"
+     }
+    },
+    {
+     "type": "permission-mode",
+     "permissionMode": "auto",
+     "sessionId": "00000000-0000-4000-8000-000000000001"
+    }
+   ]
+  },
+  {
+   "screen": {
+    "rows": [
+     " ▝▝   ▝▝   /tmp/PROJECT",
+     "",
+     "  ⏸ plan mode on (shift+tab to cycle) · ← for agents",
+     "",
+     "❯ Plan a tiny change: add one comment line at the top of util.js",
+     "",
+     "  Claude has written up a plan and is ready to execute. Would you like to proceed?",
+     "  ❯ 1. Yes, and use auto mode",
+     "    2. Yes, manually approve edits",
+     "    3. Tell Claude what to change",
+     "",
+     "  ⏵⏵ auto mode on (shift+tab to cycle)",
+     "",
+     "⏺ I added the comment line to util.js.",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "❯ ",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "",
+     "  Sonnet 5.5 (medium) | USER:PROJECT",
+     "  ⏸ manual mode on",
+     "",
+     "",
+     "",
+     ""
+    ]
+   },
+   "transcript": [
+    {
+     "type": "assistant",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "id": "msg_0011",
+      "role": "assistant",
+      "model": "claude-sonnet-5-5",
+      "content": [
+       {
+        "type": "text",
+        "text": "I added the comment line to util.js."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "wait": 0.2,
+   "working": false
+  }
+ ]
+}

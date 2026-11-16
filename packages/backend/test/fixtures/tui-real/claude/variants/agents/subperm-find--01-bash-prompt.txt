@@ -1,0 +1,32 @@
+
+❯ Launch one foreground subagent (general-purpose) that Reads long.txt and returns the first 40 lines verbatim, with no
+  commentary. Then show me its full result. Use the haiku model for the agent.
+
+⏺ Agent(Read first 40 lines of long.txt)
+  ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
+
+⏺ The subagent is running, so I don't have the 40 lines yet. It was launched as a Haiku general-purpose agent with the
+  task to find long.txt, starting in /tmp/PROJECT, and return the first 40 lines verbatim. The
+  Agent tool started it in the background even though you asked for foreground, so I can't show the full result until
+  its completion notice arrives.
+
+  » Haiku agent is reading long.txt's first 40 lines; result pending.
+
+✻ Waiting for 1 background agent to finish
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ Bash command · from the general-purpose agent
+ Tip: auto mode handles these prompts for you — choose "switch to auto mode" below
+ Search for long.txt in the working directory, then Downloads and scratchpad
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ │ find /tmp/PROJECT -name long.txt 2>/dev/null; echo "---"; find ~/Downloads
+ │ /private/tmp/claude-UID/-tmp-PROJECT/00000000-0000-4000-8000-000000000001/scratchpad -name
+ │ long.txt 2>/dev/null
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ Do you want to proceed?
+ ❯ 1. Yes
+   2. Yes, allow reading from ~/Downloads from this project
+   3. Yes, and switch to auto mode · auto mode handles these prompts for you
+   4. No
+
+ Esc to cancel · Tab to amend · ctrl+x ctrl+k twice to stop background agents

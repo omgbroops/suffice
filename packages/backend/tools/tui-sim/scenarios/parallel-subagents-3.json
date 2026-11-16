@@ -1,0 +1,447 @@
+{
+ "name": "parallel-subagents-3",
+ "beats": [
+  {
+   "screen": {
+    "rows": [
+     " ▝▝   ▝▝   /tmp/PROJECT",
+     "",
+     "❯ Launch 3 Task subagents in parallel, in one message. They reply one, two, three. Wait, then list.",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "❯ ",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "",
+     "  Sonnet 5.5 (medium) | USER:PROJECT",
+     "  ⏸ manual mode on",
+     "",
+     "",
+     "",
+     ""
+    ]
+   },
+   "transcript": [
+    {
+     "type": "user",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "role": "user",
+      "content": "Launch 3 Task subagents in parallel, in one message. They reply one, two, three. Wait, then list."
+     }
+    }
+   ]
+  },
+  {
+   "screen": {
+    "rows": [
+     " ▝▝   ▝▝   /tmp/PROJECT",
+     "",
+     "❯ Launch 3 Task subagents in parallel, in one message. They reply one, two, three. Wait, then list.",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "❯ ",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "",
+     "  Sonnet 5.5 (medium) | USER:PROJECT",
+     "  ⏸ manual mode on",
+     "",
+     "",
+     "",
+     ""
+    ]
+   },
+   "working": {
+    "seconds": 0.3,
+    "cont": false
+   },
+   "transcript": [
+    {
+     "type": "assistant",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "id": "msg_0026",
+      "role": "assistant",
+      "model": "claude-sonnet-5-5",
+      "content": [
+       {
+        "type": "tool_use",
+        "id": "toolu_pa1",
+        "name": "Agent",
+        "input": {
+         "description": "Reply with the word one",
+         "prompt": "Reply with exactly one word: one. No other text, no tools.",
+         "subagent_type": "general-purpose",
+         "model": "haiku"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "type": "user",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "role": "user",
+      "content": [
+       {
+        "type": "tool_result",
+        "tool_use_id": "toolu_pa1",
+        "content": [
+         {
+          "type": "text",
+          "text": "Async agent launched (agentId pa1)"
+         }
+        ]
+       }
+      ]
+     },
+     "toolUseResult": {
+      "isAsync": true,
+      "status": "async_launched",
+      "agentId": "pa1",
+      "description": "Reply with the word one",
+      "resolvedModel": "claude-haiku-5-5",
+      "canReadOutputFile": true,
+      "canContinueAgent": true
+     }
+    },
+    {
+     "type": "assistant",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "id": "msg_0027",
+      "role": "assistant",
+      "model": "claude-sonnet-5-5",
+      "content": [
+       {
+        "type": "tool_use",
+        "id": "toolu_pa2",
+        "name": "Agent",
+        "input": {
+         "description": "Reply with the word two",
+         "prompt": "Reply with exactly one word: two. No other text, no tools.",
+         "subagent_type": "general-purpose",
+         "model": "haiku"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "type": "user",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "role": "user",
+      "content": [
+       {
+        "type": "tool_result",
+        "tool_use_id": "toolu_pa2",
+        "content": [
+         {
+          "type": "text",
+          "text": "Async agent launched (agentId pa2)"
+         }
+        ]
+       }
+      ]
+     },
+     "toolUseResult": {
+      "isAsync": true,
+      "status": "async_launched",
+      "agentId": "pa2",
+      "description": "Reply with the word two",
+      "resolvedModel": "claude-haiku-5-5",
+      "canReadOutputFile": true,
+      "canContinueAgent": true
+     }
+    },
+    {
+     "type": "assistant",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "id": "msg_0028",
+      "role": "assistant",
+      "model": "claude-sonnet-5-5",
+      "content": [
+       {
+        "type": "tool_use",
+        "id": "toolu_pa3",
+        "name": "Agent",
+        "input": {
+         "description": "Reply with the word three",
+         "prompt": "Reply with exactly one word: three. No other text, no tools.",
+         "subagent_type": "general-purpose",
+         "model": "haiku"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "type": "user",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "role": "user",
+      "content": [
+       {
+        "type": "tool_result",
+        "tool_use_id": "toolu_pa3",
+        "content": [
+         {
+          "type": "text",
+          "text": "Async agent launched (agentId pa3)"
+         }
+        ]
+       }
+      ]
+     },
+     "toolUseResult": {
+      "isAsync": true,
+      "status": "async_launched",
+      "agentId": "pa3",
+      "description": "Reply with the word three",
+      "resolvedModel": "claude-haiku-5-5",
+      "canReadOutputFile": true,
+      "canContinueAgent": true
+     }
+    }
+   ]
+  },
+  {
+   "screen": {
+    "rows": [
+     " ▝▝   ▝▝   /tmp/PROJECT",
+     "",
+     "❯ Launch 3 Task subagents in parallel, in one message. They reply one, two, three. Wait, then list.",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "❯ ",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "",
+     "  Sonnet 5.5 (medium) | USER:PROJECT",
+     "  ⏸ manual mode on",
+     "",
+     "",
+     "",
+     ""
+    ]
+   },
+   "working": {
+    "seconds": 0.3,
+    "cont": true
+   },
+   "transcript": [
+    {
+     "type": "assistant",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "id": "msg_0029",
+      "role": "assistant",
+      "model": "claude-sonnet-5-5",
+      "content": [
+       {
+        "type": "text",
+        "text": "Three agents are running in the background, one per word."
+       }
+      ]
+     }
+    },
+    {
+     "type": "user",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "role": "user",
+      "content": "<task-notification>agent pa1 completed: one</task-notification>"
+     },
+     "origin": {
+      "kind": "task-notification",
+      "producer": "session-task",
+      "runId": "run-pa1"
+     },
+     "promptSource": "system",
+     "turnOrigin": "task_notification"
+    },
+    {
+     "type": "user",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "role": "user",
+      "content": "<task-notification>agent pa2 completed: two</task-notification>"
+     },
+     "origin": {
+      "kind": "task-notification",
+      "producer": "session-task",
+      "runId": "run-pa2"
+     },
+     "promptSource": "system",
+     "turnOrigin": "task_notification"
+    },
+    {
+     "type": "user",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "role": "user",
+      "content": "<task-notification>agent pa3 completed: three</task-notification>"
+     },
+     "origin": {
+      "kind": "task-notification",
+      "producer": "session-task",
+      "runId": "run-pa3"
+     },
+     "promptSource": "system",
+     "turnOrigin": "task_notification"
+    }
+   ]
+  },
+  {
+   "screen": {
+    "rows": [
+     " ▝▝   ▝▝   /tmp/PROJECT",
+     "",
+     "❯ Launch 3 Task subagents in parallel, in one message. They reply one, two, three. Wait, then list.",
+     "",
+     "⏺ All three agents have finished:",
+     "",
+     "  1. one",
+     "  2. two",
+     "  3. three",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "❯ ",
+     "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+     "",
+     "  Sonnet 5.5 (medium) | USER:PROJECT",
+     "  ⏸ manual mode on",
+     "",
+     "",
+     "",
+     ""
+    ]
+   },
+   "working": false,
+   "transcript": [
+    {
+     "type": "assistant",
+     "uuid": "@uuid",
+     "timestamp": "",
+     "sessionId": "00000000-0000-4000-8000-000000000001",
+     "cwd": "/tmp/PROJECT",
+     "message": {
+      "id": "msg_0030",
+      "role": "assistant",
+      "model": "claude-sonnet-5-5",
+      "content": [
+       {
+        "type": "text",
+        "text": "All three agents have finished: 1. one 2. two 3. three"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "wait": 0.2,
+   "working": false
+  }
+ ]
+}

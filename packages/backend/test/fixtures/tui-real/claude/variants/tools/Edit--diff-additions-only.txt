@@ -1,0 +1,45 @@
+  ⎿  Added 1 line, removed 1 line
+      1  // greeting helper
+      2  function greet(name) {
+      3 -  return 'Helo, ' + name;
+      3 +  return 'Hello, ' + name;
+      4  }
+      5  module.exports = { greet };
+
+⏺ user, in /tmp/PROJECT/greet.js line 3, 'Helo, ' is now 'Hello, ' via the Edit tool. Nothing else in the
+  file changed.
+
+  Not checked: other files that might compare against the old string, and no test was run.
+
+  » Fixed the typo in greet.js: 'Helo' is now 'Hello'.
+
+✻ Sautéed for 6s · done 9:54 AM
+
+❯ Use the Edit tool on util.js: replace the line exports.add = (a, b) => a + b; with that same line followed by a new
+  line exports.sub = (a, b) => a - b;.
+
+  Searched for 1 pattern, read 1 file
+
+⏺ Update(util.js)
+  ⎿  Added 1 line
+      1  exports.add = (a, b) => a + b;
+      2 +exports.sub = (a, b) => a - b;
+
+⏺ user, /tmp/PROJECT/util.js now has exports.sub = (a, b) => a - b; on line 2, directly under the add
+  line. The Edit tool made the change and nothing else in the file changed.
+
+  Not checked: I did not load the module or run any tests.
+
+  » util.js: added exports.sub below exports.add, nothing else touched.
+
+✻ Baked for 4s · done 9:55 AM
+                                                                                                    ◐ medium · /effort
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+❯ 
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+  Haiku 5.5 (medium) | user:PROJECT | 👤 user
+  ◐○○○○○○○○○ 0% 000K | wk 00% used · 00% left · used 0.00%/h · can use 0.00%/h (↺ 0d 0h)
+  +2 -1 lines | #00000000-0000-4000-8000-000000000001
+  09:55 ❯ Use the Edit tool on util.js: replace the line `exports.a...
+  ⏸ manual mode on

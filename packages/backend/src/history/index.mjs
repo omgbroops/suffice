@@ -58,38 +58,57 @@ export function createHistory({ fs = nodeFs, home, clock, slots, sources = defau
   };
   const publish = () => { listSlot?.set(list({ limit: 500 })); srcSlot?.set(sourceInfo()); };
 
-  async function scan({ sources: only, since } = {}) {
+  async function scan({ sources: only, since, signal, onProgress } = {}) {
     const idx = load();
     const stat = { added: 0, updated: 0, unchanged: 0, removed: 0 };
-    let n = 0;
+    const active = [];
     for (const s of sources) {
       detected[s.id] = !!(await s.detect({ home, fs }));
-      if (only && !only.includes(s.id)) continue;
-      if (!detected[s.id]) continue;
-      const seen = new Set();
-      for await (const e of s.list({ home, fs, known: (p) => idx[p] })) {
-        seen.add(e.path);
-        if (++n % 256 === 0) await new Promise((r) => setImmediate(r)); // keep the event loop responsive during a big scan
-        const old = idx[e.path];
-        if (old === e) { stat.unchanged++; continue; }
-        if (since && e.updatedAt < since && old) continue;
-        idx[e.path] = e;
-        stat[old ? 'updated' : 'added']++;
-      }
-      if (!since) for (const p in idx) if (idx[p].source === s.id && !seen.has(p)) { delete idx[p]; stat.removed++; }
+      if (detected[s.id] && (!only || only.includes(s.id))) active.push(s);
     }
+    let total = 0;
+    for (const s of active) { try { total += (await s.count?.({ home, fs })) ?? 0; } catch { /* unknown total */ } }
+    let n = 0;
+    const tick = () => { try { onProgress?.({ done: n, total: Math.max(total, n) }); } catch { /* a bad listener never stops a scan */ } };
+    tick();
+    for (const s of active) {
+      if (signal?.aborted) break;
+      const seen = new Set();
+      let ok = true;
+      try {
+        for await (const e of s.list({ home, fs, known: (p) => idx[p] })) {
+          seen.add(e.path);
+          if (++n % 256 === 0) { tick(); await new Promise((r) => setImmediate(r)); } // keep the event loop responsive during a big scan
+          const old = idx[e.path];
+          if (old === e) stat.unchanged++;
+          else if (!(since && e.updatedAt < since && old)) { idx[e.path] = e; stat[old ? 'updated' : 'added']++; }
+          if (signal?.aborted) { ok = false; break; }
+        }
+      } catch { ok = false; } // a failing source keeps its old entries
+      if (ok && !since) for (const p in idx) if (idx[p].source === s.id && !seen.has(p)) { delete idx[p]; stat.removed++; }
+    }
+    if (signal?.aborted) stat.aborted = true;
+    tick();
     save();
     publish();
     return stat;
   }
 
-  function list({ query, source, cwd, kinds = DEFAULT_KINDS, limit = 100, offset = 0 } = {}) {
-    const q = query?.toLowerCase();
-    return Object.values(load())
-      .filter((e) => (!source || e.source === source) && (!kinds || kinds.includes(e.kind ?? 'unknown')) && (!cwd || e.cwd === cwd)
-        && (!q || [e.title, e.firstUser, e.cwd].some((f) => f?.toLowerCase().includes(q))))
-      .sort((a, b) => b.updatedAt - a.updatedAt || (a.path < b.path ? -1 : 1))
-      .slice(offset, offset + limit).map(pub);
+  function list({ query, source, cwd, kind, kinds = kind == null ? DEFAULT_KINDS : [].concat(kind), limit = 100, offset = 0 } = {}) {
+    const terms = String(query ?? '').toLowerCase().split(/\s+/).filter(Boolean);
+    const hits = [];
+    for (const e of Object.values(load())) {
+      if ((source && e.source !== source) || (kinds && !kinds.includes(e.kind ?? 'unknown')) || (cwd && e.cwd !== cwd)) continue;
+      let score = 0;
+      if (terms.length) {
+        const t = e.title?.toLowerCase() ?? '', f = e.firstUser?.toLowerCase() ?? '', c = e.cwd?.toLowerCase() ?? '';
+        for (const w of terms) { const w1 = t.includes(w) ? 3 : f.includes(w) ? 1 : c.includes(w) ? 0.5 : 0; if (!w1) { score = -1; break; } score += w1; }
+        if (score < 0) continue;
+      }
+      hits.push([score, e]);
+    }
+    return hits.sort((a, b) => b[0] - a[0] || b[1].updatedAt - a[1].updatedAt || (a[1].path < b[1].path ? -1 : 1))
+      .slice(offset, offset + limit).map(([, e]) => pub(e));
   }
 
   async function read(entry) {

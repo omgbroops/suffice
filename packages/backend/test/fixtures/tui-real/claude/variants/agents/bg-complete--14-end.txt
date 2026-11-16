@@ -1,0 +1,32 @@
+  ┌───────┬──────────┬───────┐
+  │ File  │ Subagent │ wc -l │
+  ├───────┼──────────┼───────┤
+  │ a.txt │ 6        │ 5     │
+  ├───────┼──────────┼───────┤
+  │ b.txt │ 4        │ 3     │
+  ├───────┼──────────┼───────┤
+  │ c.txt │ 5        │ 4     │
+  ├───────┼──────────┼───────┤
+  │ d.txt │ 3        │ 2     │
+  ├───────┼──────────┼───────┤
+  │ e.txt │ 5        │ 4     │
+  ├───────┼──────────┼───────┤
+  │ Total │ 23       │ 18    │
+  └───────┴──────────┴───────┘
+
+  The subagent counted the empty line the Read tool shows after each file's last line, which added one per file. wc -l
+  counts newline characters, so it gives the true count.
+
+  » Line total is 18 (wc -l); the subagent's 23 was off by one per file.
+
+✻ Churned for 17s · done 9:56 AM
+                                                                                                    ◐ medium · /effort
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+❯
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+  Haiku 5.5 (medium) | USER:PROJECT | 👤 user@example.com
+  ◐○○○○○○○○○ 0% 000K | wk 00% used · 00% left · used 0.00%/h · can use 0.00%/h (↺ 0d 0h)
+  #00000000-0000-4000-8000-000000000001
+  09:56 ❯ /agents
+  ⏵⏵ accept edits on (shift+tab to cycle) · /tasks to see subagents
