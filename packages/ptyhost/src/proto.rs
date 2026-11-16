@@ -15,13 +15,18 @@
 //!   0x07 KILL     id u32. SIGKILL to the session's process group; the session is removed
 //!                 once the child is reaped (or at once if it already exited). Reply OK.
 //!   0x09 SHUTDOWN kill all sessions, remove the socket, exit. Reply OK.
+//!   0x0B STATS    debug counters as `key=value` lines. Reply OK.
 //! Host -> client
 //!   0x80 OK       text payload
 //!   0x81 ERR      text payload
 //!   0x82 OUTPUT   raw pty output bytes (ring replay first, then live)
 //!   0x83 EXIT     exit code i32 (128+signal if killed); sent once, then host closes
-//! Closing the connection (EOF) is the end of a request; the host processes all frames
-//! received before EOF, then closes its side, so a client may wait for EOF as an ack.
+//!   0x84 ACK      reply to a writer (OPEN flag 2) that half-closed: every INPUT byte it sent
+//!                 has been written into the pty. If the session ended first, ERR is sent instead.
+//! Flow control: the host stops reading a writer while its session's input queue is full
+//! (4 MiB), so a client's blocking write stalls instead of bytes being dropped.
+//! A client whose outgoing queue passes 8 MiB (it is not reading) is dropped; a stream or
+//! attach client can reconnect and gets the 256 KiB ring replay again.
 
 use std::io::{self, Read, Write};
 
@@ -31,11 +36,13 @@ pub const OPEN: u8 = 3;
 pub const INPUT: u8 = 5;
 pub const KILL: u8 = 7;
 pub const SHUTDOWN: u8 = 9;
+pub const STATS: u8 = 11;
 pub const WINSZ: u8 = 10;
 pub const OK: u8 = 0x80;
 pub const ERR: u8 = 0x81;
 pub const OUTPUT: u8 = 0x82;
 pub const EXIT: u8 = 0x83;
+pub const ACK: u8 = 0x84;
 pub const MAX_PAYLOAD: usize = 16 << 20;
 
 pub fn encode(t: u8, payload: &[u8]) -> Vec<u8> {

@@ -5,7 +5,7 @@ mod sys;
 
 use std::path::PathBuf;
 
-const USAGE: &str = "usage: sfx-host <serve|new|list|attach|stream|send|resize|kill|shutdown> --dir <state-dir> [...]
+const USAGE: &str = "usage: sfx-host <serve|new|list|stats|attach|stream|send|resize|kill|shutdown> --dir <state-dir> [...]
   new --dir D --cwd P [--cols N --rows N] -- cmd [args...]
   attach|stream|send|kill --dir D <id>      resize --dir D <id> <cols> <rows>";
 
@@ -36,6 +36,7 @@ fn run() -> Result<(), String> {
         "new" if cmd.is_empty() => Err("new: command required after --".into()),
         "new" => client::new(&dir, &cwd, cols, rows, &cmd),
         "list" => client::list(&dir),
+        "stats" => client::stats(&dir),
         "attach" => client::attach(&dir, id()?),
         "stream" => client::stream(&dir, id()?),
         "send" => client::send(&dir, id()?),

@@ -29,15 +29,18 @@ fn call(dir: &Path, t: u8, p: &[u8]) -> Result<Vec<u8>, String> {
         _ => Err("host closed the connection without a reply".into()),
     }
 }
-/// Half-close, then wait for the host to close: acts as an ack for INPUT/WINSZ frames.
+/// Half-close, then wait for the host's ACK: every INPUT byte is in the pty. ERR/EXIT/EOF = failure.
 fn finish(mut s: UnixStream) -> Result<(), String> {
     let _ = s.shutdown(Shutdown::Write);
-    while let Some((t, b)) = read_frame(&mut s).map_err(|e| e.to_string())? {
-        if t == ERR {
-            return Err(String::from_utf8_lossy(&b).into());
+    loop {
+        match read_frame(&mut s).map_err(|e| e.to_string())? {
+            Some((ACK, _)) => return Ok(()),
+            Some((ERR, b)) => return Err(String::from_utf8_lossy(&b).into()),
+            Some((EXIT, _)) => return Err("session exited before input was delivered".into()),
+            Some(_) => {}
+            None => return Err("host closed the connection without acknowledging".into()),
         }
     }
-    Ok(())
 }
 
 pub fn new(dir: &Path, cwd: &str, cols: u16, rows: u16, cmd: &[String]) -> Result<(), String> {
@@ -55,6 +58,10 @@ pub fn new(dir: &Path, cwd: &str, cols: u16, rows: u16, cmd: &[String]) -> Resul
 }
 pub fn list(dir: &Path) -> Result<(), String> {
     print!("{}", String::from_utf8_lossy(&call(dir, LIST, &[])?));
+    Ok(())
+}
+pub fn stats(dir: &Path) -> Result<(), String> {
+    print!("{}", String::from_utf8_lossy(&call(dir, STATS, &[])?));
     Ok(())
 }
 pub fn simple(dir: &Path, t: u8, id: Option<&str>) -> Result<(), String> {
@@ -118,7 +125,9 @@ impl Drop for RawGuard {
     }
 }
 
-/// Ctrl-\ then d detaches; Ctrl-\ Ctrl-\ sends one literal Ctrl-\; Ctrl-\ x sends both bytes.
+/// Ctrl-\ then d detaches; Ctrl-\ Ctrl-\ sends one literal Ctrl-\; Ctrl-\ x sends both bytes
+/// (also when x arrives in a later read, since `pending` carries over).
+/// Returns true on detach. Bytes after the `d` are discarded only because we are detaching.
 fn filter_input(pending: &mut bool, data: &[u8], out: &mut Vec<u8>) -> bool {
     for &b in data {
         if *pending {
@@ -137,9 +146,17 @@ fn filter_input(pending: &mut bool, data: &[u8], out: &mut Vec<u8>) -> bool {
     false
 }
 
+/// On stdin EOF a lone pending Ctrl-\ is real input: forward it.
+fn flush_pending(pending: &mut bool, out: &mut Vec<u8>) {
+    if std::mem::take(pending) {
+        out.push(0x1c);
+    }
+}
+
 pub fn attach(dir: &Path, id: &str) -> Result<(), String> {
     let tty = sys::is_tty(0);
     let wake = sys::wake_pipe(sys::SIGWINCH).map_err(|e| e.to_string())?;
+    sys::catch_term();
     let mut s = connect(dir)?;
     // raw mode before OPEN: once the replay arrives the terminal is already raw
     let _guard = RawGuard(if tty { Some(sys::make_raw(0).map_err(|e| e.to_string())?) } else { None });
@@ -167,11 +184,21 @@ pub fn attach(dir: &Path, id: &str) -> Result<(), String> {
         }
         if pf[2].revents != 0 {
             sys::drain(wake);
+            if sys::term_signal() != 0 {
+                break Ok("terminated".into());
+            }
             send_size(&mut s);
         }
         if pf[0].revents != 0 {
             match sys::read_fd(0, &mut buf) {
-                Ok(0) => break Ok("stdin closed".into()),
+                Ok(0) => {
+                    inbuf.clear();
+                    flush_pending(&mut pending, &mut inbuf);
+                    if !inbuf.is_empty() {
+                        let _ = write_frame(&mut s, INPUT, &inbuf);
+                    }
+                    break Ok("stdin closed".into());
+                }
                 Ok(n) => {
                     inbuf.clear();
                     let detach = filter_input(&mut pending, &buf[..n], &mut inbuf);
@@ -207,8 +234,49 @@ pub fn attach(dir: &Path, id: &str) -> Result<(), String> {
     match result {
         Ok(m) => {
             eprintln!("\r\n[{m}]");
+            let sig = sys::term_signal();
+            if sig != 0 {
+                std::process::exit(128 + sig);
+            }
             Ok(())
         }
         Err(e) => Err(e),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    fn run(chunks: &[&[u8]]) -> (Vec<u8>, bool, bool) {
+        let (mut p, mut out) = (false, vec![]);
+        for c in chunks {
+            if filter_input(&mut p, c, &mut out) {
+                return (out, true, p);
+            }
+        }
+        (out, false, p)
+    }
+    #[test]
+    fn chord_cases() {
+        assert_eq!(run(&[b"adz"]), (b"a".to_vec(), true, false));
+        assert_eq!(run(&[b""]), (vec![0x1c], false, false));
+        assert_eq!(run(&[b"x"]), (vec![0x1c, b'x'], false, false));
+        assert_eq!(run(&[b""]), (vec![], false, true));
+        let (mut p, mut o) = (true, vec![]);
+        flush_pending(&mut p, &mut o);
+        assert_eq!((o, p), (vec![0x1c], false));
+    }
+    #[test]
+    fn chord_splits_match_unsplit() {
+        let inputs: [&[u8]; 5] = [b"adz", b"xq", b"d", b"ab", b"dd"];
+        for inp in inputs {
+            let whole = run(&[inp]);
+            for i in 0..=inp.len() {
+                assert_eq!(run(&[&inp[..i], &inp[i..]]), whole, "split {i} of {inp:?}");
+                for j in i..=inp.len() {
+                    assert_eq!(run(&[&inp[..i], &inp[i..j], &inp[j..]]), whole, "splits {i},{j} of {inp:?}");
+                }
+            }
+        }
     }
 }

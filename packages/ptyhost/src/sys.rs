@@ -1,7 +1,8 @@
 //! Direct libc FFI (no crates). Constants that differ per OS are cfg-gated.
 use std::ffi::CStr;
 use std::io;
-use std::os::raw::{c_char, c_int, c_ulong, c_void};
+use std::os::raw::{c_char, c_int, c_uint, c_ulong, c_void};
+use std::os::unix::io::AsRawFd;
 use std::sync::atomic::{AtomicI32, Ordering};
 
 #[cfg(target_os = "macos")]
@@ -13,6 +14,7 @@ mod k {
     pub const O_NONBLOCK: c_int = 0x4;
     pub const O_NOCTTY: c_int = 0x2_0000;
     pub const SIGCHLD: c_int = 20;
+    pub const O_NOFOLLOW: c_int = 0x100;
     pub type Nfds = std::os::raw::c_uint;
 }
 #[cfg(not(target_os = "macos"))]
@@ -24,9 +26,10 @@ mod k {
     pub const O_NONBLOCK: c_int = 0x800;
     pub const O_NOCTTY: c_int = 0x100;
     pub const SIGCHLD: c_int = 17;
+    pub const O_NOFOLLOW: c_int = 0x2_0000;
     pub type Nfds = std::os::raw::c_ulong;
 }
-pub use k::SIGCHLD;
+pub use k::{O_NOFOLLOW, SIGCHLD};
 pub const SIGWINCH: c_int = 28;
 pub const SIGKILL: c_int = 9;
 pub const POLLIN: i16 = 1;
@@ -78,6 +81,9 @@ extern "C" {
     fn tcgetattr(fd: c_int, t: *mut Termios) -> c_int;
     fn tcsetattr(fd: c_int, act: c_int, t: *const Termios) -> c_int;
     fn cfmakeraw(t: *mut Termios);
+    fn flock(fd: c_int, op: c_int) -> c_int;
+    fn umask(m: c_uint) -> c_uint;
+    fn getuid() -> c_uint;
 }
 
 fn cvt(r: c_int) -> io::Result<c_int> {
@@ -146,7 +152,11 @@ pub fn reap() -> Option<(i32, i32)> {
     Some((p, if sig == 0 { (st >> 8) & 0xff } else { 128 + sig }))
 }
 pub fn poll_fds(fds: &mut [PollFd]) -> io::Result<usize> {
-    let r = unsafe { poll(fds.as_mut_ptr(), fds.len() as k::Nfds, -1) };
+    poll_fds_timeout(fds, -1)
+}
+/// poll(2) with a timeout in ms (-1 = forever). A negative fd entry is ignored by the kernel.
+pub fn poll_fds_timeout(fds: &mut [PollFd], ms: i32) -> io::Result<usize> {
+    let r = unsafe { poll(fds.as_mut_ptr(), fds.len() as k::Nfds, ms) };
     if r < 0 {
         let e = io::Error::last_os_error();
         if e.kind() == io::ErrorKind::Interrupted { return Ok(0); }
@@ -219,4 +229,34 @@ pub fn make_raw(fd: i32) -> io::Result<Termios> {
 }
 pub fn restore(fd: i32, t: &Termios) {
     unsafe { tcsetattr(fd, 1, t) };
+}
+
+pub fn getuid_() -> u32 {
+    unsafe { getuid() }
+}
+/// Sets the umask, returns the old one.
+pub fn set_umask(m: u32) -> u32 {
+    unsafe { umask(m as c_uint) as u32 & 0o777 }
+}
+/// Exclusive non-blocking flock; the lock lives as long as the open file description.
+pub fn lock_exclusive(f: &impl AsRawFd) -> io::Result<()> {
+    unsafe { cvt(flock(f.as_raw_fd(), 2 | 4)).map(|_| ()) }
+}
+
+static TERM: AtomicI32 = AtomicI32::new(0);
+extern "C" fn on_term(sig: c_int) {
+    TERM.store(sig, Ordering::Relaxed);
+    let fd = WAKE.load(Ordering::Relaxed);
+    if fd >= 0 {
+        let _ = write_fd(fd, b"x");
+    }
+}
+/// SIGHUP/SIGQUIT/SIGTERM record the signal and poke the `wake_pipe`; read it with `term_signal`.
+pub fn catch_term() {
+    for sig in [1, 3, 15] {
+        unsafe { signal(sig, on_term as *const () as usize) };
+    }
+}
+pub fn term_signal() -> i32 {
+    TERM.load(Ordering::Relaxed)
 }
