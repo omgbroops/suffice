@@ -88,6 +88,26 @@ let page;const appPid=app.process().pid;try{
   await shot('chat-full-1.png');
   await page.locator('.thread-messages').evaluate(e=>{e.scrollTop=e.scrollHeight;});await page.waitForTimeout(200);
   await shot('chat-full-2.png');
+  // CLI controls against the stand-in's typed screens
+  {const sl=await page.evaluate(()=>sufficeDesktop.sessions.list());console.log('SL',JSON.stringify(sl.map(x=>[x.id,x.agent,x.kind,x.state])));const sid=(sl.filter(x=>x.agent==='fakeclaude').at(-1)||sl.at(-1)).id;
+   const type=async t=>{await page.evaluate(([i,t])=>sufficeDesktop.sessions.send(i,t),[sid,t]);await page.waitForTimeout(1800);};
+   const reset=async()=>{await page.keyboard.press('Escape');await type('/clear');await page.mouse.click(720,450);await page.waitForTimeout(300);};
+   await type('/clear');
+   await page.locator('.session-ctl').first().click();await page.waitForTimeout(350);await shot('ctl-model-picker.png');await page.keyboard.press('Escape');await page.waitForTimeout(200);
+   await page.locator('.session-ctl').nth(2).click();await page.waitForTimeout(350);await shot('ctl-mode.png');await page.keyboard.press('Escape');await page.waitForTimeout(200);
+   await page.locator('#prompt').click();await page.keyboard.type('/co');await page.waitForTimeout(400);await shot('ctl-slash.png');await page.keyboard.press('Escape');await page.locator('#prompt').fill('');
+   await type('/model');await shot('ctl-native-picker.png');await reset();
+   await type('/queue');await shot('ctl-queued.png');await reset();
+   await type('/bg');await page.waitForSelector('.session-bg',{timeout:8000});await page.locator('.session-bg').click();await page.waitForTimeout(350);await shot('ctl-background.png');await page.keyboard.press('Escape');await reset();
+   await type('/plan');await shot('ctl-plan-approval.png');
+   const rowState=()=>page.evaluate(()=>{const r=document.querySelector('.session-row[aria-pressed="true"]');const t=r?.querySelector('.thread-state');return t?[t.getAttribute('data-status'),t.getAttribute('aria-label'),t.className,t.textContent.trim()].join('|'):'none';});
+   console.log('badge12 prompt-open',await rowState());
+   await page.evaluate(i=>sufficeDesktop.sessions.control(i,'keys',{keys:['enter']}),sid);await page.waitForTimeout(1800);
+   console.log('badge12 after-answer',await rowState(),'prompt',await page.evaluate(i=>!!sufficeDesktop.sessions.ui(i)?.prompt,sid));await reset();
+   await type('/ask');await shot('ctl-question.png');await reset();
+   await type('/ctx');await shot('ctl-usage.png');await reset();
+   await type('/queue');await shot('ctl-stop.png');await reset();
+   console.log('badge',JSON.stringify(await page.evaluate(()=>[...document.querySelectorAll('.session-row')].map(r=>r.innerText.replace(/\s+/g,' ')))));}
   // venom frames, animation slowed 4x so capturePage latency does not skew timings
   const SLOW=4;await page.evaluate(n=>{window.__motionSlow=n;},SLOW);
   const grab=(clickJs,times,extra)=>app.evaluate(async({BrowserWindow},{clickJs,times,SLOW,extra})=>{
@@ -113,33 +133,43 @@ let page;const appPid=app.process().pid;try{
   await page.locator('[data-menu-action="cli-session:claude"]').click();
   await page.locator('.thread-header--session').waitFor();
   const sid=await page.evaluate(async()=>(await sufficeDesktop.sessions.list())[0].id);
-  await page.evaluate(id=>{window.__st='';sufficeDesktop.sessions.onState(id,v=>{window.__st=v?.state;});},sid);
-  const t0=Date.now();let sent=false,done=false;const log=[];
-  while(!done&&Date.now()-t0<90000){
-   const prompt=await page.evaluate(id=>sufficeDesktop.sessions.ui(id)?.prompt||null,sid);
-   if(prompt){log.push('prompt:'+prompt.title);const o=prompt.options.find(x=>/trust/i.test(x.label))||prompt.options.find(x=>/^yes/i.test(x.label))||prompt.options[0];
-    await page.evaluate(([id,i])=>sufficeDesktop.sessions.control(id,'answerPrompt',{index:i}),[sid,o.index]);
-    await page.waitForFunction(([id,t])=>sufficeDesktop.sessions.ui(id)?.prompt?.title!==t,[sid,prompt.title],{timeout:20000}).catch(()=>{});continue;}
-   if(!sent){await page.waitForTimeout(5000);if(await page.evaluate(id=>sufficeDesktop.sessions.ui(id)?.prompt,sid))continue;
-    await page.locator('#prompt').fill('Create a file named hello.txt containing the word hi, then run: cat hello.txt');await page.locator('#prompt').press('Enter');sent=true;log.push('sent@'+(Date.now()-t0));continue;}
-   const r=await page.evaluate(id=>{const it=sufficeDesktop.sessions.ui(id)?.items||[];return {items:it.map(i=>i.kind+(i.category?':'+i.category:'')+(i.status?':'+i.status:'')),state:window.__st};},sid);
-   log.push(JSON.stringify(r));
-   if(r.state==='waiting_input'&&r.items.some(x=>x.startsWith('tool:shell'))&&r.items.filter(x=>x!=='usage'&&x!=='notice').at(-1)==='assistant'){done=true;break;}
-   await page.waitForTimeout(1500);
-  }
-  await writeFile(resolve(output,'real-claude-log.json'),JSON.stringify({done,log:log.slice(-40)},null,1));
-  await page.waitForTimeout(1500);
-  await shot('real-claude-chat.png');
-  await page.locator('.session-toggle button:last-child').click();
-  await page.locator('.session-terminal .xterm-rows').waitFor({timeout:15000});await page.waitForTimeout(2500);
-  await page.screenshot({path:resolve(output,'real-claude-terminal.png'),mask:[page.locator('.session-terminal .xterm-rows > div').filter({hasText:/@/})],maskColor:'#444'});
+  const U=()=>page.evaluate(id=>{const u=sufficeDesktop.sessions.ui(id);return {prompt:u?.prompt?.title||null,model:u?.meta?.model||null,mode:u?.meta?.mode||null,status:!!u?.status,kinds:(u?.items||[]).map(i=>i.kind+(i.category?':'+i.category:'')+(i.id&&i.kind==='notice'?':'+i.text:''))};},sid);
+  const log=[],fail=[];const t0=Date.now();
+  // trust prompt via the card
+  while(Date.now()-t0<60000){const u=await U();
+   if(u.prompt){log.push('prompt:'+u.prompt);const pr=await page.evaluate(id=>sufficeDesktop.sessions.ui(id).prompt,sid);const o=pr.options.find(x=>/trust/i.test(x.label))||pr.options.find(x=>/^yes/i.test(x.label))||pr.options[0];
+    await page.evaluate(([id,i])=>sufficeDesktop.sessions.control(id,'answerPrompt',{index:i}),[sid,o.index]);await page.waitForTimeout(2500);continue;}
+   if(u.model)break;await page.waitForTimeout(1000);}
+  const waitMeta=async(k,re)=>{try{await page.waitForFunction(([id,k,re])=>new RegExp(re,'i').test(sufficeDesktop.sessions.ui(id)?.meta?.[k]||''),[sid,k,re],{timeout:20000});return true;}catch{return false;}};
+  const pick=async(idx,re)=>{await page.locator('.session-ctl').nth(idx).click();await page.waitForTimeout(400);await page.locator('.popover .menu-item',{hasText:re}).first().click();};
+  const mask=[page.locator('.session-title')];
+  log.push('start '+JSON.stringify(await U()));
+  // (a) model
+  await pick(0,/sonnet/i);const a1=await waitMeta('model','sonnet');log.push('a sonnet '+a1);await page.waitForTimeout(600);await shot('real-ctl-model.png');
+  await pick(0,/haiku/i);const a2=await waitMeta('model','haiku');log.push('a haiku '+a2);if(!a1||!a2)fail.push('model');
+  // (b) mode
+  const m0=(await U()).mode;log.push('mode0 '+m0);
+  const ci=await page.locator('.session-ctl').count()-1;
+  await pick(ci,/plan/i);const b1=await waitMeta('mode','plan');log.push('b plan '+b1);await page.waitForTimeout(600);await shot('real-ctl-mode.png');
+  await pick(ci,new RegExp(m0&&!/plan/i.test(m0)?m0.replace(/[^a-z]/gi,'.'):'manual','i'));const b2=await waitMeta('mode',m0&&!/plan/i.test(m0)?m0.replace(/[^a-z]/gi,'.'):'manual|default');log.push('b back '+b2);if(!b1||!b2)fail.push('mode');
+  // (c) interrupt
+  await page.locator('#prompt').fill('run: sleep 8 && echo done');await page.locator('#prompt').press('Enter');
+  const t1=Date.now();
+  for(let i=0;i<60;i++){const u=await U();if(u.prompt){const pr=await page.evaluate(id=>sufficeDesktop.sessions.ui(id).prompt,sid);const o=pr.options.find(x=>/^yes/i.test(x.label))||pr.options[0];log.push('c prompt:'+pr.title);await page.evaluate(([id,i])=>sufficeDesktop.sessions.control(id,'answerPrompt',{index:i}),[sid,o.index]);break;}if(Date.now()-t1>3000)break;await page.waitForTimeout(500);}
+  await page.waitForTimeout(300);
+  const wasWorking=await page.evaluate(()=>document.querySelector('.session-run')?.dataset.running==='true'||!!document.querySelector('.session-status'));log.push('c working '+wasWorking);
+  await page.locator('.send-button').click();
+  let intr=false;try{await page.waitForFunction(id=>(sufficeDesktop.sessions.ui(id)?.items||[]).some(i=>i.kind==='notice'&&/interrupted/i.test(i.text||'')),sid,{timeout:15000});intr=true;}catch{}
+  log.push('c interrupted '+intr);if(!intr)fail.push('interrupt');
+  await page.waitForTimeout(800);await shot('real-ctl-interrupt.png');
+  await writeFile(resolve(output,'real-claude-log.json'),JSON.stringify({fail,log},null,1));
   await page.evaluate(id=>sufficeDesktop.sessions.stop(id),sid).catch(()=>{});
-  if(!done)throw new Error('real run did not finish');
+  if(fail.length)throw new Error('real run failed: '+fail.join(','));
  }
  await writeFile(resolve(output,'verification.json'),JSON.stringify({viewport:{width:1440,height:900},pageErrors:errors},null,2));
  if(errors.length)throw new Error(errors.join('\n'));
  console.log(JSON.stringify({ready:true,output}));
-}catch(e){try{console.error('DBG',JSON.stringify(await page.evaluate(()=>({t:document.querySelector('.session-terminal')?.innerHTML.slice(0,600),r:document.querySelector('.session-terminal .xterm-rows')?.textContent.slice(0,300)}))));}catch{}console.error('FAIL',e.message.slice(0,1500));process.exitCode=1;}finally{
+}catch(e){try{await page.screenshot({path:'/private/tmp/claude-501/-Users-abhayg--claude/88968a81-d5d8-4bde-b35e-a21bdddc9620/scratchpad/fail.png'});}catch{}try{console.error('DBG',JSON.stringify(await page.evaluate(async()=>({u:await Promise.all((await sufficeDesktop.sessions.list()).map(async x=>[x.id,(u=>JSON.stringify({m:u?.meta,p:u?.prompt,s:u?.status,n:u?.items?.length}))(sufficeDesktop.sessions.ui(x.id))])),h:document.querySelector('.thread-header--session')?.outerHTML.slice(0,900),term:!!document.querySelector('.session-terminal:not([hidden])'),t:document.querySelector('.session-terminal')?.innerHTML.slice(0,200),r:document.querySelector('.session-terminal .xterm-rows')?.textContent.slice(0,300)}))));}catch{}console.error('FAIL',e.message.slice(0,1500));process.exitCode=1;}finally{
  await Promise.race([app.close(),new Promise(r=>setTimeout(r,5000))]).catch(()=>{});
  try{process.kill(appPid,'SIGKILL');}catch{}
  try{execFileSync('tmux',['-L',socket,'kill-server'],{stdio:'ignore'});}catch{}

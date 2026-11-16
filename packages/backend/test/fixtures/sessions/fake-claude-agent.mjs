@@ -58,7 +58,23 @@ line({type:'system',subtype:'turn_duration',durationMs:42000});
 use('t6','Bash',{command:'rm -rf build',description:'Remove build output'});
 console.log('✻ Newspapering… (6s · ↓ 388 tokens · thought for 4s)');dialog();
 if(process.stdin.isTTY)process.stdin.setRawMode(true);
-process.stdin.on('data',async d=>{const k=String(d);
+// Typed commands print screens modelled on the recorded fixtures (tui-real/claude): /model /mode /queue /bg /plan /ask /ctx /clear.
+const R='\x1b[2J\x1b[H',foot=m=>`\n${'─'.repeat(100)}\n❯ \n${'─'.repeat(100)}\n\n  ${m}`;
+const SC={
+ model:()=>`${R}\n   Select model\n   Switch between Claude models.\n\n     Default (recommended)\n     Opus 5.5\n   ❯ Haiku 5.5 ✔\n\n   ↑/↓ to navigate · Esc to exit`,
+ mode:()=>R+foot('⏵⏵ accept edits on (shift+tab to cycle) · ← for agents'),
+ queue:()=>`${R}✻ Newspapering… (6s · ↓ 388 tokens)\n\nQueued messages\n  ↳ also update the README\n${foot('⏸ manual mode on')}`,
+ bg:()=>`${R}⏺ sleep 20 is running in the background (task bti9b799g).\n\n✻ Sautéed for 3s · 1 shell still running\n${foot('⏸ manual mode on · 1 shell · ← for agents')}`,
+ plan:()=>`${R}   Context\n\n   Add one comment line at the top of util.js.\n\n   Change\n\n   - Insert one line at line 1.\n   - Keep a shebang first if present.\n\n${'─'.repeat(100)}\n   Claude has written up a plan and is ready to execute. Would you like to proceed?\n\n   ❯ 1. Yes, and use auto mode\n     2. Yes, manually approve edits\n     3. Tell Claude what to change\n\n   ctrl+g to edit in Vim`,
+ ask:()=>`${R}Which color do you prefer, red or blue?\n\n❯ 1. Red\n     Choose red as your color.\n  2. Blue\n     Choose blue as your color.\n  3. Type something.\n\nEnter to select · ↑/↓ to navigate · Esc to cancel`,
+ ctx:()=>`${R}Context low (12% remaining) · run /compact\n${foot('⏸ manual mode on')}`,
+ clear:()=>R+foot('⏸ manual mode on'),
+};
+let buf='';
+const key=async k=>{
+ if(k==='\r'&&buf){const c=buf.replace(/^\//,'').trim().split(' ')[0];buf='';if(SC[c])console.log(SC[c]());return;}
+ if(k.length===1&&k>=' '&&k!=='\x7f'&&!(buf===''&&/[123]/.test(k))){buf+=k;return;}
  if(k==='1'||k==='\r'){console.log('\x1b[2J\x1b[H(approved)');res('t6','',{stdout:'',stderr:''});asst([{type:'text',text:'Build output removed.'}]);line({type:'system',subtype:'turn_duration',durationMs:61000});console.log('\n> ');}
- else if(k==='3'||k==='\x1b'){console.log('\n(declined)');res('t6','The user doesn\'t want to proceed with this tool use. The tool use was rejected',{},true);console.log('\n> ');}});
+ else if(k==='3'||k==='\x1b'){console.log('\n(declined)');res('t6','The user doesn\'t want to proceed with this tool use. The tool use was rejected',{},true);console.log('\n> ');}};
+process.stdin.on('data',async d=>{const s=String(d);if(s.startsWith('\x1b'))return key(s.length===1?s:'\x1b');for(const k of s)await key(k);}); // a paste arrives as one chunk: replay it per key
 setInterval(()=>{},1e6);

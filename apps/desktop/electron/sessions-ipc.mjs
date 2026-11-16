@@ -5,6 +5,9 @@ import {createIpcBridge} from '../../../packages/backend/src/app/ipc.mjs';
 import {createClaudeMapper} from '../../../packages/backend/src/tui/claude.mjs';
 import {createSubagentTracker} from '../../../packages/backend/src/tui/subagents.mjs';
 import {createCodexMapper,controls as codexControls} from '../../../packages/backend/src/tui/codex.mjs';
+import * as screenparts from '../../../packages/backend/src/tui/screenparts.mjs';
+import * as commands from '../../../packages/backend/src/tui/commands.mjs';
+import {createUsageMeter,format as formatUsage} from '../../../packages/backend/src/tui/usage.mjs';
 
 const LABELS={claude:'Claude Code',codex:'Codex',fake:'Fake agent',fakeclaude:'Fake Claude'};
 const AGENT_BY_SOURCE={'claude-code':'claude',codex:'codex'};
@@ -41,14 +44,17 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
   const sid=row?.id;if(!sid||tracked.has(sid))return;
   const kind=row.agent==='codex'?'codex':row.agent==='claude'||row.agent==='fakeclaude'?'claude':null;if(!kind)return;
   const mapper=kind==='codex'?createCodexMapper():createClaudeMapper();
-  const t={kind,mapper,state:mapper.newState?.()??{},order:[],byId:new Map(),prompt:null,status:null,screenMeta:{},unsubs:[],timer:null,last:0,dirty:false,pending:null};
+  const t={kind,mapper,state:mapper.newState?.()??{},order:[],byId:new Map(),prompt:null,status:null,screenMeta:{},meter:createUsageMeter(),unsubs:[],timer:null,last:0,dirty:false,pending:null};
   tracked.set(sid,t);
-  const publish=()=>{t.dirty=false;send({type:'slot',id:slot(sid),value:{items:t.order.map(i=>t.byId.get(i)),prompt:t.prompt,status:t.status,meta:{...(mapper.meta?.(t.state)||{}),...t.screenMeta}}});};
+  const publish=()=>{t.dirty=false;const meta={...(mapper.meta?.(t.state)||{}),...t.screenMeta};
+   for(const i of [...t.order].reverse()){const am=/Set model to `([^`]+)`/.exec(t.byId.get(i)?.text||'')?.[1];if(am){meta.model=am;break;}} // the CLI's own ack; transcripts name the model only after a turn
+   let usage;try{t.meter.setMeta(meta);const sn=t.meter.snapshot();if(sn.turns)usage={lines:formatUsage(sn),inputTokens:sn.inputTokens,outputTokens:sn.outputTokens};}catch{}
+   send({type:'slot',id:slot(sid),value:{items:t.order.map(i=>t.byId.get(i)),prompt:t.prompt,status:t.status,meta:{...meta,...(usage&&{usage})}}});};
   const soon=()=>{if(!t.dirty){t.dirty=true;setTimeout(publish,30).unref?.();}};
-  const reset=()=>{t.state=mapper.newState?.()??{};t.order=[];t.byId=new Map();soon();};
+  const reset=()=>{t.state=mapper.newState?.()??{};t.meter=createUsageMeter();t.order=[];t.byId=new Map();soon();};
   const onLine=line=>{let o;try{o=JSON.parse(line);}catch{return;}
    let items;try{items=mapper.mapLine(o,t.state)||[];}catch{return;}
-   for(const it of items){if(!t.byId.has(it.id))t.order.push(it.id);t.byId.set(it.id,it);}
+   for(const it of items){if(!t.byId.has(it.id))t.order.push(it.id);t.byId.set(it.id,it);t.meter.add(it);}
    if(items.length)soon();};
   t.unsubs.push(backend.sessions.rawLines(sid,onLine,reset));
   const check=async()=>{ // throttled to one parse per 300 ms, trailing run via a single timer
@@ -58,7 +64,10 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
    try{const {text}=await backend.sessions.screen(sid);
     const p=mapper.parsePrompt(text)||null,st=mapper.parseStatus?.(text)||null;
     const v=/Claude Code v(\d[\w.]*)/.exec(text)?.[1],e=/with (\w+) effort/.exec(text)?.[1];
-    const sm={...t.screenMeta,...(v&&{version:v}),...(e&&{effort:e})};
+    const sp=(f,...a)=>{try{return screenparts[f]?.(...a)||null;}catch{return null;}};
+    const mode=sp('parseModeLine',text),draft=sp('parseInputDraft',text),bg=sp('parseBackgroundTasks',text);
+    const sm={...t.screenMeta,...(v&&{version:v}),...(e&&{effort:e}),...(mode?.mode&&{mode:mode.mode}),
+     queued:sp('parseQueued',text)?.messages||null,draft:draft?.text||null,backgroundTasks:bg?.count??null,contextWarning:sp('parseContextWarning',text),picker:p?null:sp('parsePicker',text)};
     const changed=JSON.stringify(p)!==JSON.stringify(t.prompt)||JSON.stringify(sm)!==JSON.stringify(t.screenMeta)||JSON.stringify(st)!==JSON.stringify(t.status);
     t.prompt=p;t.status=st;t.screenMeta=sm;if(changed)soon();}catch{}
   };
@@ -79,6 +88,12 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
    return run(t.kind==='codex'?codexControls.answerPrompt(i):(t.mapper.controls.answerPrompt(t.prompt,i).bytes));}
   if(action==='interrupt')return run(t.kind==='codex'?codexControls.interrupt():t.mapper.controls.interrupt().bytes);
   if(action==='slash'&&typeof args.command==='string')return run(t.kind==='codex'?codexControls.slash(args.command):t.mapper.controls.slash(args.command).bytes);
+  const agent=t.kind;
+  if(action==='setModel'&&str(args.id))return run(commands.modelControl(agent,args.id));
+  if(action==='setEffort'&&agent==='claude'&&/^[a-z]+$/.test(args.level||''))return run(`/effort ${args.level}\r`);
+  if(action==='setMode'){const o=commands.modeControl(agent,String(args.from),String(args.to));return o?run(o):undefined;}
+  if(action==='compact')return run(agent==='codex'?codexControls.slash('/compact'):t.mapper.controls.compact().bytes);
+  if(action==='keys'&&Array.isArray(args.keys)){const K={up:'\x1b[A',down:'\x1b[B',enter:'\r',esc:'\x1b'};return run(args.keys.map(k=>K[k]||'').join(''));}
   throw new Error('Unsupported control');
  };
  return {
@@ -90,7 +105,10 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
     if(!caps?.ok)return {ok:false,reason:caps?.reason==='tmux not found'?'Needs tmux':caps?.reason||'Unavailable',agents:[]};
     return {ok:true,agents:['claude','codex',...Object.keys(sessionAgents)].map(a=>({id:a,label:LABELS[a]||a,missing:!(sessionAgents[a]||onPath(a))}))};
    },
-   'sessions-start':async p=>{await ready;const r=await call({type:'sessions.start',agent:agentName(p?.agent),cwd:folder(p?.cwd)});track(r);attachSubs(r);return r;},
+   'sessions-catalog':p=>{const t=tracked.get(id(p));if(!t)throw new Error('Unknown session');const a=t.kind;
+    let cmds=[];try{cmds=commands.slashCommands(a,{home:env.SUFFICE_HISTORY_HOME||process.env.HOME,cwd:t.state?.cwd});}catch{}
+    return {agent:a,commands:cmds,models:commands.models(a),modes:commands.modes(a),efforts:commands.efforts(a)};},
+   'sessions-start':async p=>{await ready;const args=Array.isArray(p?.args)&&p.args.every(str)?p.args:undefined;const r=await call({type:'sessions.start',agent:agentName(p?.agent),cwd:folder(p?.cwd),...(args&&{args})});track(r);attachSubs(r);return r;},
    'sessions-list':async()=>{await ready;return trackAll(await call({type:'sessions.list'}));},
    'sessions-control':p=>control(id(p?.id),String(p?.action),p?.args),
    'sessions-stop':p=>{untrack(id(p));return call({type:'sessions.stop',id:id(p)});},
