@@ -12,6 +12,8 @@ export const rules = {
     permission: [
       /Do you want to (?:proceed|make this edit|create|overwrite|allow)\b/, // Claude Code tool dialog title (recalled)
       /Yes, and (?:don't|do not) ask again/, // second option of the same dialog (recalled)
+      /Is this a project you created or one you trust\?/, // folder trust dialog (captured from a real run, 2026-11-15)
+      /Yes, I trust this folder/, // its second option (captured from a real run, 2026-11-15)
     ],
     working: [/esc to interrupt/i], // spinner hint line (recalled)
     error: [/^\s*(?:⎿\s*)?API Error\b/], // API failure line (recalled, guess)

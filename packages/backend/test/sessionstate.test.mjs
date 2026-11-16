@@ -166,3 +166,18 @@ test('no timers left running', () => {
   const t = ss.track('s', { agent: 'claude' }); t.onMessages([user('a'), asst('b')]); clock.adv(5000); ss.tick();
   assert.equal(process.getActiveResourcesInfo().filter((r) => /Timeout|Immediate/.test(r)).length, before);
 });
+
+test('claude folder-trust dialog (captured from a real run) is needs_permission', () => {
+  const { ss } = mk();
+  const t = ss.track('trust', { agent: 'claude' });
+  t.onScreen(fx('claude-trust'));
+  assert.equal(t.state().state, 'needs_permission');
+});
+
+test('an unchanged screen fed on a timer still goes idle', () => {
+  const { clock, ss } = mk();
+  const t = ss.track('idle', { agent: 'claude' });
+  const screen = '❯ \n  some status line\n';
+  for (let i = 0; i < 8; i++) { t.onScreen(screen); clock.adv(700); t.tick(); }
+  assert.equal(t.state().state, 'waiting_input');
+});

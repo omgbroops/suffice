@@ -1,5 +1,5 @@
 import { assertShape } from '../contract.mjs';
-import { classifyScreen } from './rules.mjs';
+import { classifyScreen, tailLines } from './rules.mjs';
 
 const ATTENTION = new Set(['waiting_input', 'needs_permission', 'error']);
 const IMMEDIATE = new Set(['needs_permission', 'exited', 'error']);
@@ -59,6 +59,7 @@ export function createSessionState({ clock, slots, idleMs = 1500, settleMs = 300
       if (now - pending.at >= settleMs) { const p = pending; pending = null; emit(p, p.at); }
     }
 
+    let lastTail = null; // an unchanged screen must not restart the idle window
     const tracker = {
       onMessages(messages) {
         if (!Array.isArray(messages)) throw new TypeError('messages must be an array');
@@ -75,7 +76,7 @@ export function createSessionState({ clock, slots, idleMs = 1500, settleMs = 300
         if (any) { lastAt = clock.now(); touch(); }
         evaluate();
       },
-      onScreen(text) { screen = classifyScreen(agent, text); screenAt = clock.now(); touch(); evaluate(); },
+      onScreen(text) { const tail = tailLines(text).join('\n'); screen = classifyScreen(agent, text); if (tail !== lastTail) { lastTail = tail; screenAt = clock.now(); touch(); } evaluate(); },
       onExit(code) { exit = Number.isInteger(code) ? code : 1; touch(); evaluate(); },
       tick: evaluate,
       state: () => ({ ...cur }),
