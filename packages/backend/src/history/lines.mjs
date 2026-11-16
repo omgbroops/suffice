@@ -1,6 +1,5 @@
 // Shared streaming + adapter plumbing for JSONL transcript sources. Nothing here reads a whole file.
 import path from 'node:path';
-import { readHead } from '../sessions/adapters.mjs';
 
 export const MAX_LINE = 1 << 20; // a longer line is dropped, never buffered whole
 const CHUNK = 65536;
@@ -32,16 +31,34 @@ export function* jsonLines(fs, file, max = MAX_LINE) {
 }
 
 const safeDir = (fs, d) => { try { return fs.readdirSync(d, { withFileTypes: true }); } catch { return []; } };
-export function walk(fs, dir, match, depth = 6) {
-  return safeDir(fs, dir).flatMap((d) => d.isDirectory() ? (depth ? walk(fs, path.join(dir, d.name), match, depth - 1) : [])
-    : match(d.name) ? [path.join(dir, d.name)] : []);
+// Generator: one directory's entries live at a time instead of a 40k-path array.
+export function* walk(fs, dir, match, depth = 6) {
+  for (const d of safeDir(fs, dir)) {
+    if (d.isDirectory()) { if (depth) yield* walk(fs, path.join(dir, d.name), match, depth - 1); }
+    else if (match(d.name)) yield path.join(dir, d.name);
+  }
 }
+
+export const HEAD_BYTES = 65536; // per-file read cap during a scan: enough for title, cwd, start and kind markers
+const headBuf = Buffer.allocUnsafe(HEAD_BYTES); // shared: scans are synchronous per file
+/** First `max` bytes of a file as text, cut at the last full line when truncated. */
+function readHeadText(fs, file, max = HEAD_BYTES) {
+  const fd = fs.openSync(file, 'r');
+  try {
+    const n = fs.readSync(fd, headBuf, 0, Math.min(max, HEAD_BYTES), 0);
+    const s = headBuf.toString('utf8', 0, n);
+    return n === Math.min(max, HEAD_BYTES) ? s.slice(0, s.lastIndexOf('\n') + 1) : s;
+  } finally { fs.closeSync(fd); }
+}
+
+const interned = new Map(); // cwd strings repeat across thousands of files; keep one copy
+const intern = (s) => { if (typeof s !== 'string') return s ?? null; let v = interned.get(s); if (v === undefined) { if (interned.size > 20000) interned.clear(); interned.set(s, s); v = s; } return v; };
 
 const ts = (s) => { const n = Date.parse(s); return Number.isNaN(n) ? 0 : n; };
 export const oneLine = (s, n = 80) => String(s ?? '').replace(/\s+/g, ' ').trim().slice(0, n);
 
 /** Build an adapter for a tree of JSONL files. `agent` is a sessions/adapters.mjs entry (parseLine); `meta(recs)` reads the head. */
-export function jsonlSource({ id, label, root, match, agent, meta }) {
+export function jsonlSource({ id, label, root, match, agent, meta, kind }) {
   const dir = (home) => path.join(home, ...root);
   return {
     id, label,
@@ -51,15 +68,18 @@ export function jsonlSource({ id, label, root, match, agent, meta }) {
         let st; try { st = fs.statSync(p); } catch { continue; }
         const sig = `${st.mtimeMs}:${st.size}`;
         const k = known?.(p);
-        if (k && k.sig === sig) { yield k; continue; }
+        if (k && k.sig === sig && k.kind) { yield k; continue; }
         try {
           const recs = []; // only the head of the file: enough for title, cwd and start time
-          for (const l of readHead(fs, p, 65536).split('\n')) { try { if (l) recs.push(JSON.parse(l)); } catch { /* skip */ } }
+          for (const l of readHeadText(fs, p).split('\n')) { try { if (l) recs.push(JSON.parse(l)); } catch { /* skip */ } }
           const m = meta(recs, p);
-          const first = recs.flatMap((r) => agent.parseLine(r)).find((x) => x.role === 'user' && x.text && !x.text.startsWith('<'));
-          const firstUser = oneLine(first?.text, 300);
-          yield { source: id, sessionId: m.sessionId, path: p, cwd: m.cwd ?? null, startedAt: m.startedAt || st.birthtimeMs, updatedAt: st.mtimeMs,
-            title: firstUser.slice(0, 80) || '(untitled)', firstUser, sig };
+          let firstUser = '', typedMessages = 0;
+          for (const r of recs) {
+            if (r.isMeta) continue;
+            for (const x of agent.parseLine(r)) if (x.role === 'user' && x.text && !x.text.startsWith('<')) { if (!typedMessages) firstUser = oneLine(x.text, 300); typedMessages++; }
+          }
+          yield { source: id, sessionId: m.sessionId, path: p, cwd: intern(m.cwd), startedAt: m.startedAt || st.birthtimeMs, updatedAt: st.mtimeMs,
+            title: firstUser.slice(0, 80) || '(untitled)', firstUser, kind: kind?.(recs, p) ?? 'unknown', typedMessages, sig };
         } catch { /* unreadable file: skip */ }
       }
     },
@@ -70,4 +90,4 @@ export function jsonlSource({ id, label, root, match, agent, meta }) {
     },
   };
 }
-export { ts };
+export { ts, intern };

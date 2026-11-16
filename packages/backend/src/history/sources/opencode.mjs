@@ -16,15 +16,16 @@ export default {
   async *list({ home, known }) {
     const file = dbPath(home), db = await open(file);
     try {
-      const rows = db.prepare('SELECT s.id, s.directory, s.time_created, s.time_updated, (SELECT count(*) FROM message m WHERE m.session_id = s.id) AS n FROM session s').all();
+      const hasParent = db.prepare('PRAGMA table_info(session)').all().some((c) => c.name === 'parent_id');
+      const rows = db.prepare(`SELECT s.id, s.directory, s.time_created, s.time_updated, ${hasParent ? 's.parent_id' : 'NULL'} AS parent_id, (SELECT count(*) FROM message m WHERE m.session_id = s.id) AS n, (SELECT count(*) FROM message m WHERE m.session_id = s.id AND json_extract(m.data, '$.role') = 'user') AS u FROM session s`).all();
       const firstUser = db.prepare(`SELECT p.data FROM message m JOIN part p ON p.message_id = m.id
         WHERE m.session_id = ? AND json_extract(m.data, '$.role') = 'user' AND json_extract(p.data, '$.type') = 'text' ORDER BY m.time_created, m.id, p.id LIMIT 1`);
       for (const r of rows) {
         const p = `${file}#${r.id}`, sig = `${r.time_updated}:${r.n}`, k = known?.(p);
-        if (k && k.sig === sig) { yield k; continue; }
+        if (k && k.sig === sig && k.kind) { yield k; continue; }
         const fu = oneLine(j(firstUser.get(r.id)?.data).text, 300);
         yield { source: 'opencode', sessionId: r.id, path: p, cwd: r.directory ?? null, startedAt: r.time_created, updatedAt: r.time_updated,
-          title: fu.slice(0, 80) || '(untitled)', firstUser: fu, messageCount: r.n, sig };
+          title: fu.slice(0, 80) || '(untitled)', firstUser: fu, messageCount: r.n, kind: r.parent_id ? 'subagent' : 'unknown', typedMessages: r.u, sig };
       }
     } finally { db.close(); }
   },

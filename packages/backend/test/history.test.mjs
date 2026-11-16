@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import nodeFs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { spawnSync } from 'node:child_process';
 import { DatabaseSync } from 'node:sqlite';
 import { createHistory } from '../src/history/index.mjs';
 import { createSlots } from '../src/slots/index.mjs';
@@ -33,11 +34,11 @@ function opencodeDb(home, rows) {
   const f = path.join(home, '.local/share/opencode/opencode.db');
   nodeFs.mkdirSync(path.dirname(f), { recursive: true });
   const db = new DatabaseSync(f);
-  db.exec(`CREATE TABLE session (id text primary key, directory text, time_created integer, time_updated integer);
+  db.exec(`CREATE TABLE session (id text primary key, directory text, time_created integer, time_updated integer, parent_id text);
     CREATE TABLE message (id text primary key, session_id text, time_created integer, time_updated integer, data text);
     CREATE TABLE part (id text primary key, message_id text, session_id text, time_created integer, time_updated integer, data text);`);
   for (const r of rows) {
-    db.prepare('INSERT INTO session VALUES (?,?,?,?)').run(r.id, r.cwd, r.created, r.updated);
+    db.prepare('INSERT INTO session VALUES (?,?,?,?,?)').run(r.id, r.cwd, r.created, r.updated, r.parent ?? null);
     db.prepare('INSERT INTO message VALUES (?,?,?,?,?)').run(`${r.id}-m1`, r.id, r.created, r.created, JSON.stringify({ role: 'user' }));
     db.prepare('INSERT INTO part VALUES (?,?,?,?,?,?)').run(`${r.id}-p1`, `${r.id}-m1`, r.id, r.created, r.created, JSON.stringify({ type: 'text', text: r.text }));
     db.prepare('INSERT INTO message VALUES (?,?,?,?,?)').run(`${r.id}-m2`, r.id, r.created + 1, r.created + 1, JSON.stringify({ role: 'assistant' }));
@@ -179,7 +180,7 @@ test('slots: history:list capped at 500 and history:sources', async () => {
   assert.equal(v.length, 500);
   assert.equal(v[0].title, 'q519');
   const s = slots.read('history:sources').value;
-  assert.deepEqual(s.find((x) => x.id === 'claude-code'), { id: 'claude-code', label: 'Claude Code', detected: true, count: 520 });
+  assert.deepEqual(s.find((x) => x.id === 'claude-code'), { id: 'claude-code', label: 'Claude Code', detected: true, count: 520, kinds: { unknown: 520 } });
   assert.equal(s.find((x) => x.id === 'codex').detected, false);
 });
 
@@ -188,4 +189,97 @@ test('viewSpec validates and binds to history:list', () => {
   assert.equal(spec.slot, 'history:list');
   assert.deepEqual(createViewRegistry().validate(spec), { ok: true, errors: [] });
   assert.equal(createViewRegistry().validate({ ...spec, fields: {} }).ok, false);
+});
+
+// ---- kinds ----
+const rec = (o) => ({ type: 'user', uuid: 'u', timestamp: T(1), cwd: '/k', message: { content: 'hi' }, ...o });
+const kindOf = async (rel, text, ...extra) => {
+  const home = mk();
+  put(path.join(home, '.claude/projects', rel), jl(...extra, rec({}), text ?? ''), 1_700_000_100);
+  const h = createHistory({ home, clock });
+  await h.scan();
+  return h.list({ kinds: null })[0];
+};
+test('claude-code kind: entrypoint, human markers and sidechains', async () => {
+  const f = 'p/aaaaaaaa-0000-0000-0000-00000000000k.jsonl';
+  assert.equal((await kindOf(f, '', rec({ entrypoint: 'cli' }))).kind, 'interactive');
+  assert.equal((await kindOf(f, '', rec({ entrypoint: 'sdk-cli', promptSource: 'sdk', turnOrigin: 'sdk' }))).kind, 'headless');
+  assert.equal((await kindOf(f, '', rec({ entrypoint: 'sdk-cli', promptSource: 'sdk', origin: { kind: 'human' } }))).kind, 'interactive');
+  assert.equal((await kindOf(f, '', rec({ entrypoint: 'claude-desktop', promptSource: 'sdk' }))).kind, 'unknown');
+  assert.equal((await kindOf(f, '', rec({ entrypoint: 'claude-desktop', promptSource: 'typed' }))).kind, 'interactive');
+  assert.equal((await kindOf(f, '', rec({ entrypoint: 'cli', isSidechain: true }))).kind, 'subagent');
+  assert.equal((await kindOf('p/s/subagents/agent-1.jsonl', '', rec({ entrypoint: 'cli' }))).kind, 'subagent');
+  assert.equal((await kindOf(f, '')).kind, 'unknown');
+  const e = await kindOf(f, '', rec({ entrypoint: 'cli', isMeta: true, message: { content: 'meta' } }), rec({ message: { content: [{ type: 'tool_result', content: 'x' }] } }));
+  assert.equal(e.typedMessages, 1); // meta and tool_result records are not typed messages
+});
+
+test('codex and opencode kinds; list/search/sources honour the kinds filter', async () => {
+  const home = mk();
+  const cx = (id, source, originator) => put(path.join(home, '.codex/sessions/2026/11/01', `rollout-x-${id}.jsonl`), jl(
+    { type: 'session_meta', payload: { id, cwd: `/c/${id.slice(0, 4)}`, originator, source, timestamp: T(5) } },
+    { type: 'response_item', payload: { type: 'message', role: 'user', content: [{ text: `q ${id}` }] } }), 1_700_000_100);
+  const U = (n) => `bbbbbbbb-0000-0000-0000-00000000000${n}`;
+  cx(U(1), 'cli', 'codex_cli'); cx(U(2), 'exec', 'codex_exec'); cx(U(3), { subagent: { x: 1 } }, 'Codex Desktop'); cx(U(4), undefined, 'other');
+  opencodeDb(home, [{ id: 'ses_a', cwd: '/o/a', created: 1, updated: 2, text: 'main' }, { id: 'ses_b', cwd: '/o/b', created: 1, updated: 2, text: 'child', parent: 'ses_a' }]);
+  const h = createHistory({ home, clock });
+  await h.scan();
+  const all = h.list({ kinds: null });
+  const k = (c) => all.find((e) => e.cwd === c).kind;
+  assert.deepEqual([k('/c/bbbb'), all.filter((e) => e.source === 'codex').map((e) => e.kind).sort()], ['interactive', ['headless', 'interactive', 'subagent', 'unknown']]);
+  assert.equal(k('/o/a'), 'unknown');
+  assert.equal(k('/o/b'), 'subagent');
+  assert.equal(all.find((e) => e.cwd === '/o/a').typedMessages, 1);
+  assert.deepEqual(h.list({}).map((e) => e.kind).sort(), ['interactive', 'unknown', 'unknown']); // default hides headless + subagent
+  assert.deepEqual(h.search('child').length, 0);
+  assert.deepEqual(h.search('child', { kinds: ['subagent'] }).length, 1);
+  assert.deepEqual(h.list({ kinds: ['headless'] }).map((e) => e.source), ['codex']);
+  const info = await h.sources();
+  assert.deepEqual(info.find((s) => s.id === 'codex').kinds, { interactive: 1, headless: 1, subagent: 1, unknown: 1 });
+  assert.deepEqual(info.find((s) => s.id === 'opencode').kinds, { unknown: 1, subagent: 1 });
+});
+
+test('an index without kinds is rescanned once; a legacy v1 index file still loads', async () => {
+  const home = seed();
+  const idxPath = path.join(home, 'legacy.json');
+  const h = createHistory({ home, clock, indexPath: idxPath });
+  await h.scan();
+  const lines = nodeFs.readFileSync(idxPath, 'utf8').trim().split('\n');
+  assert.equal(JSON.parse(lines[0]).v, 2);
+  const entries = Object.fromEntries(lines.slice(1).map((l) => { const e = JSON.parse(l); delete e.kind; delete e.typedMessages; return [e.path, e]; }));
+  nodeFs.writeFileSync(idxPath, JSON.stringify({ v: 1, savedAt: 1, entries })); // old format, no kind fields
+  const h2 = createHistory({ home, clock, indexPath: idxPath });
+  assert.deepEqual(await h2.scan(), { added: 0, updated: 4, unchanged: 0, removed: 0 });
+  assert.ok(h2.list({ kinds: null }).every((e) => e.kind && typeof e.typedMessages === 'number'));
+});
+
+// ---- memory ----
+test('scanning 40,000 files stays under 150 MB of RSS growth (scan and rescan)', { timeout: 300_000 }, async () => {
+  const home = mk();
+  try {
+    const pad = 'filler '.repeat(150); // ~1 KB of body per file; the scan must not hold or even read much more than the head
+    for (let i = 0; i < 40_000; i++) {
+      const dir = path.join(home, '.claude/projects', `-proj-${i % 300}`);
+      if (i < 300) nodeFs.mkdirSync(dir, { recursive: true });
+      nodeFs.writeFileSync(path.join(dir, `${String(i).padStart(8, '0')}-0000-0000-0000-000000000000.jsonl`), jl(
+        { type: 'user', uuid: 'u', timestamp: T(i), cwd: `/work/proj${i % 300}`, entrypoint: i % 3 ? 'sdk-cli' : 'cli', message: { content: `question ${i} about the thing` } },
+        { type: 'assistant', message: { content: [{ type: 'text', text: pad }] } }));
+    }
+    // child process: its own high-water mark (process.resourceUsage().maxRSS, KB) measures the scan alone
+    const mod = process.env.HISTORY_MODULE_FOR_TEST ?? new URL('../src/history/index.mjs', import.meta.url).href;
+    const code = `import(${JSON.stringify(mod)}).then(async ({ createHistory }) => {
+      const mb = () => process.resourceUsage().maxRSS / 1024, base = mb();
+      const h = createHistory({ home: process.argv[1], clock: { now: Date.now }, indexPath: process.argv[2] });
+      const a = await h.scan(), g1 = mb() - base, b = await h.scan();
+      console.log(JSON.stringify({ a, b, g1, g2: mb() - base, kinds: (await h.sources())[0].kinds }));
+    });`;
+    const r = spawnSync(process.execPath, ['-e', code, home, path.join(home, 'idx.json')], { encoding: 'utf8', maxBuffer: 1 << 20 });
+    assert.equal(r.status, 0, r.stderr);
+    const o = JSON.parse(r.stdout);
+    assert.equal(o.a.added, 40_000);
+    assert.equal(o.b.unchanged, 40_000);
+    assert.ok(o.g1 < 150, `scan grew RSS by ${o.g1.toFixed(0)} MB`);
+    assert.ok(o.g2 < 150, `scan+rescan grew RSS by ${o.g2.toFixed(0)} MB`);
+    assert.equal(o.kinds.interactive + (o.kinds.headless ?? 0), 40_000);
+  } finally { nodeFs.rmSync(home, { recursive: true, force: true }); }
 });
