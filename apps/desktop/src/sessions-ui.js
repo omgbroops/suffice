@@ -148,9 +148,26 @@ export function connectSessions({toast,form,workspace,header,hooks}){
    for(const d of o.diff){const c=el('div','tool-diff');body.append(c);later.push(()=>renderCode(c,{text:patchOf(d),path:d.path},true));}}
   return w.element;
  }
+ // AskUserQuestion: "Asked: <question> · <answer>", expands to every option with the chosen one marked.
+ function buildAsk(it){
+  const a=it.output?.answer,ans=typeof a==='string'?[a]:a&&typeof a==='object'?Object.values(a).map(String):[];
+  const d=el('details','thread-activity session-ask'),s=el('summary','','Asked: '+short(it.title||'question')),log=el('div','thread-activity-log');
+  if(ans.length)s.append(el('span','session-meta',' · '+ans.join(', ')));
+  for(const q of it.input?.questions||[]){log.append(el('div','session-ask-q',q.question));
+   for(const o of q.options||[]){const l=typeof o==='string'?o:o.label||'';log.append(el('div','session-todo',(ans.includes(l)?'✓ ':'○ ')+l));}}
+  d.append(s,log);return d;
+ }
+ // ExitPlanMode: "Plan · approved|rejected", expands to the plan as markdown.
+ function buildPlan(it){
+  const d=el('details','thread-activity session-plan'),s=el('summary','','Plan'),log=el('div','thread-activity-log');
+  if(it.output.decision)s.append(el('span','session-meta',' · '+it.output.decision));
+  hooks.markdown(log,it.output.plan);d.append(s,log);return d;
+ }
  function build(it,later,depth=0){
   if(it.kind==='user'||it.kind==='assistant'){const a=el('article',`thread-message thread-${it.kind}`);if(it.kind==='assistant')hooks.markdown(a,it.text);else a.textContent=it.text;return a;}
   if(it.kind==='thinking'){const d=el('details','thread-activity');const log=el('div','thread-activity-log');log.append(el('div','thread-reasoning',it.text));d.append(el('summary','','Reasoning'),log);return d;}
+  if(it.kind==='tool'&&it.name==='AskUserQuestion')return buildAsk(it);
+  if(it.kind==='tool'&&it.name==='ExitPlanMode'&&it.output?.plan)return buildPlan(it);
   if(it.kind==='tool')return buildTool(it,later);
   if(it.kind==='todo'){const d=el('details','thread-activity');d.open=true;const log=el('div','thread-activity-log');
    const done=it.items.filter(i=>i.status==='done').length;d.append(el('summary','',`Plan ${done}/${it.items.length}`),log);
@@ -165,7 +182,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  const plural=(n,w)=>`${n} ${w}${n===1?'':'s'}`;
  function subStats(it){
   const run=it.status==='running',bits=[plural(it.toolUses??0,'tool use'),it.tokens!=null&&`${kfmt(it.tokens)} tokens`];
-  if(run)bits.push(it.lastAction);else if(it.endedAt&&it.startedAt)bits.push(dur(Math.max(0,Math.round((it.endedAt-it.startedAt)/1000))));
+  if(run)bits.push(short(it.lastAction||''));else if(it.endedAt&&it.startedAt)bits.push(dur(Math.max(0,Math.round((it.endedAt-it.startedAt)/1000))));
   return (run?'':it.status==='error'?'Failed · ':'Done · ')+bits.filter(Boolean).join(' · ');
  }
  function fillSub(it,body,depth){
@@ -204,6 +221,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  const RUN=new Set(['tool','todo','subagent']),isRun=it=>it.kind==='tool'?it.status==='running':it.status==='running';
  // A maximal run of tool/todo/subagent items is one disclosure labelled by summarizeTools; running = open at its latest row, done = collapsed.
  function buildRun(run,later,old,depth=0){
+  if(run.every(it=>it.kind==='subagent')){const w=el('div','session-subs');for(const it of run){const n=build(it,later,depth);if(n)w.append(n);}return w;}
   const running=run.some(isRun),d=el('details','session-run thread-detail');d.dataset.running=String(running);
   const sum=el('summary','',summarizeTools(run).text);if(running)sum.prepend(threadState({status:'working'}));
   const body=el('div','session-run-body');run.forEach((it,i)=>{const n=build(it,later,depth);if(!n)return;if(running&&i<run.length-1&&it.kind!=='subagent')n.hidden=true;body.append(n);});

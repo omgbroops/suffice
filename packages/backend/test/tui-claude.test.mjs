@@ -99,7 +99,7 @@ test('mode: first seen is silent, a later change emits mode_changed', () => {
   const mk = (mode, t) => ({ type: 'permission-mode', permissionMode: mode, timestamp: `2026-11-15T11:00:0${t}.000Z` });
   assert.deepEqual(m.mapLine(mk('default', 1), st), []);
   const n = m.mapLine(mk('plan', 2), st);
-  assert.deepEqual(n.map((i) => [i.code, i.text]), [['mode_changed', 'Mode: default -> plan']]);
+  assert.deepEqual(n.map((i) => [i.code, i.text]), [['mode_changed', 'Mode  Manual → Plan']]);
   assert.equal(m.meta(st).mode, 'plan');
 });
 
@@ -303,7 +303,7 @@ test('item 1: mode lines go to meta.uiMode; permission-mode drives meta.mode; on
   const r = runReal('plan-mode');
   const mc = r.items.filter((i) => i.code === 'mode_changed');
   assert.equal(mc.length, 1);
-  assert.equal(mc[0].text, 'Mode: plan -> auto');
+  assert.equal(mc[0].text, 'Mode  Plan → Auto');
   assert.equal(r.mm.meta(r.st).mode, 'auto');
   assert.equal(r.mm.meta(r.st).uiMode, 'normal'); // another axis; feeding it to meta.mode would flip against permission-mode
   assert.equal(runReal('read-search').items.filter((i) => i.code === 'mode_changed').length, 0);
@@ -431,4 +431,18 @@ test('item 8: parsePrompt on the recorded plan-approval and question dialogs; nu
 test('parsePrompt: diff preview between rules is not in the body', () => {
   const p = P(['Edit file', '╌╌╌╌╌╌╌╌╌', '  1 +const a = 1', '  2 -const b = 2', '╌╌╌╌╌╌╌╌╌', ' Do you want to make this edit?', ' ❯ 1. Yes', '   2. No'].join('\n'));
   assert.equal(p.body, 'Edit file');
+});
+
+test('rate-limit api_error plus its synthetic assistant line is one notice; a later one is separate', () => {
+  const sys = (t, u) => ({ type: 'system', subtype: 'api_error', content: 'API Error: 429 Rate limit reached', uuid: u, timestamp: ts(t) });
+  const asst = (t, u) => ({ type: 'assistant', isApiErrorMessage: true, uuid: u, timestamp: ts(t), message: { role: 'assistant', content: [{ type: 'text', text: 'API Error: Rate limit reached' }] } });
+  const n = (ls) => runLines(ls).items.filter((i) => i.kind === 'notice');
+  assert.equal(n([sys(0, 'a'), asst(1, 'b')]).length, 1);
+  assert.equal(n([sys(0, 'a'), asst(60, 'b')]).length, 2);
+});
+
+test('model change notice uses friendly names and an arrow', () => {
+  const a = (t, m, u) => ({ type: 'assistant', uuid: u, timestamp: ts(t), message: { role: 'assistant', model: m, content: [{ type: 'text', text: 'x' }] } });
+  const n = runLines([a(0, 'claude-sonnet-5-5', 'a'), a(1, 'claude-haiku-5-5', 'b')]).items.find((i) => i.code === 'model_changed');
+  assert.equal(n.text, 'Model  Sonnet 5.5 → Haiku 5.5');
 });

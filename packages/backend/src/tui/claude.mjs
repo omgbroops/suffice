@@ -37,7 +37,18 @@ function emit(state, out, it) {
   out.push(it);
 }
 const fmtDur = (ms) => { const s = Math.round(ms / 1000); return s < 60 ? `${s}s` : `${Math.floor(s / 60)}m ${s % 60}s`; };
-const notice = (state, out, id, ts, level, code, text) => emit(state, out, { id, ts, kind: 'notice', level, code, text });
+// An api_error system line and its synthetic assistant line describe one event: same class within 5 s gives one notice.
+const notice = (state, out, id, ts, level, code, text) => {
+  if (level === 'error') {
+    const l = state.lastErr;
+    if (l && l.code === code && Math.abs(ts - l.ts) <= 5000 && l.id !== id) return;
+    state.lastErr = { id, code, ts };
+  }
+  emit(state, out, { id, ts, kind: 'notice', level, code, text });
+};
+const MODES = { default: 'Manual', plan: 'Plan', auto: 'Auto', acceptEdits: 'Accept edits', bypassPermissions: 'Bypass', dontAsk: "Don't ask" };
+const modeName = (m) => MODES[m] || m;
+const modelName = (m) => { const x = /(opus|sonnet|haiku)-(\d+)(?:-(\d+))?/i.exec(m); return x ? `${x[1][0].toUpperCase()}${x[1].slice(1).toLowerCase()} ${x[2]}${x[3] && x[3].length < 3 ? '.' + x[3] : ''}` : m; };
 
 function resultText(c) {
   if (typeof c === 'string') return c;
@@ -108,7 +119,7 @@ function emitCall(state, out, callId) {
 
 function setMode(state, out, mode, ts) {
   if (!str(mode)) return;
-  if (state.mode && state.mode !== mode) notice(state, out, `mode:${ts}:${mode}`, ts, 'info', 'mode_changed', `Mode: ${state.mode} -> ${mode}`);
+  if (state.mode && state.mode !== mode) notice(state, out, `mode:${ts}:${mode}`, ts, 'info', 'mode_changed', `Mode  ${modeName(state.mode)} → ${modeName(mode)}`);
   state.mode = mode;
 }
 
@@ -196,7 +207,7 @@ function run(obj, state, out, opts) {
       }
       const model = str(obj.message?.model);
       if (model && !model.startsWith('<')) {
-        if (state.model && state.model !== model) notice(state, out, `model:${uuid}`, ts, 'info', 'model_changed', `Model: ${state.model} -> ${model}`);
+        if (state.model && state.model !== model) notice(state, out, `model:${uuid}`, ts, 'info', 'model_changed', `Model  ${modelName(state.model)} → ${modelName(model)}`);
         state.model = model;
       }
       state.lastUser = null; // later file attachments belong to the next user item

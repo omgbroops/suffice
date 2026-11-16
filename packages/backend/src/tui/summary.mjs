@@ -9,6 +9,8 @@ const WORDS = { // [past verb, present verb, singular, plural]
   web: ['fetched', 'fetching', 'page', 'pages'],
   subagent: ['ran', 'running', 'subagent', 'subagents'],
   todo: ['updated', 'updating', 'todo list', 'todo lists'],
+  ask: ['asked', 'asking', 'question', 'questions'],
+  plan: ['proposed', 'proposing', 'plan', 'plans'],
   other: ['used', 'using', 'tool', 'tools'],
 };
 
@@ -32,7 +34,7 @@ export function summarizeTools(items) {
   const parts = new Map(); // category -> { part, done, running }
   let failed = 0, denied = 0, running = 0;
   for (const it of items || []) {
-    const category = it.kind === 'todo' ? 'todo' : it.kind === 'subagent' ? 'subagent' : it.kind === 'tool' ? (it.category === 'write' ? 'edit' : it.category) : null;
+    const category = it.kind === 'todo' ? 'todo' : it.kind === 'subagent' ? 'subagent' : it.kind === 'tool' ? (it.name === 'AskUserQuestion' ? 'ask' : it.name === 'ExitPlanMode' ? 'plan' : it.category === 'write' ? 'edit' : it.category) : null;
     if (!category) continue;
     const key = WORDS[category] ? category : 'other'; // mcp and unknown categories
     let e = parts.get(key);

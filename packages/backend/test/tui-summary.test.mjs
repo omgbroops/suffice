@@ -58,3 +58,10 @@ test('empty and non-tool input', () => {
   assert.deepEqual(summarizeTools(null), { text: '', parts: [] });
   assert.equal(text([{ kind: 'assistant', text: 'hi' }]), '');
 });
+
+test('AskUserQuestion and ExitPlanMode get their own wording', () => {
+  assert.equal(text([tool('other', { name: 'AskUserQuestion' })]), 'Asked 1 question');
+  assert.equal(text([tool('other', { name: 'AskUserQuestion', status: 'running' })]), 'Asking 1 question…');
+  assert.equal(text([tool('other', { name: 'ExitPlanMode' })]), 'Proposed 1 plan');
+  assert.equal(text([tool('other', { name: 'ExitPlanMode' }), tool('other', { name: 'ExitPlanMode' })]), 'Proposed 2 plans');
+});

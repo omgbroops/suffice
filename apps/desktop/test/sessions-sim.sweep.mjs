@@ -27,8 +27,10 @@ const mapper=createClaudeMapper();
 // ---- expectations from the scenario file
 function expectedOf(scn){
  const maps=new Map(),items=[],seen=new Set(),texts=[];
- for(const b of scn.beats)for(const sp of b.transcript||[]){
-  if(!sp.rec)continue;const key=`${sp.rec}|${sp.fresh||''}`;
+ for(const b of scn.beats)for(let sp of b.transcript||[]){if(typeof sp==='string'){try{sp=JSON.parse(sp);}catch{continue;}}
+  if(!sp.rec){if(!maps.has('inline'))maps.set('inline',{m:createClaudeMapper(),st:null}),maps.get('inline').st=maps.get('inline').m.newState?.()??{};
+   const {m,st}=maps.get('inline');for(const it of m.mapLine(sp,st)||[]){if(it.kind==='usage'||it.internal)continue;const id='inline|'+it.id;if(!seen.has(id)){seen.add(id);items.push({id,it});}}continue;}
+  const key=`${sp.rec}|${sp.fresh||''}`;
   if(!maps.has(key)){const m=createClaudeMapper();maps.set(key,{m,st:m.newState?.()??{}});}
   const {m,st}=maps.get(key);
   let L;try{L=requireLines(sp.rec);}catch{continue;}
@@ -152,7 +154,13 @@ try{
     R.measure.nodesCollapsed=fin.box.nodes;
     for(let k=0;k<4;k++){const sums=page.locator('.thread-messages details > summary:visible');const n=await sums.count();let opened=0;for(let j=0;j<n;j++){const d=sums.nth(j);if(!await d.evaluate(e=>e.parentElement.open)){await d.click().catch(()=>{});opened++;}}if(!opened)break;await page.waitForTimeout(300);}
     const ex=await snap();R.measure.nodesExpanded=ex.box.nodes;R.measure.textExpanded=ex.box.text;R.measure.showMore=await page.locator('.thread-messages button',{hasText:/more|truncated|earlier/i}).count();R.measure.truncNote=await page.locator('.thread-messages',{hasText:/truncated/}).count();}
-   await page.evaluate(()=>{const b=document.querySelector('.thread-messages');let e=b;while(e&&!(e.scrollHeight>e.clientHeight+5))e=e.parentElement;if(e)e.scrollTop=e.scrollHeight;});
+   const HDR=`(()=>{const h=document.querySelector('.thread-header--session');if(!h)return null;const main=h.closest('.workspace')||h.parentElement,mr=main.getBoundingClientRect(),r=h.getBoundingClientRect(),bad=[];
+    for(let e=h;e;e=e.parentElement)if(e.scrollTop||e.scrollLeft)bad.push((e.className||e.tagName).toString().slice(0,40)+' '+e.scrollTop+','+e.scrollLeft);
+    return {top:r.top-mr.top,bottom:mr.bottom-r.bottom,left:r.left-mr.left,right:mr.right-r.right,h:r.height,bad};})()`;
+   R.measure.hdrBefore=await page.evaluate(HDR);
+   R.measure.overflowers=await page.evaluate(()=>{const w=document.querySelector('.workspace'),wr=w.getBoundingClientRect();return [...w.querySelectorAll('*')].filter(e=>{const r=e.getBoundingClientRect();return r.height&&(r.bottom>wr.bottom+1||r.right>wr.right+1)&&!e.closest('.thread-transcript')}).slice(0,6).map(e=>e.className.toString().slice(0,40)+' '+Math.round(e.getBoundingClientRect().bottom-wr.bottom));});
+   await page.evaluate(()=>{const t=document.querySelector('.thread-transcript');if(t)t.scrollTop=t.scrollHeight;for(let e=document.querySelector('.thread-header--session');e;e=e.parentElement){e.scrollTop=1e5;e.scrollLeft=1e5;}});
+   R.measure.hdrAfter=await page.evaluate(HDR);
    await page.screenshot({path:resolve(out,name+'.png')});
    // ---- verdicts
    const dom=fin.rows,full=dom.map(r=>r.kind==='run'||r.kind==='subagent'?r.text:r.text).join(' \n ');
@@ -160,6 +168,15 @@ try{
    let cur=0;const missing=[];
    for(const it of expected){const sg=sigOf(it);if(!sg)continue;const at=text.indexOf(sg,cur);if(at<0)missing.push(it.kind+':'+sg);else cur=at;}
    R.verdicts.expectedInOrder={pass:missing.length===0,expected:expected.length,missing:missing.slice(0,12)};
+   {const n=k=>expected.filter(i=>i.kind===k).length,d=k=>dom.filter(r=>r.kind===k).length,typed=steps.filter(x=>x.text).length,sim=/^interrupt/.test(name),big=dom.length>=150;
+    const cnt={user:[n('user'),d('user')],assistant:[n('assistant'),d('assistant')],notice:[expected.filter(i=>i.kind==='notice'&&i.code!=='model_changed'&&i.code!=='mode_changed'&&!(sim&&i.code==='interrupted')).length,dom.filter(r=>r.kind==='notice'&&!/^(Model|Mode)\s/.test(r.text)&&!(sim&&/^\[Request interrupted/.test(r.text))).length]},bad=[];
+    for(const [k,[e,g]] of Object.entries(cnt)){const lo=e,hi=e+(k==='user'?typed:0);if(big?g>hi:(g<lo||g>hi))bad.push(`${k} expected ${e} got ${g}`);}
+    const subs=await page.locator('.session-sub').count(),es=n('subagent');if(es&&!subs)bad.push('subagent expected '+es+' got 0');
+    const tdl=await page.locator('.session-todo').count(),et=expected.filter(i=>i.kind==='todo').reduce((a,i)=>a+(i.items?.length||0),0);if(!big&&tdl<et&&et)bad.push('todo rows expected '+et+' got '+tdl);
+    R.verdicts.orderExactOnce={pass:!bad.length&&missing.length===0,counts:cnt,bad:bad.slice(0,6)};}
+   if(name==='compact-mid-run'){const i=dom.findIndex(r=>r.kind==='notice'&&/^Compacted/.test(r.text));R.verdicts.compactNotice={pass:i>0&&i<dom.length-1&&dom.slice(0,i).some(r=>r.kind==='user')&&dom.slice(i+1).some(r=>['assistant','run','user'].includes(r.kind)),at:i,rows:dom.length};}
+   if(name==='resume-existing'){const us=dom.filter(r=>r.kind==='user');R.verdicts.resumeHistory={pass:us.length>=3,users:us.length,first:us.slice(0,3).map(r=>r.text.slice(0,40))};}
+   if(name==='long-session'){const tt=await page.evaluate(()=>[...document.querySelectorAll('.session-todo')].map(e=>e.textContent)),sm=await page.evaluate(()=>[...document.querySelectorAll('.thread-messages summary')].map(e=>e.textContent).filter(x=>/^Plan \d/.test(x)));R.verdicts.todoList={pass:tt.some(x=>x.startsWith('✓'))&&tt.some(x=>x.startsWith('›'))&&tt.some(x=>x.startsWith('○'))&&sm.some(x=>/^Plan 1\/3/.test(x)),todos:tt.slice(0,4),summaries:sm.slice(0,3)};}
    const seenTxt=new Map(),dups=[];
    for(const r of dom)if(['user','assistant','notice','reasoning'].includes(r.kind)&&r.text){const n=(seenTxt.get(r.text)||0)+1;seenTxt.set(r.text,n);}
    const expCount=new Map();for(const it of expected)if(it.text)expCount.set(tokenOf(it.text),(expCount.get(tokenOf(it.text))||0)+1);
@@ -180,6 +197,7 @@ try{
    if(modeOk!==null)R.verdicts.headerFollowsMode={pass:modeOk};
    if(name==='parallel-subagents'||name==='subagent'||name==='long-session'){const subs=dom.filter(r=>r.kind==='subagent'||(r.children||[]).some(c=>c.kind==='subagent'));R.measure.subagentBlocks=(await page.locator('.session-sub').count());R.verdicts.subagentBlocks={pass:R.measure.subagentBlocks>=(name==='parallel-subagents'?3:1)};}
    {const ov=await page.evaluate(()=>{const m=document.querySelector('.thread-messages');return m?[...m.querySelectorAll('*')].filter(e=>e.getBoundingClientRect().right>m.getBoundingClientRect().right+2&&!e.closest('pre,.tool-diff,.session-terminal')).length:0;});R.verdicts.noHorizontalOverflow={pass:ov===0,count:ov};}
+   {const ok=h=>!!h&&h.top>=0&&h.top<=8&&h.bottom>=0&&h.left>=-2&&h.right>=-2&&!h.bad.length;R.verdicts.headerVisible={pass:ok(R.measure.hdrBefore)&&ok(R.measure.hdrAfter),before:R.measure.hdrBefore,after:R.measure.hdrAfter};}
    R.verdicts.noPageErrors={pass:!errors.length,errors:errors.slice(0,3)};errors.length=0;
    R.verdicts.sizeOk=name==='huge-output'?{pass:R.measure.nodesExpanded<3000&&(R.measure.showMore>0||R.measure.truncNote>0),nodes:R.measure.nodesExpanded}:undefined;
    R.pass=Object.values(R.verdicts).filter(Boolean).every(v=>v.pass);
