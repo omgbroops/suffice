@@ -1,0 +1,9 @@
+{"timestamp": "2026-01-01T00:00:00Z", "type": "event_msg", "payload": {"type": "user_message", "message": "run it"}}
+{"timestamp": "2026-01-01T00:00:01Z", "type": "response_item", "payload": {"type": "message", "role": "assistant", "content": [{"type": "output_text", "text": "fallback text"}]}}
+{"timestamp": "2026-01-01T00:00:02Z", "type": "event_msg", "payload": {"type": "exec_command_begin", "call_id": "x1", "command": ["bash", "-lc", "exit 3"], "cwd": "/w"}}
+{"timestamp": "2026-01-01T00:00:03Z", "type": "event_msg", "payload": {"type": "exec_command_end", "call_id": "x1", "command": ["bash", "-lc", "exit 3"], "exit_code": 3, "aggregated_output": "bad", "duration": {"secs": 1, "nanos": 0}}}
+{"timestamp": "2026-01-01T00:00:04Z", "type": "response_item", "payload": {"type": "custom_tool_call", "name": "apply_patch", "call_id": "ap1", "input": "*** Begin Patch\n*** Add File: n.txt\n+hi\n+there\n*** Update File: u.txt\n@@\n-a\n+b\n*** Delete File: d.txt\n*** Update File: m.txt\n*** Move to: m2.txt\n@@\n-1\n+2\n*** End Patch"}}
+{"timestamp": "2026-01-01T00:00:05Z", "type": "response_item", "payload": {"type": "custom_tool_call_output", "call_id": "ap1", "output": "Success"}}
+{"timestamp": "2026-01-01T00:00:06Z", "type": "event_msg", "payload": {"type": "mcp_tool_call_begin", "call_id": "mc1", "invocation": {"server": "s", "tool": "t", "arguments": {}}}}
+{"timestamp": "2026-01-01T00:00:07Z", "type": "event_msg", "payload": {"type": "mcp_tool_call_end", "call_id": "mc1", "invocation": {"server": "s", "tool": "t", "arguments": {}}, "result": {"Ok": {"content": [{"type": "text", "text": "fine"}]}}}}
+{"timestamp": "2026-01-01T00:00:08Z", "type": "event_msg", "payload": {"type": "web_search_end", "call_id": "ws1", "query": "q"}}
