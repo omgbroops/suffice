@@ -137,13 +137,14 @@ try{
     await page.waitForFunction(()=>window.__idle>1500,null,{timeout:30000,polling:200}).catch(()=>{});
     const before=await snap();
     const ctl=page.locator('.session-ctl').nth(name==='mode-cycle'?2:0);
-    if(await ctl.count()){await ctl.click();await page.waitForTimeout(400);const items=page.locator('.popover .menu-item,.session-menu .menu-item');R.measure.menuItems=await items.count();
+    if(await ctl.count()){await ctl.click();await page.waitForTimeout(400);const items=page.locator('.session-menu .menu-item');R.measure.menuItems=await items.count();
      await beat('menu-open');if(R.measure.menuItems>1){await items.nth(1).click();await page.waitForTimeout(2500);}else await page.keyboard.press('Escape');}
     const after=await snap();R.measure.ctlBefore=before.header.ctls;R.measure.ctlAfter=after.header.ctls;
     if(name==='mode-cycle')modeOk=JSON.stringify(before.header.ctls)!==JSON.stringify(after.header.ctls);
    }
    // settle, then final snapshot
    await page.waitForFunction(()=>window.__idle>2500,null,{timeout:30000,polling:200}).catch(()=>R.notes.push('never idle'));
+   await page.waitForFunction(()=>!/needs|permission|working/i.test(document.querySelector('.session-row')?.outerHTML.match(/data-status="[^"]*"/)?.[0]||''),null,{timeout:10000,polling:200}).catch(()=>{});
    const fin=await beat('final');R.final=fin;
    // stress
    const ipc=await page.evaluate(()=>window.__ipc||0),secs=(Date.now()-tStart)/1000;
@@ -169,7 +170,7 @@ try{
    for(const it of expected){const sg=sigOf(it);if(!sg)continue;const at=text.indexOf(sg,cur);if(at<0)missing.push(it.kind+':'+sg);else cur=at;}
    R.verdicts.expectedInOrder={pass:missing.length===0,expected:expected.length,missing:missing.slice(0,12)};
    {const n=k=>expected.filter(i=>i.kind===k).length,d=k=>dom.filter(r=>r.kind===k).length,typed=steps.filter(x=>x.text).length,sim=/^interrupt/.test(name),big=dom.length>=150;
-    const cnt={user:[n('user'),d('user')],assistant:[n('assistant'),d('assistant')],notice:[expected.filter(i=>i.kind==='notice'&&i.code!=='model_changed'&&i.code!=='mode_changed'&&!(sim&&i.code==='interrupted')).length,dom.filter(r=>r.kind==='notice'&&!/^(Model|Mode)\s/.test(r.text)&&!(sim&&/^\[Request interrupted/.test(r.text))).length]},bad=[];
+    const cnt={user:[n('user'),d('user')],assistant:[n('assistant'),d('assistant')],notice:[expected.filter(i=>i.kind==='notice'&&i.code!=='model_changed'&&i.code!=='mode_changed'&&!(sim&&i.code==='interrupted')).length,dom.filter(r=>r.kind==='notice'&&!/^(Model|Mode|Set model)\s/.test(r.text)&&!(sim&&/^\[Request interrupted/.test(r.text))).length]},bad=[];
     for(const [k,[e,g]] of Object.entries(cnt)){const lo=e,hi=e+(k==='user'?typed:0);if(big?g>hi:(g<lo||g>hi))bad.push(`${k} expected ${e} got ${g}`);}
     const subs=await page.locator('.session-sub').count(),es=n('subagent');if(es&&!subs)bad.push('subagent expected '+es+' got 0');
     const tdl=await page.locator('.session-todo').count(),et=expected.filter(i=>i.kind==='todo').reduce((a,i)=>a+(i.items?.length||0),0);if(!big&&tdl<et&&et)bad.push('todo rows expected '+et+' got '+tdl);
@@ -186,7 +187,7 @@ try{
    for(const r of dom){if(!['user','assistant','reasoning'].includes(r.kind))continue;const tk=tokenOf(r.text);if(!expected.some(it=>it.text&&(it.text.replace(/\s+/g,' ').includes(tk)||r.text.includes(tokenOf(it.text))))&&![...known].some(k=>r.text.includes(k)))extra.push(r.kind+':'+r.text.slice(0,60));}
    R.verdicts.nothingExtra={pass:!extra.length,extra:extra.slice(0,8)};
    const cardBeats=R.beats.filter(b=>b.snap.card&&b.parsed),bad=[];
-   for(const b of cardBeats){const c=b.snap.card.opts.map(o=>o.t.replace(/^\d+\.\s*/,'')),pl=b.parsed.opts.map(o=>o.replace(/^\d+\.\s*/,''));const cs=b.snap.card.opts.findIndex(o=>o.sel);
+   for(const b of cardBeats){const w=t=>t.replace(/^\d+\.\s*/,'').replace(/\s+/g,' '),c=b.snap.card.opts.map(o=>w(o.t)),pl=b.parsed.opts.map(w);const cs=b.snap.card.opts.findIndex(o=>o.sel);
     if(JSON.stringify(c)!==JSON.stringify(pl)||cs!==b.parsed.sel)bad.push({beat:b.label,card:c,screen:pl,cs,ss:b.parsed.sel});}
    R.verdicts.cardMatchesScreen={pass:!bad.length,checked:cardBeats.length,bad:bad.slice(0,3)};
    R.verdicts.clearsAfterAnswer={pass:cleared.every(Boolean)&&!fin.card&&!fin.picker,answered:cleared.length};
@@ -198,6 +199,11 @@ try{
    if(name==='parallel-subagents'||name==='subagent'||name==='long-session'){const subs=dom.filter(r=>r.kind==='subagent'||(r.children||[]).some(c=>c.kind==='subagent'));R.measure.subagentBlocks=(await page.locator('.session-sub').count());R.verdicts.subagentBlocks={pass:R.measure.subagentBlocks>=(name==='parallel-subagents'?3:1)};}
    {const ov=await page.evaluate(()=>{const m=document.querySelector('.thread-messages');return m?[...m.querySelectorAll('*')].filter(e=>e.getBoundingClientRect().right>m.getBoundingClientRect().right+2&&!e.closest('pre,.tool-diff,.session-terminal')).length:0;});R.verdicts.noHorizontalOverflow={pass:ov===0,count:ov};}
    {const ok=h=>!!h&&h.top>=0&&h.top<=8&&h.bottom>=0&&h.left>=-2&&h.right>=-2&&!h.bad.length;R.verdicts.headerVisible={pass:ok(R.measure.hdrBefore)&&ok(R.measure.hdrAfter),before:R.measure.hdrBefore,after:R.measure.hdrAfter};}
+   {const tg=n=>page.locator('.session-toggle button',{hasText:n}).click(),xt=()=>page.locator('.session-terminal .xterm').count(),clients=()=>tmux('list-clients','-F','#{client_session}').split('\n').filter(Boolean).length,counts=[];
+    for(const b of ['Terminal','Chat','Terminal']){await tg(b);if(b==='Terminal')await page.locator('.session-terminal .xterm-rows').first().waitFor();counts.push(await xt());}
+    await page.waitForTimeout(500);const c1=clients();await tg('Chat');
+    await page.locator('.session-row--sidebar').first().click();await page.waitForTimeout(1500);const c2=clients(),x2=await xt();
+    R.verdicts.oneTerminalPerSession={pass:counts.every(c=>c===1)&&c1<=1&&c2===0&&x2===0,xterms:counts,clientsInTerminal:c1,clientsAfterLeave:c2,xtermsAfterLeave:x2};}
    R.verdicts.noPageErrors={pass:!errors.length,errors:errors.slice(0,3)};errors.length=0;
    R.verdicts.sizeOk=name==='huge-output'?{pass:R.measure.nodesExpanded<3000&&(R.measure.showMore>0||R.measure.truncNote>0),nodes:R.measure.nodesExpanded}:undefined;
    R.pass=Object.values(R.verdicts).filter(Boolean).every(v=>v.pass);

@@ -440,7 +440,9 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  }
  function leave(){
   if(!active&&!import_)return;
-  unsubs.forEach(f=>f());unsubs=[];uiUnsub?.();uiUnsub=null;subUnsub?.();subUnsub=null;ctlOff?.();ctlOff=null;closeMenu();cards?.remove();cards=null;cardsSig='';ui=null;drawPrompt();active=null;form.setRunning?.(false);
+  unsubs.forEach(f=>f());unsubs=[];uiUnsub?.();uiUnsub=null;subUnsub?.();subUnsub=null;ctlOff?.();ctlOff=null;closeMenu();cards?.remove();cards=null;cardsSig='';ui=null;drawPrompt();
+  if(active&&termIds.has(active.id)){views?.close('session-'+active.id,termIds.get(active.id));termIds.delete(active.id);termEl?.querySelector(`[data-sid="${active.id}"]`)?.remove();}
+  active=null;form.setRunning?.(false);
   venomEnd();if(termEl){termEl.hidden=true;delete termEl.dataset.solid;}
   form.hidden=false;delete form.dataset.session;prompt().placeholder=PH;
   header.className='thread-header';delete header.dataset.status;
