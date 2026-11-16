@@ -1,0 +1,2089 @@
+{
+ "coverage": {
+  "found": {
+   "claude.interactive": 244,
+   "claude.headless": 25052,
+   "claude.subagent": 12850,
+   "claude.unknown": 1223,
+   "codex.interactive": 216,
+   "codex.headless": 7,
+   "codex.subagent": 490,
+   "codex.unknown": 0
+  },
+  "groups": {
+   "claude.interactive": {
+    "planned": 244,
+    "done": 244,
+    "stoppedMidFile": 0
+   },
+   "claude.subagent": {
+    "planned": 400,
+    "done": 400,
+    "stoppedMidFile": 0
+   },
+   "claude.headless": {
+    "planned": 400,
+    "done": 400,
+    "stoppedMidFile": 0
+   },
+   "codex.all": {
+    "planned": 713,
+    "done": 713,
+    "stoppedMidFile": 0
+   }
+  },
+  "timedOut": false,
+  "wallSec": 70,
+  "bytesRead": 11264101015,
+  "linesSkippedOver5MB": 107,
+  "unreadableFiles": 0,
+  "childPathPattern": "<project>/<session>/subagents/agent-<id>.jsonl"
+ },
+ "claude": {
+  "chats": 1044,
+  "lines": 809352,
+  "parseFail": 0,
+  "sidechainLines": {
+   "subagent": 38452
+  },
+  "throwsObserved": 0,
+  "throwsNote": "throws are swallowed by mapLine try/catch and not observable",
+  "invalidItems": {},
+  "lineCoverage": {
+   "last-prompt": {
+    "seen": 34253,
+    "produced": 0,
+    "none": 34253
+   },
+   "mode": {
+    "seen": 28911,
+    "produced": 0,
+    "none": 28911
+   },
+   "permission-mode": {
+    "seen": 25482,
+    "produced": 7,
+    "none": 25475
+   },
+   "session-owner": {
+    "seen": 20403,
+    "produced": 0,
+    "none": 20403
+   },
+   "attachment.hook_success": {
+    "seen": 42172,
+    "produced": 0,
+    "none": 42172
+   },
+   "attachment": {
+    "seen": 138461,
+    "produced": 6107,
+    "none": 132354
+   },
+   "attachment.hook_additional_context": {
+    "seen": 9775,
+    "produced": 0,
+    "none": 9775
+   },
+   "file-history-snapshot": {
+    "seen": 6466,
+    "produced": 0,
+    "none": 6466
+   },
+   "user": {
+    "seen": 97403,
+    "produced": 92511,
+    "none": 4892
+   },
+   "api-request-shape": {
+    "seen": 2430,
+    "produced": 0,
+    "none": 2430
+   },
+   "api-request-blob": {
+    "seen": 62583,
+    "produced": 0,
+    "none": 62583
+   },
+   "api-request": {
+    "seen": 67005,
+    "produced": 0,
+    "none": 67005
+   },
+   "atis-latch": {
+    "seen": 33857,
+    "produced": 0,
+    "none": 33857
+   },
+   "attachment.environment": {
+    "seen": 4799,
+    "produced": 0,
+    "none": 4799
+   },
+   "attachment.model": {
+    "seen": 2419,
+    "produced": 0,
+    "none": 2419
+   },
+   "attachment.output_style_instructions": {
+    "seen": 152,
+    "produced": 0,
+    "none": 152
+   },
+   "attachment.deferred_tools_delta": {
+    "seen": 2752,
+    "produced": 0,
+    "none": 2752
+   },
+   "attachment.agent_listing_delta": {
+    "seen": 1617,
+    "produced": 0,
+    "none": 1617
+   },
+   "attachment.mcp_instructions_delta": {
+    "seen": 2309,
+    "produced": 0,
+    "none": 2309
+   },
+   "attachment.skill_listing": {
+    "seen": 2060,
+    "produced": 0,
+    "none": 2060
+   },
+   "attachment.output_style": {
+    "seen": 5196,
+    "produced": 0,
+    "none": 5196
+   },
+   "attachment.instructions": {
+    "seen": 2173,
+    "produced": 0,
+    "none": 2173
+   },
+   "attachment.session_context": {
+    "seen": 2386,
+    "produced": 0,
+    "none": 2386
+   },
+   "attachment.date": {
+    "seen": 2539,
+    "produced": 0,
+    "none": 2539
+   },
+   "attachment.credential_org": {
+    "seen": 2383,
+    "produced": 0,
+    "none": 2383
+   },
+   "attachment.remote_session_change": {
+    "seen": 2227,
+    "produced": 0,
+    "none": 2227
+   },
+   "attachment.prompt_snapshot": {
+    "seen": 4749,
+    "produced": 0,
+    "none": 4749
+   },
+   "ai-title": {
+    "seen": 26135,
+    "produced": 0,
+    "none": 26135
+   },
+   "tools-used": {
+    "seen": 905,
+    "produced": 0,
+    "none": 905
+   },
+   "assistant": {
+    "seen": 160479,
+    "produced": 160478,
+    "none": 1
+   },
+   "attachment.silent_turn_reminder": {
+    "seen": 2907,
+    "produced": 0,
+    "none": 2907
+   },
+   "queue-operation": {
+    "seen": 45241,
+    "produced": 0,
+    "none": 45241
+   },
+   "attachment.queued_command": {
+    "seen": 3736,
+    "produced": 0,
+    "none": 3736
+   },
+   "system.stop_hook_summary": {
+    "seen": 10183,
+    "produced": 42,
+    "none": 10141
+   },
+   "system": {
+    "seen": 26777,
+    "produced": 15598,
+    "none": 11179
+   },
+   "system.turn_duration": {
+    "seen": 12841,
+    "produced": 12841,
+    "none": 0
+   },
+   "system.compact_boundary": {
+    "seen": 1350,
+    "produced": 1349,
+    "none": 1
+   },
+   "attachment.file": {
+    "seen": 4446,
+    "produced": 2433,
+    "none": 2013
+   },
+   "attachment.task_status": {
+    "seen": 2773,
+    "produced": 2773,
+    "none": 0
+   },
+   "attachment.total_tokens_reminder": {
+    "seen": 22177,
+    "produced": 0,
+    "none": 22177
+   },
+   "cost-state": {
+    "seen": 898,
+    "produced": 0,
+    "none": 898
+   },
+   "attachment.compact_file_reference": {
+    "seen": 1250,
+    "produced": 0,
+    "none": 1250
+   },
+   "attachment.deferred_tools_record": {
+    "seen": 4691,
+    "produced": 0,
+    "none": 4691
+   },
+   "attachment.thinking_drop": {
+    "seen": 722,
+    "produced": 0,
+    "none": 722
+   },
+   "file-history-delta": {
+    "seen": 1517,
+    "produced": 0,
+    "none": 1517
+   },
+   "attachment.command_permissions": {
+    "seen": 161,
+    "produced": 0,
+    "none": 161
+   },
+   "attachment.invoked_skills": {
+    "seen": 807,
+    "produced": 0,
+    "none": 807
+   },
+   "attachment.session_cron_carry": {
+    "seen": 222,
+    "produced": 0,
+    "none": 222
+   },
+   "attachment.edited_text_file": {
+    "seen": 967,
+    "produced": 0,
+    "none": 967
+   },
+   "pr-link": {
+    "seen": 5102,
+    "produced": 0,
+    "none": 5102
+   },
+   "attachment.hook_cancelled": {
+    "seen": 901,
+    "produced": 901,
+    "none": 0
+   },
+   "system.scheduled_task_fire": {
+    "seen": 889,
+    "produced": 0,
+    "none": 889
+   },
+   "attachment.auto_mode": {
+    "seen": 1251,
+    "produced": 0,
+    "none": 1251
+   },
+   "bridge-session": {
+    "seen": 2150,
+    "produced": 0,
+    "none": 2150
+   },
+   "system.bridge_status": {
+    "seen": 10,
+    "produced": 0,
+    "none": 10
+   },
+   "system.away_summary": {
+    "seen": 1094,
+    "produced": 1094,
+    "none": 0
+   },
+   "system.informational": {
+    "seen": 221,
+    "produced": 221,
+    "none": 0
+   },
+   "frame-link": {
+    "seen": 7411,
+    "produced": 0,
+    "none": 7411
+   },
+   "artifact-comment-monitor": {
+    "seen": 245,
+    "produced": 0,
+    "none": 245
+   },
+   "artifact-autoreact-ledger": {
+    "seen": 385,
+    "produced": 0,
+    "none": 385
+   },
+   "attachment.structured_output": {
+    "seen": 141,
+    "produced": 0,
+    "none": 141
+   },
+   "agent-name": {
+    "seen": 7237,
+    "produced": 0,
+    "none": 7237
+   },
+   "attachment.task_reminder": {
+    "seen": 43,
+    "produced": 0,
+    "none": 43
+   },
+   "system.local_command": {
+    "seen": 129,
+    "produced": 0,
+    "none": 129
+   },
+   "attachment.goal_status": {
+    "seen": 287,
+    "produced": 0,
+    "none": 287
+   },
+   "attachment.hook_non_blocking_error": {
+    "seen": 432,
+    "produced": 0,
+    "none": 432
+   },
+   "system.model_refusal_fallback": {
+    "seen": 6,
+    "produced": 0,
+    "none": 6
+   },
+   "custom-title": {
+    "seen": 5988,
+    "produced": 0,
+    "none": 5988
+   },
+   "continued-in": {
+    "seen": 2,
+    "produced": 0,
+    "none": 2
+   },
+   "system.api_error": {
+    "seen": 51,
+    "produced": 51,
+    "none": 0
+   },
+   "attachment.ultra_effort_enter": {
+    "seen": 15,
+    "produced": 0,
+    "none": 15
+   },
+   "attachment.diagnostics": {
+    "seen": 74,
+    "produced": 0,
+    "none": 74
+   },
+   "attachment.nested_memory": {
+    "seen": 19,
+    "produced": 0,
+    "none": 19
+   },
+   "attachment.dynamic_skill": {
+    "seen": 1,
+    "produced": 0,
+    "none": 1
+   },
+   "attachment.skill_mention": {
+    "seen": 9,
+    "produced": 0,
+    "none": 9
+   },
+   "relocated": {
+    "seen": 1298,
+    "produced": 0,
+    "none": 1298
+   },
+   "attachment.auto_mode_exit": {
+    "seen": 8,
+    "produced": 0,
+    "none": 8
+   },
+   "attachment.workflow_keyword_request": {
+    "seen": 1,
+    "produced": 0,
+    "none": 1
+   },
+   "attachment.ultra_effort_exit": {
+    "seen": 6,
+    "produced": 0,
+    "none": 6
+   },
+   "attachment.read_truncation_notice": {
+    "seen": 5,
+    "produced": 0,
+    "none": 5
+   },
+   "attachment.hook_system_message": {
+    "seen": 5,
+    "produced": 0,
+    "none": 5
+   },
+   "system.agents_killed": {
+    "seen": 2,
+    "produced": 0,
+    "none": 2
+   },
+   "attachment.plan_mode_exit": {
+    "seen": 4,
+    "produced": 0,
+    "none": 4
+   },
+   "attachment.unknown_command_fallback": {
+    "seen": 1,
+    "produced": 0,
+    "none": 1
+   },
+   "launched": {
+    "seen": 5,
+    "produced": 0,
+    "none": 5
+   },
+   "started": {
+    "seen": 117,
+    "produced": 0,
+    "none": 117
+   },
+   "result": {
+    "seen": 116,
+    "produced": 0,
+    "none": 116
+   },
+   "attachment.budget_usd": {
+    "seen": 659,
+    "produced": 0,
+    "none": 659
+   },
+   "attachment.context_sections": {
+    "seen": 1,
+    "produced": 0,
+    "none": 1
+   },
+   "system.model_refusal_no_fallback": {
+    "seen": 1,
+    "produced": 0,
+    "none": 1
+   },
+   "dev-mods": {
+    "seen": 89,
+    "produced": 0,
+    "none": 89
+   },
+   "attachment.plan_mode": {
+    "seen": 2,
+    "produced": 0,
+    "none": 2
+   },
+   "fork-context-ref": {
+    "seen": 1,
+    "produced": 0,
+    "none": 1
+   },
+   "attachment.plan_file_reference": {
+    "seen": 28,
+    "produced": 0,
+    "none": 28
+   },
+   "attachment.max_turns_reached": {
+    "seen": 1,
+    "produced": 0,
+    "none": 1
+   }
+  },
+  "shapeCoverage": {
+   "user.meta": {
+    "seen": 3400,
+    "produced": 0,
+    "none": 3400
+   },
+   "user.string": {
+    "seen": 14207,
+    "produced": 14066,
+    "none": 141
+   },
+   "user.toolResult": {
+    "seen": 78022,
+    "produced": 78021,
+    "none": 1
+   },
+   "user.compactSummary": {
+    "seen": 1350,
+    "produced": 0,
+    "none": 1350
+   },
+   "user.blocks": {
+    "seen": 424,
+    "produced": 424,
+    "none": 0
+   }
+  },
+  "blockCoverage": {
+   "user.string": {
+    "seen": 18632,
+    "produced": 14066,
+    "none": 4566
+   },
+   "api-request-blob.text": {
+    "seen": 47758,
+    "produced": 0,
+    "none": 47758
+   },
+   "assistant.thinking": {
+    "seen": 53706,
+    "produced": 4425,
+    "none": 49281
+   },
+   "assistant.tool_use": {
+    "seen": 78024,
+    "produced": 78024,
+    "none": 0
+   },
+   "user.tool_result": {
+    "seen": 78022,
+    "produced": 78022,
+    "none": 0
+   },
+   "api-request-blob.thinking": {
+    "seen": 11153,
+    "produced": 0,
+    "none": 11153
+   },
+   "api-request-blob.tool_use": {
+    "seen": 24628,
+    "produced": 24484,
+    "none": 144
+   },
+   "api-request-blob.tool_result": {
+    "seen": 22081,
+    "produced": 21937,
+    "none": 144
+   },
+   "assistant.text": {
+    "seen": 28776,
+    "produced": 28491,
+    "none": 285
+   },
+   "user.text": {
+    "seen": 852,
+    "produced": 488,
+    "none": 364
+   },
+   "api-request-blob.tool_addition": {
+    "seen": 445,
+    "produced": 0,
+    "none": 445
+   },
+   "user.image": {
+    "seen": 197,
+    "produced": 197,
+    "none": 0
+   },
+   "api-request-blob.image": {
+    "seen": 83,
+    "produced": 0,
+    "none": 83
+   },
+   "api-request-blob.tool_removal": {
+    "seen": 15,
+    "produced": 0,
+    "none": 15
+   }
+  },
+  "lineKeys": {
+   "last-prompt": {
+    "type": 34253,
+    "leafUuid": 34253,
+    "sessionId": 34253,
+    "lastPrompt": 33741,
+    "explicit": 230
+   },
+   "mode": {
+    "type": 28911,
+    "mode": 28911,
+    "sessionId": 28911
+   },
+   "permission-mode": {
+    "type": 25482,
+    "permissionMode": 25482,
+    "sessionId": 25482
+   },
+   "session-owner": {
+    "type": 20403,
+    "accountUuid": 20403,
+    "organizationUuid": 20403,
+    "sessionId": 20403
+   },
+   "attachment": {
+    "parentUuid": 138461,
+    "isSidechain": 138461,
+    "attachment": 138461,
+    "type": 138461,
+    "uuid": 138461,
+    "timestamp": 138461,
+    "userType": 138461,
+    "entrypoint": 138461,
+    "cwd": 138461,
+    "sessionId": 138461,
+    "version": 138461,
+    "gitBranch": 138461,
+    "rendered": 97266,
+    "renderedRole": 97276,
+    "session_id": 71370,
+    "renderedBesideToolResult": 2215,
+    "slug": 106233,
+    "agentId": 14543,
+    "renderedInHumanTurn": 2748,
+    "sessionKind": 932
+   },
+   "file-history-snapshot": {
+    "type": 6466,
+    "messageId": 6466,
+    "snapshot": 6466,
+    "isSnapshotUpdate": 6466
+   },
+   "user": {
+    "parentUuid": 97403,
+    "isSidechain": 97403,
+    "promptId": 97359,
+    "type": 97403,
+    "message": 97403,
+    "isMeta": 3400,
+    "uuid": 97403,
+    "timestamp": 97403,
+    "userType": 97403,
+    "entrypoint": 97403,
+    "cwd": 97403,
+    "sessionId": 97403,
+    "version": 97403,
+    "gitBranch": 97403,
+    "permissionMode": 15159,
+    "origin": 13870,
+    "promptSource": 15150,
+    "turnOrigin": 16374,
+    "turnPosition": 16311,
+    "toolUseResult": 72748,
+    "sandboxed": 38227,
+    "sourceToolAssistantUUID": 78021,
+    "permissionDecision": 73448,
+    "session_id": 55005,
+    "queueSkipAttachments": 8739,
+    "isVisibleInTranscriptOnly": 1350,
+    "isCompactSummary": 1350,
+    "slug": 76729,
+    "agentId": 9320,
+    "summarizedTurnPromptUuids": 632,
+    "turnCompanion": 1144,
+    "sourceToolUseID": 92,
+    "queueSkipSlashCommands": 1705,
+    "toolDenialKind": 442,
+    "wakeupSource": 420,
+    "scheduledTaskId": 889,
+    "scheduledFireId": 889,
+    "queuePriority": 1055,
+    "imagePasteIds": 158,
+    "serverClassifierContext": 5360,
+    "interruptedMessageId": 100,
+    "toolEndsTurn": 146,
+    "sessionKind": 846,
+    "queueTranscriptOnly": 124,
+    "queueOrigin": 38,
+    "refusedMessageId": 15,
+    "interruptedBySendNow": 29,
+    "clientPlatform": 189,
+    "turnAttributionKey": 189,
+    "classifierBoundary": 132,
+    "mcpMeta": 162,
+    "mcpCallNotReadOnly": 5,
+    "repeatsCompactSummary": 5,
+    "retractedMessageUuids": 1,
+    "userFeedback": 2,
+    "joinedNoticeLengths": 28,
+    "joinedNoticeOwn": 28,
+    "joinedNoticeRunIds": 28,
+    "usageLimitNote": 4,
+    "stackedOriginalInput": 2,
+    "stackedExpansion": 3,
+    "promptRewritten": 42
+   },
+   "api-request-shape": {
+    "type": 2430,
+    "sessionId": 2430,
+    "shapeHash": 2430,
+    "timestamp": 2430,
+    "version": 2430,
+    "shape": 2430,
+    "agentId": 499
+   },
+   "api-request-blob": {
+    "type": 62583,
+    "sessionId": 62583,
+    "hash": 62583,
+    "message": 62583,
+    "agentId": 5050
+   },
+   "api-request": {
+    "type": 67005,
+    "sessionId": 67005,
+    "id": 67005,
+    "timestamp": 67005,
+    "version": 67005,
+    "querySource": 67005,
+    "shapeHash": 67005,
+    "params": 67005,
+    "keep": 67005,
+    "tail": 67005,
+    "cacheControl": 67005,
+    "requestDigest": 67005,
+    "base": 63187,
+    "agentId": 5573
+   },
+   "atis-latch": {
+    "type": 33857,
+    "atis": 33857,
+    "sessionId": 33857
+   },
+   "ai-title": {
+    "type": 26135,
+    "aiTitle": 26135,
+    "sessionId": 26135
+   },
+   "tools-used": {
+    "type": 905,
+    "tools": 905,
+    "sessionId": 905
+   },
+   "assistant": {
+    "parentUuid": 160479,
+    "isSidechain": 160479,
+    "message": 160479,
+    "thinkingDurationMs": 52573,
+    "thinkingDisplay": 49222,
+    "serverClassifierRequest": 103221,
+    "apiBlockIndex": 160176,
+    "requestId": 160203,
+    "requestRef": 132815,
+    "requestedModel": 149193,
+    "promptCacheRequested": 92730,
+    "type": 160479,
+    "uuid": 160479,
+    "timestamp": 160479,
+    "advisorModel": 155846,
+    "effort": 159755,
+    "perTurnEffort": 160393,
+    "madeBy": 18387,
+    "session_id": 115086,
+    "userType": 160479,
+    "entrypoint": 160479,
+    "cwd": 160479,
+    "sessionId": 160479,
+    "version": 160479,
+    "gitBranch": 160479,
+    "toolInputStreamMs": 40645,
+    "wireToolInputs": 77758,
+    "agentId": 14432,
+    "attributionAgent": 14426,
+    "slug": 126171,
+    "attributionSkill": 4355,
+    "apiError": 235,
+    "error": 285,
+    "isApiErrorMessage": 303,
+    "wireIngestContext": 1672,
+    "isAbortedMidStream": 19,
+    "sessionKind": 1473,
+    "supersedesUuids": 2,
+    "attributionMcpServer": 5529,
+    "attributionMcpTool": 5529,
+    "attributionPlugin": 461,
+    "failedResponseHadNoToolCall": 146,
+    "truncatedAfterOutput": 25,
+    "streamCutCause": 20,
+    "apiErrorParams": 26,
+    "quotaLimits": 28,
+    "apiErrorStatus": 29,
+    "refusedMessageId": 1
+   },
+   "queue-operation": {
+    "type": 45241,
+    "operation": 45241,
+    "timestamp": 45241,
+    "sessionId": 45241,
+    "content": 31838,
+    "reason": 12125,
+    "commandUuid": 10767,
+    "deliveryId": 10767
+   },
+   "system": {
+    "parentUuid": 26777,
+    "isSidechain": 26777,
+    "type": 26777,
+    "subtype": 26777,
+    "hookCount": 10183,
+    "hookInfos": 10183,
+    "hookErrors": 10183,
+    "hookAdditionalContext": 10183,
+    "preventedContinuation": 10183,
+    "stopReason": 10183,
+    "hasOutput": 10183,
+    "level": 11941,
+    "timestamp": 26777,
+    "uuid": 26777,
+    "toolUseID": 10183,
+    "session_id": 8663,
+    "userType": 26777,
+    "entrypoint": 26777,
+    "cwd": 26777,
+    "sessionId": 26777,
+    "version": 26777,
+    "gitBranch": 26777,
+    "durationMs": 12841,
+    "messageCount": 12841,
+    "pendingBackgroundAgentCount": 4808,
+    "isMeta": 15422,
+    "logicalParentUuid": 1350,
+    "content": 3700,
+    "compactMetadata": 1350,
+    "slug": 23477,
+    "agentId": 157,
+    "pendingWorkflowCount": 729,
+    "taskId": 889,
+    "cron": 889,
+    "prompt": 889,
+    "url": 10,
+    "sessionKind": 154,
+    "commandRun": 87,
+    "trigger": 6,
+    "direction": 6,
+    "scope": 6,
+    "originalModel": 7,
+    "fallbackModel": 6,
+    "requestId": 7,
+    "apiRefusalCategory": 7,
+    "apiRefusalExplanation": 7,
+    "apiRefusalCyberVerification": 5,
+    "retractedMessageUuids": 6,
+    "refusedUserMessageUuid": 7,
+    "error": 51,
+    "retryInMs": 51,
+    "retryAttempt": 51,
+    "maxRetries": 51,
+    "source": 51,
+    "taskKind": 102,
+    "cronKind": 102,
+    "noOpStreak": 40,
+    "streakStartedAt": 40,
+    "foldedUuids": 40
+   },
+   "cost-state": {
+    "type": 898,
+    "sessionId": 898,
+    "totalCostUSD": 898,
+    "totalAPIDuration": 898,
+    "totalAPIDurationWithoutRetries": 898,
+    "totalToolDuration": 898,
+    "totalLinesAdded": 898,
+    "totalLinesRemoved": 898,
+    "totalDuration": 898,
+    "startTime": 898,
+    "modelUsage": 898,
+    "hasUnknownModelCost": 898
+   },
+   "file-history-delta": {
+    "type": 1517,
+    "messageId": 1517,
+    "snapshotMessageId": 1517,
+    "trackingPath": 1517,
+    "backup": 1517,
+    "timestamp": 1517
+   },
+   "pr-link": {
+    "type": 5102,
+    "sessionId": 5102,
+    "prNumber": 5102,
+    "prUrl": 5102,
+    "prRepository": 5102,
+    "timestamp": 5102
+   },
+   "bridge-session": {
+    "type": 2150,
+    "sessionId": 2150,
+    "bridgeSessionId": 2150,
+    "lastSequenceNum": 2150,
+    "ownerAccountUuid": 2149,
+    "ownerOrganizationUuid": 2149
+   },
+   "frame-link": {
+    "type": 7411,
+    "sessionId": 7411,
+    "path": 145,
+    "frameUrl": 145,
+    "title": 145,
+    "artifactCount": 7411,
+    "timestamp": 7411
+   },
+   "artifact-comment-monitor": {
+    "type": 245,
+    "v": 245,
+    "sessionId": 245,
+    "artifacts": 245
+   },
+   "artifact-autoreact-ledger": {
+    "type": 385,
+    "v": 385,
+    "sessionId": 385,
+    "accountUuid": 385,
+    "artifacts": 385
+   },
+   "agent-name": {
+    "type": 7237,
+    "agentName": 7237,
+    "sessionId": 7237
+   },
+   "custom-title": {
+    "type": 5988,
+    "customTitle": 5988,
+    "sessionId": 5988
+   },
+   "continued-in": {
+    "type": 2,
+    "timestamp": 2,
+    "sessionId": 2,
+    "continuedInSessionId": 2
+   },
+   "relocated": {
+    "type": 1298,
+    "sessionId": 1298,
+    "relocatedCwd": 1298
+   },
+   "launched": {
+    "type": 5
+   },
+   "started": {
+    "type": 117,
+    "key": 117,
+    "agentId": 117,
+    "label": 117,
+    "phase": 117
+   },
+   "result": {
+    "type": 116,
+    "key": 116,
+    "agentId": 116,
+    "result": 116,
+    "remoteControlDeviceReport": 4,
+    "toolsUsed": 4
+   },
+   "dev-mods": {
+    "type": 89,
+    "folder": 89,
+    "sessionId": 89
+   },
+   "fork-context-ref": {
+    "type": 1,
+    "agentId": 1,
+    "parentSessionId": 1,
+    "parentLastUuid": 1,
+    "contextLength": 1
+   }
+  },
+  "runReferenceKeys": {
+   "attachment.parentUuid": 138461,
+   "attachment.isSidechain": 138461,
+   "attachment.agentId": 14543,
+   "user.parentUuid": 97403,
+   "user.isSidechain": 97403,
+   "user.agentId": 9320,
+   "user.scheduledTaskId": 889,
+   "api-request-shape.agentId": 499,
+   "api-request-blob.agentId": 5050,
+   "api-request.agentId": 5573,
+   "assistant.parentUuid": 160479,
+   "assistant.isSidechain": 160479,
+   "assistant.agentId": 14432,
+   "assistant.attributionAgent": 14426,
+   "system.parentUuid": 26777,
+   "system.isSidechain": 26777,
+   "system.subtype": 26777,
+   "system.pendingBackgroundAgentCount": 4808,
+   "system.logicalParentUuid": 1350,
+   "system.agentId": 157,
+   "system.taskId": 889,
+   "system.taskKind": 102,
+   "agent-name.agentName": 7237,
+   "started.agentId": 117,
+   "result.agentId": 116,
+   "fork-context-ref.agentId": 1,
+   "fork-context-ref.parentSessionId": 1,
+   "fork-context-ref.parentLastUuid": 1
+  },
+  "tools": {
+   "Bash": {
+    "calls": 51495,
+    "noResult": 2,
+    "mapperRunningAtEof": 2,
+    "error": 1218,
+    "denied": 365,
+    "cats": {
+     "shell": 51495
+    }
+   },
+   "Read": {
+    "calls": 8287,
+    "noResult": 1,
+    "mapperRunningAtEof": 1,
+    "error": 69,
+    "denied": 19,
+    "cats": {
+     "read": 8287
+    }
+   },
+   "Agent": {
+    "calls": 4586,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 47,
+    "denied": 0,
+    "cats": {
+     "subagent": 4586
+    }
+   },
+   "mcp__*": {
+    "calls": 3102,
+    "noResult": 0,
+    "mapperRunningAtEof": 1,
+    "error": 133,
+    "denied": 6,
+    "cats": {
+     "mcp": 3102
+    }
+   },
+   "Edit": {
+    "calls": 2115,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 21,
+    "denied": 1,
+    "cats": {
+     "edit": 2115
+    }
+   },
+   "SendMessage": {
+    "calls": 1815,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 0,
+    "denied": 2,
+    "cats": {
+     "other": 1815
+    }
+   },
+   "Write": {
+    "calls": 1502,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 12,
+    "denied": 1,
+    "cats": {
+     "write": 1502
+    }
+   },
+   "WebSearch": {
+    "calls": 1285,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 0,
+    "denied": 8,
+    "cats": {
+     "web": 1285
+    }
+   },
+   "WebFetch": {
+    "calls": 915,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 13,
+    "denied": 0,
+    "cats": {
+     "web": 915
+    }
+   },
+   "ToolSearch": {
+    "calls": 907,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 1,
+    "denied": 4,
+    "cats": {
+     "search": 907
+    }
+   },
+   "TaskStop": {
+    "calls": 376,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 9,
+    "denied": 0,
+    "cats": {
+     "other": 376
+    }
+   },
+   "Monitor": {
+    "calls": 375,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 15,
+    "denied": 0,
+    "cats": {
+     "shell": 375
+    }
+   },
+   "Workflow": {
+    "calls": 232,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 1,
+    "denied": 0,
+    "cats": {
+     "other": 232
+    }
+   },
+   "Artifact": {
+    "calls": 224,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 9,
+    "denied": 0,
+    "cats": {
+     "other": 224
+    }
+   },
+   "ListAgents": {
+    "calls": 158,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 0,
+    "denied": 1,
+    "cats": {
+     "other": 158
+    }
+   },
+   "StructuredOutput": {
+    "calls": 144,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 3,
+    "denied": 0,
+    "cats": {
+     "other": 144
+    }
+   },
+   "ScheduleWakeup": {
+    "calls": 136,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 0,
+    "denied": 0,
+    "cats": {
+     "other": 136
+    }
+   },
+   "Skill": {
+    "calls": 95,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 3,
+    "denied": 0,
+    "cats": {
+     "other": 95
+    }
+   },
+   "AskUserQuestion": {
+    "calls": 68,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 0,
+    "denied": 2,
+    "cats": {
+     "other": 68
+    }
+   },
+   "SendUserFile": {
+    "calls": 53,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 1,
+    "denied": 0,
+    "cats": {
+     "other": 53
+    }
+   },
+   "CronCreate": {
+    "calls": 37,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 0,
+    "denied": 0,
+    "cats": {
+     "other": 37
+    }
+   },
+   "CronDelete": {
+    "calls": 31,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 0,
+    "denied": 0,
+    "cats": {
+     "other": 31
+    }
+   },
+   "PushNotification": {
+    "calls": 18,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 0,
+    "denied": 0,
+    "cats": {
+     "other": 18
+    }
+   },
+   "bash": {
+    "calls": 17,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 17,
+    "denied": 0,
+    "cats": {
+     "other": 17
+    }
+   },
+   "Grep": {
+    "calls": 12,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 1,
+    "denied": 0,
+    "cats": {
+     "search": 12
+    }
+   },
+   "CronList": {
+    "calls": 12,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 0,
+    "denied": 1,
+    "cats": {
+     "other": 12
+    }
+   },
+   "SendFeedback": {
+    "calls": 5,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 1,
+    "denied": 0,
+    "cats": {
+     "other": 5
+    }
+   },
+   "SubagentHandback": {
+    "calls": 5,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 0,
+    "denied": 0,
+    "cats": {
+     "other": 5
+    }
+   },
+   "ReadNotifications": {
+    "calls": 3,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 0,
+    "denied": 0,
+    "cats": {
+     "other": 3
+    }
+   },
+   "ExitPlanMode": {
+    "calls": 3,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 0,
+    "denied": 1,
+    "cats": {
+     "other": 3
+    }
+   },
+   "ReportFindings": {
+    "calls": 2,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 0,
+    "denied": 0,
+    "cats": {
+     "other": 2
+    }
+   },
+   "ArtifactComments": {
+    "calls": 2,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 0,
+    "denied": 0,
+    "cats": {
+     "other": 2
+    }
+   },
+   "ArtifactData": {
+    "calls": 2,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 0,
+    "denied": 0,
+    "cats": {
+     "other": 2
+    }
+   },
+   "CrossSessionMessage": {
+    "calls": 1,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 1,
+    "denied": 0,
+    "cats": {
+     "other": 1
+    }
+   },
+   "bash_placeholder": {
+    "calls": 1,
+    "noResult": 0,
+    "mapperRunningAtEof": 0,
+    "error": 1,
+    "denied": 0,
+    "cats": {
+     "other": 1
+    }
+   }
+  },
+  "orphanResults": 0,
+  "notices": {
+   "total": 26696,
+   "userItems": 7500,
+   "perUserOverall": 3.56,
+   "perUserPerChat": {
+    "n": 1037,
+    "p50": 0,
+    "p90": 2.05,
+    "p99": 12,
+    "max": 64.5
+   },
+   "chatsWithNoticesNoUser": 2,
+   "byCode": {
+    "other": 24720,
+    "compacted": 1368,
+    "error": 336,
+    "interrupted": 177,
+    "model_changed": 67,
+    "mode_changed": 28
+   },
+   "byTrigger": {
+    "system.turn_duration~other": 12841,
+    "user.taskNotification~other": 6787,
+    "attachment.task_status~other": 2773,
+    "system.compact_boundary~compacted": 1349,
+    "system.away_summary~other": 1094,
+    "attachment.hook_cancelled~other": 901,
+    "assistant~error": 285,
+    "system.informational~other": 221,
+    "user~interrupted": 177,
+    "user.localStdout~other": 54,
+    "system.api_error~error": 51,
+    "system.stop_hook_summary~other": 42,
+    "user.localStdout~model_changed": 38,
+    "assistant.modelChange~model_changed": 29,
+    "user.permissionMode~mode_changed": 21,
+    "user.localStdout~compacted": 19,
+    "user.permissionMode~other": 7,
+    "permission-mode~mode_changed": 7
+   }
+  },
+  "usage": {
+   "assistantLines": 160479,
+   "assistantNoMessageId": 0,
+   "assistantNoUsage": 0,
+   "distinctMessageIds": 78063,
+   "usageEmissions": 160166,
+   "distinctUsageIds": 77778,
+   "tokenCountNoInfo": 0
+  },
+  "ids": {
+   "firstSeen": 222911,
+   "collisionsDifferentContent": {},
+   "sameIdUpdates": {
+    "usage": 82388,
+    "tool": 73435,
+    "subagent": 4586,
+    "user": 2433
+   }
+  },
+  "order": {
+   "outOfTimestampOrder": 2949,
+   "tsZeroOrMissing": 0
+  },
+  "thinking": {
+   "blocksSeen": 64859,
+   "nonEmpty": 5457,
+   "empty": 59402,
+   "emptyWithSignature": 59402,
+   "redacted": 0,
+   "itemsEmitted": 4425,
+   "blockKeys": {
+    "type": 64859,
+    "thinking": 64859,
+    "signature": 64859
+   },
+   "chatsWithBlocks": 957,
+   "chatsWithItems": 125
+  },
+  "sizes": {
+   "itemsPerChat": {
+    "n": 1044,
+    "p50": 19,
+    "p90": 207,
+    "p99": 5668,
+    "max": 17912
+   },
+   "toolOutLen": {
+    "n": 73431,
+    "p50": 389,
+    "p90": 2582,
+    "p99": 9942,
+    "max": 80612
+   },
+   "diffPerEdit": {
+    "n": 3616,
+    "p50": 1,
+    "p90": 1,
+    "p99": 1,
+    "max": 1
+   },
+   "assistantLen": {
+    "n": 28491,
+    "p50": 187,
+    "p90": 1459,
+    "p99": 3551,
+    "max": 16334
+   },
+   "thinkingLen": {
+    "n": 4425,
+    "p50": 217,
+    "p90": 288,
+    "p99": 386,
+    "max": 8474
+   },
+   "notices": {
+    "n": 1044,
+    "p50": 0,
+    "p90": 12,
+    "p99": 811,
+    "max": 4392
+   }
+  },
+  "chatsContainingKind": {
+   "user": 1037,
+   "usage": 1016,
+   "assistant": 922,
+   "tool": 782,
+   "notice": 326,
+   "thinking": 125,
+   "subagent": 108
+  },
+  "lineTypesOnlyInSubagentFiles": [
+   "attachment.structured_output",
+   "launched",
+   "started",
+   "result",
+   "fork-context-ref"
+  ],
+  "subagents": {
+   "calls": 4579,
+   "noAgentId": 2764,
+   "exact": 1804,
+   "otherName": 0,
+   "notFound": 11,
+   "resultKeys": {
+    "toolUseResult": {
+     "isAsync": 4530,
+     "status": 4538,
+     "agentId": 4538,
+     "description": 4530,
+     "resolvedModel": 4538,
+     "prompt": 4538,
+     "outputFile": 4530,
+     "canReadOutputFile": 4530,
+     "canContinueAgent": 4318,
+     "agentType": 8,
+     "toolsUsed": 7,
+     "harnessNoteCount": 8,
+     "harnessTailCount": 8,
+     "harnessSectionHash": 8,
+     "content": 8,
+     "totalDurationMs": 8,
+     "totalTokens": 8,
+     "totalToolUseCount": 8,
+     "usage": 8,
+     "toolStats": 8
+    }
+   },
+   "resultStatus": {
+    "async_launched": 4530,
+    "(none)": 3133,
+    "completed": 8
+   },
+   "callInputKeys": {
+    "input": {
+     "description": 7638,
+     "subagent_type": 7283,
+     "model": 4235,
+     "prompt": 7638,
+     "run_in_background": 4022,
+     "effort": 62,
+     "isolation": 48
+    }
+   },
+   "childIdWithoutCall": 0
+  },
+  "meta": {
+   "chats": 1044,
+   "model": 1016,
+   "mode": 642,
+   "cwd": 1039,
+   "branch": 1039,
+   "contextUsedPct": 1016,
+   "sessionId": 1039,
+   "ctxAt100": 46,
+   "modes": {
+    "default": 230,
+    "bypassPermissions": 285,
+    "acceptEdits": 9,
+    "auto": 118
+   },
+   "models": {
+    "claude-haiku-5-5": 451,
+    "claude-sonnet-5-5": 343,
+    "claude-opus-5-5": 199,
+    "claude-fable-5-2": 12,
+    "claude-opus-4-8": 2,
+    "deepseek-flash": 2,
+    "claude-sonnet-5": 1,
+    "claude-haiku-4-5-20251001": 6
+   }
+  }
+ },
+ "codex": {
+  "chats": 713,
+  "lines": 605118,
+  "parseFail": 0,
+  "sidechainLines": {},
+  "throwsObserved": 0,
+  "throwsNote": "throws are swallowed by mapLine try/catch and not observable",
+  "invalidItems": {},
+  "lineCoverage": {
+   "session_meta": {
+    "seen": 955,
+    "produced": 0,
+    "none": 955
+   },
+   "event.thread_settings_applied": {
+    "seen": 2751,
+    "produced": 2008,
+    "none": 743
+   },
+   "event.task_started": {
+    "seen": 3667,
+    "produced": 0,
+    "none": 3667
+   },
+   "resp.message+itemmode": {
+    "seen": 18021,
+    "produced": 0,
+    "none": 18021
+   },
+   "world_state": {
+    "seen": 3013,
+    "produced": 0,
+    "none": 3013
+   },
+   "turn_context": {
+    "seen": 4529,
+    "produced": 1969,
+    "none": 2560
+   },
+   "event.item_completed": {
+    "seen": 184847,
+    "produced": 134182,
+    "none": 50665
+   },
+   "resp.reasoning+itemmode": {
+    "seen": 98779,
+    "produced": 0,
+    "none": 98779
+   },
+   "resp.custom_tool_call+itemmode": {
+    "seen": 53193,
+    "produced": 0,
+    "none": 53193
+   },
+   "token_usage_record": {
+    "seen": 69864,
+    "produced": 0,
+    "none": 69864
+   },
+   "resp.custom_tool_call_output+itemmode": {
+    "seen": 53157,
+    "produced": 0,
+    "none": 53157
+   },
+   "event.token_count": {
+    "seen": 71894,
+    "produced": 71889,
+    "none": 5
+   },
+   "compacted": {
+    "seen": 828,
+    "produced": 828,
+    "none": 0
+   },
+   "event.task_complete": {
+    "seen": 3409,
+    "produced": 9,
+    "none": 3400
+   },
+   "resp.function_call+itemmode": {
+    "seen": 13521,
+    "produced": 0,
+    "none": 13521
+   },
+   "resp.function_call_output+itemmode": {
+    "seen": 13871,
+    "produced": 0,
+    "none": 13871
+   },
+   "inter_agent_communication_metadata": {
+    "seen": 4029,
+    "produced": 0,
+    "none": 4029
+   },
+   "resp.agent_message+itemmode": {
+    "seen": 4029,
+    "produced": 0,
+    "none": 4029
+   },
+   "event.thread_goal_updated": {
+    "seen": 78,
+    "produced": 78,
+    "none": 0
+   },
+   "event.turn_aborted": {
+    "seen": 193,
+    "produced": 193,
+    "none": 0
+   },
+   "retained_context": {
+    "seen": 1,
+    "produced": 0,
+    "none": 1
+   },
+   "realtime_item": {
+    "seen": 262,
+    "produced": 0,
+    "none": 262
+   },
+   "resp.message": {
+    "seen": 12,
+    "produced": 5,
+    "none": 7
+   },
+   "resp.web_search_call+itemmode": {
+    "seen": 205,
+    "produced": 0,
+    "none": 205
+   },
+   "resp.tool_search_call+itemmode": {
+    "seen": 5,
+    "produced": 0,
+    "none": 5
+   },
+   "resp.tool_search_output+itemmode": {
+    "seen": 5,
+    "produced": 0,
+    "none": 5
+   }
+  },
+  "shapeCoverage": {
+   "item.UserMessage": {
+    "seen": 1425,
+    "produced": 1239,
+    "none": 186
+   },
+   "item.Reasoning": {
+    "seen": 98779,
+    "produced": 48864,
+    "none": 49915
+   },
+   "item.AgentMessage": {
+    "seen": 11949,
+    "produced": 11939,
+    "none": 10
+   },
+   "item.CommandExecution": {
+    "seen": 46253,
+    "produced": 46253,
+    "none": 0
+   },
+   "item.FileChange": {
+    "seen": 8149,
+    "produced": 8149,
+    "none": 0
+   },
+   "item.ContextCompaction": {
+    "seen": 655,
+    "produced": 655,
+    "none": 0
+   },
+   "item.ImageView": {
+    "seen": 1756,
+    "produced": 1756,
+    "none": 0
+   },
+   "item.Extension": {
+    "seen": 2781,
+    "produced": 2781,
+    "none": 0
+   },
+   "item.SubAgentActivity": {
+    "seen": 4056,
+    "produced": 4056,
+    "none": 0
+   },
+   "item.CollabAgentToolCall": {
+    "seen": 1679,
+    "produced": 1679,
+    "none": 0
+   },
+   "item.McpToolCall": {
+    "seen": 6811,
+    "produced": 6811,
+    "none": 0
+   },
+   "item.Plan": {
+    "seen": 2,
+    "produced": 0,
+    "none": 2
+   },
+   "item.FunctionCallOutput": {
+    "seen": 347,
+    "produced": 0,
+    "none": 347
+   },
+   "item.WebSearch": {
+    "seen": 205,
+    "produced": 0,
+    "none": 205
+   }
+  },
+  "blockCoverage": {
+   "resp.input_text": {
+    "seen": 12635,
+    "produced": 9,
+    "none": 12626
+   },
+   "resp.output_text": {
+    "seen": 12179,
+    "produced": 0,
+    "none": 12179
+   },
+   "resp.encrypted_content": {
+    "seen": 3406,
+    "produced": 0,
+    "none": 3406
+   },
+   "resp.input_image": {
+    "seen": 70,
+    "produced": 2,
+    "none": 68
+   }
+  },
+  "lineKeys": {},
+  "runReferenceKeys": {},
+  "tools": {
+   "exec": {
+    "calls": 46253,
+    "mapperRunningAtEof": 0,
+    "error": 4552,
+    "denied": 0,
+    "cats": {
+     "shell": 46253
+    }
+   },
+   "apply_patch": {
+    "calls": 8149,
+    "mapperRunningAtEof": 0,
+    "error": 0,
+    "denied": 0,
+    "cats": {
+     "edit": 8149
+    }
+   },
+   "mcp__*": {
+    "calls": 6811,
+    "mapperRunningAtEof": 0,
+    "error": 797,
+    "denied": 0,
+    "cats": {
+     "mcp": 6811
+    }
+   },
+   "web_search": {
+    "calls": 2513,
+    "mapperRunningAtEof": 0,
+    "error": 0,
+    "denied": 0,
+    "cats": {
+     "web": 2513
+    }
+   },
+   "view_image": {
+    "calls": 1756,
+    "mapperRunningAtEof": 0,
+    "error": 0,
+    "denied": 0,
+    "cats": {
+     "read": 1756
+    }
+   },
+   "clock.sleep": {
+    "calls": 255,
+    "mapperRunningAtEof": 0,
+    "error": 0,
+    "denied": 0,
+    "cats": {
+     "other": 255
+    }
+   },
+   "image_gen.generation": {
+    "calls": 13,
+    "mapperRunningAtEof": 0,
+    "error": 0,
+    "denied": 0,
+    "cats": {
+     "other": 13
+    }
+   }
+  },
+  "orphanResults": 350,
+  "notices": {
+   "total": 5770,
+   "userItems": 1244,
+   "perUserOverall": 4.64,
+   "perUserPerChat": {
+    "n": 304,
+    "p50": 1.67,
+    "p90": 4,
+    "p99": 17,
+    "max": 35
+   },
+   "chatsWithNoticesNoUser": 268,
+   "byCode": {
+    "mode_changed": 3954,
+    "compacted": 1483,
+    "interrupted": 193,
+    "other": 78,
+    "model_changed": 53,
+    "error": 9
+   },
+   "byTrigger": {
+    "event.thread_settings_applied~mode_changed": 1988,
+    "turn_context~mode_changed": 1966,
+    "compacted~compacted": 828,
+    "item.ContextCompaction~compacted": 655,
+    "event.turn_aborted~interrupted": 193,
+    "event.thread_goal_updated~other": 78,
+    "event.thread_settings_applied~model_changed": 50,
+    "event.task_complete~error": 9,
+    "turn_context~model_changed": 3
+   }
+  },
+  "usage": {
+   "assistantLines": 71894,
+   "assistantNoMessageId": 0,
+   "assistantNoUsage": 0,
+   "distinctMessageIds": 0,
+   "usageEmissions": 71889,
+   "distinctUsageIds": 3305,
+   "tokenCountNoInfo": 5
+  },
+  "ids": {
+   "firstSeen": 142607,
+   "collisionsDifferentContent": {},
+   "sameIdUpdates": {
+    "usage": 68584
+   }
+  },
+  "order": {
+   "outOfTimestampOrder": 0,
+   "tsZeroOrMissing": 0
+  },
+  "thinking": {
+   "blocksSeen": 98779,
+   "nonEmpty": 48864,
+   "empty": 49915,
+   "emptyWithSignature": 0,
+   "redacted": 0,
+   "itemsEmitted": 48864,
+   "blockKeys": {
+    "type": 98779,
+    "id": 98779,
+    "summary_text": 98779,
+    "raw_content": 98779
+   },
+   "chatsWithBlocks": 667,
+   "chatsWithItems": 571
+  },
+  "sizes": {
+   "itemsPerChat": {
+    "n": 713,
+    "p50": 28,
+    "p90": 293,
+    "p99": 3188,
+    "max": 21754
+   },
+   "toolOutLen": {
+    "n": 63726,
+    "p50": 1284,
+    "p90": 19205,
+    "p99": 60000,
+    "max": 60000
+   },
+   "diffPerEdit": {
+    "n": 8149,
+    "p50": 1,
+    "p90": 2,
+    "p99": 5,
+    "max": 19
+   },
+   "assistantLen": {
+    "n": 11939,
+    "p50": 272,
+    "p90": 879,
+    "p99": 5902,
+    "max": 31402
+   },
+   "thinkingLen": {
+    "n": 48864,
+    "p50": 65,
+    "p90": 191,
+    "p99": 2156,
+    "max": 8569
+   },
+   "notices": {
+    "n": 713,
+    "p50": 3,
+    "p90": 13,
+    "p99": 106,
+    "max": 484
+   }
+  },
+  "chatsContainingKind": {
+   "user": 304,
+   "thinking": 571,
+   "assistant": 697,
+   "tool": 605,
+   "usage": 701,
+   "notice": 479,
+   "subagent": 265
+  },
+  "lineTypesOnlyInSubagentFiles": [],
+  "subagents": {
+   "calls": 5735,
+   "noAgentId": 0,
+   "exact": 0,
+   "otherName": 0,
+   "notFound": 0,
+   "resultKeys": {},
+   "resultStatus": {},
+   "callInputKeys": {},
+   "childIdWithoutCall": 0
+  },
+  "meta": {
+   "chats": 713,
+   "model": 713,
+   "mode": 713,
+   "cwd": 713,
+   "branch": 20,
+   "contextUsedPct": 701,
+   "sessionId": 713,
+   "ctxAt100": 0,
+   "modes": {
+    "on-request_default": 14,
+    "never_default": 95,
+    "never+danger-full-access_default": 578,
+    "untrusted+workspace-write_default": 5,
+    "never+workspace-write_default": 6,
+    "on-request+workspace-write_default": 6,
+    "on-request+read-only_default": 2,
+    "(other)": 1,
+    "never+read-only_default": 6
+   },
+   "models": {
+    "(other)": 6,
+    "gpt-6-luna": 468,
+    "gpt-6-astra": 23,
+    "gpt-5.6-terra": 37,
+    "gpt-6-sol": 1,
+    "gpt-5.6-luna": 158,
+    "gpt-5.5": 15,
+    "gpt-reserve": 3,
+    "codex-auto-review": 2
+   }
+  }
+ }
+}
