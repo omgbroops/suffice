@@ -1,0 +1,19 @@
+✔ host streams events, reuses a session, prevents overlapping tasks, cancels, and disposes (20.1425ms)
+✔ host rejects malformed and unauthenticated tasks without executing the harness (0.754958ms)
+✔ desktop settings reach the harness and approvals wait for the matching answer (14.26575ms)
+✔ selected catalog model reaches the harness and unsupported model requests are rejected (16.354625ms)
+✔ first Send reserves a saved ID and its pending alias while independent IDs run concurrently (3.461459ms)
+✔ failed view admission releases the saved ID so retry opens its own host (0.279958ms)
+✔ failed resume admission releases the saved ID so retry opens its own host (0.15775ms)
+✔ router isolates concurrent sessions, steering, cancellation and view selection (4.14325ms)
+✔ opening a saved transcript never creates another host or lists every thread (0.288375ms)
+✔ saved transcripts are read without modification and resume their original engine context (58.84075ms)
+✔ a read-only router view resumes its original saved session lazily on the first send (39.229375ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 688.623209

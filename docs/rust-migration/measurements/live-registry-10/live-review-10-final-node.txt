@@ -1,0 +1,38 @@
+✔ Native and JS routes reproduce the ordered checkpoint IPC, events and single-dispatch host calls (18.705625ms)
+✔ stale notifications and completions cannot rebind, release or replay a newer native turn (3.350875ms)
+✔ a native state failure after Pi dispatch is surfaced and never replays Send (2.53875ms)
+✔ public draft aliases preserve distinct UTF-16 identities across the native binding (3.338042ms)
+✔ native and JS registries reject an idle canonical alias collision without mutating either host (3.511666ms)
+✔ a Pi adapter that omits the protocol generation cannot dispatch a native turn (3.600959ms)
+✔ release retains the host and its aliases across a failed reset and blocks overlapping Sends (4.073209ms)
+✔ real Pi streams a loopback-only turn through the rust worker (861.215375ms)
+✔ real Pi streams a loopback-only turn through the default JS worker (397.541417ms)
+﹣ the full Wry renderer Sends through native live admission and displays the real Pi response (0.10775ms) # SKIP
+✔ verified loader serializes canonical aliases and revokes an ambiguous first load (23.600334ms)
+✔ first Send reserves a saved ID and its pending alias while independent IDs run concurrently (4.745541ms)
+✔ failed view admission releases the saved ID so retry opens its own host (0.479167ms)
+✔ failed resume admission releases the saved ID so retry opens its own host (0.131916ms)
+✔ router isolates concurrent sessions, steering, cancellation and view selection (10.800458ms)
+✔ opening a saved transcript never creates another host or lists every thread (0.355291ms)
+✔ typed protocol v1 exposes synchronous reservations and rejects invalid numeric handles (1.798209ms)
+✔ independent native worker registries isolate aliases and reject late completions after retry (0.35125ms)
+✔ native and desktop JavaScript registries match a deterministic lifecycle trace (6.571917ms)
+✔ catalog, view, cache, bytes and stale tokens (13.108917ms)
+✔ replacement revokes and resume releases handles (4.707375ms)
+✔ missing root and symlink replacement (3.324166ms)
+✔ root swap and close drains concurrent list (2.761125ms)
+✔ normal append invalidates cache and stock custom entries remain eligible (4.032875ms)
+✔ malformed stock journal is not native eligible (2.828958ms)
+✔ queued completion is canceled at close and reopening changes authority (52.91525ms)
+✔ repeated close drains and request limits reject (1.705625ms)
+✔ prepareResume cancels an earlier queued completion at admission (301.832125ms)
+✔ cache versions distinguish pre-1970 file modification times (2.339625ms)
+✔ an admitted malformed resume request still releases the reader (1.718791ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 29
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 1
+ℹ todo 0
+ℹ duration_ms 1331.9575

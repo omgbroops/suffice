@@ -1,21 +1,9 @@
 // Trusted host adapter for the opt-in experimental saved-session backend.
-import {createRequire} from 'node:module';
-import {fileURLToPath} from 'node:url';
-import {basename,dirname,isAbsolute,resolve,join} from 'node:path';
-import {readFile} from 'node:fs/promises';
+import {basename,dirname,isAbsolute,resolve} from 'node:path';
 import {createHash} from 'node:crypto';
 import {sidebarFromSessionTail} from '../desktop/electron/sidebar-metadata.mjs';
-import {sessionNativeArtifactFiles,sessionArtifactName} from '../../scripts/rust-migration/session-native-artifact.mjs';
+import {loadDesktopBinding} from './native-binding.mjs';
 
-const require=createRequire(import.meta.url),directory=fileURLToPath(new URL('./native/',import.meta.url));
-let loadedHash;
-async function loadDefault(){
- if(!(await sessionNativeArtifactFiles(directory)).length)throw Error('Experimental session addon is not built; run session:native:build');
- const file=join(directory,sessionArtifactName());
- const receipt=JSON.parse(await readFile(file+'.json','utf8'));
- if(loadedHash&&loadedHash!==receipt.sha256)throw Error('Restart the process after rebuilding the session addon');
- const module=require(file);loadedHash=receipt.sha256;return module;
-}
 const idFor=path=>createHash('sha256').update(process.platform==='win32'?resolve(path).toLowerCase():resolve(path)).digest('hex').slice(0,32);
 const decode=value=>{if(typeof value!=='string')throw Error('Invalid native session response');const response=JSON.parse(value);if(!response||typeof response!=='object'||Array.isArray(response))throw Error('Invalid native session response');return response;};
 function locationReceipt(raw) {
@@ -174,7 +162,7 @@ function checkParentChain(entries){
  }
 }
 
-export async function createNativeSessionCatalog(root,{load=loadDefault,resolveModel=()=>undefined,limits:requestedLimits}={}){
+export async function createNativeSessionCatalog(root,{load=loadDesktopBinding,resolveModel=()=>undefined,limits:requestedLimits}={}){
  if(typeof root!=='string'||!isAbsolute(root))throw Error('An explicit absolute session root is required');
  const {PersistentSessionReader}=await load();if(typeof PersistentSessionReader!=='function')throw Error('Native session reader export is missing');
  const limits=readLimits(requestedLimits);

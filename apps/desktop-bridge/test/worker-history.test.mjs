@@ -209,3 +209,16 @@ test('worker Send is the first operation that migrates a v1 journal and preserve
   assert.equal(await readFile(archive,'utf8'),original);
  }finally{await desktop.request('shutdown');}
 });
+
+test('a live reset failure preserves native history authority for a later release',async t=>{
+ const f=await fixture(t);
+ const {createNativeThreadStore}=await import('../../desktop/electron/threads-native.mjs');
+ const store=createNativeThreadStore(f.home);
+ try{
+  await store.list();await store.open(f.id);
+  await assert.rejects(store.releaseLocation(f.id,async()=>{throw Error('Fixture disposal failed');}),/disposal failed/);
+  assert.equal((await store.open(f.id)).id,f.id);
+  assert.equal(await store.releaseLocation(f.id,async()=>{}),f.file);
+  await assert.rejects(store.open(f.id),/not found/);
+ }finally{await store.close();}
+});

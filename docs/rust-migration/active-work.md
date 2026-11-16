@@ -4,7 +4,14 @@ The user asked to continue the full migration and preserve all features. This
 is ongoing work; no persistent goal handle is being asserted here. The earlier
 reports and paused checkpoint are historical, not completion.
 
-Latest continuation: [`continuation-desktop-cutover.md`](continuation-desktop-cutover.md).
+Latest continuation: [`continuation-live-registry.md`](continuation-live-registry.md).
+The experimental desktop now uses Rust for atomic live admission, aliases,
+turn-generation settlement and failure-safe retirement. Frozen-router differential
+traces and real local-provider turns pass; the final WK release also completes a
+visible Send. Pi still executes turns and writes journals. Matched macOS coalition
+measurement tooling is implemented; a campaign is not claimed until recorded.
+
+Previous continuation: [`continuation-desktop-cutover.md`](continuation-desktop-cutover.md).
 The experimental full-renderer Wry host now runs on macOS as well as the earlier
 Windows path. Saved browsing uses a persistent Rust reader with an explicit Pi
 compatibility adapter for legacy/unrepresentable journals. Large replies are

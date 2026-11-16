@@ -1,4 +1,5 @@
 mod browser;
+mod fixture_measure;
 mod instance;
 mod native;
 mod process_tree;
@@ -28,6 +29,7 @@ enum Message {
     DeliveryFailed(String, u64),
     ResetBrowser,
     MeasureSelect,
+    FixtureCommand(String),
     Engine(String, std::sync::mpsc::SyncSender<()>),
     EngineClosed,
     Tick,
@@ -165,6 +167,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
     let node = native::configure_launch(Path::new(&argument("--node")?), &root, &home, &profile)?;
     let smoke = std::env::args().any(|x| x == "--smoke");
+    let measure = std::env::args().any(|x| x == "--measure-fixture");
+    if measure && smoke {
+        return Err("Choose either --measure-fixture or --smoke".into());
+    }
+    let mut fixture = measure.then(fixture_measure::Fixture::default);
     let smoke_pause = smoke && std::env::args().any(|x| x == "--smoke-pause");
     let assets = root.join("apps/desktop/dist").canonicalize()?;
     let preload = std::fs::read_to_string(root.join("apps/desktop/electron/preload.cjs"))?;
@@ -181,11 +188,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let proxy = event_loop.create_proxy();
     #[cfg(target_os = "macos")]
     let (mut child, mut tree) = process_tree::spawn_macos(
-        bridge_command(Path::new(&node), &root, &home, &profile, smoke),
+        bridge_command(Path::new(&node), &root, &home, &profile, smoke || measure),
         &root,
     )?;
     #[cfg(not(target_os = "macos"))]
-    let mut child = bridge_command(Path::new(&node), &root, &home, &profile, smoke).spawn()?;
+    let mut child =
+        bridge_command(Path::new(&node), &root, &home, &profile, smoke || measure).spawn()?;
     #[cfg(not(target_os = "macos"))]
     let mut tree = match process_tree::ProcessTree::attach(&child) {
         Ok(tree) => tree,
@@ -269,15 +277,26 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             if(!window.__sufficeMeasurePause)window.__sufficeMeasureSelect();
           },100);});})();"#);
     }
-    if smoke_pause {
+    if smoke_pause || measure {
         let commands = event_loop.create_proxy();
         std::thread::spawn(move || {
             let mut stdin = BufReader::new(std::io::stdin());
             while let Ok(Some(line)) = transport::read_frame(&mut stdin) {
-                if serde_json::from_str::<Value>(&line)
-                    .ok()
-                    .is_some_and(|v| v["type"] == "measure-select")
-                {
+                let parsed = serde_json::from_str::<Value>(&line).ok();
+                if measure {
+                    let action = parsed
+                        .as_ref()
+                        .filter(|v| v["type"] == "measure-fixture")
+                        .and_then(|v| v["action"].as_str())
+                        .filter(|a| matches!(*a, "select" | "settings" | "pty" | "finish"))
+                        .unwrap_or("invalid");
+                    if commands
+                        .send_event(Message::FixtureCommand(action.to_owned()))
+                        .is_err()
+                    {
+                        break;
+                    }
+                } else if parsed.is_some_and(|v| v["type"] == "measure-select") {
                     let _ = commands.send_event(Message::MeasureSelect);
                 }
             }
@@ -337,7 +356,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .build_as_child(&window)?;
     #[cfg(not(target_os = "macos"))]
     let webview = root_builder.build(&window)?;
-    let mut deadline = started + Duration::from_secs(if smoke { 25 } else { 86400 });
+    let mut deadline = started
+        + Duration::from_secs(if measure {
+            180
+        } else if smoke {
+            25
+        } else {
+            86400
+        });
     let mut close_requested = false;
     let mut engine_ready = false;
     let mut smoke_ok = false;
@@ -347,10 +373,24 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut stream = transport::FragmentStream::default();
     let delivery = event_loop.create_proxy();
     event_loop.run(move |event, _, flow| {
-        let next = guest_browser.deadline().into_iter().chain(smoke.then_some(deadline)).min();
+        let next = guest_browser.deadline().into_iter().chain((smoke||measure).then_some(deadline)).min();
         *flow = next.map_or(ControlFlow::Wait,ControlFlow::WaitUntil);
         match event {
-            Event::UserEvent(Message::Renderer(line,_permit)) => if let Ok(v) = serde_json::from_str::<Value>(&line) { if v["type"] == "invoke-json" && v["channel"].as_str().is_some_and(|c| c.starts_with("suffice:")) { if let Err(error)=input.send(&v){let reply=json!({"type":"reply","id":v["id"],"document":v["document"],"ok":false,"error":error.to_string()});let _=webview.evaluate_script(&format!("window.__sufficeReceive?.({reply})"));} } else if v["type"]=="renderer-ready" {renderer_ready=true;if let Some(pending)=waiting_fragment.take(){let _=delivery.send_event(pending);}} else if v["type"] == "drag" { let _=window.drag_window(); } else if smoke && v["type"] == "smoke-ready" { println!("{}",json!({"event":"ui-ready","threadCount":v["threadCount"],"width":v["width"],"height":v["height"],"devicePixelRatio":v["devicePixelRatio"],"elapsedMs":started.elapsed().as_millis()})); } else if smoke && v["type"] == "smoke" { smoke_ok=v["ok"]==true; println!("{}",json!({"event":"smoke","ok":smoke_ok,"threadCount":v["threadCount"],"transcriptCharacters":v["transcriptCharacters"],"reason":v["reason"],"elapsedMs":started.elapsed().as_millis()})); deadline=Instant::now()+Duration::from_secs(5); } },
+            Event::UserEvent(Message::Renderer(line,_permit)) => if let Ok(v) = serde_json::from_str::<Value>(&line) { if v["type"] == "invoke-json" && v["channel"].as_str().is_some_and(|c| c.starts_with("suffice:")) { if let Err(error)=input.send(&v){let reply=json!({"type":"reply","id":v["id"],"document":v["document"],"ok":false,"error":error.to_string()});let _=webview.evaluate_script(&format!("window.__sufficeReceive?.({reply})"));} } else if v["type"]=="renderer-ready" {
+                renderer_ready=true;
+                if let Some(f)=fixture.as_mut().filter(|f|f.expected()==Some("ready"))
+                    && let Err(error)=f.start("ready",&webview) {
+                    println!("{}",json!({"event":"fixture-ready","action":"ready","ok":false,"reason":error}));
+                    *flow=ControlFlow::ExitWithCode(1);return;
+                }
+                if let Some(pending)=waiting_fragment.take(){let _=delivery.send_event(pending);}
+            } else if measure && v["type"]=="fixture-result" {
+                let f=fixture.as_mut().expect("measurement fixture enabled");let phase=f.expected().unwrap_or("finished");
+                match f.accept(&v,started.elapsed().as_millis()) {
+                   Ok(receipt)=>{println!("{receipt}");if phase=="finish"{*flow=ControlFlow::Exit;}},
+                   Err(error)=>{println!("{}",json!({"event":"fixture-phase","action":phase,"ok":false,"reason":error}));*flow=ControlFlow::ExitWithCode(1);}
+                }
+            } else if v["type"] == "drag" { let _=window.drag_window(); } else if smoke && v["type"] == "smoke-ready" { println!("{}",json!({"event":"ui-ready","threadCount":v["threadCount"],"width":v["width"],"height":v["height"],"devicePixelRatio":v["devicePixelRatio"],"elapsedMs":started.elapsed().as_millis()})); } else if smoke && v["type"] == "smoke" { smoke_ok=v["ok"]==true; println!("{}",json!({"event":"smoke","ok":smoke_ok,"threadCount":v["threadCount"],"transcriptCharacters":v["transcriptCharacters"],"reason":v["reason"],"elapsedMs":started.elapsed().as_millis()})); deadline=Instant::now()+Duration::from_secs(5); } },
             Event::UserEvent(Message::Engine(line, ack)) => {
                 let Ok(frame) = serde_json::from_str::<Value>(&line) else {
                     eprintln!("Invalid bridge control frame");
@@ -440,6 +480,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
                 let _ = ack.try_send(());
             }
+            Event::UserEvent(Message::FixtureCommand(action)) if measure => {
+                if let Err(error)=fixture.as_mut().expect("measurement fixture enabled").start(&action,&webview){
+                   println!("{}",json!({"event":"fixture-phase","action":action,"ok":false,"reason":error}));*flow=ControlFlow::ExitWithCode(1);
+                }
+            }
             Event::UserEvent(Message::MeasureSelect) if smoke_pause => {let _=webview.evaluate_script("window.__sufficeMeasureSelect?.()");},
             Event::UserEvent(Message::ResetBrowser) => { guest_browser.reset();renderer_ready=false;document_generation+=1;stream.reset_document(); },
             Event::UserEvent(Message::DeliveryFailed(reason,generation)) if generation==document_generation => {eprintln!("Renderer bridge delivery failed: {}",reason.chars().take(256).collect::<String>());*flow=ControlFlow::ExitWithCode(1);},
@@ -463,7 +508,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             },
             Event::UserEvent(Message::Tick) if smoke && Instant::now() >= deadline => { println!("{}",json!({"event":"shutdown","ok":engine_ready && smoke_ok,"engineReady":engine_ready})); *flow=ControlFlow::ExitWithCode(if engine_ready && smoke_ok {0}else{1}); },
             Event::LoopDestroyed => { instance.take();cleanup(&mut child,&input,&mut tree); },
-            Event::MainEventsCleared => {guest_browser.poll(&webview);let next=guest_browser.deadline().into_iter().chain(smoke.then_some(deadline)).min();*flow=next.map_or(ControlFlow::Wait,ControlFlow::WaitUntil);}, _=>{}
+            Event::MainEventsCleared if measure && Instant::now()>=deadline => {
+                println!("{}",json!({"event":"fixture-phase","action":fixture.as_ref().and_then(|f|f.expected()),"ok":false,"reason":"Fixture watchdog expired"}));
+                *flow=ControlFlow::ExitWithCode(1);
+            }
+            Event::MainEventsCleared => {guest_browser.poll(&webview);let next=guest_browser.deadline().into_iter().chain((smoke||measure).then_some(deadline)).min();*flow=next.map_or(ControlFlow::Wait,ControlFlow::WaitUntil);}, _=>{}
         }
     });
 }

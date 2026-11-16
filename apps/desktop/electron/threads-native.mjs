@@ -83,9 +83,13 @@ export function createNativeThreadStore(home,{resolveModel,createCatalog=createN
   }),
   open:id=>request(async catalog=>{await lookup(catalog,id);return catalog.open(id);}),
   location:id=>request(async catalog=>{await lookup(catalog,id);return (await catalog.location(id)).absolutePath;}),
-  releaseLocation:id=>request(async catalog=>{
+  releaseLocation:(id,resetHost)=>request(async catalog=>{
    await lookup(catalog,id);
-   const {absolutePath}=await catalog.location(id);
+   let {absolutePath}=await catalog.location(id);
+   if(resetHost){
+    await resetHost();
+    ({absolutePath}=await catalog.location(id));
+   }
    await catalog.close();
    authorized.delete(id);
    released=true;
@@ -111,7 +115,7 @@ export function createNativeThreadStore(home,{resolveModel,createCatalog=createN
 // routed separately, so an isolated saved-history request can stay read-only.
 export function createSavedCatalogHost(store,send){
  let usage=null,revision=0;
- return {async request(action,payload={}){
+ return {async request(action,payload={},resetHost){
   switch(action){
    case 'threads':return store.list();
    case 'thread':{
@@ -122,7 +126,7 @@ export function createSavedCatalogHost(store,send){
    }
    case 'usage':return usage;
    case 'thread-location':return store.location(payload.id);
-   case 'release-location':return store.releaseLocation(payload.id);
+   case 'release-location':return store.releaseLocation(payload.id,resetHost);
    case 'shutdown':revision++;usage=null;return store.close();
    case 'reset':revision++;usage=null;await store.reset();return;
    case 'clear-view':revision++;usage=null;return;

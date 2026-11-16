@@ -3,7 +3,7 @@
   "method": "Static source inventory; settings imported from pure data; handlers, preload members and tool names use literal regex, not a complete JS parser. Dynamic, aliased, generated or indirectly registered members may be missed. Test references are literal name matches or manually identified, not coverage evidence. Existing sources are authoritative.",
   "counts": {
     "automation-tool": 25,
-    "capability": 32,
+    "capability": 33,
     "cli-command": 10,
     "cli-option": 17,
     "desktop-ipc-handler": 52,
@@ -824,6 +824,24 @@
       "compatibility": "Rust traversal preserves original ordered path outputs and filesystem error behavior through JavaScript fallback. Acorn/TypeScript parsing and the rest of the engine remain JavaScript. Other platforms remain unverified.",
       "verification": "Rebuild locked release addon; run native-files tests, verify-installed, packaged smoke, compare-walk, measure-addon and verify-rollback; retain raw outputs. See delivery.md for measured CPU/memory tradeoffs.",
       "migrationStatus": "rust-optional-verified-windows"
+    },
+    {
+      "category": "capability",
+      "id": "Rust live admission aliases turn generations and retirement",
+      "classification": "product",
+      "source": [
+        "crates/suffice-live/src/lib.rs",
+        "crates/suffice-session-addon/src/live_runs.rs",
+        "apps/desktop/electron/thread-router.mjs",
+        "apps/desktop-bridge/live-registry.mjs",
+        "apps/desktop-bridge/test/live-router.test.mjs"
+      ],
+      "testReferences": [],
+      "testReferenceBasis": "literal name matches only; possible false positives and omissions",
+      "proposedRustModule": "runtime/sessions",
+      "compatibility": "Inspect source contracts, retained Pi behavior and platform-specific handling; preserve output, security and failure semantics.",
+      "verification": "Perform targeted differential and integration tests; include negative cases, and manual platform/accessibility checks where relevant.",
+      "migrationStatus": "retained-js-pending"
     },
     {
       "category": "capability",
@@ -6156,7 +6174,6 @@
         "tests/workflow.test.mjs",
         "tests/workspace.test.mjs",
         "packages/cli/test/cli.test.mjs",
-        "apps/desktop/test/approval-recovery.test.mjs",
         "apps/desktop/test/diff-view.test.mjs",
         "apps/desktop/test/panel-preview.test.mjs",
         "apps/desktop/test/panel.test.mjs",

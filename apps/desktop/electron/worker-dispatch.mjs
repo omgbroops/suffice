@@ -12,11 +12,13 @@ export async function createDesktopWorker({
   return createThreadRouter({send,createRuntime,createHost:options=>createHarnessHost({...options,home,threadStore})});
  }
  const {createNativeThreadStore,createSavedCatalogHost}=await import('./threads-native.mjs');
+ const {createNativeRunRegistry}=await import('../../desktop-bridge/live-registry.mjs');
+ const registry=await createNativeRunRegistry();
  let runtime;
  const threadStore=createNativeThreadStore(home,{resolveModel:(provider,model)=>runtime?.getModel?.(provider,model)});
  return createThreadRouter({
   send,
-  savedCatalog:createSavedCatalogHost(threadStore,send),
+  registry,savedCatalog:createSavedCatalogHost(threadStore,send),
   async createRuntime(options){runtime=await createRuntime(options);return runtime;},
   createHost(options){
    const host=Promise.resolve().then(loadHost).then(({createHarnessHost})=>createHarnessHost({...options,home,threadStore}));

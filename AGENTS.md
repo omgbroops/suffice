@@ -23,6 +23,10 @@ assuming that research behavior is production behavior.
 - `crates/suffice-session-addon`: persistent capability-backed saved-history
   reader. Its separately receipted experimental artifact stays under
   `apps/desktop-bridge/native`, outside production traversal packaging.
+- `crates/suffice-live`: worker-local live slot/alias/turn-generation authority.
+  The experimental desktop injects its registry through the session addon.
+  Preserve failed-disposal ownership and never replay a Send after native error.
+  Pi still executes turns, extensions and journal writes.
 - `apps/desktop-native`: experimental eframe viewer of synthetic sessions.
 - `apps/desktop-rust`, `apps/desktop-bridge`: experimental Wry host and transitional
   Node business logic. Windows uses a kernel Job; macOS has an independent

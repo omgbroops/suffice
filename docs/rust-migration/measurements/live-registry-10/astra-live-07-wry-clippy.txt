@@ -1,0 +1,31 @@
+    Blocking waiting for file lock on package cache
+    Checking suffice-desktop-rust v0.1.0 (/Users/aryasalem/Downloads/Programming/suffice/apps/desktop-rust)
+error: this looks like an `else if` but the `else` is missing
+   --> src/main.rs:379:744
+    |
+379 | ...k":false,"reason":e}));*flow=ControlFlow::ExitWithCode(1);return;}}if let Some(pending)=waiting_fragment.take(){let _=delivery.send_ev...
+    |                                                                       ^
+    |
+    = note: to remove this lint, add the missing `else` or add a new line before the second `if`
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.92.0/index.html#possible_missing_else
+    = note: `-D clippy::possible-missing-else` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::possible_missing_else)]`
+
+error: this `if` statement can be collapsed
+   --> src/main.rs:379:501
+    |
+379 | ...ue;if let Some(f)=fixture.as_mut().filter(|f|f.expected()==Some("ready")) {if let Err(e)=f.start("ready",&webview){println!("{}",json!({"event":"fixture-ready","action":"ready","ok":false,"reason":e}));*flow=ControlFlow::ExitWithCode(1);return;}}if ...
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.92.0/index.html#collapsible_if
+    = note: `-D clippy::collapsible-if` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::collapsible_if)]`
+help: collapse nested if block
+    |
+379 -             Event::UserEvent(Message::Renderer(line,_permit)) => if let Ok(v) = serde_json::from_str::<Value>(&line) { if v["type"] == "invoke-json" && v["channel"].as_str().is_some_and(|c| c.starts_with("suffice:")) { if let Err(error)=input.send(&v){let reply=json!({"type":"reply","id":v["id"],"document":v["document"],"ok":false,"error":error.to_string()});let _=webview.evaluate_script(&format!("window.__sufficeReceive?.({reply})"));} } else if v["type"]=="renderer-ready" {renderer_ready=true;if let Some(f)=fixture.as_mut().filter(|f|f.expected()==Some("ready")) {if let Err(e)=f.start("ready",&webview){println!("{}",json!({"event":"fixture-ready","action":"ready","ok":false,"reason":e}));*flow=ControlFlow::ExitWithCode(1);return;}}if let Some(pending)=waiting_fragment.take(){let _=delivery.send_event(pending);}} else if measure && v["type"]=="fixture-result" {
+379 +             Event::UserEvent(Message::Renderer(line,_permit)) => if let Ok(v) = serde_json::from_str::<Value>(&line) { if v["type"] == "invoke-json" && v["channel"].as_str().is_some_and(|c| c.starts_with("suffice:")) { if let Err(error)=input.send(&v){let reply=json!({"type":"reply","id":v["id"],"document":v["document"],"ok":false,"error":error.to_string()});let _=webview.evaluate_script(&format!("window.__sufficeReceive?.({reply})"));} } else if v["type"]=="renderer-ready" {renderer_ready=true;if let Some(f)=fixture.as_mut().filter(|f|f.expected()==Some("ready"))&& let Err(e)=f.start("ready",&webview){println!("{}",json!({"event":"fixture-ready","action":"ready","ok":false,"reason":e}));*flow=ControlFlow::ExitWithCode(1);return;}if let Some(pending)=waiting_fragment.take(){let _=delivery.send_event(pending);}} else if measure && v["type"]=="fixture-result" {
+    |
+
+error: could not compile `suffice-desktop-rust` (bin "suffice-desktop-rust") due to 2 previous errors
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `suffice-desktop-rust` (bin "suffice-desktop-rust" test) due to 2 previous errors

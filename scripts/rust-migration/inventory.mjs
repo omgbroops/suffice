@@ -46,6 +46,7 @@ broad.push(
  ['Isolated in-app browser navigation popups and downloads',['apps/desktop/src/browser-panel.js','apps/desktop/electron/browser-surface.cjs','apps/desktop-rust/src/browser.rs','apps/desktop/test/browser.test.mjs','apps/desktop/test/browser-profile.test.mjs'],'host/browser'],
  ['Capability-bound saved browsing and legacy compatibility',['crates/suffice-session/src/persistent.rs','crates/suffice-session-addon/src/lib.rs','apps/desktop-bridge/session-catalog.mjs','apps/desktop/electron/threads-native.mjs'],'storage/sessions'],
  ['macOS managed process guardian and Windows Job lifecycle',['apps/desktop-rust/src/process_tree.rs','apps/desktop-rust/src/process_macos.rs','apps/desktop-rust/owned-process-hook.cjs'],'process/lifecycle'],
+ ['Rust live admission aliases turn generations and retirement',['crates/suffice-live/src/lib.rs','crates/suffice-session-addon/src/live_runs.rs','apps/desktop/electron/thread-router.mjs','apps/desktop-bridge/live-registry.mjs','apps/desktop-bridge/test/live-router.test.mjs'],'runtime/sessions'],
  ['Native clipboard trash icons startup notifications and profile windows',['apps/desktop-rust/src/native.rs','apps/desktop-rust/src/native_services.rs','apps/desktop-rust/src/instance.rs','apps/desktop-bridge/native-services.mjs'],'host/native'],
  ['Dedicated macOS app icon packaging',['apps/desktop/electron/build-macos-icon.mjs','scripts/desktop/package.mjs','apps/desktop/assets/suffice-logo-macos.icns'],'platform/package'],
 );

@@ -91,8 +91,12 @@ jobs:
           PI_OFFLINE: '1'
         run: |
           set -o pipefail
+          cargo fmt --manifest-path crates/suffice-live/Cargo.toml -- --check
+          cargo clippy --locked --manifest-path crates/suffice-live/Cargo.toml --all-targets -- -D warnings
+          cargo test --locked --manifest-path crates/suffice-live/Cargo.toml
           cargo fmt --manifest-path crates/suffice-session-addon/Cargo.toml -- --check
           cargo clippy --locked --manifest-path crates/suffice-session-addon/Cargo.toml --all-targets -- -D warnings
+          cargo test --locked --manifest-path crates/suffice-session-addon/Cargo.toml 2>&1 | tee .ci-logs/session-addon-rust.log
           bun run session:native:build 2>&1 | tee .ci-logs/session-addon-build.log
           node --test crates/suffice-session-addon/tests/*.test.mjs apps/desktop-bridge/test/*.test.mjs 2>&1 | tee .ci-logs/session-addon.log
       - name: Check experimental desktop host and lifecycle
@@ -104,6 +108,9 @@ jobs:
           cargo clippy --locked --manifest-path apps/desktop-rust/Cargo.toml --all-targets -- -D warnings
           cargo test --locked --manifest-path apps/desktop-rust/Cargo.toml
           node --test apps/desktop-rust/start-bridge.test.mjs apps/desktop-rust/owned-process-hook.test.mjs 2>&1 | tee .ci-logs/host-lifecycle.log
+      - name: Check macOS measurement observer
+        if: runner.os == 'macOS'
+        run: node --test scripts/rust-migration/macos-accounting.test.mjs
       - name: Core and CLI tests
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
