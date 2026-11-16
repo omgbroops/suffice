@@ -29,9 +29,9 @@ const maskedFrame = (op, payload, { fin = true, mask = true, forceLen } = {}) =>
 };
 
 // Minimal client: handshake over node:net, then a frame queue.
-function connect(port, path, headers = {}) {
+function connect(port, path, headers = {}, halfOpen = false) {
   return new Promise((resolve) => {
-    const sock = net.connect(port, '127.0.0.1');
+    const sock = net.connect({ port, host: '127.0.0.1', allowHalfOpen: halfOpen });
     const key = crypto.randomBytes(16).toString('base64');
     let buf = Buffer.alloc(0), head = null, closed = false;
     const frames = [], waiters = [];
@@ -75,7 +75,7 @@ async function setup(opts = {}) {
   const sessions = fakeSessions();
   const bridge = createTermBridge({ sessions, clock: { now: () => 0 }, ...opts });
   const info = await bridge.start();
-  const open = (path = '/session/a', headers = {}, q = `?token=${info.token}`) => connect(info.port, path + q, headers);
+  const open = (path = '/session/a', headers = {}, q = `?token=${info.token}`, half = false) => connect(info.port, path + q, headers, half);
   return { sessions, bridge, info, open };
 }
 const closeCode = (f) => f.data.readUInt16BE(0);
@@ -249,4 +249,105 @@ test('stop() closes clients, frees the port, process can exit', async () => {
     import { createTermBridge } from ${JSON.stringify(new URL('../src/termbridge/index.mjs', import.meta.url).href)};
     const b = createTermBridge({ sessions: { list: () => [] } }); await b.start(); await b.stop();`], { timeout: 5000 });
   assert.equal(res.status, 0, String(res.stderr));
+});
+
+const within = (p, ms, what) => Promise.race([p, new Promise((_, no) => setTimeout(() => no(new Error(`timeout: ${what}`)), ms))]);
+
+test('after a close frame the server destroys the socket and ignores further bytes', async () => {
+  const { sessions, bridge, open } = await setup();
+  const r = await open('/session/a', {}, undefined, true); await r.client.next();
+  r.client.send(8, Buffer.from([0x03, 0xe8]));
+  assert.equal((await r.client.next()).op, 8);
+  r.client.raw(Buffer.alloc(256 * 1024, 1)); // junk after close must not be parsed or kept
+  await tick(1500);
+  assert.equal(bridge.connections(), 0, 'server never destroyed the socket');
+  assert.equal(sessions.unsubs, 1);
+  assert.equal(sessions.sent.length, 0);
+  await bridge.stop();
+});
+
+test('large frame arriving in many small chunks parses linearly', async () => {
+  const { sessions, bridge, open } = await setup();
+  const r = await open(); await r.client.next();
+  const big = crypto.randomBytes(900 * 1024);
+  const f = maskedFrame(2, big);
+  const t0 = Date.now();
+  for (let i = 0; i < f.length; i += 512) r.client.raw(f.subarray(i, i + 512));
+  await tick(300);
+  assert.ok(sessions.sent[0]?.equals(big));
+  assert.ok(Date.now() - t0 < 4000);
+  r.client.sock.destroy(); await bridge.stop();
+});
+
+test('endless zero-length continuation frames => 1009', async () => {
+  const { bridge, open } = await setup({ maxFragments: 16 });
+  const r = await open(); await r.client.next();
+  r.client.send(2, B(''), { fin: false });
+  for (let i = 0; i < 40; i++) r.client.send(0, B(''), { fin: false });
+  const f = await within(r.client.next(), 2000, 'no close');
+  assert.equal(f.op, 8); assert.equal(closeCode(f), 1009);
+  await bridge.stop();
+});
+
+test('supplied token must be a string of 32+ chars', () => {
+  for (const t of ['', 'short', 'x'.repeat(31), 5, null]) assert.throws(() => createTermBridge({ sessions: fakeSessions(), token: t }), TypeError, String(t));
+  assert.doesNotThrow(() => createTermBridge({ sessions: fakeSessions(), token: 'x'.repeat(32) }));
+});
+
+test('client closing while stream() is pending does not leak the subscription', async () => {
+  const sessions = fakeSessions();
+  let release; const gate = new Promise((r) => { release = r; });
+  const inner = sessions.stream;
+  sessions.stream = async (id, cb) => { await gate; return inner(id, cb); };
+  const bridge = createTermBridge({ sessions }); const info = await bridge.start();
+  const r = await connect(info.port, `/session/a?token=${info.token}`);
+  r.client.sock.destroy(); await tick();
+  release(); await tick();
+  assert.equal(sessions.unsubs, 1);
+  await bridge.stop();
+});
+
+test('closing while screen() is pending unsubscribes exactly once; screen rejection => 1011', async () => {
+  let sessions = fakeSessions();
+  let release; const gate = new Promise((r) => { release = r; });
+  sessions.screen = async () => { await gate; return { ansi: 'x' }; };
+  let bridge = createTermBridge({ sessions }); let info = await bridge.start();
+  let r = await connect(info.port, `/session/a?token=${info.token}`);
+  await tick(); r.client.sock.destroy(); await tick();
+  release(); await tick();
+  assert.equal(sessions.unsubs, 1);
+  await bridge.stop();
+
+  sessions = fakeSessions();
+  sessions.screen = async () => { throw new Error('boom'); };
+  bridge = createTermBridge({ sessions }); info = await bridge.start();
+  r = await connect(info.port, `/session/a?token=${info.token}`);
+  const f = await within(r.client.next(), 2000, 'no close'); assert.equal(closeCode(f), 1011);
+  await r.client.ended(); await tick();
+  assert.equal(sessions.unsubs, 1);
+  await bridge.stop();
+
+  sessions = fakeSessions();
+  sessions.stream = () => { throw new Error('boom'); };
+  bridge = createTermBridge({ sessions }); info = await bridge.start();
+  r = await connect(info.port, `/session/a?token=${info.token}`);
+  assert.equal(closeCode(await within(r.client.next(), 2000, 'no close')), 1011);
+  await bridge.stop();
+});
+
+test('ended session closes its sockets with 1000 (ping tick and onExit)', async () => {
+  const { sessions, bridge, open } = await setup({ pingMs: 30 });
+  const r = await open(); await r.client.next();
+  sessions.ids = [];
+  const f = await within(r.client.next(), 2000, 'no close');
+  assert.equal(f.op, 8); assert.equal(closeCode(f), 1000);
+  await bridge.stop();
+
+  const s2 = fakeSessions(); let exit;
+  s2.onExit = (id, fn) => { exit = fn; return () => {}; };
+  const b2 = createTermBridge({ sessions: s2 }); const i2 = await b2.start();
+  const r2 = await connect(i2.port, `/session/a?token=${i2.token}`); await r2.client.next();
+  exit();
+  assert.equal(closeCode(await within(r2.client.next(), 2000, 'no close')), 1000);
+  await b2.stop();
 });

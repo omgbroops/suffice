@@ -14,12 +14,13 @@ export const frame = (op, payload = Buffer.alloc(0)) => {
   return Buffer.concat([head, payload]);
 };
 const closeFrame = (code, reason = '') => { const b = Buffer.alloc(2); b.writeUInt16BE(code); return frame(8, Buffer.concat([b, Buffer.from(reason)])); };
-const safeEq = (a, b) => { const x = Buffer.from(String(a)), y = Buffer.from(String(b)); return x.length === y.length && crypto.timingSafeEqual(x, y); };
+const safeEq = (a, b) => { if (typeof a !== 'string' || typeof b !== 'string' || !a || !b) return false; const x = Buffer.from(String(a)), y = Buffer.from(String(b)); return x.length === y.length && crypto.timingSafeEqual(x, y); };
 
 export function createTermBridge({ sessions, clock, host = '127.0.0.1', port = 0, token, allowNonLoopback = false,
-  origins = [], maxBuffered = 8 * 1024 * 1024, maxPayload = 1024 * 1024, pingMs = 30000 } = {}) {
+  origins = [], maxBuffered = 8 * 1024 * 1024, maxPayload = 1024 * 1024, pingMs = 30000, maxFragments = 1024 } = {}) {
   if (!sessions) throw new TypeError('termbridge: sessions required');
   if (!allowNonLoopback && !LOOPBACK.has(host)) throw new Error(`termbridge: refusing non-loopback host ${host}`);
+  if (token !== undefined && (typeof token !== 'string' || token.length < 32)) throw new TypeError('termbridge: token must be a string of at least 32 characters');
   const allowed = [...DEFAULT_ORIGINS, ...origins.map((o) => (o instanceof RegExp ? o : new RegExp(`^${o.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*')}$`)))];
   const conns = new Set();
   let server = null, timer = null, tok = token;
@@ -32,12 +33,13 @@ export function createTermBridge({ sessions, clock, host = '127.0.0.1', port = 0
       `Sec-WebSocket-Accept: ${crypto.createHash('sha1').update(key + GUID).digest('base64')}`,
       ...(proto ? [`Sec-WebSocket-Protocol: ${proto}`] : []), '', ''].join('\r\n'));
     socket.setNoDelay(true);
-    const c = { socket, missed: 0, unsub: null, dead: false, buf: Buffer.alloc(0), frag: null };
+    const c = { socket, missed: 0, unsub: null, dead: false, chunks: [], size: 0, frag: null, id };
     conns.add(c);
+    const drop = () => { const u = c.unsub, o = c.offExit; c.unsub = c.offExit = null; for (const f of [u, o]) try { if (typeof f === 'function') f(); } catch { /* ignore */ } };
     const fail = (code, reason) => {
       if (c.dead) return;
-      c.dead = true;
-      try { c.unsub?.(); } catch { /* ignore */ } c.unsub = null;
+      c.dead = true; c.chunks = []; c.size = 0; c.frag = null;
+      drop();
       try { socket.end(closeFrame(code, reason)); } catch { /* gone */ }
       setTimeout(() => socket.destroy(), 1000).unref();
     };
@@ -47,7 +49,7 @@ export function createTermBridge({ sessions, clock, host = '127.0.0.1', port = 0
       socket.write(buf);
     };
     c.out = out; c.fail = fail;
-    socket.on('close', () => { c.dead = true; conns.delete(c); try { c.unsub?.(); } catch { /* ignore */ } c.unsub = null; });
+    socket.on('close', () => { c.dead = true; c.chunks = []; c.size = 0; conns.delete(c); drop(); });
     socket.on('error', () => socket.destroy());
     socket.on('end', () => socket.destroy()); // http sockets are half-open by default; a vanished client must free the session
 
@@ -64,10 +66,15 @@ export function createTermBridge({ sessions, clock, host = '127.0.0.1', port = 0
       if (op === 2) Promise.resolve().then(() => sessions.sendBytes(id, new Uint8Array(data))).catch(() => {});
       else control(data.toString('utf8'));
     };
+    const take = (n) => { // flatten only when a whole frame has arrived: linear overall
+      const b = c.chunks.length === 1 ? c.chunks[0] : Buffer.concat(c.chunks, c.size);
+      c.chunks = b.length > n ? [b.subarray(n)] : []; c.size -= n;
+      return b.subarray(0, n);
+    };
     const parse = () => {
       for (;;) {
-        const b = c.buf;
-        if (c.dead || b.length < 2) return;
+        if (c.dead || c.size < 2) return;
+        const b = c.chunks[0].length >= 14 ? c.chunks[0] : Buffer.concat(c.chunks.slice(0, 14));
         const fin = !!(b[0] & 0x80), op = b[0] & 15;
         if (b[0] & 0x70) return fail(1002, 'reserved bits');
         if (!(b[1] & 0x80)) return fail(1002, 'unmasked frame');
@@ -76,13 +83,13 @@ export function createTermBridge({ sessions, clock, host = '127.0.0.1', port = 0
         else if (len === 127) { if (b.length < 10) return; const big = b.readBigUInt64BE(2); if (big > BigInt(maxPayload)) return fail(1009, 'too big'); len = Number(big); off = 10; }
         if (op >= 8 && (!fin || len > 125)) return fail(1002, 'bad control frame');
         if (len > maxPayload || (c.frag && c.frag.len + len > maxPayload)) return fail(1009, 'too big');
-        if (b.length < off + 4 + len) return;
-        const mask = b.subarray(off, off + 4);
-        const data = Buffer.from(b.subarray(off + 4, off + 4 + len));
+        if (c.size < off + 4 + len) return;
+        const f = take(off + 4 + len);
+        const mask = f.subarray(off, off + 4);
+        const data = Buffer.from(f.subarray(off + 4));
         for (let i = 0; i < len; i++) data[i] ^= mask[i & 3];
-        c.buf = b.subarray(off + 4 + len);
         c.missed = 0;
-        if (op === 8) { c.dead = true; try { socket.end(closeFrame(len >= 2 ? data.readUInt16BE(0) : 1000)); } catch { /* gone */ } return; }
+        if (op === 8) return fail(len >= 2 ? data.readUInt16BE(0) : 1000);
         if (op === 9) { out(frame(10, data)); continue; }
         if (op === 10) continue;
         if (op === 1 || op === 2) {
@@ -90,19 +97,23 @@ export function createTermBridge({ sessions, clock, host = '127.0.0.1', port = 0
           if (fin) message(op, data); else c.frag = { op, parts: [data], len };
         } else if (op === 0) {
           if (!c.frag) return fail(1002, 'unexpected continuation');
+          if (c.frag.parts.length >= maxFragments) return fail(1009, 'too many fragments');
           c.frag.parts.push(data); c.frag.len += len;
-          if (fin) { const f = c.frag; c.frag = null; message(f.op, Buffer.concat(f.parts)); }
+          if (fin) { const g = c.frag; c.frag = null; message(g.op, Buffer.concat(g.parts)); }
         } else return fail(1002, 'bad opcode');
       }
     };
-    socket.on('data', (d) => { c.buf = c.buf.length ? Buffer.concat([c.buf, d]) : d; parse(); });
+    socket.on('data', (d) => { if (c.dead) return; c.chunks.push(d); c.size += d.length; parse(); });
 
     // Subscribe before the snapshot so no output is lost between them; hold live bytes until the snapshot is out.
     const pending = []; let ready = false;
     try {
-      c.unsub = await sessions.stream(id, (bytes) => { const f = frame(2, Buffer.from(bytes)); if (ready) out(f); else pending.push(f); });
+      const u = await sessions.stream(id, (bytes) => { if (c.dead) return; const f = frame(2, Buffer.from(bytes)); if (ready) out(f); else pending.push(f); });
+      c.unsub = u;
+      if (c.dead) return drop();
+      if (typeof sessions.onExit === 'function') { try { c.offExit = sessions.onExit(id, () => fail(1000, 'session ended')); } catch { /* optional */ } }
       const snap = await sessions.screen(id);
-      if (c.dead) { c.unsub?.(); c.unsub = null; return; }
+      if (c.dead) return drop();
       out(frame(2, Buffer.from(snap?.ansi ?? '')));
       ready = true;
       for (const f of pending) out(f);
@@ -134,9 +145,12 @@ export function createTermBridge({ sessions, clock, host = '127.0.0.1', port = 0
       server = http.createServer((req, res) => { res.writeHead(426).end(); });
       server.on('upgrade', (req, socket) => { onUpgrade(req, socket).catch(() => socket.destroy()); });
       await new Promise((ok, no) => { server.once('error', no); server.listen(port, host, ok); });
-      timer = setInterval(() => {
+      timer = setInterval(async () => {
+        let live = null;
+        try { live = new Set((await sessions.list()).map((x) => (typeof x === 'string' ? x : x?.id))); } catch { /* keep sockets */ }
         for (const c of conns) {
           if (c.dead) continue;
+          if (live && !live.has(c.id)) { c.fail(1000, 'session ended'); continue; }
           if (c.missed >= 2) { c.dead = true; c.socket.destroy(); continue; }
           c.missed++; c.out(frame(9));
         }
