@@ -26,7 +26,7 @@ test('every emitted item is valid and ids are unique per final item', () => {
 
 test('item counts per kind', () => {
   const n = Object.fromEntries(ITEM_KINDS.map((k) => [k, of(k).length]));
-  assert.deepEqual(n, { user: 4, assistant: 2, thinking: 2, tool: 14, todo: 1, subagent: 1, notice: 11, usage: 2 });
+  assert.deepEqual(n, { user: 4, assistant: 2, thinking: 2, tool: 14, todo: 1, subagent: 1, notice: 12, usage: 2 });
 });
 
 test('user items: text, command echo, bash echo, image + @file attachment', () => {
@@ -90,8 +90,9 @@ test('notices by code', () => {
   const codes = of('notice').map((n) => n.code);
   const count = (c) => codes.filter((x) => x === c).length;
   assert.deepEqual({ i: count('interrupted'), c: count('compacted'), mc: count('model_changed'), md: count('mode_changed'), rl: count('rate_limit'), e: count('error'), o: count('other') },
-    { i: 1, c: 1, mc: 2, md: 0, rl: 1, e: 2, o: 4 });
+    { i: 1, c: 1, mc: 2, md: 0, rl: 1, e: 2, o: 5 });
   assert.equal(of('notice').find((n) => n.code === 'compacted').text, 'Compacted: 150000 -> 20000 tokens');
+  assert.match(of('notice').find((n) => /^Worked for \d/.test(n.text)).text, /^Worked for \d+(s|m \d+s)$/);
 });
 test('mode: first seen is silent, a later change emits mode_changed', () => {
   const st = m.newState();

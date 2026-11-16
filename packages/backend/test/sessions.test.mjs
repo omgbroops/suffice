@@ -381,6 +381,22 @@ test('tail: truncation resets partial line + utf8 decoder; multibyte split acros
   fs.rmSync(dir, { recursive: true, force: true });
 });
 
+test('rawLines: yields whole lines, survives split writes, stops on unsub and on stop()', async () => {
+  const dir = tmp(); const file = path.join(dir, 'r.jsonl'); fs.writeFileSync(file, '');
+  const s = createSessions({ exec: fakeExec().exec, clock, home: dir, agents: { a: mkAgent(file) } });
+  const r = await s.start({ agent: 'a', cwd: '/w' });
+  const got = []; let waiter = null;
+  const un = s.rawLines(r.id, (l) => { got.push(l); waiter?.(); });
+  const until = (n) => new Promise((res, rej) => { if (got.length >= n) return res(); const t = setTimeout(() => rej(new Error(`timeout; got ${JSON.stringify(got)}`)), 3000); t.unref(); waiter = () => { if (got.length >= n) { clearTimeout(t); waiter = null; res(); } }; });
+  fs.appendFileSync(file, '{"t":"a"}\n{"t":"b'); await until(1);
+  fs.appendFileSync(file, '"}\n'); await until(2);
+  assert.deepEqual(got, ['{"t":"a"}', '{"t":"b"}']);
+  un(); fs.appendFileSync(file, '{"t":"c"}\n'); await sleep(200);
+  assert.equal(got.length, 2);
+  await s.stop(r.id);
+  fs.rmSync(dir, { recursive: true, force: true });
+});
+
 test('resume requires a non-empty safe string sessionId', async () => {
   const { exec, calls } = fakeExec();
   const s = createSessions({ exec, clock });

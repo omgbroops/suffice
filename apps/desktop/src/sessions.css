@@ -6,12 +6,16 @@ body:has(.thread-header--session) .window-drag-region { pointer-events: none; }
 .thread-header--session .session-title { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .thread-header--session .session-meta { color: var(--text-muted); font-size: 12px; font-weight: 400; margin-left: auto; }
 .thread-header--session .session-toggle { margin-left: auto; }
+.thread-header--session .session-meta + .session-toggle { margin-left: 0; }
 .thread-header--session .session-meta + .session-copy { margin-left: 0; }
 .thread-header--session .session-copy { min-height: 28px; font-size: 12px; gap: 6px; }
 .thread-header--session .session-copy .icon { width: 13px; height: 13px; }
 .session-notice { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; border: 1px solid var(--border-strong); border-radius: 12px; color: var(--text); font-size: 13px; }
-.session-terminal { position: absolute; inset: 54px 0 0; z-index: 5; background: var(--surface-base); }
-.session-terminal-slot { position: absolute; inset: 0 0 12px 12px; }
+.session-terminal { position: absolute; inset: 0; z-index: 5; }
+.session-terminal[data-solid] { background: var(--venom, var(--surface-base)); }
+.session-venom { position: absolute; inset: 0; z-index: 5; pointer-events: none; }
+.thread-header--session { z-index: 6; }
+.session-terminal-slot { position: absolute; inset: 54px 0 12px 12px; }
 .session-terminal[hidden],.session-terminal-slot[hidden] { display: none; }
 .session-import { left: 50%; top: 14vh; width: 520px; transform: translateX(-50%); padding: 0; transform-origin: top center; }
 .session-import-list { max-height: 360px; overflow-y: auto; padding: 4px; border-top: 1px solid var(--border-strong); scrollbar-width: none; }
@@ -27,3 +31,8 @@ body:has(.session-row) .sidebar-empty { display: none; }
 [data-status='working'].thread-header--session .thread-state svg { animation: thread-working 1.2s linear infinite; }
 .popover.session-import .session-import-row { align-items: flex-start; justify-content: flex-start; text-align: left; }
 .session-import-row > span { align-self: flex-start; text-align: left; }
+.tool-widget[data-status='pending'] .thread-state svg { animation: thread-working 1.2s linear infinite; }
+.tool-widget .tool-exit { margin-left: 8px; color: var(--text-muted); font-size: 11px; }
+.session-notice--quiet { border: 0; padding: 2px 4px; color: var(--text-muted); font-size: 12px; justify-content: flex-start; }
+.session-todo { color: var(--text-muted); font-size: 13px; padding: 1px 0; }
+.tool-diff { margin-top: 6px; }

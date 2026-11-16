@@ -113,7 +113,7 @@ export function createSessions({ exec, clock, slots, fs = nodeFs, home = os.home
     }, parse.reset);
     return c;
   }
-  const dropChat = (s) => { s.chat?.stop?.(); s.chat = null; };
+  const dropChat = (s) => { s.chat?.stop?.(); s.chat = null; for (const u of [...(s.raws ?? [])]) u(); };
 
   // live record + slots + chat tail for one session; undoes itself and kills nothing on failure (callers decide)
   async function register(s, adapter, name, { killOnFail = true } = {}) {
@@ -249,6 +249,19 @@ export function createSessions({ exec, clock, slots, fs = nodeFs, home = os.home
     c.listeners.add(onMessages);
     return () => { c.listeners.delete(onMessages); if (!c.listeners.size && !slots) dropChat(s); };
   }
+  // Raw transcript lines (unparsed strings), for mappers that need the whole JSON object. `onReset` fires when the file restarts.
+  function rawLines(id, onLine, onReset = () => {}) {
+    const s = rec(id); const adapter = adapters[s.agent];
+    let dec = new StringDecoder('utf8'); let rest = '';
+    const root = adapter.watchRoot?.({ home }) ?? path.dirname(s.transcriptPath ?? home);
+    const stop = tail(fs, () => s.transcriptPath ?? (s.transcriptPath = locate(adapter, s)), root, (buf) => {
+      rest += dec.write(buf); const parts = rest.split('\n'); rest = parts.pop();
+      for (const l of parts) if (l.trim()) onLine(l);
+    }, () => { dec = new StringDecoder('utf8'); rest = ''; onReset(); });
+    (s.raws ??= new Set()).add(unsub);
+    function unsub() { if (s.raws?.delete(unsub)) stop(); }
+    return unsub;
+  }
   const messages = (id) => [...ensureChat(rec(id)).messages];
 
   const adapterFor = (agent) => { const a = adapters[agent]; if (!a) throw new TypeError(`sessions: unknown agent ${agent}`); return a; };
@@ -261,5 +274,5 @@ export function createSessions({ exec, clock, slots, fs = nodeFs, home = os.home
   };
   const resume = ({ agent, sessionId, cwd }) => start({ agent, cwd, sessionId, resume: true });
 
-  return { start, list, stop, close, resize, send, sendBytes, screen, stream, chat, messages, history, resume };
+  return { start, list, stop, close, resize, send, sendBytes, screen, stream, chat, messages, rawLines, history, resume };
 }

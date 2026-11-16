@@ -267,6 +267,7 @@ export function connectThreads({api,prompt,send,toast}){
  },true);
  form.addEventListener('submit',async event=>{
   event.preventDefault();event.stopImmediatePropagation();
+  if(!prompt.value.trim()&&sessions?.stop()){return;}
   if(busy&&!prompt.value.trim()&&!form.attachments?.count){await api.abort(activeId).catch(error=>toast(error.message));return;}
   if(opening)return;
   if(sessions?.isActive()){const t=prompt.value.trim();if(t){sessions.send(t);prompt.value='';send.disabled=true;saveView();}return;}

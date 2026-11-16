@@ -32,6 +32,7 @@ function emit(state, out, it) {
   state.emitted.set(it.id, sig);
   out.push(it);
 }
+const fmtDur = (ms) => { const s = Math.round(ms / 1000); return s < 60 ? `${s}s` : `${Math.floor(s / 60)}m ${s % 60}s`; };
 const notice = (state, out, id, ts, level, code, text) => emit(state, out, { id, ts, kind: 'notice', level, code, text });
 
 function resultText(c) {
@@ -200,7 +201,8 @@ function run(obj, state, out, opts) {
       }
       if (obj.subtype === 'stop_hook_summary' && (obj.hookErrors?.length || obj.preventedContinuation)) return notice(state, out, id, ts, 'warn', 'other', `Stop hook: ${str(obj.stopReason) || 'error'}`);
       if (obj.subtype === 'informational' || obj.subtype === 'away_summary') return str(obj.content) && notice(state, out, id, ts, 'info', 'other', obj.content);
-      return; // turn_duration and unknown subtypes: not shown
+      if (obj.subtype === 'turn_duration' && Number.isFinite(obj.durationMs)) return notice(state, out, id, ts, 'info', 'other', `Worked for ${fmtDur(obj.durationMs)}`);
+      return; // unknown subtypes: not shown
     }
     case 'attachment': {
       const a = obj.attachment ?? {};
