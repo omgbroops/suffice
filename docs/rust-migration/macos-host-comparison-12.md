@@ -5,6 +5,14 @@ latency regresses. It is not accepted as the production replacement. The full
 Rust engine/UI rewrite, Windows runtime and installer/performance gates remain
 open.
 
+Later standalone-package qualification found that the old Electron artifact
+resolved its missing `@suffice/harness` entry from the enclosing checkout. That
+also loaded two distinct Pi SDK module identities. This baseline is unsuitable
+for conclusions about a self-contained installed app. Keep the measured numbers
+below as historical diagnostic observations; compare the corrected standalone
+package before asserting a current memory or startup benefit. The exact module
+resolution proof is retained with the subsequent packaging continuation.
+
 Five alternating pairs completed on macOS 26.5.2. Ten host runs passed all phases,
 120 process snapshots reconciled, all exits and process/store/project cleanup
 passed, and runtime fingerprints stayed unchanged. Each run used the same

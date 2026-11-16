@@ -10,6 +10,7 @@ crate-type = ["cdylib"]
 [dependencies]
 napi = { version = "=2.16.17", default-features = false, features = ["napi6", "dyn-symbols"] }
 napi-derive = "=2.16.13"
+suffice-receipt = { path = "../suffice-receipt" }
 suffice-live = { path = "../suffice-live" }
 suffice-session = { path = "../suffice-session" }
 serde_json = "=1.0.151"

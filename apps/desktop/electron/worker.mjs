@@ -10,11 +10,11 @@ import {mkdir,realpath,stat} from 'node:fs/promises';
 import {resolve,dirname} from 'node:path';
 import {SessionManager} from '@earendil-works/pi-coding-agent';
 import {createThreadStore,threadId} from './threads.mjs';
-import {createSufficeSession,parseOptions} from '@suffice/harness';
+import {createSufficeSession,parseOptions} from '../../../packages/harness/index.mjs';
 import {getSupportedThinkingLevels} from '@earendil-works/pi-ai/compat';
 
 process.env.PI_CODING_AGENT_DIR=parseOptions([]).home;
-export function createHarnessHost({send,createRuntime=options=>createSufficeModelRuntime(options,{onRefresh:result=>send({event:'models_changed',catalog:result})}),createSession=createSufficeSession,home=parseOptions([]).home,threadStore}) {
+export function createHarnessHost({send,createRuntime=options=>createSufficeModelRuntime(options,{onRefresh:result=>send({event:'models_changed',catalog:result})}),createSession=createSufficeSession,home=parseOptions([]).home,threadStore,createReceiptWriter}) {
 let agent,runtime,workspace,changeTracker,busy=false,abortRequested=false;
 const extensionPrompts=new Map();let extensionSequence=0;
 const approvals=new Map();let approvalSequence=0,preferencesKey='';
@@ -83,7 +83,7 @@ async function receive(message) {
       options.extensionBindings=(base,session)=>({mode:'rpc',commandContextActions:{waitForIdle:()=>session.agent.waitForIdle(),reload:()=>session.reload(),navigateTree:(id,opts)=>session.navigateTree(id,opts),newSession:async()=>{throw new Error('Use the New session button to create a desktop conversation');},fork:async()=>{throw new Error('Use Fork thread in the conversation menu');},switchSession:async()=>{throw new Error('Choose the conversation from the desktop sidebar');}},onError:error=>send({event:'extension_ui',kind:'notice',message:error.error,type:'error'}),uiContext:createDesktopExtensionUI({base,emit:value=>send({event:'extension_ui',...value}),request:(value,opts)=>new Promise(resolvePrompt=>{const requestId=++extensionSequence;let timer;const finish=value=>{clearTimeout(timer);opts?.signal?.removeEventListener('abort',cancel);extensionPrompts.delete(requestId);send({event:'extension_ui',kind:'dismiss',requestId});resolvePrompt(value);};const cancel=()=>finish(undefined);extensionPrompts.set(requestId,finish);if(opts?.signal?.aborted){finish(undefined);return;}opts?.signal?.addEventListener('abort',cancel,{once:true});if(opts?.timeout)timer=setTimeout(cancel,opts.timeout);send({event:'extension_ui',requestId,...value});})})});
       const gitTracker=createChatGitTracker({cwd,home,getId:currentThreadId,onChange:()=>send({event:'history_changed'})});
       const toolObserver={before:(...args)=>changeTracker.before(...args),after:async(token,result)=>{await changeTracker.after(token);await gitTracker.after(token,result);}};
-      agent=await createSession(options,runtime,{onTool:name=>send({event:'tool',name}),toolObserver,onApproval:(name,input)=>new Promise(resolve=>{const requestId=++approvalSequence;approvals.set(requestId,allow=>{send({event:'approval_resolved',requestId});resolve(allow);});send({event:'approval',requestId,name,input});})});
+      agent=await createSession(options,runtime,{createReceiptWriter,onTool:name=>send({event:'tool',name}),toolObserver,onApproval:(name,input)=>new Promise(resolve=>{const requestId=++approvalSequence;approvals.set(requestId,allow=>{send({event:'approval_resolved',requestId});resolve(allow);});send({event:'approval',requestId,name,input});})});
       await gitTracker.initialize(newlyCreated);
       if(newlyCreated&&agent.session.setSessionName)agent.session.setSessionName(threadTitle(payload.prompt,options.desktopSettings.naming));
       if(abortRequested){await agent.dispose();agent=null;throw new Error('Cancelled');}

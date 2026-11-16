@@ -1,4 +1,5 @@
 import {loadDesktopBinding} from '../desktop-bridge/native-binding.mjs';
+import {verifyReceiptWriter} from '../desktop-bridge/receipt-writer.mjs';
 import {verifyLiveRegistry} from '../desktop-bridge/live-registry.mjs';
 
 export async function verifySessionBackend(directory) {
@@ -6,6 +7,7 @@ export async function verifySessionBackend(directory) {
     // The selected Node executable determines the platform and ABI for loading.
     const addon=await loadDesktopBinding(directory);
     verifyLiveRegistry(addon);
+    verifyReceiptWriter(addon);
     if (typeof addon.PersistentSessionReader !== 'function') throw new Error('session reader export is missing');
   } catch (error) {
     throw new Error(`Rust session backend unavailable for ${process.platform}-${process.arch}: ${error.message}. Run node scripts/rust-migration/build-session-native.mjs with the host's Node executable and matching Rust target.`, {cause: error});

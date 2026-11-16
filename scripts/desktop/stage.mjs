@@ -11,7 +11,7 @@ export async function stageDesktop(stage,{version='0.1.0-preview.20261115.1'}={}
  stage=resolve(stage);await mkdir(stage,{recursive:true});if(await exists(join(stage,'package.json')))throw new Error('Stage must be a fresh directory: '+stage);
  const app=await read(join(root,'apps/desktop/package.json')),base=await read(join(root,'package.json')),cli=await read(join(root,'packages/cli/package.json'));
  const dependencies={...base.dependencies,...cli.dependencies,...Object.fromEntries(Object.entries(app.dependencies).filter(([name])=>name.startsWith('@fontsource/')))};delete dependencies['@suffice/harness'];
- const manifest={name:'suffice-desktop',productName:'Suffice',version,description:'Suffice desktop coding agent',author:'Suffice',license:'UNLICENSED',type:'module',main:'apps/desktop/electron/main.cjs',dependencies:{...dependencies,'@suffice/harness':'0.1.0'}};
+ const manifest={name:'suffice-desktop',productName:'Suffice',version,description:'Suffice desktop coding agent',author:'Suffice',license:'UNLICENSED',type:'module',main:'apps/desktop/electron/main.cjs',dependencies};
  await writeFile(join(stage,'package.json'),JSON.stringify(manifest,null,2)+'\n');
  const filter=source=>!['.git','node_modules','test','tests','__tests__'].includes(source.split(/[\\/]/).at(-1))&&!/^(?:\.env(?:\..*)?|auth\.json|\.npmrc)$/i.test(source.split(/[\\/]/).at(-1));
  for(const path of ['apps/desktop/electron','apps/desktop/dist','apps/desktop/assets','apps/desktop/shared','packages/cli/src','packages/cli/bin','packages/harness'])await cp(join(root,path),join(stage,path),{recursive:true,dereference:true,filter});
@@ -20,9 +20,8 @@ export async function stageDesktop(stage,{version='0.1.0-preview.20261115.1'}={}
   await mkdir(join(stage,'packages/cli/native'),{recursive:true});await cp(source,join(stage,'packages/cli/native',name));
  }
  for(const path of ['apps/desktop/src/settings-data.js','apps/desktop/src/backgrounds/presets.js','packages/cli/package.json','packages/cli/README.md','packages/cli/THIRD-PARTY-NOTICES.md']){await mkdir(dirname(join(stage,path)),{recursive:true});await cp(join(root,path),join(stage,path));}
- // Internal source imports keep their monorepo-relative layout. Expose a package
- // proxy instead of shipping workspace links that point outside the installation.
- const proxy=join(stage,'node_modules/@suffice/harness');await mkdir(proxy,{recursive:true});await writeFile(join(proxy,'package.json'),JSON.stringify({name:'@suffice/harness',version:'0.1.0',type:'module',exports:'./index.mjs'}));await writeFile(join(proxy,'index.mjs'),"export * from '../../../packages/harness/index.mjs';\n");
+ // Internal imports keep the same relative layout in the installed app. They
+ // must not depend on a workspace package or an ancestor checkout's modules.
  const globals=new Map(),packages=[];
  async function locate(name,from){const req=createRequire(join(from,'package.json'));for(const directory of req.resolve.paths(name)||[]){const candidate=join(directory,name,'package.json');if(await exists(candidate))return realpath(dirname(candidate));}throw new Error('Missing runtime dependency '+name+' from '+from);}
  async function copyPackage(name,from,parent,optional=false){

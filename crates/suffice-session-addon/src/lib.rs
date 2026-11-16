@@ -1,4 +1,5 @@
 mod live_runs;
+mod receipt_writer;
 
 use napi::bindgen_prelude::{Buffer, Either};
 use napi::{Env, Error, JsObject, Result};

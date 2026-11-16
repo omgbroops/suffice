@@ -1,4 +1,5 @@
 import {preference} from './settings-preferences.js';
+import {guardTerminalDimensionsStyle} from './terminal-styles.js';
 import {Terminal} from '@xterm/xterm';
 import {FitAddon} from '@xterm/addon-fit';
 import '@xterm/xterm/css/xterm.css';
@@ -16,6 +17,7 @@ export function createTerminalViews({api,onLabel}){
   if(!view){const node=document.createElement('div');node.className='terminal-session';node.setAttribute('aria-label','Terminal session');
    const term=new Terminal({fontFamily:preference('terminal-font','JetBrains Mono')+', monospace',fontSize:parseInt(preference('terminal-size','12 px')),fontWeight:400,lineHeight:1.3,letterSpacing:0,cursorStyle:preference('cursor','Bar').toLowerCase(),cursorWidth:1,cursorBlink:preference('cursor-blink',true)&&!preference('reduced-motion',false)&&!matchMedia('(prefers-reduced-motion: reduce)').matches,scrollback:parseInt(preference('scrollback','5,000 lines').replace(',','')),theme:theme(),allowTransparency:true,allowProposedApi:false});const fit=new FitAddon();term.loadAddon(fit);
    view={node,term,fit,ready:false,queued:[],sequence:0,closed:false,threadId,id};views.set(name,view);body.replaceChildren(node);term.open(node);
+   view.restoreDimensionsStyle=guardTerminalDimensionsStyle(term.element);
    // Output may never read or replace the system clipboard using OSC 52.
    term.parser.registerOscHandler(52,()=>true);
    let pendingInput='',inputTimer,inputBlocked=false,inputTail=Promise.resolve();
@@ -36,6 +38,6 @@ export function createTerminalViews({api,onLabel}){
   }else if(view.node.parentElement!==body){body.replaceChildren(view.node);requestAnimationFrame(()=>{if(view.node.isConnected){view.fit.fit();view.term.focus();}});}
   return view;
  }
- function close(threadId,id){const name=key(threadId,id),view=views.get(name);for(const other of views.values())if(other!==view)other.settleInput();if(view){view.closed=true;clearTimeout(view.resizeTimer);cancelAnimationFrame(view.frame);view.resize.disconnect();view.disposeInput();view.term.dispose();views.delete(name);}void api.terminalClose({threadId,id}).catch(()=>{});}
+ function close(threadId,id){const name=key(threadId,id),view=views.get(name);for(const other of views.values())if(other!==view)other.settleInput();if(view){view.closed=true;clearTimeout(view.resizeTimer);cancelAnimationFrame(view.frame);view.resize.disconnect();view.disposeInput();view.restoreDimensionsStyle?.();view.term.dispose();views.delete(name);}void api.terminalClose({threadId,id}).catch(()=>{});}
  return {mount,close};
 }

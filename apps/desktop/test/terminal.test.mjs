@@ -28,11 +28,60 @@ test('real native terminals stream commands, stay independent and survive tab/ch
  await page.getByRole('tab',{name:'bash 2',exact:true}).hover();await page.getByRole('button',{name:'Close bash 2 tab',exact:true}).click();assert.equal(await page.getByRole('tab',{name:'bash 2',exact:true}).count(),0);await page.locator('.terminal-session').filter({hasText:'FIRST_first'}).waitFor();await command("printf '%s%s\\n' AFTER_ INACTIVE_CLOSE");await page.locator('.terminal-session').filter({hasText:'AFTER_INACTIVE_CLOSE'}).waitFor();await command('exit');await page.locator('.terminal-session').filter({hasText:'Process exited'}).waitFor();
  const asset=(await readdir(resolve('apps/desktop/dist/assets'))).find(name=>/^terminal-view-.*\.js$/.test(name));
  await page.evaluate(async asset=>{const {createTerminalViews}=await import(new URL('assets/'+asset,location.href));const views=createTerminalViews({api:window.sufficeDesktop,onLabel(){}});const threadId=(await window.sufficeDesktop.threads()).find(thread=>thread.title==='Terminal thread one').id;const id='terminal:22222222-2222-4222-8222-222222222222';const view=await views.mount(document.querySelector('.right-panel-content'),threadId,id,3);await view.start;window.__resizeFixture={view,views,id,threadId};},asset);
+ const guardChecks=await page.evaluate(()=>{
+  const {view}=window.__resizeFixture,term=view.term;
+  const styles=[...term.element.querySelectorAll('.xterm-screen > style')];
+  const guarded=styles.filter(style=>Object.hasOwn(style,'textContent'));
+  if(guarded.length!==1)throw Error('Expected exactly one guarded dimension stylesheet');
+  const style=guarded[0],source=style.textContent,originalCSS=style.sheet.cssRules[0].cssText;
+  const observer=new MutationObserver(()=>{});observer.observe(style,{subtree:true,childList:true,characterData:true});
+  style.textContent=source;
+  const identicalWrites=observer.takeRecords().length;
+  style.textContent=source.replace('height: 100%', 'height: 92%');
+  const changedWrites=observer.takeRecords().length;
+  term.resize(term.cols+1,term.rows);
+  const restoredAfterResize=style.textContent===source&&style.sheet.cssRules[0].cssText===originalCSS;
+  style.firstChild.data=source+'/* external DOM edit */';style.textContent=source;
+  const restoredAfterDOM=style.textContent===source;
+  const external=document.createComment('External edit');style.append(external);
+  style.textContent=source;const restoredNodes=!external.isConnected&&style.childNodes.length===1;
+  style.media='print';observer.takeRecords();style.textContent=source;
+  const mediaWrites=observer.takeRecords().length;style.removeAttribute('media');
+  style.sheet.disabled=true;observer.takeRecords();style.textContent=source;
+  const disabledWrites=observer.takeRecords().length;style.sheet.disabled=false;
+  style.sheet.cssRules[0].style.setProperty('outline','2px solid red');observer.takeRecords();
+  style.textContent=source;
+  const restoredAfterCSSOM=observer.takeRecords().length>0&&style.sheet.cssRules[0].cssText===originalCSS;
+  const row=term.element.querySelector('.xterm-rows > div'),beforeHeight=row.getBoundingClientRect().height;
+  const fontSize=term.options.fontSize,theme=term.options.theme;
+  term.options.fontSize=fontSize+4;view.fit.fit();
+  const fontChanged=row.getBoundingClientRect().height>beforeHeight;
+  term.options.theme={...theme,foreground:'#123456'};
+  const themeChanged=getComputedStyle(term.element.querySelector('.xterm-rows')).color==='rgb(18, 52, 86)';
+  term.options.fontSize=fontSize;term.options.theme=theme;view.fit.fit();term.focus();
+  observer.disconnect();window.__resizeFixture.guardedStyle=style;
+  return {identicalWrites,changedWrites,mediaWrites,disabledWrites,restoredNodes,restoredAfterResize,restoredAfterDOM,restoredAfterCSSOM,fontChanged,themeChanged,focused:document.activeElement===term.textarea};
+ });
+ assert.equal(guardChecks.identicalWrites,0);assert.ok(guardChecks.changedWrites>0);assert.ok(guardChecks.mediaWrites>0);assert.ok(guardChecks.disabledWrites>0);
+ for(const key of ['restoredNodes','restoredAfterResize','restoredAfterDOM','restoredAfterCSSOM','fontChanged','themeChanged','focused'])assert.equal(guardChecks[key],true,key);
+ const density=await page.evaluate(()=>devicePixelRatio),originalZoom=await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].webContents.getZoomFactor());
+ try{
+  await app.evaluate(({BrowserWindow},zoom)=>BrowserWindow.getAllWindows()[0].webContents.setZoomFactor(zoom),originalZoom*1.25);
+  await page.waitForFunction(previous=>devicePixelRatio!==previous,density);
+  await page.evaluate(()=>{const {view}=window.__resizeFixture;view.fit.fit();if(view.term.cols<2||view.term.rows<1)throw Error('Invalid terminal dimensions after density change');});
+ }finally{await app.evaluate(({BrowserWindow},zoom)=>BrowserWindow.getAllWindows()[0].webContents.setZoomFactor(zoom),originalZoom);}
+ await page.waitForFunction(previous=>devicePixelRatio===previous,density);
  await page.waitForTimeout(700);await command("for i in {1..90}; do printf 'RESIZE_ROW_%03d\\n' \"$i\"; done; printf '%s%s\\n' RESIZE_ SENTINEL");
  const bufferText=()=>page.evaluate(()=>{const buffer=window.__resizeFixture.view.term.buffer.active;return Array.from({length:buffer.length},(_,index)=>buffer.getLine(index).translateToString(true)).join('\n');});
  await page.waitForTimeout(500);await page.waitForFunction(()=>{const buffer=window.__resizeFixture.view.term.buffer.active;return Array.from({length:buffer.length},(_,index)=>buffer.getLine(index).translateToString(true)).join('\n').includes('RESIZE_SENTINEL');});
  for(const dimensions of [[1440,650],[1200,900],[1600,700],[1440,900],[1200,650],[1440,900]]){await app.evaluate(({BrowserWindow},size)=>BrowserWindow.getAllWindows()[0].setSize(...size),dimensions);await page.waitForTimeout(400);const text=await bufferText();const rows=text.match(/RESIZE_ROW_\d{3}/g)||[];assert.equal(rows.length,90,'Resizing must preserve all output exactly once');assert.equal(new Set(rows).size,90,'Resizing must not duplicate prior output');}
  for(let index=0;index<12;index++){await app.evaluate(({BrowserWindow},size)=>BrowserWindow.getAllWindows()[0].setSize(...size),[1200+index*20,650+(index%3)*70]);await page.waitForTimeout(35);}await page.waitForTimeout(400);const rapidRows=(await bufferText()).match(/RESIZE_ROW_\d{3}/g)||[];assert.equal(rapidRows.length,90,'Rapid resizes must preserve output exactly once: '+await bufferText());assert.equal(new Set(rapidRows).size,90);
- await page.screenshot({path:resolve('apps/desktop/desktop-terminal-resize.png')});await page.evaluate(()=>{const {views,id,threadId}=window.__resizeFixture;views.close(threadId,id);delete window.__resizeFixture;});assert.deepEqual(errors,[]);
+ await page.screenshot({path:resolve('apps/desktop/desktop-terminal-resize.png')});await page.evaluate(()=>{
+  const {view,views,id,threadId,guardedStyle}=window.__resizeFixture;
+  view.term.scrollToTop();if(view.term.buffer.active.viewportY!==0)throw Error('Terminal did not scroll to top');
+  view.term.scrollToBottom();if(view.term.buffer.active.viewportY!==view.term.buffer.active.baseY)throw Error('Terminal did not return to bottom');
+  views.close(threadId,id);if(Object.hasOwn(guardedStyle,'textContent'))throw Error('Closed terminal retained its dimensions guard');
+  delete window.__resizeFixture;
+ });assert.deepEqual(errors,[]);
  }catch(error){console.error('Terminal fixture diagnostics:',JSON.stringify(await app.evaluate(()=>globalThis.terminalDiagnostics)));const page=await app.firstWindow();console.error('Terminal fixture screen:',await page.locator('.terminal-session').innerText());await page.screenshot({path:resolve('apps/desktop/desktop-terminal-failure.png')});throw error;}finally{await app.close();}
 });

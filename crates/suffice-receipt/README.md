@@ -1,0 +1,7 @@
+# Experimental receipt writer
+
+Rust appends the UTF-8 bytes supplied by the trusted desktop worker. The writer accepts an absolute home and a generated timestamp/UUID filename under its fixed `events` child. The addon validates the arguments at construction and opens the directories on the first asynchronous operation. The first append exclusively creates the receipt. Newly created directories and files request modes 0700 and 0600 on Unix, subject to umask.
+
+Each open writer has a FIFO queue. Pages contain at most 1 MiB of UTF-8 payload. The queue admits at most 32 operations and 4 MiB of payload through JavaScript promise delivery, plus a reserved close operation. Repeated closes share one promise. At most 32 writers may be live in the addon process, including its Node worker isolates. Close, terminal fault, or collection releases the slot after admitted work drains. The queue counts each owned UTF-8 payload once. The caller's JavaScript string, a temporary UTF-16 conversion buffer of up to approximately 2 MiB per page, object metadata, and allocator capacity beyond the payload length consume additional memory.
+
+Flush waits for accepted writes to reach the operating system. It does not call fsync. A partial-write or identity error stops further writes. Completed prefixes survive a process crash, and a subsequent writer cannot reopen the same receipt for replay. The file and directories are checked around writes. Moving a file during an in-flight append can still deliver those bytes to its previously authorized open descriptor.

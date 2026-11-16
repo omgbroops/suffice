@@ -4,7 +4,8 @@ import {Type} from 'typebox';
 import {readFileSync,existsSync} from 'node:fs';
 import {mcpConfig} from './mcp-config.mjs';
 import {requiresDesktopApproval} from './desktop-policy.mjs';
-import {mkdir, appendFile} from 'node:fs/promises';
+import {mkdir} from 'node:fs/promises';
+import {createReceiptLog} from './receipt-log.mjs';
 import {resolve} from 'node:path';
 import {randomUUID} from 'node:crypto';
 import {createAgentSession, DefaultResourceLoader, SettingsManager, SessionManager, createCodemodeExtension, createMcpExtension,createToolSearchExtension,ProjectTrustStore} from '@earendil-works/pi-coding-agent';
@@ -18,7 +19,7 @@ export const PROMPT='Implement the requested change in this repository. Investig
 
 export const SUFFICE_IDENTITY='You are Suffice, the coding agent in the Suffice application and CLI. Your product and host are Suffice. Refer to yourself and this application as Suffice.';
 
-export async function createSufficeSession(options, runtime, {onTool=()=>{}, onAssistant=()=>{}, onApproval, toolObserver}={}) {
+export async function createSufficeSession(options, runtime, {onTool=()=>{}, onAssistant=()=>{}, onApproval, toolObserver, createReceiptWriter}={}) {
   const workspace=options.cwd;
   const access=options.access??'full';if(!['read','edit','full'].includes(access))throw new Error('Invalid access level');
   const externalAccess=access==='full';
@@ -27,9 +28,10 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
   await mkdir(sessionDir,{recursive:true,mode:0o700});
   await mkdir(eventDir,{recursive:true,mode:0o700});
   const eventPath=resolve(eventDir,`${Date.now()}-${randomUUID()}.jsonl`);
-  let tail=Promise.resolve(), logError, session, allowance, taskTimer, managedRun=false;
+  let session, allowance, taskTimer, managedRun=false;
   const totals={input:0,cacheRead:0,cacheWrite:0,output:0,estimatedApiUsd:0,modelCalls:0,costUnknown:false};
-  const log=event=>{tail=tail.then(()=>appendFile(eventPath,JSON.stringify({at:new Date().toISOString(),...event})+'\n',{mode:0o600})).catch(e=>{logError??=e; void session?.abort();});};
+  const receipts=createReceiptLog(options.home,eventPath,createReceiptWriter,()=>{void session?.abort();});
+  const log=receipts.log;
   const manager=options.sessionManager??(options.continue?SessionManager.continueRecent(workspace,sessionDir):SessionManager.create(workspace,sessionDir));
   const automation=createAutomation({home:options.home,sessionId:hash(manager.getSessionFile()??randomUUID()).slice(0,32),browser:externalAccess&&options.browser!==false,desktop:externalAccess&&options.desktop!==false,headless:options.browserHeadless===true});
   const automaticNaming=options.desktopSettings?.naming==='Automatic';
@@ -48,18 +50,18 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
       log({type:'tool_call',name:e.toolName,input:e.input,callId:e.toolCallId,parentCallId:e.parentToolCallId});
       onTool(e.toolName,e.input);
       if(allowance)allowance.calls++;
-      if(allowance && (allowance.reason || logError)) {
-        stop(logError?'receipt_error':allowance.reason); return {block:true,reason:'Task stopped'};
+      if(allowance && (allowance.reason || receipts.error)) {
+        stop(receipts.error?'receipt_error':allowance.reason); return {block:true,reason:'Task stopped'};
       }
     });
     pi.on('tool_result',e=>log({type:'tool_result',name:e.toolName,callId:e.toolCallId,parentCallId:e.parentToolCallId,isError:e.isError,content:e.content,details:e.details}));
     pi.on('before_provider_request',e=>{
-      if(logError) throw logError;
+      if(receipts.error) throw receipts.error;
       if(allowance && (allowance.reason || (options.maxCost!=null&&allowance.spent>=options.maxCost))) throw new Error('Task allowance exhausted');
       log({type:'provider_request',model:e.payload.model,reasoning:e.payload.reasoning,bytes:JSON.stringify(e.payload).length});
     });
     pi.on('provider_stream_event',e=>{if(e.data?.response?.usage) log({type:'provider_usage',responseId:e.data.response.id,usage:e.data.response.usage});});
-    pi.on('session_shutdown',async event=>{finish();if(event.reason!=='reload')await automation.dispose();await tail;if(logError) throw logError;});
+    pi.on('session_shutdown',async event=>{finish();if(event.reason!=='reload')await automation.dispose();await receipts.drain(event.reason==='reload'?'flush':'close');});
   };
   const resourceState=()=>{try{return JSON.parse(readFileSync(resolve(options.home,'resource-state.json'),'utf8'));}catch(e){if(e.code==='ENOENT')return {};throw e;}};
   const webExtension=externalAccess?await loadWebExtension(options.home):null;
@@ -112,22 +114,22 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
   return {
     session, totals, eventPath, sessionPath:()=>manager.getSessionFile(), created,
     services:{cwd:workspace,agentDir:options.home,modelRuntime:runtime,settingsManager:settings,resourceLoader:loader,diagnostics:[]},
-    async flush() {clearTimeout(taskTimer);await tail;if(logError) throw logError;},
+    async flush() {clearTimeout(taskTimer);await receipts.drain('flush');},
     async run(prompt,options={}) {
       managedRun=true;begin();
       try {
         let disposition;await session.prompt(prompt,{...(options.images?.length?{images:options.images}:{}),preflightResult:value=>{disposition=value;}});
         if(disposition==='handled')return '';
         const last=[...session.messages].reverse().find(m=>m.role==='assistant');
-        if(logError) throw new Error(`Could not save usage receipts: ${logError.message}`);
+        if(receipts.error) throw new Error(`Could not save usage receipts: ${receipts.error.message}`);
         if(allowance.reason) throw new Error(`Task stopped: ${allowance.reason}`);
         if(!last || ['error','aborted','length'].includes(last.stopReason)) throw new Error(last?.errorMessage || `Response ${last?.stopReason??'missing'}`);
         return session.getLastAssistantText()??'';
       } finally {
-        finish();managedRun=false;await tail;
+        finish();managedRun=false;await receipts.tail;
       }
     },
     abort:()=>{stop('cancelled');},
-    async dispose() {clearTimeout(taskTimer);await session.extensionRunner.emit({type:'session_shutdown',reason:'exit'});session.dispose();await automation.dispose();await tail;if(logError) throw logError; }
+    async dispose() {clearTimeout(taskTimer);await session.extensionRunner.emit({type:'session_shutdown',reason:'exit'});session.dispose();await automation.dispose();await receipts.drain('close'); }
   };
 }
