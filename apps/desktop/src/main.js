@@ -400,7 +400,10 @@ const spotlight=createSpotlight({commands:()=>[
  {id:'sidebar',title:'Toggle sidebar',icon:'panel',run:()=>document.querySelector('[data-action="toggle-sidebar"]').click()},
  {id:'project',title:'Choose project',icon:'folder',run:()=>document.querySelector('.project-picker')?.click()},
  {id:'theme',title:getTheme()==='dark'?'Use light theme':'Use dark theme',icon:'agent',run:()=>setTheme(getTheme()==='dark'?'light':'dark')},
- {id:'settings',title:'Workspace settings',icon:'agent',run:showSettings}
+ {id:'settings',title:'Workspace settings',icon:'agent',run:showSettings},
+ {id:'voice',title:voice?.active?'End voice':'Start voice',icon:'message',run:()=>voice?.toggle()},
+ {id:'voice-full',title:'Voice: full view',icon:'message',run:()=>voice?.full()},
+ {id:'voice-mini',title:'Voice: floating orb',icon:'message',run:()=>voice?.minimize()}
 ]});
 function showSearch(keyboard=false){spotlight.open({keyboard});}
 
@@ -421,6 +424,8 @@ connectSendControls(document.querySelector('.composer'),prompt,send);
 connectComposerSize(document.querySelector('.composer'),prompt);
 connectAttachments({form:document.querySelector('.composer'),prompt,send,input:document.querySelector('#file-input'),toast});
 connectDesktop({prompt,send,toast,escapeHtml});
+import { connectVoice } from './voice/voice-ui.js';
+const voice=window.sufficeDesktop?connectVoice({form:document.querySelector('.composer'),prompt,toast}):null;
 
 document.addEventListener('suffice-preference',event=>{const {id,value}=event.detail;if(id==='background'){localStorage.setItem('suffice-background',value);unmountAtmosphere();const url=new URL(location.href);url.searchParams.set('background',value);history.replaceState(null,'',url);unmountAtmosphere=mountAtmosphere(document.querySelector('.atmosphere'));}if(id==='background-motion'||id==='reduced-motion'||id==='background'){document.querySelector('.atmosphere').dataset.motion=preference('background-motion',true)&&!preference('reduced-motion',false)?'running':'paused';}});
 document.querySelector('.atmosphere').dataset.motion=preference('background-motion',true)&&!preference('reduced-motion',false)?'running':'paused';

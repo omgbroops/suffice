@@ -1,5 +1,5 @@
 const {externalLink}=require('./external-links.cjs');
-const {app,BrowserWindow,ipcMain,dialog,utilityProcess,clipboard,shell,Notification,nativeImage}=require('electron');
+const {app,BrowserWindow,ipcMain,dialog,utilityProcess,clipboard,shell,Notification,nativeImage,systemPreferences,screen}=require('electron');
 const path=require('node:path');
 const packaged=require('./launch-mode.cjs').isInstalledApp(app);
 require('./desktop-profile.cjs').configureDesktopProfile(app,{packaged});
@@ -43,12 +43,20 @@ if(primary)app.whenReady().then(async()=>{
   const entry=pathToFileURL(path.join(__dirname,'../dist/index.html')).href;
   win.webContents.setWindowOpenHandler(({url})=>{const link=externalLink(url);if(link)void shell.openExternal(link).catch(()=>{});return {action:'deny'};});
   win.webContents.on('will-navigate',(event,url)=>{if(url!==entry){event.preventDefault();const link=externalLink(url);if(link)void shell.openExternal(link).catch(()=>{});}});
-  function handle(name,handler){ipcMain.handle(`suffice:${name}`,(event,...args)=>{if(event.senderFrame!==win.webContents.mainFrame)throw new Error('Untrusted frame');if(branchBusy&&['select-project','thread','project','reset'].includes(name))throw new Error('Wait for the branch change to finish');return handler(...args);});}
+  const voiceWindow=require('./voice-window.cjs').createVoiceWindow({BrowserWindow,screen,preloadPath:path.join(__dirname,'preload.cjs'),entryPath:path.join(__dirname,'../dist/index.html'),hidden:process.env.SUFFICE_TEST_HIDE_WINDOW==='1',getMainWindow:()=>win});
+  const voiceHub=require('./voice-window.cjs').createVoiceHub({getMainWindow:()=>win,voiceWindow});
+  function handle(name,handler,opts={}){ipcMain.handle(`suffice:${name}`,(event,...args)=>{const who=voiceHub.senderOf(event,opts);if(!who)throw new Error('Untrusted frame');if(branchBusy&&['select-project','thread','project','reset'].includes(name))throw new Error('Wait for the branch change to finish');return opts.sender?handler(who,...args):handler(...args);});}
   const views=require('./view-state-store.cjs').createViewStateStore(path.join(app.getPath('userData'),'thread-views'));
   handle('view-states',()=>views.load());
   handle('save-view-state',payload=>views.save(payload));
   const {createProviderSettings,providerLoginErrorMessage}=await import('./provider-settings.mjs');
   const providerSettings=createProviderSettings({getPreferences:()=>settings.get(),onCatalog:catalog=>{if(!win.isDestroyed())win.webContents.send('suffice:event',{event:'models_changed',catalog});},emit:event=>{if(!win.isDestroyed())win.webContents.send('suffice:provider-auth',event);},openBrowser:url=>shell.openExternal(url)});
+  const voiceSessions=require('./voice-session.cjs').createVoiceSessions({getApiKey:()=>providerSettings.getApiKey('openai')});
+  handle('voice-session',async()=>{if(process.platform==='darwin')await systemPreferences.askForMediaAccess('microphone').catch(()=>false);return voiceSessions.mint();},{allowVoiceWindow:true});
+  handle('voice-window',(who,action)=>voiceHub.windowAction(who,action),{allowVoiceWindow:true,sender:true});
+  handle('voice-relay',(who,message)=>voiceHub.relay(who,message),{allowVoiceWindow:true,sender:true});
+  const voiceTranscriber=require('./voice-transcribe.cjs').createTranscriber({getApiKey:()=>providerSettings.getApiKey('openai')});
+  handle('voice-transcribe',payload=>{const audio=payload?.audio;const bytes=audio instanceof ArrayBuffer?new Uint8Array(audio):audio instanceof Uint8Array?audio:null;if(!bytes||typeof payload.mimeType!=='string'||payload.mimeType.length>100||(payload.prompt!==undefined&&(typeof payload.prompt!=='string'||payload.prompt.length>500)))throw new Error('Invalid voice recording');return voiceTranscriber.transcribe({audio:bytes,mimeType:payload.mimeType,prompt:payload.prompt});});
   const resources=(await import('./resources.mjs')).createResourceService(settingsHome,{choosePath:async kind=>{const result=await dialog.showOpenDialog(win,{title:'Add '+kind,properties:kind==='extensions'?['openFile']:['openDirectory']});return result.canceled?null:result.filePaths[0];}});
   app.on('will-quit',()=>resources.dispose());
   handle('resources',()=>resources.list());
