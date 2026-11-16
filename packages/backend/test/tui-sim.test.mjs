@@ -88,8 +88,7 @@ test('dialog navigation: Down, digit, Esc', { skip }, async () => {
     await t.wait(/Do you want to proceed\?/, 15000)
     assert.match(t.screen(), /^\s*❯ 1\./m)
     t.key('Down'); await t.wait(/^\s*❯ 2\./m)
-    t.key('3'); await t.wait(/^\s*❯ 3\./m)
-    t.key('Escape'); await t.wait(/Interrupted|What should Claude do instead/)
+    t.key('3'); await t.wait(/Interrupted|What should Claude do instead/) // a digit confirms, like the real CLI
     assert.doesNotMatch(t.screen(), /Do you want to proceed\?/)
   } finally { t.end() }
 })

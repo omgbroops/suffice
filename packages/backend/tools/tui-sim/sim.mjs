@@ -372,7 +372,7 @@ function onKey(key) {
     const d = dlg
     if (key === 'up') { d.sel = Math.max(0, d.sel - 1); drawOpts(d) }
     else if (key === 'down') { d.sel = Math.min(d.opts.length - 1, d.sel + 1); drawOpts(d) }
-    else if (/^[1-9]$/.test(key) && d.opts[0]?.num && Number(key) <= d.opts.length) { d.sel = Number(key) - 1; drawOpts(d) }
+    else if (/^[1-9]$/.test(key) && d.opts[0]?.num && Number(key) <= d.opts.length) { d.sel = Number(key) - 1; drawOpts(d); d.resolve(d.sel) } // real Claude: a digit selects and confirms
     else if (key === 'enter') d.resolve(d.kind === 'modal' ? 'esc' : d.sel)
     else if (key === 'esc') d.resolve('esc')
     return

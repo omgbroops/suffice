@@ -9,7 +9,7 @@ import * as screenparts from '../../../packages/backend/src/tui/screenparts.mjs'
 import * as commands from '../../../packages/backend/src/tui/commands.mjs';
 import {createUsageMeter,format as formatUsage} from '../../../packages/backend/src/tui/usage.mjs';
 
-const LABELS={claude:'Claude Code',codex:'Codex',fake:'Fake agent',fakeclaude:'Fake Claude'};
+const LABELS={claude:'Claude Code',codex:'Codex',fake:'Fake agent',fakeclaude:'Fake Claude',simclaude:'Sim Claude'};
 const AGENT_BY_SOURCE={'claude-code':'claude',codex:'codex'};
 const str=v=>typeof v==='string'&&v.length>0&&v.length<4096;
 const onPath=bin=>(process.env.PATH||'').split(path.delimiter).some(dir=>{try{fs.accessSync(path.join(dir,bin),fs.constants.X_OK);return true;}catch{return false;}});
@@ -28,8 +28,16 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
   const transcript=path.join(dataDir,'fakeclaude-transcript.jsonl');fs.mkdirSync(dataDir,{recursive:true});fs.writeFileSync(transcript,'');
   sessionAgents.fakeclaude={bin:env.SUFFICE_TEST_NODE||'node',startArgs:()=>[claudeAgent,transcript],resumeArgs:()=>[claudeAgent,transcript],locateTranscript:()=>transcript,listHistory:()=>[],parseLine:()=>[]};
  }
+ // Test-only: one tui-sim scenario per session. The scenario comes from <dataDir>/sim-run.json at spawn, each session gets its own transcript.
+ const simAgent=env.SUFFICE_TEST_SIM_AGENT;
+ if(simAgent){
+  fs.mkdirSync(dataDir,{recursive:true});
+  const run=()=>{try{return JSON.parse(fs.readFileSync(path.join(dataDir,'sim-run.json'),'utf8'));}catch{return {};}};
+  const tf=sessionId=>path.join(dataDir,`sim-${sessionId}.jsonl`),args=({sessionId})=>{const r=run();return [simAgent,'--scenario',r.scenario||'status-idle','--speed',String(r.speed||1),'--seed',String(r.seed||1),'--session-id',sessionId,tf(sessionId)];};
+  sessionAgents.simclaude={bin:env.SUFFICE_TEST_NODE||'node',newSessionId:()=>'sim'+Math.random().toString(36).slice(2,10),startArgs:args,resumeArgs:args,locateTranscript:({sessionId})=>{const f=tf(sessionId);fs.writeFileSync(f,'',{flag:'a'});return f;},listHistory:()=>[],parseLine:()=>[]};
+ }
  const socket=env.SUFFICE_SESSIONS_SOCKET||'suffice';
- const backend=createBackend({dataDir,sessions:true,history:true,socketName:socket,home:env.SUFFICE_HISTORY_HOME||undefined,sessionAgents,...(testAgent&&{idleMs:400,settleMs:100})});
+ const backend=createBackend({dataDir,sessions:true,history:true,socketName:socket,home:env.SUFFICE_HISTORY_HOME||undefined,sessionAgents,...((testAgent||simAgent)&&{idleMs:400,settleMs:100})});
  const bridge=createIpcBridge(backend);
  bridge.subscribe(send);
  const call=async message=>{const r=await bridge.handle(message);if(!r.ok)throw new Error(r.error);return r.result;};
@@ -42,7 +50,7 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
  const slot=id=>`session:${id}:ui`;
  function track(row){
   const sid=row?.id;if(!sid||tracked.has(sid))return;
-  const kind=row.agent==='codex'?'codex':row.agent==='claude'||row.agent==='fakeclaude'?'claude':null;if(!kind)return;
+  const kind=row.agent==='codex'?'codex':row.agent==='claude'||row.agent==='fakeclaude'||row.agent==='simclaude'?'claude':null;if(!kind)return;
   const mapper=kind==='codex'?createCodexMapper():createClaudeMapper();
   const t={kind,mapper,state:mapper.newState?.()??{},order:[],byId:new Map(),prompt:null,status:null,screenMeta:{},meter:createUsageMeter(),unsubs:[],timer:null,last:0,dirty:false,pending:null};
   tracked.set(sid,t);

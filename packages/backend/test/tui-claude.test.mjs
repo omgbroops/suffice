@@ -427,3 +427,8 @@ test('item 8: parsePrompt on the recorded plan-approval and question dialogs; nu
   assert.equal(m.parsePrompt(realScreen('model-switch', '07-help.txt')), null);
   assert.equal(m.parsePrompt(realScreen('model-switch', '08-slash-menu.txt')), null);
 });
+
+test('parsePrompt: diff preview between rules is not in the body', () => {
+  const p = P(['Edit file', '╌╌╌╌╌╌╌╌╌', '  1 +const a = 1', '  2 -const b = 2', '╌╌╌╌╌╌╌╌╌', ' Do you want to make this edit?', ' ❯ 1. Yes', '   2. No'].join('\n'));
+  assert.equal(p.body, 'Edit file');
+});

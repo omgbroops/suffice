@@ -1,0 +1,59 @@
+PASS  ask-question         
+PASS  at-mention           
+PASS  background           
+PASS  bash-allow           
+PASS  bash-deny            
+PASS  bash-fail            
+PASS  compact              
+PASS  compact-mid-run      
+PASS  deny-and-redirect    
+PASS  edit                 
+PASS  error-rate-limit     
+PASS  huge-output          
+PASS  interrupt            
+PASS  interrupt-then-queue 
+PASS  long-session         
+FAIL  mode-cycle           ERROR locator.click: Timeout 15000ms exceeded.
+Call log:
+[2m  - waiting for locator('
+FAIL  model-switch         ERROR locator.waitFor: Error: strict mode violation: locator('.session-terminal .xterm
+PASS  parallel-subagents   
+PASS  plan-mode            
+PASS  queued               
+PASS  read-search          
+PASS  resume               
+PASS  resume-existing      
+FAIL  status-idle          ERROR locator.waitFor: Error: strict mode violation: locator('.session-terminal .xterm
+PASS  storm                
+PASS  subagent             
+PASS  todo                 
+PASS  web                  
+PASS  write                
+
+Measurements
+ask-question         rows=4 nodes=13 gapMax=25ms ipc/s=0.9 mem=10.6->10.6MB
+at-mention           rows=0 nodes=0 gapMax=10ms ipc/s=0.8 mem=10.6->10.6MB
+background           rows=4 nodes=22 gapMax=25ms ipc/s=1.5 mem=10.6->10.6MB
+bash-allow           rows=4 nodes=30 gapMax=10ms ipc/s=1.8 mem=10.6->10.6MB
+bash-deny            rows=7 nodes=17 gapMax=10ms ipc/s=1.4 mem=11.2->11.2MB
+bash-fail            rows=4 nodes=26 gapMax=10ms ipc/s=1.2 mem=10.6->10.6MB
+compact              rows=11 nodes=22 gapMax=10ms ipc/s=1.5 mem=10.6->10.6MB
+compact-mid-run      rows=11 nodes=94 gapMax=42ms ipc/s=2.1 mem=10.6->10.6MB
+deny-and-redirect    rows=18 nodes=95 gapMax=11ms ipc/s=1.7 mem=10.6->10.6MB
+edit                 rows=4 nodes=88 gapMax=10ms ipc/s=1.5 mem=10.6->10.6MB
+error-rate-limit     rows=3 nodes=3 gapMax=10ms ipc/s=1.6 mem=10.6->10.6MB
+huge-output          rows=4 nodes=30 gapMax=10ms ipc/s=1.8 mem=10.6->10.6MB
+interrupt            rows=3 nodes=10 gapMax=10ms ipc/s=2 mem=10.6->10.6MB
+interrupt-then-queue rows=7 nodes=71 gapMax=11ms ipc/s=2.2 mem=10.6->10.6MB
+long-session         rows=44 nodes=389 gapMax=33ms ipc/s=2.4 mem=10.6->10.6MB
+parallel-subagents   rows=4 nodes=35 gapMax=10ms ipc/s=1.6 mem=11.9->11.9MB
+plan-mode            rows=8 nodes=96 gapMax=10ms ipc/s=1.3 mem=10.6->10.6MB
+queued               rows=4 nodes=15 gapMax=10ms ipc/s=1.7 mem=10.6->10.6MB
+read-search          rows=4 nodes=61 gapMax=10ms ipc/s=1.7 mem=10.6->10.6MB
+resume               rows=3 nodes=5 gapMax=10ms ipc/s=1 mem=10.6->10.6MB
+resume-existing      rows=4 nodes=30 gapMax=10ms ipc/s=1.8 mem=10.6->10.6MB
+storm                rows=4 nodes=425 gapMax=10ms ipc/s=6.2 mem=10.6->10.6MB
+subagent             rows=4 nodes=13 gapMax=10ms ipc/s=1.6 mem=11.2->11.2MB
+todo                 rows=8 nodes=44 gapMax=10ms ipc/s=1.7 mem=10.6->10.6MB
+web                  rows=4 nodes=14 gapMax=10ms ipc/s=1.1 mem=10.6->10.6MB
+write                rows=4 nodes=35 gapMax=10ms ipc/s=1.2 mem=10.6->10.6MB

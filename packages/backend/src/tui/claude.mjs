@@ -300,7 +300,10 @@ function parsePrompt(screen) {
   for (let j = rows[0].i - 1; j >= 0; j--) if (lines[j].includes('?')) { ti = j; break; }
   if (ti < 0) ti = Math.max(0, rows[0].i - 1);
   const title = trust ? 'Is this a project you created or one you trust?' : lines[ti].trim();
-  const body = lines.slice(Math.max(0, ti - 6), ti).filter((l) => !SPIN.test(l)).map((l) => l.trim()).join('\n');
+  let above = lines.slice(Math.max(0, ti - 6), ti).filter((l) => !SPIN.test(l));
+  const rl = above.map((l, k) => (/^[\s╌─━╍-]{3,}$/.test(l) ? k : -1)).filter((k) => k >= 0); // diff/preview panel sits between rules: not dialog text
+  if (rl.length) above = [...above.slice(0, rl[0]), ...above.slice(rl.length > 1 ? rl.at(-1) + 1 : rl[0] + 1).filter(() => rl.length > 1)];
+  const body = above.map((l) => l.trim()).join('\n');
   const promptId = createHash('sha1').update(`${title}\n${options.map((o) => o.label).join('\n')}`).digest('hex').slice(0, 12);
   return { promptId, type, title, ...(body ? { body } : {}), options, selected };
 }
