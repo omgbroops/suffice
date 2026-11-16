@@ -71,9 +71,11 @@ if(primary)app.whenReady().then(async()=>{
   handle('changes',()=>workspaceFiles.changes(project));
   handle('diff',name=>workspaceFiles.diff(project,name));
   handle('clipboard-files',()=>clipboardFiles(clipboard));
-  const threadLocations=new Map();
+  const threadLocations=new Map();let sessionsIpc;
   terminals=require('./terminals.cjs').createTerminalManager({resolveCwd:async id=>(await settings.get())['working-directory']==='Home directory'?require('node:os').homedir():threadLocations.get(id),resolveShell:async()=>{const prefs=await settings.get();if(process.platform==='win32'&&prefs['terminal-shell']==='PowerShell')return path.join(process.env.SystemRoot,'System32/WindowsPowerShell/v1.0/powershell.exe');if(prefs['terminal-shell']==='System default')return process.platform==='win32'?process.env.ComSpec:process.env.SHELL||'/bin/bash';return (await import('../../../packages/cli/src/shell.mjs')).nativeShellPath()||process.env.SHELL||'/bin/bash';},emit:event=>{if(win&&!win.isDestroyed())win.webContents.send('suffice:terminal-event',event);}});
-  handle('terminal-create',payload=>terminals.create(payload));
+  const sx=await (await import('./sessions-ipc.mjs')).createSessionsIpc({dataDir:path.join(app.getPath('userData'),'sessions'),env:process.env,send:m=>{if(win&&!win.isDestroyed())win.webContents.send('suffice:sessions-event',m);}});sessionsIpc=sx;
+  for(const [name,fn] of Object.entries(sx.handlers))handle(name,fn);
+  handle('terminal-create',async payload=>{const{command:_ignored,sessionId,...rest}=payload||{};if(typeof sessionId!=='string')return terminals.create(rest);const target=await sx.attach(sessionId);threadLocations.set(rest.threadId,target.cwd);return terminals.create({...rest,command:target.command});});
   handle('terminal-write',payload=>terminals.write(payload));
   handle('terminal-resize',payload=>terminals.resize(payload));
   handle('terminal-close',payload=>terminals.close(payload));
@@ -150,4 +152,4 @@ if(primary)app.whenReady().then(async()=>{
   }
 });
 app.on('window-all-closed',()=>app.quit());
-app.on('will-quit',()=>{terminals?.dispose();background?.stop();harness?.stop();});
+app.on('will-quit',()=>{terminals?.dispose();sessionsIpc?.dispose();background?.stop();harness?.stop();});

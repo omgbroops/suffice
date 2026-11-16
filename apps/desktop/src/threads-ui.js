@@ -21,6 +21,7 @@ import {groupActions,actionTitle} from './action-display.js';
 import {connectDisclosureMotion} from './disclosure-motion.js';
 import {createToolWidget,toolOutput} from './tool-widget.js';
 import {nextTranscriptFollowing} from './transcript-scroll.js';
+import {connectSessions} from './sessions-ui.js';
 
 export function connectThreads({api,prompt,send,toast}){
  connectExtensionUI(api,toast);const approvals=connectApprovals(api,toast);
@@ -58,8 +59,10 @@ export function connectThreads({api,prompt,send,toast}){
  window.addEventListener('beforeunload',saveView);
  historyObserver.observe(history);
  new ResizeObserver(()=>{transcript.style.setProperty('--transcript-bottom-space',`${form.getBoundingClientRect().height+48}px`);bottom();}).observe(form);
- function threadView(title,animate=false){const change=()=>{if(!workspace.classList.contains('thread-view')){const canvas=workspace.querySelector('.atmosphere');previousMotion=canvas.dataset.motion;canvas.dataset.motion='paused';canvas.dispatchEvent(new Event('motion-change'));}workspace.classList.add('thread-view');newSession.removeAttribute('aria-current');header.textContent=title;header.hidden=false;};if(animate)transition.enter(change);else change();}
+ let sessions;
+ function threadView(title,animate=false){sessions?.leave();const change=()=>{if(!workspace.classList.contains('thread-view')){const canvas=workspace.querySelector('.atmosphere');previousMotion=canvas.dataset.motion;canvas.dataset.motion='paused';canvas.dispatchEvent(new Event('motion-change'));}workspace.classList.add('thread-view');newSession.removeAttribute('aria-current');header.textContent=title;header.hidden=false;};if(animate)transition.enter(change);else change();}
  function clear(){
+  sessions?.leave();
   const wasThread=workspace.classList.contains('thread-view');
   const change=()=>{
    if(workspace.classList.contains('thread-view')){const canvas=workspace.querySelector('.atmosphere');if(previousMotion===undefined)delete canvas.dataset.motion;else canvas.dataset.motion=previousMotion;canvas.dispatchEvent(new Event('motion-change'));}
@@ -74,6 +77,7 @@ export function connectThreads({api,prompt,send,toast}){
   clearTimeout(codeTimers.get(element));
   if(element.querySelector('pre code'))codeTimers.set(element,setTimeout(()=>{if(element.isConnected){void import('./mermaid-diagrams.js').then(({renderDiagrams})=>renderDiagrams(element));void import('./code-highlight.js').then(({colorCode})=>Promise.all([...element.querySelectorAll('pre code')].map(code=>colorCode(code,'snippet.'+(code.className.match(/language-([\w+-]+)/)?.[1]||'text'))))).catch(()=>{});}},120));
  }
+ sessions=connectSessions({toast,form,workspace,header,hooks:{showHistory,threadView,markdown,bottom}});
  function plainReasoning(text){const node=document.createElement('div');markdown(node,text);return node.textContent.replace(/[*_`~]/g,'').replace(/^#{1,6}\s*/gm,'').split('\n').map(line=>line.trim()).filter(Boolean).at(-1)||'Working';}
  function message(role,text){const element=document.createElement('article');element.className=`thread-message thread-${role}`;if(role==='assistant')markdown(element,text);else element.textContent=text;history.append(element);bottom();return element;}
  function renderMessages(messages){
@@ -265,6 +269,7 @@ export function connectThreads({api,prompt,send,toast}){
   event.preventDefault();event.stopImmediatePropagation();
   if(busy&&!prompt.value.trim()&&!form.attachments?.count){await api.abort(activeId).catch(error=>toast(error.message));return;}
   if(opening)return;
+  if(sessions?.isActive()){const t=prompt.value.trim();if(t){sessions.send(t);prompt.value='';send.disabled=true;saveView();}return;}
   const text=prompt.value.trim()||(form.attachments?.count?'Please review the attached files.':'');if(!text)return;
   if(form.modelsDisabled){toast('Enable a model in Settings → Models first');return;}if(form.dataset.requireProject==='true'){toast('Choose a project above the composer first');return;}const inBackground=form.backgroundSubmit||form.backgroundIntent;if(inBackground&&!preference('background-agents',true)){toast('Background agents are disabled in settings');return;}form.backgroundSubmit=false;
   let attachments;opening=true;try{attachments=await form.attachments?.payload();}catch(error){toast(error.message);return;}finally{opening=false;}

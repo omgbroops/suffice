@@ -55,4 +55,10 @@ contextBridge.exposeInMainWorld('sufficeDesktop',{
   steer:payload=>ipcRenderer.invoke('suffice:steer',payload),
   reset:()=>ipcRenderer.invoke('suffice:reset'),
   onEvent:callback=>{const listener=(_event,value)=>callback(value);ipcRenderer.on('suffice:event',listener);return()=>ipcRenderer.removeListener('suffice:event',listener);},
+  sessions:(()=>{const inv=(n,p)=>ipcRenderer.invoke('suffice:'+n,p);const last=new Map(),subs=new Set();
+   ipcRenderer.on('suffice:sessions-event',(_e,m)=>{if(m?.type!=='slot')return;last.set(m.id,m.value);for(const f of subs)f(m.id,m.value);});
+   const watch=(slot,cb)=>{const f=(id,v)=>{if(id===slot)cb(v);};subs.add(f);if(last.has(slot))cb(last.get(slot));return()=>subs.delete(f);};
+   return {available:()=>inv('sessions-available'),start:p=>inv('sessions-start',p),list:()=>inv('sessions-list'),stop:id=>inv('sessions-stop',id),send:(id,text)=>inv('sessions-send',{id,text}),
+    messages:id=>last.get(`session:${id}:chat`)||[],onMessages:(id,cb)=>watch(`session:${id}:chat`,cb),onState:(id,cb)=>watch(`session:${id}:state`,cb),
+    attachCommand:id=>inv('sessions-attach-command',id),resume:p=>inv('sessions-resume',p),history:{list:p=>inv('history-list',p),read:p=>inv('history-read',p)}};})(),
 });

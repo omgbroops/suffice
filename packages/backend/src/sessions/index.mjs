@@ -149,7 +149,7 @@ export function createSessions({ exec, clock, slots, fs = nodeFs, home = os.home
     await tmux(['new-session', '-d', '-s', name, '-x', dim(cols, 'cols'), '-y', dim(rows, 'rows'), '-c', cwd, '--', adapter.bin, ...agentArgs, ...args]);
     const s = { id, name, agent, cwd, sessionId, startedAt, attachCommand: `tmux -L ${socketName} attach -t ${name}`, transcriptPath: null, chat: null, streams: new Set(), pipe: null, pipeSetup: null };
     // kept in tmux so a restarted app can re-adopt the session (see list)
-    await tmux(['set-option', '-t', name, '@sfx', JSON.stringify({ agent, cwd, sessionId, startedAt })], { allowFail: true }).catch(() => {});
+    await tmux(['set-option', '-t', name, '@sfx', JSON.stringify({ agent, cwd, sessionId, startedAt }), ';', 'set-option', '-t', name, 'status', 'off'], { allowFail: true }).catch(() => {});
     await register(s, adapter, name);
     return { id, name, agent, cwd, attachCommand: s.attachCommand, ...(s.transcriptPath ? { transcriptPath: s.transcriptPath } : {}) };
   }

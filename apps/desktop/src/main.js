@@ -21,6 +21,7 @@ import './right-panel.css';
 import './composer-files.css';
 import './thread-row.css';
 import './window-chrome.css';
+import {sessionMenuItems} from './sessions-ui.js';
 import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/500.css';
 
@@ -320,7 +321,7 @@ document.addEventListener('click', (e) => {
 
     case 'attach': document.querySelector('#file-input').click(); break;
 
-    case 'send-menu': menu(control, [{ label: 'Start session in background', action: 'background-send:start' }]); break;
+    case 'send-menu': menu(control, [{ label: 'Start session in background', action: 'background-send:start' }, ...sessionMenuItems()]); break;
 
     case 'sidebar-menu': menu(control, sidebarPreferences.items(), 'Sidebar'); break;
 
