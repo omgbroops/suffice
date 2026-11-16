@@ -28,6 +28,8 @@ function tail(fs, resolve, root, onData, onReset = () => {}) {
     // recursive only on the root itself: an ancestor (maybe $HOME) is watched one level deep and re-armed on each event
     try { w = fs.watch(want, { recursive: want === root }, read); w.on?.('error', () => {}); } catch { wDir = null; return; }
     if (nearest() !== want) arm(); // a dir appeared while the watch was being set up
+    // shortcut: FSEvents can drop writes made just after a watch is armed (seen under load); two catch-up reads, no polling beyond that
+    for (const ms of [250, 1000]) { const c = setTimeout(read, ms); c.unref?.(); }
   };
   const watchFile = () => { try { fw?.close(); } catch { /* closed */ } fw = null; try { fw = fs.watch(file, read); fw.on?.('error', () => {}); } catch { /* not there yet */ } };
   function read() {
@@ -113,6 +115,27 @@ export function createSessions({ exec, clock, slots, fs = nodeFs, home = os.home
   }
   const dropChat = (s) => { s.chat?.stop?.(); s.chat = null; };
 
+  // live record + slots + chat tail for one session; undoes itself and kills nothing on failure (callers decide)
+  async function register(s, adapter, name, { killOnFail = true } = {}) {
+    const { id } = s; const h = {};
+    try {
+      try { s.transcriptPath = locate(adapter, s); } catch { /* locate lazily */ }
+      live.set(id, s);
+      if (slots) {
+        handles.set(id, h);
+        h.chat = slots.define({ id: `session:${id}:chat`, title: `Chat ${id}`, schema: { type: 'array' } }, []);
+        h.meta = slots.define({ id: `session:${id}:meta`, title: `Session ${id}`, schema: { type: 'object' } }, { attachCommand: s.attachCommand, agent: s.agent, cwd: s.cwd, state: 'running' });
+        ensureChat(s); // keeps the chat slot live without any subscriber
+      }
+      publishList();
+    } catch (e) {
+      live.delete(id); handles.delete(id); dropChat(s); h.chat?.remove(); h.meta?.remove();
+      if (killOnFail) await tmux(['kill-session', '-t', name], { allowFail: true }).catch(() => {});
+      try { publishList(); } catch { /* original error wins */ }
+      throw e;
+    }
+  }
+
   async function start({ agent, cwd, args = [], cols = 120, rows = 32, sessionId: given, resume = false } = {}) {
     const adapter = adapters[agent];
     if (!adapter) throw new TypeError(`sessions: unknown agent ${agent}`);
@@ -125,23 +148,9 @@ export function createSessions({ exec, clock, slots, fs = nodeFs, home = os.home
     const startedAt = clock.now();
     await tmux(['new-session', '-d', '-s', name, '-x', dim(cols, 'cols'), '-y', dim(rows, 'rows'), '-c', cwd, '--', adapter.bin, ...agentArgs, ...args]);
     const s = { id, name, agent, cwd, sessionId, startedAt, attachCommand: `tmux -L ${socketName} attach -t ${name}`, transcriptPath: null, chat: null, streams: new Set(), pipe: null, pipeSetup: null };
-    const h = {};
-    try {
-      try { s.transcriptPath = locate(adapter, s); } catch { /* locate lazily */ }
-      live.set(id, s);
-      if (slots) {
-        handles.set(id, h);
-        h.chat = slots.define({ id: `session:${id}:chat`, title: `Chat ${id}`, schema: { type: 'array' } }, []);
-        h.meta = slots.define({ id: `session:${id}:meta`, title: `Session ${id}`, schema: { type: 'object' } }, { attachCommand: s.attachCommand, agent, cwd, state: 'running' });
-        ensureChat(s); // keeps the chat slot live without any subscriber
-      }
-      publishList();
-    } catch (e) {
-      live.delete(id); handles.delete(id); dropChat(s); h.chat?.remove(); h.meta?.remove();
-      await tmux(['kill-session', '-t', name], { allowFail: true }).catch(() => {});
-      try { publishList(); } catch { /* original error wins */ }
-      throw e;
-    }
+    // kept in tmux so a restarted app can re-adopt the session (see list)
+    await tmux(['set-option', '-t', name, '@sfx', JSON.stringify({ agent, cwd, sessionId, startedAt })], { allowFail: true }).catch(() => {});
+    await register(s, adapter, name);
     return { id, name, agent, cwd, attachCommand: s.attachCommand, ...(s.transcriptPath ? { transcriptPath: s.transcriptPath } : {}) };
   }
 
@@ -155,17 +164,30 @@ export function createSessions({ exec, clock, slots, fs = nodeFs, home = os.home
   }
 
   async function list() {
-    const r = await tmux(['list-sessions', '-F', '#{session_name}\t#{session_created}\t#{session_attached}'], { allowFail: true });
+    const r = await tmux(['list-sessions', '-F', '#{session_name}\t#{session_created}\t#{session_attached}\t#{@sfx}'], { allowFail: true });
     const rows = r.code !== 0 ? [] : r.stdout.split('\n').map((l) => l.split('\t')).filter((p) => /^sfx-[a-f0-9]+$/.test(p[0]));
     const present = new Set(rows.map((p) => p[0].slice(4)));
     const gone = [...live.values()].filter((s) => !present.has(s.id)); // tmux session exited on its own
     for (const s of gone) await forget(s);
     if (gone.length) publishList();
+    // sessions started by an earlier process: rebuild the record from the tmux option written at start
+    for (const p of rows) {
+      const id = p[0].slice(4);
+      if (live.has(id) || !p[3]) continue;
+      try {
+        const m = JSON.parse(p[3]);
+        if (!adapters[m.agent] || typeof m.cwd !== 'string') continue;
+        await register({ id, name: p[0], agent: m.agent, cwd: m.cwd, sessionId: m.sessionId ?? null, startedAt: Number(m.startedAt) || clock.now(), attachCommand: `tmux -L ${socketName} attach -t ${p[0]}`, transcriptPath: null, chat: null, streams: new Set(), pipe: null, pipeSetup: null }, adapters[m.agent], p[0], { killOnFail: false });
+      } catch { /* unreadable meta: stays listed without agent/cwd */ }
+    }
     return rows.map(([name, created, attached]) => {
       const id = name.slice(4); const s = live.get(id);
       return { id, name, agent: s?.agent, cwd: s?.cwd, created: Number(created), attached: Number(attached) > 0, attachCommand: `tmux -L ${socketName} attach -t ${name}` };
     });
   }
+
+  // shutdown: release chat tails and stream pipes; tmux sessions keep running and are re-adopted by list()
+  async function close() { for (const s of [...live.values()]) await forget(s); }
 
   async function stop(id) {
     const name = need(id); const s = live.get(id);
@@ -239,5 +261,5 @@ export function createSessions({ exec, clock, slots, fs = nodeFs, home = os.home
   };
   const resume = ({ agent, sessionId, cwd }) => start({ agent, cwd, sessionId, resume: true });
 
-  return { start, list, stop, resize, send, sendBytes, screen, stream, chat, messages, history, resume };
+  return { start, list, stop, close, resize, send, sendBytes, screen, stream, chat, messages, history, resume };
 }

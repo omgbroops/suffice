@@ -3,10 +3,14 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { createSessions } from '../src/sessions/index.mjs';
+import { createSessions as realCreate } from '../src/sessions/index.mjs';
 import { builtinAgents } from '../src/sessions/adapters.mjs';
 import { createSlots } from '../src/slots/index.mjs';
 
+// every instance is closed at the end so no chat tail keeps the process alive
+const made = [];
+const createSessions = (o) => { const s = realCreate(o); made.push(s); return s; };
+test.after(() => { for (const s of made) s.close?.(); });
 const clock = { now: () => 1_700_000_000_000 };
 function fakeExec(reply = () => ({ code: 0, stdout: '', stderr: '', timedOut: false })) {
   const calls = [];
@@ -29,7 +33,9 @@ test('start/list/stop/send/sendBytes/resize argv', async () => {
   await s.sendBytes(r.id, new Uint8Array([0x68, 0x0d, 0x1b]));
   await s.resize(r.id, 90, 20);
   await s.stop(r.id);
-  assert.deepEqual(calls.slice(1), [
+  assert.equal(calls[1].slice(0, 9).join(' '), `tmux -f /dev/null -L suffice set-option -t sfx-${r.id} @sfx`);
+  assert.equal(JSON.parse(calls[1][9]).agent, 'a');
+  assert.deepEqual(calls.slice(2), [
     ['tmux', '-f', '/dev/null', '-L', 'suffice', 'send-keys', '-t', `sfx-${r.id}`, '-l', '--', '-hi; $(x)'],
     ['tmux', '-f', '/dev/null', '-L', 'suffice', 'send-keys', '-t', `sfx-${r.id}`, 'Enter'],
     ['tmux', '-f', '/dev/null', '-L', 'suffice', 'send-keys', '-t', `sfx-${r.id}`, '-l', '--', 'q'],
@@ -47,9 +53,28 @@ test('list parses tab format and keeps only sfx- sessions; no server = empty', a
   const l = await s.list();
   assert.deepEqual(l.map((x) => x.id), ['ab12', 'cd34']);
   assert.equal(l[0].attached, true);
-  assert.deepEqual(calls[0], ['tmux', '-f', '/dev/null', '-L', 'sock1', 'list-sessions', '-F', '#{session_name}\t#{session_created}\t#{session_attached}']);
+  assert.deepEqual(calls[0], ['tmux', '-f', '/dev/null', '-L', 'sock1', 'list-sessions', '-F', '#{session_name}\t#{session_created}\t#{session_attached}\t#{@sfx}']);
   const none = createSessions({ exec: fakeExec(() => ({ code: 1, stdout: '', stderr: 'no server running' })).exec, clock });
   assert.deepEqual(await none.list(), []);
+});
+
+test('list re-adopts sfx- sessions started by an earlier process from the @sfx option', async () => {
+  const dir = tmp();
+  const meta = JSON.stringify({ agent: 'a', cwd: '/w', sessionId: 'sid1', startedAt: 5 });
+  const out = `sfx-ab12\t1700\t0\t${meta}\nsfx-cd34\t1800\t0\t\nsfx-ef56\t1\t0\t{"agent":"nope","cwd":"/w"}\n`;
+  const slots = createSlots({ bus: { on() { return () => {}; }, emit() {} }, clock });
+  const { exec } = fakeExec(() => ({ code: 0, stdout: out, stderr: '' }));
+  const s = createSessions({ exec, clock, slots, home: dir, agents: { a: mkAgent(path.join(dir, 't.jsonl')) } });
+  const l = await s.list();
+  assert.equal(l.find((x) => x.id === 'ab12').agent, 'a');
+  assert.equal(l.find((x) => x.id === 'cd34').agent, undefined);
+  assert.ok(slots.read('session:ab12:meta'));
+  assert.deepEqual(slots.read('sessions:list').value.map((x) => x.id), ['ab12']);
+  const off = s.chat('ab12', () => {});
+  assert.throws(() => s.chat('cd34', () => {}), /unknown session/);
+  off();
+  await s.stop('ab12');
+  fs.rmSync(dir, { recursive: true, force: true });
 });
 
 test('bad ids and bad input are rejected before any exec', async () => {
@@ -142,7 +167,7 @@ test('history list/read against a fake home; cwd filter; resume args', async () 
   await s.resume({ agent: 'claude', sessionId: 'sess-1', cwd: '/w/proj' });
   assert.deepEqual(calls[0].slice(-3), ['claude', '--resume', 'sess-1']);
   await s.resume({ agent: 'codex', sessionId: cid, cwd: '/w/other' });
-  assert.deepEqual(calls[1].slice(-3), ['codex', 'resume', cid]);
+  assert.deepEqual(calls[2].slice(-3), ['codex', 'resume', cid]);
   fs.rmSync(home, { recursive: true, force: true });
 });
 
@@ -365,5 +390,5 @@ test('resume requires a non-empty safe string sessionId', async () => {
   }
   assert.equal(calls.length, 0);
   await s.resume({ agent: 'claude', sessionId: '019aaaaa-bbbb-cccc-dddd-eeeeeeeeeeee', cwd: '/w' });
-  assert.equal(calls.length, 1);
+  assert.equal(calls.length, 2);
 });

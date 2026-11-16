@@ -1,6 +1,8 @@
 // Composition root: journal + bus + slots + budget + watchdog + runners + plugins + workflow engine.
 import fs from 'node:fs';
 import path from 'node:path';
+import os from 'node:os';
+import { spawnSync } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { createJournal, createBus, listRuns } from '../journal/index.mjs';
@@ -9,18 +11,27 @@ import { createBudget, createFileStore } from '../budget/index.mjs';
 import { createDecider } from '../decide/index.mjs';
 import { createDatasetFile } from '../decide/dataset.mjs';
 import { createWatchdog } from '../watchdog/index.mjs';
-import { createRunnerRegistry } from '../runner/index.mjs';
+import { createRunnerRegistry, createExec } from '../runner/index.mjs';
 import { createPluginHost } from '../plugins/index.mjs';
 import { createHandoff } from '../board/index.mjs';
 import { createEngine } from '../workflow/index.mjs';
 import { createPiRunner } from './pi-runner.mjs';
 import { workflows } from './workflows.mjs';
+import { createSessions } from '../sessions/index.mjs';
+import { createSessionState } from '../sessionstate/index.mjs';
+import { createHistory } from '../history/index.mjs';
+import { createByok } from '../byok/index.mjs';
+import { createVault, createMemoryKeyring } from '../vault/index.mjs';
+import { createTermBridge } from '../termbridge/index.mjs';
+import { createViewRegistry } from '../views/registry.mjs';
 
 const BUILTINS = fileURLToPath(new URL('../builtins', import.meta.url));
 // generous: only a real stall or loop should trip these
 const THRESHOLDS = { stallMs: 600000, loopRepeats: 5, noProgressSteps: 50, tokensPerStep: 500000 };
 
-export function createBackend({ dataDir, clock = { now: () => Date.now() }, createSession, exec, approve = async () => false, runners = {}, limits = [], strict = false } = {}) {
+export function createBackend({ dataDir, clock = { now: () => Date.now() }, createSession, exec, approve = async () => false, runners = {}, limits = [], strict = false,
+  sessions: withSessions = false, history: withHistory = false, byok: withByok = false, termbridge: withBridge = false,
+  home, socketName, sessionAgents, sessionsExec, idleMs, settleMs, fetch, keyring, bridge: bridgeOpts = {} } = {}) {
   if (typeof dataDir !== 'string' || !dataDir) throw new TypeError('createBackend: dataDir must be a non-empty string');
   const runsDir = path.join(dataDir, 'runs');
   fs.mkdirSync(runsDir, { recursive: true });
@@ -108,9 +119,98 @@ export function createBackend({ dataDir, clock = { now: () => Date.now() }, crea
     return done;
   }
 
+  // optional modules: each is built on its own, so one failing (tmux missing, bad home) never takes the others down
+  const caps = {};
+  const capSlot = slots.define({ id: 'app:capabilities', title: 'Capabilities', schema: { type: 'object' } }, caps);
+  const mod = (name, on, build) => {
+    if (!on) caps[name] = { ok: false, reason: 'disabled' };
+    else try { const v = build(); caps[name] = { ok: true }; return v; } catch (e) { caps[name] = { ok: false, reason: e instanceof Error ? e.message : String(e) }; }
+  };
+  const views = {}, viewCheck = createViewRegistry();
+  const addView = (name, spec) => { const v = viewCheck.validate(spec); if (v.ok) views[name] = spec; else throw new Error(`view ${name}: ${v.errors.map((x) => `${x.path} ${x.message}`).join('; ')}`); };
+
+  const state = mod('sessions', withSessions, () => createSessionState({ clock, slots, idleMs, settleMs }));
+  const raw = state && mod('sessions', true, () => {
+    const tmuxBin = 'tmux';
+    if (spawnSync(tmuxBin, ['-V']).status !== 0) throw new Error('tmux not found');
+    const sx = createSessions({ exec: sessionsExec ?? createExec(), clock, slots, home, socketName, agents: sessionAgents });
+    addView('sessions', { format: 'suffice.view', v: 1, type: 'list', title: 'Sessions', slot: 'sessions:list',
+      fields: { name: { label: 'Name', role: 'title' }, agent: { label: 'Agent', role: 'source' }, cwd: { label: 'Folder', role: 'group' }, created: { label: 'Started', role: 'date', format: 'datetime' }, state: { label: 'State' } } });
+    addView('attention', { format: 'suffice.view', v: 1, type: 'list', title: 'Needs attention', slot: 'sessions:attention', fields: { id: { label: 'Session', role: 'title' } } });
+    return sx;
+  });
+
+  // sessions facade: feeds sessionstate from chat, throttled screen text and list() exits; one tick interval while any session is live
+  const watch = new Map(), exitCbs = new Map(); // id -> watcher, id -> Set<cb>
+  let tickTimer = null;
+  const stopTick = () => { clearInterval(tickTimer); tickTimer = null; };
+  const forget = (id, code) => {
+    const w = watch.get(id);
+    if (!w) return;
+    watch.delete(id);
+    w.closed = true; clearTimeout(w.timer);
+    for (const f of [w.offChat, w.offStream]) try { f?.(); } catch { /* already gone */ }
+    if (code !== undefined) { try { w.tracker.onExit(code); } catch { /* display only */ } for (const cb of exitCbs.get(id) ?? []) try { cb(); } catch { /* listener */ } }
+    exitCbs.delete(id);
+    if (!watch.size) stopTick();
+  };
+  const emit = (id, w) => { w.last = clock.now(); raw.screen(id).then((r) => { if (!w.closed) w.tracker.onScreen(r.text); }).catch(() => {}); };
+  const track = (id, agent) => {
+    if (watch.has(id)) return;
+    const w = { tracker: state.track(id, { agent }), born: clock.now(), last: -Infinity, timer: null, closed: false };
+    watch.set(id, w);
+    try { w.offChat = raw.chat(id, (m) => w.tracker.onMessages(Array.isArray(m) ? m : [m])); } catch { /* chat is optional for state */ }
+    raw.stream(id, () => { // activity-driven: at most one screen read per 500 ms, trailing edge via an unref'd timer
+      if (w.closed || w.timer) return;
+      const wait = 500 - (clock.now() - w.last);
+      if (wait <= 0) emit(id, w); else { w.timer = setTimeout(() => { w.timer = null; if (!w.closed) emit(id, w); }, wait); w.timer.unref?.(); }
+    }).then((off) => { if (w.closed) off?.(); else w.offStream = off; }).catch(() => {});
+    if (!tickTimer) { tickTimer = setInterval(() => { try { state.tick(); } catch { /* next tick */ } }, Math.min(250, Math.max(50, settleMs ?? 300))); tickTimer.unref(); }
+  };
+  const sessionsApi = raw && {
+    ...raw,
+    async start(a) { const r = await raw.start(a); track(r.id, r.agent); return r; },
+    async resume(a) { const r = await raw.resume(a); track(r.id, r.agent); return r; },
+    async list() {
+      const t0 = clock.now(), rows = await raw.list(), ids = new Set(rows.map((r) => r.id));
+      for (const r of rows) track(r.id, r.agent);
+      for (const [id, w] of watch) if (!ids.has(id) && w.born < t0) forget(id, 0);
+      return rows;
+    },
+    async stop(id) { const r = await raw.stop(id); forget(id, 0); return r; },
+    onExit(id, cb) { let set = exitCbs.get(id); if (!set) exitCbs.set(id, set = new Set()); set.add(cb); return () => set.delete(cb); },
+  };
+  const chatView = (id) => ({ format: 'suffice.view', v: 1, type: 'list', title: 'Chat', slot: `session:${id}:chat`,
+    fields: { text: { label: 'Message', role: 'title' }, role: { label: 'From', role: 'group' }, ts: { label: 'Time', role: 'date', format: 'datetime' } } });
+  if (sessionsApi) { try { addView('chat', chatView('x')); } catch (e) { caps.sessions = { ok: false, reason: e.message }; } }
+
+  let bridge = null, bridgeInfo = null;
+  const bridgeOk = mod('termbridge', withBridge, () => { if (!sessionsApi) throw new Error('needs sessions'); return true; });
+  const terminal = async () => {
+    if (!bridgeOk) throw new Error(`terminal unavailable: ${caps.termbridge?.reason ?? 'disabled'}`);
+    if (!bridgeInfo) {
+      const b = createTermBridge({ sessions: sessionsApi, clock, ...bridgeOpts });
+      bridgeInfo = b.start().then((i) => { bridge = b; return { url: i.url, token: i.token }; }, (e) => { bridgeInfo = null; throw e; });
+    }
+    return bridgeInfo;
+  };
+
+  const historyApi = mod('history', withHistory, () => {
+    const h = createHistory({ home: home ?? os.homedir(), clock, slots });
+    addView('history', h.viewSpec());
+    return h;
+  });
+
+  const byokApi = mod('byok', withByok, () => {
+    const vault = createVault({ dir: path.join(dataDir, 'vault'), keyring: keyring ?? createMemoryKeyring(), clock });
+    return createByok({ fetch, vault, clock, budget });
+  });
+  capSlot.set({ ...caps });
+
   return {
     slots,
     decide,
+    sessions: sessionsApi, history: historyApi, byok: byokApi, terminal, views, capabilities: () => ({ ...caps }),
     reader: () => reader,
     startRun(workflow, args = {}) {
       const fn = typeof workflow === 'function' ? workflow : lookup(workflow);
@@ -153,6 +253,10 @@ export function createBackend({ dataDir, clock = { now: () => Date.now() }, crea
     async dispose() {
       for (const r of active.values()) r.ac.abort();
       await Promise.allSettled([...finished.values()]);
+      for (const id of [...watch.keys()]) forget(id); // watchers only: tmux sessions keep running
+      stopTick();
+      if (bridgeInfo) { const p = bridgeInfo; bridgeInfo = null; await p.catch(() => {}); await bridge?.stop(); }
+      await raw?.close?.();
     },
   };
 }

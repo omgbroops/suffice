@@ -9,6 +9,7 @@
 // Not checked: preload.cjs, so whether the renderer can call these is unverified.
 const str = (v) => typeof v === 'string' && v.length > 0;
 const bad = (m) => { throw new TypeError(m); };
+const isObj = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
 
 export function createIpcBridge(backend) {
   const reader = backend.reader();
@@ -42,6 +43,53 @@ export function createIpcBridge(backend) {
       off?.();
       return !!off;
     },
+    // optional modules: a disabled or failed one answers with its reason instead of throwing a TypeError on undefined
+    ...(() => {
+      const mod = (name, api) => api ?? bad(`${name} unavailable: ${backend.capabilities?.()[name]?.reason ?? 'disabled'}`);
+      const S = () => mod('sessions', backend.sessions), H = () => mod('history', backend.history), K = () => mod('byok', backend.byok);
+      const sid = (m) => { if (!str(m.id)) bad('id: expected a non-empty string'); return m.id; };
+      const prov = (m) => { if (!str(m.provider)) bad('provider: expected a non-empty string'); return m.provider; };
+      const entry = (m) => { if (!isObj(m.entry) || !str(m.entry.source) || !str(m.entry.path)) bad('entry: expected {source, path}'); return m.entry; };
+      const opts = (m) => { if (m.opts !== undefined && !isObj(m.opts)) bad('opts: expected an object'); return m.opts ?? {}; };
+      const agentArgs = (m) => {
+        if (!str(m.agent)) bad('agent: expected a non-empty string');
+        if (m.cwd !== undefined && !str(m.cwd)) bad('cwd: expected a non-empty string');
+        if (m.args !== undefined && !(Array.isArray(m.args) && m.args.every((a) => typeof a === 'string'))) bad('args: expected an array of strings');
+        return { agent: m.agent, ...(m.cwd && { cwd: m.cwd }), ...(m.args && { args: m.args }), ...(m.cols && { cols: m.cols }), ...(m.rows && { rows: m.rows }) };
+      };
+      return {
+        'sessions.start': (m) => S().start(agentArgs(m)),
+        'sessions.list': () => S().list(),
+        'sessions.stop': async (m) => { await S().stop(sid(m)); return true; },
+        'sessions.send': async (m) => {
+          if (typeof m.text !== 'string') bad('text: expected a string');
+          await S().send(sid(m), m.text, { enter: m.enter !== false });
+          return true;
+        },
+        'sessions.resume': (m) => { if (!str(m.sessionId)) bad('sessionId: expected a non-empty string'); return S().resume({ ...agentArgs(m), sessionId: m.sessionId }); },
+        'sessions.attachCommand': async (m) => { const id = sid(m); const r = (await S().list()).find((x) => x.id === id); return r?.attachCommand ?? bad(`unknown session: ${id}`); },
+        'sessions.terminal': () => { mod('termbridge', backend.terminal && backend.capabilities?.().termbridge?.ok ? backend.terminal : null); return backend.terminal(); },
+        'history.scan': async (m) => H().scan(opts(m)),
+        'history.list': (m) => H().list(opts(m)),
+        'history.search': (m) => { if (!str(m.query)) bad('query: expected a non-empty string'); return H().search(m.query, opts(m)); },
+        'history.read': (m) => H().read(entry(m)),
+        'keys.set': (m) => {
+          if (!str(m.key)) bad('key: expected a non-empty string');
+          if (m.baseUrl !== undefined && !str(m.baseUrl)) bad('baseUrl: expected a non-empty string');
+          K().keys.set(prov(m), m.key, { baseUrl: m.baseUrl }); return true;
+        },
+        'keys.has': (m) => K().keys.has(prov(m)),
+        'keys.remove': (m) => K().keys.remove(prov(m)),
+        'keys.list': () => K().keys.list(),
+        'keys.test': (m) => K().test(prov(m), { baseUrl: m.baseUrl }),
+        'models.run': (m) => {
+          if (typeof m.prompt !== 'string') bad('prompt: expected a string');
+          if (!str(m.model)) bad('model: expected a non-empty string');
+          if (m.schema !== undefined && !isObj(m.schema)) bad('schema: expected an object');
+          return K().runner({ provider: prov(m), model: m.model, maxTokens: m.maxTokens, system: m.system, baseUrl: m.baseUrl }).run({ prompt: m.prompt, schema: m.schema });
+        },
+      };
+    })(),
   };
 
   return {
