@@ -1,0 +1,18 @@
+import {readFile,writeFile,mkdir,mkdtemp,realpath,rm} from 'node:fs/promises';
+import {join} from 'node:path';
+import {tmpdir} from 'node:os';
+import {createHash} from 'node:crypto';
+import {pathToFileURL} from 'node:url';
+const driver=await readFile('scripts/rust-migration/measure-macos-hosts.mjs','utf8');
+const unique=await mkdtemp(join(process.cwd(),'.ci-logs/viewport-12/try-'));
+const staged=JSON.parse(await readFile('.ci-logs/macos-pairs-11/campaign.json','utf8')).options;
+const code=process.argv[2] ? await readFile(process.argv[2],'utf8') : '';
+const file=join(unique,'observed-driver.mjs');
+await writeFile(file,driver.replace("'--remote-debugging-port=0'",process.argv[2]?.includes('native')?"'--inspect=127.0.0.1:0','--remote-debugging-port=0'":"'--remote-debugging-port=0'").replace('if(!wry)cdp=await attachElectron(profile,config.entry);','if(!wry)cdp=await attachElectron(profile,config.entry);'+code)+'\nexport { sample };\n');
+const {sample,projectStamp,fixtures}=await import(pathToFileURL(file));
+const project=await realpath(await mkdtemp(join(tmpdir(),'suffice-viewport-project-')));
+const fixture=fixtures(project),expected=Object.fromEntries([...fixture].map(([k,v])=>['fixture/'+k,createHash('sha256').update(v).digest('hex')]));
+const config={...staged,out:unique};const helper=await readFile(join(config.root,'apps/desktop-rust/src/measure-fixture.js'),'utf8');
+const state=await sample(config,{host:'electron',pair:1},fixture,expected,project,await projectStamp(project),join(process.cwd(),'.ci-logs/macos-pairs-11/macos-accounting'),helper);
+console.log(JSON.stringify({unique,errors:state.errors,phases:state.phases,cleanup:state.cleanup.complete}));
+if(state.cleanup.complete)await rm(project,{recursive:true});if(state.errors.length)process.exitCode=1;

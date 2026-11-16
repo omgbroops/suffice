@@ -175,10 +175,100 @@ async function attachElectron(profile,entry){
     if(!r?.ok)return;
     const expected=pathToFileURL(entry).href;
     const targets=await r.json(),target=targets.find(t=>t.type==='page'&&t.url===expected);
-    if(target&&new URL(target.webSocketDebuggerUrl).host===base)return {page:target.webSocketDebuggerUrl,browser:'ws://'+base+browser};
+    if(target&&new URL(target.webSocketDebuggerUrl).host===base)return {page:target.webSocketDebuggerUrl,browser:'ws://'+base+browser,targetId:target.id};
   },45000,'trusted packaged renderer');
   const page=await DevTools.connect(endpoint.page);
-  try{return {page,browser:await DevTools.connect(endpoint.browser)};}catch(e){page.close();throw e;}
+  try{return {page,browser:await DevTools.connect(endpoint.browser),targetId:endpoint.targetId};}catch(e){page.close();throw e;}
+}
+// MacOS may constrain Electron's initial native window to the visible work
+// area (e.g. 1440x896). The real BrowserWindow needs a minimum large enough
+// to hold the intended content, even after an AppKit layout pass.
+export function correctedBounds(bounds,content,dom) {
+  const dx=1440-dom.width,dy=900-dom.height;
+  if(![bounds.width,bounds.height,content.width,content.height,dom.width,dom.height].every(n=>Number.isSafeInteger(n)&&n>0)
+      ||Math.abs(dx)>256||Math.abs(dy)>256)throw Error('Unexpected native/DOM dimensions; refusing viewport correction');
+  return {minimum:[bounds.width+dx,bounds.height+dy],content:[content.width+dx,content.height+dy]};
+}
+async function inspectValue(client,expression){
+  const r=await client.call('Runtime.evaluate',{expression,awaitPromise:true,returnByValue:true},6000);
+  if(r.exceptionDetails)throw Error(r.exceptionDetails.exception?.description||r.exceptionDetails.text);
+  return r.result.value;
+}
+async function frameSizes(page) {
+  return inspectValue(page,`(async()=>{
+    const frames=[];
+    for(let i=0;i<3;i++){await new Promise(requestAnimationFrame);frames.push({width:innerWidth,height:innerHeight,devicePixelRatio,outerWidth,outerHeight});}
+    return frames;
+  })()`);
+}
+export function stableViewport(frames){
+  return frames.length===3&&frames.every(f=>f.width===1440&&f.height===900&&Number.isFinite(f.devicePixelRatio)&&f.devicePixelRatio>0&&f.devicePixelRatio===frames[0].devicePixelRatio);
+}
+export function assertInspectorOwner(actual,expected) {
+  if(!Number.isSafeInteger(expected.pid)||expected.pid<=0||actual.pid!==expected.pid||actual.type!=='browser'||actual.profile!==expected.profile)
+    throw Error('Main inspector PID, process type or canonical profile does not match the launched job');
+}
+export function fixtureWindowBinding(rows,targetContentsId,entryUrl) {
+  const matches=rows.filter(w=>w.url===entryUrl);
+  if(matches.length!==1||!Number.isSafeInteger(matches[0].windowId)||matches[0].windowId<=0||
+      !Number.isSafeInteger(targetContentsId)||targetContentsId<=0||matches[0].webContentsId!==targetContentsId)
+    throw Error('Main inspector window does not uniquely match the attached renderer target');
+  return matches[0];
+}
+async function normalizeElectronWindow(cdp,stderr,entry,pid,profile,receipt) {
+  const endpoint=await poll(async()=>(await optionalText(stderr)).match(/^Debugger listening on (ws:\/\/127\.0\.0\.1:\d+\/[\da-f-]+)$/m)?.[1],5000,'loopback main inspector');
+  const main=await DevTools.connect(endpoint);
+  const electron="process.getBuiltinModule('module').createRequire(process.resourcesPath+'/app/package.json')('electron')";
+  let verified=false;
+  try{
+    const expected={pid,profile:await realpath(profile)};
+    const processIdentity=await inspectValue(main,"({pid:process.pid,type:process.type})");
+    receipt.expectedOwner=expected;
+    receipt.owner=processIdentity;
+    if(processIdentity.pid!==pid||processIdentity.type!=='browser')throw Error('Main inspector does not belong to the launched Electron browser PID');
+    receipt.owner.profile=await inspectValue(main,`process.getBuiltinModule('fs').realpathSync.native(${electron}.app.getPath('userData'))`);
+    assertInspectorOwner(receipt.owner,expected);
+    const url=pathToFileURL(entry).href;
+    const target=await poll(async()=>{
+      const current=await inspectValue(main,`(()=>{const e=${electron};return {
+      rows:e.BrowserWindow.getAllWindows().filter(w=>w.webContents.getURL()===${JSON.stringify(url)}).map(w=>({windowId:w.id,webContentsId:w.webContents.id,url:w.webContents.getURL()})),
+      targetContentsId:e.webContents.fromDevToolsTargetId(${JSON.stringify(cdp.targetId)})?.id}})()`);
+      receipt.windowCheck={...current,devToolsTargetId:cdp.targetId};
+      // CDP can expose the pending navigation before main's committed getURL().
+      return current.rows.length ? current : null;
+    },4000,'committed native renderer window');
+    const bound=fixtureWindowBinding(target.rows,target.targetContentsId,url);
+    receipt.window={...bound,devToolsTargetId:cdp.targetId};
+    verified=true;
+    const windowExpr=`(()=>{const e=${electron},w=e.BrowserWindow.fromId(${bound.windowId});
+      if(!w||w.isDestroyed()||w.webContents.id!==${bound.webContentsId}||w.webContents.getURL()!==${JSON.stringify(url)}||
+         e.webContents.fromDevToolsTargetId(${JSON.stringify(cdp.targetId)})!==w.webContents)throw Error('Measured native window identity changed');
+      return w})()`;
+    for(let i=0;i<4;i++){
+      const frames=await frameSizes(cdp.page);
+      const bounds=await inspectValue(main,`(()=>{const w=${windowExpr};return {outer:w.getBounds(),content:w.getContentBounds(),minimum:w.getMinimumSize()}})()`);
+      const step={frames,bounds};receipt.steps.push(step);
+      if(stableViewport(frames))return;
+      if(i===3)break;
+      const requested=correctedBounds(bounds.outer,bounds.content,frames.at(-1));
+      step.requested=requested;
+      await inspectValue(main,`(()=>{const w=${windowExpr};w.setMinimumSize(...${JSON.stringify(requested.minimum)});w.setContentSize(...${JSON.stringify(requested.content)},false);return true})()`);
+    }
+    throw Error('Native Electron window did not stabilize at 1440x900');
+  }finally{
+    try{
+      if(verified)await inspectValue(main,"setTimeout(()=>process.getBuiltinModule('inspector').close(),20);true");
+    }finally{main.close();}
+    if(verified){
+      const discovery='http://'+new URL(endpoint).host+'/json/list';
+      await poll(async()=>{
+        try{await fetch(discovery,{signal:AbortSignal.timeout(500)});return false;}
+        catch(e){return e.cause?.code==='ECONNREFUSED';}
+      },4000,'main inspector shutdown');
+      receipt.inspectorClosed=true;
+    }
+
+  }
 }
 async function electronPhase(page,source,action){
   const response=await page.call('Runtime.evaluate',{expression:'('+source+')('+JSON.stringify(action)+')',awaitPromise:true,returnByValue:true});
@@ -293,7 +383,7 @@ async function sample(config,definition,files,expectedFiles,project,expectedProj
     state.fixtureBefore=await treeHashes(join(home,'sessions'));
     if(!equalHashes(expectedFiles,state.fixtureBefore))throw Error('Initial fixture mismatch');
     const env={SUFFICE_HOME:home,PI_CODING_AGENT_DIR:home,PI_OFFLINE:'1',SUFFICE_SESSION_BACKEND:wry?'rust':'pi',SUFFICE_START_PROJECT:project,SHELL:'/bin/zsh',ZDOTDIR:scratch,PATH:dirname(config.node)+':/usr/bin:/bin:/usr/sbin:/sbin'};
-    const argv=wry?[config.wry,'--root',config.root,'--node',config.node,'--home',home,'--profile',profile,'--measure-fixture']:[config.electron,'--user-data-dir='+profile,'--remote-debugging-port=0','--remote-debugging-address=127.0.0.1'];
+    const argv=wry?[config.wry,'--root',config.root,'--node',config.node,'--home',home,'--profile',profile,'--measure-fixture']:[config.electron,'--user-data-dir='+profile,'--inspect=127.0.0.1:0','--remote-debugging-port=0','--remote-debugging-address=127.0.0.1'];
     const job={Label:label,ProgramArguments:argv,WorkingDirectory:config.root,EnvironmentVariables:env,RunAtLoad:true,ProcessType:'Interactive',StandardOutPath:stdout,StandardErrorPath:stderr};
     if(wry){
       job.StandardInPath=join(scratch,'fixture.input');
@@ -317,7 +407,14 @@ async function sample(config,definition,files,expectedFiles,project,expectedProj
     state.job=await poll(async()=>{const j=await jobInfo(service);return j.pid&&j.resource&&j.jetsam?j:null;},5000,'launchd job identity');
     state.pid=state.job.pid;
     const waitHost=readHostEvents(stdout,state);
-    if(!wry)cdp=await attachElectron(profile,config.entry);
+    if(!wry){
+      cdp=await attachElectron(profile,config.entry);
+      const adjustmentStart=timestamp();
+      state.viewportAdjustment={steps:[]};
+      try{
+        await normalizeElectronWindow(cdp,stderr,config.entry,state.pid,profile,state.viewportAdjustment);
+      }finally{state.viewportAdjustment.elapsedMs=timestamp()-adjustmentStart;}
+    }
     let previous,finishStarted;
     for(const action of ['ready','select','settings','pty','finish']){
       const start=action==='ready'?clockStart:timestamp();
@@ -463,7 +560,7 @@ async function runCampaign(options){
     const files=fixtures(await realpath(project));
     const expected=Object.fromEntries([...files].map(([n,s])=>['fixture/'+n,digest(s)]));
     result.fixture={project,projectStamp:expectedProject,sessionFiles:expected,sessionCount:files.size,largeMessageCount:1000};
-    result.method={clock:'external performance.now() from immediately before launchctl bootstrap until observed shared DOM fixture receipt',order:'alternating first host by pair',phases:['ready','select','settings','pty','finish'],accounting:'resource coalition physical footprint, audited summed live RSS, cumulative coalition CPU',scopeLimits:['no OS cache flush','sampled snapshots do not establish continuous peaks','Electron loopback CDP and Wry command/IPC have different delivery overhead','kernel-charged footprint excludes universal services outside the app coalition','source Wry host with external Node/dependencies; no Rust installer size comparison']};
+    result.method={clock:'external performance.now() from immediately before launchctl bootstrap until observed shared DOM fixture receipt',order:'alternating first host by pair',phases:['ready','select','settings','pty','finish'],accounting:'resource coalition physical footprint, audited summed live RSS, cumulative coalition CPU',scopeLimits:['no OS cache flush','sampled snapshots do not establish continuous peaks','Electron native bounds normalization and loopback inspector shutdown count toward startup; Electron CDP and Wry command/IPC have different delivery overhead','kernel-charged footprint excludes universal services outside the app coalition','source Wry host with external Node/dependencies; no Rust installer size comparison']};
     await json(join(c.out,'campaign.json'),result);
     for(const definition of sampleOrder(c.pairs)){
       if(stopping)throw Error('Interrupted by '+stopping);

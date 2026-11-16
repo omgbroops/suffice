@@ -94,8 +94,9 @@ Normal application launches do not enable these hooks.
 The macOS accounting observer and paired harness are described in
 [`macos-host-measurement.md`](macos-host-measurement.md). They include launchd-parented
 WebKit services and retired-helper CPU through isolated kernel coalitions. All
-samples and failures must be retained. A five-pair campaign and its analysis remain
-separate work until actually recorded. macOS 26.5.2 is below the Electron package's
+samples and failures must be retained. The five-pair campaign and its analysis are now recorded separately in
+`macos-host-comparison-12.md`; they expose a terminal regression and do not pass
+release gates. macOS 26.5.2 is below the Electron package's
 declared 27.0 floor, so direct-executable measurements there are diagnostic and
 cannot qualify release acceptance. Source, installer, shared-runtime and complete
 feature parity remain separate gates.

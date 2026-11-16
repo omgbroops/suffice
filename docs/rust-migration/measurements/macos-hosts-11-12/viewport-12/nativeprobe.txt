@@ -1,0 +1,11 @@
+const inspectURL=await poll(async()=>(await optionalText(stderr)).match(/Debugger listening on (ws:\/\/127\.0\.0\.1:\d+\/[\da-f-]+)/)?.[1],4000,'Node inspector');
+const inspector=await DevTools.connect(inspectURL);
+async function ev(expr){const out=await inspector.call('Runtime.evaluate',{expression:expr,returnByValue:true});console.log('EV',out.exceptionDetails?.exception?.description??out.result.value);}
+const win="process.getBuiltinModule('module').createRequire(process.resourcesPath+'/app/package.json')('electron').BrowserWindow.getAllWindows()[0]";
+await ev(`(()=>{const w=${win};return [w.getBounds(),w.getContentBounds(),w.isFullScreen()]})()`);
+await ev(`(()=>{const w=${win};w.setContentSize(1440,900,false);return [w.getBounds(),w.getContentBounds()]})()`);
+await delay(250);
+const measure=async()=> (await cdp.page.call('Runtime.evaluate',{expression:'JSON.stringify({outerHeight,outerWidth,innerHeight,innerWidth,avail:screen.availHeight,y:screenY,screenHeight:screen.height})',returnByValue:true})).result.value;
+console.log('content size',await measure());
+await ev(`(()=>{const w=${win};w.setBounds({x:30,y:32,width:1440,height:900},false);return [w.getBounds(),w.getContentBounds()]})()`);await delay(100);console.log('set bounds',await measure());
+inspector.close();

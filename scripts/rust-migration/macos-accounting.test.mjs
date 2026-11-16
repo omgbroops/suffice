@@ -8,7 +8,7 @@ import {randomUUID} from 'node:crypto';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {setTimeout as delay} from 'node:timers/promises';
-import {assess,fingerprint,fixtures,observedIdentities,projectStamp,runtimeInputs,safeToContinue,verifyRetirement,parseOptions,sampleOrder,validatePhase} from './measure-macos-hosts.mjs';
+import {assess,assertInspectorOwner,fixtureWindowBinding,correctedBounds,stableViewport,fingerprint,fixtures,observedIdentities,projectStamp,runtimeInputs,safeToContinue,verifyRetirement,parseOptions,sampleOrder,validatePhase} from './measure-macos-hosts.mjs';
 
 test('requires independent outputs and at least five alternating pairs',()=>{
   const args=['--root','root','--electron-app','App.app','--wry','host','--node','node','--output','new'];
@@ -140,4 +140,27 @@ test('empty directories, created files and changed bytes invalidate the shared f
   assert.notEqual(first.sha256,before.sha256);
   await writeFile(file,'v2');
   assert.notEqual((await projectStamp(project)).sha256,first.sha256);
+});
+
+test('native viewport correction preserves frame insets and requires three equal real layout frames',()=>{
+  const chrome={width:1440,height:919},content={width:1440,height:896};
+  assert.deepEqual(correctedBounds(chrome,content,{width:1440,height:896}),{minimum:[1440,923],content:[1440,900]});
+  assert.throws(()=>correctedBounds(chrome,content,{width:0,height:896}),/dimensions/);
+  assert.throws(()=>correctedBounds(chrome,content,{width:800,height:600}),/dimensions/);
+  const frame={width:1440,height:900,devicePixelRatio:2};
+  assert.equal(stableViewport([frame,frame,frame]),true);
+  assert.equal(stableViewport([frame,frame]),false);
+  assert.equal(stableViewport([frame,{...frame,height:899},frame]),false);
+  assert.equal(stableViewport([frame,{...frame,devicePixelRatio:1},frame]),false);
+});
+
+test('native inspector PID, browser type, canonical profile and renderer binding all identify the measured window',()=>{
+  const expected={pid:123,profile:'/private/scratch/profile'},owner={...expected,type:'browser'};
+  assert.doesNotThrow(()=>assertInspectorOwner(owner,expected));
+  for(const changed of [{pid:124},{type:'renderer'},{profile:'/private/another/profile'}])
+    assert.throws(()=>assertInspectorOwner({...owner,...changed},expected),/does not match/);
+  const row={windowId:7,webContentsId:15,url:'file:///staged/index.html'};
+  assert.deepEqual(fixtureWindowBinding([row],15,row.url),row);
+  for(const [windows,target] of [[[],15],[[row],16],[[row],undefined],[[row,{...row,windowId:8}],15]])
+    assert.throws(()=>fixtureWindowBinding(windows,target,row.url),/does not uniquely match/);
 });

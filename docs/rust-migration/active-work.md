@@ -8,8 +8,10 @@ Latest continuation: [`continuation-live-registry.md`](continuation-live-registr
 The experimental desktop now uses Rust for atomic live admission, aliases,
 turn-generation settlement and failure-safe retirement. Frozen-router differential
 traces and real local-provider turns pass; the final WK release also completes a
-visible Send. Pi still executes turns and writes journals. Matched macOS coalition
-measurement tooling is implemented; a campaign is not claimed until recorded.
+visible Send. Pi still executes turns and writes journals. Matched macOS campaign 12 is now recorded in
+[`macos-host-comparison-12.md`](macos-host-comparison-12.md): lower memory, but a
+terminal latency regression prevents promotion. The platform is below the package
+OS floor, so the comparison is diagnostic.
 
 Previous continuation: [`continuation-desktop-cutover.md`](continuation-desktop-cutover.md).
 The experimental full-renderer Wry host now runs on macOS as well as the earlier

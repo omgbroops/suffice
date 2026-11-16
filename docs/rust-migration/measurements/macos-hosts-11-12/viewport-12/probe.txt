@@ -1,0 +1,8 @@
+const measure=async()=> (await cdp.page.call('Runtime.evaluate',{expression:'JSON.stringify({outerHeight,outerWidth,innerHeight,innerWidth,avail:screen.availHeight,y:screenY,screenHeight:screen.height})',returnByValue:true})).result.value;
+console.log('BEFORE',await measure());
+for(const [name,client] of [['page',cdp.page],['browser',cdp.browser]]) {
+try{const r=await client.call('Browser.getWindowForTarget',{});console.log(name,r);
+await client.call('Browser.setWindowBounds',{windowId:r.windowId,bounds:{width:1440,height:905}});console.log('set',await measure());}
+catch(e){console.log(name,e.message);}}
+await cdp.page.call('Runtime.evaluate',{expression:'window.resizeBy(0,900-innerHeight)'});
+await delay(250);console.log('JS resize',await measure());
