@@ -20,12 +20,15 @@ const RATE = /rate.?limit|usage limit|\b429\b|limit reached/i;
 const DENIED = /doesn't want to (take this action|proceed)|tool use was rejected|permission.{0,20}denied/i; // assumed wording
 
 const CAT = { Bash: 'shell', PowerShell: 'shell', Monitor: 'shell', Edit: 'edit', MultiEdit: 'edit', NotebookEdit: 'edit', Write: 'write', Read: 'read',
-  Glob: 'search', Grep: 'search', LSP: 'search', ToolSearch: 'search', WebFetch: 'web', WebSearch: 'web',
+  Glob: 'search', Grep: 'search', LSP: 'search', WebFetch: 'web', WebSearch: 'web',
   TaskCreate: 'todo', TaskGet: 'todo', TaskList: 'todo', TaskUpdate: 'todo', TaskOutput: 'todo', Agent: 'subagent', Task: 'subagent' };
+const INTERNAL = new Set(['ToolSearch', 'EnterWorktree', 'ExitWorktree']); // housekeeping tools: category other + internal:true; only ToolSearch is seen in recordings
 const TODO_STATUS = { pending: 'pending', in_progress: 'active', completed: 'done' };
 
 const fresh = () => ({ emitted: new Map(), calls: new Map(), results: new Map(), queue: [], lastTs: 0, lastUser: null, model: null, mode: null,
-  cwd: null, branch: null, sessionId: null, ctxTokens: 0, sidechainSkipped: 0 });
+  cwd: null, branch: null, sessionId: null, ctxTokens: 0, sidechainSkipped: 0,
+  dropped: {}, fileHistory: 0, errors: { count: 0, lastClass: null }, title: null, agentName: null, costUsd: null, uiMode: null, tasks: {}, pendingAtt: [] });
+const drop = (state, k) => { state.dropped[k] = (state.dropped[k] || 0) + 1; };
 
 function emit(state, out, it) {
   const sig = JSON.stringify(it);
@@ -89,7 +92,17 @@ function emitCall(state, out, callId) {
   const { category, title } = classify(c.name, input);
   const status = !r ? 'running' : r.denied ? 'denied' : r.isError ? 'error' : 'ok';
   const it = { id: `tool:${callId}`, ts: c.ts, kind: 'tool', callId, name: c.name, category, title, input, status };
-  if (r) it.output = output(c, r, category, status);
+  if (INTERNAL.has(c.name)) { it.category = 'other'; it.internal = true; }
+  if (c.name === 'ExitPlanMode') it.title = 'Plan';
+  if (c.name === 'AskUserQuestion') it.title = firstLine(input.questions?.[0]?.question) || c.name;
+  if (r) {
+    it.output = output(c, r, it.category, status);
+    if (c.name === 'ExitPlanMode') { it.output.plan = str(r.tur?.plan) || str(input.plan); it.output.decision = r.denied || r.isError ? 'rejected' : 'approved'; }
+    if (c.name === 'AskUserQuestion' && !r.isError && !r.denied) {
+      const a = r.tur?.answers && typeof r.tur.answers === 'object' ? r.tur.answers : null;
+      if (a) { const v = Object.values(a).map(str); it.output.answer = v.length === 1 ? v[0] : a; }
+    }
+  }
   emit(state, out, it);
 }
 
@@ -101,7 +114,7 @@ function setMode(state, out, mode, ts) {
 
 function userText(state, out, text, id, ts, images) {
   const tag = (n) => new RegExp(`<${n}>([\\s\\S]*?)</${n}>`).exec(text)?.[1];
-  if (text.includes('<local-command-caveat>')) return;
+  if (text.includes('<local-command-caveat>')) return drop(state, 'user.caveat');
   const cmd = tag('command-name');
   if (cmd) {
     const name = cmd.trim().replace(/^\//, '');
@@ -116,22 +129,27 @@ function userText(state, out, text, id, ts, images) {
     return notice(state, out, id, ts, 'info', code, so.trim());
   }
   if (text.startsWith('[Request interrupted by user')) return notice(state, out, id, ts, 'info', 'interrupted', text.trim());
-  if (text.includes('<task-notification>')) return notice(state, out, id, ts, 'info', 'other', str(tag('summary')).trim() || 'Background task update');
+  if (text.includes('<task-notification>')) { // assumed tags: task-id, status, summary
+    const tid = str(tag('task-id')).trim() || id;
+    state.tasks[tid] = { id: tid, label: str(tag('summary')).trim() || tid, status: str(tag('status')).trim() || 'unknown' };
+    return;
+  }
   const bash = tag('bash-input');
   if (bash !== undefined) { // shortcut: <bash-stdout>/<bash-stderr> lines of a "!cmd" are dropped, upgrade when the chat should show them
     const it = { id, ts, kind: 'user', text: `!${bash.trim()}` };
     state.lastUser = it;
     return emit(state, out, it);
   }
-  if (/^<bash-(stdout|stderr)>/.test(text)) return;
+  if (/^<bash-(stdout|stderr)>/.test(text)) return drop(state, 'user.bash-output');
   const it = { id, ts, kind: 'user', text };
-  if (images.length) it.attachments = images;
+  const att = [...images, ...state.pendingAtt.splice(0)];
+  if (att.length) it.attachments = att;
   state.lastUser = it;
   emit(state, out, it);
 }
 
 function run(obj, state, out, opts) {
-  if (!obj || typeof obj !== 'object') return;
+  if (!obj || typeof obj !== 'object') throw Object.assign(new Error('line is not an object'), { name: 'NotAnObject' });
   if (obj.isSidechain === true && !opts.includeSidechain) { state.sidechainSkipped++; return; }
   const parsed = Date.parse(obj.timestamp);
   const ts = Number.isFinite(parsed) ? parsed : state.lastTs;
@@ -144,12 +162,17 @@ function run(obj, state, out, opts) {
 
   switch (obj.type) {
     case 'permission-mode': return setMode(state, out, obj.permissionMode, ts);
+    case 'mode': if (str(obj.mode)) state.uiMode = obj.mode; return; // always 'normal' in recordings, a different axis than permission-mode: not fed to meta.mode
+    case 'ai-title': if (str(obj.aiTitle)) state.title = obj.aiTitle; return;
+    case 'agent-name': if (str(obj.agentName)) state.agentName = obj.agentName; return;
+    case 'cost-state': if (Number.isFinite(obj.totalCostUSD)) state.costUsd = obj.totalCostUSD; return;
+    case 'file-history-delta': state.fileHistory++; return;
     case 'queue-operation':
       if (obj.operation === 'enqueue') state.queue.push(str(obj.content));
       else state.queue.shift(); // dequeue/remove; queued messages are terminal-only (see coverage)
       return;
     case 'user': {
-      if (obj.isMeta || obj.isCompactSummary || obj.isVisibleInTranscriptOnly) return;
+      if (obj.isMeta || obj.isCompactSummary || obj.isVisibleInTranscriptOnly) return drop(state, 'user.meta');
       setMode(state, out, obj.permissionMode, ts);
       if (typeof c === 'string') return userText(state, out, c, `${uuid}:0`, ts, []);
       if (!Array.isArray(c)) return;
@@ -176,9 +199,17 @@ function run(obj, state, out, opts) {
         if (state.model && state.model !== model) notice(state, out, `model:${uuid}`, ts, 'info', 'model_changed', `Model: ${state.model} -> ${model}`);
         state.model = model;
       }
+      state.lastUser = null; // later file attachments belong to the next user item
+      // A block whose id is already taken by different content (same uuid on two lines, or no uuid and equal ts) gets a content-hash suffix: deterministic, so a replayed line still de-dups.
+      const put = (kind, text, i) => {
+        let id = `${uuid}:${i}`;
+        const it = { id, ts, kind, text };
+        if (state.emitted.has(id) && state.emitted.get(id) !== JSON.stringify(it)) it.id = `${id}~${createHash('sha1').update(text).digest('hex').slice(0, 8)}`;
+        emit(state, out, it);
+      };
       blocks.forEach((b, i) => {
-        if (b?.type === 'text' && str(b.text)) emit(state, out, { id: `${uuid}:${i}`, ts, kind: 'assistant', text: b.text });
-        else if (b?.type === 'thinking' && str(b.thinking)) emit(state, out, { id: `${uuid}:${i}`, ts, kind: 'thinking', text: b.thinking }); // redacted thinking has empty text: skipped
+        if (b?.type === 'text' && str(b.text)) put('assistant', b.text, i);
+        else if (b?.type === 'thinking' && str(b.thinking).trim()) put('thinking', b.thinking, i); // redacted/signature-only thinking has empty text: skipped
         else if (b?.type === 'tool_use' && str(b.id)) { state.calls.set(b.id, { name: str(b.name), input: b.input, ts }); emitCall(state, out, b.id); }
       });
       const u = obj.message?.usage;
@@ -204,25 +235,38 @@ function run(obj, state, out, opts) {
         return notice(state, out, id, ts, 'error', RATE.test(text) ? 'rate_limit' : 'error', text);
       }
       if (obj.subtype === 'stop_hook_summary' && (obj.hookErrors?.length || obj.preventedContinuation)) return notice(state, out, id, ts, 'warn', 'other', `Stop hook: ${str(obj.stopReason) || 'error'}`);
-      if (obj.subtype === 'informational' || obj.subtype === 'away_summary') return str(obj.content) && notice(state, out, id, ts, 'info', 'other', obj.content);
-      if (obj.subtype === 'turn_duration' && Number.isFinite(obj.durationMs)) return notice(state, out, id, ts, 'info', 'other', `Worked for ${fmtDur(obj.durationMs)}`);
-      return; // unknown subtypes: not shown
+      if ((obj.subtype === 'informational' || obj.subtype === 'away_summary') && str(obj.content)) return notice(state, out, id, ts, 'info', 'other', obj.content);
+      // the one timing notice per turn: text "<n>s" or "<m>m <n>s" (code 'other': model.mjs has no timing code)
+      if (obj.subtype === 'turn_duration' && Number.isFinite(obj.durationMs)) return emit(state, out, { id, ts, kind: 'notice', level: 'info', code: 'other', text: fmtDur(obj.durationMs), durationMs: obj.durationMs });
+      return drop(state, `system.${str(obj.subtype) || 'unknown'}`);
     }
+    // Attachment subtype -> handling. task_status: meta.backgroundTasks. file / image: the user item's attachments (re-emit the
+    // last user item, or held in pendingAtt for the next one). hook_success exit!=0 and hook_cancelled: warn/info notice (failure
+    // signals). Everything else (hook_success ok, reminders, listings, plan_mode, environment, ...): dropped, state.dropped['attachment.<subtype>'].
     case 'attachment': {
       const a = obj.attachment ?? {};
       const id = `att:${uuid}`;
       if (a.type === 'hook_success' && a.exitCode !== 0) return notice(state, out, id, ts, 'warn', 'other', `Hook ${str(a.hookEvent)} exited ${a.exitCode}`);
       if (a.type === 'hook_cancelled') return notice(state, out, id, ts, 'info', 'other', `Hook ${str(a.hookEvent)} cancelled`);
-      if (a.type === 'task_status') return notice(state, out, id, ts, 'info', 'other', `Task ${str(a.description) || str(a.taskId)}: ${str(a.status)}`);
-      if (a.type === 'file' && state.lastUser && str(a.filename)) { // @mention: re-emit the last user item (same id) with the file listed
-        const att = [...(state.lastUser.attachments ?? [])];
-        if (!att.some((x) => x.path === a.filename)) att.push({ type: 'file', name: base(a.filename), path: a.filename });
-        state.lastUser = { ...state.lastUser, attachments: att };
-        emit(state, out, state.lastUser);
+      if (a.type === 'task_status') {
+        const tid = str(a.taskId) || id;
+        state.tasks[tid] = { id: tid, label: str(a.description) || tid, status: str(a.status) };
+        return;
       }
-      return;
+      if ((a.type === 'file' && str(a.filename)) || a.type === 'image') {
+        const f = a.type === 'file' ? { type: 'file', name: base(a.filename), path: a.filename } : { type: 'image', name: str(a.filename) ? base(a.filename) : 'image' };
+        const dup = (x) => x.type === f.type && x.name === f.name && x.path === f.path;
+        if (state.lastUser) {
+          const att = [...(state.lastUser.attachments ?? [])];
+          if (!att.some(dup)) att.push(f);
+          state.lastUser = { ...state.lastUser, attachments: att };
+          emit(state, out, state.lastUser);
+        } else if (!state.pendingAtt.some(dup)) state.pendingAtt.push(f);
+        return;
+      }
+      return drop(state, `attachment.${str(a.type) || 'unknown'}`);
     }
-    default: return; // unknown line types (api-request, cost-state, last-prompt, ...) are not shown
+    default: return drop(state, str(obj.type) || 'unknown'); // last-prompt, tools-used, api-request*, file-history-snapshot, ... counted, not shown
   }
 }
 
@@ -378,20 +422,49 @@ function meta(state) {
   if (state.cwd) m.cwd = state.cwd;
   if (state.branch) m.branch = state.branch;
   if (state.sessionId) m.sessionId = state.sessionId;
+  if (state.title) m.title = state.title;
+  if (state.agentName) m.agentName = state.agentName;
+  if (state.costUsd !== null) m.costUsd = state.costUsd;
+  if (state.uiMode) m.uiMode = state.uiMode;
+  const bg = Object.values(state.tasks);
+  if (bg.length) m.backgroundTasks = bg;
   if (state.ctxTokens) m.contextUsedPct = Math.min(100, Math.round((state.ctxTokens / state.contextWindow) * 100));
   return m;
+}
+
+/** { ok, errors, lastClass, dropped }: lines the mapper threw on (class name only) and counts of lines it deliberately did not show. */
+export function mapperHealth(state) {
+  const e = state?.errors ?? { count: 0, lastClass: null };
+  return { ok: e.count === 0, errors: e.count, lastClass: e.lastClass, dropped: { ...(state?.dropped ?? {}) } };
+}
+
+/** Turn-end footer on screen, "✻ Sautéed for 2s · done 12:13 AM" (any verb) -> { verb, seconds } or null. */
+export function parseTurnFooter(screen) {
+  const lines = stripAnsi(str(screen)).split('\n');
+  for (let i = lines.length - 1; i >= 0; i--) {
+    const m = /^\s*\S?\s*(\p{L}[\p{L}'-]*) for ((?:\d+h )?(?:\d+m )?\d+s)\s*·\s*done\b/u.exec(lines[i]);
+    const seconds = m ? parseDuration(m[2]) : null;
+    if (seconds !== null) return { verb: m[1], seconds };
+  }
+  return null;
 }
 
 /** contextWindow default 200000 is an assumption: the transcript has no window size. */
 export function createClaudeMapper({ contextWindow = 200000, includeSidechain = false } = {}) {
   const newState = () => ({ ...fresh(), contextWindow });
-  const ensure = (s) => { if (!s.emitted) Object.assign(s, newState()); return s; };
+  const ensure = (s) => { // fill keys an older persisted state lacks
+    if (!s.emitted) return Object.assign(s, newState());
+    for (const [k, v] of Object.entries(newState())) if (!(k in s)) s[k] = v;
+    return s;
+  };
   return {
     newState,
     mapLine(obj, state) {
       const out = [];
       const start = out.length;
-      try { run(obj, ensure(state), out, { includeSidechain }); } catch { /* shortcut: a malformed line is dropped, not reported; upgrade if lost lines matter */ }
+      try { run(obj, ensure(state), out, { includeSidechain }); } catch (e) { // never throws; the class name (no line content) is kept for mapperHealth
+        if (state && typeof state === 'object') { const er = (state.errors ??= { count: 0, lastClass: null }); er.count++; er.lastClass = String(e?.name || 'Error'); }
+      }
       if (includeSidechain && obj?.isSidechain === true) for (const it of out.slice(start)) it.sidechain = true;
       return out;
     },

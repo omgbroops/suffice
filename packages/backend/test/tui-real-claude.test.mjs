@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createClaudeMapper } from '../src/tui/claude.mjs';
+import { createClaudeMapper, parseTurnFooter } from '../src/tui/claude.mjs';
 import { itemProblem } from '../src/tui/model.mjs';
 import { createScrubber } from '../tools/tui-record/scrub.mjs';
 
@@ -59,11 +59,32 @@ test('every item produced from every real transcript passes itemProblem', () => 
 // Known mismatches, derived from the recorded CONFORMANCE.json (regenerate: node tools/tui-record/conformance.mjs).
 const cf = fs.existsSync(path.join(root, 'CONFORMANCE.json')) ? JSON.parse(fs.readFileSync(path.join(root, 'CONFORMANCE.json'), 'utf8')) : {};
 const todos = new Set();
+const RESOLVED_TOOLS = new Set(['ToolSearch', 'ExitPlanMode', 'AskUserQuestion']); // asserted below
+const mapDir = (d) => { const mm = createClaudeMapper(); const st = mm.newState(); const em = fs.readFileSync(path.join(root, d, 'transcript.jsonl'), 'utf8').split('\n').filter(Boolean).flatMap((l) => mm.mapLine(JSON.parse(l), st)); return [...new Map(em.map((i) => [i.id, i])).values()]; };
+const hasTranscript = (d) => okDirs.includes(d) && fs.existsSync(path.join(root, d, 'transcript.jsonl'));
 for (const [d, r] of Object.entries(cf)) {
-  for (const x of r.dialogs || []) todos.add(`${d}: dialog ${x.screen} ${x.issues.join('; ')}`);
+  if (!hasTranscript(d)) continue;
+  for (const x of r.toolCategoryMismatches || []) if (RESOLVED_TOOLS.has(x.tool)) test(`${d}: ${x.tool} maps to category other`, () => {
+    const t = mapDir(d).filter((i) => i.kind === 'tool' && i.name === x.tool);
+    assert.ok(t.length > 0);
+    for (const i of t) { assert.equal(i.category, 'other'); assert.equal(i.internal === true, x.tool === 'ToolSearch'); }
+  });
+  if (r.onScreenNoItem?.turnTiming) test(`${d}: turn timing footer parses, one notice per turn_duration`, () => {
+    const dir = path.join(root, d, 'screens');
+    const foot = fs.readdirSync(dir).filter((f) => f.endsWith('.txt')).map((f) => parseTurnFooter(fs.readFileSync(path.join(dir, f), 'utf8'))).filter(Boolean);
+    assert.ok(foot.length > 0 && foot.every((f) => f.verb && f.seconds >= 0));
+    const want = fs.readFileSync(path.join(root, d, 'transcript.jsonl'), 'utf8').split('\n').filter((l) => l.includes('"turn_duration"')).length;
+    assert.equal(mapDir(d).filter((i) => i.durationMs !== undefined).length, want);
+  });
+}
+test('model-switch: /help dialog is not a prompt', () => {
+  assert.equal(createClaudeMapper().parsePrompt(fs.readFileSync(path.join(root, 'model-switch', 'screens', '07-help.txt'), 'utf8')), null);
+});
+for (const [d, r] of Object.entries(cf)) {
+  for (const x of r.dialogs || []) if (!(d === 'model-switch' && x.screen === '07-help.txt')) todos.add(`${d}: dialog ${x.screen} ${x.issues.join('; ')}`);
   for (const x of r.workingNotParsed || []) todos.add(`${d}: working line not parsed on ${x.screen}`);
-  for (const k of Object.keys(r.onScreenNoItem || {})) todos.add(`${d}: on screen, no item: ${k}`);
-  for (const x of r.toolCategoryMismatches || []) todos.add(`${d}: tool ${x.tool} expected ${x.expected} got ${x.produced}`);
+  for (const k of Object.keys(r.onScreenNoItem || {})) if (k !== 'turnTiming') todos.add(`${d}: on screen, no item: ${k}`); // turnTiming: asserted below
+  for (const x of r.toolCategoryMismatches || []) if (!RESOLVED_TOOLS.has(x.tool)) todos.add(`${d}: tool ${x.tool} expected ${x.expected} got ${x.produced}`);
   for (const x of r.subagent || []) if (!x.childFileFound || !x.childSessionId) todos.add(`${d}: subagent item does not link child transcript`);
   for (const k of Object.keys(r.blockTypesWithoutItems || {})) if (!k.startsWith('api-request')) todos.add(`${d}: content block ${k} produced no item`);
   for (const k of Object.keys(r.lineTypesWithoutItems || {})) if (['user', 'assistant', 'system', 'queue-operation', 'sidechain'].includes(k)) todos.add(`${d}: line type ${k} produced no item`);
