@@ -1,0 +1,75 @@
+{
+ "name": "model-switch",
+ "recorded": true,
+ "beats": [
+  {
+   "screen": "model-switch/01-trust",
+   "dialog": {
+    "kind": "trust",
+    "onChoose": {
+     "0": [
+      {
+       "exit": 1
+      }
+     ],
+     "1": [],
+     "esc": [
+      {
+       "exit": 1
+      }
+     ]
+    }
+   }
+  },
+  {
+   "screen": "model-switch/04-ready",
+   "transcript": [
+    {
+     "rec": "model-switch",
+     "from": 0,
+     "to": 8
+    }
+   ]
+  },
+  {
+   "wait": "input",
+   "expectInput": "^/model",
+   "transcript": [
+    {
+     "rec": "model-switch",
+     "from": 8,
+     "to": 10
+    }
+   ]
+  },
+  {
+   "screen": "model-switch/05-model-picker",
+   "dialog": {
+    "kind": "picker"
+   }
+  },
+  {
+   "screen": "model-switch/06-after-model"
+  },
+  {
+   "wait": "input",
+   "expectInput": "^/help",
+   "transcript": [
+    {
+     "rec": "model-switch",
+     "from": 10,
+     "to": 11
+    }
+   ]
+  },
+  {
+   "screen": "model-switch/07-help",
+   "dialog": {
+    "kind": "modal"
+   }
+  },
+  {
+   "screen": "model-switch/09-cleared"
+  }
+ ]
+}

@@ -1,0 +1,104 @@
+{
+ "name": "write",
+ "recorded": true,
+ "beats": [
+  {
+   "screen": "write/01-trust",
+   "dialog": {
+    "kind": "trust",
+    "onChoose": {
+     "0": [
+      {
+       "exit": 1
+      }
+     ],
+     "1": [],
+     "esc": [
+      {
+       "exit": 1
+      }
+     ]
+    }
+   }
+  },
+  {
+   "screen": "write/04-ready",
+   "transcript": [
+    {
+     "rec": "write",
+     "from": 0,
+     "to": 8
+    }
+   ]
+  },
+  {
+   "wait": "input",
+   "transcript": [
+    {
+     "rec": "write",
+     "from": 8,
+     "to": 34
+    }
+   ]
+  },
+  {
+   "screen": "write/05-working",
+   "working": {
+    "seconds": 0.176,
+    "cont": false
+   }
+  },
+  {
+   "screen": "write/06-working",
+   "working": {
+    "seconds": 0.236,
+    "cont": true
+   }
+  },
+  {
+   "screen": "write/07-working",
+   "working": {
+    "seconds": 0.212,
+    "cont": true
+   }
+  },
+  {
+   "screen": "write/08-working",
+   "working": {
+    "seconds": 0.534,
+    "cont": true
+   }
+  },
+  {
+   "screen": "write/09-working",
+   "working": {
+    "seconds": 1.478,
+    "cont": true
+   }
+  },
+  {
+   "screen": "write/10-dialog",
+   "transcript": [
+    {
+     "rec": "write",
+     "from": 34,
+     "to": 36
+    }
+   ],
+   "dialog": {
+    "kind": "perm"
+   }
+  },
+  {
+   "screen": "write/11-idle",
+   "working": false,
+   "transcript": [
+    {
+     "rec": "write",
+     "from": 36,
+     "to": 51
+    }
+   ]
+  }
+ ]
+}

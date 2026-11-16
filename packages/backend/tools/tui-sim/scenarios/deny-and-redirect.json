@@ -1,0 +1,289 @@
+{
+ "name": "deny-and-redirect",
+ "recorded": true,
+ "beats": [
+  {
+   "screen": "bash-deny/01-trust",
+   "dialog": {
+    "kind": "trust",
+    "onChoose": {
+     "0": [
+      {
+       "exit": 1
+      }
+     ],
+     "1": [],
+     "esc": [
+      {
+       "exit": 1
+      }
+     ]
+    }
+   }
+  },
+  {
+   "screen": "bash-deny/04-ready",
+   "transcript": [
+    {
+     "rec": "bash-deny",
+     "from": 0,
+     "to": 8
+    }
+   ]
+  },
+  {
+   "wait": "input",
+   "transcript": [
+    {
+     "rec": "bash-deny",
+     "from": 8,
+     "to": 34,
+     "fresh": "d1"
+    }
+   ]
+  },
+  {
+   "screen": "bash-deny/05-working",
+   "working": {
+    "seconds": 0.162,
+    "cont": false
+   }
+  },
+  {
+   "screen": "bash-deny/06-working",
+   "working": {
+    "seconds": 0.227,
+    "cont": true
+   }
+  },
+  {
+   "screen": "bash-deny/07-working",
+   "working": {
+    "seconds": 0.222,
+    "cont": true
+   }
+  },
+  {
+   "screen": "bash-deny/08-working",
+   "working": {
+    "seconds": 0.569,
+    "cont": true
+   }
+  },
+  {
+   "screen": "bash-deny/09-working",
+   "working": {
+    "seconds": 1.358,
+    "cont": true
+   }
+  },
+  {
+   "screen": "bash-deny/10-dialog",
+   "transcript": [
+    {
+     "rec": "bash-deny",
+     "from": 34,
+     "to": 36,
+     "fresh": "d1"
+    }
+   ],
+   "dialog": {
+    "kind": "perm"
+   }
+  },
+  {
+   "screen": "bash-deny/11-idle",
+   "working": false,
+   "transcript": [
+    {
+     "rec": "bash-deny",
+     "from": 36,
+     "to": 47,
+     "fresh": "d1"
+    }
+   ]
+  },
+  {
+   "wait": "input",
+   "transcript": [
+    {
+     "rec": "bash-deny",
+     "from": 47,
+     "to": 52,
+     "fresh": "d1"
+    }
+   ]
+  },
+  {
+   "screen": "bash-deny/12-idle",
+   "transcript": [
+    {
+     "rec": "bash-deny",
+     "from": 52,
+     "to": 56,
+     "fresh": "d1"
+    }
+   ]
+  },
+  {
+   "wait": "input",
+   "transcript": [
+    {
+     "rec": "bash-deny",
+     "from": 8,
+     "to": 34,
+     "fresh": "d2"
+    }
+   ]
+  },
+  {
+   "screen": "bash-deny/05-working",
+   "working": {
+    "seconds": 0.162,
+    "cont": false
+   }
+  },
+  {
+   "screen": "bash-deny/06-working",
+   "working": {
+    "seconds": 0.227,
+    "cont": true
+   }
+  },
+  {
+   "screen": "bash-deny/07-working",
+   "working": {
+    "seconds": 0.222,
+    "cont": true
+   }
+  },
+  {
+   "screen": "bash-deny/08-working",
+   "working": {
+    "seconds": 0.569,
+    "cont": true
+   }
+  },
+  {
+   "screen": "bash-deny/09-working",
+   "working": {
+    "seconds": 1.358,
+    "cont": true
+   }
+  },
+  {
+   "screen": "bash-deny/10-dialog",
+   "transcript": [
+    {
+     "rec": "bash-deny",
+     "from": 34,
+     "to": 36,
+     "fresh": "d2"
+    }
+   ],
+   "dialog": {
+    "kind": "perm"
+   }
+  },
+  {
+   "screen": "bash-deny/11-idle",
+   "working": false,
+   "transcript": [
+    {
+     "rec": "bash-deny",
+     "from": 36,
+     "to": 47,
+     "fresh": "d2"
+    }
+   ]
+  },
+  {
+   "wait": "input",
+   "transcript": [
+    {
+     "rec": "bash-deny",
+     "from": 47,
+     "to": 52,
+     "fresh": "d2"
+    }
+   ]
+  },
+  {
+   "screen": "bash-deny/12-idle",
+   "transcript": [
+    {
+     "rec": "bash-deny",
+     "from": 52,
+     "to": 56,
+     "fresh": "d2"
+    }
+   ]
+  },
+  {
+   "wait": "input",
+   "transcript": [
+    {
+     "rec": "read-search",
+     "from": 8,
+     "to": 33,
+     "fresh": "dr"
+    }
+   ]
+  },
+  {
+   "screen": "read-search/05-working",
+   "working": {
+    "seconds": 0.197,
+    "cont": false
+   }
+  },
+  {
+   "screen": "read-search/06-working",
+   "working": {
+    "seconds": 0.229,
+    "cont": true
+   }
+  },
+  {
+   "screen": "read-search/07-working",
+   "working": {
+    "seconds": 0.22,
+    "cont": true
+   },
+   "transcript": [
+    {
+     "rec": "read-search",
+     "from": 33,
+     "to": 36,
+     "fresh": "dr"
+    }
+   ]
+  },
+  {
+   "screen": "read-search/08-working",
+   "working": {
+    "seconds": 0.518,
+    "cont": true
+   }
+  },
+  {
+   "screen": "read-search/09-working",
+   "working": {
+    "seconds": 8,
+    "cont": true
+   }
+  },
+  {
+   "screen": "read-search/10-idle",
+   "working": false,
+   "transcript": [
+    {
+     "rec": "read-search",
+     "from": 36,
+     "to": 63,
+     "fresh": "dr"
+    }
+   ]
+  }
+ ]
+}

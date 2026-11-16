@@ -1,0 +1,99 @@
+{
+ "name": "huge-output",
+ "recorded": true,
+ "beats": [
+  {
+   "screen": "bash-allow/01-trust",
+   "dialog": {
+    "kind": "trust",
+    "onChoose": {
+     "0": [
+      {
+       "exit": 1
+      }
+     ],
+     "1": [],
+     "esc": [
+      {
+       "exit": 1
+      }
+     ]
+    }
+   }
+  },
+  {
+   "screen": "bash-allow/04-ready",
+   "transcript": [
+    {
+     "rec": "bash-allow",
+     "from": 0,
+     "to": 9
+    }
+   ]
+  },
+  {
+   "wait": "input",
+   "transcript": [
+    {
+     "rec": "bash-allow",
+     "from": 9,
+     "to": 34
+    }
+   ]
+  },
+  {
+   "screen": "bash-allow/05-working",
+   "working": {
+    "seconds": 0.174,
+    "cont": false
+   }
+  },
+  {
+   "screen": "bash-allow/06-working",
+   "working": {
+    "seconds": 0.239,
+    "cont": true
+   }
+  },
+  {
+   "screen": "bash-allow/07-working",
+   "working": {
+    "seconds": 0.233,
+    "cont": true
+   },
+   "transcript": [
+    {
+     "rec": "bash-allow",
+     "from": 34,
+     "to": 35
+    },
+    "{\"parentUuid\":\"00000000-0000-4000-8000-000000000025\",\"isSidechain\":false,\"promptId\":\"00000000-0000-4000-8000-000000000009\",\"type\":\"user\",\"message\":{\"role\":\"user\",\"content\":[{\"tool_use_id\":\"toolu_017CKrH1bhrnf82YYyvqsEhw\",\"type\":\"tool_result\",\"content\":\"@big(3000)\",\"is_error\":false}]},\"uuid\":\"00000000-0000-4000-8000-000000000026\",\"timestamp\":\"2026-11-16T06:11:36.572Z\",\"toolUseResult\":{\"stdout\":\"@big(3000)\",\"stderr\":\"\",\"interrupted\":false,\"isImage\":false,\"noOutputExpected\":false},\"sandboxed\":false,\"sourceToolAssistantUUID\":\"00000000-0000-4000-8000-000000000025\",\"permissionDecision\":{\"decision\":\"accept\",\"source\":\"config\",\"reasonType\":\"subcommandResults\"},\"session_id\":\"00000000-0000-4000-8000-000000000001\",\"userType\":\"external\",\"entrypoint\":\"cli\",\"cwd\":\"/tmp/PROJECT\",\"sessionId\":\"00000000-0000-4000-8000-000000000001\",\"version\":\"2.1.325\",\"gitBranch\":\"HEAD\"}"
+   ]
+  },
+  {
+   "screen": "bash-allow/08-working",
+   "working": {
+    "seconds": 0.537,
+    "cont": true
+   }
+  },
+  {
+   "screen": "bash-allow/09-working",
+   "working": {
+    "seconds": 8,
+    "cont": true
+   }
+  },
+  {
+   "screen": "bash-allow/10-idle",
+   "working": false,
+   "transcript": [
+    {
+     "rec": "bash-allow",
+     "from": 36,
+     "to": 49
+    }
+   ]
+  }
+ ]
+}

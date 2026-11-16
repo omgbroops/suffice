@@ -1,0 +1,108 @@
+{
+ "name": "resume",
+ "recorded": true,
+ "beats": [
+  {
+   "screen": "resume/01-trust",
+   "dialog": {
+    "kind": "trust",
+    "onChoose": {
+     "0": [
+      {
+       "exit": 1
+      }
+     ],
+     "1": [],
+     "esc": [
+      {
+       "exit": 1
+      }
+     ]
+    }
+   }
+  },
+  {
+   "screen": "resume/04-ready",
+   "transcript": [
+    {
+     "rec": "resume",
+     "from": 0,
+     "to": 9
+    }
+   ]
+  },
+  {
+   "wait": "input",
+   "transcript": [
+    {
+     "rec": "resume",
+     "from": 9,
+     "to": 32
+    }
+   ]
+  },
+  {
+   "screen": "resume/05-working",
+   "working": {
+    "seconds": 0.183,
+    "cont": false
+   }
+  },
+  {
+   "screen": "resume/06-working",
+   "working": {
+    "seconds": 0.228,
+    "cont": true
+   }
+  },
+  {
+   "screen": "resume/07-working",
+   "working": {
+    "seconds": 0.227,
+    "cont": true
+   },
+   "transcript": []
+  },
+  {
+   "screen": "resume/08-working",
+   "working": {
+    "seconds": 0.154,
+    "cont": true
+   }
+  },
+  {
+   "screen": "resume/09-working",
+   "working": {
+    "seconds": 1.87,
+    "cont": true
+   }
+  },
+  {
+   "screen": "resume/12-resumed",
+   "working": false,
+   "transcript": [
+    {
+     "rec": "resume",
+     "from": 32,
+     "to": 43
+    }
+   ]
+  }
+ ],
+ "resume": [
+  {
+   "screen": "resume/11-ready"
+  },
+  {
+   "wait": 600,
+   "screen": "resume/12-resumed",
+   "transcript": [
+    {
+     "rec": "resume",
+     "from": 43,
+     "to": 44
+    }
+   ]
+  }
+ ]
+}

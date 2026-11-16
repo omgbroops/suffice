@@ -1,0 +1,7 @@
+{
+ "name": "trust-then-ready",
+ "beats": [
+  { "screen": "bash-allow/01-trust", "dialog": { "kind": "trust", "onChoose": { "0": [{ "exit": 1 }], "1": [], "esc": [{ "exit": 1 }] } } },
+  { "screen": "bash-allow/04-ready", "transcript": [] }
+ ]
+}

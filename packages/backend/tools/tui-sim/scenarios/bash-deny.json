@@ -1,0 +1,124 @@
+{
+ "name": "bash-deny",
+ "recorded": true,
+ "beats": [
+  {
+   "screen": "bash-deny/01-trust",
+   "dialog": {
+    "kind": "trust",
+    "onChoose": {
+     "0": [
+      {
+       "exit": 1
+      }
+     ],
+     "1": [],
+     "esc": [
+      {
+       "exit": 1
+      }
+     ]
+    }
+   }
+  },
+  {
+   "screen": "bash-deny/04-ready",
+   "transcript": [
+    {
+     "rec": "bash-deny",
+     "from": 0,
+     "to": 8
+    }
+   ]
+  },
+  {
+   "wait": "input",
+   "transcript": [
+    {
+     "rec": "bash-deny",
+     "from": 8,
+     "to": 34
+    }
+   ]
+  },
+  {
+   "screen": "bash-deny/05-working",
+   "working": {
+    "seconds": 0.162,
+    "cont": false
+   }
+  },
+  {
+   "screen": "bash-deny/06-working",
+   "working": {
+    "seconds": 0.227,
+    "cont": true
+   }
+  },
+  {
+   "screen": "bash-deny/07-working",
+   "working": {
+    "seconds": 0.222,
+    "cont": true
+   }
+  },
+  {
+   "screen": "bash-deny/08-working",
+   "working": {
+    "seconds": 0.569,
+    "cont": true
+   }
+  },
+  {
+   "screen": "bash-deny/09-working",
+   "working": {
+    "seconds": 1.358,
+    "cont": true
+   }
+  },
+  {
+   "screen": "bash-deny/10-dialog",
+   "transcript": [
+    {
+     "rec": "bash-deny",
+     "from": 34,
+     "to": 36
+    }
+   ],
+   "dialog": {
+    "kind": "perm"
+   }
+  },
+  {
+   "screen": "bash-deny/11-idle",
+   "working": false,
+   "transcript": [
+    {
+     "rec": "bash-deny",
+     "from": 36,
+     "to": 47
+    }
+   ]
+  },
+  {
+   "wait": "input",
+   "transcript": [
+    {
+     "rec": "bash-deny",
+     "from": 47,
+     "to": 52
+    }
+   ]
+  },
+  {
+   "screen": "bash-deny/12-idle",
+   "transcript": [
+    {
+     "rec": "bash-deny",
+     "from": 52,
+     "to": 56
+    }
+   ]
+  }
+ ]
+}

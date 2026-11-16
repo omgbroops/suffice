@@ -1,0 +1,127 @@
+{
+ "name": "compact",
+ "recorded": true,
+ "beats": [
+  {
+   "screen": "compact/01-trust",
+   "dialog": {
+    "kind": "trust",
+    "onChoose": {
+     "0": [
+      {
+       "exit": 1
+      }
+     ],
+     "1": [],
+     "esc": [
+      {
+       "exit": 1
+      }
+     ]
+    }
+   }
+  },
+  {
+   "screen": "compact/04-ready",
+   "transcript": [
+    {
+     "rec": "compact",
+     "from": 0,
+     "to": 8
+    }
+   ]
+  },
+  {
+   "wait": "input",
+   "transcript": [
+    {
+     "rec": "compact",
+     "from": 8,
+     "to": 32
+    }
+   ]
+  },
+  {
+   "screen": "compact/05-working",
+   "working": {
+    "seconds": 0.173,
+    "cont": false
+   }
+  },
+  {
+   "screen": "compact/06-working",
+   "working": {
+    "seconds": 0.23,
+    "cont": true
+   }
+  },
+  {
+   "screen": "compact/07-working",
+   "working": {
+    "seconds": 0.22,
+    "cont": true
+   }
+  },
+  {
+   "screen": "compact/08-working",
+   "working": {
+    "seconds": 0.555,
+    "cont": true
+   }
+  },
+  {
+   "screen": "compact/09-working",
+   "working": {
+    "seconds": 1.898,
+    "cont": true
+   }
+  },
+  {
+   "screen": "compact/10-idle",
+   "working": false,
+   "transcript": [
+    {
+     "rec": "compact",
+     "from": 32,
+     "to": 43
+    }
+   ]
+  },
+  {
+   "wait": "input",
+   "transcript": [
+    {
+     "rec": "compact",
+     "from": 43,
+     "to": 52
+    }
+   ]
+  },
+  {
+   "screen": "compact/11-idle",
+   "working": false,
+   "transcript": [
+    {
+     "rec": "compact",
+     "from": 52,
+     "to": 66
+    }
+   ]
+  },
+  {
+   "wait": "input",
+   "expectInput": "^/compact"
+  },
+  {
+   "screen": "compact/12-idle",
+   "working": false,
+   "transcript": [
+    {
+     "rec": "compact",
+     "from": 66,
+     "to": 85
+    }
+   ]
+  }
+ ]
+}

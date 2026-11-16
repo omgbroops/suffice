@@ -1,0 +1,98 @@
+{
+ "name": "queued",
+ "recorded": true,
+ "beats": [
+  {
+   "screen": "queued/01-trust",
+   "dialog": {
+    "kind": "trust",
+    "onChoose": {
+     "0": [
+      {
+       "exit": 1
+      }
+     ],
+     "1": [],
+     "esc": [
+      {
+       "exit": 1
+      }
+     ]
+    }
+   }
+  },
+  {
+   "screen": "queued/04-ready",
+   "transcript": [
+    {
+     "rec": "queued",
+     "from": 0,
+     "to": 9
+    }
+   ]
+  },
+  {
+   "wait": "input",
+   "transcript": [
+    {
+     "rec": "queued",
+     "from": 9,
+     "to": 34
+    }
+   ]
+  },
+  {
+   "screen": "queued/05-working",
+   "working": {
+    "seconds": 0.197,
+    "cont": false
+   }
+  },
+  {
+   "screen": "queued/06-working",
+   "working": {
+    "seconds": 0.238,
+    "cont": true
+   }
+  },
+  {
+   "screen": "queued/07-working",
+   "working": {
+    "seconds": 0.223,
+    "cont": true
+   },
+   "transcript": [
+    {
+     "rec": "queued",
+     "from": 34,
+     "to": 36
+    }
+   ]
+  },
+  {
+   "screen": "queued/08-working",
+   "working": {
+    "seconds": 0.15,
+    "cont": true
+   }
+  },
+  {
+   "screen": "queued/09-working",
+   "working": {
+    "seconds": 8,
+    "cont": true
+   }
+  },
+  {
+   "screen": "queued/10-failure",
+   "working": false,
+   "transcript": [
+    {
+     "rec": "queued",
+     "from": 36,
+     "to": 50
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,185 @@
+{
+ "name": "parallel-subagents",
+ "recorded": true,
+ "beats": [
+  {
+   "screen": "subagent/01-trust",
+   "dialog": {
+    "kind": "trust",
+    "onChoose": {
+     "0": [
+      {
+       "exit": 1
+      }
+     ],
+     "1": [],
+     "esc": [
+      {
+       "exit": 1
+      }
+     ]
+    }
+   }
+  },
+  {
+   "screen": "subagent/04-ready",
+   "transcript": [
+    {
+     "rec": "subagent",
+     "from": 0,
+     "to": 8
+    }
+   ]
+  },
+  {
+   "wait": "input",
+   "transcript": [
+    {
+     "rec": "subagent",
+     "from": 8,
+     "to": 34
+    }
+   ]
+  },
+  {
+   "screen": "subagent/05-working",
+   "working": {
+    "seconds": 0.194,
+    "cont": false
+   }
+  },
+  {
+   "screen": "subagent/06-working",
+   "working": {
+    "seconds": 0.22,
+    "cont": true
+   }
+  },
+  {
+   "screen": "subagent/07-working",
+   "working": {
+    "seconds": 0.215,
+    "cont": true
+   },
+   "transcript": [
+    {
+     "rec": "subagent",
+     "from": 34,
+     "to": 36,
+     "fresh": "p1",
+     "map": {
+      "a8fd05f428d5e8097": "a0000000000000001"
+     }
+    },
+    {
+     "rec": "subagent",
+     "from": 34,
+     "to": 36,
+     "fresh": "p2",
+     "map": {
+      "a8fd05f428d5e8097": "a0000000000000002"
+     }
+    },
+    {
+     "rec": "subagent",
+     "from": 34,
+     "to": 36,
+     "fresh": "p3",
+     "map": {
+      "a8fd05f428d5e8097": "a0000000000000003"
+     }
+    }
+   ],
+   "subagents": [
+    {
+     "id": "a0000000000000001",
+     "rec": "subagent",
+     "file": "agent-a8fd05f428d5e8097.jsonl",
+     "fresh": "p1",
+     "map": {
+      "a8fd05f428d5e8097": "a0000000000000001"
+     },
+     "to": 2
+    },
+    {
+     "id": "a0000000000000002",
+     "rec": "subagent",
+     "file": "agent-a8fd05f428d5e8097.jsonl",
+     "fresh": "p2",
+     "map": {
+      "a8fd05f428d5e8097": "a0000000000000002"
+     },
+     "to": 2
+    },
+    {
+     "id": "a0000000000000003",
+     "rec": "subagent",
+     "file": "agent-a8fd05f428d5e8097.jsonl",
+     "fresh": "p3",
+     "map": {
+      "a8fd05f428d5e8097": "a0000000000000003"
+     },
+     "to": 2
+    }
+   ]
+  },
+  {
+   "screen": "subagent/08-working",
+   "working": {
+    "seconds": 0.15,
+    "cont": true
+   }
+  },
+  {
+   "screen": "subagent/09-working",
+   "working": {
+    "seconds": 5.207,
+    "cont": true
+   }
+  },
+  {
+   "screen": "subagent/10-idle",
+   "working": false,
+   "transcript": [
+    {
+     "rec": "subagent",
+     "from": 36,
+     "to": 51,
+     "fresh": "p9"
+    }
+   ],
+   "subagents": [
+    {
+     "id": "a0000000000000001",
+     "rec": "subagent",
+     "file": "agent-a8fd05f428d5e8097.jsonl",
+     "fresh": "p1",
+     "map": {
+      "a8fd05f428d5e8097": "a0000000000000001"
+     },
+     "from": 2
+    },
+    {
+     "id": "a0000000000000002",
+     "rec": "subagent",
+     "file": "agent-a8fd05f428d5e8097.jsonl",
+     "fresh": "p2",
+     "map": {
+      "a8fd05f428d5e8097": "a0000000000000002"
+     },
+     "from": 2
+    },
+    {
+     "id": "a0000000000000003",
+     "rec": "subagent",
+     "file": "agent-a8fd05f428d5e8097.jsonl",
+     "fresh": "p3",
+     "map": {
+      "a8fd05f428d5e8097": "a0000000000000003"
+     },
+     "from": 2
+    }
+   ]
+  }
+ ]
+}

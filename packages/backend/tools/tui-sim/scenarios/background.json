@@ -1,0 +1,111 @@
+{
+ "name": "background",
+ "recorded": true,
+ "beats": [
+  {
+   "screen": "background/01-trust",
+   "dialog": {
+    "kind": "trust",
+    "onChoose": {
+     "0": [
+      {
+       "exit": 1
+      }
+     ],
+     "1": [],
+     "esc": [
+      {
+       "exit": 1
+      }
+     ]
+    }
+   }
+  },
+  {
+   "screen": "background/04-ready",
+   "transcript": [
+    {
+     "rec": "background",
+     "from": 0,
+     "to": 9
+    }
+   ]
+  },
+  {
+   "wait": "input",
+   "transcript": [
+    {
+     "rec": "background",
+     "from": 9,
+     "to": 34
+    }
+   ]
+  },
+  {
+   "screen": "background/05-working",
+   "working": {
+    "seconds": 0.218,
+    "cont": false
+   }
+  },
+  {
+   "screen": "background/06-working",
+   "working": {
+    "seconds": 0.214,
+    "cont": true
+   }
+  },
+  {
+   "screen": "background/07-working",
+   "working": {
+    "seconds": 0.221,
+    "cont": true
+   },
+   "transcript": [
+    {
+     "rec": "background",
+     "from": 34,
+     "to": 38
+    }
+   ]
+  },
+  {
+   "screen": "background/08-working",
+   "working": {
+    "seconds": 0.209,
+    "cont": true
+   }
+  },
+  {
+   "screen": "background/09-working",
+   "working": {
+    "seconds": 3.576,
+    "cont": true
+   }
+  },
+  {
+   "screen": "background/11-tasks-view",
+   "working": false,
+   "transcript": [
+    {
+     "rec": "background",
+     "from": 38,
+     "to": 52
+    }
+   ]
+  },
+  {
+   "wait": "input",
+   "expectInput": "^/tasks"
+  },
+  {
+   "screen": "background/11-tasks-view",
+   "dialog": {
+    "kind": "modal"
+   }
+  },
+  {
+   "screen": "background/10-idle"
+  }
+ ]
+}

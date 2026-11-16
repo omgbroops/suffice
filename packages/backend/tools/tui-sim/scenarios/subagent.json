@@ -1,0 +1,105 @@
+{
+ "name": "subagent",
+ "recorded": true,
+ "beats": [
+  {
+   "screen": "subagent/01-trust",
+   "dialog": {
+    "kind": "trust",
+    "onChoose": {
+     "0": [
+      {
+       "exit": 1
+      }
+     ],
+     "1": [],
+     "esc": [
+      {
+       "exit": 1
+      }
+     ]
+    }
+   }
+  },
+  {
+   "screen": "subagent/04-ready",
+   "transcript": [
+    {
+     "rec": "subagent",
+     "from": 0,
+     "to": 8
+    }
+   ]
+  },
+  {
+   "wait": "input",
+   "transcript": [
+    {
+     "rec": "subagent",
+     "from": 8,
+     "to": 34
+    }
+   ]
+  },
+  {
+   "screen": "subagent/05-working",
+   "working": {
+    "seconds": 0.194,
+    "cont": false
+   }
+  },
+  {
+   "screen": "subagent/06-working",
+   "working": {
+    "seconds": 0.22,
+    "cont": true
+   }
+  },
+  {
+   "screen": "subagent/07-working",
+   "working": {
+    "seconds": 0.215,
+    "cont": true
+   },
+   "transcript": [
+    {
+     "rec": "subagent",
+     "from": 34,
+     "to": 37
+    }
+   ],
+   "subagents": [
+    {
+     "id": "a8fd05f428d5e8097",
+     "rec": "subagent",
+     "file": "agent-a8fd05f428d5e8097.jsonl"
+    }
+   ]
+  },
+  {
+   "screen": "subagent/08-working",
+   "working": {
+    "seconds": 0.15,
+    "cont": true
+   }
+  },
+  {
+   "screen": "subagent/09-working",
+   "working": {
+    "seconds": 5.207,
+    "cont": true
+   }
+  },
+  {
+   "screen": "subagent/10-idle",
+   "working": false,
+   "transcript": [
+    {
+     "rec": "subagent",
+     "from": 37,
+     "to": 51
+    }
+   ]
+  }
+ ]
+}

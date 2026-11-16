@@ -1,0 +1,71 @@
+{
+ "name": "status-idle",
+ "recorded": true,
+ "beats": [
+  {
+   "screen": "status-idle/01-trust",
+   "dialog": {
+    "kind": "trust",
+    "onChoose": {
+     "0": [
+      {
+       "exit": 1
+      }
+     ],
+     "1": [],
+     "esc": [
+      {
+       "exit": 1
+      }
+     ]
+    }
+   }
+  },
+  {
+   "screen": "status-idle/04-ready",
+   "transcript": []
+  },
+  {
+   "screen": "status-idle/05-idle"
+  },
+  {
+   "wait": "input",
+   "expectInput": "^/status"
+  },
+  {
+   "screen": "status-idle/06-status",
+   "dialog": {
+    "kind": "modal"
+   }
+  },
+  {
+   "screen": "status-idle/05-idle"
+  },
+  {
+   "wait": "input",
+   "expectInput": "^/cost"
+  },
+  {
+   "screen": "status-idle/07-cost",
+   "dialog": {
+    "kind": "modal"
+   }
+  },
+  {
+   "screen": "status-idle/05-idle"
+  },
+  {
+   "wait": "input",
+   "expectInput": "^/usage"
+  },
+  {
+   "screen": "status-idle/08-usage",
+   "dialog": {
+    "kind": "modal"
+   }
+  },
+  {
+   "screen": "status-idle/05-idle"
+  }
+ ]
+}

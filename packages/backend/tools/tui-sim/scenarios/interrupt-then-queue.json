@@ -1,0 +1,185 @@
+{
+ "name": "interrupt-then-queue",
+ "recorded": true,
+ "beats": [
+  {
+   "screen": "interrupt/01-trust",
+   "dialog": {
+    "kind": "trust",
+    "onChoose": {
+     "0": [
+      {
+       "exit": 1
+      }
+     ],
+     "1": [],
+     "esc": [
+      {
+       "exit": 1
+      }
+     ]
+    }
+   }
+  },
+  {
+   "screen": "interrupt/04-ready",
+   "transcript": [
+    {
+     "rec": "interrupt",
+     "from": 0,
+     "to": 9
+    }
+   ]
+  },
+  {
+   "wait": "input",
+   "transcript": [
+    {
+     "rec": "interrupt",
+     "from": 9,
+     "to": 34,
+     "fresh": "i1"
+    }
+   ]
+  },
+  {
+   "screen": "interrupt/05-working",
+   "working": {
+    "seconds": 0.2,
+    "cont": false
+   }
+  },
+  {
+   "screen": "interrupt/06-working",
+   "working": {
+    "seconds": 0.217,
+    "cont": true
+   }
+  },
+  {
+   "screen": "interrupt/07-working",
+   "working": {
+    "seconds": 0.227,
+    "cont": true
+   }
+  },
+  {
+   "screen": "interrupt/08-working",
+   "working": {
+    "seconds": 0.161,
+    "cont": true
+   }
+  },
+  {
+   "screen": "interrupt/09-working",
+   "working": {
+    "seconds": 1.006,
+    "cont": true
+   }
+  },
+  {
+   "screen": "interrupt/10-dialog",
+   "transcript": [
+    {
+     "rec": "interrupt",
+     "from": 34,
+     "to": 36,
+     "fresh": "i1"
+    }
+   ],
+   "dialog": {
+    "kind": "perm"
+   }
+  },
+  {
+   "screen": "interrupt/09-working",
+   "working": {
+    "seconds": 3600,
+    "onInterrupt": [
+     {
+      "screen": "interrupt/11-after-esc",
+      "working": false,
+      "transcript": [
+       {
+        "rec": "interrupt",
+        "from": 36,
+        "to": 45,
+        "fresh": "i1"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "keep": true,
+   "screen": "interrupt/12-idle"
+  },
+  {
+   "wait": "input",
+   "transcript": [
+    {
+     "rec": "read-search",
+     "from": 8,
+     "to": 33,
+     "fresh": "q1"
+    }
+   ]
+  },
+  {
+   "screen": "read-search/05-working",
+   "working": {
+    "seconds": 0.197,
+    "cont": false
+   }
+  },
+  {
+   "screen": "read-search/06-working",
+   "working": {
+    "seconds": 0.229,
+    "cont": true
+   }
+  },
+  {
+   "screen": "read-search/07-working",
+   "working": {
+    "seconds": 0.22,
+    "cont": true
+   },
+   "transcript": [
+    {
+     "rec": "read-search",
+     "from": 33,
+     "to": 36,
+     "fresh": "q1"
+    }
+   ]
+  },
+  {
+   "screen": "read-search/08-working",
+   "working": {
+    "seconds": 0.518,
+    "cont": true
+   }
+  },
+  {
+   "screen": "read-search/09-working",
+   "working": {
+    "seconds": 8,
+    "cont": true
+   }
+  },
+  {
+   "screen": "read-search/10-idle",
+   "working": false,
+   "transcript": [
+    {
+     "rec": "read-search",
+     "from": 36,
+     "to": 63,
+     "fresh": "q1"
+    }
+   ]
+  }
+ ]
+}

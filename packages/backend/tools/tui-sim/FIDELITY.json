@@ -1,0 +1,1977 @@
+{
+ "speed": 1,
+ "totals": {
+  "exact": 159,
+  "near": 30,
+  "different": 20
+ },
+ "worst": [
+  {
+   "scenario": "edit",
+   "frame": "11-idle",
+   "diff": 30,
+   "bad": [
+    {
+     "row": 1,
+     "want": "❯ Fix the typo in greet.js: 'Helo' should be 'Hello'. Use the Edit tool.",
+     "got": "▐▛███▛█ Claude Code v2.1.325"
+    },
+    {
+     "row": 2,
+     "want": "",
+     "got": "▝▜██████▀ Haiku 5.5 with medium effort · Claude Ultra"
+    },
+    {
+     "row": 3,
+     "want": "Read 1 file",
+     "got": "▝▝ ▝▝ /tmp/PROJECT"
+    }
+   ]
+  },
+  {
+   "scenario": "read-search",
+   "frame": "10-idle",
+   "diff": 26,
+   "bad": [
+    {
+     "row": 0,
+     "want": "▝▝ ▝▝ /tmp/PROJECT",
+     "got": ""
+    },
+    {
+     "row": 1,
+     "want": "",
+     "got": "▐▛███▛█ Claude Code v2.1.325"
+    },
+    {
+     "row": 2,
+     "want": "",
+     "got": "▝▜██████▀ Haiku 5.5 with medium effort · Claude Ultra"
+    }
+   ]
+  },
+  {
+   "scenario": "todo",
+   "frame": "10-idle",
+   "diff": 25,
+   "bad": [
+    {
+     "row": 0,
+     "want": "▝▝ ▝▝ /tmp/PROJECT",
+     "got": ""
+    },
+    {
+     "row": 1,
+     "want": "",
+     "got": "▐▛███▛█ Claude Code v2.1.325"
+    },
+    {
+     "row": 2,
+     "want": "",
+     "got": "▝▜██████▀ Haiku 5.5 with medium effort · Claude Ultra"
+    }
+   ]
+  },
+  {
+   "scenario": "bash-fail",
+   "frame": "06-working",
+   "diff": 21,
+   "bad": [
+    {
+     "row": 8,
+     "want": "",
+     "got": "Running missing.js in current directory"
+    },
+    {
+     "row": 9,
+     "want": "",
+     "got": "⎿ $ node missing.js"
+    },
+    {
+     "row": 11,
+     "want": "",
+     "got": "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────"
+    }
+   ]
+  },
+  {
+   "scenario": "bash-fail",
+   "frame": "07-working",
+   "diff": 21,
+   "bad": [
+    {
+     "row": 8,
+     "want": "",
+     "got": "Running missing.js in current directory"
+    },
+    {
+     "row": 9,
+     "want": "",
+     "got": "⎿ $ node missing.js"
+    },
+    {
+     "row": 11,
+     "want": "",
+     "got": "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────"
+    }
+   ]
+  }
+ ],
+ "results": [
+  {
+   "scenario": "ask-question",
+   "frames": [
+    {
+     "frame": "01-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "02-trust",
+     "diff": 2,
+     "bad": [
+      {
+       "row": 13,
+       "want": "❯ No, exit",
+       "got": "No, exit"
+      },
+      {
+       "row": 14,
+       "want": "Yes, I trust this folder",
+       "got": "❯ Yes, I trust this folder"
+      }
+     ]
+    },
+    {
+     "frame": "03-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "04-ready",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "05-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "06-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "07-working",
+     "diff": 20,
+     "bad": [
+      {
+       "row": 7,
+       "want": "",
+       "got": "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────"
+      },
+      {
+       "row": 8,
+       "want": "",
+       "got": "☐ Color"
+      },
+      {
+       "row": 10,
+       "want": "",
+       "got": "Which color do you prefer, red or blue?"
+      }
+     ]
+    },
+    {
+     "frame": "08-working",
+     "diff": 20,
+     "bad": [
+      {
+       "row": 7,
+       "want": "",
+       "got": "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────"
+      },
+      {
+       "row": 8,
+       "want": "",
+       "got": "☐ Color"
+      },
+      {
+       "row": 10,
+       "want": "",
+       "got": "Which color do you prefer, red or blue?"
+      }
+     ]
+    },
+    {
+     "frame": "09-working",
+     "diff": 20,
+     "bad": [
+      {
+       "row": 7,
+       "want": "",
+       "got": "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────"
+      },
+      {
+       "row": 8,
+       "want": "",
+       "got": "☐ Color"
+      },
+      {
+       "row": 10,
+       "want": "",
+       "got": "Which color do you prefer, red or blue?"
+      }
+     ]
+    },
+    {
+     "frame": "10-dialog",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "11-idle",
+     "diff": 0,
+     "bad": []
+    }
+   ],
+   "transcript": {
+    "want": 46,
+    "got": 46,
+    "diff": 0
+   }
+  },
+  {
+   "scenario": "at-mention",
+   "frames": [
+    {
+     "frame": "01-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "02-trust",
+     "diff": 2,
+     "bad": [
+      {
+       "row": 13,
+       "want": "❯ No, exit",
+       "got": "No, exit"
+      },
+      {
+       "row": 14,
+       "want": "Yes, I trust this folder",
+       "got": "❯ Yes, I trust this folder"
+      }
+     ]
+    },
+    {
+     "frame": "03-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "04-ready",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "05-at-picker",
+     "diff": 1,
+     "bad": [
+      {
+       "row": 31,
+       "want": "⏸ manual mode on",
+       "got": "⏸ manual mode on · ← for agents"
+      }
+     ]
+    },
+    {
+     "frame": "06-cleared",
+     "diff": 1,
+     "bad": [
+      {
+       "row": 23,
+       "want": "Ctrl+Y to paste deleted text",
+       "got": "◐ medium · /effort"
+      }
+     ]
+    }
+   ],
+   "transcript": {
+    "want": 0,
+    "got": 0,
+    "diff": 0
+   }
+  },
+  {
+   "scenario": "background",
+   "frames": [
+    {
+     "frame": "01-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "02-trust",
+     "diff": 2,
+     "bad": [
+      {
+       "row": 13,
+       "want": "❯ No, exit",
+       "got": "No, exit"
+      },
+      {
+       "row": 14,
+       "want": "Yes, I trust this folder",
+       "got": "❯ Yes, I trust this folder"
+      }
+     ]
+    },
+    {
+     "frame": "03-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "04-ready",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "05-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "06-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "07-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "08-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "09-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "10-idle",
+     "diff": 11,
+     "bad": [
+      {
+       "row": 21,
+       "want": "",
+       "got": "▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔ ◐ medium · /effort ▔"
+      },
+      {
+       "row": 22,
+       "want": "◐ medium · /effort",
+       "got": "Shell details"
+      },
+      {
+       "row": 23,
+       "want": "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+       "got": ""
+      }
+     ]
+    },
+    {
+     "frame": "11-tasks-view",
+     "diff": 0,
+     "bad": []
+    }
+   ],
+   "transcript": {
+    "want": 49,
+    "got": 49,
+    "diff": 0
+   }
+  },
+  {
+   "scenario": "bash-allow",
+   "frames": [
+    {
+     "frame": "01-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "02-trust",
+     "diff": 2,
+     "bad": [
+      {
+       "row": 13,
+       "want": "❯ No, exit",
+       "got": "No, exit"
+      },
+      {
+       "row": 14,
+       "want": "Yes, I trust this folder",
+       "got": "❯ Yes, I trust this folder"
+      }
+     ]
+    },
+    {
+     "frame": "03-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "04-ready",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "05-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "06-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "07-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "08-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "09-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "10-idle",
+     "diff": 18,
+     "bad": [
+      {
+       "row": 8,
+       "want": "Listed 1 directory",
+       "got": ""
+      },
+      {
+       "row": 10,
+       "want": "⏺ The ls output for the working directory:",
+       "got": ""
+      },
+      {
+       "row": 12,
+       "want": "build",
+       "got": ""
+      }
+     ]
+    }
+   ],
+   "transcript": {
+    "want": 46,
+    "got": 46,
+    "diff": 0
+   }
+  },
+  {
+   "scenario": "bash-deny",
+   "frames": [
+    {
+     "frame": "01-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "02-trust",
+     "diff": 2,
+     "bad": [
+      {
+       "row": 13,
+       "want": "❯ No, exit",
+       "got": "No, exit"
+      },
+      {
+       "row": 14,
+       "want": "Yes, I trust this folder",
+       "got": "❯ Yes, I trust this folder"
+      }
+     ]
+    },
+    {
+     "frame": "03-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "04-ready",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "05-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "06-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "07-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "08-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "09-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "10-dialog",
+     "diff": 1,
+     "bad": [
+      {
+       "row": 20,
+       "want": "2. Yes, and always allow access to /tmp/PROJECT/build from",
+       "got": "2. Yes, and always allow access to /private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/tuisim-fid-q0i55j/PROJECm"
+      }
+     ]
+    },
+    {
+     "frame": "11-idle",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "12-idle",
+     "diff": 0,
+     "bad": []
+    }
+   ],
+   "transcript": {
+    "want": 53,
+    "got": 53,
+    "diff": 0
+   }
+  },
+  {
+   "scenario": "bash-fail",
+   "frames": [
+    {
+     "frame": "01-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "02-trust",
+     "diff": 2,
+     "bad": [
+      {
+       "row": 13,
+       "want": "❯ No, exit",
+       "got": "No, exit"
+      },
+      {
+       "row": 14,
+       "want": "Yes, I trust this folder",
+       "got": "❯ Yes, I trust this folder"
+      }
+     ]
+    },
+    {
+     "frame": "03-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "04-ready",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "05-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "06-working",
+     "diff": 21,
+     "bad": [
+      {
+       "row": 8,
+       "want": "",
+       "got": "Running missing.js in current directory"
+      },
+      {
+       "row": 9,
+       "want": "",
+       "got": "⎿ $ node missing.js"
+      },
+      {
+       "row": 11,
+       "want": "",
+       "got": "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────"
+      }
+     ]
+    },
+    {
+     "frame": "07-working",
+     "diff": 21,
+     "bad": [
+      {
+       "row": 8,
+       "want": "",
+       "got": "Running missing.js in current directory"
+      },
+      {
+       "row": 9,
+       "want": "",
+       "got": "⎿ $ node missing.js"
+      },
+      {
+       "row": 11,
+       "want": "",
+       "got": "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────"
+      }
+     ]
+    },
+    {
+     "frame": "08-working",
+     "diff": 21,
+     "bad": [
+      {
+       "row": 8,
+       "want": "",
+       "got": "Running missing.js in current directory"
+      },
+      {
+       "row": 9,
+       "want": "",
+       "got": "⎿ $ node missing.js"
+      },
+      {
+       "row": 11,
+       "want": "",
+       "got": "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────"
+      }
+     ]
+    },
+    {
+     "frame": "09-working",
+     "diff": 21,
+     "bad": [
+      {
+       "row": 8,
+       "want": "Running 1 shell command…",
+       "got": "Running missing.js in current directory"
+      },
+      {
+       "row": 9,
+       "want": "",
+       "got": "⎿ $ node missing.js"
+      },
+      {
+       "row": 11,
+       "want": "",
+       "got": "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────"
+      }
+     ]
+    },
+    {
+     "frame": "10-dialog",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "11-idle",
+     "diff": 1,
+     "bad": [
+      {
+       "row": 12,
+       "want": "Error: Cannot find module '/tmp/PROJECT/missing.js'",
+       "got": "Error: Cannot find module '/tmp/PROJECT/missing'"
+      }
+     ]
+    }
+   ],
+   "transcript": {
+    "want": 47,
+    "got": 47,
+    "diff": 0
+   }
+  },
+  {
+   "scenario": "compact",
+   "frames": [
+    {
+     "frame": "01-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "02-trust",
+     "diff": 2,
+     "bad": [
+      {
+       "row": 13,
+       "want": "❯ No, exit",
+       "got": "No, exit"
+      },
+      {
+       "row": 14,
+       "want": "Yes, I trust this folder",
+       "got": "❯ Yes, I trust this folder"
+      }
+     ]
+    },
+    {
+     "frame": "03-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "04-ready",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "05-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "06-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "07-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "08-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "09-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "10-idle",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "11-idle",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "12-idle",
+     "diff": 0,
+     "bad": []
+    }
+   ],
+   "transcript": {
+    "want": 80,
+    "got": 80,
+    "diff": 0
+   }
+  },
+  {
+   "scenario": "edit",
+   "frames": [
+    {
+     "frame": "01-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "02-trust",
+     "diff": 2,
+     "bad": [
+      {
+       "row": 13,
+       "want": "❯ No, exit",
+       "got": "No, exit"
+      },
+      {
+       "row": 14,
+       "want": "Yes, I trust this folder",
+       "got": "❯ Yes, I trust this folder"
+      }
+     ]
+    },
+    {
+     "frame": "03-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "04-ready",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "05-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "06-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "07-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "08-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "09-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "10-dialog",
+     "diff": 21,
+     "bad": [
+      {
+       "row": 8,
+       "want": "Read 1 file",
+       "got": ""
+      },
+      {
+       "row": 10,
+       "want": "⏺ Update(greet.js)",
+       "got": ""
+      },
+      {
+       "row": 12,
+       "want": "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+       "got": ""
+      }
+     ]
+    },
+    {
+     "frame": "11-idle",
+     "diff": 30,
+     "bad": [
+      {
+       "row": 1,
+       "want": "❯ Fix the typo in greet.js: 'Helo' should be 'Hello'. Use the Edit tool.",
+       "got": "▐▛███▛█ Claude Code v2.1.325"
+      },
+      {
+       "row": 2,
+       "want": "",
+       "got": "▝▜██████▀ Haiku 5.5 with medium effort · Claude Ultra"
+      },
+      {
+       "row": 3,
+       "want": "Read 1 file",
+       "got": "▝▝ ▝▝ /tmp/PROJECT"
+      }
+     ]
+    }
+   ],
+   "transcript": {
+    "want": 56,
+    "got": 46,
+    "diff": 10
+   }
+  },
+  {
+   "scenario": "interrupt",
+   "frames": [
+    {
+     "frame": "01-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "02-trust",
+     "diff": 2,
+     "bad": [
+      {
+       "row": 13,
+       "want": "❯ No, exit",
+       "got": "No, exit"
+      },
+      {
+       "row": 14,
+       "want": "Yes, I trust this folder",
+       "got": "❯ Yes, I trust this folder"
+      }
+     ]
+    },
+    {
+     "frame": "03-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "04-ready",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "05-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "06-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "07-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "08-working",
+     "diff": 21,
+     "bad": [
+      {
+       "row": 8,
+       "want": "",
+       "got": "⏺ Counting 1 to 30 with a 1-second sleep between each"
+      },
+      {
+       "row": 9,
+       "want": "",
+       "got": "⎿ $ for i in $(seq 1 30); do echo $i; sleep 1; done"
+      },
+      {
+       "row": 11,
+       "want": "",
+       "got": "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────"
+      }
+     ]
+    },
+    {
+     "frame": "09-working",
+     "diff": 21,
+     "bad": [
+      {
+       "row": 8,
+       "want": "",
+       "got": "⏺ Counting 1 to 30 with a 1-second sleep between each"
+      },
+      {
+       "row": 9,
+       "want": "",
+       "got": "⎿ $ for i in $(seq 1 30); do echo $i; sleep 1; done"
+      },
+      {
+       "row": 11,
+       "want": "",
+       "got": "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────"
+      }
+     ]
+    },
+    {
+     "frame": "10-dialog",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "11-after-esc",
+     "diff": 1,
+     "bad": [
+      {
+       "row": 22,
+       "want": "tmux detected · scroll with PgUp/PgDn · or add 'set -g mouse on' to ~/.tmux.conf for wheel scroll",
+       "got": "◐ medium · /effort"
+      }
+     ]
+    },
+    {
+     "frame": "12-idle",
+     "diff": 0,
+     "bad": []
+    }
+   ],
+   "transcript": {
+    "want": 42,
+    "got": 42,
+    "diff": 0
+   }
+  },
+  {
+   "scenario": "mode-cycle",
+   "frames": [
+    {
+     "frame": "01-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "02-trust",
+     "diff": 2,
+     "bad": [
+      {
+       "row": 13,
+       "want": "❯ No, exit",
+       "got": "No, exit"
+      },
+      {
+       "row": 14,
+       "want": "Yes, I trust this folder",
+       "got": "❯ Yes, I trust this folder"
+      }
+     ]
+    },
+    {
+     "frame": "03-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "04-ready",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "05-start",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "06-mode-1",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "07-mode-2",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "08-mode-3",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "09-mode-4",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "10-mode-5",
+     "diff": 0,
+     "bad": []
+    }
+   ],
+   "transcript": {
+    "want": 0,
+    "got": 0,
+    "diff": 0
+   }
+  },
+  {
+   "scenario": "model-switch",
+   "frames": [
+    {
+     "frame": "01-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "02-trust",
+     "diff": 2,
+     "bad": [
+      {
+       "row": 13,
+       "want": "❯ No, exit",
+       "got": "No, exit"
+      },
+      {
+       "row": 14,
+       "want": "Yes, I trust this folder",
+       "got": "❯ Yes, I trust this folder"
+      }
+     ]
+    },
+    {
+     "frame": "03-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "04-ready",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "05-model-picker",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "06-after-model",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "07-help",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "08-slash-menu",
+     "diff": 1,
+     "bad": [
+      {
+       "row": 31,
+       "want": "⏸ manual mode on",
+       "got": "⏸ manual mode on · ← for agents"
+      }
+     ]
+    },
+    {
+     "frame": "09-cleared",
+     "diff": 0,
+     "bad": []
+    }
+   ],
+   "transcript": {
+    "want": 10,
+    "got": 10,
+    "diff": 0
+   }
+  },
+  {
+   "scenario": "plan-mode",
+   "frames": [
+    {
+     "frame": "01-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "02-trust",
+     "diff": 2,
+     "bad": [
+      {
+       "row": 13,
+       "want": "❯ No, exit",
+       "got": "No, exit"
+      },
+      {
+       "row": 14,
+       "want": "Yes, I trust this folder",
+       "got": "❯ Yes, I trust this folder"
+      }
+     ]
+    },
+    {
+     "frame": "03-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "04-ready",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "05-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "06-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "07-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "08-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "09-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "10-dialog",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "11-dialog",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "12-idle",
+     "diff": 0,
+     "bad": []
+    }
+   ],
+   "transcript": {
+    "want": 103,
+    "got": 103,
+    "diff": 0
+   }
+  },
+  {
+   "scenario": "queued",
+   "frames": [
+    {
+     "frame": "01-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "02-trust",
+     "diff": 2,
+     "bad": [
+      {
+       "row": 13,
+       "want": "❯ No, exit",
+       "got": "No, exit"
+      },
+      {
+       "row": 14,
+       "want": "Yes, I trust this folder",
+       "got": "❯ Yes, I trust this folder"
+      }
+     ]
+    },
+    {
+     "frame": "03-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "04-ready",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "05-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "06-working",
+     "diff": 2,
+     "bad": [
+      {
+       "row": 8,
+       "want": "",
+       "got": "⏺ Running 1 shell command…"
+      },
+      {
+       "row": 22,
+       "want": "✻ SPIN",
+       "got": "✶ SPIN"
+      }
+     ]
+    },
+    {
+     "frame": "07-working",
+     "diff": 2,
+     "bad": [
+      {
+       "row": 8,
+       "want": "",
+       "got": "⏺ Running 1 shell command…"
+      },
+      {
+       "row": 22,
+       "want": "✳ SPIN",
+       "got": "· SPIN"
+      }
+     ]
+    },
+    {
+     "frame": "08-working",
+     "diff": 16,
+     "bad": [
+      {
+       "row": 8,
+       "want": "",
+       "got": "Ran 1 shell command"
+      },
+      {
+       "row": 10,
+       "want": "",
+       "got": "⏺ The command ran and printed first."
+      },
+      {
+       "row": 12,
+       "want": "",
+       "got": "Skipped: nothing. This was a single sleep and echo, so there was no code to change and nothing to check beyond the"
+      }
+     ]
+    },
+    {
+     "frame": "09-working",
+     "diff": 16,
+     "bad": [
+      {
+       "row": 8,
+       "want": "⏺ Running 1 shell command…",
+       "got": "Ran 1 shell command"
+      },
+      {
+       "row": 10,
+       "want": "",
+       "got": "⏺ The command ran and printed first."
+      },
+      {
+       "row": 12,
+       "want": "",
+       "got": "Skipped: nothing. This was a single sleep and echo, so there was no code to change and nothing to check beyond the"
+      }
+     ]
+    },
+    {
+     "frame": "10-failure",
+     "diff": 0,
+     "bad": []
+    }
+   ],
+   "transcript": {
+    "want": 47,
+    "got": 47,
+    "diff": 0
+   }
+  },
+  {
+   "scenario": "read-search",
+   "frames": [
+    {
+     "frame": "01-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "02-trust",
+     "diff": 2,
+     "bad": [
+      {
+       "row": 13,
+       "want": "❯ No, exit",
+       "got": "No, exit"
+      },
+      {
+       "row": 14,
+       "want": "Yes, I trust this folder",
+       "got": "❯ Yes, I trust this folder"
+      }
+     ]
+    },
+    {
+     "frame": "03-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "04-ready",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "05-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "06-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "07-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "08-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "09-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "10-idle",
+     "diff": 26,
+     "bad": [
+      {
+       "row": 0,
+       "want": "▝▝ ▝▝ /tmp/PROJECT",
+       "got": ""
+      },
+      {
+       "row": 1,
+       "want": "",
+       "got": "▐▛███▛█ Claude Code v2.1.325"
+      },
+      {
+       "row": 2,
+       "want": "",
+       "got": "▝▜██████▀ Haiku 5.5 with medium effort · Claude Ultra"
+      }
+     ]
+    }
+   ],
+   "transcript": {
+    "want": 60,
+    "got": 60,
+    "diff": 0
+   }
+  },
+  {
+   "scenario": "resume",
+   "frames": [
+    {
+     "frame": "01-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "02-trust",
+     "diff": 2,
+     "bad": [
+      {
+       "row": 13,
+       "want": "❯ No, exit",
+       "got": "No, exit"
+      },
+      {
+       "row": 14,
+       "want": "Yes, I trust this folder",
+       "got": "❯ Yes, I trust this folder"
+      }
+     ]
+    },
+    {
+     "frame": "03-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "04-ready",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "05-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "06-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "07-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "08-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "09-working",
+     "diff": 12,
+     "bad": [
+      {
+       "row": 8,
+       "want": "",
+       "got": "⏺ ok"
+      },
+      {
+       "row": 10,
+       "want": "",
+       "got": "» Nothing in progress; waiting for your next instruction."
+      },
+      {
+       "row": 12,
+       "want": "",
+       "got": "✻ DONE"
+      }
+     ]
+    },
+    {
+     "frame": "10-idle",
+     "diff": 1,
+     "bad": [
+      {
+       "row": 28,
+       "want": "◐○○○○○○○○○ 0% 000K | wk 00% used · 00% left · used 0.00%/h · can use 0.00%/h (↺ 0d 00h)",
+       "got": "◐○○○○○○○○○ 0% 000K"
+      }
+     ]
+    },
+    {
+     "frame": "11-ready",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "12-resumed",
+     "diff": 0,
+     "bad": []
+    }
+   ],
+   "transcript": {
+    "want": 40,
+    "got": 40,
+    "diff": 0
+   }
+  },
+  {
+   "scenario": "status-idle",
+   "frames": [
+    {
+     "frame": "01-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "02-trust",
+     "diff": 2,
+     "bad": [
+      {
+       "row": 13,
+       "want": "❯ No, exit",
+       "got": "No, exit"
+      },
+      {
+       "row": 14,
+       "want": "Yes, I trust this folder",
+       "got": "❯ Yes, I trust this folder"
+      }
+     ]
+    },
+    {
+     "frame": "03-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "04-ready",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "05-idle",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "06-status",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "07-cost",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "08-usage",
+     "diff": 0,
+     "bad": []
+    }
+   ],
+   "transcript": {
+    "want": 0,
+    "got": 0,
+    "diff": 0
+   }
+  },
+  {
+   "scenario": "subagent",
+   "frames": [
+    {
+     "frame": "01-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "02-trust",
+     "diff": 2,
+     "bad": [
+      {
+       "row": 13,
+       "want": "❯ No, exit",
+       "got": "No, exit"
+      },
+      {
+       "row": 14,
+       "want": "Yes, I trust this folder",
+       "got": "❯ Yes, I trust this folder"
+      }
+     ]
+    },
+    {
+     "frame": "03-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "04-ready",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "05-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "06-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "07-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "08-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "09-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "10-idle",
+     "diff": 0,
+     "bad": []
+    }
+   ],
+   "transcript": {
+    "want": 48,
+    "got": 48,
+    "diff": 0
+   }
+  },
+  {
+   "scenario": "todo",
+   "frames": [
+    {
+     "frame": "01-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "02-trust",
+     "diff": 2,
+     "bad": [
+      {
+       "row": 13,
+       "want": "❯ No, exit",
+       "got": "No, exit"
+      },
+      {
+       "row": 14,
+       "want": "Yes, I trust this folder",
+       "got": "❯ Yes, I trust this folder"
+      }
+     ]
+    },
+    {
+     "frame": "03-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "04-ready",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "05-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "06-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "07-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "08-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "09-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "10-idle",
+     "diff": 25,
+     "bad": [
+      {
+       "row": 0,
+       "want": "▝▝ ▝▝ /tmp/PROJECT",
+       "got": ""
+      },
+      {
+       "row": 1,
+       "want": "",
+       "got": "▐▛███▛█ Claude Code v2.1.325"
+      },
+      {
+       "row": 2,
+       "want": "",
+       "got": "▝▜██████▀ Haiku 5.5 with medium effort · Claude Ultra"
+      }
+     ]
+    }
+   ],
+   "transcript": {
+    "want": 67,
+    "got": 67,
+    "diff": 0
+   }
+  },
+  {
+   "scenario": "web",
+   "frames": [
+    {
+     "frame": "01-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "02-trust",
+     "diff": 2,
+     "bad": [
+      {
+       "row": 13,
+       "want": "❯ No, exit",
+       "got": "No, exit"
+      },
+      {
+       "row": 14,
+       "want": "Yes, I trust this folder",
+       "got": "❯ Yes, I trust this folder"
+      }
+     ]
+    },
+    {
+     "frame": "03-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "04-ready",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "05-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "06-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "07-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "08-working",
+     "diff": 21,
+     "bad": [
+      {
+       "row": 8,
+       "want": "",
+       "got": "⏺ Fetch(https://example.com)"
+      },
+      {
+       "row": 10,
+       "want": "",
+       "got": "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────"
+      },
+      {
+       "row": 11,
+       "want": "",
+       "got": "Fetch"
+      }
+     ]
+    },
+    {
+     "frame": "09-working",
+     "diff": 21,
+     "bad": [
+      {
+       "row": 8,
+       "want": "",
+       "got": "⏺ Fetch(https://example.com)"
+      },
+      {
+       "row": 10,
+       "want": "",
+       "got": "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────"
+      },
+      {
+       "row": 11,
+       "want": "",
+       "got": "Fetch"
+      }
+     ]
+    },
+    {
+     "frame": "10-dialog",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "11-idle",
+     "diff": 0,
+     "bad": []
+    }
+   ],
+   "transcript": {
+    "want": 55,
+    "got": 55,
+    "diff": 0
+   }
+  },
+  {
+   "scenario": "write",
+   "frames": [
+    {
+     "frame": "01-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "02-trust",
+     "diff": 2,
+     "bad": [
+      {
+       "row": 13,
+       "want": "❯ No, exit",
+       "got": "No, exit"
+      },
+      {
+       "row": 14,
+       "want": "Yes, I trust this folder",
+       "got": "❯ Yes, I trust this folder"
+      }
+     ]
+    },
+    {
+     "frame": "03-trust",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "04-ready",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "05-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "06-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "07-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "08-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "09-working",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "10-dialog",
+     "diff": 0,
+     "bad": []
+    },
+    {
+     "frame": "11-idle",
+     "diff": 1,
+     "bad": [
+      {
+       "row": 12,
+       "want": "⏺ Created /tmp/PROJECT/notes.txt with the single line remember",
+       "got": "⏺ Created /tmp/PROJECT/notes.txt with the single r"
+      }
+     ]
+    }
+   ],
+   "transcript": {
+    "want": 48,
+    "got": 48,
+    "diff": 0
+   }
+  }
+ ]
+}

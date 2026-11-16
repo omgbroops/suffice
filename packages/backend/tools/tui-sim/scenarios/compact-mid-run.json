@@ -1,0 +1,175 @@
+{
+ "name": "compact-mid-run",
+ "recorded": true,
+ "beats": [
+  {
+   "screen": "read-search/01-trust",
+   "dialog": {
+    "kind": "trust",
+    "onChoose": {
+     "0": [
+      {
+       "exit": 1
+      }
+     ],
+     "1": [],
+     "esc": [
+      {
+       "exit": 1
+      }
+     ]
+    }
+   }
+  },
+  {
+   "screen": "read-search/04-ready",
+   "transcript": [
+    {
+     "rec": "read-search",
+     "from": 0,
+     "to": 8
+    }
+   ]
+  },
+  {
+   "wait": "input",
+   "transcript": [
+    {
+     "rec": "read-search",
+     "from": 8,
+     "to": 33,
+     "fresh": "cm"
+    }
+   ]
+  },
+  {
+   "screen": "read-search/05-working",
+   "working": {
+    "seconds": 0.197,
+    "cont": false
+   },
+   "transcript": [
+    {
+     "rec": "compact",
+     "from": 66,
+     "to": 71,
+     "fresh": "c1"
+    }
+   ]
+  },
+  {
+   "screen": "read-search/06-working",
+   "working": {
+    "seconds": 0.229,
+    "cont": true
+   }
+  },
+  {
+   "screen": "read-search/07-working",
+   "working": {
+    "seconds": 0.22,
+    "cont": true
+   },
+   "transcript": [
+    {
+     "rec": "read-search",
+     "from": 33,
+     "to": 36,
+     "fresh": "cm"
+    }
+   ]
+  },
+  {
+   "screen": "read-search/08-working",
+   "working": {
+    "seconds": 0.518,
+    "cont": true
+   }
+  },
+  {
+   "screen": "read-search/09-working",
+   "working": {
+    "seconds": 8,
+    "cont": true
+   }
+  },
+  {
+   "screen": "read-search/10-idle",
+   "working": false,
+   "transcript": [
+    {
+     "rec": "read-search",
+     "from": 36,
+     "to": 63,
+     "fresh": "cm"
+    }
+   ]
+  },
+  {
+   "wait": "input",
+   "transcript": [
+    {
+     "rec": "bash-allow",
+     "from": 9,
+     "to": 34,
+     "fresh": "cm2"
+    }
+   ]
+  },
+  {
+   "screen": "bash-allow/05-working",
+   "working": {
+    "seconds": 0.174,
+    "cont": false
+   }
+  },
+  {
+   "screen": "bash-allow/06-working",
+   "working": {
+    "seconds": 0.239,
+    "cont": true
+   }
+  },
+  {
+   "screen": "bash-allow/07-working",
+   "working": {
+    "seconds": 0.233,
+    "cont": true
+   },
+   "transcript": [
+    {
+     "rec": "bash-allow",
+     "from": 34,
+     "to": 36,
+     "fresh": "cm2"
+    }
+   ]
+  },
+  {
+   "screen": "bash-allow/08-working",
+   "working": {
+    "seconds": 0.537,
+    "cont": true
+   }
+  },
+  {
+   "screen": "bash-allow/09-working",
+   "working": {
+    "seconds": 8,
+    "cont": true
+   }
+  },
+  {
+   "screen": "bash-allow/10-idle",
+   "working": false,
+   "transcript": [
+    {
+     "rec": "bash-allow",
+     "from": 36,
+     "to": 49,
+     "fresh": "cm2"
+    }
+   ]
+  }
+ ]
+}

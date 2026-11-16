@@ -1,0 +1,104 @@
+{
+ "name": "ask-question",
+ "recorded": true,
+ "beats": [
+  {
+   "screen": "ask-question/01-trust",
+   "dialog": {
+    "kind": "trust",
+    "onChoose": {
+     "0": [
+      {
+       "exit": 1
+      }
+     ],
+     "1": [],
+     "esc": [
+      {
+       "exit": 1
+      }
+     ]
+    }
+   }
+  },
+  {
+   "screen": "ask-question/04-ready",
+   "transcript": [
+    {
+     "rec": "ask-question",
+     "from": 0,
+     "to": 8
+    }
+   ]
+  },
+  {
+   "wait": "input",
+   "transcript": [
+    {
+     "rec": "ask-question",
+     "from": 8,
+     "to": 34
+    }
+   ]
+  },
+  {
+   "screen": "ask-question/05-working",
+   "working": {
+    "seconds": 0.189,
+    "cont": false
+   }
+  },
+  {
+   "screen": "ask-question/06-working",
+   "working": {
+    "seconds": 0.247,
+    "cont": true
+   }
+  },
+  {
+   "screen": "ask-question/07-working",
+   "working": {
+    "seconds": 0.213,
+    "cont": true
+   }
+  },
+  {
+   "screen": "ask-question/08-working",
+   "working": {
+    "seconds": 0.308,
+    "cont": true
+   }
+  },
+  {
+   "screen": "ask-question/09-working",
+   "working": {
+    "seconds": 0.412,
+    "cont": true
+   }
+  },
+  {
+   "screen": "ask-question/10-dialog",
+   "transcript": [
+    {
+     "rec": "ask-question",
+     "from": 34,
+     "to": 35
+    }
+   ],
+   "dialog": {
+    "kind": "perm"
+   }
+  },
+  {
+   "screen": "ask-question/11-idle",
+   "working": false,
+   "transcript": [
+    {
+     "rec": "ask-question",
+     "from": 35,
+     "to": 49
+    }
+   ]
+  }
+ ]
+}

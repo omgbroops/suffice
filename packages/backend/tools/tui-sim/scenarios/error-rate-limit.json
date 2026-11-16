@@ -1,0 +1,72 @@
+{
+ "name": "error-rate-limit",
+ "synthetic": true,
+ "beats": [
+  {
+   "screen": "bash-allow/01-trust",
+   "dialog": {
+    "kind": "trust",
+    "onChoose": {
+     "0": [
+      {
+       "exit": 1
+      }
+     ],
+     "1": [],
+     "esc": [
+      {
+       "exit": 1
+      }
+     ]
+    }
+   }
+  },
+  {
+   "screen": "bash-allow/04-ready",
+   "transcript": [
+    {
+     "rec": "bash-allow",
+     "from": 0,
+     "to": 9
+    }
+   ]
+  },
+  {
+   "wait": "input",
+   "transcript": [
+    {
+     "rec": "bash-allow",
+     "from": 9,
+     "to": 34
+    }
+   ]
+  },
+  {
+   "screen": "bash-allow/05-working",
+   "working": {
+    "seconds": 0.174,
+    "cont": false
+   }
+  },
+  {
+   "screen": "bash-allow/06-working",
+   "working": {
+    "seconds": 0.239,
+    "cont": true
+   }
+  },
+  {
+   "screen": {
+    "ref": "bash-allow/10-idle",
+    "set": {
+     "20": "⎿  API Error: Rate limit reached"
+    }
+   },
+   "working": false,
+   "transcript": [
+    "{\"type\":\"system\",\"subtype\":\"api_error\",\"level\":\"error\",\"content\":\"API Error: 429 Rate limit reached\",\"uuid\":\"00000000-0000-4000-8000-0000000000e1\",\"timestamp\":\"2026-11-16T06:11:40.000Z\",\"sessionId\":\"00000000-0000-4000-8000-000000000001\",\"cwd\":\"/tmp/PROJECT\",\"userType\":\"external\",\"version\":\"2.1.325\"}",
+    "{\"type\":\"assistant\",\"isApiErrorMessage\":true,\"message\":{\"id\":\"msg_err1\",\"role\":\"assistant\",\"model\":\"<synthetic>\",\"content\":[{\"type\":\"text\",\"text\":\"API Error: Rate limit reached\"}]},\"uuid\":\"00000000-0000-4000-8000-0000000000e2\",\"timestamp\":\"2026-11-16T06:11:41.000Z\",\"sessionId\":\"00000000-0000-4000-8000-000000000001\",\"cwd\":\"/tmp/PROJECT\",\"userType\":\"external\",\"version\":\"2.1.325\"}"
+   ]
+  }
+ ]
+}

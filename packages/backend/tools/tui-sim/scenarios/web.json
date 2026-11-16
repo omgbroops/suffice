@@ -1,0 +1,104 @@
+{
+ "name": "web",
+ "recorded": true,
+ "beats": [
+  {
+   "screen": "web/01-trust",
+   "dialog": {
+    "kind": "trust",
+    "onChoose": {
+     "0": [
+      {
+       "exit": 1
+      }
+     ],
+     "1": [],
+     "esc": [
+      {
+       "exit": 1
+      }
+     ]
+    }
+   }
+  },
+  {
+   "screen": "web/04-ready",
+   "transcript": [
+    {
+     "rec": "web",
+     "from": 0,
+     "to": 9
+    }
+   ]
+  },
+  {
+   "wait": "input",
+   "transcript": [
+    {
+     "rec": "web",
+     "from": 9,
+     "to": 34
+    }
+   ]
+  },
+  {
+   "screen": "web/05-working",
+   "working": {
+    "seconds": 0.21,
+    "cont": false
+   }
+  },
+  {
+   "screen": "web/06-working",
+   "working": {
+    "seconds": 0.234,
+    "cont": true
+   }
+  },
+  {
+   "screen": "web/07-working",
+   "working": {
+    "seconds": 0.209,
+    "cont": true
+   }
+  },
+  {
+   "screen": "web/08-working",
+   "working": {
+    "seconds": 0.343,
+    "cont": true
+   }
+  },
+  {
+   "screen": "web/09-working",
+   "working": {
+    "seconds": 1.111,
+    "cont": true
+   }
+  },
+  {
+   "screen": "web/10-dialog",
+   "transcript": [
+    {
+     "rec": "web",
+     "from": 34,
+     "to": 51
+    }
+   ],
+   "dialog": {
+    "kind": "perm"
+   }
+  },
+  {
+   "screen": "web/11-idle",
+   "working": false,
+   "transcript": [
+    {
+     "rec": "web",
+     "from": 51,
+     "to": 58
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,104 @@
+{
+ "name": "bash-fail",
+ "recorded": true,
+ "beats": [
+  {
+   "screen": "bash-fail/01-trust",
+   "dialog": {
+    "kind": "trust",
+    "onChoose": {
+     "0": [
+      {
+       "exit": 1
+      }
+     ],
+     "1": [],
+     "esc": [
+      {
+       "exit": 1
+      }
+     ]
+    }
+   }
+  },
+  {
+   "screen": "bash-fail/04-ready",
+   "transcript": [
+    {
+     "rec": "bash-fail",
+     "from": 0,
+     "to": 8
+    }
+   ]
+  },
+  {
+   "wait": "input",
+   "transcript": [
+    {
+     "rec": "bash-fail",
+     "from": 8,
+     "to": 34
+    }
+   ]
+  },
+  {
+   "screen": "bash-fail/05-working",
+   "working": {
+    "seconds": 0.178,
+    "cont": false
+   }
+  },
+  {
+   "screen": "bash-fail/06-working",
+   "working": {
+    "seconds": 0.237,
+    "cont": true
+   }
+  },
+  {
+   "screen": "bash-fail/07-working",
+   "working": {
+    "seconds": 0.225,
+    "cont": true
+   }
+  },
+  {
+   "screen": "bash-fail/08-working",
+   "working": {
+    "seconds": 0.556,
+    "cont": true
+   }
+  },
+  {
+   "screen": "bash-fail/09-working",
+   "working": {
+    "seconds": 0.387,
+    "cont": true
+   }
+  },
+  {
+   "screen": "bash-fail/10-dialog",
+   "transcript": [
+    {
+     "rec": "bash-fail",
+     "from": 34,
+     "to": 35
+    }
+   ],
+   "dialog": {
+    "kind": "perm"
+   }
+  },
+  {
+   "screen": "bash-fail/11-idle",
+   "working": false,
+   "transcript": [
+    {
+     "rec": "bash-fail",
+     "from": 35,
+     "to": 50
+    }
+   ]
+  }
+ ]
+}

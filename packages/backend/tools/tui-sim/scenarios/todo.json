@@ -1,0 +1,98 @@
+{
+ "name": "todo",
+ "recorded": true,
+ "beats": [
+  {
+   "screen": "todo/01-trust",
+   "dialog": {
+    "kind": "trust",
+    "onChoose": {
+     "0": [
+      {
+       "exit": 1
+      }
+     ],
+     "1": [],
+     "esc": [
+      {
+       "exit": 1
+      }
+     ]
+    }
+   }
+  },
+  {
+   "screen": "todo/04-ready",
+   "transcript": [
+    {
+     "rec": "todo",
+     "from": 0,
+     "to": 9
+    }
+   ]
+  },
+  {
+   "wait": "input",
+   "transcript": [
+    {
+     "rec": "todo",
+     "from": 9,
+     "to": 34
+    }
+   ]
+  },
+  {
+   "screen": "todo/05-working",
+   "working": {
+    "seconds": 0.159,
+    "cont": false
+   }
+  },
+  {
+   "screen": "todo/06-working",
+   "working": {
+    "seconds": 0.217,
+    "cont": true
+   }
+  },
+  {
+   "screen": "todo/07-working",
+   "working": {
+    "seconds": 0.227,
+    "cont": true
+   },
+   "transcript": [
+    {
+     "rec": "todo",
+     "from": 34,
+     "to": 37
+    }
+   ]
+  },
+  {
+   "screen": "todo/08-working",
+   "working": {
+    "seconds": 0.563,
+    "cont": true
+   }
+  },
+  {
+   "screen": "todo/09-working",
+   "working": {
+    "seconds": 8,
+    "cont": true
+   }
+  },
+  {
+   "screen": "todo/10-idle",
+   "working": false,
+   "transcript": [
+    {
+     "rec": "todo",
+     "from": 37,
+     "to": 70
+    }
+   ]
+  }
+ ]
+}
