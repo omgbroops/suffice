@@ -1,0 +1,129 @@
+{
+ "scenario": "model-switch",
+ "status": "ok",
+ "error": null,
+ "notes": [],
+ "durationMs": 11191,
+ "steps": [
+  {
+   "t": 25,
+   "type": "start",
+   "resume": false,
+   "mode": "manual"
+  },
+  {
+   "t": 288,
+   "type": "snap",
+   "file": "01-trust"
+  },
+  {
+   "t": 293,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 424,
+   "type": "snap",
+   "file": "02-trust"
+  },
+  {
+   "t": 428,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 563,
+   "type": "snap",
+   "file": "03-trust"
+  },
+  {
+   "t": 567,
+   "type": "bytes",
+   "label": "enter"
+  },
+  {
+   "t": 567,
+   "type": "answer",
+   "label": "Yes, I trust this folder"
+  },
+  {
+   "t": 3212,
+   "type": "snap",
+   "file": "04-ready"
+  },
+  {
+   "t": 3223,
+   "type": "send",
+   "text": "/model",
+   "enter": true
+  },
+  {
+   "t": 4744,
+   "type": "snap",
+   "file": "05-model-picker"
+  },
+  {
+   "t": 4757,
+   "type": "bytes",
+   "label": "enter"
+  },
+  {
+   "t": 4757,
+   "type": "answer",
+   "label": "Haiku 5.5 ✔            Fastest for quick answers",
+   "options": [
+    "Default (recommended)  Opus 5.5 · Best for everyday, complex tasks",
+    "Opus 5.5               For complex work and everyday tasks",
+    "Fable 5.2              For your toughest challenges",
+    "Sonnet 5.5             Most efficient for simpler tasks",
+    "Haiku 5.5 ✔            Fastest for quick answers"
+   ]
+  },
+  {
+   "t": 6278,
+   "type": "snap",
+   "file": "06-after-model"
+  },
+  {
+   "t": 6289,
+   "type": "send",
+   "text": "/help",
+   "enter": true
+  },
+  {
+   "t": 7811,
+   "type": "snap",
+   "file": "07-help"
+  },
+  {
+   "t": 7818,
+   "type": "bytes",
+   "label": "esc"
+  },
+  {
+   "t": 8632,
+   "type": "bytes",
+   "label": "slash"
+  },
+  {
+   "t": 9647,
+   "type": "snap",
+   "file": "08-slash-menu"
+  },
+  {
+   "t": 9653,
+   "type": "bytes",
+   "label": "ctrl-u"
+  },
+  {
+   "t": 10176,
+   "type": "snap",
+   "file": "09-cleared"
+  },
+  {
+   "t": 11191,
+   "type": "subagent-files",
+   "paths": []
+  }
+ ]
+}

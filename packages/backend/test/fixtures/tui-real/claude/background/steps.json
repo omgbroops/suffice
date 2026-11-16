@@ -1,0 +1,112 @@
+{
+ "scenario": "background",
+ "status": "ok",
+ "error": null,
+ "notes": [],
+ "durationMs": 10880,
+ "steps": [
+  {
+   "t": 24,
+   "type": "start",
+   "resume": false,
+   "mode": "manual"
+  },
+  {
+   "t": 288,
+   "type": "snap",
+   "file": "01-trust"
+  },
+  {
+   "t": 292,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 426,
+   "type": "snap",
+   "file": "02-trust"
+  },
+  {
+   "t": 431,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 565,
+   "type": "snap",
+   "file": "03-trust"
+  },
+  {
+   "t": 570,
+   "type": "bytes",
+   "label": "enter"
+  },
+  {
+   "t": 570,
+   "type": "answer",
+   "label": "Yes, I trust this folder"
+  },
+  {
+   "t": 3206,
+   "type": "snap",
+   "file": "04-ready"
+  },
+  {
+   "t": 3217,
+   "type": "send",
+   "text": "Run `sleep 20` in the background (bash run_in_background), then immediately run echo hi.",
+   "enter": true
+  },
+  {
+   "t": 3350,
+   "type": "snap",
+   "file": "05-working"
+  },
+  {
+   "t": 3568,
+   "type": "snap",
+   "file": "06-working"
+  },
+  {
+   "t": 3782,
+   "type": "snap",
+   "file": "07-working"
+  },
+  {
+   "t": 4003,
+   "type": "snap",
+   "file": "08-working"
+  },
+  {
+   "t": 4212,
+   "type": "snap",
+   "file": "09-working"
+  },
+  {
+   "t": 7788,
+   "type": "snap",
+   "file": "10-idle"
+  },
+  {
+   "t": 7800,
+   "type": "send",
+   "text": "/tasks",
+   "enter": true
+  },
+  {
+   "t": 9322,
+   "type": "snap",
+   "file": "11-tasks-view"
+  },
+  {
+   "t": 9330,
+   "type": "bytes",
+   "label": "esc"
+  },
+  {
+   "t": 10880,
+   "type": "subagent-files",
+   "paths": []
+  }
+ ]
+}

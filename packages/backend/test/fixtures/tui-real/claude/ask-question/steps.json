@@ -1,0 +1,117 @@
+{
+ "scenario": "ask-question",
+ "status": "ok",
+ "error": null,
+ "notes": [],
+ "durationMs": 9211,
+ "steps": [
+  {
+   "t": 23,
+   "type": "start",
+   "resume": false,
+   "mode": "manual"
+  },
+  {
+   "t": 286,
+   "type": "snap",
+   "file": "01-trust"
+  },
+  {
+   "t": 290,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 423,
+   "type": "snap",
+   "file": "02-trust"
+  },
+  {
+   "t": 427,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 562,
+   "type": "snap",
+   "file": "03-trust"
+  },
+  {
+   "t": 567,
+   "type": "bytes",
+   "label": "enter"
+  },
+  {
+   "t": 567,
+   "type": "answer",
+   "label": "Yes, I trust this folder"
+  },
+  {
+   "t": 3212,
+   "type": "snap",
+   "file": "04-ready"
+  },
+  {
+   "t": 3222,
+   "type": "send",
+   "text": "Use the AskUserQuestion tool to ask me which color I prefer, red or blue. Then reply with my choice.",
+   "enter": true
+  },
+  {
+   "t": 3353,
+   "type": "snap",
+   "file": "05-working"
+  },
+  {
+   "t": 3542,
+   "type": "snap",
+   "file": "06-working"
+  },
+  {
+   "t": 3789,
+   "type": "snap",
+   "file": "07-working"
+  },
+  {
+   "t": 4002,
+   "type": "snap",
+   "file": "08-working"
+  },
+  {
+   "t": 4310,
+   "type": "snap",
+   "file": "09-working"
+  },
+  {
+   "t": 4722,
+   "type": "snap",
+   "file": "10-dialog"
+  },
+  {
+   "t": 4736,
+   "type": "bytes",
+   "label": "enter"
+  },
+  {
+   "t": 4736,
+   "type": "answer",
+   "label": "Red",
+   "options": [
+    "Red",
+    "Blue",
+    "Type something.",
+    "Chat about this"
+   ]
+  },
+  {
+   "t": 8164,
+   "type": "snap",
+   "file": "11-idle"
+  },
+  {
+   "t": 9211,
+   "type": "subagent-files",
+   "paths": []
+  }
+ ]
+}

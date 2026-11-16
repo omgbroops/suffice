@@ -1,0 +1,99 @@
+{
+ "scenario": "subagent",
+ "status": "ok",
+ "error": null,
+ "notes": [],
+ "durationMs": 10396,
+ "steps": [
+  {
+   "t": 22,
+   "type": "start",
+   "resume": false,
+   "mode": "manual"
+  },
+  {
+   "t": 287,
+   "type": "snap",
+   "file": "01-trust"
+  },
+  {
+   "t": 292,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 425,
+   "type": "snap",
+   "file": "02-trust"
+  },
+  {
+   "t": 429,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 561,
+   "type": "snap",
+   "file": "03-trust"
+  },
+  {
+   "t": 566,
+   "type": "bytes",
+   "label": "enter"
+  },
+  {
+   "t": 566,
+   "type": "answer",
+   "label": "Yes, I trust this folder"
+  },
+  {
+   "t": 3214,
+   "type": "snap",
+   "file": "04-ready"
+  },
+  {
+   "t": 3228,
+   "type": "send",
+   "text": "Use the Task tool to launch a subagent that counts the files in this directory and reports the number. Wait for it.",
+   "enter": true
+  },
+  {
+   "t": 3360,
+   "type": "snap",
+   "file": "05-working"
+  },
+  {
+   "t": 3554,
+   "type": "snap",
+   "file": "06-working"
+  },
+  {
+   "t": 3774,
+   "type": "snap",
+   "file": "07-working"
+  },
+  {
+   "t": 3989,
+   "type": "snap",
+   "file": "08-working"
+  },
+  {
+   "t": 4129,
+   "type": "snap",
+   "file": "09-working"
+  },
+  {
+   "t": 9336,
+   "type": "snap",
+   "file": "10-idle"
+  },
+  {
+   "t": 10396,
+   "type": "subagent-files",
+   "paths": [
+    "-tmp-PROJECT/00000000-0000-4000-8000-000000000001/subagents/agent-a8fd05f428d5e8097.jsonl",
+    "-tmp-PROJECT/00000000-0000-4000-8000-000000000001/subagents/agent-a8fd05f428d5e8097.meta.json"
+   ]
+  }
+ ]
+}

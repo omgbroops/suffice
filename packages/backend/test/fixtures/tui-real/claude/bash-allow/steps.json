@@ -1,0 +1,96 @@
+{
+ "scenario": "bash-allow",
+ "status": "ok",
+ "error": null,
+ "notes": [],
+ "durationMs": 16056,
+ "steps": [
+  {
+   "t": 24,
+   "type": "start",
+   "resume": false,
+   "mode": "manual"
+  },
+  {
+   "t": 304,
+   "type": "snap",
+   "file": "01-trust"
+  },
+  {
+   "t": 309,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 450,
+   "type": "snap",
+   "file": "02-trust"
+  },
+  {
+   "t": 455,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 610,
+   "type": "snap",
+   "file": "03-trust"
+  },
+  {
+   "t": 617,
+   "type": "bytes",
+   "label": "enter"
+  },
+  {
+   "t": 617,
+   "type": "answer",
+   "label": "Yes, I trust this folder"
+  },
+  {
+   "t": 3251,
+   "type": "snap",
+   "file": "04-ready"
+  },
+  {
+   "t": 3261,
+   "type": "send",
+   "text": "Run the shell command ls and show me its output.",
+   "enter": true
+  },
+  {
+   "t": 3390,
+   "type": "snap",
+   "file": "05-working"
+  },
+  {
+   "t": 3564,
+   "type": "snap",
+   "file": "06-working"
+  },
+  {
+   "t": 3803,
+   "type": "snap",
+   "file": "07-working"
+  },
+  {
+   "t": 4036,
+   "type": "snap",
+   "file": "08-working"
+  },
+  {
+   "t": 4573,
+   "type": "snap",
+   "file": "09-working"
+  },
+  {
+   "t": 15002,
+   "type": "snap",
+   "file": "10-idle"
+  },
+  {
+   "t": 16056,
+   "type": "subagent-files",
+   "paths": []
+  }
+ ]
+}

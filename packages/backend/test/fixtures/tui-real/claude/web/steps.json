@@ -1,0 +1,116 @@
+{
+ "scenario": "web",
+ "status": "ok",
+ "error": null,
+ "notes": [],
+ "durationMs": 10177,
+ "steps": [
+  {
+   "t": 23,
+   "type": "start",
+   "resume": false,
+   "mode": "manual"
+  },
+  {
+   "t": 284,
+   "type": "snap",
+   "file": "01-trust"
+  },
+  {
+   "t": 288,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 420,
+   "type": "snap",
+   "file": "02-trust"
+  },
+  {
+   "t": 424,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 560,
+   "type": "snap",
+   "file": "03-trust"
+  },
+  {
+   "t": 565,
+   "type": "bytes",
+   "label": "enter"
+  },
+  {
+   "t": 565,
+   "type": "answer",
+   "label": "Yes, I trust this folder"
+  },
+  {
+   "t": 3199,
+   "type": "snap",
+   "file": "04-ready"
+  },
+  {
+   "t": 3209,
+   "type": "send",
+   "text": "Fetch https://example.com with WebFetch and tell me the page title.",
+   "enter": true
+  },
+  {
+   "t": 3342,
+   "type": "snap",
+   "file": "05-working"
+  },
+  {
+   "t": 3552,
+   "type": "snap",
+   "file": "06-working"
+  },
+  {
+   "t": 3786,
+   "type": "snap",
+   "file": "07-working"
+  },
+  {
+   "t": 3995,
+   "type": "snap",
+   "file": "08-working"
+  },
+  {
+   "t": 4338,
+   "type": "snap",
+   "file": "09-working"
+  },
+  {
+   "t": 5449,
+   "type": "snap",
+   "file": "10-dialog"
+  },
+  {
+   "t": 5462,
+   "type": "bytes",
+   "label": "enter"
+  },
+  {
+   "t": 5462,
+   "type": "answer",
+   "label": "Yes",
+   "options": [
+    "Yes",
+    "Yes, and don't ask again for example.com",
+    "No, and tell Claude what to do differently (esc)"
+   ]
+  },
+  {
+   "t": 9135,
+   "type": "snap",
+   "file": "11-idle"
+  },
+  {
+   "t": 10177,
+   "type": "subagent-files",
+   "paths": []
+  }
+ ]
+}

@@ -1,0 +1,126 @@
+{
+ "scenario": "interrupt",
+ "status": "ok",
+ "error": null,
+ "notes": [],
+ "durationMs": 21437,
+ "steps": [
+  {
+   "t": 24,
+   "type": "start",
+   "resume": false,
+   "mode": "manual"
+  },
+  {
+   "t": 293,
+   "type": "snap",
+   "file": "01-trust"
+  },
+  {
+   "t": 297,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 431,
+   "type": "snap",
+   "file": "02-trust"
+  },
+  {
+   "t": 435,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 570,
+   "type": "snap",
+   "file": "03-trust"
+  },
+  {
+   "t": 575,
+   "type": "bytes",
+   "label": "enter"
+  },
+  {
+   "t": 575,
+   "type": "answer",
+   "label": "Yes, I trust this folder"
+  },
+  {
+   "t": 3218,
+   "type": "snap",
+   "file": "04-ready"
+  },
+  {
+   "t": 3229,
+   "type": "send",
+   "text": "Run this bash command exactly: for i in $(seq 1 30); do echo $i; sleep 1; done",
+   "enter": true
+  },
+  {
+   "t": 3362,
+   "type": "snap",
+   "file": "05-working"
+  },
+  {
+   "t": 3562,
+   "type": "snap",
+   "file": "06-working"
+  },
+  {
+   "t": 3779,
+   "type": "snap",
+   "file": "07-working"
+  },
+  {
+   "t": 4006,
+   "type": "snap",
+   "file": "08-working"
+  },
+  {
+   "t": 4167,
+   "type": "snap",
+   "file": "09-working"
+  },
+  {
+   "t": 5173,
+   "type": "snap",
+   "file": "10-dialog"
+  },
+  {
+   "t": 5186,
+   "type": "bytes",
+   "label": "enter"
+  },
+  {
+   "t": 5186,
+   "type": "answer",
+   "label": "Yes",
+   "options": [
+    "Yes",
+    "Yes, and switch to auto mode · auto mode handles these prompts for you",
+    "No"
+   ]
+  },
+  {
+   "t": 9396,
+   "type": "bytes",
+   "label": "esc"
+  },
+  {
+   "t": 10918,
+   "type": "snap",
+   "file": "11-after-esc"
+  },
+  {
+   "t": 20390,
+   "type": "snap",
+   "file": "12-idle"
+  },
+  {
+   "t": 21437,
+   "type": "subagent-files",
+   "paths": []
+  }
+ ]
+}

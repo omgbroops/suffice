@@ -1,0 +1,136 @@
+{
+ "scenario": "plan-mode",
+ "status": "ok",
+ "error": null,
+ "notes": [],
+ "durationMs": 19537,
+ "steps": [
+  {
+   "t": 25,
+   "type": "start",
+   "resume": false,
+   "mode": "plan"
+  },
+  {
+   "t": 296,
+   "type": "snap",
+   "file": "01-trust"
+  },
+  {
+   "t": 301,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 435,
+   "type": "snap",
+   "file": "02-trust"
+  },
+  {
+   "t": 440,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 575,
+   "type": "snap",
+   "file": "03-trust"
+  },
+  {
+   "t": 579,
+   "type": "bytes",
+   "label": "enter"
+  },
+  {
+   "t": 579,
+   "type": "answer",
+   "label": "Yes, I trust this folder"
+  },
+  {
+   "t": 3216,
+   "type": "snap",
+   "file": "04-ready"
+  },
+  {
+   "t": 3225,
+   "type": "send",
+   "text": "Plan a tiny change: add one comment line at the top of util.js.",
+   "enter": true
+  },
+  {
+   "t": 3356,
+   "type": "snap",
+   "file": "05-working"
+  },
+  {
+   "t": 3563,
+   "type": "snap",
+   "file": "06-working"
+  },
+  {
+   "t": 3780,
+   "type": "snap",
+   "file": "07-working"
+  },
+  {
+   "t": 4017,
+   "type": "snap",
+   "file": "08-working"
+  },
+  {
+   "t": 4172,
+   "type": "snap",
+   "file": "09-working"
+  },
+  {
+   "t": 8151,
+   "type": "snap",
+   "file": "10-dialog"
+  },
+  {
+   "t": 8167,
+   "type": "bytes",
+   "label": "enter"
+  },
+  {
+   "t": 8167,
+   "type": "answer",
+   "label": "Yes, and use auto mode",
+   "options": [
+    "Yes, and use auto mode",
+    "Yes, manually approve edits",
+    "Tell Claude what to change"
+   ]
+  },
+  {
+   "t": 10314,
+   "type": "snap",
+   "file": "11-dialog"
+  },
+  {
+   "t": 10331,
+   "type": "bytes",
+   "label": "enter"
+  },
+  {
+   "t": 10331,
+   "type": "answer",
+   "label": "Yes, and use auto mode",
+   "options": [
+    "Yes, and use auto mode",
+    "Yes, manually approve edits",
+    "Tell Claude what to change"
+   ]
+  },
+  {
+   "t": 18481,
+   "type": "snap",
+   "file": "12-idle"
+  },
+  {
+   "t": 19537,
+   "type": "subagent-files",
+   "paths": []
+  }
+ ]
+}

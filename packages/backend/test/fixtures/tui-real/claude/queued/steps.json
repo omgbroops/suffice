@@ -1,0 +1,96 @@
+{
+ "scenario": "queued",
+ "status": "failed",
+ "error": "scenario over 3 min",
+ "notes": [],
+ "durationMs": 181189,
+ "steps": [
+  {
+   "t": 24,
+   "type": "start",
+   "resume": false,
+   "mode": "manual"
+  },
+  {
+   "t": 288,
+   "type": "snap",
+   "file": "01-trust"
+  },
+  {
+   "t": 293,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 425,
+   "type": "snap",
+   "file": "02-trust"
+  },
+  {
+   "t": 429,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 563,
+   "type": "snap",
+   "file": "03-trust"
+  },
+  {
+   "t": 568,
+   "type": "bytes",
+   "label": "enter"
+  },
+  {
+   "t": 568,
+   "type": "answer",
+   "label": "Yes, I trust this folder"
+  },
+  {
+   "t": 3201,
+   "type": "snap",
+   "file": "04-ready"
+  },
+  {
+   "t": 3210,
+   "type": "send",
+   "text": "Run the bash command: sleep 8 && echo first",
+   "enter": true
+  },
+  {
+   "t": 3343,
+   "type": "snap",
+   "file": "05-working"
+  },
+  {
+   "t": 3540,
+   "type": "snap",
+   "file": "06-working"
+  },
+  {
+   "t": 3778,
+   "type": "snap",
+   "file": "07-working"
+  },
+  {
+   "t": 4001,
+   "type": "snap",
+   "file": "08-working"
+  },
+  {
+   "t": 4136,
+   "type": "snap",
+   "file": "09-working"
+  },
+  {
+   "t": 180164,
+   "type": "snap",
+   "file": "10-failure"
+  },
+  {
+   "t": 181189,
+   "type": "subagent-files",
+   "paths": []
+  }
+ ]
+}

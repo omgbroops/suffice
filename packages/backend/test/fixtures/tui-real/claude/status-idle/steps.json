@@ -1,0 +1,115 @@
+{
+ "scenario": "status-idle",
+ "status": "ok",
+ "error": null,
+ "notes": [
+  "no transcript written"
+ ],
+ "durationMs": 11235,
+ "steps": [
+  {
+   "t": 24,
+   "type": "start",
+   "resume": false,
+   "mode": "manual"
+  },
+  {
+   "t": 288,
+   "type": "snap",
+   "file": "01-trust"
+  },
+  {
+   "t": 292,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 427,
+   "type": "snap",
+   "file": "02-trust"
+  },
+  {
+   "t": 432,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 565,
+   "type": "snap",
+   "file": "03-trust"
+  },
+  {
+   "t": 569,
+   "type": "bytes",
+   "label": "enter"
+  },
+  {
+   "t": 569,
+   "type": "answer",
+   "label": "Yes, I trust this folder"
+  },
+  {
+   "t": 3213,
+   "type": "snap",
+   "file": "04-ready"
+  },
+  {
+   "t": 3224,
+   "type": "snap",
+   "file": "05-idle"
+  },
+  {
+   "t": 3234,
+   "type": "send",
+   "text": "/status",
+   "enter": true
+  },
+  {
+   "t": 4754,
+   "type": "snap",
+   "file": "06-status"
+  },
+  {
+   "t": 4761,
+   "type": "bytes",
+   "label": "esc"
+  },
+  {
+   "t": 5573,
+   "type": "send",
+   "text": "/cost",
+   "enter": true
+  },
+  {
+   "t": 7085,
+   "type": "snap",
+   "file": "07-cost"
+  },
+  {
+   "t": 7090,
+   "type": "bytes",
+   "label": "esc"
+  },
+  {
+   "t": 7903,
+   "type": "send",
+   "text": "/usage",
+   "enter": true
+  },
+  {
+   "t": 9415,
+   "type": "snap",
+   "file": "08-usage"
+  },
+  {
+   "t": 9420,
+   "type": "bytes",
+   "label": "esc"
+  },
+  {
+   "t": 11235,
+   "type": "subagent-files",
+   "paths": []
+  }
+ ]
+}

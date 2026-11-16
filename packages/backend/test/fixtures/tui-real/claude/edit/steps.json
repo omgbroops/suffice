@@ -1,0 +1,116 @@
+{
+ "scenario": "edit",
+ "status": "ok",
+ "error": null,
+ "notes": [],
+ "durationMs": 16391,
+ "steps": [
+  {
+   "t": 24,
+   "type": "start",
+   "resume": false,
+   "mode": "manual"
+  },
+  {
+   "t": 297,
+   "type": "snap",
+   "file": "01-trust"
+  },
+  {
+   "t": 301,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 435,
+   "type": "snap",
+   "file": "02-trust"
+  },
+  {
+   "t": 439,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 574,
+   "type": "snap",
+   "file": "03-trust"
+  },
+  {
+   "t": 578,
+   "type": "bytes",
+   "label": "enter"
+  },
+  {
+   "t": 578,
+   "type": "answer",
+   "label": "Yes, I trust this folder"
+  },
+  {
+   "t": 3236,
+   "type": "snap",
+   "file": "04-ready"
+  },
+  {
+   "t": 3248,
+   "type": "send",
+   "text": "Fix the typo in greet.js: 'Helo' should be 'Hello'. Use the Edit tool.",
+   "enter": true
+  },
+  {
+   "t": 3380,
+   "type": "snap",
+   "file": "05-working"
+  },
+  {
+   "t": 3569,
+   "type": "snap",
+   "file": "06-working"
+  },
+  {
+   "t": 3791,
+   "type": "snap",
+   "file": "07-working"
+  },
+  {
+   "t": 4022,
+   "type": "snap",
+   "file": "08-working"
+  },
+  {
+   "t": 4584,
+   "type": "snap",
+   "file": "09-working"
+  },
+  {
+   "t": 10813,
+   "type": "snap",
+   "file": "10-dialog"
+  },
+  {
+   "t": 10830,
+   "type": "bytes",
+   "label": "enter"
+  },
+  {
+   "t": 10830,
+   "type": "answer",
+   "label": "Yes",
+   "options": [
+    "Yes",
+    "Yes, and switch to accept edits (auto-approve file edits and common file commands) for this session (shift+tab)",
+    "No"
+   ]
+  },
+  {
+   "t": 15337,
+   "type": "snap",
+   "file": "11-idle"
+  },
+  {
+   "t": 16391,
+   "type": "subagent-files",
+   "paths": []
+  }
+ ]
+}

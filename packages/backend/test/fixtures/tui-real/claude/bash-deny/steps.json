@@ -1,0 +1,143 @@
+{
+ "scenario": "bash-deny",
+ "status": "ok",
+ "error": null,
+ "notes": [],
+ "durationMs": 14965,
+ "steps": [
+  {
+   "t": 25,
+   "type": "start",
+   "resume": false,
+   "mode": "manual"
+  },
+  {
+   "t": 298,
+   "type": "snap",
+   "file": "01-trust"
+  },
+  {
+   "t": 302,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 438,
+   "type": "snap",
+   "file": "02-trust"
+  },
+  {
+   "t": 442,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 590,
+   "type": "snap",
+   "file": "03-trust"
+  },
+  {
+   "t": 597,
+   "type": "bytes",
+   "label": "enter"
+  },
+  {
+   "t": 597,
+   "type": "answer",
+   "label": "Yes, I trust this folder"
+  },
+  {
+   "t": 3251,
+   "type": "snap",
+   "file": "04-ready"
+  },
+  {
+   "t": 3264,
+   "type": "send",
+   "text": "Run exactly: rm -rf build",
+   "enter": true
+  },
+  {
+   "t": 3396,
+   "type": "snap",
+   "file": "05-working"
+  },
+  {
+   "t": 3558,
+   "type": "snap",
+   "file": "06-working"
+  },
+  {
+   "t": 3785,
+   "type": "snap",
+   "file": "07-working"
+  },
+  {
+   "t": 4007,
+   "type": "snap",
+   "file": "08-working"
+  },
+  {
+   "t": 4576,
+   "type": "snap",
+   "file": "09-working"
+  },
+  {
+   "t": 5934,
+   "type": "snap",
+   "file": "10-dialog"
+  },
+  {
+   "t": 5948,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 6183,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 6423,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 6653,
+   "type": "bytes",
+   "label": "enter"
+  },
+  {
+   "t": 6653,
+   "type": "answer",
+   "label": "No",
+   "options": [
+    "Yes",
+    "Yes, and always allow access to /private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/sfxrec-Q0YDPi/build from",
+    "Yes, and switch to auto mode · auto mode handles these prompts for you",
+    "No"
+   ]
+  },
+  {
+   "t": 10070,
+   "type": "snap",
+   "file": "11-idle"
+  },
+  {
+   "t": 10090,
+   "type": "send",
+   "text": "ok, never mind. Say done.",
+   "enter": true
+  },
+  {
+   "t": 13934,
+   "type": "snap",
+   "file": "12-idle"
+  },
+  {
+   "t": 14965,
+   "type": "subagent-files",
+   "paths": []
+  }
+ ]
+}

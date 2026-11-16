@@ -1,0 +1,117 @@
+{
+ "scenario": "bash-fail",
+ "status": "ok",
+ "error": null,
+ "notes": [],
+ "durationMs": 10365,
+ "steps": [
+  {
+   "t": 22,
+   "type": "start",
+   "resume": false,
+   "mode": "manual"
+  },
+  {
+   "t": 296,
+   "type": "snap",
+   "file": "01-trust"
+  },
+  {
+   "t": 301,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 435,
+   "type": "snap",
+   "file": "02-trust"
+  },
+  {
+   "t": 439,
+   "type": "bytes",
+   "label": "down"
+  },
+  {
+   "t": 572,
+   "type": "snap",
+   "file": "03-trust"
+  },
+  {
+   "t": 576,
+   "type": "bytes",
+   "label": "enter"
+  },
+  {
+   "t": 576,
+   "type": "answer",
+   "label": "Yes, I trust this folder"
+  },
+  {
+   "t": 3228,
+   "type": "snap",
+   "file": "04-ready"
+  },
+  {
+   "t": 3246,
+   "type": "send",
+   "text": "Run exactly: node missing.js",
+   "enter": true
+  },
+  {
+   "t": 3378,
+   "type": "snap",
+   "file": "05-working"
+  },
+  {
+   "t": 3556,
+   "type": "snap",
+   "file": "06-working"
+  },
+  {
+   "t": 3793,
+   "type": "snap",
+   "file": "07-working"
+  },
+  {
+   "t": 4018,
+   "type": "snap",
+   "file": "08-working"
+  },
+  {
+   "t": 4574,
+   "type": "snap",
+   "file": "09-working"
+  },
+  {
+   "t": 4961,
+   "type": "snap",
+   "file": "10-dialog"
+  },
+  {
+   "t": 4974,
+   "type": "bytes",
+   "label": "enter"
+  },
+  {
+   "t": 4974,
+   "type": "answer",
+   "label": "Yes",
+   "options": [
+    "Yes",
+    "Yes, and don’t ask again for: node *",
+    "Yes, and switch to auto mode · auto mode handles these prompts for you",
+    "No"
+   ]
+  },
+  {
+   "t": 9321,
+   "type": "snap",
+   "file": "11-idle"
+  },
+  {
+   "t": 10365,
+   "type": "subagent-files",
+   "paths": []
+  }
+ ]
+}
