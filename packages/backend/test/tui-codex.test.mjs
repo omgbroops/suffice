@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { createCodexMapper, parsePatch, parsePrompt, controls, coverage } from '../src/tui/codex.mjs';
+import { createCodexMapper, mapperHealth, parsePatch, parsePrompt, controls, coverage } from '../src/tui/codex.mjs';
 import { itemProblem, promptProblem } from '../src/tui/model.mjs';
 
 const fx = (n) => readFileSync(new URL(`./fixtures/tui-codex/${n}`, import.meta.url), 'utf8').trim().split('\n').map((l) => JSON.parse(l));
@@ -128,7 +128,7 @@ test('usage, rate limit, compaction, abort, error, model/mode change notices', (
   for (const c of ['rate_limit', 'compacted', 'interrupted', 'error', 'model_changed', 'mode_changed']) assert.ok(codes.includes(c), c);
   assert.equal(items.filter((i) => i.code === 'compacted').length, 2);
   const meta = m.meta(state);
-  assert.deepEqual(meta, { agent: 'codex', model: 'gpt-y', mode: 'never', cwd: '/work/demo', branch: 'feat-x', contextUsedPct: 25, sessionId: 'sess-1' });
+  assert.deepEqual(meta, { agent: 'codex', model: 'gpt-y', mode: 'never', cwd: '/work/demo', effort: 'high', branch: 'feat-x', contextUsedPct: 25, sessionId: 'sess-1' });
 });
 
 test('unknown line types never throw and emit nothing; hostile input is safe', () => {
@@ -232,4 +232,64 @@ test('codex parseStatus: idle and look-alikes give null', () => {
   assert.equal(codexStatus('› Ask Codex\n  ? for shortcuts'), null);
   assert.equal(codexStatus('Done (12s)'), null); // no hint, no glyph
   assert.equal(codexStatus('lowercase text (12s • esc to interrupt)'), null);
+});
+
+// ---- real-shape additions (structure observed in real rollouts; values invented) ----------------
+const L = (type, payload, extra = {}) => ({ timestamp: '2026-01-01T00:00:01Z', type, payload, ...extra });
+const ev = (payload) => L('event_msg', payload);
+const feed = (lines) => {
+  const m = createCodexMapper();
+  const state = {};
+  const items = lines.flatMap((o) => m.mapLine(o, state));
+  return { m, state, items };
+};
+
+test('token_usage_record maps to usage and feeds contextUsedPct', () => {
+  const u = { input_tokens: 10, cached_input_tokens: 4, cache_write_input_tokens: 0, output_tokens: 3, reasoning_output_tokens: 1, total_tokens: 250 };
+  const { items, m, state } = feed([
+    ev({ type: 'task_started', turn_id: 't1', root_turn_id: 't1', model_context_window: 1000 }),
+    L('turn_context', { turn_id: 't1', model: 'gpt-x', approval_policy: { granular: {} }, sandbox_policy: { type: 'workspace-write' } }),
+    L('token_usage_record', { turn_id: 't1', usage: u, turn_token_usage: u, thread_token_usage: { ...u, input_tokens: 30, output_tokens: 9 } }),
+  ]);
+  const us = items.filter((i) => i.kind === 'usage');
+  assert.equal(us.length, 1);
+  assert.equal(itemProblem(us[0]), null);
+  assert.deepEqual([us[0].inputTokens, us[0].outputTokens, us[0].cacheReadTokens, us[0].model], [30, 9, 4, 'gpt-x']);
+  assert.equal(m.meta(state).contextUsedPct, 25);
+});
+
+test('settings lines emit mode/model changes only on a real change; object approval is stable', () => {
+  const tc = { turn_id: 't', root_turn_id: 't', model: 'gpt-x', effort: 'high', approval_policy: { granular: { a: 1 } }, sandbox_policy: { type: 'workspace-write' }, collaboration_mode: { mode: 'default' }, cwd: '/w' };
+  const ts = { model: 'gpt-x', reasoning_effort: 'high', approval_policy: { granular: { a: 1 } }, collaboration_mode: { mode: 'default' }, cwd: '/w' };
+  const { items, m, state } = feed([L('turn_context', tc), ev({ type: 'thread_settings_applied', thread_settings: ts }), L('turn_context', tc), ev({ type: 'thread_settings_applied', thread_settings: ts })]);
+  assert.deepEqual(items.filter((i) => i.kind === 'notice'), []);
+  assert.equal(m.meta(state).model, 'gpt-x');
+  assert.ok(!JSON.stringify(m.meta(state)).includes('[object'));
+  const more = m.mapLine(ev({ type: 'thread_settings_applied', thread_settings: { ...ts, model: 'gpt-z', approval_policy: 'never' } }), state);
+  assert.deepEqual(more.map((i) => i.code).sort(), ['mode_changed', 'model_changed']);
+  assert.equal(m.meta(state).effort, 'high');
+});
+
+test('item_completed: WebSearch and Plan map, the rest are counted in state.dropped', () => {
+  const ic = (item) => ev({ type: 'item_completed', item });
+  const { items, state } = feed([
+    ic({ type: 'WebSearch', id: 'w1', query: 'q', action: { type: 'search', query: 'q' } }),
+    ic({ type: 'Plan', id: 'p1', text: 'step one' }),
+    ic({ type: 'FunctionCallOutput', id: 'f1', name: 'x', output: 'o' }),
+    ic({ type: 'Reasoning', id: 'r1', summary_text: [], raw_content: [] }),
+    ic({ type: 'Brand', id: 'b1' }),
+  ]);
+  assert.equal(items.find((i) => i.name === 'web_search').title, 'q');
+  assert.equal(items.find((i) => i.id === 'codex:plan:p1').text, 'step one');
+  assert.deepEqual(state.dropped, { FunctionCallOutput: 1, Reasoning: 1, Brand: 1 });
+});
+
+test('mapLine records errors instead of throwing; mapperHealth reports them', () => {
+  const m = createCodexMapper();
+  const state = {};
+  const bad = { type: 'event_msg', payload: { type: 'item_completed', get item() { throw new TypeError('boom'); } } };
+  assert.deepEqual(m.mapLine(bad, state), []);
+  assert.deepEqual(state.errors, { count: 1, lastClass: 'TypeError' });
+  assert.deepEqual(mapperHealth(state), { ok: false, errors: 1, lastClass: 'TypeError', dropped: {} });
+  assert.deepEqual(mapperHealth({}), { ok: true, errors: 0, lastClass: null, dropped: {} });
 });

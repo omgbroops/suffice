@@ -82,3 +82,35 @@ test('every parser returns null or a plain object on every fixture and never thr
 test('parseModeLine reads the real recorded footer (manual mode = default)', () => {
   assert.deepEqual(parseModeLine('  Haiku 5.5 (medium) | USER:PROJECT\n  ⏸ manual mode on · ← for agents\n'), { agent: 'claude', mode: 'default', hint: undefined });
 });
+
+// ---- real Claude screens (recorded) ----
+const real = (sc, f) => fs.readFileSync(path.join(dir, '..', 'tui-real', 'claude', sc, 'screens', f + '.txt'), 'utf8');
+
+test('real: parseModeLine over the mode cycle', () => {
+  assert.deepEqual(parseModeLine(real('mode-cycle', '05-start')), { agent: 'claude', mode: 'default', hint: undefined });
+  assert.equal(parseModeLine(real('mode-cycle', '06-mode-1')).mode, 'acceptEdits');
+  assert.equal(parseModeLine(real('mode-cycle', '07-mode-2')).mode, 'plan');
+  assert.equal(parseModeLine(real('mode-cycle', '08-mode-3')).mode, 'auto');
+  assert.equal(parseModeLine(real('mode-cycle', '01-trust')), null);
+});
+
+test('real: parseInputDraft', () => {
+  assert.deepEqual(parseInputDraft(real('at-mention', '05-at-picker')), { text: '@gre' });
+  assert.equal(parseInputDraft(real('at-mention', '04-ready')).placeholder, true);
+  assert.deepEqual(parseInputDraft(real('model-switch', '08-slash-menu')), { text: '/' });
+  assert.equal(parseInputDraft(real('model-switch', '05-model-picker')), null);
+});
+
+test('real: parseBackgroundTasks', () => {
+  assert.deepEqual(parseBackgroundTasks(real('background', '10-idle')), { count: 1, agent: 'claude' });
+  assert.equal(parseBackgroundTasks(real('background', '11-tasks-view')), null);
+});
+
+test('real: parsePicker finds the /model dialog and rejects transcripts and idle screens', () => {
+  const p = parsePicker(real('model-switch', '05-model-picker'));
+  assert.equal(p.title, 'Select model');
+  assert.equal(p.options.length, 5);
+  assert.equal(p.selected, 5);
+  for (const f of ['07-help', '04-ready', '08-slash-menu', '01-trust']) assert.equal(parsePicker(real('model-switch', f)), null, f);
+  assert.equal(parsePicker(real('at-mention', '05-at-picker')), null);
+});

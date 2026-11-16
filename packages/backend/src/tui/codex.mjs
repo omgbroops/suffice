@@ -67,14 +67,23 @@ export function createCodexMapper() {
   };
   const note = (c, ts, level, code, t) => ({ id: `codex:notice:${code}:${c.ordinal++}`, ts, kind: 'notice', level, code, text: t });
 
+  // approval_policy is a string or an object like {granular:{...}} in real rollouts: reduce to its first key.
+  const approvalOf = (a) => (typeof a === 'string' ? a : a && typeof a === 'object' ? Object.keys(a)[0] ?? '' : '');
   function applySettings(c, ts, v) {
     const items = [];
-    const mode = [v.approval_policy ?? v.approval, v.sandbox_policy?.type ?? v.sandbox].filter(Boolean).join('/');
-    const collab = v.collaboration_mode?.mode;
-    if (v.model && c.model && v.model !== c.model) items.push(note(c, ts, 'info', 'model_changed', `Model changed to ${v.model}`));
+    const approval = approvalOf(v.approval_policy ?? v.approval);
+    const sandbox = text(v.sandbox_policy?.type ?? v.sandbox);
+    const collab = text(v.collaboration_mode?.mode);
+    const mode = [approval, sandbox].filter(Boolean).join('/');
     const full = [mode, collab].filter(Boolean).join(' ');
-    if (full && c.mode && full !== c.mode) items.push(note(c, ts, 'info', 'mode_changed', `Mode changed to ${full}`));
+    // Compare only the parts this line carries: a thread_settings line has no sandbox_policy, a turn_context does.
+    const changed = (k, val) => val && c[k] && c[k] !== val;
+    if (changed('model', v.model)) items.push(note(c, ts, 'info', 'model_changed', `Model changed to ${v.model}`));
+    if (changed('approval', approval) || changed('sandbox', sandbox) || changed('collab', collab)) items.push(note(c, ts, 'info', 'mode_changed', `Mode changed to ${full}`));
     if (v.model) c.model = v.model;
+    if (approval) c.approval = approval;
+    if (sandbox) c.sandbox = sandbox;
+    if (collab) c.collab = collab;
     if (full) c.mode = full;
     if (v.cwd) c.cwd = v.cwd;
     if (v.effort ?? v.reasoning_effort) c.effort = v.effort ?? v.reasoning_effort;
@@ -142,6 +151,12 @@ export function createCodexMapper() {
       }
       case 'ContextCompaction':
         return [note(c, ts, 'info', 'compacted', 'Context compacted')];
+      case 'WebSearch': {
+        const a = it.action ?? {};
+        return [tool(c, ts, id, { name: 'web_search', category: 'web', title: text(it.query) || text(a.query) || text(a.url) || 'web search', input: a, status: 'ok' })];
+      }
+      case 'Plan':
+        return text(it.text).trim() ? [{ id: `codex:plan:${id}`, ts, kind: 'assistant', text: it.text }] : [];
       default:
         return [];
     }
@@ -272,6 +287,13 @@ export function createCodexMapper() {
           items = [note(c, ts, 'info', 'compacted', 'Context compacted')];
           break;
         case 'response_item': items = responseItem(c, ts, p); break;
+        case 'token_usage_record': {
+          const t = p.thread_token_usage ?? p.turn_token_usage ?? p.usage;
+          const last = p.usage?.total_tokens;
+          if (last && c.window) c.ctxPct = Math.min(100, Math.round((last / c.window) * 100));
+          if (t) items.push({ id: `codex:usage:${text(p.turn_id) || c.turn}`, ts, kind: 'usage', inputTokens: t.input_tokens ?? 0, outputTokens: t.output_tokens ?? 0, cacheReadTokens: t.cached_input_tokens ?? 0, cacheWriteTokens: t.cache_write_input_tokens ?? 0, ...(c.model ? { model: c.model } : {}) });
+          break;
+        }
         case 'event_msg':
           switch (p.type) {
             case 'task_started':
@@ -279,7 +301,12 @@ export function createCodexMapper() {
               if (p.turn_id) c.turn = p.turn_id;
               if (p.model_context_window) c.window = p.model_context_window;
               break;
-            case 'item_completed': c.itemMode = true; items = p.item ? threadItem(c, ts, p.item) : []; break;
+            case 'item_completed': {
+              c.itemMode = true;
+              items = p.item ? threadItem(c, ts, p.item) : [];
+              if (!items.length) { const k = text(p.item?.type) || 'unknown'; (state.dropped ??= {})[k] = (state.dropped[k] ?? 0) + 1; }
+              break;
+            }
             case 'thread_settings_applied': items = applySettings(c, ts, p.thread_settings ?? {}); break;
             case 'token_count': {
               const t = p.info?.total_token_usage;
@@ -303,7 +330,10 @@ export function createCodexMapper() {
       // Remember tool fields so a later output line can re-emit the same id with the call's title.
       for (const it of items) if (it.kind === 'tool' && c.calls[it.callId]) Object.assign(c.calls[it.callId], { name: it.name, category: it.category, title: it.title, input: it.input, last: it });
       return items;
-    } catch {
+    } catch (e) {
+      const er = (state.errors ??= { count: 0, lastClass: null });
+      er.count++;
+      er.lastClass = e?.constructor?.name ?? 'Error';
       return [];
     }
   }
@@ -314,6 +344,7 @@ export function createCodexMapper() {
     if (c.model) m.model = c.model;
     if (c.mode) m.mode = c.mode;
     if (c.cwd) m.cwd = c.cwd;
+    if (c.effort) m.effort = c.effort;
     if (c.branch) m.branch = c.branch;
     if (c.ctxPct != null) m.contextUsedPct = c.ctxPct;
     if (c.sessionId) m.sessionId = c.sessionId;
@@ -321,6 +352,11 @@ export function createCodexMapper() {
   }
 
   return { mapLine, meta, parsePrompt, parseStatus, controls, coverage, itemProblem };
+}
+
+export function mapperHealth(state = {}) {
+  const errors = state.errors?.count ?? 0;
+  return { ok: errors === 0, errors, lastClass: state.errors?.lastClass ?? null, dropped: { ...state.dropped } };
 }
 
 // ---- prompts -------------------------------------------------------------------------------

@@ -6,14 +6,14 @@
 const stripAnsi = (s) => String(s ?? '').replace(/\x1b\[[0-9;?]*[ -/]*[@-~]/g, '');
 const linesOf = (s) => stripAnsi(s).replace(/\r/g, '').split('\n');
 const nonEmpty = (ls) => ls.filter((l) => l.trim());
-const RULE = /^\s*[╭╰]?[─━]{8,}[╮╯]?\s*$/;
+const RULE = /^\s*[╭╰]?[─━▔]{8,}[╮╯]?\s*$/;
 const NUMBER_WORDS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
 const countOf = (w) => (/^\d+$/.test(w) ? Number(w) : NUMBER_WORDS[w.toLowerCase()]);
 
 // ---- mode line ----
 // Claude footer: "⏵⏵ accept edits on (shift+tab to cycle)", "⏸ plan mode on (shift+tab to cycle)". // assumed
 // Codex footer: "Plan mode (shift+tab to cycle)". // assumed
-const CLAUDE_MODE_LINE = /^\s*[⏵⏸]+\s*(accept edits|manual mode|plan mode|bypass permissions|auto mode|don'?t ask(?: mode)?)\s+on\b/i; // assumed
+const CLAUDE_MODE_LINE = /^\s*[⏵⏸]+\s*(accept edits|manual mode|plan mode|bypass permissions|auto mode|don'?t ask(?: mode)?)\s+on\b/i; // confirmed: mode-cycle/06-mode-1, 07-mode-2, 08-mode-3, 09-mode-4 (manual mode, no hint)
 const MODE_IDS = { 'accept edits': 'acceptEdits', 'manual mode': 'default', 'plan mode': 'plan', 'bypass permissions': 'bypassPermissions', 'auto mode': 'auto' };
 export function parseModeLine(screen) {
   const tail = nonEmpty(linesOf(screen)).slice(-6); // the footer sits under the input box
@@ -47,7 +47,7 @@ export function parseQueued(screen) {
 
 // ---- input draft ----
 // The box is a pair of rules around "❯ text" (older builds: │ > text │ in a rounded box); Codex has "› text" with no rules. // assumed
-const PROMPT_GLYPH = /^\s*(?:│\s*)?([❯›>])\s?(.*?)\s*(?:│\s*)?$/;
+const PROMPT_GLYPH = /^\s*(?:│\s*)?([❯›>])\s?(.*?)\s*(?:│\s*)?$/; // confirmed: at-mention/05-at-picker, model-switch/08-slash-menu, background/10-idle
 const PLACEHOLDER = /^(?:Try "|Ask Codex to do anything|Improve documentation in @filename|Summarize recent commits|Explain this codebase)/; // assumed
 const MENU_ROW = /^\s*[❯›>]\s*\d+\.\s/;
 export function parseInputDraft(screen) {
@@ -84,7 +84,7 @@ export function parseBackgroundTasks(screen) {
     if (m) return { count: countOf(m[1]), agent: 'codex' };
     // footer-only: needs the mode glyph or the manage hint so prose like "I ran 3 tasks" never matches
     if (/^\s*[⏵⏸]/.test(l) || /↓ to manage|to manage\b/i.test(l)) {
-      m = /\b(\d+) (?:background )?(?:tasks?|shells?|bash(?:es)?|agents?)\b/i.exec(l); // assumed
+      m = /\b(\d+) (?:background )?(?:tasks?|shells?|bash(?:es)?|agents?)\b/i.exec(l); // confirmed: background/10-idle ("1 shell")
       if (m) return { count: Number(m[1]), agent: 'claude' };
     }
   }
@@ -107,7 +107,7 @@ export function parseContextWarning(screen) {
 // ---- list picker (/model, /resume, ...) ----
 // Not a permission prompt: claude.parsePrompt / codex.parsePrompt own those. A picker has a title, 2+ rows with one
 // marked ❯ or ›, and a navigation hint line. Rows may be numbered ("2. Sonnet") or plain.
-const NAV_HINT = /\b(?:enter to (?:confirm|select|choose)|esc to (?:cancel|go back|exit|close)|↑\/↓|↑↓|to navigate)\b/i; // assumed
+const NAV_HINT = /\b(?:enter to (?:confirm|select|choose|set as default)|esc to (?:cancel|go back|exit|close)|↑\/↓|↑↓|to navigate)\b/i; // confirmed: model-switch/05-model-picker ("Esc to cancel")
 const PERMISSIONISH = /do you want|\ballow\b|\bpermission|\btrust\b|\bapprove\b|proceed\?/i;
 const MORE = /[↑↓]\s*\d*\s*more\b|\bmore (?:above|below)\b|\(\d+\s*(?:\/|of)\s*\d+\)/i; // assumed
 export function parsePicker(screen) {
@@ -126,7 +126,7 @@ export function parsePicker(screen) {
   let a = sel, b = sel;
   while (a > 0 && rowAt(ls[a - 1])) a--;
   while (b < ls.length - 1 && rowAt(ls[b + 1])) b++;
-  const rows = ls.slice(a, b + 1).map(parse);
+  const rows = ls.slice(a, b + 1).filter((l) => !/^\s*▸\s/.test(l)).map(parse); // "▸ More models" expander row: confirmed model-switch/05-model-picker
   if (rows.length < 2 || rows.some((r) => !r)) return null;
   const numbered = rows.every((r) => r.num !== null);
   if (!numbered && rows.some((r) => r.num !== null)) return null;
@@ -134,8 +134,8 @@ export function parsePicker(screen) {
   if (options.some((o) => /^(?:yes|no)\b|don'?t ask again/i.test(o.label))) return null; // a permission prompt, not a picker
   let t = a - 1;
   while (t >= 0 && !ls[t].trim()) t--;
-  while (t > 0 && ls[t - 1].trim() && !RULE.test(ls[t - 1])) t--;
+  while (t > 0 && ls[t - 1].trim() && !RULE.test(ls[t - 1]) && !/▔{8,}/.test(ls[t - 1])) t--;
   const title = t >= 0 && !RULE.test(ls[t]) ? ls[t].trim() : '';
-  if (!title || PERMISSIONISH.test(title)) return null;
+  if (!title || PERMISSIONISH.test(title) || /Claude Code v\d|▔{8,}/.test(title) || options.some((o) => /^⎿/.test(o.label))) return null; // transcript, not a picker: confirmed model-switch/07-help
   return { title, options, selected: options[sel - a].index, scrolls: ls.some((l) => MORE.test(l)) };
 }
