@@ -26,16 +26,17 @@ try{
  await page.waitForFunction(()=>innerWidth===1440&&innerHeight===900);
  const shot=async n=>{await page.waitForTimeout(250);const b64=await app.evaluate(async({BrowserWindow})=>(await BrowserWindow.getAllWindows()[0].webContents.capturePage()).toPNG().toString('base64'));await writeFile(resolve(output,n),Buffer.from(b64,'base64'));};
  const startFake=async()=>{await page.locator('[data-action="send-menu"]').click();await page.waitForTimeout(250);await page.locator('[data-menu-action="cli-session:fakeclaude"]').click();await page.locator('.session-row').first().waitFor();await page.waitForFunction(()=>/session/i.test(document.querySelector('.thread-header')?.textContent||''));await page.waitForTimeout(1500);};
+ const norm=await page.evaluate(()=>{const h=document.querySelector('.thread-header'),was=h.hidden;h.hidden=false;document.querySelector('.workspace')?.classList.add('thread-view');const b=document.querySelector('.caption-chat-tools'),r=h.getBoundingClientRect();const o={h:r.height,pad:getComputedStyle(h).padding,toolPad:getComputedStyle(b).padding};h.hidden=was;document.querySelector('.workspace')?.classList.remove('thread-view');return o;});console.log('normal',JSON.stringify(norm));
  await startFake();
  const sock=await page.evaluate(()=>[...document.querySelectorAll('.session-row')].length);assert.ok(sock>=1);
  await shot('01-session-chat-header.png');
  const m=await page.evaluate(()=>{const h=document.querySelector('.thread-header'),t=document.querySelector('.workspace-tools'),cs=getComputedStyle(h),box=document.querySelector('.caption-chat-tools');
   const r=x=>x.getBoundingClientRect(),hr=r(h);
-  return {h:hr.height,pad:cs.padding,tools:r(t).height,toolPad:getComputedStyle(box).padding,text:h.textContent,kids:[...h.children].map(c=>r(c).right<=hr.right),ring:document.querySelector('.context-ring')?.getAttribute('aria-label'),
+  return {h:hr.height,pad:cs.padding,tools:r(t).height,toolPad:getComputedStyle(box).padding,text:h.textContent,kids:[...box.querySelectorAll('button,.context-ring')].map(c=>r(c).right<=r(box).right+0.5),ring:document.querySelector('.context-ring')?.getAttribute('aria-label'),
    fits:h.scrollWidth<=h.clientWidth+1,cls:h.className,wide:r(box).right<=innerWidth};});
  console.log(JSON.stringify(m));
- assert.equal(m.cls,'thread-header');assert.equal(m.h,25);assert.equal(m.pad,'3px 7px');assert.ok(m.kids.every(Boolean));assert.ok(!/in ·|ctx|Manual|Haiku|Open in terminal/.test(m.text),'header text: '+m.text);
- if(!BEFORE){assert.match(m.ring,/^Context usage: \d+%$/);
+ assert.equal(m.cls,'thread-header');assert.ok(m.kids.length>=3);assert.equal(m.h,norm.h);assert.equal(m.pad,norm.pad);assert.equal(m.toolPad,norm.toolPad);assert.ok(m.kids.every(Boolean));assert.ok(!/in ·|ctx|Manual|Haiku|Open in terminal/.test(m.text),'header text: '+m.text);
+ if(!BEFORE){assert.equal(m.ring,'Context usage: 12%');
   // ring tooltip
   await page.locator('.context-ring').hover();await page.waitForTimeout(500);await shot('02-ring-tooltip.png');await page.mouse.move(700,500);
   // rename in place + long title

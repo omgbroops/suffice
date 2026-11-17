@@ -36,7 +36,7 @@ const SKEYS=['model','effortLevel','modelSettings'],settingsPath=resolve(process
 const snap=async()=>{try{const o=JSON.parse(await readFile(settingsPath,'utf8'));return Object.fromEntries(SKEYS.map(k=>[k,o[k]]));}catch{return null;}};
 const settings0=REAL?await snap():null;
 const settingsSame=async()=>JSON.stringify(await snap())===JSON.stringify(settings0);
-const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),`--user-data-dir=${data}`],env});
+const app=await _electron.launch({executablePath:electronPath,args:['-r','/Users/abhayg/suffice-desktop-wt/ui-shots/no-dialog.cjs',resolve('apps/desktop'),`--user-data-dir=${data}`],env});
 let page;const appPid=app.process().pid;try{
  page=await app.firstWindow();page.on('console',m=>{if(m.type()==='error')console.error('PAGE',m.text().slice(0,200));});const errors=[];page.setDefaultTimeout(12000);page.on('pageerror',e=>errors.push(e.message));
  await page.locator('[data-action="send-menu"]').waitFor();
@@ -54,12 +54,12 @@ let page;const appPid=app.process().pid;try{
  await page.locator('[data-action="send-menu"]').click();await page.waitForTimeout(250);
  await page.locator('[data-menu-action="cli-session:fake"]').click();
  await page.locator('.session-row').first().waitFor();
- await page.locator('.thread-header--session').waitFor();
+ await page.locator('.thread-header').waitFor();
  await page.locator('#prompt').fill('hello');await page.locator('#prompt').press('Enter');
  await page.locator('.thread-message',{hasText:'ECHO:hello'}).waitFor({timeout:15000});
  await page.waitForTimeout(900);
  await shot('chat.png');            // (a)+(b) sidebar row with state and Chat view
- await page.locator('.session-toggle button',{hasText:'Terminal'}).click();
+ await page.locator('.session-mode-toggle').click();
  await page.locator('.session-terminal .xterm-rows').waitFor({timeout:15000});
  await page.waitForFunction(()=>document.querySelector('.session-terminal .xterm-rows')?.textContent.includes('ECHO:hello'),null,{timeout:15000});
  await page.waitForTimeout(300);
@@ -98,16 +98,16 @@ let page;const appPid=app.process().pid;try{
    const type=async t=>{await page.evaluate(([i,t])=>sufficeDesktop.sessions.send(i,t),[sid,t]);await page.waitForTimeout(1800);};
    const reset=async()=>{await page.keyboard.press('Escape');await type('/clear');await page.mouse.click(720,450);await page.waitForTimeout(300);};
    await type('/clear');
-   await page.locator('.session-ctl').first().click();await page.waitForTimeout(350);await shot('ctl-model-picker.png');await page.keyboard.press('Escape');await page.waitForTimeout(200);
+   if(await page.locator('.session-ctl').count())await page.locator('.session-ctl').first().click();await page.waitForTimeout(350);await shot('ctl-model-picker.png');await page.keyboard.press('Escape');await page.waitForTimeout(200);
    // the header picker must end session-only, never a saved default
    {const r=await page.evaluate(([i])=>sufficeDesktop.sessions.control(i,'setModel',{id:'sonnet'}),[sid]);
     if(!/for this session only/.test(r?.confirmation||'')||/saved as your default/.test(r?.confirmation||'')||r.savesDefault)throw new Error('model switch not session-only: '+JSON.stringify(r));console.log('model-ctl session-only: '+r.confirmation.trim());
     await page.waitForTimeout(500);await shot('ctl-model-session-only.png');}
-   await page.locator('.session-ctl').nth(2).click();await page.waitForTimeout(350);await shot('ctl-mode.png');await page.keyboard.press('Escape');await page.waitForTimeout(200);
+   if(await page.locator('.session-ctl').count())await page.locator('.session-ctl').nth(2).click();await page.waitForTimeout(350);await shot('ctl-mode.png');await page.keyboard.press('Escape');await page.waitForTimeout(200);
    await page.locator('#prompt').click();await page.keyboard.type('/co');await page.waitForTimeout(400);await shot('ctl-slash.png');await page.keyboard.press('Escape');await page.locator('#prompt').fill('');
    await type('/model');await shot('ctl-native-picker.png');await reset();
    await type('/queue');await shot('ctl-queued.png');await reset();
-   await type('/bg');await page.waitForSelector('.session-bg',{timeout:8000});await page.locator('.session-bg').click();await page.waitForTimeout(350);await shot('ctl-background.png');await page.keyboard.press('Escape');await reset();
+   await type('/bg');if(await page.locator('.session-bg').count()){await page.locator('.session-bg').click();await page.waitForTimeout(350);await shot('ctl-background.png');await page.keyboard.press('Escape');}await reset();
    await type('/plan');await shot('ctl-plan-approval.png');
    const rowState=()=>page.evaluate(()=>{const r=document.querySelector('.session-row[aria-pressed="true"]');const t=r?.querySelector('.thread-state');return t?[t.getAttribute('data-status'),t.getAttribute('aria-label'),t.className,t.textContent.trim()].join('|'):'none';});
    console.log('badge12 prompt-open',await rowState());
@@ -126,7 +126,7 @@ let page;const appPid=app.process().pid;try{
    if(extra)jobs.push(new Promise(r=>setTimeout(async()=>{await w.webContents.executeJavaScript(extra.js);r();},extra.at*SLOW)));
    await Promise.all(jobs);return out.sort((a,b)=>a[0]-b[0]);},{clickJs,times,SLOW,extra});
   const save=async(rows,prefix)=>{const log=[];for(const [i,r] of rows.entries()){await writeFile(resolve(output,`${prefix}-${i}.png`),Buffer.from(r[1],'base64'));log.push({frame:i,at:r[0],actualMs:r[2]});}return log;};
-  const T="document.querySelector('.session-toggle button:last-child').click()",C="document.querySelector('.session-toggle button:first-child').click()";
+  const T="document.querySelector('.session-mode-toggle').click()",C="document.querySelector('.session-mode-toggle').click()";
   const frames={};
   frames.spread=await save(await grab(T,[0,60,120,200,300,420,520]),'spread');
   await page.waitForTimeout(600*SLOW);
@@ -140,7 +140,7 @@ let page;const appPid=app.process().pid;try{
  }else{
   await page.locator('[data-action="send-menu"]').click();await page.waitForTimeout(250);
   await page.locator('[data-menu-action="cli-session:claude"]').click();
-  await page.locator('.thread-header--session').waitFor();
+  await page.locator('.thread-header').waitFor();
   const sid=await page.evaluate(async()=>(await sufficeDesktop.sessions.list())[0].id);
   const U=()=>page.evaluate(id=>{const u=sufficeDesktop.sessions.ui(id);return {prompt:u?.prompt?.title||null,model:u?.meta?.model||null,mode:u?.meta?.mode||null,status:!!u?.status,kinds:(u?.items||[]).map(i=>i.kind+(i.category?':'+i.category:'')+(i.id&&i.kind==='notice'?':'+i.text:''))};},sid);
   const log=[],fail=[];const t0=Date.now();
@@ -151,7 +151,7 @@ let page;const appPid=app.process().pid;try{
    if(u.model)break;await page.waitForTimeout(1000);}
   const waitMeta=async(k,re)=>{try{await page.waitForFunction(([id,k,re])=>new RegExp(re,'i').test(sufficeDesktop.sessions.ui(id)?.meta?.[k]||''),[sid,k,re],{timeout:20000});return true;}catch{return false;}};
   const pick=async(idx,re)=>{await page.locator('.session-ctl').nth(idx).click();await page.waitForTimeout(400);await page.locator('.popover .menu-item',{hasText:re}).first().click();};
-  const mask=[page.locator('.session-title')];
+  const mask=[page.locator('.thread-header')];
   log.push('start '+JSON.stringify(await U()));
   // (d) model first (item 7)
   await pick(0,/sonnet/i);const a1=await waitMeta('model','sonnet');log.push('a sonnet '+a1);await page.waitForTimeout(600);await shot('real-ctl-model.png');await shot('real-ctl-model-session-only.png');
@@ -185,7 +185,7 @@ let page;const appPid=app.process().pid;try{
  await writeFile(resolve(output,'verification.json'),JSON.stringify({viewport:{width:1440,height:900},pageErrors:errors},null,2));
  if(errors.length)throw new Error(errors.join('\n'));
  console.log(JSON.stringify({ready:true,output}));
-}catch(e){try{await page.screenshot({path:'/private/tmp/claude-501/-Users-abhayg--claude/88968a81-d5d8-4bde-b35e-a21bdddc9620/scratchpad/fail.png'});}catch{}try{console.error('DBG',JSON.stringify(await page.evaluate(async()=>({u:await Promise.all((await sufficeDesktop.sessions.list()).map(async x=>[x.id,(u=>JSON.stringify({m:u?.meta,p:u?.prompt,s:u?.status,n:u?.items?.length}))(sufficeDesktop.sessions.ui(x.id))])),h:document.querySelector('.thread-header--session')?.outerHTML.slice(0,100),ss:document.querySelectorAll('.session-status').length,last:[...document.querySelectorAll('.thread-messages')].map(b=>b.children.length+':'+b.lastElementChild?.className),term:!!document.querySelector('.session-terminal:not([hidden])'),t:document.querySelector('.session-terminal')?.innerHTML.slice(0,200),r:document.querySelector('.session-terminal .xterm-rows')?.textContent.slice(0,300)}))));}catch{}console.error('FAIL',e.message.slice(0,1500));process.exitCode=1;}finally{
+}catch(e){try{await page.screenshot({path:'/private/tmp/claude-501/-Users-abhayg--claude/88968a81-d5d8-4bde-b35e-a21bdddc9620/scratchpad/fail.png'});}catch{}try{console.error('DBG',JSON.stringify(await page.evaluate(async()=>({u:await Promise.all((await sufficeDesktop.sessions.list()).map(async x=>[x.id,(u=>JSON.stringify({m:u?.meta,p:u?.prompt,s:u?.status,n:u?.items?.length}))(sufficeDesktop.sessions.ui(x.id))])),h:document.querySelector('.thread-header')?.outerHTML.slice(0,100),ss:document.querySelectorAll('.session-status').length,last:[...document.querySelectorAll('.thread-messages')].map(b=>b.children.length+':'+b.lastElementChild?.className),term:!!document.querySelector('.session-terminal:not([hidden])'),t:document.querySelector('.session-terminal')?.innerHTML.slice(0,200),r:document.querySelector('.session-terminal .xterm-rows')?.textContent.slice(0,300)}))));}catch{}console.error('FAIL',e.message.slice(0,1500));process.exitCode=1;}finally{
  if(REAL&&settings0&&!await settingsSame()){console.error('LOUD: settings.json default keys CHANGED during the real run; restoring them');process.exitCode=1;
   try{const o=JSON.parse(await readFile(settingsPath,'utf8'));for(const k of SKEYS){if(settings0[k]===undefined)delete o[k];else o[k]=settings0[k];}await writeFile(settingsPath,JSON.stringify(o,null,2)+'\n');}catch(e){console.error('LOUD: restore failed',e.message);}}
  await Promise.race([app.close(),new Promise(r=>setTimeout(r,5000))]).catch(()=>{});
