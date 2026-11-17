@@ -7,7 +7,7 @@ import {showPopover,hidePopover,keyboardInteraction} from './popover-motion.js';
 const titles={off:'Off',minimal:'Minimal',low:'Low',medium:'Medium',high:'High',xhigh:'Extra high',max:'Max'};
 const effortLabel=value=>titles[value]||String(value).charAt(0).toUpperCase()+String(value).slice(1);
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const logo=provider=>providerIcon(provider)?`<img class="provider-logo" src="./providers/${providerIcon(provider)}.svg" alt=""/>`:icon('agent');
+const logo=provider=>providerIcon(provider)?`<img class="provider-logo" src="./providers/${providerIcon(provider)}.svg" alt=""/>`:`<i class="provider-logo-fallback">${icon('agent')}</i>`;
 
 export function connectModels({api,toast}){
  const button=document.querySelector('.model-button'),form=document.querySelector('.composer');

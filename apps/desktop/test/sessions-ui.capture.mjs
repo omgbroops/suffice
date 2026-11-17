@@ -8,7 +8,7 @@ import {execFileSync} from 'node:child_process';
 const REAL=process.env.SUFFICE_REAL_CLAUDE==='1';
 const output=resolve('apps/desktop/visual-review/sessions-ui');await mkdir(output,{recursive:true});
 const tmp=await realpath(await mkdtemp(resolve(tmpdir(),'sfx-sessions-ui-')));
-const socket=`sfx-cap-${process.pid}`;
+const socket=process.env.SUFFICE_SESSIONS_SOCKET||`sfx-cap-${process.pid}`;
 const home=resolve(tmp,'home'),project=resolve(tmp,'demo-project'),data=resolve(tmp,'data'),suffice=resolve(tmp,'suffice');
 for(const d of [project,data,suffice])await mkdir(d,{recursive:true});
 const j=(...rows)=>rows.map(r=>JSON.stringify(r)).join('\n')+'\n';
@@ -36,7 +36,7 @@ const SKEYS=['model','effortLevel','modelSettings'],settingsPath=resolve(process
 const snap=async()=>{try{const o=JSON.parse(await readFile(settingsPath,'utf8'));return Object.fromEntries(SKEYS.map(k=>[k,o[k]]));}catch{return null;}};
 const settings0=REAL?await snap():null;
 const settingsSame=async()=>JSON.stringify(await snap())===JSON.stringify(settings0);
-const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),`--user-data-dir=${data}`],env});
+const app=await _electron.launch({executablePath:electronPath,args:['-r','/Users/abhayg/suffice-desktop-wt/ui-shots/no-dialog.cjs',resolve('apps/desktop'),`--user-data-dir=${data}`],env});
 let page;const appPid=app.process().pid;try{
  page=await app.firstWindow();page.on('console',m=>{if(m.type()==='error')console.error('PAGE',m.text().slice(0,200));});const errors=[];page.setDefaultTimeout(12000);page.on('pageerror',e=>errors.push(e.message));
  await page.locator('[data-action="send-menu"]').waitFor();
@@ -98,12 +98,12 @@ let page;const appPid=app.process().pid;try{
    const type=async t=>{await page.evaluate(([i,t])=>sufficeDesktop.sessions.send(i,t),[sid,t]);await page.waitForTimeout(1800);};
    const reset=async()=>{await page.keyboard.press('Escape');await type('/clear');await page.mouse.click(720,450);await page.waitForTimeout(300);};
    await type('/clear');
-   await page.locator('.session-ctl').first().click();await page.waitForTimeout(350);await shot('ctl-model-picker.png');await page.keyboard.press('Escape');await page.waitForTimeout(200);
+   await page.locator('.composer .model-button').click();await page.waitForTimeout(350);await shot('ctl-model-picker.png');await page.keyboard.press('Escape');await page.waitForTimeout(200);
    // the header picker must end session-only, never a saved default
    {const r=await page.evaluate(([i])=>sufficeDesktop.sessions.control(i,'setModel',{id:'sonnet'}),[sid]);
     if(!/for this session only/.test(r?.confirmation||'')||/saved as your default/.test(r?.confirmation||'')||r.savesDefault)throw new Error('model switch not session-only: '+JSON.stringify(r));console.log('model-ctl session-only: '+r.confirmation.trim());
     await page.waitForTimeout(500);await shot('ctl-model-session-only.png');}
-   await page.locator('.session-ctl').nth(2).click();await page.waitForTimeout(350);await shot('ctl-mode.png');await page.keyboard.press('Escape');await page.waitForTimeout(200);
+   await page.locator('.access-mode-picker').click();await page.waitForTimeout(350);await shot('ctl-mode.png');await page.keyboard.press('Escape');await page.waitForTimeout(200);
    await page.locator('#prompt').click();await page.keyboard.type('/co');await page.waitForTimeout(400);await shot('ctl-slash.png');await page.keyboard.press('Escape');await page.locator('#prompt').fill('');
    await type('/model');await shot('ctl-native-picker.png');await reset();
    await type('/queue');await shot('ctl-queued.png');await reset();
@@ -150,7 +150,7 @@ let page;const appPid=app.process().pid;try{
     await page.evaluate(([id,i])=>sufficeDesktop.sessions.control(id,'answerPrompt',{index:i}),[sid,o.index]);await page.waitForTimeout(2500);continue;}
    if(u.model)break;await page.waitForTimeout(1000);}
   const waitMeta=async(k,re)=>{try{await page.waitForFunction(([id,k,re])=>new RegExp(re,'i').test(sufficeDesktop.sessions.ui(id)?.meta?.[k]||''),[sid,k,re],{timeout:20000});return true;}catch{return false;}};
-  const pick=async(idx,re)=>{await page.locator('.session-ctl').nth(idx).click();await page.waitForTimeout(400);await page.locator('.popover .menu-item',{hasText:re}).first().click();};
+  const pick=async(idx,re)=>{await page.locator(idx===0?'.composer .model-button':'.access-mode-picker').click();await page.waitForTimeout(400);await page.locator('.popover .menu-item',{hasText:re}).first().click();};
   const mask=[page.locator('.session-title')];
   log.push('start '+JSON.stringify(await U()));
   // (d) model first (item 7)
@@ -163,7 +163,7 @@ let page;const appPid=app.process().pid;try{
   try{
   // (b) mode
   const m0=(await U()).mode;log.push('mode0 '+m0);
-  const ci=await page.locator('.session-ctl').count()-1;
+  const ci=1;
   await pick(ci,/plan/i);const b1=await waitMeta('mode','plan');log.push('b plan '+b1);await page.waitForTimeout(600);await shot('real-ctl-mode.png');
   await pick(ci,new RegExp(m0&&!/plan/i.test(m0)?m0.replace(/[^a-z]/gi,'.'):'manual','i'));const b2=await waitMeta('mode',m0&&!/plan/i.test(m0)?m0.replace(/[^a-z]/gi,'.'):'manual|default');log.push('b back '+b2);if(!b1||!b2)log.push('SOFT mode failed');
   // (c) interrupt

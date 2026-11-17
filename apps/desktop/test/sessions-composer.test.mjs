@@ -31,7 +31,7 @@ try{
  // 1. start screen: the model list has an Agent CLIs group (fake agents appear in the test env only)
  await page.waitForFunction(()=>sufficeDesktop.sessions.available().then(a=>a.agents.some(x=>!x.missing)));
  await page.waitForTimeout(500);
- const preSelection=await sel(),preLabel=await page.locator('.model-button').innerText();
+ await page.waitForFunction(()=>document.querySelector(".composer").modelSelection);const preSelection=await sel(),preLabel=await page.locator('.model-button').innerText();
  await page.locator('.model-button').click();await page.locator('.popover.model-picker').waitFor();if(await page.locator('.model-picker .model-stage-button').count())await page.locator('.model-picker .model-stage-button').click();await page.locator('.popover.model-picker .model-options').waitFor();
  ok(await page.locator('.model-picker .model-provider-title',{hasText:'Agent CLIs'}).count()===1,'no Agent CLIs group');
  ok(!await page.locator('.model-picker .effort-track').count(),'effort stage on start screen list');
