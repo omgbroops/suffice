@@ -1,22 +1,5 @@
 .sidebar-cli-sessions { display: flex; flex-direction: column; gap: 3px; }
 .sidebar-cli-sessions:not(:empty) { margin-bottom: 6px; }
-.thread-header--session { display: flex; align-items: center; gap: 10px; }
-.thread-header--session > * { -webkit-app-region: no-drag; flex-shrink: 0; }
-body:has(.thread-header--session) .window-drag-region { pointer-events: none; }
-.thread-header--session .session-title { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
-.thread-header--session .session-meta { color: var(--text-muted); font-size: 12px; font-weight: 400; margin-left: auto; }
-.thread-header--session .session-toggle { margin-left: auto; }
-.thread-header--session .session-meta + .session-toggle { margin-left: 0; }
-.thread-header--session .session-meta + .session-copy { margin-left: 0; }
-.thread-header--session .session-copy { min-height: 28px; font-size: 12px; gap: 6px; }
-.thread-header--session .session-copy .icon { width: 13px; height: 13px; }
-.session-notice { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; border: 1px solid var(--border-strong); border-radius: 12px; color: var(--text); font-size: 13px; }
-.session-terminal { position: absolute; inset: 0; z-index: 5; }
-.session-terminal[data-solid] { background: var(--venom, var(--surface-base)); }
-.session-venom { position: absolute; inset: 0; z-index: 5; pointer-events: none; }
-.thread-header--session { z-index: 6; }
-.session-terminal-slot { position: absolute; inset: 54px 0 12px 12px; }
-.session-terminal[hidden],.session-terminal-slot[hidden] { display: none; }
 .session-import { left: 50%; top: 14vh; width: 520px; transform: translateX(-50%); padding: 0; transform-origin: top center; }
 .session-import-list { max-height: 360px; overflow-y: auto; padding: 4px; border-top: 1px solid var(--border-strong); scrollbar-width: none; }
 .session-import-row { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; width: 100%; height: auto; padding: 7px 10px; text-align: left; }
@@ -24,43 +7,5 @@ body:has(.thread-header--session) .window-drag-region { pointer-events: none; }
 .session-import-meta { color: var(--text-muted); font-size: 11px; white-space: pre; }
 .session-import-empty { padding: 14px; color: var(--text-muted); font-size: 12px; }
 body:has(.session-row) .sidebar-empty { display: none; }
-[data-status='working'].thread-header--session .thread-state { color: #60a5fa; }
-[data-status='failed'].thread-header--session .thread-state { color: #f87171; }
-.thread-header--session:is([data-status='approval'],[data-status='input']) .thread-state { color: #fbbf24; }
-[data-status='working'].thread-header--session .thread-state svg { animation: thread-working 1.2s linear infinite; }
 .popover.session-import .session-import-row { align-items: flex-start; justify-content: flex-start; text-align: left; }
 .session-import-row > span { align-self: flex-start; text-align: left; }
-.tool-widget[data-status='pending'] .thread-state svg { animation: thread-working 1.2s linear infinite; }
-.tool-widget .tool-exit { margin-left: 8px; color: var(--text-muted); font-size: 11px; }
-.session-notice--quiet { border: 0; padding: 2px 4px; color: var(--text-muted); font-size: 12px; justify-content: flex-start; }
-.session-todo { color: var(--text-muted); font-size: 13px; padding: 1px 0; }
-.tool-diff { margin-top: 6px; }
-.session-run { margin: 2px 0; }
-.session-run > summary { cursor: pointer; }
-.session-run-body { display: flex; flex-direction: column; gap: 4px; padding-top: 4px; }
-.tool-widget .tool-cmd { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; white-space: pre-wrap; overflow-wrap: anywhere; }
-.session-status { display: flex; align-items: center; gap: 8px; padding: 4px 0; color: var(--text-muted); font-size: 13px; }
-.session-status .thread-state { color: #60a5fa; }
-.session-status .thread-state svg { animation: thread-working 1.2s linear infinite; }
-.session-sub > .session-sub-sum { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 10px; cursor: pointer; max-width: 100%; }
-.session-sub-head { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.session-sub-stats { flex: 0 0 100%; padding-left: 15px; color: var(--text-muted); font-size: 12px; font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.session-sub-body { display: flex; flex-direction: column; gap: 4px; }
-.session-sub-body > .button { align-self: flex-start; }
-.session-sub-flat { margin-left: 0; }
-/* CLI session controls: same popover, menu-item and chip styles as the rest of the app. */
-.thread-header--session .session-meta { display: flex; align-items: center; gap: 8px; }
-.session-usage, .session-cwd { color: var(--text-muted); font-size: 12px; white-space: nowrap; }
-.session-plan { max-height: 260px; overflow-y: auto; padding: 4px 2px; font-size: 13px; scrollbar-width: none; }
-.session-question { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 8px; }
-.session-question-text { width: 100%; font-size: 13px; color: var(--text-strong); }
-
-/* the header sits above the transcript: nothing may scroll the workspace itself */
-.desktop-app .workspace.thread-view { overflow: clip; }
-.desktop-app .thread-header.thread-header--session { overflow: clip; }
-
-.desktop-app .session-meta { opacity: .6; font-weight: 400; }
-.desktop-app .session-subs { display: contents; }
-.desktop-app .session-notice--quiet.is-error { color: var(--red); }
-
-.session-bg { border: 0; color: var(--text-muted); }

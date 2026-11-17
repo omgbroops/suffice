@@ -7,13 +7,14 @@ import {mkdir,mkdtemp,writeFile,readFile,readdir,realpath} from 'node:fs/promise
 import {tmpdir} from 'node:os';
 import {execFileSync} from 'node:child_process';
 import {createClaudeMapper} from '../../../packages/backend/src/tui/claude.mjs';
+import {guard} from './electron-guard.mjs';
 
 const root=resolve('.'),SIM=resolve(root,'packages/backend/tools/tui-sim'),FIX=resolve(root,'packages/backend/test/fixtures/tui-real/claude');
 const out=resolve(root,'apps/desktop/visual-review/sessions-sim');await mkdir(out,{recursive:true});
 const only=process.env.SWEEP_ONLY?.split(',').filter(Boolean);
 const names=(await readdir(resolve(SIM,'scenarios'))).filter(f=>f.endsWith('.json')).map(f=>f.slice(0,-5)).filter(n=>!only||only.includes(n)).sort();
 const tmp=await realpath(await mkdtemp(resolve(tmpdir(),'sfx-sim-')));
-const socket=process.env.SUFFICE_SESSIONS_SOCKET||`sfx-sim-${process.pid}`,data=resolve(tmp,'data'),project=resolve(tmp,'demo-project'),dist=resolve(tmp,'dist');
+const socket=`sfx-sim-${process.pid}`,data=resolve(tmp,'data'),project=resolve(tmp,'demo-project'),dist=resolve(tmp,'dist');
 for(const d of [data,project,resolve(tmp,'home'),resolve(tmp,'suffice')])await mkdir(d,{recursive:true});
 execFileSync('npx',['vite','build','--outDir',dist,'--emptyOutDir'],{cwd:resolve(root,'apps/desktop'),stdio:'ignore'});
 const env={...process.env};delete env.ELECTRON_RUN_AS_NODE;
@@ -69,14 +70,14 @@ const SNAP=`(()=>{
  const card=q('.composer-approval:not([hidden])'),pk=q('.session-picker'),p=q('#prompt'),sb=q('.send-button'),hdr=q('.thread-header--session'),row=q('.session-row[aria-pressed="true"]')||q('.session-row');
  const sp=getComputedStyle(box||document.body);
  return {rows,box:{children:box?.children.length||0,nodes:box?box.querySelectorAll('*').length:0,text:box?.textContent.length||0},total:document.querySelectorAll('*').length,
-  header:{text:t(hdr,300),ctls:[...document.querySelectorAll('.composer .model-button,.access-mode-picker')].map(x=>t(x,60)),usage:t(q('.session-usage')),bg:t(q('.session-bg')),cwd:t(q('.session-cwd'))},
+  header:{text:t(hdr,300),ctls:[...document.querySelectorAll('.session-ctl')].map(x=>t(x,60)),usage:t(q('.session-usage')),bg:t(q('.session-bg')),cwd:t(q('.session-cwd'))},
   badge:row?{cls:row.className,status:row.dataset.status||row.querySelector('[data-status]')?.dataset.status||'',text:t(row,120),html:row.innerHTML.match(/status[-\\w]*[^>]*/g)?.slice(0,3)}:null,
   composer:{disabled:!!p?.disabled||!!p?.closest('[inert]'),ph:p?.placeholder,send:sb?{cls:sb.className,label:sb.getAttribute('aria-label')||sb.title||t(sb,20),disabled:sb.disabled}:null,approval:q('form[data-approval],[data-approval]')?.dataset.approval||null},
   card:card?{title:t(card.querySelector('h3')),body:t(card.querySelector('.approval-preview-host'),400),opts:[...card.querySelectorAll('.approval-controls button')].map(b=>({t:t(b),sel:b.classList.contains('provider-dialog-primary')}))}:null,
   picker:pk?{title:t(pk.querySelector('.popover-heading')),opts:[...pk.querySelectorAll('.menu-item')].map(b=>({t:t(b),sel:!!b.querySelector('.menu-check')}))}:null,
   mem:performance.memory?.usedJSHeapSize||0,gap:window.__gap,idle:window.__idle};})()`;
 
-const app=await _electron.launch({executablePath:electronPath,args:['-r','/Users/abhayg/suffice-desktop-wt/ui-shots/no-dialog.cjs',resolve(root,'apps/desktop'),`--user-data-dir=${data}`],env});
+const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve(root,'apps/desktop'),`--user-data-dir=${data}`],env});
 const pid=app.process().pid;let launches=1;
 let result={};try{result=JSON.parse(await readFile(resolve(out,'SWEEP.json'),'utf8'));}catch{}
 try{
@@ -136,8 +137,8 @@ try{
    if(name==='mode-cycle'||name==='model-switch'){
     await page.waitForFunction(()=>window.__idle>1500,null,{timeout:30000,polling:200}).catch(()=>{});
     const before=await snap();
-    const ctl=page.locator(name==='mode-cycle'?'.access-mode-picker':'.composer .model-button');
-    if(await ctl.count()){await ctl.click();await page.waitForTimeout(400);const items=page.locator(name==='mode-cycle'?'.access-mode-menu .menu-item':'.popover.model-picker .model-option');R.measure.menuItems=await items.count();
+    const ctl=page.locator('.session-ctl').nth(name==='mode-cycle'?2:0);
+    if(await ctl.count()){await ctl.click();await page.waitForTimeout(400);const items=page.locator('.session-menu .menu-item');R.measure.menuItems=await items.count();
      await beat('menu-open');if(R.measure.menuItems>1){await items.nth(1).click();await page.waitForTimeout(2500);}else await page.keyboard.press('Escape');}
     const after=await snap();R.measure.ctlBefore=before.header.ctls;R.measure.ctlAfter=after.header.ctls;
     if(name==='mode-cycle')modeOk=JSON.stringify(before.header.ctls)!==JSON.stringify(after.header.ctls);
@@ -208,7 +209,7 @@ try{
    R.verdicts.sizeOk=name==='huge-output'?{pass:R.measure.nodesExpanded<3000&&(R.measure.showMore>0||R.measure.truncNote>0),nodes:R.measure.nodesExpanded}:undefined;
    R.pass=Object.values(R.verdicts).filter(Boolean).every(v=>v.pass);
    await page.evaluate(id=>sufficeDesktop.sessions.stop(id),sid).catch(()=>{});
-  }catch(e){R.error=String(e.message||e).slice(0,1500);R.pass=false;try{await page.screenshot({path:resolve(out,name+'.png')});}catch{}
+  }catch(e){R.error=String(e.message||e).slice(0,300);R.pass=false;try{await page.screenshot({path:resolve(out,name+'.png')});}catch{}
    await page.evaluate(async()=>{for(const s of await sufficeDesktop.sessions.list())await sufficeDesktop.sessions.stop(s.id).catch(()=>{});}).catch(()=>{});}
   console.log(name,R.pass?'PASS':'FAIL',R.error||Object.entries(R.verdicts).filter(([,v])=>v&&!v.pass).map(([k])=>k).join(','));
   await writeFile(resolve(out,'SWEEP.json'),JSON.stringify(result,(k,v)=>k==='final'?undefined:v,1));

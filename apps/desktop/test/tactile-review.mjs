@@ -3,9 +3,10 @@ import electronPath from 'electron';
 import {_electron} from 'playwright-core';
 import {resolve} from 'node:path';
 import {mkdir,writeFile} from 'node:fs/promises';
+import {guard} from './electron-guard.mjs';
 const output=resolve('apps/desktop/visual-review/tactile');await mkdir(output,{recursive:true});
 const env={...process.env};delete env.ELECTRON_RUN_AS_NODE;
-const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop')],env});
+const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop')],env});
 let keep=false;
 try{
  const page=await app.firstWindow();const errors=[];page.on('pageerror',error=>errors.push(error.message));
