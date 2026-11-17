@@ -40,9 +40,19 @@ try{
   // ring tooltip
   await page.locator('.context-ring').hover();await page.waitForTimeout(500);await shot('02-ring-tooltip.png');await page.mouse.move(700,500);
   // rename in place + long title
+  // rename keys must not answer the pending approval
+  await page.locator('.composer-approval:not([hidden])').waitFor({timeout:20000});
+  const hd=page.locator('.thread-header'),htxt=()=>hd.evaluate(e=>e.textContent),row0=await page.evaluate(()=>document.querySelector('.session-row').textContent),t0=await htxt();
+  const clean=async why=>{assert.ok(await page.locator('.composer-approval:not([hidden])').count(),'approval answered: '+why);assert.ok(!/denied|allow all/i.test(await page.evaluate(()=>document.querySelector('.workspace').textContent.replace(/Yes, allow all[^\n]*/,''))),'denial in transcript: '+why);};
+  await hd.focus();await page.keyboard.press('Meta+A');await page.keyboard.type('Nope');await page.keyboard.press('Escape');await page.waitForTimeout(300);
+  assert.equal(await htxt(),t0,'Escape did not revert');assert.equal(await page.evaluate(()=>document.querySelector('.session-row').textContent),row0);await clean('escape');
+  await hd.focus();await page.keyboard.press('Meta+A');await page.keyboard.press('Backspace');await page.keyboard.press('Enter');await page.waitForTimeout(300);
+  assert.equal(await htxt(),t0,'empty title not restored');assert.equal(await page.evaluate(()=>document.querySelector('.session-row').textContent),row0);await clean('empty');
+  await hd.focus();await page.keyboard.press('Meta+A');await page.keyboard.type('Fix 2 bugs');await page.keyboard.press('Enter');await page.waitForTimeout(300);
+  assert.equal(await htxt(),'Fix 2 bugs','digit dropped');await clean('digit');
   const h=page.locator('.thread-header');await h.focus();await page.keyboard.press('Meta+A');await page.keyboard.type('Refactor');await shot('03-rename-in-place.png');await page.keyboard.press('Enter');
   await page.waitForFunction(()=>document.querySelector('.session-row .thread-title, .session-row')?.textContent.includes('Refactor'));
-  await h.focus();await page.keyboard.press('Meta+A');await page.keyboard.type('Investigate why the nightly build fails only on the Windows runner after the dependency bump');await page.keyboard.press('Enter');await page.waitForTimeout(300);
+  await h.focus();await page.keyboard.press('Meta+A');await page.keyboard.type('Investigate why the nightly build fails only on the Windows runner after the dependency bump');await page.keyboard.press('Enter');await page.evaluate(()=>document.activeElement?.blur());await page.waitForFunction(()=>{const h=document.querySelector('.thread-header');return getComputedStyle(h).textOverflow==='ellipsis'&&h.scrollWidth>h.clientWidth;},null,{timeout:5000});await page.waitForTimeout(300);
   await shot('04-long-title.png');
   const lt=await page.evaluate(()=>{const h=document.querySelector('.thread-header'),r=h.getBoundingClientRect();return {w:r.width,over:getComputedStyle(h).textOverflow,full:h.textContent.length,tr:document.querySelector('.workspace-tools').getBoundingClientRect().right,box:document.querySelector('.caption-chat-tools').getBoundingClientRect().right};});
   console.log(JSON.stringify(lt));assert.ok(lt.w<=240+1);assert.ok(lt.tr<=lt.box+1);

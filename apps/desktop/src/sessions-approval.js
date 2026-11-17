@@ -55,7 +55,7 @@ export function createApproval({form,markdown,answer}){
   for(const c of form.children)c.inert=c!==card;form.resizePrompt?.();
   const key=e=>{
    if(e.defaultPrevented||e.ctrlKey||e.metaKey||e.altKey)return;
-   if(!card.contains(e.target)&&e.target.closest?.('input,textarea,select,[contenteditable="true"]'))return;
+   if(!card.contains(e.target)&&e.target.closest?.('input,textarea,select,[contenteditable]:not([contenteditable="false"])'))return;
    const n=/^[1-9]$/.test(e.key)?Number(e.key)-1:-1,hit=n>=0?p.options?.[n]:e.key==='Escape'?p.options?.find(o=>DENY.test(o.label)):null;
    if(!hit)return;e.preventDefault();e.stopPropagation();answer(hit.index);};
   document.addEventListener('keydown',key,true);off=()=>document.removeEventListener('keydown',key,true);
