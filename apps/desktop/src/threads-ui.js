@@ -78,7 +78,7 @@ export function connectThreads({api,prompt,send,toast}){
   clearTimeout(codeTimers.get(element));
   if(element.querySelector('pre code'))codeTimers.set(element,setTimeout(()=>{if(element.isConnected){void import('./mermaid-diagrams.js').then(({renderDiagrams})=>renderDiagrams(element));void import('./code-highlight.js').then(({colorCode})=>Promise.all([...element.querySelectorAll('pre code')].map(code=>colorCode(code,'snippet.'+(code.className.match(/language-([\w+-]+)/)?.[1]||'text'))))).catch(()=>{});}},120));
  }
- sessions=connectSessions({toast,form,workspace,header,hooks:{showHistory,threadView,markdown,bottom}});
+ sessions=connectSessions({toast,form,workspace,header,hooks:{showHistory,threadView,markdown,bottom,clear}});
  function plainReasoning(text){const node=document.createElement('div');markdown(node,text);return node.textContent.replace(/[*_`~]/g,'').replace(/^#{1,6}\s*/gm,'').split('\n').map(line=>line.trim()).filter(Boolean).at(-1)||'Working';}
  function message(role,text){const element=document.createElement('article');element.className=`thread-message thread-${role}`;if(role==='assistant')markdown(element,text);else element.textContent=text;history.append(element);bottom();return element;}
  function renderMessages(messages){
@@ -280,6 +280,7 @@ export function connectThreads({api,prompt,send,toast}){
   if(busy&&!prompt.value.trim()&&!form.attachments?.count){await api.abort(activeId).catch(error=>toast(error.message));return;}
   if(opening)return;
   if(sessions?.isActive()){const t=prompt.value.trim();if(t){sessions.send(t);prompt.value='';send.disabled=true;saveView();}return;}
+  if(form.modelSelection?.provider==='cli'){const t=prompt.value.trim();if(!t)return;prompt.value='';form.attachments?.clear();send.disabled=true;saveView();form.resizePrompt?.();if(!await sessions.start(form.modelSelection.model,t)){prompt.value=t;send.disabled=false;}return;}
   const text=prompt.value.trim()||(form.attachments?.count?'Please review the attached files.':'');if(!text)return;
   if(form.modelsDisabled){toast('Enable a model in Settings → Models first');return;}if(form.dataset.requireProject==='true'){toast('Choose a project above the composer first');return;}const inBackground=form.backgroundSubmit||form.backgroundIntent;if(!busy&&inBackground&&!preference('background-agents',true)){toast('Background agents are disabled in settings');return;}form.backgroundSubmit=false;
   let attachments;opening=true;try{attachments=await form.attachments?.payload();}catch(error){toast(error.message);return;}finally{opening=false;}

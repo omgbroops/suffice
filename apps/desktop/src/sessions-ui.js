@@ -1,5 +1,7 @@
 import {icon} from './ui.js';
-import {populateThreadRow,tickThreadTimes,threadState} from './thread-row.js';
+import {populateThreadRow,tickThreadTimes,threadState,connectThreadHover,formatThreadTime} from './thread-row.js';
+import {threadViewState} from './thread-view-state.js';
+import {connectSessionContextMenu} from './thread-context-menu.js';
 import {showPopover,hidePopover} from './popover-motion.js';
 import {createToolWidget} from './tool-widget.js';
 import {renderCode} from './panel-content.js';
@@ -12,25 +14,22 @@ sx?.available().then(a=>{avail=a;}).catch(()=>{});
 const STATUS={starting:'working',working:'working',waiting_input:'input',needs_permission:'approval',error:'failed',exited:'done'};
 const base=p=>String(p||'').split('/').filter(Boolean).pop()||'/';
 const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
-const age=ms=>{const s=Math.max(0,(Date.now()-ms)/1000);return s<60?'now':s<3600?Math.floor(s/60)+'m':s<86400?Math.floor(s/3600)+'h':Math.floor(s/86400)+'d';};
+const age=ms=>formatThreadTime(Math.max(0,Math.floor((Date.now()-ms)/1000)));
 const PH=document.querySelector('#prompt')?.placeholder||'';const prompt=()=>document.querySelector('#prompt');
 const project=()=>document.querySelector('.project-picker')?.dataset.tooltip||'';
 
-// Items for the new-thread menu. Agents come from `available()`; a missing tmux becomes one disabled line.
-export function sessionMenuItems(){
- if(!sx)return [];
- const items=avail.agents.map((a,i)=>a.missing?{label:`${a.label} session`,detail:`${a.label} CLI not found`,disabled:true,separator:i===0}:{label:`${a.label} session`,action:'cli-session:'+a.id,separator:i===0});
- if(!avail.ok)items.push({label:`CLI sessions: ${avail.reason||'unavailable'}`,detail:avail.reason,disabled:true,separator:true});
- items.push({label:'Import chat',action:'import-chat:open',separator:!items.length});
- return items;
-}
+// Send-options menu: agents are chosen in the model picker, so only Import remains.
+export function sessionMenuItems(){return sx?[{label:'Import chat',action:'import-chat:open',separator:true}]:[];}
 
 export function connectSessions({toast,form,workspace,header,hooks}){
- if(!sx)return {leave(){},isActive:()=>false,stop:()=>false,send(){}};
+ if(!sx)return {leave(){},isActive:()=>false,stop:()=>false,send(){},start:async()=>{toast('Sessions are unavailable');return false;}};
  const side=el('div','sidebar-cli-sessions');
  document.querySelector('.sidebar-sessions').before(side);
  const busy=new Map(),rows=new Map(),states=new Map(),prompts=new Map(),subs=new Map(),labels=new Map(),titles=new Map();
- const name=s=>titles.get(s.id)||`${labels.get(s.id)||s.agent} session`;
+ const name=s=>threadViewState.read('session-'+s.id).sidebar?.title||titles.get(s.id)||'New session';
+ const agentLabel=a=>({claude:'Claude Code',codex:'Codex'}[a]||(/claude/.test(a)?'Claude Code':/codex/.test(a)?'Codex':avail.agents.find(x=>x.id===a)?.label||a));
+ const providerOf=a=>/claude/.test(a)?'anthropic':/codex/.test(a)?'openai':a;
+ const firstText=new Map(),activity=new Map(),bump=(id)=>{activity.set(id,Date.now());};
  let active=null,mode='chat',unsubs=[],termEl=null,views=null,viewPromise=null,import_=null;
  let ui=null,statusEl=null,uiUnsub=null,subUnsub=null,box=null,useItems=false,lastMsgs=[],card=null,cardSig='',metaEl=null,termBtn=null;const cache=new Map();
  const termIds=new Map();
@@ -91,9 +90,9 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   let list;try{list=await sx.list();}catch{return;}
   const seen=new Set();
   for(const s of list){
-   seen.add(s.id);labels.set(s.id,avail.agents.find(a=>a.id===s.agent)?.label||s.agent);
-   if(!states.has(s.id)){states.set(s.id,'starting');sx.onState(s.id,v=>{states.set(s.id,v?.state||'starting');paint(s);if(active?.id===s.id){paintHeader();syncRun();}});
-    sx.onUi(s.id,u=>{const had=prompts.get(s.id),hs=busy.get(s.id);prompts.set(s.id,u?!!u.prompt:undefined);busy.set(s.id,!!u?.status);if(had!==prompts.get(s.id)||hs!==busy.get(s.id)){paint(s);if(active?.id===s.id)paintHeader();}});}
+   seen.add(s.id);labels.set(s.id,agentLabel(s.agent));if(!activity.has(s.id))activity.set(s.id,(s.created&&s.created<1e12?s.created*1000:s.created)||Date.now());
+   if(!states.has(s.id)){states.set(s.id,'starting');sx.onState(s.id,v=>{states.set(s.id,v?.state||'starting');bump(s.id);paint(s);if(active?.id===s.id){paintHeader();syncRun();}});
+    sx.onUi(s.id,u=>{const had=prompts.get(s.id),hs=busy.get(s.id);const ft=u?.items?.find(i=>i.kind==='user')?.text?.trim().replace(/\s+/g,' ').slice(0,60);if(ft&&!titles.has(s.id)){titles.set(s.id,ft);paint(s);}prompts.set(s.id,u?!!u.prompt:undefined);busy.set(s.id,!!u?.status);if(had!==prompts.get(s.id)||hs!==busy.get(s.id)){bump(s.id);paint(s);if(active?.id===s.id)paintHeader();}});}
    paint(s);
   }
   for(const [id,row] of rows)if(!seen.has(id)){row.remove();rows.delete(id);}
@@ -110,11 +109,13 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   if(!row){row=el('button','thread-row session-row session-row--sidebar');row.type='button';row.addEventListener('click',()=>open(row._s));rows.set(s.id,row);side.append(row);}
   row._s=s;
   const status=statusOf(s);
-  populateThreadRow(row,{id:'session-'+s.id,title:name(s),project:base(s.cwd),status,modified:(s.created&&s.created<1e12?s.created*1000:s.created)||Date.now()});
-  const label=labels.get(s.id);const noGit=row.querySelector('.thread-no-branch span');if(noGit)noGit.textContent=label+' CLI';
-  row.setAttribute('aria-pressed',String(active?.id===s.id));row.title=`${name(s)} (${label} CLI)`;
-  tickThreadTimes(row);
+  const label=labels.get(s.id);
+  populateThreadRow(row,{id:'session-'+s.id,title:name(s),project:base(s.cwd),status,modified:activity.get(s.id)||Date.now(),agent:label,provider:providerOf(s.agent),model:label});
+  row.setAttribute('aria-pressed',String(active?.id===s.id));row.title=`${name(s)} · ${base(s.cwd)}`;
+  tickThreadTimes(row);sortRows();
  }
+ // Newest activity first, like the thread list.
+ function sortRows(){const order=[...rows.entries()].sort((a,b)=>(activity.get(b[0])||0)-(activity.get(a[0])||0)).map(e=>e[1]);if(order.some((r,i)=>side.children[i]!==r))side.append(...order);}
  const unpress=()=>{for(const r of rows.values())r.setAttribute('aria-pressed','false');};
 
  // Chat view reuses the normal message components.
@@ -229,7 +230,8 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  }
  function drawItems(){
   if(!box||!ui)return;const later=[];let prev=null;
-  const entries=[];for(let it of ui.items){if(hide(it))continue;if(it.kind==='subagent'&&subs.get(it.callId))it={...it,...subs.get(it.callId)};const l=entries.at(-1);
+  const entries=[];const first=firstText.get(active.id);if(first&&!ui.items.some(i=>i.kind==='user'))entries.push({id:'pending-user',it:{kind:'user',text:first}});
+  for(let it of ui.items){if(hide(it))continue;if(it.kind==='subagent'&&subs.get(it.callId))it={...it,...subs.get(it.callId)};const l=entries.at(-1);
    if(RUN.has(it.kind)){if(l?.run)l.run.push(it);else entries.push({id:'run:'+it.id,run:[it]});}else entries.push({id:it.id,it});}
   for(const e of entries){
    const sg=JSON.stringify(e.run||e.it),c=cache.get(e.id);let node=c?.el;
@@ -237,9 +239,10 @@ export function connectSessions({toast,form,workspace,header,hooks}){
    if(node.parentNode!==box||(prev?prev.nextSibling!==node:box.firstChild!==node))box.insertBefore(node,prev?prev.nextSibling:box.firstChild);
    prev=node;
   }
+  if(!(first&&!ui.items.some(i=>i.kind==='user'))&&cache.has('pending-user')){cache.get('pending-user').el.remove();cache.delete('pending-user');}
   for(const f of later)f();
   const t=ui.items.find(i=>i.kind==='user')?.text?.trim().replace(/\s+/g,' ').slice(0,60);
-  if(t&&titles.get(active.id)!==t){titles.set(active.id,t);paint(active.s);paintHeader();}
+  if(t&&!titles.has(active.id)){titles.set(active.id,t);paint(active.s);paintHeader();}
   paintStatus();
  }
  // One live row at the bottom: "Newspapering… 6s · ↓388 · thought 4s". Text is updated in place; the row only adds or removes its own height.
@@ -257,7 +260,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   if(!box||!active)return;
   const items=!!ui?.items?.length;
   if(items!==useItems||(!items&&!cache.size&&false)){useItems=items;box.replaceChildren();cache.clear();}
-  if(items)drawItems();else{renderChat(box,lastMsgs);if(states.get(active.id)==='needs_permission'&&!ui?.prompt)notice(box,active.s);paintStatus();}
+  if(items)drawItems();else{renderChat(box,lastMsgs);const first=firstText.get(active.id);if(first&&!lastMsgs.some(m=>m.role==='user')){const a=el('article','thread-message thread-user',first);box.prepend(a);}if(states.get(active.id)==='needs_permission'&&!ui?.prompt)notice(box,active.s);paintStatus();}
  }
  // Header controls: model / effort / mode menus, quiet usage text, background chip, cwd. Rebuilt only when its inputs change.
  const bgCount=v=>typeof v==='number'?v:Number(v?.count)||0;
@@ -358,7 +361,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   const s=active.s;
   unsubs.forEach(f=>f());unsubs=[];
   const msgs=m=>Array.isArray(m)?m:m?.messages||[];
-  const title=m=>{const t=m.find(x=>x.role==='user')?.text?.trim().replace(/\s+/g,' ').slice(0,60);if(t&&titles.get(s.id)!==t){titles.set(s.id,t);paint(s);paintHeader();}};
+  const title=m=>{const t=m.find(x=>x.role==='user')?.text?.trim().replace(/\s+/g,' ').slice(0,60);if(t&&!titles.has(s.id)){titles.set(s.id,t);paint(s);paintHeader();}};
   lastMsgs=msgs(sx.messages(s.id));
   unsubs.push(sx.onMessages(s.id,m=>{lastMsgs=msgs(m);if(!ui?.items?.length){title(lastMsgs);drawChat();}}));
   unsubs.push(sx.onState(s.id,()=>{if(!ui?.items?.length)drawChat();syncRun();}));
@@ -428,8 +431,8 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   copy.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(s.attachCommand||await sx.attachCommand(s.id));toast('Attach command copied');}catch(e){toast(e.message);}});
   metaEl=el('span','session-meta');metaSig='';header.append(metaEl,seg,copy);paintMeta();
  }
- function open(s){
-  leave();hooks.threadView(name(s));
+ function open(s,animate=false){
+  leave();hooks.threadView(name(s),animate);
   active={id:s.id,s};mode='chat';unpress();rows.get(s.id)?.setAttribute('aria-pressed','true');
   form.hidden=false;form.dataset.session='';prompt().placeholder=`Message ${labels.get(s.id)||'the agent'}`;
   ui=null;cardSig='';paintHeader();showChat();
@@ -448,9 +451,10 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   header.className='thread-header';delete header.dataset.status;
   unpress();
  }
- async function start(agent){
-  const cwd=project();if(!cwd){toast('Choose a project');return;}
-  try{const s=await sx.start({agent,cwd});await refresh();open(rows.get(s.id)?._s||s);}catch(e){toast(e.message);}
+ // Start flow from the composer: the typed text is the first message; resolves false when nothing started.
+ async function start(agent,text){
+  const cwd=project();if(!cwd){toast('Choose a project');return false;}
+  try{const s=await sx.start({agent,cwd});bump(s.id);await refresh();if(text){titles.set(s.id,text.replace(/\s+/g,' ').slice(0,60));firstText.set(s.id,text);await sx.send(s.id,text);}open(rows.get(s.id)?._s||s,true);return true;}catch(e){toast(e.message);return false;}
  }
 
  // Import: searchable history, read-only in the chat renderer, Resume starts a live session.
@@ -491,11 +495,10 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   const box=el('div','thread-messages');hooks.showHistory(box);renderChat(box,msgs);
  }
 
- document.addEventListener('click',e=>{
-  const item=e.target.closest?.('[data-menu-action^="cli-session:"],[data-menu-action^="import-chat:"]');if(!item)return;
-  const [type,value]=item.dataset.menuAction.split(':');
-  if(type==='cli-session')void start(value);else openImport();
- });
+ document.addEventListener('click',e=>{if(e.target.closest?.('[data-menu-action^="import-chat:"]'))openImport();});
+ connectThreadHover(side);
+ connectSessionContextMenu(side,{toast,getSession:row=>{const s=row._s;return s&&{id:s.id,title:name(s),attach:()=>sx.attachCommand(s.id),show:()=>{if(active?.id!==s.id)open(s);setMode('terminal');},stop:async()=>{await sx.stop(s.id);if(active?.id===s.id)hooks.clear?.();await refresh();}};}});
+ threadViewState.subscribe(ev=>{if(ev.type==='update'&&ev.changed?.includes('sidebar')){for(const r of rows.values())paint(r._s);if(active)paintHeader();}});
  void refresh();
  setInterval(()=>tickThreadTimes(side),30000);
  return {
@@ -503,5 +506,6 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   isActive:()=>!!active&&mode==='chat',
   stop(){if(!active||mode!=='chat'||!isWorking())return false;sx.control(active.id,'interrupt').catch(e=>toast(e.message));return true;},
   send(text){if(active)sx.send(active.id,text).catch(e=>toast(e.message));},
+  start,
  };
 }

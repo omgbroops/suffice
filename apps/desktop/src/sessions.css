@@ -78,3 +78,6 @@ body:has(.session-row) .sidebar-empty { display: none; }
 .desktop-app .session-meta { opacity: .6; font-weight: 400; }
 .desktop-app .session-subs { display: contents; }
 .desktop-app .session-notice--quiet.is-error { color: var(--red); }
+/* Session row line 3: provider mark + agent name, same layout as a thread's branch chip. */
+.thread-agent { flex: 1; min-width: 0; display: flex; align-items: center; gap: 5px; }
+.thread-agent > span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
