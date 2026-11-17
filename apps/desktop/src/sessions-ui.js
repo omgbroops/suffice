@@ -4,6 +4,7 @@ import {showPopover,hidePopover} from './popover-motion.js';
 import {createToolWidget} from './tool-widget.js';
 import {renderCode} from './panel-content.js';
 import {summarizeTools} from '../../../packages/backend/src/tui/summary.mjs';
+import {createApproval} from './sessions-approval.js';
 import './sessions.css';
 
 const sx=window.sufficeDesktop?.sessions;
@@ -32,10 +33,10 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  const busy=new Map(),rows=new Map(),states=new Map(),prompts=new Map(),subs=new Map(),labels=new Map(),titles=new Map();
  const name=s=>titles.get(s.id)||`${labels.get(s.id)||s.agent} session`;
  let active=null,mode='chat',unsubs=[],termEl=null,views=null,viewPromise=null,import_=null;
- let ui=null,statusEl=null,uiUnsub=null,subUnsub=null,box=null,useItems=false,lastMsgs=[],card=null,cardSig='',metaEl=null,termBtn=null;const cache=new Map();
+ let ui=null,statusEl=null,uiUnsub=null,subUnsub=null,box=null,useItems=false,lastMsgs=[],metaEl=null,termBtn=null;const cache=new Map();
  const termIds=new Map();
  let cat=null,pend=null,pendTimer=0,metaSig='',openMenu=null,cards=null,cardsSig='',lastDraft='',pickSel=-1,pool=null,ctlOff=null;
- form.addEventListener('submit',e=>{if(card){e.preventDefault();e.stopImmediatePropagation();}},true);
+ form.addEventListener('submit',e=>{if(form.dataset.approval==='true'){e.preventDefault();e.stopImmediatePropagation();}},true);
  const sessionPH=()=>`Message ${labels.get(active?.id)||'the agent'}`;
 
  // Popover list shared by the header controls and the slash completion. Arrows/Enter/Tab/Esc are taken at capture so focus stays where it was.
@@ -329,28 +330,8 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   const p=prompt(),d=ui?.meta?.draft;if(!active||mode!=='chat'||typeof d!=='string'||d===lastDraft)return;lastDraft=d;
   if(d&&!p.value&&document.activeElement!==p){p.value=d;p.dispatchEvent(new Event('input',{bubbles:true}));}
  }
- function drawPrompt(){
-  const p=active?ui?.prompt:null,sg=p?JSON.stringify(p):'';
-  if(sg===cardSig)return;cardSig=sg;
-  if(card){card.remove();card=null;delete form.dataset.approval;for(const c of form.children)c.inert=false;form.resizePrompt?.();}
-  if(!p)return;
-  card=el('section','composer-approval');card.setAttribute('aria-label','Agent approval');
-  card.append(el('h3','',p.title||'Agent needs input'));
-  const body=(p.body||'').split('\n').filter(l=>!/^\s*(Claude Code v|claude-\S+ with \w+ effort)/.test(l)).join('\n').trim();
-  if(p.type==='choice'&&body&&hooks.markdown){const a=el('div','approval-action');a.innerHTML=icon('terminal');a.append(el('span','',p.plan?'Plan':'Request'));const md=el('div','approval-preview-host session-plan');hooks.markdown(md,p.plan||body);card.append(a,md);}
-  else if(body){const a=el('div','approval-action');a.innerHTML=icon('terminal');a.append(el('span','',p.type==='trust'?'Folder':'Request'));
-   const host=el('div','approval-preview-host'),pre=el('pre','approval-preview');pre.tabIndex=0;pre.setAttribute('aria-label','Request details');pre.append(el('code','',body));host.append(pre);card.append(a,host);}
-  for(const q of Array.isArray(p.questions)?p.questions:[]){ // optional structured fields; absent for the current parsers
-   const g=el('div','session-question');g.append(el('div','session-question-text',q.question||q.text||q.title||''));
-   for(const o of q.options||[]){const lab=typeof o==='string'?o:o.label,b=el('button','provider-dialog-button',lab);b.type='button';
-    b.addEventListener('click',()=>{if(q.multiSelect)b.classList.toggle('provider-dialog-primary');else sx.control(active.id,'answerPrompt',{index:o.index??q.options.indexOf(o)}).catch(e=>toast(e.message));});g.append(b);}
-   card.append(g);}
-  const ctl=el('div','approval-controls');
-  for(const o of p.options){const b=el('button',`provider-dialog-button${o.index===p.selected?' provider-dialog-primary':''}`,o.label);b.type='button';
-   b.addEventListener('click',()=>{sx.control(active.id,'answerPrompt',{index:o.index}).catch(e=>toast(e.message));});ctl.append(b);}
-  card.append(ctl);form.append(card);form.dataset.approval='true';
-  for(const c of form.children)c.inert=c!==card;
- }
+ const approval=createApproval({form,markdown:(n,t)=>hooks.markdown(n,t),answer:index=>sx.control(active.id,'answerPrompt',{index}).catch(e=>toast(e.message))});
+ function drawPrompt(){approval.draw(active?ui?.prompt:null,ui?.items);}
  const isWorking=()=>!!active&&(states.get(active.id)==='working'||!!ui?.status);
  function syncRun(){if(active&&mode==='chat'){form.setRunning?.(isWorking());const b=document.querySelector('.send-button');if(b&&isWorking()&&!prompt().value.trim())b.disabled=false;}}
  function showChat(){
@@ -432,7 +413,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   leave();hooks.threadView(name(s));
   active={id:s.id,s};mode='chat';unpress();rows.get(s.id)?.setAttribute('aria-pressed','true');
   form.hidden=false;form.dataset.session='';prompt().placeholder=`Message ${labels.get(s.id)||'the agent'}`;
-  ui=null;cardSig='';paintHeader();showChat();
+  ui=null;approval.clear();paintHeader();showChat();
   uiUnsub=sx.onUi(s.id,u=>{ui=u;if(pend&&u?.meta)pendDone(u.meta);paintMeta();if(mode==='chat')drawChat();drawPrompt();paintCards();syncDraft();syncRun();});
   cat=null;lastDraft='';cardsSig='';sx.catalog?.(s.id).then(c=>{if(active?.id===s.id){cat=c;metaSig='';paintMeta();}}).catch(()=>{});
   const p=prompt();p.addEventListener('input',slash);p.addEventListener('keydown',esc);ctlOff=()=>{p.removeEventListener('input',slash);p.removeEventListener('keydown',esc);};
