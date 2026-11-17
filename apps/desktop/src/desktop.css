@@ -38,7 +38,7 @@
 .thread-view > .atmosphere,.thread-view > .atmosphere-shade,.thread-view > .gradient-ascii-host,.thread-view > .sonar-grid-host,.thread-view > .oceanic-shimmer-host { visibility: hidden; }
 .workspace.thread-view .home { position: absolute; bottom: 16px; left: 0; right: 0; padding: 0; min-height: 0; z-index: 2; }
 .thread-header { position: absolute; top: 0; left: 0; right: calc(var(--window-controls-width) + 8px); height: 54px; padding: 17px 24px; color: var(--text-strong); font-size: 13px; font-weight: 500; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-.thread-view .thread-transcript { position: absolute; inset: 54px 0 0; display: block; overflow-y: auto; scrollbar-gutter: stable both-edges; scroll-padding-bottom: var(--transcript-bottom-space,184px); mask-image: linear-gradient(transparent,black 18px,black calc(100% - 24px),transparent); }
+.thread-view .thread-transcript { position: absolute; inset: 54px 0 0; display: block; overflow-y: auto; scrollbar-gutter: stable both-edges; scroll-padding-bottom: var(--transcript-bottom-space,184px); }
 /* long threads: skip layout/paint of off-screen blocks; auto remembers real height once rendered */
 .thread-messages > :not(:last-child) { content-visibility: auto; contain-intrinsic-size: auto 120px; }
 .thread-messages { width: min(var(--composer-width),calc(100% - 64px)); margin: 0 auto; padding: 16px 0; font-size: 14px; line-height: 22px; letter-spacing: -.01em; }
@@ -129,7 +129,7 @@
 .tool-widget .tool-input,.tool-widget .tool-output { margin: 0; padding: 10px 0; background: transparent; border-radius: 0; max-height: 320px; overflow: auto; font: 12px/1.65 ui-monospace,monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
 .tool-widget .tool-input { color: var(--text-muted); border-bottom: 1px solid var(--border-strong); }
 .tool-widget .tool-output { color: var(--text); }
-.thread-message:empty { display: none; }
+.thread-message:empty:not([data-lazy-markdown]) { display: none; }
 @media(prefers-reduced-motion:reduce){.thread-status { animation: none; background: none; -webkit-text-fill-color: var(--text-muted); }}
 
 .thread-view .thread-messages { padding-bottom: var(--transcript-bottom-space,184px); }
