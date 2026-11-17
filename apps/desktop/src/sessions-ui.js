@@ -4,6 +4,8 @@ import {showPopover,hidePopover} from './popover-motion.js';
 import {createToolWidget} from './tool-widget.js';
 import {renderCode} from './panel-content.js';
 import {summarizeTools} from '../../../packages/backend/src/tui/summary.mjs';
+import {connectSessionHeader,viewId,storedTitle} from './sessions-header.js';
+import {threadViewState as viewState} from './thread-view-state.js';
 import './sessions.css';
 
 const sx=window.sufficeDesktop?.sessions;
@@ -30,7 +32,8 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  const side=el('div','sidebar-cli-sessions');
  document.querySelector('.sidebar-sessions').before(side);
  const busy=new Map(),rows=new Map(),states=new Map(),prompts=new Map(),subs=new Map(),labels=new Map(),titles=new Map();
- const name=s=>titles.get(s.id)||`${labels.get(s.id)||s.agent} session`;
+ const name=s=>storedTitle(s.id)||titles.get(s.id)||`${labels.get(s.id)||s.agent} session`;
+ const sh=connectSessionHeader(header,{current:()=>active?.id,renamed:id=>{const r=rows.get(id);if(r)paint(r._s);}});
  let active=null,mode='chat',unsubs=[],termEl=null,views=null,viewPromise=null,import_=null;
  let ui=null,statusEl=null,uiUnsub=null,subUnsub=null,box=null,useItems=false,lastMsgs=[],card=null,cardSig='',metaEl=null,termBtn=null;const cache=new Map();
  const termIds=new Map();
@@ -385,7 +388,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   if(reduce){T.dataset.solid='';T.hidden=false;const a=T.animate({opacity:dir>0?[0,1]:[1,0]},{duration:120*k,fill:'both'});
    ov={svg:document.createElement('i'),anims:[a],dummy:true};a.onfinish=()=>{venomEnd();if(dir<0){T.hidden=true;delete T.dataset.solid;}};return;}
   if(!ov){
-   const b=header.querySelector('.session-toggle button:last-child'),r=(b||header).getBoundingClientRect(),w=workspace.getBoundingClientRect();
+   const b=document.querySelector('.session-mode-toggle'),r=(b||header).getBoundingClientRect(),w=workspace.getBoundingClientRect();
    const W=w.width,H=w.height,ox=r.left+r.width/2-w.left,oy=r.top+r.height/2-w.top,R=Math.hypot(Math.max(ox,W-ox),Math.max(oy,H-oy))+40;
    const col=getComputedStyle(document.querySelector('.sidebar')).backgroundColor;T.style.setProperty('--venom',col);delete T.dataset.solid;
    const NS='http://www.w3.org/2000/svg',n=(t,at={})=>{const e=document.createElementNS(NS,t);for(const q in at)e.setAttribute(q,at[q]);return e;};
@@ -417,23 +420,16 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  }
  function paintHeader(){
   if(!active)return;
-  const s=active.s,status=statusOf(s);
-  header.className='thread-header thread-header--session';header.dataset.status=status;header.replaceChildren();
-  header.append(el('span','session-title',name(s)));
-  const dot=threadState({status},{unread:false});dot.classList.add('session-state');header.append(dot);
-  const seg=el('div','settings-segment session-toggle');seg.role='group';
-  for(const [k,t] of [['chat','Chat'],['terminal','Terminal']]){const b=el('button','',t);b.type='button';b.setAttribute('aria-pressed',String(mode===k));b.addEventListener('click',()=>{if(mode!==k)setMode(k);});seg.append(b);}
-  const copy=el('button','button button--subtle session-copy');copy.type='button';copy.innerHTML=icon('copy')+'<span>Open in terminal</span>';
-  copy.title='Copy the tmux attach command';
-  copy.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(s.attachCommand||await sx.attachCommand(s.id));toast('Attach command copied');}catch(e){toast(e.message);}});
-  metaEl=el('span','session-meta');metaSig='';header.append(metaEl,seg,copy);paintMeta();
+  header.dataset.status=statusOf(active.s);
+  sh.paint({title:name(active.s),mode,onMode:setMode});
+  metaEl=el('span','session-meta');metaSig='';paintMeta(); // detached: the composer carries these controls
  }
  function open(s){
   leave();hooks.threadView(name(s));
-  active={id:s.id,s};mode='chat';unpress();rows.get(s.id)?.setAttribute('aria-pressed','true');
+  active={id:s.id,s};mode='chat';sh.select(viewId(s.id));unpress();rows.get(s.id)?.setAttribute('aria-pressed','true');
   form.hidden=false;form.dataset.session='';prompt().placeholder=`Message ${labels.get(s.id)||'the agent'}`;
   ui=null;cardSig='';paintHeader();showChat();
-  uiUnsub=sx.onUi(s.id,u=>{ui=u;if(pend&&u?.meta)pendDone(u.meta);paintMeta();if(mode==='chat')drawChat();drawPrompt();paintCards();syncDraft();syncRun();});
+  uiUnsub=sx.onUi(s.id,u=>{ui=u;sh.usage(u?.meta);if(pend&&u?.meta)pendDone(u.meta);paintMeta();if(mode==='chat')drawChat();drawPrompt();paintCards();syncDraft();syncRun();});
   cat=null;lastDraft='';cardsSig='';sx.catalog?.(s.id).then(c=>{if(active?.id===s.id){cat=c;metaSig='';paintMeta();}}).catch(()=>{});
   const p=prompt();p.addEventListener('input',slash);p.addEventListener('keydown',esc);ctlOff=()=>{p.removeEventListener('input',slash);p.removeEventListener('keydown',esc);};
   subs.clear();subLimit.clear();subUnsub=sx.onSubagents?.(s.id,l=>{subs.clear();for(const x of l||[])subs.set(x.callId,x);if(mode==='chat')drawChat();});
@@ -445,7 +441,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   active=null;form.setRunning?.(false);
   venomEnd();if(termEl){termEl.hidden=true;delete termEl.dataset.solid;}
   form.hidden=false;delete form.dataset.session;prompt().placeholder=PH;
-  header.className='thread-header';delete header.dataset.status;
+  delete header.dataset.status;sh.deselect();
   unpress();
  }
  async function start(agent){
@@ -483,10 +479,9 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  async function view(h){
   let msgs;try{msgs=await sx.history.read({source:h.source,path:h.path});}catch(e){toast(e.message);return;}
   leave();hooks.threadView(h.title);import_=h;
-  header.className='thread-header thread-header--session';header.replaceChildren(el('span','session-title',h.title));
-  const resume=el('button','button button--primary session-copy','Resume');resume.type='button';
-  resume.addEventListener('click',async()=>{try{const s=await sx.resume({source:h.source,sessionId:h.sessionId,cwd:h.cwd});import_=null;await refresh();open(rows.get(s.id)?._s||s);}catch(e){toast(e.message);}});
-  header.append(el('span','session-meta',agentName(h.source)),resume);
+  sh.select(viewId('import'));
+  const resume=async()=>{try{const s=await sx.resume({source:h.source,sessionId:h.sessionId,cwd:h.cwd});import_=null;await refresh();open(rows.get(s.id)?._s||s);}catch(e){toast(e.message);}};
+  sh.paintImport({title:h.title,onResume:resume});
   form.hidden=true;
   const box=el('div','thread-messages');hooks.showHistory(box);renderChat(box,msgs);
  }
