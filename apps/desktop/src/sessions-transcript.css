@@ -1,0 +1,21 @@
+/* CLI-session transcript: only what the standard thread components do not already give. */
+.activity-icons .thread-state { display: inline-flex; color: var(--blue); }
+.activity-icons .thread-state .icon { width: 13px; height: 13px; animation: thread-working 1.2s linear infinite; }
+.thread-activity .activity-meta { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text-muted); font-size: 12px; font-weight: 400; opacity: .8; }
+.thread-activity-log > .thread-activity,.thread-activity-log > .tool-widget { margin: 0 0 6px; }
+.thread-activity-log > :last-child { margin-bottom: 0; }
+.thread-activity-log .thread-activity-log { margin-top: 4px; }
+.session-sub > summary { max-width: 100%; width: auto; }
+.session-sub[data-status="error"] > summary { color: var(--red); }
+.session-sub-prompt { margin: 0 0 8px; padding-left: 14px; border-left: 2px solid var(--border-strong); color: var(--text-muted); max-height: 8em; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
+.session-subs { display: contents; }
+.session-todo { display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 13px; line-height: 20px; }
+.session-todo .icon { width: 13px; height: 13px; flex: none; }
+.session-todo[data-status="done"] .icon { color: var(--green); }
+.session-todo[data-status="active"] { color: var(--text); }
+.session-ask-q { color: var(--text); margin: 0 0 4px; }
+.session-note { color: var(--text-muted); font-size: 13px; line-height: 20px; margin: 0 0 12px; overflow-wrap: anywhere; }
+.session-note.is-error { color: var(--red); }
+.session-note.is-warn { color: var(--text); }
+.tool-widget .tool-cmd { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; white-space: pre-wrap; overflow-wrap: anywhere; }
+.tool-diff { margin-top: 6px; }

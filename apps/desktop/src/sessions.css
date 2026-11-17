@@ -31,24 +31,6 @@ body:has(.session-row) .sidebar-empty { display: none; }
 [data-status='working'].thread-header--session .thread-state svg { animation: thread-working 1.2s linear infinite; }
 .popover.session-import .session-import-row { align-items: flex-start; justify-content: flex-start; text-align: left; }
 .session-import-row > span { align-self: flex-start; text-align: left; }
-.tool-widget[data-status='pending'] .thread-state svg { animation: thread-working 1.2s linear infinite; }
-.tool-widget .tool-exit { margin-left: 8px; color: var(--text-muted); font-size: 11px; }
-.session-notice--quiet { border: 0; padding: 2px 4px; color: var(--text-muted); font-size: 12px; justify-content: flex-start; }
-.session-todo { color: var(--text-muted); font-size: 13px; padding: 1px 0; }
-.tool-diff { margin-top: 6px; }
-.session-run { margin: 2px 0; }
-.session-run > summary { cursor: pointer; }
-.session-run-body { display: flex; flex-direction: column; gap: 4px; padding-top: 4px; }
-.tool-widget .tool-cmd { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; white-space: pre-wrap; overflow-wrap: anywhere; }
-.session-status { display: flex; align-items: center; gap: 8px; padding: 4px 0; color: var(--text-muted); font-size: 13px; }
-.session-status .thread-state { color: #60a5fa; }
-.session-status .thread-state svg { animation: thread-working 1.2s linear infinite; }
-.session-sub > .session-sub-sum { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 10px; cursor: pointer; max-width: 100%; }
-.session-sub-head { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.session-sub-stats { flex: 0 0 100%; padding-left: 15px; color: var(--text-muted); font-size: 12px; font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.session-sub-body { display: flex; flex-direction: column; gap: 4px; }
-.session-sub-body > .button { align-self: flex-start; }
-.session-sub-flat { margin-left: 0; }
 /* CLI session controls: same popover, menu-item and chip styles as the rest of the app. */
 .menu-item[data-active] { background: var(--menu-hover); }
 .thread-header--session .session-meta { display: flex; align-items: center; gap: 8px; }
@@ -76,5 +58,3 @@ body:has(.session-row) .sidebar-empty { display: none; }
 .desktop-app .thread-header.thread-header--session { overflow: clip; }
 
 .desktop-app .session-meta { opacity: .6; font-weight: 400; }
-.desktop-app .session-subs { display: contents; }
-.desktop-app .session-notice--quiet.is-error { color: var(--red); }

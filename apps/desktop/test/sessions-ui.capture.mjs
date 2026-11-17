@@ -36,7 +36,7 @@ const SKEYS=['model','effortLevel','modelSettings'],settingsPath=resolve(process
 const snap=async()=>{try{const o=JSON.parse(await readFile(settingsPath,'utf8'));return Object.fromEntries(SKEYS.map(k=>[k,o[k]]));}catch{return null;}};
 const settings0=REAL?await snap():null;
 const settingsSame=async()=>JSON.stringify(await snap())===JSON.stringify(settings0);
-const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),`--user-data-dir=${data}`],env});
+const app=await _electron.launch({executablePath:electronPath,args:['-r','/Users/abhayg/suffice-desktop-wt/ui-shots/no-dialog.cjs',resolve('apps/desktop'),`--user-data-dir=${data}`],env});
 let page;const appPid=app.process().pid;try{
  page=await app.firstWindow();page.on('console',m=>{if(m.type()==='error')console.error('PAGE',m.text().slice(0,200));});const errors=[];page.setDefaultTimeout(12000);page.on('pageerror',e=>errors.push(e.message));
  await page.locator('[data-action="send-menu"]').waitFor();
@@ -70,20 +70,20 @@ let page;const appPid=app.process().pid;try{
   await page.locator('[data-menu-action="cli-session:fakeclaude"]').click();
   await page.locator('.composer-approval:not([hidden])').waitFor({timeout:20000});await page.waitForTimeout(600);
   await shot('chat-prompt.png');
-  await page.locator('.session-status').waitFor({timeout:5000});await shot('chat-working.png');
+  await page.locator('.thread-status').waitFor({timeout:5000});await shot('chat-working.png');
   await page.locator('.composer-approval button',{hasText:/^\s*(1\.\s*)?Yes\s*$/}).first().click();await page.waitForTimeout(300);if(await page.locator('dialog.detail-dialog[open]').count())throw new Error('detail dialog opened after Yes');
-  await page.waitForFunction(()=>!document.querySelector('.session-status')&&document.querySelector('.session-run')?.dataset.running==='false',null,{timeout:15000});await page.waitForTimeout(500);
+  await page.waitForFunction(()=>!document.querySelector('.thread-status')&&document.querySelector('.thread-activity')?.dataset.running==='false',null,{timeout:15000});await page.waitForTimeout(500);
   await shot('chat-summary-collapsed.png');
-  {const r=page.locator('.session-run:has(.tool-diff)').first();if(!await r.evaluate(e=>e.open)){await r.locator('> summary').click();await page.waitForTimeout(400);}}
+  {const r=page.locator('.thread-activity:has(.tool-diff)').first();if(!await r.evaluate(e=>e.open)){await r.locator('> summary').click();await page.waitForTimeout(400);}}
   await shot('chat-summary-open.png');
   // subagent blocks: a2 running, a1 done with a nested child
   const subs=page.locator('.session-sub'),scrollTo=l=>l.evaluate(e=>e.scrollIntoView({block:'center'}));
   if(await subs.count()!==2)throw new Error('expected 2 subagent blocks, got '+await subs.count());
-  const runText=await page.locator('.session-run:has(.session-sub) > summary').first().textContent();if(!/ran 1 subagent.*running 1 subagent/.test(runText))throw new Error('run summary: '+runText);
+  const runText=await page.locator('.thread-activity:has(.session-sub) > summary').first().textContent();if(!/ran 1 subagent.*running 1 subagent/.test(runText))throw new Error('run summary: '+runText);
   await scrollTo(subs.nth(1));await page.waitForTimeout(200);await shot('subagent-running.png');
   await scrollTo(subs.nth(0));await page.waitForTimeout(200);await shot('subagent-done-collapsed.png');
   await subs.nth(0).locator('> summary').click();await page.waitForTimeout(400);await scrollTo(subs.nth(0));await shot('subagent-open.png');
-  await subs.nth(0).locator('.session-run:has(.session-sub)').first().locator('> summary').click();await page.waitForTimeout(300);
+  await subs.nth(0).locator('.thread-activity:has(.session-sub)').first().locator('> summary').click();await page.waitForTimeout(300);
   await subs.nth(0).locator('.session-sub').first().locator('> summary').click();await page.waitForTimeout(400);await scrollTo(subs.nth(0).locator('.session-sub').first());await shot('subagent-nested.png');
   await page.locator('.tool-widget:has(.tool-diff) summary').first().click().catch(()=>{});
   await page.waitForTimeout(400);
@@ -171,7 +171,7 @@ let page;const appPid=app.process().pid;try{
   const t1=Date.now();
   for(let i=0;i<60;i++){const u=await U();if(u.prompt){const pr=await page.evaluate(id=>sufficeDesktop.sessions.ui(id).prompt,sid);const o=pr.options.find(x=>/^yes/i.test(x.label))||pr.options[0];log.push('c prompt:'+pr.title);await page.evaluate(([id,i])=>sufficeDesktop.sessions.control(id,'answerPrompt',{index:i}),[sid,o.index]);break;}if(Date.now()-t1>3000)break;await page.waitForTimeout(500);}
   await page.waitForTimeout(300);
-  const wasWorking=await page.evaluate(()=>document.querySelector('.session-run')?.dataset.running==='true'||!!document.querySelector('.session-status'));log.push('c working '+wasWorking);
+  const wasWorking=await page.evaluate(()=>document.querySelector('.thread-activity')?.dataset.running==='true'||!!document.querySelector('.thread-status'));log.push('c working '+wasWorking);
   await page.locator('.send-button').click();
   let intr=false;try{await page.waitForFunction(id=>(sufficeDesktop.sessions.ui(id)?.items||[]).some(i=>i.kind==='notice'&&/interrupted/i.test(i.text||'')),sid,{timeout:15000});intr=true;}catch{}
   log.push('c interrupted '+intr);if(!intr)log.push('SOFT interrupt failed');
@@ -185,7 +185,7 @@ let page;const appPid=app.process().pid;try{
  await writeFile(resolve(output,'verification.json'),JSON.stringify({viewport:{width:1440,height:900},pageErrors:errors},null,2));
  if(errors.length)throw new Error(errors.join('\n'));
  console.log(JSON.stringify({ready:true,output}));
-}catch(e){try{await page.screenshot({path:'/private/tmp/claude-501/-Users-abhayg--claude/88968a81-d5d8-4bde-b35e-a21bdddc9620/scratchpad/fail.png'});}catch{}try{console.error('DBG',JSON.stringify(await page.evaluate(async()=>({u:await Promise.all((await sufficeDesktop.sessions.list()).map(async x=>[x.id,(u=>JSON.stringify({m:u?.meta,p:u?.prompt,s:u?.status,n:u?.items?.length}))(sufficeDesktop.sessions.ui(x.id))])),h:document.querySelector('.thread-header--session')?.outerHTML.slice(0,100),ss:document.querySelectorAll('.session-status').length,last:[...document.querySelectorAll('.thread-messages')].map(b=>b.children.length+':'+b.lastElementChild?.className),term:!!document.querySelector('.session-terminal:not([hidden])'),t:document.querySelector('.session-terminal')?.innerHTML.slice(0,200),r:document.querySelector('.session-terminal .xterm-rows')?.textContent.slice(0,300)}))));}catch{}console.error('FAIL',e.message.slice(0,1500));process.exitCode=1;}finally{
+}catch(e){try{await page.screenshot({path:'/private/tmp/claude-501/-Users-abhayg--claude/88968a81-d5d8-4bde-b35e-a21bdddc9620/scratchpad/fail.png'});}catch{}try{console.error('DBG',JSON.stringify(await page.evaluate(async()=>({u:await Promise.all((await sufficeDesktop.sessions.list()).map(async x=>[x.id,(u=>JSON.stringify({m:u?.meta,p:u?.prompt,s:u?.status,n:u?.items?.length}))(sufficeDesktop.sessions.ui(x.id))])),h:document.querySelector('.thread-header--session')?.outerHTML.slice(0,100),ss:document.querySelectorAll('.thread-status').length,last:[...document.querySelectorAll('.thread-messages')].map(b=>b.children.length+':'+b.lastElementChild?.className),term:!!document.querySelector('.session-terminal:not([hidden])'),t:document.querySelector('.session-terminal')?.innerHTML.slice(0,200),r:document.querySelector('.session-terminal .xterm-rows')?.textContent.slice(0,300)}))));}catch{}console.error('FAIL',e.message.slice(0,1500));process.exitCode=1;}finally{
  if(REAL&&settings0&&!await settingsSame()){console.error('LOUD: settings.json default keys CHANGED during the real run; restoring them');process.exitCode=1;
   try{const o=JSON.parse(await readFile(settingsPath,'utf8'));for(const k of SKEYS){if(settings0[k]===undefined)delete o[k];else o[k]=settings0[k];}await writeFile(settingsPath,JSON.stringify(o,null,2)+'\n');}catch(e){console.error('LOUD: restore failed',e.message);}}
  await Promise.race([app.close(),new Promise(r=>setTimeout(r,5000))]).catch(()=>{});

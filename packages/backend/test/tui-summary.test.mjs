@@ -37,7 +37,7 @@ test('unknown diff sizes omit the counts', () => {
 
 test('mixed runs keep first-seen order and join with commas', () => {
   const r = summarizeTools([tool('read'), tool('shell'), tool('read'), edit([{ path: 'a', newText: 'x' }]), tool('search')]);
-  assert.equal(r.text, 'Read 2 files, ran 1 shell command, made 1 edit +1, searched 1 time');
+  assert.equal(r.text, 'Read 2 files, ran 1 shell command, made 1 edit +1, and 1 more');
   assert.deepEqual(r.parts.map((p) => [p.category, p.count]), [['read', 2], ['shell', 1], ['edit', 1], ['search', 1]]);
 });
 
@@ -64,4 +64,17 @@ test('AskUserQuestion and ExitPlanMode get their own wording', () => {
   assert.equal(text([tool('other', { name: 'AskUserQuestion', status: 'running' })]), 'Asking 1 question…');
   assert.equal(text([tool('other', { name: 'ExitPlanMode' })]), 'Proposed 1 plan');
   assert.equal(text([tool('other', { name: 'ExitPlanMode' }), tool('other', { name: 'ExitPlanMode' })]), 'Proposed 2 plans');
+});
+
+test('past tense once the session is not working; no ellipsis', () => {
+  const run = [tool('read'), tool('shell', { status: 'running' })];
+  assert.equal(summarizeTools(run, { working: false }).text, 'Read 1 file, ran 1 shell command');
+  assert.equal(summarizeTools(run, { working: true }).text, 'Read 1 file, ran 1 shell command'.replace('ran', 'running') + '…');
+});
+
+test('caps at 3 activity clauses then "and N more"; failures still show', () => {
+  const six = [tool('read'), tool('shell'), tool('search'), tool('web'), tool('mcp'), edit(null)];
+  assert.equal(text(six), 'Read 1 file, ran 1 shell command, searched 1 time, and 3 more');
+  assert.equal(text([...six, tool('read', { status: 'error' })]), 'Read 2 files, ran 1 shell command, searched 1 time, and 3 more, 1 failed');
+  assert.equal(text(six.slice(0, 3)), 'Read 1 file, ran 1 shell command, searched 1 time');
 });
