@@ -5,11 +5,12 @@ import {mkdtemp,mkdir,writeFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import {_electron} from 'playwright-core';
+import {guard} from './electron-guard.mjs';
 
 test('settings persist real preferences, preserve chats and use Pi provider registry',{timeout:60000},async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-settings-')),env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
  const sessions=resolve(home,'sessions','fixture');await mkdir(sessions,{recursive:true});for(let index=0;index<24;index++){const timestamp=new Date().toISOString();await writeFile(resolve(sessions,`${index}.jsonl`),[{type:'session',version:3,id:`settings-${index}`,timestamp,cwd:home},{type:'message',id:'user',parentId:null,timestamp,message:{role:'user',content:[{type:'text',text:`Settings fixture ${index}`}],timestamp:Date.now()}}].map(value=>JSON.stringify(value)).join('\n')+'\n');}
- const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
+ const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
  try{
   const page=await app.firstWindow(),errors=[];page.on('pageerror',error=>errors.push(error.message));await app.evaluate(({BrowserWindow})=>{const win=BrowserWindow.getAllWindows()[0];win.setContentSize(1440,900);win.setPosition(0,0);});if(process.platform==='darwin')await page.setViewportSize({width:1440,height:900});await page.waitForFunction(()=>innerWidth===1440&&innerHeight===900);await page.locator('.sidebar-scroll-rail').waitFor({state:'visible'});await page.locator('#prompt').fill('Keep my draft');await page.getByRole('button',{name:'Settings',exact:true}).click();
   await page.getByRole('heading',{name:'General',exact:true}).waitFor();assert.equal(await page.locator('.home').evaluate(el=>el.inert),true);assert.equal(await page.locator('.sidebar > .settings-page').count(),1);assert.equal(await page.locator('.workspace > .settings-main').count(),1);assert.equal(await page.locator('.settings-preview,.settings-unavailable').count(),0);assert.equal(await page.locator('.sidebar-bottom').count(),0);assert.equal(await page.locator('.sidebar-tools').getByRole('button',{name:'Back to chats',exact:true}).count(),1);await page.waitForTimeout(400);assert.match(await page.locator('.settings-card').first().evaluate(el=>getComputedStyle(el).backdropFilter),/blur/);

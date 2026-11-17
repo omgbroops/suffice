@@ -5,12 +5,13 @@ import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import electronPath from 'electron';
 import {_electron} from 'playwright-core';
+import {guard} from './electron-guard.mjs';
 
 test('real utility-process failure recovers saved chats without replay and relaunch restores drafts',{timeout:60000},async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-recovery-')),dir=resolve(home,'sessions','fixture');await mkdir(dir,{recursive:true});
  const timestamp=new Date().toISOString(),source=[{type:'session',version:3,id:'recovery',timestamp,cwd:home},{type:'message',id:'user',parentId:null,timestamp,message:{role:'user',content:[{type:'text',text:'Recovery fixture'}],timestamp:Date.now()}}].map(JSON.stringify).join('\n')+'\n';await writeFile(resolve(dir,'saved.jsonl'),source);
  const env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
- const launch=()=>_electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'profile')],env});
+ const launch=()=>_electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'profile')],env});
  let app=await launch();
  try{
   let page=await app.firstWindow();await page.locator('.thread-row').first().waitFor();const [thread]=await page.evaluate(()=>window.sufficeDesktop.threads());

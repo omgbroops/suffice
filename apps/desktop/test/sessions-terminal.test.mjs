@@ -39,6 +39,7 @@ try{
  const shot=n=>page.screenshot({path:resolve(shots,n)});
  const start=async agent=>{await page.locator('[data-action="send-menu"]').click();await page.waitForTimeout(250);await page.locator(`[data-menu-action="cli-session:${agent}"]`).click();await page.locator('.thread-header--session').waitFor();};
  const ids=()=>page.evaluate(async()=>(await sufficeDesktop.sessions.list()).map(s=>s.id));
+const titleW=()=>page.evaluate(()=>document.querySelector('.session-title')?.getBoundingClientRect().width||0);
  const startNew=async agent=>{const before=await ids();await start(agent);let n=[];for(let i=0;i<40&&!n.length;i++){n=(await ids()).filter(x=>!before.includes(x));if(!n.length)await page.waitForTimeout(100);}if(n.length!==1)throw new Error('expected one new session, got '+n);return n[0];};
  await page.locator('[data-action="send-menu"]').waitFor();
  // fake agent
@@ -48,6 +49,7 @@ try{
  const g0=await geo(page).catch(()=>null);const ws=await page.evaluate(()=>{const r=document.querySelector('.workspace').getBoundingClientRect();return {x:Math.round(r.left+r.width/2),y:Math.round(r.top+r.height/2)};});
  const chatPx=await pixel(app,ws.x,ws.y);await shot('chat.png');
  check(tmux('show-options','-t','sfx-'+id,'mouse')==='mouse on','tmux mouse on: '+tmux('show-options','-t','sfx-'+id,'mouse'));
+ {const w=await titleW();check(w>40,'fake session: .session-title visible, width '+Math.round(w));}
  const t0=Date.now();await page.locator('.session-toggle button',{hasText:'Terminal'}).click();
  await page.locator('.session-terminal .xterm-rows').waitFor();
  await page.waitForFunction(()=>document.querySelector('.session-terminal .xterm-rows')?.textContent.includes('ECHO:hello'));
@@ -81,6 +83,7 @@ try{
  const cid=await startNew('fakeclaude');
  await page.locator('.composer-approval:not([hidden])').waitFor({timeout:20000});await page.waitForTimeout(600);
  check(tmux('show-options','-t','sfx-'+cid,'mouse')==='mouse on','fake claude session: tmux mouse on');
+ {const w=await titleW();check(w>40,'Claude session: .session-title visible, width '+Math.round(w));}
  {const b=await page.locator('.session-toggle button',{hasText:'Terminal'}).boundingBox();check(!!b&&b.x+b.width<=1440,'Claude header: Chat/Terminal toggle on screen');await page.locator('.session-toggle button',{hasText:'Terminal'}).click();}
  await page.locator('.session-terminal .xterm-rows').waitFor();
  check(await page.evaluate(()=>{const c=document.querySelector('.session-copy').getBoundingClientRect();console.log('copy right',c.right,innerWidth);return c.right<=innerWidth;}),'Claude header: Open in terminal on screen');
@@ -99,7 +102,7 @@ try{
  await page.screenshot({path:resolve(shots,'right-panel-terminal.png')});
  const rg=await page.evaluate(()=>({w:document.querySelector('.terminal-session').clientWidth,cols:(m=>Math.round(document.querySelector('.xterm-screen').getBoundingClientRect().width/(m.getBoundingClientRect().width/m.textContent.length)))(document.querySelector('.xterm-char-measure-element'))}));
  check(rg.cols>30,'right-panel terminal fitted, cols '+rg.cols);
-}catch(e){console.error('FAIL',e.stack?.slice(0,1500));try{console.error('HDR',await page.evaluate(()=>document.querySelector('.thread-header')?.outerHTML.slice(0,900)));await page.screenshot({path:resolve(tmp,'fail.png')});await (await import('node:fs/promises')).copyFile(resolve(tmp,'fail.png'),'/private/tmp/claude-501/-Users-abhayg--claude/67e78d96-89e3-4854-bc71-4f3b6e63e6af/scratchpad/fail.png');}catch{}failures.push(e.message);}
+}catch(e){console.error('FAIL',e.stack?.slice(0,1500));try{console.error('HDR',await page.evaluate(()=>(h=>h&&h.outerHTML.replace(/</g,'[').slice(0,900)+' DISPLAY='+getComputedStyle(h).display+' W='+h.getBoundingClientRect().width+' KIDS='+h.children.length)(document.querySelector('.thread-header'))));await page.screenshot({path:resolve(tmp,'fail.png')});await (await import('node:fs/promises')).copyFile(resolve(tmp,'fail.png'),resolve(shots,'fail.png'));}catch{}failures.push(e.message);}
 finally{try{await app?.close();}catch{}tmux('kill-server');await rm(tmp,{recursive:true,force:true});}
 if(failures.length){console.error('failures:',failures);process.exit(1);}
 console.log('all checks passed');process.exit(0);

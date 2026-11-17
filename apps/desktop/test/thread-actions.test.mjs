@@ -1,7 +1,8 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {mkdtemp} from 'node:fs/promises';import {tmpdir} from 'node:os';import {resolve} from 'node:path';import electronPath from 'electron';import {_electron} from 'playwright-core';
+import {guard} from './electron-guard.mjs';
 test('thread context actions persist and archived chats restore from settings',{timeout:60000},async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-thread-actions-')),env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
- const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'profile')],env});
+ const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'profile')],env});
  try{
   await app.evaluate(({ipcMain})=>{ipcMain.removeHandler('suffice:threads');ipcMain.handle('suffice:threads',()=>[{id:'a'.repeat(32),title:'First chat',status:'done',project:'Fixture',modified:100},{id:'b'.repeat(32),title:'Second chat',status:'done',project:'Fixture',modified:90}]);ipcMain.removeHandler('suffice:thread');ipcMain.handle('suffice:thread',(_event,id)=>({id,title:'Fixture',messages:[]}));});
   const page=await app.firstWindow();await page.evaluate(()=>localStorage.setItem('suffice-sidebar-preferences-v1',JSON.stringify({compact:true})));await page.reload();const first=()=>page.locator('.thread-row[data-thread="'+ 'a'.repeat(32)+'"]'),second=()=>page.locator('.thread-row[data-thread="'+'b'.repeat(32)+'"]');await first().waitFor();

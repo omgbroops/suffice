@@ -6,6 +6,7 @@ import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import electronPath from 'electron';
 import {_electron} from 'playwright-core';
+import {guard} from './electron-guard.mjs';
 const {windowChrome}=createRequire(import.meta.url)('../electron/window-chrome.cjs');
 
 test('macOS uses native traffic lights; the development preview never spoofs the platform',()=>{
@@ -18,7 +19,7 @@ test('macOS uses native traffic lights; the development preview never spoofs the
 test('caption layout reserves wordmark space, clamps old widths, and keeps the left cutout when collapsed',{timeout:60000},async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-caption-')),dir=resolve(home,'sessions','fixture');await mkdir(dir,{recursive:true});const timestamp=new Date().toISOString();await writeFile(resolve(dir,'chat.jsonl'),[{type:'session',version:3,id:'caption',timestamp,cwd:home},{type:'message',id:'user',parentId:null,timestamp,message:{role:'user',content:[{type:'text',text:'Caption fixture'}],timestamp:Date.now()}}].map(JSON.stringify).join('\n')+'\n');
  const env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home,SUFFICE_WINDOW_CHROME:'macos'};delete env.ELECTRON_RUN_AS_NODE;
- const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'profile')],env});
+ const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'profile')],env});
  try{
   const page=await app.firstWindow();await page.locator('.window-controls button').first().waitFor();await page.evaluate(()=>localStorage.setItem('suffice-sidebar-width','190'));await page.reload();await page.locator('.window-controls button').first().waitFor();assert.equal(await page.locator('html').getAttribute('data-window-chrome'),'macos-preview');
   const separator=page.getByRole('separator',{name:'Resize sidebar',exact:true});assert.equal(await separator.getAttribute('aria-valuemin'),'280');assert.equal(await page.locator('.sidebar').evaluate(el=>el.offsetWidth),280);

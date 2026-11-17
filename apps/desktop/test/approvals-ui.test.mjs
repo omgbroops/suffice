@@ -5,10 +5,11 @@ import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import electronPath from 'electron';
 import {_electron} from 'playwright-core';
+import {guard} from './electron-guard.mjs';
 
 test('composer approvals preserve drafts, isolate threads, and send explicit Allow/Deny answers',{timeout:60000},async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-approval-ui-')),env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
- const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'profile')],env});
+ const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'profile')],env});
  try{const page=await app.firstWindow();await page.locator('.composer').waitFor();await app.evaluate(({ipcMain,BrowserWindow})=>{
   globalThis.answers=[];globalThis.pending=new Map();
   for(const action of ['run','thread','threads','approval-answer'])ipcMain.removeHandler('suffice:'+action);
