@@ -6,6 +6,7 @@ import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import {_electron} from 'playwright-core';
 import {nativeHitTests} from './native-hit-test.mjs';
+import {guard} from './electron-guard.mjs';
 
 test('Electron loads the unchanged shell and reaches the real isolated harness', {timeout:60000},async()=>{
   const home=await mkdtemp(resolve(tmpdir(),'suffice-desktop-test-'));
@@ -20,7 +21,7 @@ test('Electron loads the unchanged shell and reaches the real isolated harness',
     await writeFile(resolve(sessions,id+'.jsonl'),entries.map(e=>JSON.stringify(e)).join('\n')+'\n');
   }
   const env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
-  const electron=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
+  const electron=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
   try{
     const page=await electron.firstWindow();
     const errors=[];page.on('pageerror',error=>errors.push(error.message));

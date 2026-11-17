@@ -9,7 +9,7 @@ import {renderCode} from './panel-content.js';
 import {summarizeTools} from '../../../packages/backend/src/tui/summary.mjs';
 import './sessions-transcript.css';
 
-const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
+import {el} from './sessions-util.js';
 const base=p=>String(p||'').split('/').filter(Boolean).pop()||'';
 const dur=n=>n<60?n+'s':Math.floor(n/60)+'m '+String(n%60).padStart(2,'0')+'s';
 const kfmt=n=>n>=1000?(n/1000).toFixed(1).replace(/\.0$/,'')+'k':String(n);
@@ -25,7 +25,7 @@ const hide=it=>it.kind==='usage'||it.internal||it.queued;
 const spin=summary=>summary.querySelector('.activity-icons')?.replaceChildren(threadState({status:'working'}));
 
 // ctx: {box(), ui(), working(), background(), sub(callId), short(text), onFirstUser(text)}; hooks: {markdown, bottom}
-export function createTranscript({hooks,ctx}){
+function createCore({hooks,ctx}){
  const cache=new Map(),subLimit=new Map(),SHOW=200;let statusEl=null;
  const mark=(n,id)=>{n.dataset.itemId=String(id);return n;};
 
@@ -174,4 +174,44 @@ export function createTranscript({hooks,ctx}){
  // Leaving a session: forget nodes and the status line (box itself is replaced by the caller).
  function reset(){cache.clear();subLimit.clear();statusEl=null;}
  return {draw,paintStatus:()=>paintStatus(),reset};
+}
+
+// Session glue: owns the plain-message fallback, chat show/draw and the items feed (core above).
+export function createTranscript(c){
+ const {sx,hooks,states,titles,subs}=c;
+ // Display-only path shortening: cwd-relative, home as ~, one path over 80 chars elided in the middle. Full text goes in a tooltip.
+ const short=t=>String(t).replace(/\/[\w.@+~-]+(?:\/[\w.@+~ -]*[\w.@+~-])+/g,p=>{const cwd=c.active?.s.cwd||'',home=sx.home||'';
+  let r=cwd&&p.startsWith(cwd+'/')?p.slice(cwd.length+1):home&&p.startsWith(home+'/')?'~'+p.slice(home.length):p;
+  if(r.length>80){const seg=r.split('/');r='…/'+seg.slice(-2).join('/');}return r;});
+ const bgCount=v=>typeof v==='number'?v:Number(v?.count)||0;
+ const tr=createCore({hooks,ctx:{box:()=>c.box,ui:()=>c.ui,working:()=>c.isWorking(),background:()=>bgCount(c.ui?.meta?.backgroundTasks),sub:id=>subs.get(id),short,
+  onFirstUser:t=>{if(c.active&&titles.get(c.active.id)!==t){titles.set(c.active.id,t);c.paint(c.active.s);c.paintHeader();}}}});
+ function renderChat(box,messages){
+  box.replaceChildren();
+  for(const m of messages){const role=m.role==='user'?'user':'assistant';const a=el('article',`thread-message thread-${role}`);if(role==='assistant')hooks.markdown(a,m.text);else a.textContent=m.text;box.append(a);}
+  hooks.bottom();
+ }
+ const notice=(box,s)=>{
+  const n=el('div','session-notice');n.append(el('span','',states.get(s.id)==='needs_permission'?'Waiting for you in the terminal':''));
+  const b=el('button','button button--subtle','Open terminal');b.type='button';b.addEventListener('click',()=>c.setMode('terminal'));n.append(b);
+  box.append(n);
+ };
+ function drawChat(){
+  if(!c.box||!c.active)return;
+  const items=!!c.ui?.items?.length;
+  if(items!==c.useItems){c.useItems=items;c.box.replaceChildren();tr.reset();}
+  if(items)tr.draw();else{renderChat(c.box,c.lastMsgs);if(states.get(c.active.id)==='needs_permission'&&!c.ui?.prompt)notice(c.box,c.active.s);tr.paintStatus();}
+ }
+ function showChat(){
+  c.box=el('div','thread-messages');hooks.showHistory(c.box);tr.reset();c.useItems=false;
+  const s=c.active.s;
+  c.unsubs.forEach(f=>f());c.unsubs=[];
+  const msgs=m=>Array.isArray(m)?m:m?.messages||[];
+  const title=m=>{const t=m.find(x=>x.role==='user')?.text?.trim().replace(/\s+/g,' ').slice(0,60);if(t&&titles.get(s.id)!==t){titles.set(s.id,t);c.paint(s);c.paintHeader();}};
+  c.lastMsgs=msgs(sx.messages(s.id));
+  c.unsubs.push(sx.onMessages(s.id,m=>{c.lastMsgs=msgs(m);if(!c.ui?.items?.length){title(c.lastMsgs);drawChat();}}));
+  c.unsubs.push(sx.onState(s.id,()=>{drawChat();c.syncRun();}));
+  drawChat();c.syncRun();
+ }
+ return {drawChat,showChat,renderChat};
 }

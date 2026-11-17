@@ -7,6 +7,7 @@ import {mkdir,mkdtemp,writeFile,readFile,readdir,realpath} from 'node:fs/promise
 import {tmpdir} from 'node:os';
 import {execFileSync} from 'node:child_process';
 import {createClaudeMapper} from '../../../packages/backend/src/tui/claude.mjs';
+import {guard} from './electron-guard.mjs';
 
 const root=resolve('.'),SIM=resolve(root,'packages/backend/tools/tui-sim'),FIX=resolve(root,'packages/backend/test/fixtures/tui-real/claude');
 const out=resolve(root,'apps/desktop/visual-review/sessions-sim');await mkdir(out,{recursive:true});
@@ -58,13 +59,13 @@ function stepsOf(scn){
 // ---- in-page helpers
 const INSTALL=`(()=>{if(window.__sw)return;window.__sw=1;window.__gap=0;window.__idle=0;let last=performance.now();
  const f=t=>{window.__gap=Math.max(window.__gap,t-last);last=t;requestAnimationFrame(f);};requestAnimationFrame(f);
- let since=0;setInterval(()=>{const idle=!document.querySelector('.thread-status,.composer-approval:not([hidden]),.session-picker');if(!idle)since=0;else if(!since)since=performance.now();window.__idle=since?performance.now()-since:0;},100);})()`;
+ let since=0;setInterval(()=>{const idle=!document.querySelector('.session-status,.composer-approval:not([hidden]),.session-picker');if(!idle)since=0;else if(!since)since=performance.now();window.__idle=since?performance.now()-since:0;},100);})()`;
 const SNAP=`(()=>{
  const q=s=>document.querySelector(s),t=(e,n=200)=>(e?.textContent||'').replace(/\\s+/g,' ').trim().slice(0,n);
  const box=q('.thread-messages'),rows=[];
- const kind=e=>{const c=e.className||'';return /thread-user/.test(c)?'user':/thread-assistant/.test(c)?'assistant':/thread-reasoning/.test(c)?'reasoning':/thread-activity/.test(c)?'run':/session-sub/.test(c)?'subagent':/thread-status/.test(c)?'working':/session-queued/.test(c)?'queued':/session-notice/.test(c)?'notice':/session-todo/.test(c)?'plan':/tool-widget|thread-detail/.test(c)?'tool':'other:'+c.slice(0,30);};
+ const kind=e=>{const c=e.className||'';return /thread-user/.test(c)?'user':/thread-assistant/.test(c)?'assistant':/thread-reasoning/.test(c)?'reasoning':/session-run/.test(c)?'run':/session-sub/.test(c)?'subagent':/session-status/.test(c)?'working':/session-queued/.test(c)?'queued':/session-notice/.test(c)?'notice':/session-todo/.test(c)?'plan':/tool-widget|thread-detail/.test(c)?'tool':'other:'+c.slice(0,30);};
  for(const e of box?box.children:[]){const r={kind:kind(e),text:t(e),open:e.tagName==='DETAILS'?e.open:undefined};
-  if(r.kind==='run'){r.summary=t(e.querySelector(':scope > summary'));r.children=[...e.querySelectorAll(':scope > .thread-activity-log > *')].slice(0,60).map(c=>({kind:kind(c),text:t(c,120),open:c.tagName==='DETAILS'?c.open:undefined,id:c.dataset?.callId}));r.full=e.textContent.length;}
+  if(r.kind==='run'){r.summary=t(e.querySelector(':scope > summary'));r.children=[...e.querySelectorAll('.session-run-body > *')].slice(0,60).map(c=>({kind:kind(c),text:t(c,120),open:c.tagName==='DETAILS'?c.open:undefined,id:c.dataset?.callId}));r.full=e.textContent.length;}
   rows.push(r);}
  const card=q('.composer-approval:not([hidden])'),pk=q('.session-picker'),p=q('#prompt'),sb=q('.send-button'),hdr=q('.thread-header--session'),row=q('.session-row[aria-pressed="true"]')||q('.session-row');
  const sp=getComputedStyle(box||document.body);
@@ -76,7 +77,7 @@ const SNAP=`(()=>{
   picker:pk?{title:t(pk.querySelector('.popover-heading')),opts:[...pk.querySelectorAll('.menu-item')].map(b=>({t:t(b),sel:!!b.querySelector('.menu-check')}))}:null,
   mem:performance.memory?.usedJSHeapSize||0,gap:window.__gap,idle:window.__idle};})()`;
 
-const app=await _electron.launch({executablePath:electronPath,args:['-r','/Users/abhayg/suffice-desktop-wt/ui-shots/no-dialog.cjs',resolve(root,'apps/desktop'),`--user-data-dir=${data}`],env});
+const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve(root,'apps/desktop'),`--user-data-dir=${data}`],env});
 const pid=app.process().pid;let launches=1;
 let result={};try{result=JSON.parse(await readFile(resolve(out,'SWEEP.json'),'utf8'));}catch{}
 try{
@@ -129,7 +130,7 @@ try{
      await page.locator('.session-terminal .xterm').click().catch(()=>{});await page.keyboard.press('Escape');await page.waitForTimeout(600);
      await page.locator('.session-toggle button',{hasText:'Chat'}).click();await page.waitForTimeout(400);
     }else if(st.k==='interrupt'){
-     await page.waitForFunction(()=>document.querySelector('.thread-status'),null,{timeout:60000,polling:200});await page.waitForTimeout(3000);await beat('interrupt-working');
+     await page.waitForFunction(()=>document.querySelector('.session-status'),null,{timeout:60000,polling:200});await page.waitForTimeout(3000);await beat('interrupt-working');
      await page.locator('.send-button').click();await page.waitForTimeout(800);
     }
    }
