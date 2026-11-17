@@ -1,0 +1,8 @@
+/* Session terminal sits on the shared wallpaper + glass like the chat: no slab of its own. */
+.session-terminal { position: absolute; inset: 0; z-index: 5; background: transparent; pointer-events: none; }
+.session-terminal-slot { position: absolute; inset: 54px 32px 16px; pointer-events: auto; }
+.session-terminal[hidden],.session-terminal-slot[hidden] { display: none; }
+.workspace[data-session-mode='terminal'] .thread-transcript { visibility: hidden; }
+/* The wheel scrolls tmux copy-mode; a reserved scrollbar column would skew the left/right gutters. */
+.session-terminal-slot .xterm-viewport { scrollbar-width: none; }
+.session-terminal-slot .xterm-screen { margin-inline: auto; }

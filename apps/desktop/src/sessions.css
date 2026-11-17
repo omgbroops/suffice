@@ -11,12 +11,7 @@ body:has(.thread-header--session) .window-drag-region { pointer-events: none; }
 .thread-header--session .session-copy { min-height: 28px; font-size: 12px; gap: 6px; }
 .thread-header--session .session-copy .icon { width: 13px; height: 13px; }
 .session-notice { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; border: 1px solid var(--border-strong); border-radius: 12px; color: var(--text); font-size: 13px; }
-.session-terminal { position: absolute; inset: 0; z-index: 5; }
-.session-terminal[data-solid] { background: var(--venom, var(--surface-base)); }
-.session-venom { position: absolute; inset: 0; z-index: 5; pointer-events: none; }
 .thread-header--session { z-index: 6; }
-.session-terminal-slot { position: absolute; inset: 54px 0 12px 12px; }
-.session-terminal[hidden],.session-terminal-slot[hidden] { display: none; }
 .session-import { left: 50%; top: 14vh; width: 520px; transform: translateX(-50%); padding: 0; transform-origin: top center; }
 .session-import-list { max-height: 360px; overflow-y: auto; padding: 4px; border-top: 1px solid var(--border-strong); scrollbar-width: none; }
 .session-import-row { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; width: 100%; height: auto; padding: 7px 10px; text-align: left; }

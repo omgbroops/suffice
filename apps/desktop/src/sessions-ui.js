@@ -4,6 +4,7 @@ import {showPopover,hidePopover} from './popover-motion.js';
 import {createToolWidget} from './tool-widget.js';
 import {renderCode} from './panel-content.js';
 import {summarizeTools} from '../../../packages/backend/src/tui/summary.mjs';
+import {createSessionTerminal} from './sessions-terminal.js';
 import './sessions.css';
 
 const sx=window.sufficeDesktop?.sessions;
@@ -31,9 +32,9 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  document.querySelector('.sidebar-sessions').before(side);
  const busy=new Map(),rows=new Map(),states=new Map(),prompts=new Map(),subs=new Map(),labels=new Map(),titles=new Map();
  const name=s=>titles.get(s.id)||`${labels.get(s.id)||s.agent} session`;
- let active=null,mode='chat',unsubs=[],termEl=null,views=null,viewPromise=null,import_=null;
+ let active=null,mode='chat',unsubs=[],import_=null;
  let ui=null,statusEl=null,uiUnsub=null,subUnsub=null,box=null,useItems=false,lastMsgs=[],card=null,cardSig='',metaEl=null,termBtn=null;const cache=new Map();
- const termIds=new Map();
+ const term=createSessionTerminal({workspace});
  let cat=null,pend=null,pendTimer=0,metaSig='',openMenu=null,cards=null,cardsSig='',lastDraft='',pickSel=-1,pool=null,ctlOff=null;
  form.addEventListener('submit',e=>{if(card){e.preventDefault();e.stopImmediatePropagation();}},true);
  const sessionPH=()=>`Message ${labels.get(active?.id)||'the agent'}`;
@@ -364,60 +365,16 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   unsubs.push(sx.onState(s.id,()=>{if(!ui?.items?.length)drawChat();syncRun();}));
   drawChat();syncRun();
  }
- async function showTerminal(){
-  if(!termEl){termEl=el('div','session-terminal');workspace.append(termEl);}
-  termEl.hidden=false;
-  if(!viewPromise)viewPromise=import('./terminal-view.js').then(({createTerminalViews})=>{views=createTerminalViews({api:window.sufficeDesktop,onLabel(){}});return views;});
-  const v=await viewPromise;const id=active?.id;if(!id||mode!=='terminal')return;
-  if(!termIds.has(id))termIds.set(id,'terminal:'+crypto.randomUUID());
-  const slot=termEl.querySelector(`[data-sid="${id}"]`)||termEl.appendChild(Object.assign(el('div','session-terminal-slot'),{}));
-  slot.dataset.sid=id;
-  for(const o of termEl.children)o.hidden=o!==slot;
-  await v.mount(slot,'session-'+id,termIds.get(id),1,{sessionId:id});
- }
- // Terminal "venom": goo blobs spread from the Terminal button and retract into it. WAAPI on transform/opacity only; overlay and filter are removed at rest.
- let ov=null;
- const venomEnd=()=>{if(!ov)return;ov.anims.forEach(a=>a.cancel());ov.svg.remove();ov=null;};
- function venom(dir){
-  const T=termEl,k=window.__motionSlow||1,D=420*k,reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(!T||(dir<0&&T.hidden&&!ov))return;
-  if(ov?.dummy||reduce)venomEnd();
-  if(reduce){T.dataset.solid='';T.hidden=false;const a=T.animate({opacity:dir>0?[0,1]:[1,0]},{duration:120*k,fill:'both'});
-   ov={svg:document.createElement('i'),anims:[a],dummy:true};a.onfinish=()=>{venomEnd();if(dir<0){T.hidden=true;delete T.dataset.solid;}};return;}
-  if(!ov){
-   const b=header.querySelector('.session-toggle button:last-child'),r=(b||header).getBoundingClientRect(),w=workspace.getBoundingClientRect();
-   const W=w.width,H=w.height,ox=r.left+r.width/2-w.left,oy=r.top+r.height/2-w.top,R=Math.hypot(Math.max(ox,W-ox),Math.max(oy,H-oy))+40;
-   const col=getComputedStyle(document.querySelector('.sidebar')).backgroundColor;T.style.setProperty('--venom',col);delete T.dataset.solid;
-   const NS='http://www.w3.org/2000/svg',n=(t,at={})=>{const e=document.createElementNS(NS,t);for(const q in at)e.setAttribute(q,at[q]);return e;};
-   const svg=n('svg',{class:'session-venom',width:W,height:H});
-   const f=n('filter',{id:'venom-goo',filterUnits:'userSpaceOnUse',x:-60,y:-60,width:W+120,height:H+120,'color-interpolation-filters':'sRGB'});
-   f.append(n('feGaussianBlur',{stdDeviation:14}),n('feColorMatrix',{values:'1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9'}));
-   const g=n('g',{filter:'url(#venom-goo)',fill:col});svg.append(n('defs'),g);svg.firstChild.append(f);
-   const E=['cubic-bezier(0.2,0.9,0.2,1)','cubic-bezier(0.1,0.8,0.3,1)','cubic-bezier(0.3,0.6,0.1,1)','cubic-bezier(0.05,0.9,0.4,1)'];
-   const base=Math.atan2(H/2-oy,W/2-ox),J=[.1,-.15,.2,-.05,.15,-.2,.05,-.1],S=[.9,.62,1,.74,.95,.68,.85,.58];
-   const anims=[];
-   const add=(cx,cy,rad,x,y,delay,dur,ease)=>{const c=n('circle',{cx,cy,r:rad});c.style.cssText='transform-box:fill-box;transform-origin:center;will-change:transform';g.append(c);
-    anims.push(c.animate([{transform:'translate(0px,0px) scale(0)'},{transform:`translate(${x}px,${y}px) scale(1)`}],{delay,duration:dur,easing:ease,fill:'both'}));};
-   add(ox,oy,R,0,0,60*k,D-60*k,E[0]); // body: guarantees full coverage; tendrils start 60 ms ahead of it
-   S.forEach((q,i)=>{const a=base+(i-3.5)*.42+J[i],d=R*q*.62,rad=R*(.13+.05*(i%3));add(ox,oy,rad,Math.cos(a)*d,Math.sin(a)*d,0,D,E[i%4]);});
-   const off=Math.max(0,(D-120*k)/D);
-   anims.push(T.animate([{opacity:0},{opacity:0,offset:off},{opacity:1}],{duration:D,fill:'both'})); // terminal content fades in over the last 120 ms
-   workspace.insertBefore(svg,T);ov={svg,anims};
-   if(dir<0)anims.forEach(a=>{a.currentTime=D;});
-   anims.at(-1).onfinish=()=>{const fwd=anims.at(-1).playbackRate>0;venomEnd();if(fwd)T.dataset.solid='';else{T.hidden=true;delete T.dataset.solid;}};
-  }
-  delete T.dataset.solid;T.hidden=false;
-  ov.anims.forEach(a=>{a.updatePlaybackRate(dir>0?1:-1.4);a.play();});
- }
  function setMode(m){
   if(!active)return;mode=m;
   form.hidden=m==='terminal';
   paintHeader();
-  if(m==='terminal'){void showTerminal();venom(1);}else{showChat();venom(-1);}
+  if(m==='terminal'){void term.show(active.id);}else{term.hide();showChat();prompt().focus();}
  }
  function paintHeader(){
   if(!active)return;
   const s=active.s,status=statusOf(s);
+  header.contentEditable='false'; // the title-rename blur handler flattens child controls when focus leaves the header
   header.className='thread-header thread-header--session';header.dataset.status=status;header.replaceChildren();
   header.append(el('span','session-title',name(s)));
   const dot=threadState({status},{unread:false});dot.classList.add('session-state');header.append(dot);
@@ -441,10 +398,11 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  function leave(){
   if(!active&&!import_)return;
   unsubs.forEach(f=>f());unsubs=[];uiUnsub?.();uiUnsub=null;subUnsub?.();subUnsub=null;ctlOff?.();ctlOff=null;closeMenu();cards?.remove();cards=null;cardsSig='';ui=null;drawPrompt();
-  if(active&&termIds.has(active.id)){views?.close('session-'+active.id,termIds.get(active.id));termIds.delete(active.id);termEl?.querySelector(`[data-sid="${active.id}"]`)?.remove();}
+  if(active)term.close(active.id);
   active=null;form.setRunning?.(false);
-  venomEnd();if(termEl){termEl.hidden=true;delete termEl.dataset.solid;}
+  term.hide();
   form.hidden=false;delete form.dataset.session;prompt().placeholder=PH;
+  header.contentEditable='plaintext-only';
   header.className='thread-header';delete header.dataset.status;
   unpress();
  }
