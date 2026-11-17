@@ -203,7 +203,7 @@ export function createTranscript(c){
   if(items)tr.draw();else{renderChat(c.box,c.lastMsgs);if(states.get(c.active.id)==='needs_permission'&&!c.ui?.prompt)notice(c.box,c.active.s);tr.paintStatus();}
  }
  function showChat(){
-  c.box=el('div','thread-messages');hooks.showHistory(c.box);tr.reset();c.useItems=false;
+  c.box=el('div','thread-messages session-transcript');hooks.showHistory(c.box);tr.reset();c.useItems=false;
   const s=c.active.s;
   c.unsubs.forEach(f=>f());c.unsubs=[];
   const msgs=m=>Array.isArray(m)?m:m?.messages||[];
