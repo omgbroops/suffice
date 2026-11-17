@@ -99,7 +99,7 @@ export function parseDialog(rows, type) {
   let above = lines.slice(Math.max(0, ti - 6), ti).filter((l) => !SPIN.test(l));
   const rl = above.map((l, k) => (/^[\s╌─━╍-]{3,}$/.test(l) ? k : -1)).filter((k) => k >= 0); // diff/preview panel between rules is not dialog text
   if (rl.length) above = [...above.slice(0, rl[0]), ...above.slice(rl.length > 1 ? rl.at(-1) + 1 : rl[0] + 1).filter(() => rl.length > 1)];
-  const body = above.map((l) => l.trim()).join('\n');
+  const body = type === 'trust' ? lines.slice(ti + 1, found[0].i).map((l) => l.trim()).join('\n') : above.map((l) => l.trim()).join('\n'); // trust: the folder path sits below the title
   const ptype = type === 'trust' ? 'trust' : type === 'permission' ? 'permission' : 'choice';
   const plan = type === 'plan' ? planMarkdown(rows, title) : '';
   return { promptId: hash(title, options.map((o) => o.label)), type: ptype, title, ...(body ? { body } : {}), ...(plan ? { plan } : {}), ...(options.some((o) => 'checked' in o) ? { multiSelect: true } : {}), options, selected };

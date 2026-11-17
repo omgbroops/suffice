@@ -1,9 +1,0 @@
-/* Plan markdown inside the stock .approval-preview: same box, prose instead of mono. */
-.approval-preview.approval-plan { white-space:normal; font:13px/20px var(--font-sans,inherit); }
-.approval-plan > :first-child { margin-top:0; }
-.approval-plan > :last-child { margin-bottom:0; }
-.approval-plan :is(h1,h2,h3,h4) { font-size:13px; line-height:20px; margin:12px 0 4px; }
-.approval-plan :is(p,ul,ol) { margin:0 0 8px; }
-/* Many CLI options: wrap onto a second row instead of overflowing. */
-.composer-approval .approval-controls { flex-wrap:wrap; }
-.composer-approval .approval-controls button { max-width:100%; }
