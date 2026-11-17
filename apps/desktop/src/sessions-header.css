@@ -16,7 +16,7 @@ body:has(.thread-header--session) .window-drag-region { pointer-events: none; }
 [data-status='failed'].thread-header--session .thread-state { color: #f87171; }
 .thread-header--session:is([data-status='approval'],[data-status='input']) .thread-state { color: #fbbf24; }
 [data-status='working'].thread-header--session .thread-state svg { animation: thread-working 1.2s linear infinite; }
-.thread-header--session .session-meta { display: flex; align-items: center; gap: 8px; flex-shrink: 1; min-width: 0; overflow: hidden; }
+.thread-header--session .session-meta { display: flex; align-items: center; gap: 8px; flex-shrink: 0; min-width: 0; overflow: hidden; }
 .thread-header--session .session-meta > * { flex-shrink: 0; white-space: nowrap; }
 .thread-header--session .session-meta:empty { display: none; }
 /* the header sits above the transcript: nothing may scroll the workspace itself */
@@ -26,8 +26,14 @@ body:has(.thread-header--session) .window-drag-region { pointer-events: none; }
 .desktop-app .session-meta { opacity: .6; font-weight: 400; }
 /* The island holds title and controls for a session; the standard 340px cap leaves no room for the title. */
 .desktop-app .caption-chat-tools-macos:has(.thread-header--session):not(.caption-chat-tools-detached) { max-width: min(640px, calc(100vw - var(--sidebar-width) - 24px)); }
-.desktop-app :is(.window-controls,.caption-chat-tools-detached,.caption-chat-tools-macos) .thread-header.thread-header--session { max-width: none; height: auto; min-height: 25px; padding-block: 0; }
+.desktop-app :is(.window-controls,.caption-chat-tools-detached,.caption-chat-tools-macos) .thread-header.thread-header--session { max-width: none; height: auto; min-height: 25px; padding-block: 0; padding-inline-end: 0; }
 /* One row only: items that do not fit wrap into the clipped second row, so each drops whole */
-.thread-header--session .session-meta { flex-wrap: wrap; height: var(--header-control-size); align-content: flex-start; row-gap: 20px; }
+.thread-header--session .session-meta { flex-wrap: wrap; justify-content: flex-end; height: var(--header-control-size); align-content: flex-start; row-gap: 20px; }
+.thread-header--session .session-meta > * { height: var(--header-control-size); display: inline-flex; align-items: center; }
 .thread-header--session .session-meta .session-ctl { min-height: var(--header-control-size); height: var(--header-control-size); padding-block: 0; }
 .thread-header--session .session-meta > :last-child { min-width: auto; }
+/* island pickers: flat like the copy button, hover fill only */
+.desktop-app .thread-header--session .session-meta .session-ctl { background: transparent; box-shadow: none; border: 0; color: var(--text-muted); }
+.desktop-app .thread-header--session .session-meta .session-ctl:hover { background: var(--hover-fill); color: var(--text); }
+/* the island is capped at 640px: the pickers keep their room, usage and cwd would only wrap out of view and leave dead space */
+.thread-header--session .session-meta:has(.session-ctl) > :not(.session-ctl) { display: none; }
