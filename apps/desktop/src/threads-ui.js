@@ -133,7 +133,8 @@ export function connectThreads({api,prompt,send,toast}){
  // The caption stays the same node so window chrome can move it between layouts.
  header.contentEditable='plaintext-only';header.tabIndex=0;header.setAttribute('role','textbox');header.setAttribute('aria-label','Chat title');header.setAttribute('aria-multiline','false');header.spellcheck=false;
  let titleEdit=null;
- header.addEventListener('focus',()=>{titleEdit={id:activeId,title:header.textContent};});
+ const inSession=()=>String(viewState.id).startsWith('session-');
+ header.addEventListener('focus',()=>{if(!inSession())titleEdit={id:activeId,title:header.textContent};});
  header.addEventListener('keydown',event=>{event.stopPropagation();if(event.key==='Enter'){event.preventDefault();header.blur();}else if(event.key==='Escape'){event.preventDefault();if(titleEdit)header.textContent=titleEdit.title;titleEdit=null;header.blur();}});
  header.addEventListener('blur',()=>{const edit=titleEdit;titleEdit=null;if(!edit)return;const title=header.textContent.replace(/\s+/g,' ').trim().slice(0,200);if(!title){header.textContent=edit.title;return;}header.textContent=title;if(edit.id&&edit.id===activeId&&title!==edit.title)updateMetadata(edit.id,{title});});
  const isViewing=id=>activeId===id&&document.hasFocus()&&document.visibilityState==='visible'&&!document.documentElement.classList.contains('settings-open');
@@ -150,7 +151,7 @@ export function connectThreads({api,prompt,send,toast}){
  async function refresh(){
   const version=++refreshVersion,threads=await api.threads();if(version!==refreshVersion)return;
   const previous=new Map(savedThreads.map(t=>[t.id,t]));for(const thread of threads)if(thread.status==='done'&&previous.has(thread.id)&&thread.modified>previous.get(thread.id).modified&&!jobs.has(thread.id))updateMetadata(thread.id,{unread:!isViewing(thread.id)});
-  savedThreads=threads;const selected=threads.find(thread=>thread.id===activeId);if(selected&&!header.hidden&&document.activeElement!==header)header.textContent=metadata(selected.id).title||selected.title;for(const thread of threads)optimisticThreads.delete(thread.id);drawThreads();
+  savedThreads=threads;const selected=threads.find(thread=>thread.id===activeId);if(selected&&!header.hidden&&!inSession()&&document.activeElement!==header)header.textContent=metadata(selected.id).title||selected.title;for(const thread of threads)optimisticThreads.delete(thread.id);drawThreads();
  }
  connectThreadFork(list,{api,toast,onFork:async fork=>{await refresh();const thread=savedThreads.find(thread=>thread.id===fork.id);if(thread)await openSavedThread(thread);}});
  async function openSavedThread(thread){
@@ -184,7 +185,7 @@ export function connectThreads({api,prompt,send,toast}){
   const scroll=list.scrollTop;
   const prefs=sidebarPreferences.get();
   const all=[...optimisticThreads.values(),...savedThreads.filter(thread=>!optimisticThreads.has(thread.id))].map(thread=>({...thread,title:metadata(thread.id).title||thread.title}));
-  if(activeId&&!header.hidden&&document.activeElement!==header){const active=all.find(t=>t.id===activeId);if(active)header.textContent=active.title;}
+  if(activeId&&!header.hidden&&!inSession()&&document.activeElement!==header){const active=all.find(t=>t.id===activeId);if(active)header.textContent=active.title;}
   const unread=thread=>!!metadata(thread.id).unread;
   const status=thread=>{const job=jobs.get(thread.id);return job?(job.running?(job.approvalRequests.size?'approval':'working'):job.failed?'failed':'done'):thread.status;};
   updateThreadDirectory(all.map(thread=>{const job=jobs.get(thread.id);return {...thread,status:status(thread),unread:unread(thread),...(job?{provider:job.provider||thread.provider,startedAt:job.startedAt,turnDiff:job.turnDiff,...(job.diff?{diff:job.diff}:{})}: {})};}),openSavedThread);

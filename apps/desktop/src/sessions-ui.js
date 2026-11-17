@@ -3,7 +3,7 @@ import {showPopover,hidePopover} from './popover-motion.js';
 import {el,base,prompt} from './sessions-util.js';
 import {createTranscript} from './sessions-transcript.js';
 import {createControls} from './sessions-controls.js';
-import {createHeader} from './sessions-header.js';
+import {connectSessionHeader,viewId,storedTitle} from './sessions-header.js';
 import {createTerminal} from './sessions-terminal.js';
 import {createApproval} from './sessions-approval.js';
 import './sessions.css';
@@ -34,11 +34,12 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  const c={sx,toast,form,workspace,header,hooks,states,subs,labels,titles,subLimit:new Map(),cache:new Map(),unsubs:[],
   active:null,mode:'chat',ui:null,cat:null,pend:null,pendTimer:0,box:null,statusEl:null,useItems:false,lastMsgs:[],pool:null,
   cards:null,cardsSig:'',metaEl:null,metaSig:'',openMenu:null,pickSel:-1,lastDraft:'',sessionHint:false,termEl:null};
- c.name=s=>titles.get(s.id)||`${labels.get(s.id)||s.agent} session`;
+ c.name=s=>storedTitle(s.id)||titles.get(s.id)||`${labels.get(s.id)||s.agent} session`;
  c.statusOf=statusOf;c.paint=paint;c.setMode=setMode;
  c.isWorking=()=>!!c.active&&(states.get(c.active.id)==='working'||!!c.ui?.status);
  c.syncRun=()=>{if(c.active&&c.mode==='chat'){form.setRunning?.(c.isWorking());const b=document.querySelector('.send-button');if(b&&c.isWorking()&&!prompt().value.trim())b.disabled=false;}};
- c.paintHeader=createHeader(c);
+ const sh=connectSessionHeader(header,{current:()=>c.active?.id,renamed:id=>{const r=rows.get(id);if(r)paint(r._s);}});
+ c.paintHeader=()=>{if(!c.active)return;sh.paint({title:c.name(c.active.s),mode:c.mode,onMode:setMode});c.metaEl=el('span','session-meta');c.metaSig='';c.paintMeta?.();}; // metaEl stays detached: the composer carries these controls
  const ctl=createControls(c),term=createTerminal(c),{drawChat,showChat,renderChat}=createTranscript(c);
  c.paintMeta=ctl.paintMeta;
  let uiUnsub=null,subUnsub=null;
@@ -83,10 +84,10 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  }
  function open(s){
   leave();hooks.threadView(c.name(s));
-  c.active={id:s.id,s};c.mode='chat';unpress();rows.get(s.id)?.setAttribute('aria-pressed','true');
+  c.active={id:s.id,s};c.mode='chat';sh.select(viewId(s.id));unpress();rows.get(s.id)?.setAttribute('aria-pressed','true');
   form.hidden=false;form.dataset.session='';
   c.ui=null;approval.clear();c.paintHeader();showChat();
-  uiUnsub=sx.onUi(s.id,u=>{c.ui=u;ctl.update();ctl.paintMeta();if(c.mode==='chat')drawChat();drawPrompt();ctl.syncDraft();c.syncRun();});
+  uiUnsub=sx.onUi(s.id,u=>{c.ui=u;sh.usage(u?.meta);ctl.update();ctl.paintMeta();if(c.mode==='chat')drawChat();drawPrompt();ctl.syncDraft();c.syncRun();});
   c.cat=null;c.lastDraft='';c.cardsSig='';sx.catalog?.(s.id).then(k=>{if(c.active?.id===s.id)ctl.setCatalog(k);}).catch(()=>{});
   ctl.attach();
   subs.clear();c.subLimit.clear();subUnsub=sx.onSubagents?.(s.id,l=>{subs.clear();for(const x of l||[])subs.set(x.callId,x);if(c.mode==='chat')drawChat();});
@@ -97,7 +98,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   term.leave();
   c.active=null;form.setRunning?.(false);
   form.hidden=false;delete form.dataset.session;
-  header.className='thread-header';delete header.dataset.status;
+  delete header.dataset.status;sh.deselect();
   unpress();
  }
  async function start(agent){
@@ -135,10 +136,9 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  async function view(h){
   let msgs;try{msgs=await sx.history.read({source:h.source,path:h.path});}catch(e){toast(e.message);return;}
   leave();hooks.threadView(h.title);import_=h;
-  header.className='thread-header thread-header--session';header.replaceChildren(el('span','session-title',h.title));
-  const resume=el('button','button button--primary session-copy','Resume');resume.type='button';
-  resume.addEventListener('click',async()=>{try{const s=await sx.resume({source:h.source,sessionId:h.sessionId,cwd:h.cwd});import_=null;await refresh();open(rows.get(s.id)?._s||s);}catch(e){toast(e.message);}});
-  header.append(el('span','session-meta',agentName(h.source)),resume);
+  sh.select(viewId('import'));
+  const resume=async()=>{try{const s=await sx.resume({source:h.source,sessionId:h.sessionId,cwd:h.cwd});import_=null;await refresh();open(rows.get(s.id)?._s||s);}catch(e){toast(e.message);}};
+  sh.paintImport({title:h.title,onResume:resume});
   form.hidden=true;
   const box=el('div','thread-messages');hooks.showHistory(box);renderChat(box,msgs);
  }

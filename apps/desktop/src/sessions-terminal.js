@@ -26,7 +26,7 @@ export function createTerminal(c){
   if(reduce){T.dataset.solid='';T.hidden=false;const a=T.animate({opacity:dir>0?[0,1]:[1,0]},{duration:120*k,fill:'both'});
    ov={svg:document.createElement('i'),anims:[a],dummy:true};a.onfinish=()=>{venomEnd();if(dir<0){T.hidden=true;delete T.dataset.solid;}};return;}
   if(!ov){
-   const b=header.querySelector('.session-toggle button:last-child'),r=(b||header).getBoundingClientRect(),w=workspace.getBoundingClientRect();
+   const b=document.querySelector('.session-mode-toggle'),r=(b||header).getBoundingClientRect(),w=workspace.getBoundingClientRect();
    const W=w.width,H=w.height,ox=r.left+r.width/2-w.left,oy=r.top+r.height/2-w.top,R=Math.hypot(Math.max(ox,W-ox),Math.max(oy,H-oy))+40;
    const col=getComputedStyle(document.querySelector('.sidebar')).backgroundColor;T.style.setProperty('--venom',col);delete T.dataset.solid;
    const NS='http://www.w3.org/2000/svg',n=(t,at={})=>{const e=document.createElementNS(NS,t);for(const q in at)e.setAttribute(q,at[q]);return e;};
