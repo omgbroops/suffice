@@ -5,11 +5,12 @@ import {mkdtemp,writeFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import {_electron} from 'playwright-core';
+import {guard} from './electron-guard.mjs';
 test('composer queue, send contrast, transcript files and shared editor preferences',{timeout:60000},async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-queue-'));
  await writeFile(resolve(home,'desktop-settings.json'),JSON.stringify({'working-send':'Queue'}));
  const env={...process.env,PI_OFFLINE:'1',SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
- const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
+ const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
  try{
   const page=await app.firstWindow();const errors=[];page.on('pageerror',error=>errors.push(error.message));await page.locator('.composer').waitFor();
   await app.evaluate(({ipcMain,BrowserWindow})=>{

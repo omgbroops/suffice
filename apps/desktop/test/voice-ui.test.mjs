@@ -5,6 +5,7 @@ import {mkdtemp,mkdir,realpath} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import {_electron} from 'playwright-core';
+import {guard} from './electron-guard.mjs';
 // Launches through a wrapper that keeps every window hidden, unfocused and out of the Dock; the fake media flags keep the real microphone closed.
 // The offline voice provider is driven with window.__sufficeVoice.emit, so nothing here needs a network or a sound device.
 test('voice: strip, full view, floating orb window, transcript rules, geometry and orb',{timeout:140000},async t=>{
@@ -12,7 +13,7 @@ test('voice: strip, full view, floating orb window, transcript rules, geometry a
  const home=resolve(root,'suffice-home'),fakeHome=resolve(root,'home'),project=resolve(root,'project');
  for(const dir of [home,fakeHome,project])await mkdir(dir);
  const env={PATH:process.env.PATH,HOME:fakeHome,TMPDIR:process.env.TMPDIR,LANG:process.env.LANG,PI_OFFLINE:'1',SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_HOME:home,SUFFICE_START_PROJECT:project};
- const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop/test/voice-hidden-main.cjs'),'--user-data-dir='+resolve(root,'electron'),'--use-fake-device-for-media-stream','--use-fake-ui-for-media-stream','--mute-audio'],env});
+ const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop/test/voice-hidden-main.cjs'),'--user-data-dir='+resolve(root,'electron'),'--use-fake-device-for-media-stream','--use-fake-ui-for-media-stream','--mute-audio'],env});
  const errors=[];
  try{
   const page=await app.firstWindow();page.on('pageerror',error=>errors.push('main: '+error.message));await page.locator('.composer').waitFor();

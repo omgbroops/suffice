@@ -6,12 +6,13 @@ import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import {_electron} from 'playwright-core';
 import {createResourceService} from '../electron/resources.mjs';
+import {guard} from './electron-guard.mjs';
 
 test('desktop manages resources through real native IPC and shared settings surfaces',{timeout:60000},async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-resource-ui-')),service=createResourceService(home);
  await service.action({action:'write',kind:'skills',name:'fixture',text:'---\nname: fixture\ndescription: Desktop fixture skill\n---\nFixture'});
  const env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
- const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
+ const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
  try{
   const page=await app.firstWindow(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.locator('.composer').waitFor();
   await page.getByRole('button',{name:'Settings',exact:true}).click();

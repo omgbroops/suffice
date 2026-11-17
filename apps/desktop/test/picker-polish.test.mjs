@@ -1,11 +1,12 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {mkdtemp,readFile} from 'node:fs/promises';import {tmpdir} from 'node:os';import {resolve} from 'node:path';import electronPath from 'electron';import {_electron} from 'playwright-core';import {branchFixture} from './branch-fixture.mjs';import {providerIcon} from '../src/provider-icons.js';
+import {guard} from './electron-guard.mjs';
 test('additional provider aliases resolve bundled monochrome marks',async()=>{
  for(const id of ['huggingface','kimi-coding','meta','minimax','minimax-cn','moonshotai','moonshotai-cn','nvidia','opencode','opencode-go','amazon-bedrock','google-vertex','typesafe','xiaomi-token-plan-cn']){const key=providerIcon(id);assert.ok(key,id);const svg=await readFile(resolve('apps/desktop/public/providers',key+'.svg'),'utf8');assert.match(svg,/<svg/);assert.doesNotMatch(svg,/<script|<foreignObject|href=["']https?:/i);}
 });
 test('pickers retain full-width rows, overlay rails and scroll fades; worktree is switch-only',{timeout:60000},async()=>{
  const {cwd,git}=await branchFixture();for(let i=0;i<12;i++)await git('branch','fixture-'+i);
  const home=await mkdtemp(resolve(tmpdir(),'suffice-picker-polish-')),env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home,SUFFICE_START_PROJECT:cwd};delete env.ELECTRON_RUN_AS_NODE;
- const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'profile')],env});
+ const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'profile')],env});
  try{
   await app.evaluate(({ipcMain})=>{ipcMain.removeHandler('suffice:models');ipcMain.handle('suffice:models',()=>Array.from({length:80},(_,i)=>({provider:'openai',id:'fixture-'+i,name:'Fixture model '+i,efforts:[]})));});
   const page=await app.firstWindow(),errors=[];page.on('pageerror',error=>errors.push(error.message));await page.waitForFunction(()=>!document.querySelector('.git-pill')?.disabled);await page.getByRole('button',{name:'Choose branch',exact:true}).click();

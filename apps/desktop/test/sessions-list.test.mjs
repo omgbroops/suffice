@@ -10,7 +10,7 @@ import {tmpdir} from 'node:os';
 import {execFileSync} from 'node:child_process';
 import {formatThreadTime} from '../src/thread-row.js';
 
-const SOCKET='sfx-test-session-list-start',BASELINE=process.env.BASELINE==='1',SHOTS=process.env.SHOT_DIR;
+const SOCKET=process.env.SFX_SOCKET||'sfx-test-session-list-start',BASELINE=process.env.BASELINE==='1',SHOTS=process.env.SHOT_DIR;
 const check=(fn)=>{if(!BASELINE)fn();};
 
 test('formatter: now, Nm, Nh Nm, Nd and never three-digit minutes',()=>{
@@ -42,7 +42,7 @@ test('session list, row menu, start flow and send options',{timeout:180000},asyn
   await page.evaluate(id=>localStorage.setItem('suffice-thread-view-v1:session-'+id,JSON.stringify({sidebar:{title:'Renamed in header'}})),first.id);
   await page.waitForTimeout(800);await page.reload();await page.locator('.composer').waitFor();
   await page.waitForFunction(()=>document.querySelectorAll('.sidebar-cli-sessions .thread-row').length===2);
-  await page.waitForTimeout(1200);
+  await page.waitForFunction(()=>{const t=[...document.querySelectorAll('.sidebar-cli-sessions .thread-card-title')].map(n=>n.textContent).sort();return t.length===2&&t[0]==='Port the parser to Rust'&&t[1]==='Renamed in header';},null,{timeout:30000});
   const rows=page.locator('.sidebar-cli-sessions .thread-row');
   check(()=>{});
   // Row content: provider logo on line 3, no monitor "CLI" chip, minutes never over 59.
@@ -50,7 +50,7 @@ test('session list, row menu, start flow and send options',{timeout:180000},asyn
   console.log(JSON.stringify(info));
   check(()=>{for(const r of info){assert.equal(r.img,true,'provider logo');assert.equal(r.noBranch,false);assert.match(r.line3,/^Claude Code$/);assert.doesNotMatch(r.age,/\d{3,}m/);}
    assert.ok(info.some(r=>r.title==='Renamed in header'),'rename wins');
-   for(const r of info)assert.match(r.title,/^(Renamed in header|New session|Clean the build output and fix the greeting\.)$/);});
+   assert.deepEqual(info.map(r=>r.title).sort(),['Port the parser to Rust','Renamed in header']);});
   await shot('sidebar.png');
   // Hover card.
   await rows.first().hover();await page.locator('.thread-hover-card:not([hidden])').first().waitFor({timeout:3000}).catch(()=>{});await shot('row-hover.png');

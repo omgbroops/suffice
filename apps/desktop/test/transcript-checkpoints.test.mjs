@@ -7,6 +7,7 @@ import electronPath from 'electron';
 import {_electron} from 'playwright-core';
 import {transcriptMessages} from '../electron/transcript-messages.mjs';
 import {createHarnessHost} from '../electron/worker.mjs';
+import {guard} from './electron-guard.mjs';
 
 test('saved compaction checkpoints distinguish automatic/manual and interruptions without summaries',()=>{
  const compact={type:'compaction',id:'c'},reason={type:'custom',customType:'suffice:compaction',data:{entryId:'c',reason:'threshold'}};
@@ -27,7 +28,7 @@ test('worker forwards compaction and returns a normal interrupted result for use
 
 test('live transcript checkpoints update in place and stopping preserves partial output',{timeout:60000},async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-checkpoint-ui-')),env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
- const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'profile')],env});
+ const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'profile')],env});
  try{const page=await app.firstWindow();await page.locator('.composer').waitFor();await app.evaluate(({ipcMain,BrowserWindow})=>{
   for(const name of ['run','threads','abort'])ipcMain.removeHandler('suffice:'+name);ipcMain.handle('suffice:threads',()=>[]);
   ipcMain.handle('suffice:run',(_e,payload)=>new Promise((resolve,reject)=>{globalThis.finishRun=resolve;globalThis.rejectRun=reject;BrowserWindow.getAllWindows()[0].webContents.send('suffice:event',{event:'thread_started',id:'fixture',clientId:payload.clientId});}));

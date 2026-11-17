@@ -7,6 +7,7 @@ import {mkdir,mkdtemp,writeFile,readFile,readdir,realpath} from 'node:fs/promise
 import {tmpdir} from 'node:os';
 import {execFileSync} from 'node:child_process';
 import {createClaudeMapper} from '../../../packages/backend/src/tui/claude.mjs';
+import {guard} from './electron-guard.mjs';
 
 const root=resolve('.'),SIM=resolve(root,'packages/backend/tools/tui-sim'),FIX=resolve(root,'packages/backend/test/fixtures/tui-real/claude');
 const out=resolve(root,'apps/desktop/visual-review/sessions-sim');await mkdir(out,{recursive:true});
@@ -76,7 +77,7 @@ const SNAP=`(()=>{
   picker:pk?{title:t(pk.querySelector('.popover-heading')),opts:[...pk.querySelectorAll('.menu-item')].map(b=>({t:t(b),sel:!!b.querySelector('.menu-check')}))}:null,
   mem:performance.memory?.usedJSHeapSize||0,gap:window.__gap,idle:window.__idle};})()`;
 
-const app=await _electron.launch({executablePath:electronPath,args:[resolve(root,'apps/desktop'),`--user-data-dir=${data}`],env});
+const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve(root,'apps/desktop'),`--user-data-dir=${data}`],env});
 const pid=app.process().pid;let launches=1;
 let result={};try{result=JSON.parse(await readFile(resolve(out,'SWEEP.json'),'utf8'));}catch{}
 try{
