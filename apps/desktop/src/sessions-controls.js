@@ -43,6 +43,8 @@ export function createControls(c){
   form.modelSource={models,selected:{id:mo?.id||m.model,effort:m.effort},pending:c.pend?.kind==='model'?{id:c.pend.id}:c.pend?.kind==='effort'?{effort:c.pend.id}:null,
    choose(id,effort){if(id!==(mo?.id||m.model))choose('model',id);else if(effort&&norm(effort)!==norm(m.effort))choose('effort',effort);}};
   form.accessSource={modes:c.cat.modes.filter(x=>x.id!=='dontAsk').map(x=>({id:x.id,label:x.label,detail:x.description})),current:modeOf(m.mode),pending:c.pend?.kind==='mode'?c.pend.id:null,choose:id=>choose('mode',id)};
+  if(models.length)delete form.dataset.noModels;else form.dataset.noModels='1';
+  if(form.accessSource.modes.length)delete form.dataset.noModes;else form.dataset.noModes='1';
   form.dispatchEvent(new Event('model-source'));form.dispatchEvent(new Event('access-source'));
  }
 
@@ -130,7 +132,7 @@ export function createControls(c){
  return {
   paintMeta,syncDraft,
   attach(){
-   sig='';hidden=false;form.modelSource={models:[],selected:{},pending:null,choose(){}};form.accessSource={modes:[{id:'',label:'…',detail:''}],current:'',pending:null,choose(){}};form.dispatchEvent(new Event('model-source'));form.dispatchEvent(new Event('access-source'));
+   sig='';hidden=false;form.dataset.noModels=form.dataset.noModes='1';form.modelSource={models:[],selected:{},pending:null,choose(){}};form.accessSource={modes:[{id:'',label:'…',detail:''}],current:'',pending:null,choose(){}};form.dispatchEvent(new Event('model-source'));form.dispatchEvent(new Event('access-source'));
    const p=prompt();p.addEventListener('input',slash);p.addEventListener('keydown',esc);slashOff=()=>{p.removeEventListener('input',slash);p.removeEventListener('keydown',esc);};
   },
   setCatalog(k){c.cat=k;sig='';sync();},
@@ -139,7 +141,7 @@ export function createControls(c){
   hide(v){hidden=v;if(shelf)shelf.hidden=v;if(picker)picker.hidden=v;if(v&&slashRows.length)slashClose();},
   closeMenu:()=>slashClose(),
   detach(){
-   slashOff?.();slashOff=null;slashClose();pickerClose();shelf?.remove();shelf=null;clearTimeout(c.pendTimer);c.pend=null;c.cat=null;sig='';c.cardsSig='';
+   delete form.dataset.noModels;delete form.dataset.noModes;slashOff?.();slashOff=null;slashClose();pickerClose();shelf?.remove();shelf=null;clearTimeout(c.pendTimer);c.pend=null;c.cat=null;sig='';c.cardsSig='';
    if(hint){hint=false;const p=prompt();if(p)p.placeholder=PH();}
    delete form.modelSource;delete form.accessSource;form.dispatchEvent(new Event('model-source'));form.dispatchEvent(new Event('access-source'));
   },
