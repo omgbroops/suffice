@@ -4,6 +4,7 @@ import {showPopover,hidePopover} from './popover-motion.js';
 import {createToolWidget} from './tool-widget.js';
 import {renderCode} from './panel-content.js';
 import {summarizeTools} from '../../../packages/backend/src/tui/summary.mjs';
+import {createSessionControls} from './sessions-controls.js';
 import './sessions.css';
 
 const sx=window.sufficeDesktop?.sessions;
@@ -13,7 +14,7 @@ const STATUS={starting:'working',working:'working',waiting_input:'input',needs_p
 const base=p=>String(p||'').split('/').filter(Boolean).pop()||'/';
 const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
 const age=ms=>{const s=Math.max(0,(Date.now()-ms)/1000);return s<60?'now':s<3600?Math.floor(s/60)+'m':s<86400?Math.floor(s/3600)+'h':Math.floor(s/86400)+'d';};
-const PH=document.querySelector('#prompt')?.placeholder||'';const prompt=()=>document.querySelector('#prompt');
+const prompt=()=>document.querySelector('#prompt');
 const project=()=>document.querySelector('.project-picker')?.dataset.tooltip||'';
 
 // Items for the new-thread menu. Agents come from `available()`; a missing tmux becomes one disabled line.
@@ -34,58 +35,8 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  let active=null,mode='chat',unsubs=[],termEl=null,views=null,viewPromise=null,import_=null;
  let ui=null,statusEl=null,uiUnsub=null,subUnsub=null,box=null,useItems=false,lastMsgs=[],card=null,cardSig='',metaEl=null,termBtn=null;const cache=new Map();
  const termIds=new Map();
- let cat=null,pend=null,pendTimer=0,metaSig='',openMenu=null,cards=null,cardsSig='',lastDraft='',pickSel=-1,pool=null,ctlOff=null;
+ let metaSig='',lastDraft='',pool=null,ctlOff=null;const ctl=createSessionControls({form,sx,toast});
  form.addEventListener('submit',e=>{if(card){e.preventDefault();e.stopImmediatePropagation();}},true);
- const sessionPH=()=>`Message ${labels.get(active?.id)||'the agent'}`;
-
- // Popover list shared by the header controls and the slash completion. Arrows/Enter/Tab/Esc are taken at capture so focus stays where it was.
- function closeMenu(){openMenu?.close();}
- function menu(anchor,rows,pick,o={}){
-  closeMenu();
-  const pop=el('div','popover session-menu');pop.role='listbox';let idx=0;
-  const btns=rows.map((r,i)=>{
-   const b=el('button','menu-item');b.type='button';b.role='option';b.disabled=!!r.disabled;b.append(el('span','menu-label',r.label));
-   if(r.detail)b.append(el('span','session-menu-detail',r.detail));
-   if(r.tag)b.append(el('span','session-menu-tag',r.tag));
-   if(r.checked!==undefined){const ck=el('span',`menu-check${r.checked?'':' menu-check--empty'}`);ck.innerHTML=icon('check');b.append(ck);}
-   if(r.checked)idx=i;
-   b.addEventListener('click',()=>{close();pick(r);});b.addEventListener('pointermove',()=>mark(i));pop.append(b);return b;});
-  const mark=i=>{idx=i;btns.forEach((b,k)=>{if(k===i)b.dataset.active='';else delete b.dataset.active;});btns[i]?.scrollIntoView({block:'nearest'});};
-  const move=d=>{let i=idx;for(let n=0;n<rows.length;n++){i=(i+d+rows.length)%rows.length;if(!rows[i].disabled){mark(i);return;}}};
-  const stop=e=>{e.preventDefault();e.stopImmediatePropagation();};
-  const key=e=>{
-   if(e.key==='Escape'){stop(e);close();}
-   else if(e.key==='ArrowDown'||e.key==='ArrowUp'){stop(e);move(e.key==='ArrowDown'?1:-1);}
-   else if((e.key==='Enter'||e.key==='Tab')&&!e.shiftKey&&rows[idx]&&!rows[idx].disabled){stop(e);const r=rows[idx];close();pick(r);}
-  };
-  const away=e=>{if(!pop.contains(e.target)&&!anchor.contains(e.target))close();};
-  function close(){document.removeEventListener('keydown',key,true);document.removeEventListener('pointerdown',away,true);if(openMenu===h)openMenu=null;hidePopover(pop,()=>pop.remove());}
-  document.body.append(pop);
-  const r=(o.rect||anchor).getBoundingClientRect();pop.style.left=Math.max(12,Math.min(r.left,innerWidth-(o.width||r.width||260)-12))+'px';
-  if(o.width)pop.style.width=Math.min(o.width,innerWidth-24)+'px';
-  if(o.above)pop.style.bottom=innerHeight-r.top+6+'px';else pop.style.top=r.bottom+6+'px';
-  if(o.quiet)pop.style.animation='none';
-  document.addEventListener('keydown',key,true);document.addEventListener('pointerdown',away,true);
-  const h={close,anchor,slash:!!o.slash};openMenu=h;mark(idx);showPopover(pop);
-  return h;
- }
- const norm=s=>String(s||'').toLowerCase().replace(/[^a-z]/g,'');
- const modelHit=(mo,v)=>{const w=String(v||'').toLowerCase();return !!w&&[mo.id.replace(/\[.*/,''),String(mo.label).split(' ')[0],...(mo.aliases||[])].some(a=>w.includes(a.toLowerCase()));};
- const modeOf=v=>{const n=norm(v);return cat?.modes.find(x=>norm(x.id)===n||norm(x.label)===n)?.id||'default';};
- function pendDone(m){
-  const v=pend.kind==='model'?m.model:pend.kind==='effort'?m.effort:m.mode;
-  const hit=pend.kind==='model'?modelHit(cat?.models.find(x=>x.id===pend.id)||{id:pend.id,label:pend.id},v):pend.kind==='effort'?norm(v)===norm(pend.id):modeOf(v)===pend.id&&(!!v||pend.id==='default');
-  if(hit||v!==pend.from){pend=null;clearTimeout(pendTimer);}
- }
- // Never optimistic: the button shows the target with "…" until meta reports it (or 20 s pass).
- function choose(kind,id){
-  const m=ui?.meta||{},raw=kind==='model'?m.model:kind==='effort'?m.effort:m.mode,from=kind==='mode'?modeOf(m.mode):raw;
-  if(kind==='mode'&&id===from)return;
-  pend={kind,id,from:raw};clearTimeout(pendTimer);
-  pendTimer=setTimeout(()=>{if(pend){pend=null;toast('No confirmation from the terminal');paintMeta();}},20000);
-  sx.control(active.id,kind==='model'?'setModel':kind==='effort'?'setEffort':'setMode',kind==='model'?{id}:kind==='effort'?{level:id}:{from,to:id}).catch(e=>{pend=null;toast(e.message);paintMeta();});
-  paintMeta();
- }
 
  async function refresh(){
   let list;try{list=await sx.list();}catch{return;}
@@ -261,69 +212,18 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  }
  // Header controls: model / effort / mode menus, quiet usage text, background chip, cwd. Rebuilt only when its inputs change.
  const bgCount=v=>typeof v==='number'?v:Number(v?.count)||0;
- function ctl(text,pending,onclick){
-  const b=el('button','button button--subtle session-ctl');b.type='button';b.append(el('span','',text));
-  const c=el('span','session-ctl-chev');c.innerHTML=icon('chevron');b.append(c);
-  if(pending){b.dataset.pending='';b.disabled=true;}else b.addEventListener('click',()=>onclick(b));return b;
- }
  function paintMeta(){
   if(!metaEl||!active)return;const m=ui?.meta||{},u=m.usage;
   const ul=(Array.isArray(u?.lines)?u.lines:String(u?.lines||'').split(' · ')).map(String).filter(x=>x&&!x.startsWith('$'));
-  const sg=JSON.stringify([m.model,m.effort,m.mode,ul,u?.inputTokens,u?.outputTokens,bgCount(m.backgroundTasks),m.cwd,pend,!!cat]);
-  if(sg===metaSig)return;metaSig=sg;if(!openMenu?.slash)closeMenu();metaEl.replaceChildren();
-  if(cat){
-   const pm=pend?.kind==='model',pe=pend?.kind==='effort',pd=pend?.kind==='mode';
-   const mo=cat.models.find(x=>modelHit(x,m.model));
-   metaEl.append(ctl(pm?pend.id+'…':mo?.label?.replace(/ \(.*/,'')||m.model||'Model',pm,b=>menu(b,cat.models.map(x=>({id:x.id,label:x.label,checked:x===mo})),r=>choose('model',r.id),{width:260})));
-   if(cat.agent==='claude'&&(m.effort||pe))metaEl.append(ctl(pe?pend.id+'…':m.effort,pe,b=>menu(b,cat.efforts.map(x=>({id:x,label:x,checked:norm(x)===norm(m.effort)})),r=>choose('effort',r.id),{width:160})));
-   const cur=modeOf(m.mode),modes=cat.modes.filter(x=>x.id!=='dontAsk');
-   metaEl.append(ctl(pd?(modes.find(x=>x.id===pend.id)?.label||pend.id)+'…':modes.find(x=>x.id===cur)?.label||'Manual',pd,b=>menu(b,modes.map(x=>({id:x.id,label:x.label,detail:x.description,checked:x.id===cur})),r=>choose('mode',r.id),{width:640})));
-  }else if(m.model)metaEl.append(el('span','',[m.model,m.effort,m.mode].filter(Boolean).join(' · ')));
+  const sg=JSON.stringify([m.model,m.effort,m.mode,ul,u?.inputTokens,u?.outputTokens,bgCount(m.backgroundTasks),m.cwd]);
+  if(sg===metaSig)return;metaSig=sg;metaEl.replaceChildren();
   if(ul.length){const t=el('span','session-usage',ul.join(' · '));if(u?.inputTokens!=null)t.title=`${u.inputTokens} tokens in · ${u.outputTokens??0} out`;metaEl.append(t);}
   else if(m.contextUsedPct!=null)metaEl.append(el('span','session-usage',`ctx ${Math.round(m.contextUsedPct)}%`));
   const n=bgCount(m.backgroundTasks);
-  if(n){const c=el('button','attachment-chip session-bg',`${n} background`);c.type='button';c.title='Background tasks';
-   c.addEventListener('click',()=>menu(c,[{label:plural(n,'task'),detail:'running in background'}],()=>{},{width:300}));metaEl.append(c);}
+  if(n){const c=el('span','attachment-chip session-bg',`${n} background`);c.title='Background tasks running';metaEl.append(c);}
   metaEl.append(el('span','session-cwd',base(m.cwd||active.s.cwd)));
  }
- // Composer extras above the form's first child: queued messages, context warning, native picker card. One strip, rebuilt on a signature change.
- function paintCards(){
-  const m=active?ui?.meta||{}:{},q=[...(Array.isArray(m.queued)?m.queued:[]).map(x=>typeof x==='string'?x:x?.text||''),...(ui?.items||[]).filter(i=>i.queued&&i.text).map(i=>i.text)].filter(Boolean);
-  const queued=[...new Set(q)],cw=m.contextWarning,pk=m.picker&&m.picker.options?.length>1&&!ui?.prompt?m.picker:null;
-  const sg=active?JSON.stringify([queued,cw,pk]):'';
-  if(sg===cardsSig)return;cardsSig=sg;cards?.remove();cards=null;pickSel=-1;
-  if(!sg||(!queued.length&&!cw&&!pk))return;
-  cards=el('div','session-cards');
-  for(const t of queued){const r=el('div','session-notice session-notice--quiet session-queued');r.append(el('span','session-queued-tag','Queued'),el('span','session-queued-text',t));cards.append(r);}
-  if(cw){const r=el('div','session-notice session-ctxwarn');r.append(el('span','',`Context ${cw.percentLeft!=null?cw.percentLeft+'% left':'nearly full'}`));
-   const b=el('button','button button--subtle','Compact');b.type='button';b.addEventListener('click',()=>sx.control(active.id,'compact').catch(e=>toast(e.message)));r.append(b);cards.append(r);}
-  if(pk){const p=el('div','session-picker');p.tabIndex=0;p.setAttribute('aria-label',pk.title||'Choose');p.append(el('div','popover-heading',pk.title||'Choose'));
-   const sel=pk.selected||0,rowsB=pk.options.map((o,i)=>{const b=el('button','menu-item');b.type='button';b.append(el('span','menu-label',o.label));if(i===sel){const ck=el('span','menu-check');ck.innerHTML=icon('check');b.append(ck);}
-    b.addEventListener('click',()=>pickKeys(pk,i));p.append(b);return b;});
-   pickSel=sel;const mark=i=>{pickSel=i;rowsB.forEach((b,k)=>{if(k===i)b.dataset.active='';else delete b.dataset.active;});};mark(sel);
-   rowsB.forEach((b,i)=>b.addEventListener('pointermove',()=>mark(i)));
-   p.addEventListener('keydown',e=>{const n=rowsB.length;
-    if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();mark((pickSel+(e.key==='ArrowDown'?1:-1)+n)%n);}
-    else if(e.key==='Enter'){e.preventDefault();pickKeys(pk,pickSel);}
-    else if(e.key==='Escape'){e.preventDefault();sx.control(active.id,'keys',{keys:['esc']}).catch(er=>toast(er.message));}});
-   cards.append(p);}
-  form.prepend(cards);form.resizePrompt?.();
- }
- // Never auto-picks: arrow presses by position difference from the highlighted row, then enter.
- function pickKeys(pk,i){const d=i-(pk.selected||0),keys=[...Array(Math.abs(d)).fill(d<0?'up':'down'),'enter'];sx.control(active.id,'keys',{keys}).catch(e=>toast(e.message));}
- // Slash completion at the composer start: prefix matches first, then substring (same order as the backend's filterCommands).
- function slash(){
-  const p=prompt();if(!active||mode!=='chat'||!cat)return;const v=p.value;
-  if(!/^\/\S*$/.test(v)){if(openMenu?.slash)closeMenu();if(sessionHint){sessionHint=false;p.placeholder=sessionPH();}return;}
-  const q=v.slice(1).toLowerCase(),pre=[],sub=[];
-  for(const c of cat.commands){const n=c.name.toLowerCase();if(n.startsWith(q))pre.push(c);else if(n.includes(q))sub.push(c);}
-  const list=[...pre,...sub].slice(0,40);if(!list.length){if(openMenu?.slash)closeMenu();return;}
-  const rows=list.map(c=>({id:c.name,label:'/'+c.name,detail:String(c.description||'').split('\n')[0],tag:c.source&&c.source!=='builtin'?c.source:'',hint:c.argumentHint}));
-  menu(form,rows,r=>{p.value=`/${r.id} `;p.placeholder=r.hint||sessionPH();sessionHint=!!r.hint;p.focus();p.dispatchEvent(new Event('input',{bubbles:true}));},{above:true,slash:true,width:Math.min(560,form.getBoundingClientRect().width),quiet:true});
-  p.focus();
- }
- let sessionHint=false;
- const esc=e=>{if(e.key==='Escape'&&!openMenu&&active&&mode==='chat'&&!e.target.value?.trim?.()&&isWorking()){e.preventDefault();sx.control(active.id,'interrupt').catch(er=>toast(er.message));}};
+ const esc=e=>{if(e.key==='Escape'&&!ctl.menuOpen()&&active&&mode==='chat'&&!e.target.value?.trim?.()&&isWorking()){e.preventDefault();sx.control(active.id,'interrupt').catch(er=>toast(er.message));}};
  // Mirror the terminal's half-typed input only into an empty, unfocused composer.
  function syncDraft(){
   const p=prompt(),d=ui?.meta?.draft;if(!active||mode!=='chat'||typeof d!=='string'||d===lastDraft)return;lastDraft=d;
@@ -411,7 +311,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  }
  function setMode(m){
   if(!active)return;mode=m;
-  form.hidden=m==='terminal';
+  form.hidden=m==='terminal';ctl.hide(m==='terminal');
   paintHeader();
   if(m==='terminal'){void showTerminal();venom(1);}else{showChat();venom(-1);}
  }
@@ -431,20 +331,20 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  function open(s){
   leave();hooks.threadView(name(s));
   active={id:s.id,s};mode='chat';unpress();rows.get(s.id)?.setAttribute('aria-pressed','true');
-  form.hidden=false;form.dataset.session='';prompt().placeholder=`Message ${labels.get(s.id)||'the agent'}`;
-  ui=null;cardSig='';paintHeader();showChat();
-  uiUnsub=sx.onUi(s.id,u=>{ui=u;if(pend&&u?.meta)pendDone(u.meta);paintMeta();if(mode==='chat')drawChat();drawPrompt();paintCards();syncDraft();syncRun();});
-  cat=null;lastDraft='';cardsSig='';sx.catalog?.(s.id).then(c=>{if(active?.id===s.id){cat=c;metaSig='';paintMeta();}}).catch(()=>{});
-  const p=prompt();p.addEventListener('input',slash);p.addEventListener('keydown',esc);ctlOff=()=>{p.removeEventListener('input',slash);p.removeEventListener('keydown',esc);};
+  form.hidden=false;form.dataset.session='';
+  ui=null;cardSig='';ctl.attach(s);paintHeader();showChat();
+  uiUnsub=sx.onUi(s.id,u=>{ui=u;ctl.update(u);paintMeta();if(mode==='chat')drawChat();drawPrompt();syncDraft();syncRun();});
+  lastDraft='';sx.catalog?.(s.id).then(c=>{if(active?.id===s.id)ctl.setCatalog(c);}).catch(()=>{});
+  const p=prompt();p.addEventListener('keydown',esc);ctlOff=()=>p.removeEventListener('keydown',esc);
   subs.clear();subLimit.clear();subUnsub=sx.onSubagents?.(s.id,l=>{subs.clear();for(const x of l||[])subs.set(x.callId,x);if(mode==='chat')drawChat();});
  }
  function leave(){
   if(!active&&!import_)return;
-  unsubs.forEach(f=>f());unsubs=[];uiUnsub?.();uiUnsub=null;subUnsub?.();subUnsub=null;ctlOff?.();ctlOff=null;closeMenu();cards?.remove();cards=null;cardsSig='';ui=null;drawPrompt();
+  unsubs.forEach(f=>f());unsubs=[];uiUnsub?.();uiUnsub=null;subUnsub?.();subUnsub=null;ctlOff?.();ctlOff=null;ctl.detach();ui=null;drawPrompt();
   if(active&&termIds.has(active.id)){views?.close('session-'+active.id,termIds.get(active.id));termIds.delete(active.id);termEl?.querySelector(`[data-sid="${active.id}"]`)?.remove();}
   active=null;form.setRunning?.(false);
   venomEnd();if(termEl){termEl.hidden=true;delete termEl.dataset.solid;}
-  form.hidden=false;delete form.dataset.session;prompt().placeholder=PH;
+  form.hidden=false;delete form.dataset.session;
   header.className='thread-header';delete header.dataset.status;
   unpress();
  }

@@ -9,7 +9,7 @@ const {pathToFileURL}=require('node:url');
 const {randomUUID,createHash}=require('node:crypto');
 const workspaceFiles=require('./workspace-files.cjs');
 const {prepareAttachments,clipboardFiles,removeAttachmentCopy}=require('./attachments.cjs');
-let background,terminals;
+let background,terminals,sessionsIpc;
 let win,project=null,selectedProject=null,running=0,preparing=0,branchBusy=false;
 const attachmentGroups=new Map();
 const deletingThreads=new Set();
@@ -84,7 +84,7 @@ if(primary)app.whenReady().then(async()=>{
   handle('changes',()=>workspaceFiles.changes(project));
   handle('diff',name=>workspaceFiles.diff(project,name));
   handle('clipboard-files',()=>clipboardFiles(clipboard));
-  const threadLocations=new Map();let sessionsIpc;
+  const threadLocations=new Map();
   terminals=require('./terminals.cjs').createTerminalManager({resolveCwd:async id=>(await settings.get())['working-directory']==='Home directory'?require('node:os').homedir():threadLocations.get(id),resolveShell:async()=>{const prefs=await settings.get();if(process.platform==='win32'&&prefs['terminal-shell']==='PowerShell')return path.join(process.env.SystemRoot,'System32/WindowsPowerShell/v1.0/powershell.exe');if(prefs['terminal-shell']==='System default')return process.platform==='win32'?process.env.ComSpec:process.env.SHELL||'/bin/bash';return (await import('../../../packages/cli/src/shell.mjs')).nativeShellPath()||process.env.SHELL||'/bin/bash';},emit:event=>{if(win&&!win.isDestroyed())win.webContents.send('suffice:terminal-event',event);}});
   const sx=await (await import('./sessions-ipc.mjs')).createSessionsIpc({dataDir:path.join(app.getPath('userData'),'sessions'),env:process.env,send:m=>{if(win&&!win.isDestroyed())win.webContents.send('suffice:sessions-event',m);}});sessionsIpc=sx;
   for(const [name,fn] of Object.entries(sx.handlers))handle(name,fn);

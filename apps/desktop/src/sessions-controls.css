@@ -1,0 +1,10 @@
+/* Session composer controls reuse .popover, .menu-item and .queued-message; only what they lack lives here. */
+.menu-item[data-active] { background: var(--menu-hover); }
+.model-pending { color: var(--text-faint); margin-left: 1px; }
+.popover.slash-menu { display: flex; flex-direction: column; max-height: var(--menu-max-height, 320px); }
+.slash-menu .menu-item { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+.slash-menu .menu-label { flex: none; }
+.slash-detail { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text-muted); font-size: 12px; font-weight: 400; }
+.popover.session-picker { max-height: 220px; overflow-y: auto; scrollbar-width: none; }
+.session-picker .menu-item { justify-content: flex-start; }
+.session-shelf[hidden] { display: none; }
