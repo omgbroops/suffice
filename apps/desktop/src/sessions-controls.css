@@ -1,18 +1,16 @@
-/* CLI session controls: same popover, menu-item and chip styles as the rest of the app. */
+/* Session composer controls reuse .popover, .menu-item and .queued-message; only what they lack lives here. */
 .menu-item[data-active] { background: var(--menu-hover); }
-.session-ctl { min-height: 28px; font-size: 12px; gap: 4px; }
-.session-ctl .session-ctl-chev { display: inline-flex; color: var(--icon-muted); }
-.session-ctl .session-ctl-chev .icon { width: 11px; height: 11px; }
-.session-ctl[data-pending] { color: var(--text-muted); }
+.popover.slash-menu { display: flex; flex-direction: column; max-height: var(--menu-max-height, 320px); }
+.slash-menu .menu-item { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+.slash-menu .menu-label { flex: none; }
+.slash-detail { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text-muted); font-size: 12px; font-weight: 400; }
+.popover.session-picker { max-height: 220px; overflow-y: auto; scrollbar-width: none; }
+.session-picker .menu-item { justify-content: flex-start; }
+.session-shelf[hidden] { display: none; }
 .session-usage, .session-cwd { color: var(--text-muted); font-size: 12px; white-space: nowrap; }
-.session-bg { cursor: pointer; border: 0; color: var(--text-muted); }
-.session-menu { max-height: min(360px, 50vh); overflow-y: auto; scrollbar-width: none; }
-.session-menu .menu-item { flex-wrap: nowrap; }
-.session-menu-detail { flex: 2; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text-muted); font-size: 12px; }
-.session-menu-tag { color: var(--text-muted); font-size: 11px; }
-.session-cards { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
-.session-queued { gap: 8px; }
-.session-queued-tag { color: var(--text-muted); font-size: 11px; }
-.session-queued-text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.session-picker { padding: var(--menu-inset); border: 1px solid var(--border-strong); border-radius: var(--radius-menu); background: var(--surface-menu); outline: none; max-height: 220px; overflow-y: auto; scrollbar-width: none; }
-form[data-session] .model-button { display: none; }
+.session-bg { border: 0; color: var(--text-muted); }
+.provider-logo-fallback { display: inline-flex; align-items: center; justify-content: center; width: 14px; height: 14px; flex-shrink: 0; overflow: hidden; }
+.provider-logo-fallback > svg, .provider-logo-fallback > .icon { width: 14px; height: 14px; }
+
+.model-pending{color:var(--text-muted)}
+.composer[data-no-models] .model-button,.composer[data-no-modes] .access-mode-picker{display:none}

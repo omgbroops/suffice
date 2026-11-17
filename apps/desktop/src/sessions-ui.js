@@ -13,7 +13,6 @@ let avail={ok:true,agents:[]};
 sx?.available().then(a=>{avail=a;}).catch(()=>{});
 const STATUS={starting:'working',working:'working',waiting_input:'input',needs_permission:'approval',error:'failed',exited:'done'};
 const age=ms=>{const s=Math.max(0,(Date.now()-ms)/1000);return s<60?'now':s<3600?Math.floor(s/60)+'m':s<86400?Math.floor(s/3600)+'h':Math.floor(s/86400)+'d';};
-const PH=document.querySelector('#prompt')?.placeholder||'';
 const project=()=>document.querySelector('.project-picker')?.dataset.tooltip||'';
 
 // Items for the new-thread menu. Agents come from `available()`; a missing tmux becomes one disabled line.
@@ -42,7 +41,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  c.paintHeader=createHeader(c);
  const ctl=createControls(c),term=createTerminal(c),{drawChat,showChat,renderChat}=createTranscript(c);
  c.paintMeta=ctl.paintMeta;
- let ctlOff=null,uiUnsub=null,subUnsub=null;
+ let uiUnsub=null,subUnsub=null;
  const approval=createApproval({form,markdown:(n,t)=>hooks.markdown(n,t),answer:index=>sx.control(c.active.id,'answerPrompt',{index}).catch(e=>toast(e.message))});
  const drawPrompt=()=>approval.draw(c.active?c.ui?.prompt:null,c.ui?.items);
  form.addEventListener('submit',e=>{if(form.dataset.approval==='true'){e.preventDefault();e.stopImmediatePropagation();}},true);
@@ -78,26 +77,26 @@ export function connectSessions({toast,form,workspace,header,hooks}){
 
  function setMode(m){
   if(!c.active)return;c.mode=m;
-  form.hidden=m==='terminal';
+  form.hidden=m==='terminal';ctl.hide(m==='terminal');
   c.paintHeader();
   if(m==='terminal')term.enter();else{showChat();term.exit();}
  }
  function open(s){
   leave();hooks.threadView(c.name(s));
   c.active={id:s.id,s};c.mode='chat';unpress();rows.get(s.id)?.setAttribute('aria-pressed','true');
-  form.hidden=false;form.dataset.session='';prompt().placeholder=`Message ${labels.get(s.id)||'the agent'}`;
+  form.hidden=false;form.dataset.session='';
   c.ui=null;approval.clear();c.paintHeader();showChat();
-  uiUnsub=sx.onUi(s.id,u=>{c.ui=u;if(c.pend&&u?.meta)ctl.pendDone(u.meta);ctl.paintMeta();if(c.mode==='chat')drawChat();drawPrompt();ctl.paintCards();ctl.syncDraft();c.syncRun();});
-  c.cat=null;c.lastDraft='';c.cardsSig='';sx.catalog?.(s.id).then(k=>{if(c.active?.id===s.id){c.cat=k;c.metaSig='';ctl.paintMeta();}}).catch(()=>{});
-  ctlOff=ctl.attach();
+  uiUnsub=sx.onUi(s.id,u=>{c.ui=u;ctl.update();ctl.paintMeta();if(c.mode==='chat')drawChat();drawPrompt();ctl.syncDraft();c.syncRun();});
+  c.cat=null;c.lastDraft='';c.cardsSig='';sx.catalog?.(s.id).then(k=>{if(c.active?.id===s.id)ctl.setCatalog(k);}).catch(()=>{});
+  ctl.attach();
   subs.clear();c.subLimit.clear();subUnsub=sx.onSubagents?.(s.id,l=>{subs.clear();for(const x of l||[])subs.set(x.callId,x);if(c.mode==='chat')drawChat();});
  }
  function leave(){
   if(!c.active&&!import_)return;
-  c.unsubs.forEach(f=>f());c.unsubs=[];uiUnsub?.();uiUnsub=null;subUnsub?.();subUnsub=null;ctlOff?.();ctlOff=null;ctl.closeMenu();c.cards?.remove();c.cards=null;c.cardsSig='';c.ui=null;drawPrompt();
+  c.unsubs.forEach(f=>f());c.unsubs=[];uiUnsub?.();uiUnsub=null;subUnsub?.();subUnsub=null;ctl.detach();c.ui=null;drawPrompt();
   term.leave();
   c.active=null;form.setRunning?.(false);
-  form.hidden=false;delete form.dataset.session;prompt().placeholder=PH;
+  form.hidden=false;delete form.dataset.session;
   header.className='thread-header';delete header.dataset.status;
   unpress();
  }
