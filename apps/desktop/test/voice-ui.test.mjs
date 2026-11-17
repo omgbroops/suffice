@@ -269,15 +269,28 @@ test('voice: strip, full view, floating orb window, transcript rules, geometry a
    for(let i=0;i<4;i++){await page.keyboard.press('Shift+Tab');assert.equal(await inside(),true,'Shift+Tab '+i);}
    await page.locator('.sidebar').first().click({position:{x:4,y:4},force:true});
    assert.equal(await full.isVisible(),false,'outside click returns to the strip');assert.equal(await on(),true,'the call continues');
-   await page.evaluate(()=>{window.__closeCalls=0;const original=window.sufficeDesktop.voiceWindow;window.sufficeDesktop.voiceWindow=a=>{if(a==='close')window.__closeCalls++;return original?.(a);};});
+   // Count orb-window calls in the main process: window.sufficeDesktop is a frozen bridge object, so the page cannot spy on it.
+   await app.evaluate(({ipcMain})=>{globalThis.orbCalls=[];ipcMain.removeHandler('suffice:voice-window');ipcMain.handle('suffice:voice-window',(_e,action)=>{globalThis.orbCalls.push(action);return true;});});
    for(let i=0;i<5;i++){await page.locator('.voice-expand').click();await full.waitFor();await page.keyboard.press('Escape');await full.waitFor({state:'hidden'});}
-   assert.equal(await page.evaluate(()=>window.__closeCalls),0,'Escape repeats do not hit the orb window');
-   // Delegation with models disabled: nothing is submitted, the reason lands in the thread.
+   assert.deepEqual(await app.evaluate(()=>globalThis.orbCalls),[],'Escape repeats do not hit the orb window');
+   // A toast over the open full view is not an outside click.
+   await page.locator('.voice-expand').click();await full.waitFor();
+   await page.evaluate(()=>document.dispatchEvent(new CustomEvent('suffice-toast',{detail:'Test toast'})));
+   await page.locator('.toast-dismiss').click();
+   assert.equal(await full.isVisible(),true,'toast Okay leaves the call view open');
+   // Full -> mini -> full still opens then closes the orb window.
+   await page.locator('.voice-full-mini').click();await page.waitForFunction(()=>document.querySelector('form.composer').dataset.voice==='mini');
+   await page.keyboard.press('Control+k');
+   const palette=page.getByRole('combobox',{name:'Search threads and commands'});await palette.waitFor();await palette.fill('voice');
+   await page.getByRole('option').filter({hasText:'Voice: full view'}).click();await full.waitFor();
+   assert.deepEqual(await app.evaluate(()=>globalThis.orbCalls),['open','close'],'round trip opens then closes the orb window');
+   await page.keyboard.press('Escape');
+   // Delegation with models disabled (the modelsDisabled state only; a fresh profile with an empty catalog is not covered here): nothing is submitted, the reason lands in the thread.
    const runs=await app.evaluate(()=>globalThis.voiceRuns.length);
    await page.evaluate(()=>{document.querySelector('form.composer').modelsDisabled=true;});
    await emit({type:'tool_call',id:'call_none',name:'background_agent',args:{prompt:'Do the thing.'}},400);
    assert.equal(await app.evaluate(()=>globalThis.voiceRuns.length),runs);
-   if(await inThread())assert.equal(await page.locator('.thread-assistant[data-voice]').filter({hasText:'Connect a provider'}).count(),1);
+   if(await inThread())assert.equal(await page.locator('.thread-assistant[data-voice]').filter({hasText:'Enable a model'}).count(),1);
    await page.evaluate(()=>{document.querySelector('form.composer').modelsDisabled=false;});
    await end();
    for(let i=0;i<6;i++){await startButton.click();await startButton.click();}

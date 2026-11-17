@@ -153,7 +153,7 @@ export function connectVoice({ form, prompt, toast = () => {}, api = window.suff
     fullMute.innerHTML = MIC; fullMute.setAttribute('aria-label', 'Mute microphone'); fullMute.title = 'Mute microphone';
     delete window.__sufficeVoice;
   }
-  const canStart = () => form.modelsDisabled ? { ok: false, reason: 'Connect a provider in Settings, Models, first.' } : form.dataset.requireProject === 'true' ? { ok: false, reason: 'Choose a project above the composer first.' } : { ok: true };
+  const canStart = () => form.modelsDisabled ? { ok: false, reason: 'Enable a model in Settings, Models, first.' } : form.dataset.requireProject === 'true' ? { ok: false, reason: 'Choose a project above the composer first.' } : { ok: true };
   async function start() {
     if (conversation) return;
     const kind = setting('voiceProvider', 'openai-realtime');
@@ -201,7 +201,7 @@ export function connectVoice({ form, prompt, toast = () => {}, api = window.suff
   });
   // Tab from outside (focus already left) and clicks outside both return to the inline strip; the call continues.
   document.addEventListener('keydown', event => { if (event.key === 'Tab' && mode === 'full' && !full.contains(document.activeElement)) { event.preventDefault(); fullMute.focus({ preventScroll: true }); } }, true);
-  document.addEventListener('pointerdown', event => { if (mode === 'full' && !full.contains(event.target)) setMode('inline'); }, true);
+  document.addEventListener('pointerdown', event => { if (mode === 'full' && !full.contains(event.target) && !event.target.closest?.('.toast')) setMode('inline'); }, true);
   mute.addEventListener('click', toggleMute);
   // Typing supersedes the spoken answer; the conversation itself continues.
   prompt.addEventListener('input', event => { if (conversation && event.isTrusted) conversation.notifyTyped(); });
