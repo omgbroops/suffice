@@ -34,16 +34,18 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  // Shared state for the component modules; they read and write it through `c`.
  const c={sx,toast,form,workspace,header,hooks,states,subs,labels,titles,subLimit:new Map(),cache:new Map(),unsubs:[],
   active:null,mode:'chat',ui:null,cat:null,pend:null,pendTimer:0,box:null,statusEl:null,useItems:false,lastMsgs:[],pool:null,
-  card:null,cardSig:'',cards:null,cardsSig:'',metaEl:null,metaSig:'',openMenu:null,pickSel:-1,lastDraft:'',sessionHint:false,termEl:null};
+  cards:null,cardsSig:'',metaEl:null,metaSig:'',openMenu:null,pickSel:-1,lastDraft:'',sessionHint:false,termEl:null};
  c.name=s=>titles.get(s.id)||`${labels.get(s.id)||s.agent} session`;
  c.statusOf=statusOf;c.paint=paint;c.setMode=setMode;
  c.isWorking=()=>!!c.active&&(states.get(c.active.id)==='working'||!!c.ui?.status);
  c.syncRun=()=>{if(c.active&&c.mode==='chat'){form.setRunning?.(c.isWorking());const b=document.querySelector('.send-button');if(b&&c.isWorking()&&!prompt().value.trim())b.disabled=false;}};
  c.paintHeader=createHeader(c);
- const ctl=createControls(c),term=createTerminal(c),drawPrompt=createApproval(c),{drawChat,showChat,renderChat}=createTranscript(c);
+ const ctl=createControls(c),term=createTerminal(c),{drawChat,showChat,renderChat}=createTranscript(c);
  c.paintMeta=ctl.paintMeta;
  let ctlOff=null,uiUnsub=null,subUnsub=null;
- form.addEventListener('submit',e=>{if(c.card){e.preventDefault();e.stopImmediatePropagation();}},true);
+ const approval=createApproval({form,markdown:(n,t)=>hooks.markdown(n,t),answer:index=>sx.control(c.active.id,'answerPrompt',{index}).catch(e=>toast(e.message))});
+ const drawPrompt=()=>approval.draw(c.active?c.ui?.prompt:null,c.ui?.items);
+ form.addEventListener('submit',e=>{if(form.dataset.approval==='true'){e.preventDefault();e.stopImmediatePropagation();}},true);
  async function refresh(){
   let list;try{list=await sx.list();}catch{return;}
   const seen=new Set();
@@ -84,7 +86,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   leave();hooks.threadView(c.name(s));
   c.active={id:s.id,s};c.mode='chat';unpress();rows.get(s.id)?.setAttribute('aria-pressed','true');
   form.hidden=false;form.dataset.session='';prompt().placeholder=`Message ${labels.get(s.id)||'the agent'}`;
-  c.ui=null;c.cardSig='';c.paintHeader();showChat();
+  c.ui=null;approval.clear();c.paintHeader();showChat();
   uiUnsub=sx.onUi(s.id,u=>{c.ui=u;if(c.pend&&u?.meta)ctl.pendDone(u.meta);ctl.paintMeta();if(c.mode==='chat')drawChat();drawPrompt();ctl.paintCards();ctl.syncDraft();c.syncRun();});
   c.cat=null;c.lastDraft='';c.cardsSig='';sx.catalog?.(s.id).then(k=>{if(c.active?.id===s.id){c.cat=k;c.metaSig='';ctl.paintMeta();}}).catch(()=>{});
   ctlOff=ctl.attach();

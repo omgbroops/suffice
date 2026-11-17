@@ -62,6 +62,20 @@ function numberedGroup(lines) {
   return group.length >= 2 && group.every((r, k) => r.n === k + 1) ? group.map((r) => ({ ...r, hotkey: String(r.n) })) : [];
 }
 
+const RULE_ROW = /^[\s─━╌╍┄-]{6,}$/;
+/** The plan text above a plan dialog's title, blank lines kept so headings and paragraphs stay separate lines. */
+function planMarkdown(rows, title) {
+  const at = rows.findLastIndex((l) => l.includes(title));
+  if (at < 0) return '';
+  let end = at;
+  while (end > 0 && (!rows[end - 1].trim() || RULE_ROW.test(rows[end - 1]))) end--;
+  let start = end;
+  while (start > 0 && !RULE_ROW.test(rows[start - 1]) && !/^\s*(Ready to code\?|Here is Claude'?s plan:?)\s*$/.test(rows[start - 1])) start--;
+  const body = rows.slice(start, end).map((l) => l.replace(/\s+$/, ''));
+  const indent = Math.min(...body.filter((l) => l.trim()).map((l) => l.search(/\S/)), 99);
+  return body.map((l) => l.slice(indent === 99 ? 0 : indent)).join('\n').trim();
+}
+
 /** Options + title + body for a dialog already known to be one of `type`. Null when the grammar does not fit. */
 export function parseDialog(rows, type) {
   const lines = rows.filter((l) => l.trim()).map((l) => l.replace(/\s+$/, '')).slice(-25);
@@ -85,9 +99,10 @@ export function parseDialog(rows, type) {
   let above = lines.slice(Math.max(0, ti - 6), ti).filter((l) => !SPIN.test(l));
   const rl = above.map((l, k) => (/^[\s╌─━╍-]{3,}$/.test(l) ? k : -1)).filter((k) => k >= 0); // diff/preview panel between rules is not dialog text
   if (rl.length) above = [...above.slice(0, rl[0]), ...above.slice(rl.length > 1 ? rl.at(-1) + 1 : rl[0] + 1).filter(() => rl.length > 1)];
-  const body = above.map((l) => l.trim()).join('\n');
+  const body = type === 'trust' ? lines.slice(ti + 1, found[0].i).map((l) => l.trim()).join('\n') : above.map((l) => l.trim()).join('\n'); // trust: the folder path sits below the title
   const ptype = type === 'trust' ? 'trust' : type === 'permission' ? 'permission' : 'choice';
-  return { promptId: hash(title, options.map((o) => o.label)), type: ptype, title, ...(body ? { body } : {}), ...(options.some((o) => 'checked' in o) ? { multiSelect: true } : {}), options, selected };
+  const plan = type === 'plan' ? planMarkdown(rows, title) : '';
+  return { promptId: hash(title, options.map((o) => o.label)), type: ptype, title, ...(body ? { body } : {}), ...(plan ? { plan } : {}), ...(options.some((o) => 'checked' in o) ? { multiSelect: true } : {}), options, selected };
 }
 
 // ---- picker ----
