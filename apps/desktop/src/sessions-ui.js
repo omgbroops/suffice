@@ -33,7 +33,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  let active=null,mode='chat',unsubs=[],termEl=null,views=null,viewPromise=null,import_=null;
  let ui=null,statusEl=null,uiUnsub=null,subUnsub=null,box=null,useItems=false,lastMsgs=[],card=null,cardSig='',metaEl=null,termBtn=null;const cache=new Map();
  const termIds=new Map();
- let cat=null,pend=null,pendTimer=0,metaSig='',openMenu=null,cards=null,cardsSig='',lastDraft='',pickSel=-1,pool=null,ctlOff=null;
+ let republished=false,cat=null,pend=null,pendTimer=0,metaSig='',openMenu=null,cards=null,cardsSig='',lastDraft='',pickSel=-1,pool=null,ctlOff=null;
  form.addEventListener('submit',e=>{if(card){e.preventDefault();e.stopImmediatePropagation();}},true);
  const sessionPH=()=>`Message ${labels.get(active?.id)||'the agent'}`;
 
@@ -87,7 +87,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  }
 
  async function refresh(){
-  let list;try{list=await sx.list();}catch{return;}
+  let list;try{list=await sx.list(republished?undefined:{republish:true});republished=true;}catch{return;}
   const seen=new Set();
   for(const s of list){
    seen.add(s.id);labels.set(s.id,agentLabel(s.agent));if(!activity.has(s.id))activity.set(s.id,(s.created&&s.created<1e12?s.created*1000:s.created)||Date.now());
@@ -230,7 +230,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  }
  function drawItems(){
   if(!box||!ui)return;const later=[];let prev=null;
-  const entries=[];const first=firstText.get(active.id);if(first&&!ui.items.some(i=>i.kind==='user'))entries.push({id:'pending-user',it:{kind:'user',text:first}});
+  const entries=[];const first=firstText.get(active.id),flat=t=>String(t||'').trim().replace(/\s+/g,' '),waiting=!!first&&!ui.items.some(i=>i.kind==='user'&&flat(i.text)===flat(first));if(waiting)entries.push({id:'pending-user',it:{kind:'user',text:first}});
   for(let it of ui.items){if(hide(it))continue;if(it.kind==='subagent'&&subs.get(it.callId))it={...it,...subs.get(it.callId)};const l=entries.at(-1);
    if(RUN.has(it.kind)){if(l?.run)l.run.push(it);else entries.push({id:'run:'+it.id,run:[it]});}else entries.push({id:it.id,it});}
   for(const e of entries){
@@ -239,7 +239,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
    if(node.parentNode!==box||(prev?prev.nextSibling!==node:box.firstChild!==node))box.insertBefore(node,prev?prev.nextSibling:box.firstChild);
    prev=node;
   }
-  if(!(first&&!ui.items.some(i=>i.kind==='user'))&&cache.has('pending-user')){cache.get('pending-user').el.remove();cache.delete('pending-user');}
+  if(!waiting&&cache.has('pending-user')){cache.get('pending-user').el.remove();cache.delete('pending-user');}
   for(const f of later)f();
   const t=ui.items.find(i=>i.kind==='user')?.text?.trim().replace(/\s+/g,' ').slice(0,60);
   if(t&&!titles.has(active.id)){titles.set(active.id,t);paint(active.s);paintHeader();}

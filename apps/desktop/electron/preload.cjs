@@ -66,7 +66,7 @@ contextBridge.exposeInMainWorld('sufficeDesktop',{
   sessions:(()=>{const inv=(n,p)=>ipcRenderer.invoke('suffice:'+n,p);const last=new Map(),subs=new Set();
    ipcRenderer.on('suffice:sessions-event',(_e,m)=>{if(m?.type!=='slot')return;last.set(m.id,m.value);for(const f of subs)f(m.id,m.value);});
    const watch=(slot,cb)=>{const f=(id,v)=>{if(id===slot)cb(v);};subs.add(f);if(last.has(slot))cb(last.get(slot));return()=>subs.delete(f);};
-   return {available:()=>inv('sessions-available'),start:p=>inv('sessions-start',p),list:()=>inv('sessions-list'),stop:id=>inv('sessions-stop',id),send:(id,text)=>inv('sessions-send',{id,text}),
+   return {available:()=>inv('sessions-available'),start:p=>inv('sessions-start',p),list:p=>inv('sessions-list',p),stop:id=>inv('sessions-stop',id),send:(id,text)=>inv('sessions-send',{id,text}),
     messages:id=>last.get(`session:${id}:chat`)||[],onMessages:(id,cb)=>watch(`session:${id}:chat`,cb),onState:(id,cb)=>watch(`session:${id}:state`,cb),
     ui:id=>last.get(`session:${id}:ui`),onUi:(id,cb)=>watch(`session:${id}:ui`,cb),onStatus:(id,cb)=>watch(`session:${id}:ui`,v=>cb(v?.status??null)),subagents:id=>last.get(`session:${id}:subagents`)||[],onSubagents:(id,cb)=>watch(`session:${id}:subagents`,cb),home:process.env.HOME||'',control:(id,action,args)=>inv('sessions-control',{id,action,args}),
     catalog:id=>inv('sessions-catalog',id),attachCommand:id=>inv('sessions-attach-command',id),resume:p=>inv('sessions-resume',p),history:{list:p=>inv('history-list',p),read:p=>inv('history-read',p)}};})(),

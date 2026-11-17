@@ -24,10 +24,10 @@ test('session list, row menu, start flow and send options',{timeout:180000},asyn
  const project=resolve(tmp,'demo-project'),data=resolve(tmp,'data'),suffice=resolve(tmp,'suffice');
  for(const d of [project,data,suffice])await mkdir(d,{recursive:true});
  await writeFile(resolve(project,'a.txt'),'x');
- const env={...process.env};delete env.ELECTRON_RUN_AS_NODE;
+ const env={...process.env,FAKE_CLAUDE_TYPED_FIRST:'1'};delete env.ELECTRON_RUN_AS_NODE;
  Object.assign(env,{SUFFICE_HOME:suffice,SUFFICE_START_PROJECT:project,SUFFICE_TEST_HIDE_WINDOW:'1',PI_OFFLINE:'1',SUFFICE_SESSIONS_SOCKET:SOCKET,SUFFICE_HISTORY_HOME:resolve(tmp,'home'),
   SUFFICE_TEST_AGENT:resolve('packages/backend/test/fixtures/sessions/fake-agent.mjs'),SUFFICE_TEST_NODE:process.execPath,SUFFICE_TEST_CLAUDE_AGENT:resolve('packages/backend/test/fixtures/sessions/fake-claude-agent.mjs')});
- const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),`--user-data-dir=${data}`],env});
+ const app=await _electron.launch({executablePath:electronPath,args:['-r',process.env.SUFFICE_TEST_ELECTRON_REQUIRE||'/Users/abhayg/suffice-desktop-wt/ui-shots/no-dialog.cjs',resolve('apps/desktop'),`--user-data-dir=${data}`],env});
  const tmux=(...a)=>{try{return execFileSync('tmux',['-L',SOCKET,...a],{encoding:'utf8'});}catch{return '';}};
  try{
   assert.equal(await app.evaluate(()=>process.env.SUFFICE_SESSIONS_SOCKET),SOCKET,'private socket must reach the app');
@@ -64,9 +64,9 @@ test('session list, row menu, start flow and send options',{timeout:180000},asyn
    const copied=await page.evaluate(()=>window.__copied);assert.ok(copied.some(t=>t.includes(`-L ${SOCKET}`)),'attach command names the private socket: '+JSON.stringify(copied));}
   else await page.keyboard.press('Escape');
   // Session older than one day: shift the clock, let the 30 s tick run.
-  await page.evaluate(()=>{const d=Date.now;Date.now=()=>d()+2*86400e3+3600e3;});await page.waitForTimeout(31000);await shot('sidebar-old-session.png');
+  await page.evaluate(()=>{window.__realNow=Date.now;const d=Date.now;Date.now=()=>d()+2*86400e3+3600e3;});await page.waitForTimeout(31000);await shot('sidebar-old-session.png');
   const olds=await page.locator('.sidebar-cli-sessions .thread-age').allInnerTexts();console.log('ages',olds);check(()=>{for(const a of olds)assert.match(a,/^2d$/);});
-  await page.evaluate(()=>{Date.now=Date.now;});
+  await page.evaluate(()=>{Date.now=window.__realNow;});
   // Start screen: new session, Claude Code selection, typed prompt, send.
   await page.getByRole('button',{name:'New session',exact:true}).click();await page.waitForTimeout(500);
   await page.evaluate(()=>{document.querySelector('.composer').modelSelection={provider:'cli',model:'fakeclaude'};});
@@ -84,7 +84,11 @@ test('session list, row menu, start flow and send options',{timeout:180000},asyn
    assert.equal(await page.locator('#prompt').inputValue(),'');
    const after=tmux('list-sessions','-F','#{session_name}').split('\n').filter(Boolean).length;assert.equal(after,before+1,'exactly one session created');
    assert.ok((await page.evaluate(()=>[...window.__bubbles])).includes('Add a retry to the uploader'),'user bubble with the typed text appeared');
-   // The fake Claude agent writes its own scripted first prompt, so the typed text is checked on the bubble and the row title.
+   // The first user item in the agent's transcript is the typed text (fake agent writes the first typed line as its first prompt).
+   await page.waitForFunction(()=>[...document.querySelectorAll('.thread-user')].some(n=>n.textContent.trim()==='Add a retry to the uploader'));
+   const sid=await page.evaluate(()=>window.sufficeDesktop.sessions.list().then(l=>l.map(s=>s.id)));
+   const firsts=await page.evaluate(ids=>ids.map(i=>window.sufficeDesktop.sessions.ui(i)?.items?.find(x=>x.kind==='user')?.text),sid);
+   assert.ok(firsts.includes('Add a retry to the uploader'),'first user item equals typed text: '+JSON.stringify(firsts));
    assert.equal((await page.locator('.sidebar-cli-sessions .thread-row[aria-pressed="true"] .thread-card-title').innerText()).trim(),'Add a retry to the uploader');
   }else await page.waitForTimeout(1500);
   await shot('after-send.png');
