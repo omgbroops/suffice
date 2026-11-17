@@ -12,7 +12,7 @@ const failures=[];const check=(ok,msg)=>{console.log(ok?'ok  ':'FAIL',msg);if(!o
 const tmux=(...a)=>{try{return execFileSync('tmux',['-L',socket,...a],{encoding:'utf8'}).trim();}catch(e){return 'ERR '+(e.stderr||e.message);}};
 const baseEnv=extra=>{const e={...process.env,SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_SESSIONS_SOCKET:socket,...extra};delete e.ELECTRON_RUN_AS_NODE;return e;};
 const launch=async(env,tag)=>{const data=resolve(tmp,'data-'+tag);await mkdir(data,{recursive:true});
- const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),`--user-data-dir=${data}`],env});
+ const app=await _electron.launch({executablePath:electronPath,args:['-r','/Users/abhayg/suffice-desktop-wt/ui-shots/no-dialog.cjs',resolve('apps/desktop'),`--user-data-dir=${data}`],env});
  const page=await app.firstWindow();page.setDefaultTimeout(15000);
  const sock=await app.evaluate(()=>process.env.SUFFICE_SESSIONS_SOCKET);if(sock!==socket)throw new Error('private socket did not reach the app: '+sock);
  await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].setBounds({width:1440,height:900}));
@@ -26,24 +26,26 @@ const geo=page=>page.evaluate(()=>{const ws=document.querySelector('.workspace')
  return {cols:Math.round(sc.width/cell),cell,inner,left:sc.left-ws.left,right:ws.right-sc.right,cx:Math.round(ws.left+ws.width/2),cy:Math.round(ws.top+ws.height/2)};});
 const tmuxCols=id=>Number(tmux('list-clients','-t','sfx-'+id,'-F','#{client_width}').split('\n')[0]);
 const assertGeo=async(page,app,id,label)=>{await page.waitForTimeout(500);const g=await geo(page);
- const tc=tmuxCols(id),sw=g.cols*g.cell,cw=sw/tc;check(tc>=Math.floor(g.inner/cw)-1,`${label}: cols ${tc} >= floor(${g.inner.toFixed(0)}/${cw.toFixed(2)})-1`);
+ const tc=tmuxCols(id);check(tc>0,label+': tmux client cols '+tc);const sw=g.cols*g.cell,cw=sw/tc;check(tc>=Math.floor(g.inner/cw)-1,`${label}: cols ${tc} >= floor(${g.inner.toFixed(0)}/${cw.toFixed(2)})-1`);
  check(Math.abs(g.left-g.right)<=4,`${label}: gutters left ${g.left.toFixed(1)} right ${g.right.toFixed(1)}`);
  return g;};
+const rowsFit=async m=>check(await page.evaluate(()=>{const sl=document.querySelector('.session-terminal-slot:not([hidden])'),edge=sl.querySelector('.xterm-screen').getBoundingClientRect().right;let worst=0;for(const r of sl.querySelectorAll('.xterm-rows > div')){const l=r.lastElementChild;if(l)worst=Math.max(worst,l.getBoundingClientRect().right);}console.log('rowsFit',worst,edge);return worst<=edge+2;}),m);
 let app,page;
 try{
  const env=baseEnv({SUFFICE_HOME:resolve(tmp,'suffice'),SUFFICE_START_PROJECT:resolve(tmp,'proj'),SUFFICE_HISTORY_HOME:resolve(tmp,'home'),
   SUFFICE_TEST_AGENT:resolve('packages/backend/test/fixtures/sessions/fake-agent.mjs'),SUFFICE_TEST_NODE:process.execPath,SUFFICE_TEST_CLAUDE_AGENT:resolve('packages/backend/test/fixtures/sessions/fake-claude-agent.mjs')});
  for(const d of ['proj','home','suffice'])await mkdir(resolve(tmp,d),{recursive:true});
- ({app,page}=await launch(env,'a'));const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ ({app,page}=await launch(env,'a'));page.on('console',m=>{if(/^(rowsFit|copy right)/.test(m.text()))console.log(m.text());});const errors=[];page.on('pageerror',e=>errors.push(e.message));
  const shot=n=>page.screenshot({path:resolve(shots,n)});
  const start=async agent=>{await page.locator('[data-action="send-menu"]').click();await page.waitForTimeout(250);await page.locator(`[data-menu-action="cli-session:${agent}"]`).click();await page.locator('.thread-header--session').waitFor();};
- const sid=()=>page.evaluate(async()=>(await sufficeDesktop.sessions.list()).at(-1).id);
+ const ids=()=>page.evaluate(async()=>(await sufficeDesktop.sessions.list()).map(s=>s.id));
+ const startNew=async agent=>{const before=await ids();await start(agent);let n=[];for(let i=0;i<40&&!n.length;i++){n=(await ids()).filter(x=>!before.includes(x));if(!n.length)await page.waitForTimeout(100);}if(n.length!==1)throw new Error('expected one new session, got '+n);return n[0];};
  await page.locator('[data-action="send-menu"]').waitFor();
  // fake agent
- await start('fake');const id=await sid();
+ const id=await startNew('fake');
  await page.locator('#prompt').fill('hello');await page.locator('#prompt').press('Enter');
  await page.locator('.thread-message',{hasText:'ECHO:hello'}).waitFor({timeout:15000});await page.waitForTimeout(900);
- const g0=await geo(page).catch(()=>null);const ws=await page.evaluate(()=>{const r=document.querySelector('.workspace').getBoundingClientRect();return {x:Math.round(r.left+r.width/2),y:Math.round(r.top+r.height*0.8)};});
+ const g0=await geo(page).catch(()=>null);const ws=await page.evaluate(()=>{const r=document.querySelector('.workspace').getBoundingClientRect();return {x:Math.round(r.left+r.width/2),y:Math.round(r.top+r.height/2)};});
  const chatPx=await pixel(app,ws.x,ws.y);await shot('chat.png');
  check(tmux('show-options','-t','sfx-'+id,'mouse')==='mouse on','tmux mouse on: '+tmux('show-options','-t','sfx-'+id,'mouse'));
  const t0=Date.now();await page.locator('.session-toggle button',{hasText:'Terminal'}).click();
@@ -56,6 +58,7 @@ try{
  const tp=await pixel(app,ws.x,ws.y);const diffFlat=Math.max(...tp.map((v,i)=>Math.abs(v-14)));const diffChat=Math.max(...tp.map((v,i)=>Math.abs(v-chatPx[i])));
  check(diffFlat>2,`terminal pixel ${tp} differs from flat #0e0e0e`);check(diffChat<=12,`terminal pixel ${tp} matches chat pixel ${chatPx}`);
  await assertGeo(page,app,id,'1440x900');
+ await rowsFit('no row overflows the xterm screen on the right');
  // light theme
  await page.evaluate(()=>{document.documentElement.dataset.theme='light';});await page.waitForTimeout(400);await shot('sess-terminal-light.png');
  await page.evaluate(()=>{document.documentElement.dataset.theme='dark';});await page.waitForTimeout(300);
@@ -65,7 +68,7 @@ try{
  // scrollback: fill tmux history, wheel up
  await page.evaluate(async i=>{for(let n=0;n<70;n++)await sufficeDesktop.sessions.send(i,'line '+n);},id);await page.waitForTimeout(2500);
  await page.mouse.move(ws.x,ws.y);await page.mouse.wheel(0,-900);await page.waitForTimeout(600);
- check(tmux('display-message','-p','-t','sfx-'+id,'#{pane_in_mode}')==='1','wheel enters tmux copy-mode');await shot('sess-terminal-scrolled.png');
+ check(tmux('display-message','-p','-t','sfx-'+id,'#{pane_in_mode}')==='1','wheel enters tmux copy-mode');await shot('sess-terminal-scrolled.png');await rowsFit('copy-mode indicator row not clipped on the right');
  tmux('send-keys','-t','sfx-'+id,'q');await page.waitForTimeout(300);
  // back to chat, immediately
  await page.locator('.session-toggle button',{hasText:'Chat'}).click();await page.waitForTimeout(60);await shot('sess-chat-after-switch.png');
@@ -75,11 +78,12 @@ try{
  await page.locator('.session-toggle button',{hasText:'Terminal'}).click();await assertGeo(page,app,id,'second show');
  // fake Claude
  await page.locator('.new-session').click();await page.locator('[data-action="send-menu"]').waitFor({state:'visible'});await page.waitForTimeout(400);
- await start('fakeclaude');const cid=await sid();
+ const cid=await startNew('fakeclaude');
  await page.locator('.composer-approval:not([hidden])').waitFor({timeout:20000});await page.waitForTimeout(600);
  check(tmux('show-options','-t','sfx-'+cid,'mouse')==='mouse on','fake claude session: tmux mouse on');
- await page.evaluate(()=>document.querySelector('.session-toggle button:last-child').click()); // the Claude header currently overflows the window (header track), so click via DOM
+ {const b=await page.locator('.session-toggle button',{hasText:'Terminal'}).boundingBox();check(!!b&&b.x+b.width<=1440,'Claude header: Chat/Terminal toggle on screen');await page.locator('.session-toggle button',{hasText:'Terminal'}).click();}
  await page.locator('.session-terminal .xterm-rows').waitFor();
+ check(await page.evaluate(()=>{const c=document.querySelector('.session-copy').getBoundingClientRect();console.log('copy right',c.right,innerWidth);return c.right<=innerWidth;}),'Claude header: Open in terminal on screen');
  await page.waitForFunction(()=>/Do you want to proceed/.test(document.querySelector('.session-terminal-slot:not([hidden]) .xterm-rows')?.textContent||''));await page.waitForTimeout(500);
  await shot('sess-terminal-prompt.png');await assertGeo(page,app,cid,'fake claude');
  check(errors.length===0,'no page errors '+errors.join(';'));

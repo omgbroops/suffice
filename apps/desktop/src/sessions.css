@@ -73,3 +73,8 @@ body:has(.session-row) .sidebar-empty { display: none; }
 .desktop-app .session-meta { opacity: .6; font-weight: 400; }
 .desktop-app .session-subs { display: contents; }
 .desktop-app .session-notice--quiet.is-error { color: var(--red); }
+
+/* the toggle and copy button must stay on screen: the meta group gives way first */
+.thread-header--session > .session-meta { flex: 0 1 auto; min-width: 0; overflow: hidden; }
+.thread-header--session > .session-title { flex-shrink: 1; }
+.desktop-app :is(.window-controls,.caption-chat-tools-detached,.caption-chat-tools-macos) .thread-header.thread-header--session { max-width: none; }
