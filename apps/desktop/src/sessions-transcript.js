@@ -31,6 +31,7 @@ export function createTranscript({hooks,ctx}){
 
  function target(it){
   const i=it.input||{},cat=it.category;
+  if(cat==='read')return base(i.file_path||i.path||i.notebook_path);
   if(cat==='shell')return String(i.command||'');
   if(cat==='edit'||cat==='write')return base(i.file_path||i.path||i.filePath||i.notebook_path||it.output?.diff?.[0]?.path);
   if(cat==='search')return String(i.pattern||i.query||i.path||'');

@@ -62,9 +62,9 @@ const INSTALL=`(()=>{if(window.__sw)return;window.__sw=1;window.__gap=0;window._
 const SNAP=`(()=>{
  const q=s=>document.querySelector(s),t=(e,n=200)=>(e?.textContent||'').replace(/\\s+/g,' ').trim().slice(0,n);
  const box=q('.thread-messages'),rows=[];
- const kind=e=>{const c=e.className||'';return /thread-user/.test(c)?'user':/thread-assistant/.test(c)?'assistant':/thread-reasoning/.test(c)?'reasoning':/session-run/.test(c)?'run':/session-sub/.test(c)?'subagent':/session-status/.test(c)?'working':/session-queued/.test(c)?'queued':/session-notice/.test(c)?'notice':/session-todo/.test(c)?'plan':/tool-widget|thread-detail/.test(c)?'tool':'other:'+c.slice(0,30);};
+ const kind=e=>{const c=e.className||'';return /thread-user/.test(c)?'user':/thread-assistant/.test(c)?'assistant':/thread-reasoning/.test(c)?'reasoning':/thread-activity/.test(c)?'run':/session-sub/.test(c)?'subagent':/thread-status/.test(c)?'working':/session-queued/.test(c)?'queued':/session-notice/.test(c)?'notice':/session-todo/.test(c)?'plan':/tool-widget|thread-detail/.test(c)?'tool':'other:'+c.slice(0,30);};
  for(const e of box?box.children:[]){const r={kind:kind(e),text:t(e),open:e.tagName==='DETAILS'?e.open:undefined};
-  if(r.kind==='run'){r.summary=t(e.querySelector(':scope > summary'));r.children=[...e.querySelectorAll('.thread-activity-body > *')].slice(0,60).map(c=>({kind:kind(c),text:t(c,120),open:c.tagName==='DETAILS'?c.open:undefined,id:c.dataset?.callId}));r.full=e.textContent.length;}
+  if(r.kind==='run'){r.summary=t(e.querySelector(':scope > summary'));r.children=[...e.querySelectorAll(':scope > .thread-activity-log > *')].slice(0,60).map(c=>({kind:kind(c),text:t(c,120),open:c.tagName==='DETAILS'?c.open:undefined,id:c.dataset?.callId}));r.full=e.textContent.length;}
   rows.push(r);}
  const card=q('.composer-approval:not([hidden])'),pk=q('.session-picker'),p=q('#prompt'),sb=q('.send-button'),hdr=q('.thread-header--session'),row=q('.session-row[aria-pressed="true"]')||q('.session-row');
  const sp=getComputedStyle(box||document.body);

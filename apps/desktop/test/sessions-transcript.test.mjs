@@ -5,6 +5,7 @@ import {_electron} from 'playwright-core';
 import {resolve} from 'node:path';
 import {mkdir,mkdtemp,writeFile,realpath} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
+import {execFileSync} from 'node:child_process';
 import assert from 'node:assert/strict';
 const KEY='session-transcript',SHOTS=process.env.SHOTS;if(SHOTS)await mkdir(SHOTS,{recursive:true});
 const tmp=await realpath(await mkdtemp(resolve(tmpdir(),'sfx-sess-tr-')));
@@ -73,7 +74,7 @@ try{
  // gaps inside open subagent stay small
  const gaps=await subs.nth(0).locator('> .thread-activity-log').evaluate(log=>{const k=[...log.children];return k.slice(1).map((c,i)=>c.getBoundingClientRect().top-k[i].getBoundingClientRect().bottom);});
  assert.ok(gaps.every(g=>g<=12),gaps.join(','));
- await page.locator(T).evaluate(e=>{e.scrollTop=0;});await page.waitForTimeout(200);await shot('full-top.png');
+ await page.locator(T).evaluate(e=>{e.parentElement.scrollTop=0;});await page.waitForTimeout(200);await shot('full-top.png');
  // no hard-coded status colors in the transcript css
  console.log('sessions-transcript OK');
-}finally{await app.close().catch(()=>{});}
+}finally{await app.close().catch(()=>{});try{execFileSync('tmux',['-L',`sfx-test-${KEY}`,'kill-server'],{stdio:'ignore'});}catch{}}
