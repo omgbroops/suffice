@@ -27,7 +27,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  document.querySelector('.sidebar-sessions').before(side);
  const busy=new Map(),rows=new Map(),states=new Map(),prompts=new Map(),subs=new Map(),labels=new Map(),titles=new Map(),firstText=new Map(),activity=new Map();
  let import_=null,republished=false;
- const bump=id=>{activity.set(id,Date.now());};
+ const uiSeen=new Set();const bump=id=>{activity.set(id,Date.now());};
  const agentLabel=a=>({claude:'Claude Code',codex:'Codex'}[a]||(/claude/.test(a)?'Claude Code':/codex/.test(a)?'Codex':avail.agents.find(x=>x.id===a)?.label||a));
  const providerOf=a=>/claude/.test(a)?'anthropic':/codex/.test(a)?'openai':a;
  // Shared state for the component modules; they read and write it through `c`.
@@ -50,8 +50,8 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   const seen=new Set();
   for(const s of list){
    seen.add(s.id);labels.set(s.id,agentLabel(s.agent));if(!activity.has(s.id))activity.set(s.id,(s.created&&s.created<1e12?s.created*1000:s.created)||Date.now());
-   if(!states.has(s.id)){states.set(s.id,'starting');sx.onState(s.id,v=>{states.set(s.id,v?.state||'starting');bump(s.id);paint(s);if(c.active?.id===s.id){c.paintHeader();c.syncRun();}});
-    sx.onUi(s.id,u=>{const had=prompts.get(s.id),hs=busy.get(s.id);const ft=u?.items?.find(i=>i.kind==='user')?.text?.trim().replace(/\s+/g,' ').slice(0,60);if(ft&&!titles.has(s.id)){titles.set(s.id,ft);paint(s);}prompts.set(s.id,u?!!u.prompt:undefined);busy.set(s.id,!!u?.status);if(had!==prompts.get(s.id)||hs!==busy.get(s.id)){bump(s.id);paint(s);if(c.active?.id===s.id)c.paintHeader();}});}
+   if(!states.has(s.id)){states.set(s.id,'starting');sx.onState(s.id,v=>{states.set(s.id,v?.state||'starting');if(v?.since)activity.set(s.id,v.since<1e12?v.since*1000:v.since);paint(s);if(c.active?.id===s.id){c.paintHeader();c.syncRun();}});
+    sx.onUi(s.id,u=>{const had=prompts.get(s.id),hs=busy.get(s.id),first=!uiSeen.has(s.id);uiSeen.add(s.id);const ft=u?.items?.find(i=>i.kind==='user')?.text?.trim().replace(/\s+/g,' ').slice(0,60);if(ft&&!titles.has(s.id)){titles.set(s.id,ft);paint(s);}prompts.set(s.id,u?!!u.prompt:undefined);busy.set(s.id,!!u?.status);if(had!==prompts.get(s.id)||hs!==busy.get(s.id)){if(!first)bump(s.id);paint(s);if(c.active?.id===s.id)c.paintHeader();}});}
    paint(s);
   }
   for(const [id,row] of rows)if(!seen.has(id)){row.remove();rows.delete(id);}
