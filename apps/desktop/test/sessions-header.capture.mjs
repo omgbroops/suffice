@@ -54,6 +54,10 @@ try{
   await page.waitForFunction(()=>document.querySelector('.session-row .thread-title, .session-row')?.textContent.includes('Refactor'));
   await h.focus();await page.keyboard.press('Meta+A');await page.keyboard.type('Investigate why the nightly build fails only on the Windows runner after the dependency bump');await page.keyboard.press('Enter');await page.evaluate(()=>document.activeElement?.blur());await page.waitForFunction(()=>{const h=document.querySelector('.thread-header');return getComputedStyle(h).textOverflow==='ellipsis'&&h.scrollWidth>h.clientWidth;},null,{timeout:5000});await page.waitForTimeout(300);
   await shot('04-long-title.png');
+  // The drawn pixels must equal a fresh layout of the same box: a stale layout clips the last glyph with no ellipsis.
+  const hdPix=async()=>{const r=await page.evaluate(()=>{const b=document.querySelector('.thread-header').getBoundingClientRect();return {x:Math.floor(b.x),y:Math.floor(b.y),width:Math.ceil(b.width),height:Math.ceil(b.height)};});await page.waitForTimeout(200);return app.evaluate(async({BrowserWindow},r)=>(await BrowserWindow.getAllWindows()[0].webContents.capturePage(r)).toBitmap().toString('base64'),r);};
+  const drawn=await hdPix();await page.evaluate(()=>{const h=document.querySelector('.thread-header');h.style.display='none';void h.offsetHeight;h.style.display='';});
+  assert.equal(await hdPix(),drawn,'long title: ellipsis not drawn (stale layout)');
   const lt=await page.evaluate(()=>{const h=document.querySelector('.thread-header'),r=h.getBoundingClientRect();return {w:r.width,over:getComputedStyle(h).textOverflow,full:h.textContent.length,tr:document.querySelector('.workspace-tools').getBoundingClientRect().right,box:document.querySelector('.caption-chat-tools').getBoundingClientRect().right};});
   console.log(JSON.stringify(lt));assert.ok(lt.w<=240+1);assert.ok(lt.tr<=lt.box+1);
   await h.focus();await page.keyboard.press('Meta+A');await page.keyboard.type('Refactor');await page.keyboard.press('Enter');

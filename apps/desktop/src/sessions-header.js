@@ -11,7 +11,8 @@ export function connectSessionHeader(header,{current,renamed}){
  header.addEventListener('focus',()=>{const id=current();from=id?{id,title:header.textContent}:null;});
  // Capture: runs before threads-ui's keydown, which blurs synchronously on Escape.
  header.addEventListener('keydown',e=>{if(e.key==='Escape'&&from)header.textContent=from.title;},true);
- header.addEventListener('blur',()=>{header.scrollLeft=0;const e=from;from=null;if(!e||e.id!==current())return;
+ // Chromium keeps a stale layout after contenteditable edits: the ellipsis is not drawn until the box is laid out again.
+ header.addEventListener('blur',()=>{header.scrollLeft=0;header.style.display='none';void header.offsetHeight;header.style.display='';const e=from;from=null;if(!e||e.id!==current())return;
   const title=header.textContent.replace(/\s+/g,' ').trim().slice(0,200);if(!title){header.textContent=e.title;return;}if(title===e.title)return;
   viewState.updateFor(viewId(e.id),{sidebar:{...viewState.read(viewId(e.id)).sidebar,title}});renamed(e.id,title);});
  return {
