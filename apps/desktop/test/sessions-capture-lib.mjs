@@ -39,7 +39,7 @@ export async function launch({key,out}={}){
   await rm(tmp,{recursive:true,force:true}).catch(()=>{});
  };
  try{
-  app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),`--user-data-dir=${data}`],env});pid=app.process().pid;
+  app=await _electron.launch({executablePath:electronPath,args:['-r','/Users/abhayg/suffice-desktop-wt/ui-shots/no-dialog.cjs',resolve('apps/desktop'),`--user-data-dir=${data}`],env});pid=app.process().pid;
   page=await app.firstWindow();page.setDefaultTimeout(12000);
   page.on('console',m=>{if(m.type()==='error')console.error('PAGE',m.text().slice(0,200));});
   page.on('pageerror',e=>console.error('PAGEERROR',e.message));
