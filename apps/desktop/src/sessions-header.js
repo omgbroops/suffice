@@ -13,7 +13,7 @@ export function createHeader(c){
   const dot=threadState({status},{unread:false});dot.classList.add('session-state');header.append(dot);
   const seg=el('div','settings-segment session-toggle');seg.role='group';
   for(const [k,t] of [['chat','Chat'],['terminal','Terminal']]){const b=el('button','',t);b.type='button';b.setAttribute('aria-pressed',String(c.mode===k));b.addEventListener('click',()=>{if(c.mode!==k)c.setMode(k);});seg.append(b);}
-  const copy=el('button','button button--subtle session-copy');copy.type='button';copy.innerHTML=icon('copy');
+  const copy=el('button','session-copy');copy.type='button';copy.innerHTML=icon('copy');
   copy.title='Copy the tmux attach command';copy.setAttribute('aria-label','Open in terminal: copy the tmux attach command');
   copy.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(s.attachCommand||await sx.attachCommand(s.id));toast('Attach command copied');}catch(e){toast(e.message);}});
   c.metaEl=el('span','session-meta');c.metaSig='';header.append(c.metaEl,seg,copy);c.paintMeta();

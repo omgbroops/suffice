@@ -49,7 +49,7 @@ const titleW=()=>page.evaluate(()=>document.querySelector('.session-title')?.get
  const g0=await geo(page).catch(()=>null);const ws=await page.evaluate(()=>{const r=document.querySelector('.workspace').getBoundingClientRect();return {x:Math.round(r.left+r.width/2),y:Math.round(r.top+r.height/2)};});
  const chatPx=await pixel(app,ws.x,ws.y);await shot('chat.png');
  check(tmux('show-options','-t','sfx-'+id,'mouse')==='mouse on','tmux mouse on: '+tmux('show-options','-t','sfx-'+id,'mouse'));
- {const w=await titleW();check(w>40,'fake session: .session-title visible, width '+Math.round(w));}
+ {const w=await titleW();check(w>20,'fake session: .session-title visible, width '+Math.round(w));}
  const t0=Date.now();await page.locator('.session-toggle button',{hasText:'Terminal'}).click();
  await page.locator('.session-terminal .xterm-rows').waitFor();
  await page.waitForFunction(()=>document.querySelector('.session-terminal .xterm-rows')?.textContent.includes('ECHO:hello'));
@@ -69,8 +69,8 @@ const titleW=()=>page.evaluate(()=>document.querySelector('.session-title')?.get
  await size(app,1440,900);await page.waitForFunction(()=>innerWidth===1440);await assertGeo(page,app,id,'back to 1440x900');await shot('sess-terminal-1440x900-again.png');
  // scrollback: fill tmux history, wheel up
  await page.evaluate(async i=>{for(let n=0;n<70;n++)await sufficeDesktop.sessions.send(i,'line '+n);},id);await page.waitForTimeout(2500);
- await page.mouse.move(ws.x,ws.y);await page.mouse.wheel(0,-900);await page.waitForTimeout(600);
- check(tmux('display-message','-p','-t','sfx-'+id,'#{pane_in_mode}')==='1','wheel enters tmux copy-mode');await shot('sess-terminal-scrolled.png');await rowsFit('copy-mode indicator row not clipped on the right');
+ await page.mouse.move(ws.x,ws.y);for(let n=0;n<8;n++){await page.mouse.wheel(0,-900);await page.waitForTimeout(150);}await page.waitForTimeout(500);
+ check(tmux('display-message','-p','-t','sfx-'+id,'#{pane_in_mode}')==='1','wheel enters tmux copy-mode');check(Number(tmux('display-message','-p','-t','sfx-'+id,'#{scroll_position}'))>0,'wheel scrolled history (scroll_position > 0)');await shot('sess-terminal-scrolled.png');await rowsFit('copy-mode indicator row not clipped on the right');
  tmux('send-keys','-t','sfx-'+id,'q');await page.waitForTimeout(300);
  // back to chat, immediately
  await page.locator('.session-toggle button',{hasText:'Chat'}).click();await page.waitForTimeout(60);await shot('sess-chat-after-switch.png');

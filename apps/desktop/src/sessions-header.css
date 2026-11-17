@@ -1,19 +1,23 @@
 .thread-header--session { display: flex; align-items: center; gap: 10px; }
 .thread-header--session > * { -webkit-app-region: no-drag; flex-shrink: 0; }
 body:has(.thread-header--session) .window-drag-region { pointer-events: none; }
-.thread-header--session .session-title { flex: 0 1 auto; min-width: 8ch; overflow: hidden; text-overflow: ellipsis; }
+.thread-header--session .session-title { flex: 0 1 auto; min-width: min(8ch, max-content); overflow: hidden; text-overflow: ellipsis; }
 .thread-header--session .session-meta { color: var(--text-muted); font-size: 12px; font-weight: 400; margin-left: auto; }
 .thread-header--session .session-toggle { margin-left: auto; }
 .thread-header--session .session-meta + .session-toggle { margin-left: 0; }
 .thread-header--session .session-meta + .session-copy { margin-left: 0; }
-.thread-header--session .session-copy { min-height: 28px; min-width: 28px; padding-inline: 6px; }
+.thread-header--session .session-copy { display: grid; place-items: center; box-sizing: border-box; width: var(--header-control-size); height: var(--header-control-size); min-width: var(--header-control-size); min-height: var(--header-control-size); padding: 5px; border: 0; border-radius: 5px; background: transparent; box-shadow: none; color: var(--text-muted); }
+.thread-header--session .session-copy:hover { background: var(--hover-fill); color: var(--text); }
 .thread-header--session .session-copy .icon { width: 13px; height: 13px; }
+.thread-header--session .session-toggle { box-sizing: border-box; height: var(--header-control-size); padding: 2px; gap: 2px; border-radius: 5px; }
+.thread-header--session .session-toggle button { height: 21px; padding: 0 8px; border-radius: 3px; font-size: 12px; line-height: 21px; }
 .thread-header--session { z-index: 6; }
 [data-status='working'].thread-header--session .thread-state { color: #60a5fa; }
 [data-status='failed'].thread-header--session .thread-state { color: #f87171; }
 .thread-header--session:is([data-status='approval'],[data-status='input']) .thread-state { color: #fbbf24; }
 [data-status='working'].thread-header--session .thread-state svg { animation: thread-working 1.2s linear infinite; }
 .thread-header--session .session-meta { display: flex; align-items: center; gap: 8px; flex-shrink: 1; min-width: 0; overflow: hidden; }
+.thread-header--session .session-meta > * { flex-shrink: 0; white-space: nowrap; }
 .thread-header--session .session-meta:empty { display: none; }
 /* the header sits above the transcript: nothing may scroll the workspace itself */
 .desktop-app .workspace.thread-view { overflow: clip; }
@@ -23,3 +27,7 @@ body:has(.thread-header--session) .window-drag-region { pointer-events: none; }
 /* The island holds title and controls for a session; the standard 340px cap leaves no room for the title. */
 .desktop-app .caption-chat-tools-macos:has(.thread-header--session):not(.caption-chat-tools-detached) { max-width: min(640px, calc(100vw - var(--sidebar-width) - 24px)); }
 .desktop-app :is(.window-controls,.caption-chat-tools-detached,.caption-chat-tools-macos) .thread-header.thread-header--session { max-width: none; height: auto; min-height: 25px; padding-block: 0; }
+/* One row only: items that do not fit wrap into the clipped second row, so each drops whole */
+.thread-header--session .session-meta { flex-wrap: wrap; height: var(--header-control-size); align-content: flex-start; row-gap: 20px; }
+.thread-header--session .session-meta .session-ctl { min-height: var(--header-control-size); height: var(--header-control-size); padding-block: 0; }
+.thread-header--session .session-meta > :last-child { min-width: auto; }
