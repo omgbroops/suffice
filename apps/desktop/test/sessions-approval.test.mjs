@@ -31,8 +31,10 @@ test('session approval cards',{timeout:240000},async()=>{
   await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].setBounds({width:1440,height:900}));
   await page.waitForFunction(()=>innerWidth===1440&&innerHeight===900);
   const shot=async n=>{await page.waitForTimeout(350);const b64=await app.evaluate(async({BrowserWindow})=>(await BrowserWindow.getAllWindows()[0].webContents.capturePage()).toPNG().toString('base64'));await writeFile(resolve(shots,n),Buffer.from(b64,'base64'));};
-  await page.locator('[data-action="send-menu"]').click();await page.waitForTimeout(250);
-  await page.locator('[data-menu-action="cli-session:fakeclaude"]').click();
+  // Agents are chosen in the model picker now (no send-menu item): start through the API, then open its sidebar row.
+  await page.evaluate(p=>sufficeDesktop.sessions.start({agent:'fakeclaude',cwd:p}),project);
+  await page.reload();await page.locator('[data-action="send-menu"]').waitFor();
+  await page.locator('.sidebar-cli-sessions .thread-row').first().click();
   await page.locator('.thread-header').waitFor();
   const sid=await page.evaluate(async()=>(await sufficeDesktop.sessions.list()).at(-1).id);
   const type=t=>page.evaluate(([i,t])=>sufficeDesktop.sessions.send(i,t),[sid,t]);

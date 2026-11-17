@@ -58,7 +58,7 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
    for(const i of [...t.order].reverse()){const am=/Set model to `([^`]+)`/.exec(t.byId.get(i)?.text||'')?.[1];if(am){meta.model=am;break;}} // the CLI's own ack; transcripts name the model only after a turn
    let usage;try{t.meter.setMeta(meta);const sn=t.meter.snapshot();if(sn.turns)usage={lines:formatUsage(sn),inputTokens:sn.inputTokens,outputTokens:sn.outputTokens};}catch{}
    send({type:'slot',id:slot(sid),value:{items:t.order.map(i=>t.byId.get(i)),prompt:t.prompt,status:t.status,meta:{...meta,...(usage&&{usage})}}});};
-  const soon=()=>{if(!t.dirty){t.dirty=true;setTimeout(publish,30).unref?.();}};
+  const soon=()=>{if(!t.dirty){t.dirty=true;setTimeout(publish,30).unref?.();}};t.soon=soon;
   const reset=()=>{t.state=mapper.newState?.()??{};t.meter=createUsageMeter();t.order=[];t.byId=new Map();soon();};
   const onLine=line=>{let o;try{o=JSON.parse(line);}catch{return;}
    let items;try{items=mapper.mapLine(o,t.state)||[];}catch{return;}
@@ -154,7 +154,7 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
     let cmds=[];try{cmds=commands.slashCommands(a,{home:env.SUFFICE_HISTORY_HOME||process.env.HOME,cwd:t.state?.cwd});}catch{}
     return {agent:a,commands:cmds,savesDefault:{model:a==='codex',effort:a==='claude'},models:commands.models(a),modes:commands.modes(a),efforts:commands.efforts(a)};},
    'sessions-start':async p=>{await ready;const args=Array.isArray(p?.args)&&p.args.every(str)?p.args:undefined;const r=await call({type:'sessions.start',agent:agentName(p?.agent),cwd:folder(p?.cwd),...(args&&{args})});track(r);attachSubs(r);return r;},
-   'sessions-list':async()=>{await ready;return trackAll(await call({type:'sessions.list'}));},
+   'sessions-list':async p=>{await ready;const rows=trackAll(await call({type:'sessions.list'}));if(p?.republish)for(const r of rows||[])tracked.get(r.id)?.soon?.();return rows;}, // a reloaded renderer has no cached slots; republish once so titles seed
    'sessions-control':p=>control(id(p?.id),String(p?.action),p?.args),
    'sessions-stop':p=>{untrack(id(p));return call({type:'sessions.stop',id:id(p)});},
    'sessions-send':p=>call({type:'sessions.send',id:id(p?.id),text:typeof p?.text==='string'?p.text:''}),

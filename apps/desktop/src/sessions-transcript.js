@@ -139,7 +139,8 @@ function createCore({hooks,ctx}){
  }
  function draw(){
   const box=ctx.box(),ui=ctx.ui();if(!box||!ui)return;const working=ctx.working(),later=[];
-  const items=[],at=new Map();
+  const items=[],at=new Map(),first=ctx.pendingUser?.();
+  if(first)items.push({kind:'user',id:'pending-user',text:first});
   for(let it of ui.items){if(hide(it))continue;if(it.kind==='subagent'&&ctx.sub(it.callId))it={...it,...ctx.sub(it.callId)};
    if(at.has(it.id)){items[at.get(it.id)]=it;continue;}at.set(it.id,items.length);items.push(it);}
   const entries=group(items),keep=new Set();let prev=null;
@@ -185,7 +186,8 @@ export function createTranscript(c){
   if(r.length>80){const seg=r.split('/');r='…/'+seg.slice(-2).join('/');}return r;});
  const bgCount=v=>typeof v==='number'?v:Number(v?.count)||0;
  const tr=createCore({hooks,ctx:{box:()=>c.box,ui:()=>c.ui,working:()=>c.isWorking(),background:()=>bgCount(c.ui?.meta?.backgroundTasks),sub:id=>subs.get(id),short,
-  onFirstUser:t=>{if(c.active&&titles.get(c.active.id)!==t){titles.set(c.active.id,t);c.paint(c.active.s);c.paintHeader();}}}});
+  pendingUser:()=>{const f=c.active&&c.firstText.get(c.active.id),flat=t=>String(t||'').trim().replace(/\s+/g,' ');return f&&!c.ui.items.some(i=>i.kind==='user'&&flat(i.text)===flat(f))?f:null;},
+  onFirstUser:t=>{if(c.active&&!titles.has(c.active.id)){titles.set(c.active.id,t);c.paint(c.active.s);c.paintHeader();}}}});
  function renderChat(box,messages){
   box.replaceChildren();
   for(const m of messages){const role=m.role==='user'?'user':'assistant';const a=el('article',`thread-message thread-${role}`);if(role==='assistant')hooks.markdown(a,m.text);else a.textContent=m.text;box.append(a);}
@@ -200,14 +202,14 @@ export function createTranscript(c){
   if(!c.box||!c.active)return;
   const items=!!c.ui?.items?.length;
   if(items!==c.useItems){c.useItems=items;c.box.replaceChildren();tr.reset();}
-  if(items)tr.draw();else{renderChat(c.box,c.lastMsgs);if(states.get(c.active.id)==='needs_permission'&&!c.ui?.prompt)notice(c.box,c.active.s);tr.paintStatus();}
+  if(items)tr.draw();else{renderChat(c.box,c.lastMsgs);const first=c.firstText.get(c.active.id);if(first&&!c.lastMsgs.some(m=>m.role==='user'))c.box.prepend(el('article','thread-message thread-user',first));if(states.get(c.active.id)==='needs_permission'&&!c.ui?.prompt)notice(c.box,c.active.s);tr.paintStatus();}
  }
  function showChat(){
   c.box=el('div','thread-messages session-transcript');hooks.showHistory(c.box);tr.reset();c.useItems=false;
   const s=c.active.s;
   c.unsubs.forEach(f=>f());c.unsubs=[];
   const msgs=m=>Array.isArray(m)?m:m?.messages||[];
-  const title=m=>{const t=m.find(x=>x.role==='user')?.text?.trim().replace(/\s+/g,' ').slice(0,60);if(t&&titles.get(s.id)!==t){titles.set(s.id,t);c.paint(s);c.paintHeader();}};
+  const title=m=>{const t=m.find(x=>x.role==='user')?.text?.trim().replace(/\s+/g,' ').slice(0,60);if(t&&!titles.has(s.id)){titles.set(s.id,t);c.paint(s);c.paintHeader();}};
   c.lastMsgs=msgs(sx.messages(s.id));
   c.unsubs.push(sx.onMessages(s.id,m=>{c.lastMsgs=msgs(m);if(!c.ui?.items?.length){title(c.lastMsgs);drawChat();}}));
   c.unsubs.push(sx.onState(s.id,()=>{drawChat();c.syncRun();}));

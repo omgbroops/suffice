@@ -30,25 +30,27 @@ export function populateThreadRow(row,thread,{draft=false,unread=false,pinned=fa
  const project=span('thread-project-line');project.append(projectBadge(thread),span('thread-project-name',thread.project||'No project'));
  const status=threadState(thread,{unread});
  const age=span('thread-age row-meta');age.dataset.started=thread.status==='working'?String(thread.startedAt||thread.modified):'';age.dataset.modified=String(thread.modified);heading.append(age);project.append(status);
- const meta=span('thread-branch-line');if(thread.branch){const branch=span('thread-branch');branch.innerHTML=icon(thread.worktree?'files':'branch');branch.append(span('',thread.branch));meta.append(branch);}else{const noGit=span('thread-no-branch');noGit.innerHTML=icon('monitor');noGit.append(span('',thread.gitUnknown?'Git not recorded':'No Git'));meta.append(noGit);}
+ const meta=span('thread-branch-line');if(thread.agent){const agent=span('thread-agent');const mark=span('thread-provider');mark.append(providerMark(thread.provider));agent.append(mark,span('',thread.agent));meta.append(agent);}else if(thread.branch){const branch=span('thread-branch');branch.innerHTML=icon(thread.worktree?'files':'branch');branch.append(span('',thread.branch));meta.append(branch);}else{const noGit=span('thread-no-branch');noGit.innerHTML=icon('monitor');noGit.append(span('',thread.gitUnknown?'Git not recorded':'No Git'));meta.append(noGit);}
  if(thread.terminalCount){const term=span('thread-terminal');term.innerHTML=icon('monitor');term.append(span('',String(thread.terminalCount)));term.setAttribute('aria-label',`${thread.terminalCount} running terminal processes`);meta.append(term);}
  if(thread.pr){const pr=span('thread-pr');pr.dataset.state=thread.pr.state;pr.innerHTML=icon('merge');pr.append(span('',String(thread.pr.number)));pr.setAttribute('aria-label',`Pull request ${thread.pr.number}, ${thread.pr.state}`);pr.role='link';pr.tabIndex=0;const open=e=>{e.stopPropagation();void window.sufficeDesktop?.openExternal?.(thread.pr.url);};pr.addEventListener('click',open);pr.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();open(e);}});meta.append(pr);}
  if(thread.diff?.scope==='chat'&&(thread.diff.added||thread.diff.removed)){const diff=span('thread-diff');diff.append(span('thread-added','+'+thread.diff.added),span('thread-removed','−'+thread.diff.removed));diff.setAttribute('aria-label',thread.diff.partial?'Chat changes, partial tracking':'Chat lines added and removed');if(thread.diff.partial)diff.append(span('thread-diff-partial','*'));meta.append(diff);}
- meta.append(threadProviders(thread));
+ if(!thread.agent)meta.append(threadProviders(thread));
  const prefs=sidebarPreferences.get();
  if(prefs.compact){if(prefs.group!=='project')heading.prepend(project.firstElementChild);heading.insertBefore(status,age);row.replaceChildren(heading);}
  else if(prefs.group==='project'){meta.append(status);row.replaceChildren(heading,meta);}
  else row.replaceChildren(heading,project,meta);
  row._threadDetails=thread;
 }
-export function tickThreadTimes(root){for(const age of root.querySelectorAll('.thread-age')){const elapsed=Math.max(0,Math.floor((Date.now()-Number(age.dataset.started||age.dataset.modified))/1000));age.textContent=age.dataset.started?(elapsed>=60?`${Math.floor(elapsed/60)}m ${elapsed%60}s`:`${elapsed}s`):elapsed<60?'now':elapsed<3600?`${Math.floor(elapsed/60)}m`:elapsed<86400?`${Math.floor(elapsed/3600)}h`:`${Math.floor(elapsed/86400)}d`;}}
-export function connectThreadHover(list){const card=document.createElement('div');card.className='thread-hover-card';card.hidden=true;card.role='tooltip';document.body.append(card);let timer;const hide=()=>{clearTimeout(timer);card.hidden=true;};const show=row=>{hide();timer=setTimeout(()=>{const t=row._threadDetails;if(!t)return;card.dataset.status=t.status||'idle';card.replaceChildren();card.append(span('thread-hover-title',t.title));
+// Age and elapsed text: 'now', 'Nm', 'Nh Nm', 'Nd'. A running thread shows seconds under a minute.
+export function formatThreadTime(elapsed,running=false){const m=Math.floor(elapsed/60);return running&&elapsed<60?`${elapsed}s`:elapsed<60?'now':elapsed<3600?`${m}m`:elapsed<86400?`${Math.floor(m/60)}h${m%60?` ${m%60}m`:''}`:`${Math.floor(elapsed/86400)}d`;}
+export function tickThreadTimes(root){for(const age of root.querySelectorAll('.thread-age'))age.textContent=formatThreadTime(Math.max(0,Math.floor((Date.now()-Number(age.dataset.started||age.dataset.modified))/1000)),!!age.dataset.started);}
+export function connectThreadHover(list){let card=document.querySelector('.thread-hover-card');if(!card){card=document.createElement('div');card.className='thread-hover-card';card.hidden=true;card.role='tooltip';document.body.append(card);}let timer;const hide=()=>{clearTimeout(timer);card.hidden=true;};const show=row=>{hide();timer=setTimeout(()=>{const t=row._threadDetails;if(!t)return;card.dataset.status=t.status||'idle';card.replaceChildren();card.append(span('thread-hover-title',t.title));
  const detail=(glyph,text,cls='')=>{if(!text)return;const line=span('thread-hover-detail '+cls),mark=span('thread-hover-icon');if(typeof glyph==='string')mark.innerHTML=icon(glyph);else if(glyph)mark.append(glyph);line.append(mark,span('thread-hover-value',text));card.append(line);return line;};
  detail(projectBadge(t),t.project||'No project');
  detail('monitor',t.machine||'Local machine');
  detail(t.worktree?'files':'branch',t.branch);
  if(t.branchMismatch)detail('warning',"You're currently checked out on another branch.",'thread-hover-warning');
- const provider=row.querySelector('.thread-provider:last-child')?.cloneNode(true);
+ const provider=[...row.querySelectorAll('.thread-provider')].at(-1)?.cloneNode(true);
  detail(provider,t.model?.replace(/^gpt-/i,'GPT-')||t.provider);
  if(['working','waiting','approval','input','failed'].includes(t.status))detail(row.querySelector('.thread-state')?.cloneNode(true),t.status==='failed'&&t.error?displayRunError(t.error,t.provider):labels[t.status],['failed','approval','input'].includes(t.status)?'thread-hover-warning':'');
  if(t.pr)detail('merge',`#${t.pr.number} · ${t.pr.state.toLowerCase()} · Checks ${t.pr.checks}`);

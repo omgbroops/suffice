@@ -1,4 +1,6 @@
-import {populateThreadRow,tickThreadTimes} from './thread-row.js';
+import {populateThreadRow,tickThreadTimes,connectThreadHover,formatThreadTime} from './thread-row.js';
+import {threadViewState} from './thread-view-state.js';
+import {connectSessionContextMenu} from './thread-context-menu.js';
 import {showPopover,hidePopover} from './popover-motion.js';
 import {el,base,prompt} from './sessions-util.js';
 import {createTranscript} from './sessions-transcript.js';
@@ -12,29 +14,26 @@ const sx=window.sufficeDesktop?.sessions;
 let avail={ok:true,agents:[]};
 sx?.available().then(a=>{avail=a;}).catch(()=>{});
 const STATUS={starting:'working',working:'working',waiting_input:'input',needs_permission:'approval',error:'failed',exited:'done'};
-const age=ms=>{const s=Math.max(0,(Date.now()-ms)/1000);return s<60?'now':s<3600?Math.floor(s/60)+'m':s<86400?Math.floor(s/3600)+'h':Math.floor(s/86400)+'d';};
+const age=ms=>formatThreadTime(Math.max(0,Math.floor((Date.now()-ms)/1000)));
 const project=()=>document.querySelector('.project-picker')?.dataset.tooltip||'';
 
-// Items for the new-thread menu. Agents come from `available()`; a missing tmux becomes one disabled line.
-export function sessionMenuItems(){
- if(!sx)return [];
- const items=avail.agents.map((a,i)=>a.missing?{label:`${a.label} session`,detail:`${a.label} CLI not found`,disabled:true,separator:i===0}:{label:`${a.label} session`,action:'cli-session:'+a.id,separator:i===0});
- if(!avail.ok)items.push({label:`CLI sessions: ${avail.reason||'unavailable'}`,detail:avail.reason,disabled:true,separator:true});
- items.push({label:'Import chat',action:'import-chat:open',separator:!items.length});
- return items;
-}
+// Send-options menu: agents are chosen in the model picker, so only Import remains.
+export function sessionMenuItems(){return sx?[{label:'Import chat',action:'import-chat:open',separator:true}]:[];}
 
 export function connectSessions({toast,form,workspace,header,hooks}){
- if(!sx)return {leave(){},isActive:()=>false,stop:()=>false,send(){}};
+ if(!sx)return {leave(){},isActive:()=>false,stop:()=>false,send(){},start:async()=>{toast('Sessions are unavailable');return false;}};
  const side=el('div','sidebar-cli-sessions');
  document.querySelector('.sidebar-sessions').before(side);
- const busy=new Map(),rows=new Map(),states=new Map(),prompts=new Map(),subs=new Map(),labels=new Map(),titles=new Map();
- let import_=null;
+ const busy=new Map(),rows=new Map(),states=new Map(),prompts=new Map(),subs=new Map(),labels=new Map(),titles=new Map(),firstText=new Map(),activity=new Map();
+ let import_=null,republished=false;
+ const uiSeen=new Set();const bump=id=>{activity.set(id,Date.now());};
+ const agentLabel=a=>({claude:'Claude Code',codex:'Codex'}[a]||(/claude/.test(a)?'Claude Code':/codex/.test(a)?'Codex':avail.agents.find(x=>x.id===a)?.label||a));
+ const providerOf=a=>/claude/.test(a)?'anthropic':/codex/.test(a)?'openai':a;
  // Shared state for the component modules; they read and write it through `c`.
- const c={sx,toast,form,workspace,header,hooks,states,subs,labels,titles,subLimit:new Map(),cache:new Map(),unsubs:[],
+ const c={sx,toast,form,workspace,header,hooks,states,subs,labels,titles,firstText,subLimit:new Map(),cache:new Map(),unsubs:[],
   active:null,mode:'chat',ui:null,cat:null,pend:null,pendTimer:0,box:null,statusEl:null,useItems:false,lastMsgs:[],pool:null,
   cards:null,cardsSig:'',metaEl:null,metaSig:'',openMenu:null,pickSel:-1,lastDraft:'',sessionHint:false,termEl:null};
- c.name=s=>storedTitle(s.id)||titles.get(s.id)||`${labels.get(s.id)||s.agent} session`;
+ c.name=s=>storedTitle(s.id)||titles.get(s.id)||'New session';
  c.statusOf=statusOf;c.paint=paint;c.setMode=setMode;
  c.isWorking=()=>!!c.active&&(states.get(c.active.id)==='working'||!!c.ui?.status);
  c.syncRun=()=>{if(c.active&&c.mode==='chat'){form.setRunning?.(c.isWorking());const b=document.querySelector('.send-button');if(b&&c.isWorking()&&!prompt().value.trim())b.disabled=false;}};
@@ -47,12 +46,12 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  const drawPrompt=()=>approval.draw(c.active?c.ui?.prompt:null,c.ui?.items);
  form.addEventListener('submit',e=>{if(form.dataset.approval==='true'){e.preventDefault();e.stopImmediatePropagation();}},true);
  async function refresh(){
-  let list;try{list=await sx.list();}catch{return;}
+  let list;try{list=await sx.list(republished?undefined:{republish:true});republished=true;}catch{return;}
   const seen=new Set();
   for(const s of list){
-   seen.add(s.id);labels.set(s.id,avail.agents.find(a=>a.id===s.agent)?.label||s.agent);
-   if(!states.has(s.id)){states.set(s.id,'starting');sx.onState(s.id,v=>{states.set(s.id,v?.state||'starting');paint(s);if(c.active?.id===s.id){c.paintHeader();c.syncRun();}});
-    sx.onUi(s.id,u=>{const had=prompts.get(s.id),hs=busy.get(s.id);prompts.set(s.id,u?!!u.prompt:undefined);busy.set(s.id,!!u?.status);if(had!==prompts.get(s.id)||hs!==busy.get(s.id)){paint(s);if(c.active?.id===s.id)c.paintHeader();}});}
+   seen.add(s.id);labels.set(s.id,agentLabel(s.agent));if(!activity.has(s.id))activity.set(s.id,(s.created&&s.created<1e12?s.created*1000:s.created)||Date.now());
+   if(!states.has(s.id)){states.set(s.id,'starting');sx.onState(s.id,v=>{states.set(s.id,v?.state||'starting');if(v?.since)activity.set(s.id,v.since<1e12?v.since*1000:v.since);paint(s);if(c.active?.id===s.id){c.paintHeader();c.syncRun();}});
+    sx.onUi(s.id,u=>{const had=prompts.get(s.id),hs=busy.get(s.id),first=!uiSeen.has(s.id);uiSeen.add(s.id);const ft=u?.items?.find(i=>i.kind==='user')?.text?.trim().replace(/\s+/g,' ').slice(0,60);if(ft&&!titles.has(s.id)){titles.set(s.id,ft);paint(s);}prompts.set(s.id,u?!!u.prompt:undefined);busy.set(s.id,!!u?.status);if(had!==prompts.get(s.id)||hs!==busy.get(s.id)){if(!first)bump(s.id);paint(s);if(c.active?.id===s.id)c.paintHeader();}});}
    paint(s);
   }
   for(const [id,row] of rows)if(!seen.has(id)){row.remove();rows.delete(id);}
@@ -69,11 +68,13 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   if(!row){row=el('button','thread-row session-row session-row--sidebar');row.type='button';row.addEventListener('click',()=>open(row._s));rows.set(s.id,row);side.append(row);}
   row._s=s;
   const status=statusOf(s);
-  populateThreadRow(row,{id:'session-'+s.id,title:c.name(s),project:base(s.cwd),status,modified:(s.created&&s.created<1e12?s.created*1000:s.created)||Date.now()});
-  const label=labels.get(s.id);const noGit=row.querySelector('.thread-no-branch span');if(noGit)noGit.textContent=label+' CLI';
-  row.setAttribute('aria-pressed',String(c.active?.id===s.id));row.title=`${c.name(s)} (${label} CLI)`;
-  tickThreadTimes(row);
+  const label=labels.get(s.id);
+  populateThreadRow(row,{id:'session-'+s.id,title:c.name(s),project:base(s.cwd),status,modified:activity.get(s.id)||Date.now(),agent:label,provider:providerOf(s.agent),model:label});
+  row.setAttribute('aria-pressed',String(c.active?.id===s.id));row.title=`${c.name(s)} · ${base(s.cwd)}`;
+  tickThreadTimes(row);sortRows();
  }
+ // Newest activity first, like the thread list.
+ function sortRows(){const order=[...rows.entries()].sort((a,b)=>(activity.get(b[0])||0)-(activity.get(a[0])||0)).map(e=>e[1]);if(order.some((r,i)=>side.children[i]!==r))side.append(...order);}
  const unpress=()=>{for(const r of rows.values())r.setAttribute('aria-pressed','false');};
 
  function setMode(m){
@@ -82,8 +83,8 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   c.paintHeader();
   if(m==='terminal')term.enter();else{showChat();term.exit();}
  }
- function open(s){
-  leave();hooks.threadView(c.name(s));
+ function open(s,animate=false){
+  leave();hooks.threadView(c.name(s),animate);
   c.active={id:s.id,s};c.mode='chat';sh.select(viewId(s.id));unpress();rows.get(s.id)?.setAttribute('aria-pressed','true');
   form.hidden=false;form.dataset.session='';
   c.ui=null;approval.clear();c.paintHeader();showChat();
@@ -101,9 +102,10 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   delete header.dataset.status;sh.deselect();
   unpress();
  }
- async function start(agent){
-  const cwd=project();if(!cwd){toast('Choose a project');return;}
-  try{const s=await sx.start({agent,cwd});await refresh();open(rows.get(s.id)?._s||s);}catch(e){toast(e.message);}
+ // Start flow from the composer: the typed text is the first message; resolves false when nothing started.
+ async function start(agent,text){
+  const cwd=project();if(!cwd){toast('Choose a project');return false;}
+  try{const s=await sx.start({agent,cwd});bump(s.id);await refresh();if(text){titles.set(s.id,text.replace(/\s+/g,' ').slice(0,60));firstText.set(s.id,text);await sx.send(s.id,text);}open(rows.get(s.id)?._s||s,true);return true;}catch(e){toast(e.message);return false;}
  }
 
  // Import: searchable history, read-only in the chat renderer, Resume starts a live session.
@@ -143,11 +145,10 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   const box=el('div','thread-messages');hooks.showHistory(box);renderChat(box,msgs);
  }
 
- document.addEventListener('click',e=>{
-  const item=e.target.closest?.('[data-menu-action^="cli-session:"],[data-menu-action^="import-chat:"]');if(!item)return;
-  const [type,value]=item.dataset.menuAction.split(':');
-  if(type==='cli-session')void start(value);else openImport();
- });
+ document.addEventListener('click',e=>{if(e.target.closest?.('[data-menu-action^="import-chat:"]'))openImport();});
+ connectThreadHover(side);
+ connectSessionContextMenu(side,{toast,getSession:row=>{const s=row._s;return s&&{id:s.id,title:c.name(s),attach:()=>sx.attachCommand(s.id),show:()=>{if(c.active?.id!==s.id)open(s);setMode('terminal');},stop:async()=>{await sx.stop(s.id);if(c.active?.id===s.id)hooks.clear?.();await refresh();}};}});
+ threadViewState.subscribe(ev=>{if(ev.type==='update'&&ev.changed?.includes('sidebar')){for(const r of rows.values())paint(r._s);if(c.active)c.paintHeader();}});
  void refresh();
  setInterval(()=>tickThreadTimes(side),30000);
  return {
@@ -155,5 +156,6 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   isActive:()=>!!c.active&&c.mode==='chat',
   stop(){if(!c.active||c.mode!=='chat'||!c.isWorking())return false;sx.control(c.active.id,'interrupt').catch(e=>toast(e.message));return true;},
   send(text){if(c.active)sx.send(c.active.id,text).catch(e=>toast(e.message));},
+  start,
  };
 }
