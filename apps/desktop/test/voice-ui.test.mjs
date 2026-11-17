@@ -261,6 +261,29 @@ test('voice: strip, full view, floating orb window, transcript rules, geometry a
    await page.locator('.voice-full-end').click();await page.waitForFunction(()=>!document.querySelector('form.composer').dataset.voice);
   });
 
+  await t.test('full view traps focus, outside click dismisses, rapid toggles leave the strip hidden, delegation without a provider reports',async()=>{
+   await start();await emit({type:'state',state:'listening'});
+   await page.locator('.voice-expand').click();await full.waitFor();
+   const inside=()=>page.evaluate(()=>!!document.activeElement.closest('.voice-full'));
+   for(let i=0;i<8;i++){await page.keyboard.press('Tab');assert.equal(await inside(),true,'Tab '+i);}
+   for(let i=0;i<4;i++){await page.keyboard.press('Shift+Tab');assert.equal(await inside(),true,'Shift+Tab '+i);}
+   await page.locator('.sidebar').first().click({position:{x:4,y:4},force:true});
+   assert.equal(await full.isVisible(),false,'outside click returns to the strip');assert.equal(await on(),true,'the call continues');
+   await page.evaluate(()=>{window.__closeCalls=0;const original=window.sufficeDesktop.voiceWindow;window.sufficeDesktop.voiceWindow=a=>{if(a==='close')window.__closeCalls++;return original?.(a);};});
+   for(let i=0;i<5;i++){await page.locator('.voice-expand').click();await full.waitFor();await page.keyboard.press('Escape');await full.waitFor({state:'hidden'});}
+   assert.equal(await page.evaluate(()=>window.__closeCalls),0,'Escape repeats do not hit the orb window');
+   // Delegation with models disabled: nothing is submitted, the reason lands in the thread.
+   const runs=await app.evaluate(()=>globalThis.voiceRuns.length);
+   await page.evaluate(()=>{document.querySelector('form.composer').modelsDisabled=true;});
+   await emit({type:'tool_call',id:'call_none',name:'background_agent',args:{prompt:'Do the thing.'}},400);
+   assert.equal(await app.evaluate(()=>globalThis.voiceRuns.length),runs);
+   if(await inThread())assert.equal(await page.locator('.thread-assistant[data-voice]').filter({hasText:'Connect a provider'}).count(),1);
+   await page.evaluate(()=>{document.querySelector('form.composer').modelsDisabled=false;});
+   await end();
+   for(let i=0;i<6;i++){await startButton.click();await startButton.click();}
+   await page.waitForFunction(()=>!document.querySelector('form.composer').dataset.voice,null,{timeout:5000});
+   assert.equal(await strip.isVisible(),false);assert.equal(await page.locator('.voice-stop').isVisible(),false);
+  });
   await t.test('spotlight lists the voice commands and opens the full view',async()=>{
    await page.keyboard.press('Control+k');
    const input=page.getByRole('combobox',{name:'Search threads and commands'});await input.waitFor();await input.fill('voice');

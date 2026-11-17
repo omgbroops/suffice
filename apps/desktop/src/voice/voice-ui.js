@@ -69,7 +69,7 @@ export function connectVoice({ form, prompt, toast = () => {}, api = window.suff
   // Full voice: a call view over the workspace. One calm orb, one word, three round
   // controls. The thread keeps filling in behind it.
   const workspace = form.closest('.workspace');
-  const full = el('div', 'voice-full', { role: 'dialog', 'aria-label': 'Voice conversation' }); full.hidden = true;
+  const full = el('div', 'voice-full', { role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Voice conversation' }); full.hidden = true;
   const fullCanvas = el('canvas', 'voice-orb', { 'aria-hidden': 'true' }), fullWord = el('div', 'voice-word', { role: 'status', 'aria-live': 'polite' });
   const round = (className, label, html) => { const node = el('button', `voice-round ${className}`, { type: 'button', 'aria-label': label, title: label }); node.innerHTML = html; return node; };
   const fullMute = round('voice-full-mute', 'Mute microphone', MIC), fullEnd = round('voice-full-end', 'End voice conversation', icon('close')), fullMini = round('voice-full-mini', 'Minimize to a floating orb', SHRINK);
@@ -79,11 +79,12 @@ export function connectVoice({ form, prompt, toast = () => {}, api = window.suff
   const fullOrb = createOrb(fullCanvas, { palette: wallpaperTones() || undefined });
   let mode = 'inline', tones = wallpaperTones();
   function setMode(next) {
-    mode = next;
+    const was = mode; mode = next;
     full.hidden = next !== 'full';
     if (conversation) form.dataset.voice = next;
     if (next === 'full') fullMute.focus({ preventScroll: true });
-    if (next === 'mini') { void api?.voiceWindow?.('open'); relay(); } else void api?.voiceWindow?.('close');
+    // Only a change into or out of the floating orb touches its window; Escape repeats stay renderer-only.
+    if (next === 'mini') { void api?.voiceWindow?.('open'); relay(); } else if (was === 'mini') void api?.voiceWindow?.('close');
   }
   // The floating orb lives in its own small window; it only mirrors state and sends back control presses.
   function relay(extra) {
@@ -152,6 +153,7 @@ export function connectVoice({ form, prompt, toast = () => {}, api = window.suff
     fullMute.innerHTML = MIC; fullMute.setAttribute('aria-label', 'Mute microphone'); fullMute.title = 'Mute microphone';
     delete window.__sufficeVoice;
   }
+  const canStart = () => form.modelsDisabled ? { ok: false, reason: 'Connect a provider in Settings, Models, first.' } : form.dataset.requireProject === 'true' ? { ok: false, reason: 'Choose a project above the composer first.' } : { ok: true };
   async function start() {
     if (conversation) return;
     const kind = setting('voiceProvider', 'openai-realtime');
@@ -160,9 +162,10 @@ export function connectVoice({ form, prompt, toast = () => {}, api = window.suff
       kind, onEvent,
       providerDeps: { deviceId, autoplay: setting('voiceAutoplay', 'true') !== 'false', speed: Number(setting('voiceSpeed', '1')) || 1 },
       app: {
-        canStart: () => form.modelsDisabled ? { ok: false, reason: 'Enable a model in Settings, Models, first.' } : form.dataset.requireProject === 'true' ? { ok: false, reason: 'Choose a project above the composer first.' } : { ok: true },
+        canStart,
         // Work goes through the same path as typing, so the transcript, tool rows and approvals behave as usual.
-        submit: text => { prompt.value = text; prompt.dispatchEvent(new Event('input', { bubbles: true })); form.requestSubmit(); },
+        // The check repeats here: a provider can be removed after the call began, and the run would be rejected with no one told.
+        submit: text => { const check = canStart(); if (!check.ok) { addMessage('assistant', check.reason); toast(check.reason); throw new Error(check.reason); } prompt.value = text; prompt.dispatchEvent(new Event('input', { bubbles: true })); form.requestSubmit(); },
         steer: async text => { prompt.value = text; prompt.dispatchEvent(new Event('input', { bubbles: true })); form.requestSubmit(); },
         abort: () => api?.abort?.(threadViewState.id),
         isRunning: () => form.dataset.running === 'true',
@@ -189,7 +192,16 @@ export function connectVoice({ form, prompt, toast = () => {}, api = window.suff
   startButton.addEventListener('click', () => (conversation ? stop() : void start()));
   stopButton.addEventListener('click', stop); fullEnd.addEventListener('click', stop);
   fullButton.addEventListener('click', () => setMode('full')); fullMute.addEventListener('click', toggleMute); fullMini.addEventListener('click', () => setMode('mini'));
-  full.addEventListener('keydown', event => { if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); setMode('inline'); prompt.focus({ preventScroll: true }); } });
+  full.addEventListener('keydown', event => {
+    if (event.key === 'Tab') { // keep focus inside the open call view
+      const items = [...full.querySelectorAll('button:not([disabled])')], first = items[0], last = items.at(-1), at = document.activeElement;
+      if (event.shiftKey ? at === first || !full.contains(at) : at === last || !full.contains(at)) { event.preventDefault(); (event.shiftKey ? last : first).focus({ preventScroll: true }); }
+    }
+    if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); setMode('inline'); prompt.focus({ preventScroll: true }); }
+  });
+  // Tab from outside (focus already left) and clicks outside both return to the inline strip; the call continues.
+  document.addEventListener('keydown', event => { if (event.key === 'Tab' && mode === 'full' && !full.contains(document.activeElement)) { event.preventDefault(); fullMute.focus({ preventScroll: true }); } }, true);
+  document.addEventListener('pointerdown', event => { if (mode === 'full' && !full.contains(event.target)) setMode('inline'); }, true);
   mute.addEventListener('click', toggleMute);
   // Typing supersedes the spoken answer; the conversation itself continues.
   prompt.addEventListener('input', event => { if (conversation && event.isTrusted) conversation.notifyTyped(); });
