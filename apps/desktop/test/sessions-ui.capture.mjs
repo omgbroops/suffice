@@ -74,20 +74,20 @@ const shot=async n=>{const b64=await app.evaluate(async({BrowserWindow})=>(await
   await page.locator('[data-menu-action="cli-session:fakeclaude"]').click();
   await page.locator('.composer-approval:not([hidden])').waitFor({timeout:20000});await page.waitForTimeout(600);
   await shot('chat-prompt.png');
-  await page.locator('.session-status').waitFor({timeout:5000});await shot('chat-working.png');
+  await page.locator('.thread-status').waitFor({timeout:5000});await shot('chat-working.png');
   await page.locator('.composer-approval button',{hasText:/^\s*(1\.\s*)?Yes\s*$/}).first().click();await page.waitForTimeout(300);if(await page.locator('dialog.detail-dialog[open]').count())throw new Error('detail dialog opened after Yes');
-  await page.waitForFunction(()=>!document.querySelector('.session-status')&&document.querySelector('.session-run')?.dataset.running==='false',null,{timeout:15000});await page.waitForTimeout(500);
+  await page.waitForFunction(()=>!document.querySelector('.thread-status')&&document.querySelector('.thread-activity[data-running]')?.dataset.running==='false',null,{timeout:15000});await page.waitForTimeout(500);
   await shot('chat-summary-collapsed.png');
-  {const r=page.locator('.session-run:has(.tool-diff)').first();if(!await r.evaluate(e=>e.open)){await r.locator('> summary').click();await page.waitForTimeout(400);}}
+  {const r=page.locator('.thread-activity:has(.tool-diff)').first();if(!await r.evaluate(e=>e.open)){await r.locator('> summary').click();await page.waitForTimeout(400);}}
   await shot('chat-summary-open.png');
   // subagent blocks: a2 running, a1 done with a nested child
   const subs=page.locator('.session-sub'),scrollTo=l=>l.evaluate(e=>e.scrollIntoView({block:'center'}));
   if(await subs.count()!==2)throw new Error('expected 2 subagent blocks, got '+await subs.count());
-  const runText=await page.locator('.session-run:has(.session-sub) > summary').first().textContent();if(!/ran 1 subagent.*running 1 subagent/.test(runText))throw new Error('run summary: '+runText);
+  const runText=await page.locator('.thread-activity:has(.session-sub) > summary').first().textContent();if(!/and 1 more/.test(runText))throw new Error('run summary: '+runText);
   await scrollTo(subs.nth(1));await page.waitForTimeout(200);await shot('subagent-running.png');
   await scrollTo(subs.nth(0));await page.waitForTimeout(200);await shot('subagent-done-collapsed.png');
   await subs.nth(0).locator('> summary').click();await page.waitForTimeout(400);await scrollTo(subs.nth(0));await shot('subagent-open.png');
-  await subs.nth(0).locator('.session-run:has(.session-sub)').first().locator('> summary').click();await page.waitForTimeout(300);
+  await subs.nth(0).locator('.thread-activity:has(.session-sub)').first().locator('> summary').click();await page.waitForTimeout(300);
   await subs.nth(0).locator('.session-sub').first().locator('> summary').click();await page.waitForTimeout(400);await scrollTo(subs.nth(0).locator('.session-sub').first());await shot('subagent-nested.png');
   await page.locator('.tool-widget:has(.tool-diff) summary').first().click().catch(()=>{});
   await page.waitForTimeout(400);
@@ -176,7 +176,7 @@ const shot=async n=>{const b64=await app.evaluate(async({BrowserWindow})=>(await
   const t1=Date.now();
   for(let i=0;i<60;i++){const u=await U();if(u.prompt){const pr=await page.evaluate(id=>sufficeDesktop.sessions.ui(id).prompt,sid);const o=pr.options.find(x=>/^yes/i.test(x.label))||pr.options[0];log.push('c prompt:'+pr.title);await page.evaluate(([id,i])=>sufficeDesktop.sessions.control(id,'answerPrompt',{index:i}),[sid,o.index]);break;}if(Date.now()-t1>3000)break;await page.waitForTimeout(500);}
   await page.waitForTimeout(300);
-  const wasWorking=await page.evaluate(()=>document.querySelector('.session-run')?.dataset.running==='true'||!!document.querySelector('.session-status'));log.push('c working '+wasWorking);
+  const wasWorking=await page.evaluate(()=>document.querySelector('.thread-activity')?.dataset.running==='true'||!!document.querySelector('.thread-status'));log.push('c working '+wasWorking);
   await page.locator('.send-button').click();
   let intr=false;try{await page.waitForFunction(id=>(sufficeDesktop.sessions.ui(id)?.items||[]).some(i=>i.kind==='notice'&&/interrupted/i.test(i.text||'')),sid,{timeout:15000});intr=true;}catch{}
   log.push('c interrupted '+intr);if(!intr)log.push('SOFT interrupt failed');
