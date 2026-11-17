@@ -19,18 +19,21 @@ export function connectThreadContextMenu(list,{getThread,metadata,update,onArchi
 
 // Right-click menu for CLI session rows: same popover, menu and dialog classes as the thread menu.
 export function connectSessionContextMenu(list,{getSession,toast}){
- const element=document.createElement('div');element.className='popover thread-context-menu';element.hidden=true;document.body.append(element);const menu=createMenu(element);let current,row;
+ let element,menu,confirm,current,row,ready;
+ function init(){if(ready)return;ready=true;element=document.createElement('div');element.className='popover thread-context-menu';element.hidden=true;document.body.append(element);menu=createMenu(element);
  document.addEventListener('suffice-close-thread-menu',()=>menu.close());
- const confirm=document.createElement('dialog');confirm.className='provider-dialog thread-delete-dialog';confirm.setAttribute('aria-label','Stop session');
+ confirm=document.createElement('dialog');confirm.className='provider-dialog thread-delete-dialog';confirm.setAttribute('aria-label','Stop session');
  confirm.innerHTML=`<header><h2>Stop session?</h2><button type="button" class="button" aria-label="Close stop dialog">${icon('close')}</button></header><div class="provider-dialog-body"><p class="thread-delete-title"></p><p>The agent process ends and the terminal closes.</p></div><footer class="provider-dialog-footer"><button type="button" class="provider-dialog-button" data-cancel>Cancel</button><button type="button" class="provider-dialog-button provider-dialog-danger" data-stop>Stop session</button></footer>`;document.body.append(confirm);
  for(const button of confirm.querySelectorAll('header button,[data-cancel]'))button.addEventListener('click',()=>confirm.close());
  confirm.addEventListener('keydown',event=>{if(event.key==='Escape')event.stopPropagation();});confirm.addEventListener('close',()=>row?.focus());
  confirm.querySelector('[data-stop]').addEventListener('click',async event=>{event.target.disabled=true;try{await current.stop();confirm.close();}catch(error){toast(error.message);}finally{event.target.disabled=false;}});
- function open(target,x,y){current=getSession(target);if(!current)return;row=target;menu.open(target,[{label:'Copy attach command',icon:'files',action:'session:attach'},{label:'Show terminal',icon:'terminal',action:'session:terminal'},{label:'Stop session',icon:'close',action:'session:stop',separator:true}],'Session');if(x!=null){element.style.left=`${Math.max(8,Math.min(x,innerWidth-element.offsetWidth-8))}px`;element.style.top=`${Math.max(8,Math.min(y,innerHeight-element.offsetHeight-8))}px`;}element.querySelector('button')?.focus();}
- list.addEventListener('contextmenu',event=>{const target=event.target.closest('.thread-row');if(!target)return;event.preventDefault();open(target,event.clientX,event.clientY);});
- list.addEventListener('keydown',event=>{if(event.key==='ContextMenu'||event.shiftKey&&event.key==='F10'){const target=event.target.closest('.thread-row');if(target){event.preventDefault();open(target);}}});
  element.addEventListener('click',async event=>{const button=event.target.closest('[data-menu-action^="session:"]');if(!button||!current)return;const action=button.dataset.menuAction.slice(8);menu.close();
   try{if(action==='attach'){await navigator.clipboard.writeText(await current.attach());toast('Attach command copied');}
    if(action==='terminal')current.show();
    if(action==='stop'){confirm.querySelector('.thread-delete-title').textContent=current.title;confirm.showModal();confirm.querySelector('[data-cancel]').focus();}}catch(error){toast(error.message);}});
+ }
+ function open(target,x,y){init();current=getSession(target);if(!current)return;row=target;menu.open(target,[{label:'Copy attach command',icon:'files',action:'session:attach'},{label:'Show terminal',icon:'terminal',action:'session:terminal'},{label:'Stop session',icon:'close',action:'session:stop',separator:true}],'Session');if(x!=null){element.style.left=`${Math.max(8,Math.min(x,innerWidth-element.offsetWidth-8))}px`;element.style.top=`${Math.max(8,Math.min(y,innerHeight-element.offsetHeight-8))}px`;}element.querySelector('button')?.focus();}
+ list.addEventListener('contextmenu',event=>{const target=event.target.closest('.thread-row');if(!target)return;event.preventDefault();open(target,event.clientX,event.clientY);});
+ list.addEventListener('keydown',event=>{if(event.key==='ContextMenu'||event.shiftKey&&event.key==='F10'){const target=event.target.closest('.thread-row');if(target){event.preventDefault();open(target);}}});
+
 }
