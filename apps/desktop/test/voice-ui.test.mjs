@@ -276,7 +276,10 @@ test('voice: strip, full view, floating orb window, transcript rules, geometry a
    // A toast over the open full view is not an outside click.
    await page.locator('.voice-expand').click();await full.waitFor();
    await page.evaluate(()=>document.dispatchEvent(new CustomEvent('suffice-toast',{detail:'Test toast'})));
-   await page.locator('.toast-dismiss').click();
+   await page.locator('.toast-dismiss').waitFor();let reached=false;const seq=[];for(let i=0;i<6&&!reached;i++){await page.keyboard.press('Tab');reached=await page.evaluate(()=>!!document.activeElement.closest('.toast-dismiss'));seq.push(await page.evaluate(()=>document.activeElement.className||document.activeElement.tagName));}
+   assert.equal(reached,true,'Tab reaches the toast Okay while the call view is open: '+seq);
+   if(process.env.VOICE_SHOT_DIR)await page.screenshot({path:process.env.VOICE_SHOT_DIR+'/toast-okay-focused.png'});
+   await page.keyboard.press('Enter');
    assert.equal(await full.isVisible(),true,'toast Okay leaves the call view open');
    // Full -> mini -> full still opens then closes the orb window.
    await page.locator('.voice-full-mini').click();await page.waitForFunction(()=>document.querySelector('form.composer').dataset.voice==='mini');

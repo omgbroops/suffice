@@ -192,15 +192,17 @@ export function connectVoice({ form, prompt, toast = () => {}, api = window.suff
   startButton.addEventListener('click', () => (conversation ? stop() : void start()));
   stopButton.addEventListener('click', stop); fullEnd.addEventListener('click', stop);
   fullButton.addEventListener('click', () => setMode('full')); fullMute.addEventListener('click', toggleMute); fullMini.addEventListener('click', () => setMode('mini'));
+  // Focus cycle for the open call view: its buttons, then any toast buttons (the toast sits outside the view).
+  const trapTab = event => {
+    const items = [...full.querySelectorAll('button:not([disabled])'), ...document.querySelectorAll('.toast button:not([disabled])')], i = items.indexOf(document.activeElement);
+    event.preventDefault(); items.at(i < 0 ? (event.shiftKey ? -1 : 0) : (i + (event.shiftKey ? -1 : 1)) % items.length).focus({ preventScroll: true });
+  };
   full.addEventListener('keydown', event => {
-    if (event.key === 'Tab') { // keep focus inside the open call view
-      const items = [...full.querySelectorAll('button:not([disabled])')], first = items[0], last = items.at(-1), at = document.activeElement;
-      if (event.shiftKey ? at === first || !full.contains(at) : at === last || !full.contains(at)) { event.preventDefault(); (event.shiftKey ? last : first).focus({ preventScroll: true }); }
-    }
+    if (event.key === 'Tab') trapTab(event);
     if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); setMode('inline'); prompt.focus({ preventScroll: true }); }
   });
   // Tab from outside (focus already left) and clicks outside both return to the inline strip; the call continues.
-  document.addEventListener('keydown', event => { if (event.key === 'Tab' && mode === 'full' && !full.contains(document.activeElement)) { event.preventDefault(); fullMute.focus({ preventScroll: true }); } }, true);
+  document.addEventListener('keydown', event => { if (event.key !== 'Tab' || mode !== 'full' || full.contains(document.activeElement)) return; if (document.activeElement?.closest?.('.toast')) return trapTab(event); event.preventDefault(); fullMute.focus({ preventScroll: true }); }, true);
   document.addEventListener('pointerdown', event => { if (mode === 'full' && !full.contains(event.target) && !event.target.closest?.('.toast')) setMode('inline'); }, true);
   mute.addEventListener('click', toggleMute);
   // Typing supersedes the spoken answer; the conversation itself continues.
