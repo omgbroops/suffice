@@ -31,7 +31,9 @@
     "desktop:build": "bun run --cwd apps/desktop build",
     "test:desktop": "node --test --test-concurrency=1 apps/desktop/test/*.test.mjs",
     "desktop:setup": "bun scripts/setup-desktop.mjs",
-    "postinstall": "bun run desktop:setup"
+    "postinstall": "bun run desktop:setup",
+    "desktop:installer": "node scripts/desktop/package.mjs",
+    "desktop:smoke": "node scripts/desktop/smoke.mjs"
   },
   "dependencies": {
     "@earendil-works/pi-ai": "1.5.2",
@@ -55,6 +57,7 @@
   ],
   "devDependencies": {
     "electron": "45.3.0",
-    "playwright-core": "^1.65.0"
+    "playwright-core": "^1.65.0",
+    "electron-builder": "26.18.0"
   }
 }

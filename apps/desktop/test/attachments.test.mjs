@@ -12,3 +12,11 @@ test('attachments stay in app storage and images reach the harness separately',a
  await assert.rejects(prepareAttachments(home,[{name:'invalid',data:'not base64!'}]),/Invalid attachment/);
  const file=resolve(home,'copied.txt');await writeFile(file,'copied');const items=await clipboardFiles({availableFormats:()=>['FileNameW'],readBuffer:()=>Buffer.from(file+'\0','utf16le')});assert.equal(items[0].name,'copied.txt');assert.equal(Buffer.from(items[0].data,'base64').toString(),'copied');
 });
+
+test('async Electron clipboard reads external file formats and ignores plain text',async()=>{
+ assert.deepEqual(await clipboardFiles({read:async()=>[{types:['text/plain']}]}),[]);
+ const home=await mkdtemp(resolve(tmpdir(),'suffice-clipboard-')),file=resolve(home,'file.txt');await writeFile(file,'fixture');
+ const type='electron application/osclipboard;format="FileNameW"';
+ const items=await clipboardFiles({read:async()=>[{types:[type],getType:async()=>new Blob([Buffer.from(file+'\0','utf16le')])}]});
+ assert.equal(items[0].name,'file.txt');
+});

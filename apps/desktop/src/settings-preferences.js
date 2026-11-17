@@ -1,7 +1,7 @@
 import {setTheme} from './theme.js';
 import {settingsSections} from './settings-data.js';
-export const supportedSettings=new Set(settingsSections.flatMap(section=>section.groups.flatMap(group=>group.rows)).filter(row=>row.id&&['toggle','select','segment','palette','action'].includes(row.type)).map(row=>row.id));
-supportedSettings.add('disabled-models');
+export const supportedSettings=new Set(settingsSections.flatMap(section=>section.groups.flatMap(group=>group.rows)).filter(row=>row.id&&['toggle','select','segment','palette','action','range'].includes(row.type)).map(row=>row.id));
+supportedSettings.add('sidebar-collapsed');supportedSettings.add('file-open-app');supportedSettings.add('disabled-models');supportedSettings.add('approval-mode');
 let saved={};try{saved=JSON.parse(localStorage.getItem('suffice-settings-v1'))||{};}catch{}
 export function preference(id,fallback){return saved[id]??fallback;}
 export async function initializePreferences(){const remote=await globalThis.window?.sufficeDesktop?.preferences?.();if(remote){for(const [id,value] of Object.entries(saved))if(supportedSettings.has(id)&&!Object.hasOwn(remote,id))await window.sufficeDesktop.desktopPreference({id,value});saved={...saved,...remote};localStorage.setItem('suffice-settings-v1',JSON.stringify(saved));applyPreferences();}}
@@ -11,9 +11,12 @@ export async function savePreference(id,value){
  saved[id]=value;localStorage.setItem('suffice-settings-v1',JSON.stringify(saved));applyPreferences();document.dispatchEvent(new CustomEvent('suffice-preference',{detail:{id,value}}));
 }
 const system=globalThis.matchMedia?.('(prefers-color-scheme:light)')??{matches:false,addEventListener(){}};
+export function previewBackgroundDimming(value){const dim=Math.min(80,Math.max(0,Number(value)||0))/100;document.documentElement.style.setProperty('--background-dim',String(dim));}
+export function previewSurfaceOpacity(value){document.documentElement.style.setProperty('--surface-opacity',Math.min(100,Math.max(0,Number(value)||0))+'%');}
 export function applyPreferences(){
  if(typeof document==='undefined')return;
- const root=document.documentElement;root.lang=preference('language','System')==='English'?'en':(navigator.language.startsWith('en')?navigator.language:'en');
+ previewBackgroundDimming(preference('background-dimming',35));previewSurfaceOpacity(preference('surface-opacity',72));
+ const root=document.documentElement;if(Object.hasOwn(saved,'sidebar-collapsed')&&!root.classList.contains('settings-open'))document.body.classList.toggle('sidebar-collapsed',saved['sidebar-collapsed']);root.lang=preference('language','System')==='English'?'en':(navigator.language.startsWith('en')?navigator.language:'en');
  if(saved.mode)setTheme(saved.mode==='System'?(system.matches?'light':'dark'):saved.mode.toLowerCase());
  if(saved.background)localStorage.setItem('suffice-background',saved.background);
  if(saved.accent)root.style.setProperty('--blue',saved.accent);

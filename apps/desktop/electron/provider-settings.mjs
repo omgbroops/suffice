@@ -25,7 +25,9 @@ export function createProviderSettings({emit,openBrowser,getPreferences=async()=
  function answer(payload){if(!pending||payload?.id!==pending.id||typeof payload.value!=='string'||payload.value.length>32000)throw new Error('Invalid login response');const prompt=pending;pending=null;prompt.answer(payload.value);}
  async function logout(id){if(operation)throw new Error('Finish connection first');const rt=await runtime();if(!rt.getProvider(id))throw new Error('Unknown provider');await rt.logout(id);return list();}
  async function refresh(options={}){return refreshModelCatalog(await runtime(),{...options,onRefresh:onCatalog});}
- return {list,login,answer,logout,refresh,cancel(){operation?.abort();}};
+ // Main-process only: never expose this over IPC.
+ async function getApiKey(id){return (await (await runtime()).getAuth(id))?.auth?.apiKey;}
+ return {list,login,answer,logout,refresh,getApiKey,cancel(){operation?.abort();}};
 }
 
 // SDK errors may contain token responses. Only known, static explanations cross IPC.

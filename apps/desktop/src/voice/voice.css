@@ -1,0 +1,74 @@
+/* Voice strip: one slim bar directly above the composer, in the same dark glass as the
+   composer and chips. Status on the left, controls on the right, nothing else.
+   Geometry: one inset (6px) on all four sides; outer radius 12 = control radius 6 + inset 6. */
+.voice-strip {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  width: 100%; height: 36px; margin: 0 0 8px; padding: 6px; border-radius: 12px;
+  background: var(--shared-chrome-fill, var(--surface-composer)); color: var(--text);
+  outline: var(--hairline, 1px) solid var(--overlay-edge, var(--border-strong)); box-shadow: var(--composer-shadow, var(--shadow-float));
+  -webkit-backdrop-filter: var(--shared-chrome-filter, var(--glass-filter)); backdrop-filter: var(--shared-chrome-filter, var(--glass-filter));
+}
+.voice-strip[hidden] { display: none; }
+.voice-strip-status, .voice-strip-controls { display: flex; align-items: center; min-width: 0; }
+.voice-strip-status { gap: 8px; padding-left: 2px; }
+.voice-strip-controls { gap: 2px; }
+.voice-orb { display: block; flex: 0 0 auto; width: 20px; height: 20px; border-radius: 50%; image-rendering: pixelated; }
+.voice-word { min-width: 72px; font-size: 13px; line-height: 20px; font-weight: 500; color: var(--text-strong); }
+.voice-strip[data-state='muted'] :is(.voice-orb, .voice-word) { opacity: .45; }
+
+/* Two small meters: what the microphone hears and what the agent says. */
+.voice-meter { display: inline-flex; align-items: center; gap: 2px; height: 16px; }
+.voice-meter-label { margin-right: 4px; font-size: 11px; line-height: 16px; color: var(--text-muted); }
+.voice-bar { display: block; width: 3px; height: 14px; background: var(--text-muted); transform: scaleY(.14); transform-origin: center; transition: transform 100ms linear; }
+.voice-meter[data-source='mic'] .voice-bar[data-on='true'] { background: var(--blue); }
+.voice-meter[data-source='agent'] .voice-bar[data-on='true'] { background: var(--text-strong); }
+.voice-meter + .voice-meter { margin-left: 8px; }
+
+.voice-control {
+  height: 24px; padding: 0 8px; border: 0; border-radius: 6px; background: transparent;
+  color: var(--text-muted); font-size: 12px; line-height: 24px; font-weight: 500;
+}
+.voice-mute[aria-pressed='true'] { background: var(--selected-fill, var(--surface-active)); color: var(--text-strong); }
+.desktop-app .composer .voice-start { width: 28px; height: 28px; min-height: 28px; padding: 0; border-radius: var(--radius-button); }
+.voice-start .icon { width: 16px; height: 16px; }
+.voice-start[aria-pressed='true'] { background: var(--selected-fill, var(--surface-active)); color: var(--text-strong); }
+
+@media (hover: hover) and (pointer: fine) {
+  .voice-control:hover { background: var(--hover-fill, var(--surface-hover)); color: var(--text-strong); }
+}
+.voice-control:focus-visible { outline: 2px solid var(--focus-ring, var(--focus)); outline-offset: 1px; }
+/* Reduced motion drops the meters and keeps the controls. */
+.reduce-motion .voice-meter { display: none; }
+@media (prefers-reduced-motion: reduce) { .voice-meter { display: none; } }
+@media (max-width: 699px) { .voice-meter-label { display: none; } .voice-meter[data-source='agent'] { display: none; } }
+
+/* Full voice: a call view over the workspace. The thread stays behind it, softened,
+   and keeps filling in while you talk. One orb, one word, three round controls. */
+.voice-full {
+  position: absolute; inset: 0; z-index: 40; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+  border-radius: inherit; background: color-mix(in srgb, var(--shared-chrome-tint, #0e0e0e) 76%, transparent);
+  -webkit-backdrop-filter: blur(40px) saturate(1.1); backdrop-filter: blur(40px) saturate(1.1);
+}
+.voice-full[hidden] { display: none; }
+.voice-full .voice-orb { width: 168px; height: 168px; }
+.voice-full .voice-word { min-width: 0; min-height: 20px; color: var(--text-muted); font-weight: 400; text-align: center; }
+.voice-full[data-state='muted'] .voice-orb { opacity: .45; }
+.voice-full-controls { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
+.voice-round {
+  display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 50%;
+  background: var(--shared-chrome-fill, var(--surface-composer)); color: var(--text);
+  outline: var(--hairline, 1px) solid var(--overlay-edge, var(--border-strong));
+}
+.voice-round .icon { width: 16px; height: 16px; }
+.voice-round[aria-pressed='true'] { color: var(--text-muted); }
+.voice-full-end { background: var(--primary-bg, var(--send-active)); color: var(--primary-fg, var(--send-fg)); outline: 0; }
+.voice-round:focus-visible { outline: 2px solid var(--focus-ring, var(--focus)); outline-offset: 2px; }
+@media (hover: hover) and (pointer: fine) { .voice-round:not(.voice-full-end):hover { color: var(--text-strong); background: var(--surface-menu, var(--shared-chrome-fill)); } }
+/* Entry: opacity only on the sheet, a short rise on the orb. Exit is instant. */
+.voice-full:not([hidden]) { animation: voice-full-in 200ms var(--ease-out); }
+.voice-full:not([hidden]) .voice-orb { animation: voice-orb-in 450ms var(--ease-out); }
+@keyframes voice-full-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes voice-orb-in { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: scale(1); } }
+.desktop-app[data-keyboard='true'] .voice-full:not([hidden]), .desktop-app[data-keyboard='true'] .voice-full:not([hidden]) .voice-orb,
+.reduce-motion .voice-full:not([hidden]), .reduce-motion .voice-full:not([hidden]) .voice-orb { animation: none; }
+@media (prefers-reduced-motion: reduce) { .voice-full:not([hidden]), .voice-full:not([hidden]) .voice-orb { animation: none; } }

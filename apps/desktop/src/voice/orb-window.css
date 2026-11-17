@@ -1,0 +1,10 @@
+/* Floating voice orb window: 200 x 220, transparent, draggable by the orb. */
+.voice-orb-window, .voice-orb-window body { margin: 0; background: transparent; overflow: hidden; }
+.voice-orb-window #app { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 16px; -webkit-app-region: drag; }
+.voice-orb-window .orb { display: block; width: 120px; height: 120px; border-radius: 50%; image-rendering: pixelated; box-shadow: 0 6px 18px #00000040; }
+.voice-orb-window #app[data-state='muted'] .orb { opacity: .5; }
+.orb-controls { display: flex; gap: 8px; -webkit-app-region: no-drag; }
+.orb-control { display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; border-radius: 50%; background: #1c1c1ee6; color: #e6e6e6; box-shadow: 0 0 0 .5px #ffffff24, 0 1px 2px #00000066; cursor: pointer; }
+:root[data-theme='light'] .orb-control { background: #fffffff0; color: #1c1c1e; box-shadow: 0 0 0 .5px #00000024, 0 1px 2px #0000002e; }
+.orb-control svg { width: 14px; height: 14px; }
+.orb-control:focus-visible { outline: 2px solid #999; outline-offset: 2px; }

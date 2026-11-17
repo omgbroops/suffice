@@ -10,7 +10,8 @@ const options={files:{label:'Files',icon:'files'},changes:{label:'Changes',icon:
 export function panelIconButton(label,glyph){const button=document.createElement('button');button.type='button';button.className='button button--ghost';button.setAttribute('aria-label',label);button.title=label;button.innerHTML=icon(glyph);return button;}
 const textNode=textElement;
 export function connectRightPanel({sidebar,resize,toggle,api}){
- document.addEventListener('suffice-preference',event=>{if(event.detail.id==='wrap-lines'||event.detail.id==='diff-layout'){const patch=event.detail.id==='wrap-lines'?{wrap:event.detail.value}:{diffLayout:event.detail.value.toLowerCase()};store.update({files:{...store.state.files,...(event.detail.id==='wrap-lines'?patch:{})},changes:{...store.state.changes,...patch}});}});
+ document.addEventListener('suffice-preference',event=>{if(event.detail.id==='wrap-lines'||event.detail.id==='diff-layout'){const patch=event.detail.id==='wrap-lines'?{wrap:event.detail.value}:{diffLayout:event.detail.value.toLowerCase()};store.update({files:{...store.state.files,...(event.detail.id==='wrap-lines'?patch:{})},changes:{...store.state.changes,...patch}});mounted=null;if(store.state.panelOpen)void load();}});
+ document.addEventListener('suffice-open-file',event=>{if(!store.id)return;const path=event.detail.path;store.update({panelOpen:true,tabs:store.state.tabs.includes('files')?store.state.tabs:[...store.state.tabs,'files'],activeTab:'files',files:{...store.state.files,file:path,scroll:0}});});
  const header=document.createElement('div');header.className='right-panel-header';
  const tabs=document.createElement('div');tabs.className='right-panel-tabs';tabs.setAttribute('role','tablist');tabs.setAttribute('aria-label','Right panel tabs');
  const add=panelIconButton('Add panel tab','plus');add.setAttribute('aria-expanded','false');add.setAttribute('aria-haspopup','menu');

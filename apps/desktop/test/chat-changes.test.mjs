@@ -58,3 +58,14 @@ test('separate background processes detect overlapping workspace operations',{ti
 test('project totals compare the feature branch to main, including uncommitted edits',async()=>{
  const {cwd}=await fixture(),exec=promisify(execFile),git=(...args)=>exec('git',['-C',cwd,...args],{windowsHide:true});await git('init','-b','main');await git('config','user.name','Fixture');await git('config','user.email','fixture@example.invalid');await writeFile(resolve(cwd,'file'),'original\n');await git('add','file');await git('commit','-m','base');await git('checkout','-b','feature');await writeFile(resolve(cwd,'file'),'replacement\n');await git('add','file');await git('commit','-m','feature');await writeFile(resolve(cwd,'file'),'replacement\nworking\n');const metadata=await projectMetadata(cwd);assert.equal(metadata.projectDiff.scope,'branch');assert.equal(metadata.projectDiff.added,2);assert.equal(metadata.projectDiff.removed,1);
 });
+
+test('turn receipts reset independently of cumulative chat changes',async()=>{
+ const {cwd,home}=await fixture();let chat,turn;
+ const tracker=createChatChangeTracker({cwd,home,getId:()=>id,onChange:(summary,current)=>{chat=summary;turn=current;}});
+ await tracker.beginTurn();let token=await tracker.before('write',{path:'turn.txt'});await writeFile(resolve(cwd,'turn.txt'),'one\n');await tracker.after(token);
+ assert.equal(turn.added,1);assert.equal(turn.scope,'turn');
+ await tracker.beginTurn();token=await tracker.before('write',{path:'turn.txt'});await writeFile(resolve(cwd,'turn.txt'),'one\ntwo\n');await tracker.after(token);
+ assert.equal(chat.added,2);assert.equal(turn.added,1);assert.equal(turn.files,1);
+ await tracker.beginTurn();token=await tracker.before('write',{path:'turn.txt'});await writeFile(resolve(cwd,'turn.txt'),'');await tracker.after(token);
+ assert.equal(chat.files,0);assert.equal(turn.removed,2);assert.equal(turn.added,0);
+});

@@ -30,8 +30,9 @@ async function list(root,directory=''){
  const entries=await fs.readdir(file,{withFileTypes:true});
  return {directory,project:path.basename(base),entries:entries.filter(entry=>entry.name!=='.git').map(entry=>({name:entry.name,path:path.relative(base,path.join(file,entry.name)).split(path.sep).join('/'),kind:entry.isSymbolicLink()?'link':entry.isDirectory()?'directory':'file'})).sort((a,b)=>(a.kind==='directory'?0:1)-(b.kind==='directory'?0:1)||a.name.localeCompare(b.name,undefined,{numeric:true}))};
 }
-async function read(root,name){
- const {file}=await inside(root,name);const handle=await fs.open(file,'r');
+async function read(root,name,{external=false}={}){
+ if(typeof name!=='string'||name.includes('\0'))throw new Error('Invalid file path');
+ const {file}=external?{file:await fs.realpath(path.resolve(root,name))}:await inside(root,name);const handle=await fs.open(file,'r');
  try{
   const info=await handle.stat();if(!info.isFile())throw new Error('This is not a file');
   const buffer=Buffer.alloc(Math.min(info.size,limit));const {bytesRead}=await handle.read(buffer,0,buffer.length,0);

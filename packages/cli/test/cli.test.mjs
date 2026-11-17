@@ -94,16 +94,24 @@ test('native tools edit multiple packages, root and hidden config, then run proj
     const ts=await find('symbol_read').execute('g',{path:'packages/b/index.ts',name:'typed'});
     assert.match(ts.structuredContent.text,/value: number/);
     assert.equal(await readFile(resolve(dir,'.github/workflows/ci.yml'),'utf8'),'name: ci\n');
-    await assert.rejects(find('write').execute('h',{path:'../escape.txt',content:'no'}),/outside/);
+    await assert.rejects(repositoryPath(dir,''),/path is required/);
   } finally {await rm(dir,{recursive:true,force:true});}
 });
 
-test('file scope rejects an escaping directory link, including for new files',async()=>{
+test('file tools accept external paths and directory links',async()=>{
   const dir=await mkdtemp(resolve(tmpdir(),'suffice-cli-scope-'));
   try {
     const repo=resolve(dir,'repo'),outside=resolve(dir,'outside');
     await mkdir(repo);await mkdir(outside);
     await symlink(outside,resolve(repo,'linked'),process.platform==='win32'?'junction':'dir');
-    await assert.rejects(repositoryPath(repo,'linked/new.txt'),/leaves/);
+    assert.equal(await repositoryPath(repo,'../outside/new.txt'),resolve(outside,'new.txt'));
+    assert.equal(await repositoryPath(repo,resolve(outside,'new.txt')),resolve(outside,'new.txt'));
+    assert.equal(await repositoryPath(repo,'linked/new.txt'),resolve(repo,'linked/new.txt'));
+    const tools=repositoryTools({workspace:repo}),find=name=>tools.find(tool=>tool.name===name);
+    const path=resolve(outside,'new.txt');
+    await find('write').execute('external-write',{path,content:'old value'});
+    const read=await find('read').execute('external-read',{path});assert.ok(read.content.some(item=>item.text?.includes('old value')));
+    await find('edit').execute('external-edit',{path:'../outside/new.txt',edits:[{oldText:'old value',newText:'new value'}]});
+    assert.equal(await readFile(path,'utf8'),'new value');
   } finally {await rm(dir,{recursive:true,force:true});}
 });

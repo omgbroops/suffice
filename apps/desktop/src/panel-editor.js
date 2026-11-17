@@ -1,3 +1,5 @@
+import {createFileOpenButton} from './file-open-menu.js';
+import {savePreference} from './settings-preferences.js';
 import {icon} from './ui.js';
 import {textElement} from './panel-content.js';
 import {fileIcon} from './file-icons.js';
@@ -25,11 +27,12 @@ export function createPanelEditor({body,type,view,project,onPatch,onTab,onRefres
   bar.replaceChildren();const toggle=control('Show explorer','panel',()=>onPatch({explorerOpen:true}));toggle.hidden=view.explorerOpen!==false;bar.append(toggle);
   const path=textElement('span','panel-path',view.file||(type==='changes'?'All changes':''));path.title=view.file||'';if(view.file)bar.append(fileIcon(view.file));bar.append(path);
   if(view.file){
-   const options=document.createElement('div');options.className='editor-view-options';const wrap=control('Wrap lines','wrap',()=>onPatch({wrap:!view.wrap,scroll:scroller.scrollTop}));wrap.setAttribute('aria-pressed',String(!!view.wrap));options.append(wrap);
+   const options=document.createElement('div');options.className='editor-view-options';const wrap=control('Wrap lines','wrap',()=>void savePreference('wrap-lines',!view.wrap));wrap.setAttribute('aria-pressed',String(!!view.wrap));options.append(wrap);
    if(type==='changes'){
-    const split=control('Split diff','split',()=>onPatch({diffLayout:view.diffLayout==='split'?'unified':'split',scroll:scroller.scrollTop}));split.setAttribute('aria-pressed',String(view.diffLayout==='split'));options.append(split);
+    const split=control('Split diff','split',()=>void savePreference('diff-layout',view.diffLayout==='split'?'Unified':'Split'));split.setAttribute('aria-pressed',String(view.diffLayout==='split'));options.append(split);
     for(const direction of [-1,1]){const jump=control(direction<0?'Previous change':'Next change','chevron',()=>{const hunks=[...scroller.querySelectorAll('.hunk')],top=scroller.getBoundingClientRect().top;const target=direction>0?hunks.find(hunk=>hunk.getBoundingClientRect().top>top+8)||hunks[0]:[...hunks].reverse().find(hunk=>hunk.getBoundingClientRect().top<top-8)||hunks.at(-1);if(target)scroller.scrollTo({top:scroller.scrollTop+target.getBoundingClientRect().top-top-6});});jump.dataset.changeNav=String(direction);options.append(jump);}
    }
+   options.append(createFileOpenButton(view.file));
    bar.append(options,control('Back','close',()=>onPatch({file:null,scroll:0})));
   }
  }

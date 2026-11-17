@@ -1,6 +1,14 @@
 // Shared primitives: every control and surface is assembled from these helpers.
 export { mark } from './brand.js';
 const paths = {
+ queue:'<path d="M4 4v7a3 3 0 0 0 3 3h11m-3-3 3 3-3 3M9 5h11M9 8h8M4 20h16"/>',
+ steer:'<path d="M4 5v5a3 3 0 0 0 3 3h13m-5-5 5 5-5 5"/>',
+ code:'<path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-15-2 18"/>',
+
+  'access-supervised':'<path d="M8 12V6a1.5 1.5 0 0 1 3 0v5-7a1.5 1.5 0 0 1 3 0v7-5a1.5 1.5 0 0 1 3 0v6-3a1.5 1.5 0 0 1 3 0v6a7 7 0 0 1-13 3l-3-5a1.5 1.5 0 0 1 2-2l2 2Z"/>',
+  'access-auto':'<path d="m12 3 8 4v6c0 4-4 7-8 8-4-1-8-4-8-8V7Z"/><path d="m9 10 3 2-3 2m5 1h2"/>',
+  'access-full':'<path d="m12 3 8 4v6c0 4-4 7-8 8-4-1-8-4-8-8V7Z"/><path d="M12 8v5m0 3h.01"/>',
+
   copy:'<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"/>',
   plug:'<path d="M8 3v4m8-4v4M5 7h14v4a7 7 0 0 1-14 0V7Zm7 11v4"/>',
   puzzle:'<path d="M8 3h8v5a2 2 0 1 1 4 0h1v7h-5a2 2 0 1 0 0 4v2H9v-5a2 2 0 1 1-4 0H3V9h5a2 2 0 1 0 0-4V3Z"/>',

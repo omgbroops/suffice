@@ -1,3 +1,6 @@
+import {openAccentPicker} from './accent-color-picker.js';
+import {connectOverlayScrollbar} from './overlay-scrollbar.js';
+import {fadeGlassContent} from './glass-content-motion.js';
 import {mountWallpaperSettings} from './wallpaper-settings.js';
 import {mountResourceSettings} from './resource-settings.js';
 import {setProjectGroupExpanded} from './project-group-motion.js';
@@ -7,7 +10,7 @@ import {settingsSections} from './settings-data.js';
 import {createMenu} from './menu.js';
 import {connectScrollEdges} from './components/ui/scroll-edges.js';
 import './settings.css';
-import {preference,savePreference,supportedSettings} from './settings-preferences.js';
+import {preference,savePreference,supportedSettings,previewBackgroundDimming,previewSurfaceOpacity} from './settings-preferences.js';
 import {backgroundPresets} from './backgrounds/presets.js';
 import {providerIcon} from './provider-icons.js';
 import {threadViewState} from './thread-view-state.js';
@@ -25,7 +28,8 @@ export function createSettings(){
  const popup=document.createElement('div');popup.className='popover settings-select-menu';popup.hidden=true;document.body.append(popup);
  const menu=createMenu(popup),nav=root.querySelector('nav'),search=root.querySelector('input'),content=main.querySelector('.settings-content'),scroll=main.querySelector('.settings-scroll');
  const back=document.querySelector('[data-action="settings"]');
- connectScrollEdges(scroll);connectScrollEdges(nav);
+ connectScrollEdges(scroll);connectScrollEdges(nav);connectOverlayScrollbar(nav);
+ let closeAccent=()=>{};
  const positions=new Map();let selected='general',active=false,previousFocus,underlay=[],currentSelect,wasCollapsed=false,providers=[];
  const value=row=>row.id==='background'?(localStorage.getItem('suffice-background')||'horizon'):preference(row.id,row.id==='mode'?(localStorage.getItem('suffice-theme')==='light'?'Light':'Dark'):row.value);
  const api=window.sufficeDesktop,connectionModal=createProviderConnectModal(api);let modelQuery='',modelWrites=Promise.resolve(),catalogStatus='';const collapsedModels=new Set();
@@ -49,12 +53,13 @@ export function createSettings(){
   const current=value(row),label=escape(row.label);
   if(['toggle','select','segment','palette','action'].includes(row.type)&&!supportedSettings.has(row.id))return '<span class="settings-unavailable">Not available yet</span>';
   switch(row.type){
+   case 'range':return `<label class="settings-dim-slider"><input type="range" min="${row.min??0}" max="${row.max??80}" step="1" value="${Number(current)}" style="--dim-progress:${(Number(current)-(row.min??0))/((row.max??80)-(row.min??0))*100}%" data-range="${row.id}" aria-label="${label}"><output>${Number(current)}%</output></label>`;
    case 'archived-thread':return `<div class="archived-thread-actions"><button type="button" class="provider-dialog-button" data-restore-thread="${escape(row.threadId)}" aria-label="Restore ${label}">Restore</button><button type="button" class="button" data-delete-thread="${escape(row.threadId)}" aria-label="Delete ${label}">${icon('trash')}</button></div>`;
    case 'model':return `<button type="button" class="settings-switch" role="switch" aria-label="${label}" aria-checked="${!preference('disabled-models',[]).includes(row.id)}" data-model="${escape(row.id)}"><span></span></button>`;
    case 'toggle':return `<button type="button" class="settings-switch" role="switch" aria-label="${label}" aria-checked="${!!current}" data-value="${row.id}"><span></span></button>`;
    case 'select':return `<button type="button" class="settings-select" aria-label="${label}" aria-haspopup="menu" aria-expanded="false" data-select="${row.id}"><span>${escape(display(row,current))}</span>${icon('chevron')}</button>`;
    case 'segment':return `<div class="settings-segment" role="group" aria-label="${label}"><span class="settings-segment-indicator"></span>${row.options.map(option=>`<button type="button" aria-pressed="${option===current}" data-segment="${row.id}" data-option="${escape(option)}">${escape(option)}</button>`).join('')}</div>`;
-   case 'palette':return `<div class="settings-palette" role="group" aria-label="${label}">${accents.map(color=>`<button type="button" aria-label="${color}" aria-pressed="${color===current}" style="--swatch:${color}" data-segment="${row.id}" data-option="${color}"></button>`).join('')}</div>`;
+   case 'palette':return `<div class="settings-palette" role="group" aria-label="${label}">${accents.map(color=>`<button type="button" aria-label="${color}" aria-pressed="${color===current}" style="--swatch:${color}" data-segment="${row.id}" data-option="${color}"></button>`).join('')}<button type="button" class="custom-accent" aria-label="Custom accent color" title="Custom accent color" aria-haspopup="dialog" aria-expanded="false" aria-pressed="${!accents.includes(current)}" style="${!accents.includes(current)?'--custom-accent:'+escape(current):''}" data-custom-accent>${icon('plus')}</button></div>`;
    case 'keys':if(row.label==='Send message')return `<span class="settings-keys">${preference('send','Enter').split(' + ').map(key=>`<kbd>${escape(key)}</kbd>`).join('')}</span>`;if(row.label==='Send in background'&&preference('send','Enter')!=='Enter')return '<span class="settings-readonly">Send menu</span>';return `<span class="settings-keys">${String(current).split(' ').map(key=>`<kbd>${escape(key)}</kbd>`).join('')}</span>`;
    case 'provider':return `<button type="button" class="settings-select settings-configure provider-connect-button" data-provider="${row.id}" aria-label="Configure ${label}">${providers.find(p=>p.id===row.id)?.connected?'Connected':'Connect'}${icon('chevron')}</button>`;
    case 'action':return `<button type="button" class="settings-select settings-configure" data-settings-action="${row.id}">${escape(current)}</button>`;
@@ -62,7 +67,7 @@ export function createSettings(){
   }
  }
  function render(animate=false){
-  menu.close();const query=search.value.trim().toLowerCase();
+  closeAccent();menu.close();const query=search.value.trim().toLowerCase();
   settingsSections.find(section=>section.id==='archived').groups=[{title:'Archived threads',empty:'No archived threads. Archive a chat from its right-click menu.',rows:getThreadDirectory().threads.filter(thread=>threadViewState.read(thread.id).sidebar?.archived).map(thread=>({type:'archived-thread',threadId:thread.id,label:threadViewState.read(thread.id).sidebar?.title||thread.title,detail:thread.project||'No project'}))}];
   const matches=(section,row)=>`${section.title} ${row.label} ${row.detail||''}`.toLowerCase().includes(query);
   let category='';nav.innerHTML=settingsSections.filter(section=>!query||section.title.toLowerCase().includes(query)||section.groups.some(group=>group.rows.some(row=>matches(section,row)))).map(section=>{
@@ -71,7 +76,7 @@ export function createSettings(){
   }).join('');
   const sections=query?settingsSections:[settingsSections.find(section=>section.id===selected)];
   content.innerHTML=sections.map(section=>{
-   const groups=section.groups.map(group=>({...group,rows:group.rows.filter(row=>!query||matches(section,row))})).filter(group=>group.rows.length||(group.empty&&(!query||section.title.toLowerCase().includes(query))));
+   const groups=section.groups.map(group=>({...group,rows:group.rows.filter(row=>(!row.whenGlass||preference('glass',true))&&(!query||matches(section,row)))})).filter(group=>group.rows.length||(group.empty&&(!query||section.title.toLowerCase().includes(query))));
    if(!groups.length)return '';
    return `<section class="settings-section" aria-labelledby="settings-title-${section.id}"><div class="settings-title-row"><h1 id="settings-title-${section.id}">${section.title}</h1>${['models','providers'].includes(section.id)?`<button type="button" class="settings-catalog-refresh" data-refresh-models aria-label="Refresh models" title="Refresh models">${icon('refresh')}</button>`:''}</div>${['models','providers'].includes(section.id)?`<p class="settings-catalog-status" role="status">${escape(catalogStatus)}</p>`:''}${section.id==='models'?`<label class="settings-model-search">${icon('search')}<input type="search" aria-label="Search models in settings" placeholder="Search models" value="${escape(modelQuery)}"></label>`:''}${groups.map(group=>`<section class="settings-group${group.models?' settings-model-group':''}" aria-label="${escape(group.title)}"><h2>${group.models?`<button type="button" class="settings-provider-pill" data-model-group="${escape(group.id)}" aria-expanded="${!collapsedModels.has(group.id)}" aria-controls="models-group-${escape(group.id)}">`:''}${group.logo?`<img class="settings-provider-icon" src="./providers/${group.logo}.svg" alt="">`:''}${escape(group.title)}${group.models?`${icon('chevron','model-group-chevron')}</button>`:''}</h2><div ${group.models?`id="models-group-${escape(group.id)}" class="settings-model-group-body" ${collapsedModels.has(group.id)?'hidden inert':''}`:'class="settings-group-body"'}><div class="settings-card">${!group.rows.length?`<p class="settings-group-empty">${escape(group.empty)}</p>`:''}${group.rows.map(row=>`<div class="settings-option"><div class="settings-option-copy">${row.logo?`<img class="settings-provider-icon" src="./providers/${row.logo}.svg" alt="">`:row.type==='provider'?`<span class="settings-provider-placeholder" aria-hidden="true">${escape(row.label.charAt(0))}</span>`:''}<div><span class="settings-option-label">${escape(row.label)}</span>${row.detail?`<p>${escape(row.detail)}</p>`:''}</div></div>${control(row)}</div>`).join('')}</div></div></section>`).join('')}</section>`;
   }).join('')||'<div class="settings-empty">No settings found</div>';
@@ -83,14 +88,17 @@ export function createSettings(){
  main.addEventListener('click',event=>{const button=event.target.closest('[data-delete-thread]');if(button)document.dispatchEvent(new CustomEvent('suffice-delete-thread',{detail:{id:button.dataset.deleteThread}}));});
  document.addEventListener('suffice-thread-deleted',()=>{if(active&&selected==='archived')render();});
  threadViewState.subscribe(event=>{if(active&&selected==='archived'&&event.changed?.includes('sidebar'))render();});
+ main.addEventListener('input',event=>{const input=event.target;if(!input.matches('[data-range]'))return;(input.dataset.range==='surface-opacity'?previewSurfaceOpacity:previewBackgroundDimming)(input.value);input.style.setProperty('--dim-progress',(Number(input.value)-Number(input.min))/(Number(input.max)-Number(input.min))*100+'%');input.nextElementSibling.value=input.value+'%';});
+ main.addEventListener('change',event=>{if(event.target.matches('[data-range]'))void commit({id:event.target.dataset.range},Number(event.target.value));});
  const findRow=id=>settingsSections.flatMap(section=>section.groups.flatMap(group=>group.rows)).find(row=>row.id===id);
  async function handleClick(event){
+  const custom=event.target.closest('[data-custom-accent]');if(custom){closeAccent();closeAccent=openAccentPicker(custom,{value:preference('accent','#d59c77'),onSave:async color=>{const saved=await commit({id:'accent'},color);if(saved){for(const sibling of custom.parentElement.querySelectorAll('button'))sibling.setAttribute('aria-pressed',String(sibling===custom));custom.style.setProperty('--custom-accent',color);}return saved;}});return;}
   const refreshButton=event.target.closest('[data-refresh-models]');if(refreshButton){refreshButton.disabled=true;refreshButton.setAttribute('aria-busy','true');catalogStatus='Refreshing…';try{const result=await api.refreshModels();catalogStatus=result.offline?'Offline · using saved models':result.aborted?'Refresh timed out · using saved models':result.failedProviders?.length?'Some providers could not refresh':'';await refreshProviders();render();}catch{catalogStatus='Could not refresh · using saved models';render();}finally{refreshButton.disabled=false;}return;}
   if(event.target.closest('.settings-back')){close();return;}
   const section=event.target.closest('[data-section]');if(section){positions.set(selected,scroll.scrollTop);selected=section.dataset.section;search.value='';render(true);scroll.scrollTop=positions.get(selected)||0;return;}
   const groupToggle=event.target.closest('[data-model-group]');if(groupToggle){const id=groupToggle.dataset.modelGroup,expanded=groupToggle.getAttribute('aria-expanded')!=='true';expanded?collapsedModels.delete(id):collapsedModels.add(id);groupToggle.setAttribute('aria-expanded',String(expanded));setProjectGroupExpanded(document.getElementById(groupToggle.getAttribute('aria-controls')),expanded);return;}
   const model=event.target.closest('[data-model]');if(model){model.disabled=true;const key=model.dataset.model;modelWrites=modelWrites.catch(()=>{}).then(async()=>{const disabled=new Set(preference('disabled-models',[]));disabled.has(key)?disabled.delete(key):disabled.add(key);try{await savePreference('disabled-models',[...disabled]);model.setAttribute('aria-checked',String(!disabled.has(key)));}catch(error){showConnectionMessage(error.message);}finally{model.disabled=false;}});return;}
-  const toggle=event.target.closest('[data-value]');if(toggle){const row=findRow(toggle.dataset.value),next=!value(row);if(await commit(row,next))toggle.setAttribute('aria-checked',String(next));return;}
+  const toggle=event.target.closest('[data-value]');if(toggle){const row=findRow(toggle.dataset.value),next=!value(row);if(await commit(row,next)){toggle.setAttribute('aria-checked',String(next));if(row.id==='glass'){render();content.querySelector('[data-value=glass]')?.focus({preventScroll:true});}}return;}
   const segment=event.target.closest('[data-segment]');if(segment){if(await commit(findRow(segment.dataset.segment),segment.dataset.option)){for(const sibling of segment.parentElement.querySelectorAll('button'))sibling.setAttribute('aria-pressed',String(sibling===segment));positionIndicator(segment.parentElement,true);}return;}
   const select=event.target.closest('[data-select]');if(select){const row=findRow(select.dataset.select);currentSelect={row,button:select};menu.open(select,row.options.map((option,index)=>({label:display(row,option),selected:option===value(row),action:String(index)})),row.label);return;}
   const provider=event.target.closest('[data-provider]');if(provider){const p=providers.find(p=>p.id===provider.dataset.provider);currentSelect=null;menu.open(provider,[...p.methods.map(method=>({label:method.name,action:`login:${p.id}:${method.id}`})),...(p.credential?[{label:'Disconnect',action:`logout:${p.id}`}]:[])],p.name);return;}
@@ -121,12 +129,12 @@ export function createSettings(){
   underlay=[...document.querySelectorAll('.new-session,.session-section,.home,.thread-transcript,.thread-header,.workspace-tools,.right-sidebar')].map(element=>({element,inert:element.inert}));for(const {element} of underlay)element.inert=true;
   if(!wasCollapsed)outgoing(document.querySelector('.session-section'),-9);
   document.body.classList.remove('sidebar-collapsed');document.documentElement.classList.add('settings-open');root.hidden=false;main.hidden=false;back.innerHTML=icon('home');back.setAttribute('aria-label','Back to chats');render();nav.querySelector('[aria-current=page]')?.focus({preventScroll:true});
-  if(motion()){slide(root,9,0);content.animate([{opacity:0},{opacity:1}],{duration:180,easing:'ease-out'});}
+  if(motion()){slide(root,9,0);fadeGlassContent(content);}
  }
  async function close(){
-  if(!active)return;active=false;menu.close();outgoing(root,9);
+  if(!active)return;active=false;closeAccent();menu.close();outgoing(root,9);
   connectionModal.close();
-  root.hidden=true;main.hidden=true;back.innerHTML=icon('gear');back.setAttribute('aria-label','Settings');document.documentElement.classList.remove('settings-open');if(wasCollapsed)document.body.classList.add('sidebar-collapsed');for(const {element,inert} of underlay)element.inert=inert;previousFocus?.focus({preventScroll:true});if(motion())slide(document.querySelector('.session-section'),-9,0);
+  root.hidden=true;main.hidden=true;back.innerHTML=icon('gear');back.setAttribute('aria-label','Settings');document.documentElement.classList.remove('settings-open');document.body.classList.toggle('sidebar-collapsed',preference('sidebar-collapsed',wasCollapsed));for(const {element,inert} of underlay)element.inert=inert;previousFocus?.focus({preventScroll:true});if(motion())slide(document.querySelector('.session-section'),-9,0);
  }
  return {open,close,get isOpen(){return active;}};
 }
