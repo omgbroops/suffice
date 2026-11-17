@@ -7,7 +7,7 @@ import {resolve} from 'node:path';
 import {_electron} from 'playwright-core';
 import {guard} from './electron-guard.mjs';
 
-test('quit disposes sessions without a ReferenceError and stale catalog ids return empty', {timeout:60000},async()=>{
+test('quit disposes sessions without a ReferenceError and stale catalog ids return null', {timeout:60000},async()=>{
   const home=await mkdtemp(resolve(tmpdir(),'suffice-mp-'));
   const env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home,SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_SESSIONS_SOCKET:'sfx-r2-main-process',SUFFICE_HISTORY_HOME:resolve(home,'hist')};delete env.ELECTRON_RUN_AS_NODE;
   const electron=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
@@ -16,8 +16,7 @@ test('quit disposes sessions without a ReferenceError and stale catalog ids retu
     const page=await electron.firstWindow();
     await page.locator('.composer').waitFor();
     const cat=await page.evaluate(()=>window.sufficeDesktop.sessions.catalog('missing-session'));
-    assert.deepEqual(cat.commands,[]);
-    assert.equal(cat.agent,null);
+    assert.equal(cat,null);
   }finally{
     await electron.evaluate(({app})=>app.quit()).catch(()=>{});
     await new Promise(r=>electron.process().once('exit',r)).catch(()=>{});
