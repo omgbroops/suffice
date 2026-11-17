@@ -5,10 +5,11 @@ import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import electronPath from 'electron';
 import {_electron} from 'playwright-core';
+import {guard} from './electron-guard.mjs';
 
 test('refresh restores a live transcript and pending approval, then continues the original run',{timeout:60000},async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-refresh-approval-')),env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
- const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'profile')],env});
+ const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'profile')],env});
  try{const page=await app.firstWindow();await page.locator('.composer').waitFor();await app.evaluate(async({ipcMain,BrowserWindow},routerSource)=>{
   const createThreadRouter=new Function(routerSource.replace('export function createThreadRouter','return function createThreadRouter'))();let started=false;globalThis.approvalAnswers=[];globalThis.startedRuns=0;
   const route=createThreadRouter({send:message=>{const pending=globalThis.routePending.get(message.id);if(message.event){BrowserWindow.getAllWindows()[0].webContents.send('suffice:event',message);return;}if(pending){globalThis.routePending.delete(message.id);message.ok?pending.resolve(message.result):pending.reject(new Error(message.error));}},createRuntime:async()=>({}),createHost:({send})=>{let approve;

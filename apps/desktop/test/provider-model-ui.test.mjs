@@ -5,10 +5,11 @@ import {mkdtemp} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import {_electron} from 'playwright-core';
+import {guard} from './electron-guard.mjs';
 
 test('connected providers, modal cancellation and model visibility persist into the picker',{timeout:60000},async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-provider-models-')),env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
- const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
+ const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
  try{
   await app.evaluate(({ipcMain,BrowserWindow})=>{
    const providers=[{id:'openai',name:'OpenAI',connected:true,credential:'api_key',methods:[{id:'api_key',name:'API key'}]},{id:'anthropic',name:'Anthropic',connected:true,credential:'oauth',methods:[{id:'oauth',name:'Subscription'}]},{id:'google',name:'Google',connected:false,methods:[{id:'api_key',name:'API key'}]}];

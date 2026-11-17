@@ -5,10 +5,11 @@ import {mkdtemp,writeFile,mkdir,readFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import {_electron} from 'playwright-core';
+import {guard} from './electron-guard.mjs';
 test('mac preview keeps lights stationary and puts chat controls in a floating bar',{timeout:60000},async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-mac-float-')),dir=resolve(home,'sessions','fixture');await mkdir(dir,{recursive:true});const timestamp=new Date().toISOString();await writeFile(resolve(dir,'chat.jsonl'),[{type:'session',version:3,id:'caption',timestamp,cwd:home},{type:'message',id:'user',parentId:null,timestamp,message:{role:'user',content:[{type:'text',text:'Caption fixture'}],timestamp:Date.now()}}].map(JSON.stringify).join('\n')+'\n');
  const env={...process.env,PI_OFFLINE:'1',SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_HOME:home,SUFFICE_WINDOW_CHROME:'macos'};delete env.ELECTRON_RUN_AS_NODE;
- const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'profile')],env});
+ const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'profile')],env});
  try{const page=await app.firstWindow();await page.locator('.thread-row').first().click();await page.locator('.caption-chat-tools-macos .thread-header').waitFor();
  const red=()=>page.locator('[data-window="close"]').evaluate(el=>{const r=el.getBoundingClientRect();return {x:r.x,y:r.y};});const expanded=await red();
  await page.getByRole('button',{name:'Collapse sidebar',exact:true}).click();await page.getByRole('button',{name:'Open sidebar',exact:true}).waitFor();const collapsed=await red();assert.deepEqual(collapsed,expanded);

@@ -5,12 +5,13 @@ import {mkdtemp,mkdir,writeFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import {_electron} from 'playwright-core';
+import {guard} from './electron-guard.mjs';
 
 test('UI SDK navigation preserves menus, editable searches and tab state',{timeout:60000},async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-ui-behaviors-')),cwd=await mkdtemp(resolve(tmpdir(),'suffice-ui-project-')),dir=resolve(home,'sessions','fixture');await mkdir(dir,{recursive:true});
  const now=new Date().toISOString();await writeFile(resolve(dir,'one.jsonl'),[{type:'session',version:3,id:'ui-fixture',timestamp:now,cwd},{type:'message',id:'user',parentId:null,timestamp:now,message:{role:'user',content:[{type:'text',text:'Keyboard navigation fixture'}],timestamp:Date.now()}}].map(value=>JSON.stringify(value)).join('\n')+'\n');
  const env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
- const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
+ const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
  try{
   const page=await app.firstWindow(),errors=[];page.on('pageerror',error=>errors.push(error.message));await page.locator('.composer').waitFor();
   await app.evaluate(({ipcMain})=>{

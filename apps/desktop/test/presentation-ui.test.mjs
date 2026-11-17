@@ -5,8 +5,9 @@ import {resolve} from 'node:path';
 import {tmpdir} from 'node:os';
 import electronPath from 'electron';
 import {_electron} from 'playwright-core';
+import {guard} from './electron-guard.mjs';
 test('custom wallpaper, light horizon, rich Spotlight and safe mathematics work in the real renderer',{timeout:90000},async()=>{
- const home=resolve(tmpdir(),'suffice-presentation-review');await mkdir(home,{recursive:true});const env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'profile'),'--disk-cache-size=1048576','--disable-gpu-shader-disk-cache'],env});
+ const home=resolve(tmpdir(),'suffice-presentation-review');await mkdir(home,{recursive:true});const env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'profile'),'--disk-cache-size=1048576','--disable-gpu-shader-disk-cache'],env});
  try{const page=await app.firstWindow(),errors=[];page.on('pageerror',error=>errors.push(error.message));await page.locator('.composer').waitFor();const math=String.raw`For $a>0$, we have \(\alpha+\beta\).
 
 \[\int_{-\infty}^{\infty} e^{-a x^2}\,dx=\sqrt{\frac{\pi}{a}}.\]

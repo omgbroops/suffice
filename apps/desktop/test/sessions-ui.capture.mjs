@@ -5,6 +5,7 @@ import {resolve} from 'node:path';
 import {mkdir,mkdtemp,writeFile,rm,utimes,realpath,readFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {execFileSync} from 'node:child_process';
+import {guard} from './electron-guard.mjs';
 const REAL=process.env.SUFFICE_REAL_CLAUDE==='1';
 const output=resolve('apps/desktop/visual-review/sessions-ui');await mkdir(output,{recursive:true});
 const tmp=await realpath(await mkdtemp(resolve(tmpdir(),'sfx-sessions-ui-')));
@@ -36,7 +37,7 @@ const SKEYS=['model','effortLevel','modelSettings'],settingsPath=resolve(process
 const snap=async()=>{try{const o=JSON.parse(await readFile(settingsPath,'utf8'));return Object.fromEntries(SKEYS.map(k=>[k,o[k]]));}catch{return null;}};
 const settings0=REAL?await snap():null;
 const settingsSame=async()=>JSON.stringify(await snap())===JSON.stringify(settings0);
-const app=await _electron.launch({executablePath:electronPath,args:['-r','/Users/abhayg/suffice-desktop-wt/ui-shots/no-dialog.cjs',resolve('apps/desktop'),`--user-data-dir=${data}`],env});
+const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),`--user-data-dir=${data}`],env});
 let page;const appPid=app.process().pid;try{
  page=await app.firstWindow();page.on('console',m=>{if(m.type()==='error')console.error('PAGE',m.text().slice(0,200));});const errors=[];page.setDefaultTimeout(12000);page.on('pageerror',e=>errors.push(e.message));
  await page.locator('[data-action="send-menu"]').waitFor();

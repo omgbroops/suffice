@@ -5,9 +5,10 @@ import {mkdtemp} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import {_electron} from 'playwright-core';
+import {guard} from './electron-guard.mjs';
 test('Spotlight searches all threads, switches scopes, navigates and leaves the app backdrop untouched',{timeout:60000},async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-spotlight-')),env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
- const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
+ const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
  try{const page=await app.firstWindow();await page.locator('.composer').waitFor();await app.evaluate(({ipcMain})=>{ipcMain.removeHandler('suffice:threads');ipcMain.handle('suffice:threads',()=>Array.from({length:18},(_,i)=>({id:'thread-'+i,title:i===0?'Fix webhook retries':'Review workspace '+i,project:i%2?'Suffice':'Spool',branch:'fix/webhooks',status:'done',modified:Date.now()-i*60000})));ipcMain.removeHandler('suffice:thread');ipcMain.handle('suffice:thread',(_e,id)=>({id,title:'Fix webhook retries',cwd:process.cwd(),messages:[{role:'user',content:[{type:'text',text:'Fix webhook retries'}]},{role:'assistant',content:[{type:'text',text:'Saved transcript loaded.'}]}]}));});await page.reload();await page.locator('.thread-card').last().waitFor();
  await page.getByRole('button',{name:'Search sessions',exact:true}).click();await page.getByRole('dialog',{name:'Search Suffice'}).waitFor();const input=page.getByRole('combobox',{name:'Search threads and commands'});assert.equal(await input.evaluate(el=>document.activeElement===el),true);const backdrop=await page.locator('.spotlight').evaluate(el=>({filter:getComputedStyle(el,'::backdrop').backdropFilter,color:getComputedStyle(el,'::backdrop').backgroundColor}));assert.equal(backdrop.filter,'none');assert.equal(backdrop.color,'rgba(0, 0, 0, 0)');assert.equal(await page.locator('.detail-dialog[open]').count(),0);
  await page.waitForTimeout(200);await page.screenshot({path:resolve('apps/desktop/spotlight-dark.png')});
