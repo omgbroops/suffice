@@ -6,6 +6,7 @@ import {createChatChangeTracker} from './chat-changes.mjs';
 import {createChatGitTracker} from './chat-git.mjs';
 import {createThreadRouter} from './thread-router.mjs';
 import {sessionUsage} from './usage.mjs';
+import {installContext,sessionInventory} from '../shared/context-items.mjs';
 import {randomUUID,createHash} from 'node:crypto';
 import {mkdir,realpath,stat} from 'node:fs/promises';
 import {resolve,dirname} from 'node:path';
@@ -21,7 +22,7 @@ export function createHarnessHost({send,createRuntime=options=>createSufficeMode
 let agent,runtime,workspace,changeTracker,busy=false,abortRequested=false;
 const extensionPrompts=new Map();let extensionSequence=0;
 const approvals=new Map();let approvalSequence=0,preferencesKey='';
-let resumePath=null,viewedUsage=null,viewRevision=0;
+let resumePath=null,viewedUsage=null,viewRevision=0,pendingTurn=null,turnCount=0;const turns=[];
 const threads=threadStore??createThreadStore(home);
 async function receive(message) {
   const {id,action,payload={}}=message;
@@ -34,10 +35,12 @@ async function receive(message) {
     if(action==='approval-answer'){approvals.get(payload.requestId)?.(!!payload.allow);approvals.delete(payload.requestId);send({id,ok:true});return;}
     if(action==='abort'){abortRequested=true;for(const finish of extensionPrompts.values())finish(undefined);for(const resolve of approvals.values())resolve(false);approvals.clear();agent?.abort();send({id,ok:true});return;}
     if(action==='usage'){send({id,ok:true,result:sessionUsage(agent?.session)??viewedUsage});return;}
+    // Context inspector: what the next turn would send. Without a live agent only the saved messages are known.
+    if(action==='context'){const live=agent?.session,messages=live?live.messages??[]:resumePath?SessionManager.open(resumePath).buildSessionContext().messages:[];send({id,ok:true,result:{...sessionInventory(live,messages),turns:turns.map(turn=>({...turn}))}});return;}
     if(action==='threads'){send({id,ok:true,result:await threads.list()});return;}
     if(action==='thread-location'){send({id,ok:true,result:await threads.location(payload.id)});return;}
     if(busy)throw new Error('A task is already running. Stop it before changing sessions.');
-    if(action==='reset'){viewRevision++;await agent?.dispose();agent=null;resumePath=null;viewedUsage=null;send({event:'usage',usage:null});send({id,ok:true});return;}
+    if(action==='reset'){viewRevision++;turns.length=0;await agent?.dispose();agent=null;resumePath=null;viewedUsage=null;send({event:'usage',usage:null});send({id,ok:true});return;}
     if(action==='models'){
       if(!runtime)throw new Error('Harness is not ready');
       await runtime.refresh?.({allowNetwork:false});
@@ -90,7 +93,7 @@ async function receive(message) {
         }
         if(['message_end','tool_execution_end','agent_end'].includes(event.type))send({event:'usage',usage:sessionUsage(agent.session)});
         if(event.type==='message_update'&&event.assistantMessageEvent?.type==='text_delta')send({event:'text',text:event.assistantMessageEvent.delta});
-        if(event.type==='message_start'&&event.message?.role==='assistant')send({event:'assistant_start'});
+        if(event.type==='message_start'&&event.message?.role==='assistant'){send({event:'assistant_start'});pendingTurn?.();pendingTurn=null;}
         if(event.type==='message_update'&&event.assistantMessageEvent?.type==='thinking_delta')send({event:'reasoning',text:event.assistantMessageEvent.delta});
         if(event.type==='tool_execution_start')send({event:'tool_start',id:event.toolCallId,name:event.toolName,input:event.args});
         if(event.type==='tool_execution_update')send({event:'tool_output',id:event.toolCallId,result:event.partialResult});
@@ -101,7 +104,9 @@ async function receive(message) {
     turnPresentation={id:randomUUID(),startedAt:payload.turnStartedAt||Date.now(),provider:agent.session.model?.provider||payload.provider,model:agent.session.model?.id||payload.model,modelName:agent.session.model?.name,effort:agent.session.thinkingLevel||payload.effort};
     agent.session.sessionManager?.appendCustomEntry?.('suffice:turn-start',{...turnPresentation,promptHash:createHash('sha256').update(payload.prompt).digest('hex'),displayPrompt:payload.displayPrompt??payload.prompt,attachments:payload.attachmentMetadata||[]});send({event:'turn_started',presentation:turnPresentation});
     await changeTracker?.beginTurn();
-    const text=await agent.run(payload.prompt,{images:payload.images});finishPresentation('completed');
+    const choices=payload.context,restoreContext=installContext(agent.session,choices);
+    pendingTurn=()=>{turns.push({n:++turnCount,at:Date.now(),...sessionInventory(agent.session,agent.session.messages??[]),removed:choices?.exclude||[],summaries:!!choices?.summaries});if(turns.length>10)turns.shift();};
+    let text;try{text=await agent.run(payload.prompt,{images:payload.images});}finally{restoreContext();pendingTurn=null;}finishPresentation('completed');
     await changeTracker?.flush().catch(()=>{});if(payload.desktopSettings?.['remember-context'])await rememberProject(home,cwd,text);
     send({id,ok:true,result:{text,presentation:turnPresentation,sessionPath:agent.sessionPath(),threadId:agent.sessionPath()?threadId(agent.sessionPath()):null,usage:agent.totals}});
   } catch(error){finishPresentation(abortRequested?'interrupted':'failed');if(ownsRun)await changeTracker?.flush().catch(()=>{});if(ownsRun&&abortRequested){agent?.session.sessionManager?.appendCustomEntry('suffice:interrupted');send({id,ok:true,result:{interrupted:true,presentation:turnPresentation,threadId:agent?.sessionPath()?threadId(agent.sessionPath()):null}});}else send({id,ok:false,error:error.message});}

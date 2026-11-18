@@ -23,11 +23,12 @@ import {connectDisclosureMotion} from './disclosure-motion.js';
 import {createToolWidget,toolOutput} from './tool-widget.js';
 import {nextTranscriptFollowing} from './transcript-scroll.js';
 import {connectSessions} from './sessions-ui.js';
+import {connectContextInspector} from './context-inspector.js';
 
 export function connectThreads({api,prompt,send,toast}){
  connectExtensionUI(api,toast);const approvals=connectApprovals(api,toast);
  const workspace=document.querySelector('.workspace'),form=document.querySelector('.composer');
- const transition=createThreadTransition(workspace,form);
+ const transition=createThreadTransition(workspace,form);const contextInspector=connectContextInspector({api,form,toast});
  if(preference('new-project','Last used project')==='Ask each time')form.dataset.requireProject='true';
  const newSession=document.querySelector('.new-session');newSession.setAttribute('aria-current','page');
  const list=document.querySelector('.sidebar-sessions');list.replaceChildren();
@@ -253,7 +254,7 @@ export function connectThreads({api,prompt,send,toast}){
   return job;
  }
  form.steerQueuedMessage=async(item,id)=>{const target=jobs.get(id);if(!target?.running)throw new Error('This chat is no longer running');await api.steer({threadId:id,prompt:item.prompt,attachments:item.attachments});target.addSteering(item.prompt,item.attachments);if(activeId===id)bottom(true);};
- form.runQueuedMessage=(item,id)=>{const previous=jobs.get(id);if(!previous||previous.running)throw new Error('Chat is not ready for a queued message');const node=previous.history;node.querySelectorAll('.thread-run-error').forEach(e=>e.remove());const user=document.createElement('article');user.className='thread-message thread-user';user.textContent=item.prompt;node.append(user);messageActions.user(user,{text:item.prompt,timestamp:Date.now(),attachments:item.attachments});const job=createJob(id,previous.title,node);job.provider=item.selection?.provider;job.model=item.selection?.model;job.turn=messageActions.turn({...item.selection,startedAt:job.startedAt},true);if(activeId===id){syncRunning();bottom(true);}drawThreads();void api.run({prompt:item.prompt,...item.selection,effort:item.selection?.effort||'low',approvalMode:item.approvalMode,attachments:item.attachments,threadId:id,clientId:id}).then(result=>{adoptJob(job,result.threadId);job.finish(result);}).catch(error=>job.finish(null,error));};
+ form.runQueuedMessage=(item,id)=>{const previous=jobs.get(id);if(!previous||previous.running)throw new Error('Chat is not ready for a queued message');const node=previous.history;node.querySelectorAll('.thread-run-error').forEach(e=>e.remove());const user=document.createElement('article');user.className='thread-message thread-user';user.textContent=item.prompt;node.append(user);messageActions.user(user,{text:item.prompt,timestamp:Date.now(),attachments:item.attachments});const job=createJob(id,previous.title,node);job.provider=item.selection?.provider;job.model=item.selection?.model;job.turn=messageActions.turn({...item.selection,startedAt:job.startedAt},true);if(activeId===id){syncRunning();bottom(true);}drawThreads();void api.run({prompt:item.prompt,...item.selection,effort:item.selection?.effort||'low',approvalMode:item.approvalMode,attachments:item.attachments,threadId:id,clientId:id,context:contextInspector.take(id)}).then(result=>{adoptJob(job,result.threadId);job.finish(result);}).catch(error=>job.finish(null,error));};
  function adoptJob(job,id){if(!id||id===job.id)return;const previous=job.id;jobs.delete(previous);jobs.set(id,job);job.id=id;adoptOptimistic(previous,id);if(activeId!==previous&&viewState.read(previous).approvalMode)viewState.updateFor(id,{approvalMode:viewState.read(previous).approvalMode});if(activeId===previous){activeId=id;viewState.adopt(id);sessionStorage.setItem('suffice-active-thread',id);}drawThreads();}
  api.onClearCache?.(()=>{savedHistories.clear();});
  document.addEventListener('suffice-preference',event=>{if(event.detail.id==='collapse-work')document.querySelectorAll('.thread-activity').forEach(group=>group.open=!event.detail.value);if(event.detail.id==='new-project'&&!activeId)form.dataset.requireProject=String(event.detail.value==='Ask each time');});
@@ -306,7 +307,7 @@ export function connectThreads({api,prompt,send,toast}){
   if(entering||inBackground)addOptimistic(id,text);if(entering)viewState.updateFor(origin,{draft:''});
   if(!inBackground){if(entering){transition.cancel();viewState.select(id);viewState.update({model:selection});activeId=id;}threadView(job.title,entering);transition.reveal(user,'user',entering?undefined:0);}
   prompt.value='';form.attachments?.clear();viewState.update({draft:''});form.resizePrompt?.();syncRunning();bottom(true);
-  const payload={prompt:text,...selection,approvalMode,attachments,clientId:id,...(!id.startsWith('pending:')?{threadId:id}:{})};
+  const payload={prompt:text,...selection,approvalMode,attachments,clientId:id,context:contextInspector.take(id),...(!id.startsWith('pending:')?{threadId:id}:{})};
   void selectionReady.catch(()=>{}).then(()=>form.projectSelection).then(()=>(inBackground?api.runBackground(payload):api.run(payload))).then(result=>{adoptJob(job,result.threadId);job.finish(result);}).catch(error=>{
    if(job.id.startsWith('pending:')){optimisticThreads.delete(job.id);drawThreads();}job.finish(null,error);
    if(!isInterruption(error)&&inBackground)toast(displayRunError(error.message,job.provider));
