@@ -346,7 +346,7 @@
   backdrop-filter:var(--shared-chrome-filter); -webkit-backdrop-filter:var(--shared-chrome-filter); z-index:200;
 }
 .custom-tooltip[popover] { inset:auto; margin:0; border:0; overflow:visible; }
-.message-copy:disabled { opacity:.4; cursor:default; }
+.message-copy:disabled,.message-action:disabled { opacity:.4; cursor:default; }
 .chat-changes-widget { position:absolute; z-index:10; transform:translateX(-50%); display:flex; align-items:center; gap:6px; padding:7px 12px; border:1px solid var(--overlay-edge); border-radius:10px; background:var(--shared-chrome-fill); color:var(--text-muted); font:12px/18px var(--font-sans); box-shadow:var(--composer-shadow); cursor:pointer; backdrop-filter:var(--shared-chrome-filter); }
 .chat-changes-widget[hidden],.settings-open .chat-changes-widget { display:none; }
 .chat-changes-widget:hover { color:var(--text); }

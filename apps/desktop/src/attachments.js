@@ -22,9 +22,12 @@ export function connectAttachments({form,prompt,send,input,toast}){
  function add(items){const incoming=Array.from(items);if([...files,...incoming].reduce((sum,file)=>sum+file.size,0)>20*1024*1024||files.length+incoming.length>20){toast('Attach up to 20 files, 20 MB total.');return;}for(const file of incoming)if(!files.some(existing=>existing.name===file.name&&existing.size===file.size&&existing.lastModified===file.lastModified))files.push(file);changed();}
  input.addEventListener('change',()=>{add(input.files);input.value='';});
  prompt.addEventListener('paste',event=>{const items=[...event.clipboardData.files];if(items.length){event.preventDefault();add(items);}else if(!event.clipboardData.getData('text/plain')&&window.sufficeDesktop?.clipboardFiles){event.preventDefault();void window.sufficeDesktop.clipboardFiles().then(items=>add(items.map(item=>new File([Uint8Array.from(atob(item.data),c=>c.charCodeAt(0))],item.name,{type:item.type,lastModified:item.modified})))).catch(error=>toast(error.message));}});
- form.addEventListener('dragover',event=>{if(event.dataTransfer.types.includes('Files')){event.preventDefault();form.classList.add('attachment-drag');}});
- form.addEventListener('dragleave',()=>form.classList.remove('attachment-drag'));
- form.addEventListener('drop',event=>{event.preventDefault();form.classList.remove('attachment-drag');add(event.dataTransfer.files);});
+ // The whole workspace is the drop zone so a thread view accepts files too; only the composer lights up.
+ const zone=form.closest('.workspace')||form;let depth=0;const dragging=event=>event.dataTransfer?.types.includes('Files');
+ zone.addEventListener('dragenter',event=>{if(dragging(event)){depth++;form.classList.add('attachment-drag');}});
+ zone.addEventListener('dragover',event=>{if(dragging(event))event.preventDefault();});
+ zone.addEventListener('dragleave',event=>{if(dragging(event)&&--depth<=0){depth=0;form.classList.remove('attachment-drag');}});
+ zone.addEventListener('drop',event=>{if(!dragging(event))return;event.preventDefault();depth=0;form.classList.remove('attachment-drag');add(event.dataTransfer.files);prompt.focus();});
  prompt.addEventListener('input',()=>{if(form.dataset.running!=='true')send.disabled=!prompt.value.trim()&&!files.length;});
  store.subscribe(async event=>{if(event.type!=='select'&&event.type!=='adopt')return;const next=event.id||'new';if(next===activeKey)return;cache.set(activeKey,files);if(event.type==='adopt'){activeKey=next;cache.set(next,files);void persist(next,files).catch(()=>toast('Could not save attachments.'));return;}const token=++generation;activeKey=next;files=[];render();const saved=await restore(next);if(token===generation){files=saved;render();}});
  const initialKey=activeKey;void restore(initialKey).then(saved=>{if(activeKey===initialKey&&!files.length){files=saved;render();}});

@@ -1,0 +1,7 @@
+/* Slash/@ menu reuses .popover, .slash-menu and .menu-item; drop target and the message edit control are the only new pieces. */
+.composer-suggest .slash-detail { max-width: 55%; direction: rtl; text-align: left; }
+.composer.attachment-drag { position: relative; border-color: var(--border-focus); box-shadow: inset 0 0 0 1px var(--border-focus), inset 0 0 24px #ffffff0a; }
+.composer.attachment-drag > * { opacity: .28; transition: opacity 100ms ease-out; }
+.composer.attachment-drag::after { content: 'Drop files to attach'; position: absolute; inset: 0; display: grid; place-items: center; border-radius: inherit; color: var(--text-strong); font-size: 14px; font-weight: 500; pointer-events: none; }
+:root[data-theme='light'] .composer.attachment-drag { box-shadow: inset 0 0 0 1px var(--border-focus), inset 0 0 24px #0000000d; }
+@media (prefers-reduced-motion: reduce) { .composer.attachment-drag > * { transition: none; } }
