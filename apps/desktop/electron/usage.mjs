@@ -9,9 +9,9 @@ export function sessionUsage(session){
 }
 
 // Per-run spend cap. Defaults are a logged guess; env overrides exist for tests.
-export function runCaps(env=process.env){
+export function runCaps(env=process.env,fileTokens=0){
   const pick=(raw,fallback)=>{const value=Number(raw);return raw!==undefined&&raw!==''&&Number.isFinite(value)&&value>=0?value:fallback;};
-  return {usd:pick(env.SUFFICE_RUN_CAP_USD,5),tokens:pick(env.SUFFICE_RUN_CAP_TOKENS,2000000)};
+  return {usd:pick(env.SUFFICE_RUN_CAP_USD,5),tokens:pick(env.SUFFICE_RUN_CAP_TOKENS,fileTokens||2000000)};
 }
 const compact=n=>n>=1e6?`${+(n/1e6).toFixed(1)}M`:n>=1e3?`${+(n/1e3).toFixed(1)}K`:String(n);
 // Returns the stop message when the run delta is strictly over a cap, else null. Unknown cost is checked by tokens alone.

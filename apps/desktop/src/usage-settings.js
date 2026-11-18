@@ -11,10 +11,12 @@ export function lastDays(days,count,today=new Date()){
  return out;
 }
 
+import {mountBudgetSettings} from './budget-settings.js';
 export function mountUsageSettings(content,section,api){
  if(section!=='usage')return;
  const host=content.querySelector('#settings-title-usage')?.closest('.settings-section');if(!host)return;
  const view=document.createElement('div');view.className='usage-view';(host.querySelector('.settings-subtitle')||host.querySelector('.settings-title-row')).after(view);
+ const caps=document.createElement('div');view.before(caps);mountBudgetSettings(caps,api);
  view.innerHTML='<p class="usage-status" role="status">Reading saved threads…</p>';
  api.usageReport().then(report=>{
   if(!view.isConnected)return;

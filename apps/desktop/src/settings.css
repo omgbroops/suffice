@@ -362,3 +362,7 @@
 .settings-main .env-label { font-size:13px; font-weight:var(--weight-medium); color:var(--text-strong); }
 .settings-main .settings-subtitle { margin-bottom:32px; }
 @media(max-width:850px){ .settings-main .settings-option { padding:12px; } }
+.budget-input { width:140px; height:32px; padding:0 10px; border:var(--hairline) solid color-mix(in srgb,var(--text) 14%,transparent); border-radius:var(--radius-control); background:var(--control-raised); color:var(--text-strong); font:inherit; font-variant-numeric:tabular-nums; text-align:right; }
+.budget-input:focus-visible,.budget-save:focus-visible { outline:2px solid var(--focus-ring); outline-offset:3px; }
+.budget-foot { justify-content:space-between; } .budget-status { font-size:12px; color:var(--text-muted); }
+.budget-save { height:32px; padding:0 14px; border:0; border-radius:var(--radius-control); background:var(--accent); color:var(--accent-fg); font:inherit; font-weight:var(--weight-medium); cursor:pointer; }
