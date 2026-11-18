@@ -12,6 +12,7 @@ export function connectScheduled({api}){
  let isOpen=false,underlay=[];
  function open(){
   if(isOpen){view.querySelector('button')?.focus();return;}
+  if(document.documentElement.classList.contains('settings-open'))document.querySelector('[data-action=settings]')?.click();
   if(workspace.classList.contains('issues-open'))document.querySelector('.issues-nav')?.click();
   if(workspace.classList.contains('needs-open'))document.querySelector('.needs-nav')?.click();
   isOpen=true;

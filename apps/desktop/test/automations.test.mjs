@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtemp,mkdir,writeFile,utimes} from 'node:fs/promises';
+import {mkdtemp,mkdir,writeFile,utimes,readFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import {execFileSync} from 'node:child_process';
@@ -96,4 +96,24 @@ test('file change trigger fires on edits, skips ignored folders, honours cooldow
  clock.t+=10000;await svc.tick();await svc.idle();assert.equal(runs.length,1);
  clock.t+=120000;await svc.tick();await svc.idle();assert.equal(runs.length,2);
  assert.match(await fileFingerprint(project),/^\d+:\d+:\d+$/);
+});
+
+test('a failed create or edit leaves the list and the file exactly as they were',async()=>{
+ const {project,make}=await setup(),svc=make();
+ const weekday=await svc.create({name:'Weekday',prompt:'p',project,trigger:{kind:'cron',cron:'30 8 * * 1-5'}});
+ await assert.rejects(svc.create({name:'Ghost',prompt:'p',project,trigger:{kind:'cron',cron:'5 4 31 2 *'}}),/never runs/);
+ assert.deepEqual((await svc.list()).map(item=>item.name),['Weekday']);
+ await assert.rejects(svc.update(weekday.id,{name:'Weekday',prompt:'p',project,trigger:{kind:'cron',cron:'0 0 31 2 *'}}),/never runs/);
+ const [kept]=await svc.list();assert.equal(kept.trigger.cron,'30 8 * * 1-5');
+ await svc.toggle(weekday.id,false);assert.equal((await svc.toggle(weekday.id,true)).enabled,true);
+});
+
+test('two instances sharing one home keep each other\'s writes, also when they write at once',async()=>{
+ const {home,project,make}=await setup(),one=make(),two=make();
+ await two.list();await one.create({...daily,name:'From one',project});await two.create({...daily,name:'From two',project});
+ const names=async svc=>(await svc.list()).map(item=>item.name).sort();
+ assert.deepEqual(await names(one),['From one','From two']);assert.deepEqual(await names(two),['From one','From two']);
+ await Promise.all([one.create({...daily,name:'A',project}),two.create({...daily,name:'B',project})]);
+ assert.deepEqual(await names(one),['A','B','From one','From two']);
+ assert.equal(JSON.parse(await readFile(resolve(home,'automations.json'),'utf8')).length,4);
 });

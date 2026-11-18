@@ -1,4 +1,4 @@
-import {mkdir,readFile,writeFile,rename,readdir,stat} from 'node:fs/promises';
+import {mkdir,readFile,writeFile,rename,readdir,stat,rm} from 'node:fs/promises';
 import {randomUUID} from 'node:crypto';
 import {resolve,join} from 'node:path';
 import {execFile} from 'node:child_process';
@@ -67,18 +67,54 @@ export async function fileFingerprint(project){
 // The scheduler. `run(automation)` starts a thread and resolves {threadId}. `now` is injectable; tick() is the only clock edge.
 export function createAutomations({home,now=Date.now,run,projectPaths,probes={push:pushFingerprint,file:fileFingerprint},onChange=()=>{},tickMs=30000,cooldownMs=60000}){
  const file=resolve(home,'automations.json'),inflight=new Map();let items=null,timer=null,tail=Promise.resolve();
- async function load(){if(items)return items;try{const data=JSON.parse(await readFile(file,'utf8'));items=Array.isArray(data)?data:[];for(const item of items)if(item.lastRun?.status==='running')item.lastRun={...item.lastRun,status:'error',error:'Interrupted by a restart'};}catch(error){if(error.code!=='ENOENT')throw error;items=[];}return items;}
- const save=()=>{const job=tail.catch(()=>{}).then(async()=>{await mkdir(home,{recursive:true});const temporary=file+'.'+randomUUID()+'.tmp';await writeFile(temporary,JSON.stringify(items,null,2),{mode:0o600});await rename(temporary,file);});tail=job;return job;};
- const find=async id=>{const found=(await load()).find(item=>item.id===id);if(!found)throw new Error('Automation not found');return found;};
+ // Several instances can share one home: every write runs under a lock directory, re-reads the file first and merges into the live objects, so no instance overwrites another's changes.
+ const lockDir=file+'.lock',pause=ms=>new Promise(done=>setTimeout(done,ms));
+ async function locked(work){
+  await mkdir(home,{recursive:true});
+  for(let tries=0;;tries++){
+   try{await mkdir(lockDir);break;}catch(error){if(error.code!=='EEXIST')throw error;
+    const info=await stat(lockDir).catch(()=>null);
+    if(info&&Date.now()-info.mtimeMs>10000)await rm(lockDir,{recursive:true,force:true});
+    else if(tries>500)throw new Error('Automations file is busy');else await pause(10);}
+  }
+  try{return await work();}finally{await rm(lockDir,{recursive:true,force:true});}
+ }
+ async function readDisk(){try{const data=JSON.parse(await readFile(file,'utf8'));return Array.isArray(data)?data:[];}catch(error){if(error.code!=='ENOENT')throw error;return [];}}
+ // full: disk values replace in-memory ones (running automations keep theirs); otherwise only additions and deletions merge in.
+ function tx(work,{full=true,write=true}={}){
+  const job=tail.catch(()=>{}).then(()=>locked(async()=>{
+   const disk=await readDisk(),first=!items,mem=new Map((items||[]).map(item=>[item.id,item]));
+   items=disk.map(d=>{const m=mem.get(d.id);if(!m)return d;if(full&&!inflight.has(d.id)){for(const key of Object.keys(m))delete m[key];Object.assign(m,d);}return m;});
+   if(first)for(const item of items)if(item.lastRun?.status==='running')item.lastRun={...item.lastRun,status:'error',error:'Interrupted by a restart'};
+   const result=await work(items);
+   if(write){const temporary=file+'.'+randomUUID()+'.tmp';await writeFile(temporary,JSON.stringify(items,null,2),{mode:0o600});await rename(temporary,file);}
+   return result;
+  }));
+  tail=job;return job;
+ }
+ const load=()=>tx(list=>list,{write:false});
+ const save=()=>tx(()=>{},{full:false});
  const view=item=>({...item,running:inflight.has(item.id)});
  async function list(){return (await load()).map(view);}
  async function put(input,id){
-  const fields=validate(input,await projectPaths());await load();let item=id?await find(id):null;
-  if(!item){if(items.length>=100)throw new Error('Delete an automation before adding another');item={id:randomUUID(),enabled:true,createdAt:now(),lastRun:null};items.push(item);}
-  Object.assign(item,fields);delete item.fingerprint;item.nextRun=nextRun(item,now());await save();onChange();return view(item);
+  const fields=validate(input,await projectPaths());
+  const result=await tx(list=>{
+   const item=id?list.find(entry=>entry.id===id):null;if(id&&!item)throw new Error('Automation not found');
+   if(!item&&list.length>=100)throw new Error('Delete an automation before adding another');
+   // Build and check the schedule on a copy: a failed save must leave the stored item untouched.
+   const next={...(item||{id:randomUUID(),enabled:true,createdAt:now(),lastRun:null}),...fields};delete next.fingerprint;next.nextRun=nextRun(next,now());
+   if(item){delete item.fingerprint;Object.assign(item,next);}else list.push(next);
+   return view(item||next);
+  });
+  onChange();return result;
  }
- async function toggle(id,enabled){const item=await find(id);if(typeof enabled!=='boolean')throw new Error('Invalid state');item.enabled=enabled;delete item.fingerprint;item.nextRun=nextRun(item,now());await save();onChange();return view(item);}
- async function remove(id){await find(id);items=items.filter(item=>item.id!==id);await save();onChange();return true;}
+ async function toggle(id,enabled){
+  if(typeof enabled!=='boolean')throw new Error('Invalid state');
+  const result=await tx(list=>{const item=list.find(entry=>entry.id===id);if(!item)throw new Error('Automation not found');const next={...item,enabled};delete next.fingerprint;next.nextRun=nextRun(next,now());delete item.fingerprint;Object.assign(item,next);return view(item);});
+  onChange();return result;
+ }
+ async function remove(id){await tx(list=>{const at=list.findIndex(item=>item.id===id);if(at<0)throw new Error('Automation not found');list.splice(at,1);});onChange();return true;}
+ const find=async id=>{const found=(await load()).find(item=>item.id===id);if(!found)throw new Error('Automation not found');return found;};
  function fire(item,reason){
   if(inflight.has(item.id))return inflight.get(item.id);
   item.lastRun={at:now(),status:'running',reason};
