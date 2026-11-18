@@ -35,7 +35,7 @@ export const TOOL_CATEGORIES = ['shell', 'edit', 'write', 'read', 'search', 'web
 export const TOOL_STATUS = ['running', 'ok', 'error', 'denied', 'interrupted', 'background'];
 export const NOTICE_CODES = ['compacted', 'interrupted', 'model_changed', 'mode_changed', 'rate_limit', 'error', 'other'];
 export const PROMPT_TYPES = ['permission', 'trust', 'choice', 'text'];
-export const CONTROLS = ['interrupt', 'answerPrompt', 'setMode', 'setModel', 'slash', 'compact', 'clear', 'attach'];
+export const CONTROLS = ['interrupt', 'answerPrompt', 'answerMulti', 'setMode', 'setModel', 'slash', 'compact', 'clear', 'attach'];
 
 const str = (v) => typeof v === 'string';
 const num = (v) => typeof v === 'number' && Number.isFinite(v);

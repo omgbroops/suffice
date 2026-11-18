@@ -43,7 +43,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  const ctl=createControls(c),term=createTerminal(c),{drawChat,showChat,renderChat}=createTranscript(c);
  c.paintMeta=ctl.paintMeta;
  let uiUnsub=null,subUnsub=null;
- const approval=createApproval({form,agent:()=>labels.get(c.active?.id),markdown:(n,t)=>hooks.markdown(n,t),answer:index=>sx.control(c.active.id,'answerPrompt',{index}).catch(e=>toast(e.message))});
+ const approval=createApproval({form,agent:()=>labels.get(c.active?.id),markdown:(n,t)=>hooks.markdown(n,t),answer:index=>sx.control(c.active.id,'answerPrompt',{index}).catch(e=>toast(e.message)),answerMulti:indices=>sx.control(c.active.id,'answerMulti',{indices}).catch(e=>toast(e.message))});
  const drawPrompt=()=>approval.draw(c.active?c.ui?.prompt:null,c.ui?.items);
  form.addEventListener('submit',e=>{if(form.dataset.approval==='true'){e.preventDefault();e.stopImmediatePropagation();}},true);
  async function refresh(){
