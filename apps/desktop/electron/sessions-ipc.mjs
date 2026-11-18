@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import os from 'node:os';
 import {createBackend} from '../../../packages/backend/src/app/backend.mjs';
 import {createIpcBridge} from '../../../packages/backend/src/app/ipc.mjs';
 import {createClaudeMapper} from '../../../packages/backend/src/tui/claude.mjs';
@@ -36,8 +37,10 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
   const tf=sessionId=>path.join(dataDir,`sim-${sessionId}.jsonl`),args=({sessionId})=>{const r=run();return [simAgent,'--scenario',r.scenario||'status-idle','--speed',String(r.speed||1),'--seed',String(r.seed||1),'--session-id',sessionId,tf(sessionId)];};
   sessionAgents.simclaude={bin:env.SUFFICE_TEST_NODE||'node',newSessionId:()=>'sim'+Math.random().toString(36).slice(2,10),startArgs:args,resumeArgs:args,locateTranscript:({sessionId})=>{const f=tf(sessionId);fs.writeFileSync(f,'',{flag:'a'});return f;},listHistory:()=>[],parseLine:()=>[]};
  }
+ // Test mode never reads the real history: an explicit SUFFICE_HISTORY_HOME wins, else a fresh empty dir.
+ const historyHome=env.SUFFICE_HISTORY_HOME||(env.SUFFICE_TEST_HIDE_WINDOW==='1'?fs.mkdtempSync(path.join(os.tmpdir(),'sfx-history-')):process.env.HOME);
  const socket=env.SUFFICE_SESSIONS_SOCKET||'suffice';
- const backend=createBackend({dataDir,sessions:true,history:true,socketName:socket,home:env.SUFFICE_HISTORY_HOME||undefined,sessionAgents,...((testAgent||simAgent)&&{idleMs:400,settleMs:100})});
+ const backend=createBackend({dataDir,sessions:true,history:true,socketName:socket,home:historyHome,sessionAgents,...((testAgent||simAgent)&&{idleMs:400,settleMs:100})});
  const bridge=createIpcBridge(backend);
  bridge.subscribe(send);
  const call=async message=>{const r=await bridge.handle(message);if(!r.ok)throw new Error(r.error);return r.result;};
@@ -91,7 +94,7 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
   t.subs=true;t.unsubs.push(subTracker.attach(p,list=>send({type:'slot',id:`session:${row.id}:subagents`,value:list})));};
  const trackAll=rows=>{for(const r of rows||[]){track(r);attachSubs(r);}return rows;};
  // Read-only view of the CLI's saved defaults. The app never writes this file.
- const defaultsOf=()=>{try{const s=JSON.parse(fs.readFileSync(path.join(env.SUFFICE_HISTORY_HOME||process.env.HOME||'','.claude','settings.json'),'utf8'));return {model:s.model??null,effortLevel:s.effortLevel??null,modelSettings:s.modelSettings??null};}catch{return null;}};
+ const defaultsOf=()=>{try{const s=JSON.parse(fs.readFileSync(path.join(historyHome||'','.claude','settings.json'),'utf8'));return {model:s.model??null,effortLevel:s.effortLevel??null,modelSettings:s.modelSettings??null};}catch{return null;}};
  // Resolves with pred(screenText) the first time it is truthy after a screen event, or null after ms.
  const waitScreen=(sid,pred,ms)=>new Promise(resolve=>{let done=false,unsub=null,timer=null;
   const fin=v=>{if(done)return;done=true;clearTimeout(timer);unsub?.();resolve(v||null);};
@@ -152,7 +155,7 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
     return {ok:true,agents:['claude','codex',...Object.keys(sessionAgents)].map(a=>({id:a,label:LABELS[a]||a,missing:!(sessionAgents[a]||onPath(a))}))};
    },
    'sessions-catalog':p=>{const t=tracked.get(id(p));if(!t)throw new Error('Unknown session');const a=t.kind;
-    let cmds=[];try{cmds=commands.slashCommands(a,{home:env.SUFFICE_HISTORY_HOME||process.env.HOME,cwd:t.state?.cwd});}catch{}
+    let cmds=[];try{cmds=commands.slashCommands(a,{home:historyHome,cwd:t.state?.cwd});}catch{}
     return {agent:a,commands:cmds,savesDefault:{model:a==='codex',effort:a==='claude'},models:commands.models(a),modes:commands.modes(a),efforts:commands.efforts(a)};},
    'sessions-start':async p=>{await ready;const args=Array.isArray(p?.args)&&p.args.every(str)?p.args:undefined;const r=await call({type:'sessions.start',agent:agentName(p?.agent),cwd:folder(p?.cwd),...(args&&{args})});track(r);attachSubs(r);return r;},
    'sessions-list':async p=>{await ready;const rows=trackAll(await call({type:'sessions.list'}));if(p?.republish)for(const r of rows||[])tracked.get(r.id)?.soon?.();return rows;}, // a reloaded renderer has no cached slots; republish once so titles seed
