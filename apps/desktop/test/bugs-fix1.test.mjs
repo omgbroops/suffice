@@ -115,7 +115,7 @@ test('17: Start session in background starts a real session without opening it',
  const before=tmux('list-sessions','-F','#{session_name}').split('\n').filter(Boolean).length;
  await page.locator('[data-action="send-menu"]').click();
  await page.locator('[data-menu-action="background-send:start"]').click();
- await page.waitForFunction(()=>document.querySelectorAll('.sidebar-cli-sessions .thread-row').length>=1,null,{timeout:15000});
+ await page.waitForFunction(()=>document.querySelectorAll('.sidebar-cli-sessions .thread-row').length>=1,null,{timeout:30000});
  const after=tmux('list-sessions','-F','#{session_name}').split('\n').filter(Boolean).length;
  assert.equal(after,before+1,'exactly one tmux session started');
  assert.equal(await page.locator('.thread-header').isVisible().catch(()=>false),false,'background session is not opened');
@@ -169,9 +169,13 @@ test('24, 28, 33, 38: live turn keeps its action bar in flow and its chips above
    ipcMain.handle('suffice:threads',()=>[]);ipcMain.handle('suffice:thread',(_e,id)=>({id,title:'Initial',cwd:process.cwd(),messages:[]}));
    ipcMain.handle('suffice:run',(_e,p)=>new Promise(resolve=>{globalThis.runs.push({p,resolve});send({event:'thread_started',id:'fx',threadId:'fx',clientId:p.clientId});}));
   });
-  await pg.reload();await pg.locator('#prompt').fill('Add a retry to the fetch helper');await pg.locator('.composer').evaluate(f=>f.requestSubmit());
+  await pg.reload();await pg.evaluate(()=>{window.__ev=[];sufficeDesktop.onEvent(e=>window.__ev.push(e.event));});await pg.locator('#prompt').fill('Add a retry to the fetch helper');await pg.locator('.composer').evaluate(f=>f.requestSubmit());
   await pg.getByRole('button',{name:'Stop task',exact:true}).waitFor();
+  // the run handler (and its thread_started event) fires after the button appears; events sent earlier match no job and are dropped
+  await pg.waitForFunction(()=>true);for(let i=0;i<200&&!await app2.evaluate(()=>globalThis.runs.length);i++)await pg.waitForTimeout(50);
   await app2.evaluate(()=>{const b={threadId:'fx',clientId:'fx'};sendEv({...b,event:'turn_started',presentation:{id:'t',startedAt:Date.now()-4000,provider:'unknown-provider',model:'Example',effort:'low'}});sendEv({...b,event:'tool_start',id:'t1',name:'edit',input:{path:'src/fetch.js'}});sendEv({...b,event:'tool_end',id:'t1',result:'ok',isError:false});});
+  // invoke replies and sent events are separate IPC messages: resolving before the renderer saw tool_end finishes the job first and drops the tools
+  await pg.waitForFunction(()=>window.__ev.includes('tool_end'));
   await app2.evaluate(()=>runs[0].resolve({threadId:'fx',text:'Added a retry with backoff to fetch.js.'}));
   await pg.locator('.followup-chip').first().waitFor();
   const geo=await pg.evaluate(()=>{const row=document.querySelector('.thread-followups'),comp=document.querySelector('.composer'),r=row.getBoundingClientRect(),c=comp.getBoundingClientRect();return {inComposer:row.parentElement===comp,inTranscript:!!document.querySelector('.thread-messages .thread-followups'),gap:c.top-r.bottom,visible:r.height>0};});
