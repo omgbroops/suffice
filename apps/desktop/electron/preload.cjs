@@ -105,5 +105,5 @@ contextBridge.exposeInMainWorld('sufficeDesktop',{
    return {available:()=>inv('sessions-available'),start:p=>inv('sessions-start',p),list:p=>inv('sessions-list',p),stop:id=>inv('sessions-stop',id),send:(id,text)=>inv('sessions-send',{id,text}),
     messages:id=>last.get(`session:${id}:chat`)||[],onMessages:(id,cb)=>watch(`session:${id}:chat`,cb),onState:(id,cb)=>watch(`session:${id}:state`,cb),
     ui:id=>last.get(`session:${id}:ui`),onUi:(id,cb)=>watch(`session:${id}:ui`,cb),onStatus:(id,cb)=>watch(`session:${id}:ui`,v=>cb(v?.status??null)),subagents:id=>last.get(`session:${id}:subagents`)||[],onSubagents:(id,cb)=>watch(`session:${id}:subagents`,cb),home:process.env.HOME||'',control:(id,action,args)=>inv('sessions-control',{id,action,args}),
-    catalog:id=>inv('sessions-catalog',id),attachCommand:id=>inv('sessions-attach-command',id),attachTerminal:id=>inv('sessions-attach-terminal',id),resume:p=>inv('sessions-resume',p),history:{list:p=>inv('history-list',p),read:p=>inv('history-read',p)}};})(),
+    catalog:id=>inv('sessions-catalog',id),attachCommand:id=>inv('sessions-attach-command',id),attachTerminal:id=>inv('sessions-attach-terminal',id),resume:p=>inv('sessions-resume',p),history:{list:p=>inv('history-list',p),search:p=>inv('history-search',p),read:p=>inv('history-read',p)}};})(),
 });

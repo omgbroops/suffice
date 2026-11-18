@@ -15,6 +15,7 @@ import {createUsageMeter,format as formatUsage} from '../../../packages/backend/
 
 const LABELS={claude:'Claude Code',codex:'Codex',fake:'Fake agent',fakeclaude:'Fake Claude',simclaude:'Sim Claude'};
 const AGENT_BY_SOURCE={'claude-code':'claude',codex:'codex'};
+const q=v=>typeof v==='string'?v.slice(0,200):''; // search text is clamped, not rejected: a huge paste must search, not fall back to the unfiltered list
 const str=v=>typeof v==='string'&&v.length>0&&v.length<4096;
 const onPath=bin=>(process.env.PATH||'').split(path.delimiter).some(dir=>{try{fs.accessSync(path.join(dir,bin),fs.constants.X_OK);return true;}catch{return false;}});
 
@@ -43,6 +44,7 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
  // Test mode never reads the real history: an explicit SUFFICE_HISTORY_HOME wins, else a fresh empty dir.
  const historyHome=env.SUFFICE_HISTORY_HOME||(env.SUFFICE_TEST_HIDE_WINDOW==='1'?fs.mkdtempSync(path.join(os.tmpdir(),'sfx-history-')):process.env.HOME);
  const socket=env.SUFFICE_SESSIONS_SOCKET||'suffice';
+ let lastScan=0;
  const flow=createFlow({dataDir,env,send});
  const computer=createComputer({dataDir,env,send});
  const backend=createBackend({dataDir,sessions:true,history:true,socketName:socket,home:historyHome,sessionAgents,exec:flow.exec,approve:flow.approve,runners:flow.runners,limits:flow.limits,...((testAgent||simAgent)&&{idleMs:400,settleMs:100})});
@@ -176,7 +178,8 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
    'sessions-attach-command':p=>call({type:'sessions.attachCommand',id:id(p)}),
    // Opens the session's tmux attach in Terminal.app; hidden test runs only report the command.
    'sessions-attach-terminal':async p=>{const command=await call({type:'sessions.attachCommand',id:id(p)});if(process.env.SUFFICE_TEST_HIDE_WINDOW==='1')return {command,opened:false};await new Promise((ok,no)=>execFile('osascript',['-e','tell application "Terminal" to do script "'+command.replace(/[\\"]/g,'\\$&')+'"'],e=>e?no(e):ok()));return {command,opened:true};},
-   'history-list':async p=>{await call({type:'history.scan'});return call({type:'history.list',opts:{limit:200,...(str(p?.query)&&{query:p.query})}});},
+   'history-list':async p=>{await call({type:'history.scan'});return call({type:'history.list',opts:{limit:200,...(q(p?.query)&&{query:q(p.query)})}});},
+   'history-search':async p=>{if(Date.now()-lastScan>30000){lastScan=Date.now();await call({type:'history.scan'});}return call({type:'history.find',query:q(p?.query),opts:{limit:50}});},
    'history-read':p=>call({type:'history.read',entry:{source:String(p?.source),path:String(p?.path)}}),
    'sessions-resume':async p=>{const agent=AGENT_BY_SOURCE[p?.source];if(!agent||!str(p?.sessionId)||!str(p?.cwd))throw new Error('Cannot resume this chat');await ready;const r=await call({type:'sessions.resume',agent,cwd:folder(p.cwd),sessionId:p.sessionId});track(r);attachSubs(r);return r;},
   },

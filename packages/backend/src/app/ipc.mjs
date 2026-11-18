@@ -72,6 +72,7 @@ export function createIpcBridge(backend) {
         'history.scan': async (m) => H().scan(opts(m)),
         'history.list': (m) => H().list(opts(m)),
         'history.search': (m) => { if (!str(m.query)) bad('query: expected a non-empty string'); return H().search(m.query, opts(m)); },
+        'history.find': (m) => H().find(m.query, opts(m)),
         'history.read': (m) => H().read(entry(m)),
         'keys.set': (m) => {
           if (!str(m.key)) bad('key: expected a non-empty string');
