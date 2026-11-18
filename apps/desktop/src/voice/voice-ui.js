@@ -194,7 +194,7 @@ export function connectVoice({ form, prompt, toast = () => {}, api = window.suff
   fullButton.addEventListener('click', () => setMode('full')); fullMute.addEventListener('click', toggleMute); fullMini.addEventListener('click', () => setMode('mini'));
   // Focus cycle for the open call view: its buttons, then any toast buttons (the toast sits outside the view).
   const trapTab = event => {
-    const items = [...full.querySelectorAll('button:not([disabled])'), ...document.querySelectorAll('.toast button:not([disabled])')], i = items.indexOf(document.activeElement);
+    const items = [...full.querySelectorAll('button:not([disabled])'), ...document.querySelectorAll('.toast:popover-open button:not([disabled])')], i = items.indexOf(document.activeElement);
     event.preventDefault(); items.at(i < 0 ? (event.shiftKey ? -1 : 0) : (i + (event.shiftKey ? -1 : 1)) % items.length).focus({ preventScroll: true });
   };
   full.addEventListener('keydown', event => {

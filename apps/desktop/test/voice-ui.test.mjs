@@ -317,6 +317,14 @@ test('voice: strip, full view, floating orb window, transcript rules, geometry a
    await full.waitFor();assert.equal(await attr(),'full');
    await page.locator('.voice-full-end').click();await page.waitForFunction(()=>!document.querySelector('form.composer').dataset.voice);
   });
+  await t.test('Tab in the full view skips a closed toast and keeps cycling',async()=>{
+   await start();await emit({type:'state',state:'listening'});await page.locator('.voice-expand').first().click();await full.waitFor({state:'visible'});
+   await page.evaluate(()=>{const toast=document.createElement('div');toast.className='toast';toast.innerHTML='<button type="button">Okay</button>';document.body.append(toast);});
+   await page.locator('.voice-full-end').focus();const seen=new Set();
+   for(let i=0;i<6;i++){await page.keyboard.press('Tab');seen.add(await page.evaluate(()=>document.activeElement.className));}
+   assert.ok(seen.size>=3,'focus cycles through the call buttons, got '+[...seen]);
+   await page.evaluate(()=>document.querySelector('body > .toast').remove());await page.locator('.voice-full-end').click();await page.waitForFunction(()=>!document.querySelector('form.composer').dataset.voice);
+  });
   assert.deepEqual(errors,[]);
  }finally{await app.close();}
 });
