@@ -3,6 +3,7 @@ import {threadViewState,restoreThreadViews} from './thread-view-state.js';
 import {preference,savePreference,initializePreferences} from './settings-preferences.js';
 import {createSettings} from './settings.js';
 import {createSpotlight} from './spotlight.js';
+import {createTaskBoardView} from './task-board.js';
 import {sidebarPreferences} from './sidebar-preferences.js';
 import {connectComposerSize} from './composer-size.js';
 import {connectAttachments} from './attachments.js';
@@ -409,7 +410,9 @@ let settingsPage;
 document.addEventListener('suffice-open-settings',event=>{closeMenu();(settingsPage??=createSettings()).open(event.detail?.section);});
 function showSettings() { closeMenu(); if(settingsPage?.isOpen)settingsPage.close();else (settingsPage??=createSettings()).open(); }
 
+const taskBoard=createTaskBoardView();
 const spotlight=createSpotlight({commands:()=>[
+ {id:'tasks',title:'Tasks: open the board',icon:'inbox',run:()=>taskBoard.open()},
  {id:'new',title:'New session',icon:'plus',run:()=>document.querySelector('.new-session').click()},
  {id:'sidebar',title:'Toggle sidebar',icon:'panel',run:()=>document.querySelector('[data-action="toggle-sidebar"]').click()},
  {id:'project',title:'Choose project',icon:'folder',run:()=>document.querySelector('.project-picker')?.click()},
