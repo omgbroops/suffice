@@ -2,6 +2,7 @@ import electronPath from 'electron';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdtemp,mkdir,writeFile,symlink,chmod} from 'node:fs/promises';
+import {existsSync} from "node:fs";
 import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';import {fileURLToPath} from 'node:url';
 import {execFile} from 'node:child_process';
@@ -50,7 +51,7 @@ test('load maps gh api data and degrades to clean states', async()=>{
 async function launch(path){
  const sh=resolve(tmpdir(),'sfx-pr-'+process.pid+'-'+Math.random().toString(36).slice(2));
  const home=await mkdtemp(resolve(tmpdir(),'suffice-pr-')),cwd=await mkdtemp(resolve(tmpdir(),'suffice-pr-project-')),bin=resolve(sh,'bin');
- await mkdir(bin,{recursive:true});await symlink('/usr/bin/git',resolve(bin,'git'));
+ await mkdir(bin,{recursive:true});await symlink('/usr/bin/git',resolve(bin,'git'));for(const t of ["/opt/homebrew/bin/tmux","/usr/local/bin/tmux","/usr/bin/tmux"])if(existsSync(t)){await symlink(t,resolve(bin,"tmux"));break;}
  const git=args=>promisify(execFile)('git',['-C',cwd,...args],{windowsHide:true});
  await git(['init','-q','-b','feat/pr-demo']);await git(['remote','add','origin','git@github.com:acme/widgets.git']);
  await writeFile(resolve(cwd,'a.txt'),'x\n');await git(['add','a.txt']);await git(['-c','user.name=Fixture','-c','user.email=fixture@example.invalid','commit','-qm','fixture']);
@@ -61,7 +62,7 @@ async function launch(path){
  }
  const dir=resolve(home,'sessions','fixture');await mkdir(dir,{recursive:true});const timestamp=new Date().toISOString(),id='one';
  await writeFile(resolve(dir,id+'.jsonl'),[{type:'session',version:3,id,timestamp,cwd},{type:'message',id:'user',parentId:null,timestamp,message:{role:'user',content:[{type:'text',text:'Thread one'}],timestamp:Date.now()}},{type:'message',id:'assistant',parentId:'user',timestamp,message:{role:'assistant',content:[{type:'text',text:'Reply one'}],timestamp:Date.now(),stopReason:'stop'}}].map(e=>JSON.stringify(e)).join('\n')+'\n');
- const env={...process.env,PATH:bin,PI_OFFLINE:'1',SUFFICE_HOME:home,SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_START_PROJECT:cwd,SUFFICE_SESSIONS_SOCKET:'sfx-feat-pr-review-'+process.pid,SUFFICE_HISTORY_HOME:await mkdtemp(resolve(tmpdir(),'suffice-pr-hist-'))};delete env.ELECTRON_RUN_AS_NODE;
+ const env={...process.env,PATH:bin,PI_OFFLINE:'1',SUFFICE_HOME:home,SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_START_PROJECT:cwd,SUFFICE_SESSIONS_SOCKET:'sfx-pre-pr-review-'+process.pid,SUFFICE_HISTORY_HOME:await mkdtemp(resolve(tmpdir(),'suffice-pr-hist-'))};delete env.ELECTRON_RUN_AS_NODE;
  const app=await _electron.launch({executablePath:electronPath,args:[...guard,fileURLToPath(new URL('..',import.meta.url)),'--user-data-dir='+resolve(home,'electron')],env});
  return {app,sh,page:await app.firstWindow()};
 }
