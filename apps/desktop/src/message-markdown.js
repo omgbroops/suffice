@@ -43,7 +43,9 @@ const eligibleHide=e=>sources.has(e)&&!e.hasAttribute('data-lazy-markdown')&&e.i
 const eligibleShow=e=>sources.has(e)&&e.hasAttribute('data-lazy-markdown');
 const idleHides=new Set();let idle=0;
 // Unrendering is not urgent: defer it to idle time and only for blocks that are still far away.
-function flushHides(){idle=0;const out=[...idleHides].filter(eligibleHide);idleHides.clear();if(!out.length)return;const root=out[0].closest('.thread-transcript'),r=root?.getBoundingClientRect();apply(out.filter(e=>{const b=e.getBoundingClientRect();return r&&(b.bottom<r.top-1500||b.top>r.bottom+1500);}),[]);}
+function flushHides(){idle=0;const out=[...idleHides].filter(eligibleHide);idleHides.clear();if(!out.length)return;const root=out[0].closest('.thread-transcript'),r=root?.getBoundingClientRect(),far=e=>{const b=e.getBoundingClientRect();return r&&(b.bottom<r.top-1500||b.top>r.bottom+1500);};apply(out.filter(far),[]);
+ // blocks that just left view are still near: keep them queued (IO fires no second event for them) and look again later
+ for(const e of out)if(eligibleHide(e)&&!far(e))idleHides.add(e);if(idleHides.size)idle=setTimeout(flushHides,800);}
 function windowObserver(){return observer??=new IntersectionObserver(entries=>{const shows=[];for(const {target,isIntersecting} of entries){if(isIntersecting){idleHides.delete(target);if(eligibleShow(target))shows.push(target);}else if(eligibleHide(target))idleHides.add(target);}
  if(shows.length)apply([],shows);if(idleHides.size&&!idle)idle=(window.requestIdleCallback||setTimeout)(flushHides,{timeout:800});},{rootMargin:'1500px 0px'});}
 function track(element,text){watch(element);sources.set(element,text);windowObserver().observe(element);}

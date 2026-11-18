@@ -39,7 +39,8 @@ test('long thread windows its DOM, colors lazy code, and keeps scroll stable',{t
   const up=await stat();
   assert.ok(up.visible>0&&up.visibleEmpty===0,'rendered after scrolling up: '+JSON.stringify(up));
   assert.ok(up.code>0&&up.colored===up.code,'lazy code highlighted after scroll: '+JSON.stringify(up));
-  await page.evaluate(()=>{const t=document.querySelector('.thread-messages').parentElement;for(const a of t.querySelectorAll('.thread-assistant')){if(a.querySelector('code.language-mermaid,.thread-diagram')){a.scrollIntoView({block:'center'});break;}}});
+  // Answer 657 carries a mermaid block (i%50===7). Dehydrated blocks no longer linger in the DOM far from the viewport, so jump to it by index.
+  await page.evaluate(()=>{document.querySelector('.thread-messages').children[2*657+1].scrollIntoView({block:'center'});});
   await page.waitForTimeout(2500);
   const mer=await stat();
   assert.ok(mer.raw===0&&mer.mer>0,'lazy mermaid becomes a diagram: '+JSON.stringify(mer));
