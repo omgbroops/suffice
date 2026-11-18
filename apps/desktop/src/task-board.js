@@ -1,5 +1,6 @@
 import {createTaskBoard,columnOf,splitTasks,fetchIssues,formatElapsed,formatCost} from './task-board-engine.js';
 import {icon} from './ui.js';
+import {threadViewState as viewState} from './thread-view-state.js';
 import './task-board.css';
 
 const COLUMNS=[['queued','Queued','Waiting for a free slot'],['running','Running','Nothing running'],['needs','Needs you','Nothing needs you'],['done','Done','Nothing finished yet']];
@@ -32,17 +33,26 @@ export function createTaskBoardView({api=window.sufficeDesktop,board,host=docume
  function draw(){
   const list=board.tasks(),by={queued:[],running:[],needs:[],done:[]};for(const task of list)by[columnOf(task)].push(task);
   by.done.reverse();
-  for(const [key,,empty] of COLUMNS){const col=$(`[data-col="${key}"]`),ul=col.querySelector('.tb-list');col.querySelector('.tb-count').textContent=by[key].length||'';ul.replaceChildren(...(by[key].length?by[key].map(card):[Object.assign(document.createElement('li'),{className:'tb-empty',textContent:empty})]));}
+  for(const [key] of COLUMNS){const col=$(`[data-col="${key}"]`),ul=col.querySelector('.tb-list');col.querySelector('.tb-count').textContent=by[key].length||'';ul.replaceChildren(...(by[key].length?by[key].map(card):[]));}
   const active=by.queued.length+by.running.length+by.needs.length;
-  $('.tb-summary').textContent=list.length?[by.running.length&&`${by.running.length} running`,by.queued.length&&`${by.queued.length} queued`,by.needs.length&&`${by.needs.length} need you`,by.done.length&&`${by.done.length} done`].filter(Boolean).join(' · '):'Queue as many tasks as you like. They run as threads.';
+  $('.tb-summary').textContent=list.length?[by.running.length&&`${by.running.length} running`,by.queued.length&&`${by.queued.length} queued`,by.needs.length&&`${by.needs.length} need you`,by.done.length&&`${by.done.length} done`].filter(Boolean).join(' · '):'';
   $('.tb-limit output').textContent=board.limit();
   const b=badge.querySelector('.tb-badge');b.hidden=!active;b.textContent=active||'';badge.dataset.active=active?'true':'false';
  }
  // Redraw on every tick would drop focus on a button; only the live numbers change between state changes.
  board.subscribe(()=>{const focus=open&&root.contains(document.activeElement)?document.activeElement:null,act=focus?.dataset.act,id=focus?.closest('.tb-card')?.dataset.id;draw();if(act)root.querySelector(`.tb-card[data-id="${id}"] [data-act="${act}"]`)?.focus();});
- const setOpen=(value,restore=true)=>{if(value===open)return;open=value;root.hidden=!value;document.body.classList.toggle('tasks-open',value);badge.setAttribute('aria-pressed',String(value));if(value){returnFocus=document.activeElement;draw();text.focus();}else if(restore){returnFocus?.isConnected&&returnFocus.focus?.();}};
+ const setOpen=(value,restore=true)=>{if(value===open)return;open=value;hideBubble();root.hidden=!value;document.body.classList.toggle('tasks-open',value);badge.setAttribute('aria-pressed',String(value));if(value){returnFocus=document.activeElement;draw();text.focus();}else if(restore){returnFocus?.isConnected&&returnFocus.focus?.();}};
  // Any click outside the board (sidebar, a thread, settings) leaves it; the click keeps its own focus.
- document.addEventListener('click',event=>{if(open&&!root.contains(event.target)&&!badge.contains(event.target)&&!event.target.closest('.popover,dialog'))setOpen(false,false);},true);
+ const dirty=()=>text.value.trim()||$('#tb-repo').value.trim();
+ const bubble=document.createElement('div');bubble.className='tb-discard';bubble.hidden=true;bubble.setAttribute('role','alertdialog');bubble.setAttribute('aria-label','Discard unsaved tasks');bubble.innerHTML='<span>Discard?</span><button type="button" class="tb-keep">Keep</button><button type="button" class="tb-drop">Discard</button>';document.body.append(bubble);let trigger=null;
+ const hideBubble=()=>{bubble.hidden=true;};
+ function showBubble(){bubble.hidden=false;const r=(trigger?.isConnected?trigger:badge).getBoundingClientRect(),b=bubble.getBoundingClientRect();bubble.style.left=Math.min(r.right+8,innerWidth-b.width-8)+'px';bubble.style.top=Math.max(8,Math.min(r.top+(r.height-b.height)/2,innerHeight-b.height-8))+'px';if(!matchMedia('(prefers-reduced-motion: reduce)').matches)bubble.animate([{transform:'translateY(8px) scale(.94)',opacity:0},{transform:'translateY(-3px) scale(1.02)',opacity:1,offset:.6},{transform:'none',opacity:1}],{duration:260,easing:'cubic-bezier(.34,1.45,.64,1)'});bubble.querySelector('.tb-keep').focus({preventScroll:true});}
+ bubble.querySelector('.tb-keep').addEventListener('click',()=>{hideBubble();text.focus();});
+ bubble.querySelector('.tb-drop').addEventListener('click',()=>{text.value='';$('#tb-repo').value='';queue.disabled=true;hideBubble();setOpen(false,false);});
+ // Leaving the board (any click outside, or a thread/session switch) closes it; unsaved input asks first and never forces the view.
+ const leave=()=>{if(!open)return false;if(dirty()){showBubble();return true;}setOpen(false,false);return false;};
+ document.addEventListener('click',event=>{if(open&&(trigger=event.target.closest('button,a,[role=button]'))&&!root.contains(event.target)&&!badge.contains(event.target)&&!event.target.closest('.popover,dialog')&&leave()){event.preventDefault();event.stopPropagation();}},true);
+ viewState.subscribe(event=>{if(event.type==='select')leave();});
  text.addEventListener('input',()=>{queue.disabled=!splitTasks(text.value).length;error.textContent='';});
  $('.tb-add').addEventListener('submit',event=>{event.preventDefault();const lines=splitTasks(text.value);if(!lines.length)return;board.add(lines);text.value='';queue.disabled=true;});
  text.addEventListener('keydown',event=>{if(event.key==='Enter'&&(event.metaKey||event.ctrlKey)){event.preventDefault();$('.tb-add').requestSubmit();}});
