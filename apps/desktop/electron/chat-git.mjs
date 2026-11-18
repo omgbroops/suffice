@@ -1,9 +1,8 @@
 import {mkdir,readFile,writeFile,rename} from 'node:fs/promises';
 import {resolve} from 'node:path';
 import {randomUUID} from 'node:crypto';
-import {execFile} from 'node:child_process';
-import {promisify} from 'node:util';
-const exec=promisify(execFile);
+import {createRequire} from 'node:module';
+const {git:runGit}=createRequire(import.meta.url)('./branches.cjs');
 const receipt=(home,id)=>/^[a-f0-9]{32}$/.test(id||'')?resolve(home,'chat-git',id+'.json'):null;
 const rootKey=cwd=>process.platform==='win32'?resolve(cwd).toLowerCase():resolve(cwd);
 export async function readChatGit(home,id,cwd){try{const value=JSON.parse(await readFile(receipt(home,id),'utf8'));return value.version===1&&value.scope==='chat'&&(!cwd||!value.root||rootKey(value.root)===rootKey(cwd))?value:null;}catch{return null;}}
@@ -15,7 +14,7 @@ export async function bindChatGitToProject(home,id,cwd){
  const state={version:1,scope:'chat',root:resolve(cwd),...await snapshot(cwd),pr:null,...(previous?{previousContexts:[...previousContexts,context]}:{})};
  await writeReceipt(home,id,state);return state;
 }
-async function snapshot(cwd){const git=async args=>{try{return (await exec('git',['-C',cwd,...args],{windowsHide:true,timeout:3000})).stdout.trim();}catch{return null;}};const [branch,dir,common]=await Promise.all([git(['symbolic-ref','--short','HEAD']),git(['rev-parse','--git-dir']),git(['rev-parse','--git-common-dir'])]);return {branch,worktree:!!(dir&&common&&resolve(cwd,dir)!==resolve(cwd,common)),gitAvailable:!!dir};}
+async function snapshot(cwd){const git=async args=>{try{return await runGit(cwd,args,{timeout:3000});}catch{return null;}};const [branch,dir,common]=await Promise.all([git(['symbolic-ref','--short','HEAD']),git(['rev-parse','--git-dir']),git(['rev-parse','--git-common-dir'])]);return {branch,worktree:!!(dir&&common&&resolve(cwd,dir)!==resolve(cwd,common)),gitAvailable:!!dir};}
 export function chatGitProjection(project,chat){const {branch,pr,worktree,diff,...identity}=project;return {...identity,branch:chat?.branch??null,worktree:chat?.worktree??false,pr:chat?.pr??null,gitUnknown:!chat,branchMismatch:!!(chat?.branch&&branch&&chat.branch!==branch)};}
 export function createChatGitTracker({cwd,home,getId,onChange=()=>{}}){
  let state,tail=Promise.resolve();
