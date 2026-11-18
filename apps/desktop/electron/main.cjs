@@ -141,6 +141,15 @@ if(primary)app.whenReady().then(async()=>{
   handle('settings-action',async action=>{if(action==='export'){const chosen=await dialog.showOpenDialog(win,{properties:['openDirectory','createDirectory'],title:'Export conversations'});if(chosen.canceled)return null;return (await import('./settings-data-actions.mjs')).exportSessions(settingsHome,chosen.filePaths[0]);}if(action==='clear-cache'){await win.webContents.session.clearCache();win.webContents.send('suffice:clear-cache');return true;}if(action==='worktree-location'){const chosen=await dialog.showOpenDialog(win,{properties:['openDirectory','createDirectory'],title:'Worktree location'});if(chosen.canceled)return null;await settings.set('worktree-path',chosen.filePaths[0]);return chosen.filePaths[0];}throw new Error('Unknown settings action');});
   handle('run',payload=>runTask(payload));
   handle('run-background',payload=>runTask(payload,true));
+  const fakeCompare=process.env.SUFFICE_TEST_COMPARE_AGENT;// test-only provider: a script run in each worktree
+  const compare=(await import('./best-of-n.mjs')).createBestOfN({directory:path.join(settingsHome,'worktrees'),runCandidate:async({cwd,prompt,model,provider,effort,clientId})=>{
+   if(fakeCompare){const {stdout}=await require('node:util').promisify(require('node:child_process').execFile)(process.execPath,[fakeCompare],{cwd,env:{...process.env,ELECTRON_RUN_AS_NODE:'1',COMPARE_MODEL:model,COMPARE_PROMPT:prompt}});return JSON.parse(stdout);}
+   return request('run',{prompt,displayPrompt:prompt,clientId,effort,model,provider,cwd,desktopSettings:{...await settings.get()}});
+  }});
+  handle('compare-models',async()=>fakeCompare?['alpha','beta','gamma'].map(name=>({id:'fake-'+name,name:'Fake '+name,provider:'fake',efforts:[]})):(await request('models',{})).filter(model=>model.available));
+  handle('compare-run',payload=>{if(!project)throw new Error('Choose a project above the composer first');return compare.run({project,prompt:payload?.prompt,candidates:payload?.candidates});});
+  handle('compare-keep',payload=>compare.keep(payload?.id,payload?.index));
+  handle('compare-discard',id=>compare.discard(id));
   handle('abort',threadId=>request('abort',{threadId}));
   handle('steer',async payload=>{if(!payload||typeof payload.prompt!=='string'||!payload.prompt.trim()||payload.prompt.length>1000000)throw new Error('Invalid steering message');const attached=await prepareAttachments(app.getPath('userData'),payload.attachments);if(attached.directory)attachmentGroups.get(payload.threadId)?.push(attached.directory);return request('steer',{threadId:payload.threadId,prompt:payload.prompt+attached.context,displayPrompt:payload.prompt,attachmentMetadata:attached.metadata,images:attached.images});});
   handle('reset',async()=>{viewedThreadId=null;const revision=++viewedThreadRevision;await request('reset');if(revision===viewedThreadRevision)project=selectedProject;});

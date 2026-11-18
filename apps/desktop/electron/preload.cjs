@@ -65,6 +65,10 @@ contextBridge.exposeInMainWorld('sufficeDesktop',{
   abort:threadId=>ipcRenderer.invoke('suffice:abort',threadId),
   steer:payload=>ipcRenderer.invoke('suffice:steer',payload),
   reset:()=>ipcRenderer.invoke('suffice:reset'),
+  compareModels:()=>ipcRenderer.invoke('suffice:compare-models'),
+  compareRun:payload=>ipcRenderer.invoke('suffice:compare-run',payload),
+  compareKeep:payload=>ipcRenderer.invoke('suffice:compare-keep',payload),
+  compareDiscard:id=>ipcRenderer.invoke('suffice:compare-discard',id),
   onEvent:callback=>{const listener=(_event,value)=>callback(value);ipcRenderer.on('suffice:event',listener);return()=>ipcRenderer.removeListener('suffice:event',listener);},
   sessions:(()=>{const inv=(n,p)=>ipcRenderer.invoke('suffice:'+n,p);const last=new Map(),subs=new Set();
    ipcRenderer.on('suffice:sessions-event',(_e,m)=>{if(m?.type!=='slot')return;last.set(m.id,m.value);for(const f of subs)f(m.id,m.value);});

@@ -23,6 +23,7 @@ import './composer-files.css';
 import './thread-row.css';
 import './window-chrome.css';
 import {sessionMenuItems} from './sessions-ui.js';
+import {compareMenuItems,openCompare} from './compare-ui.js';
 import './edge-to-edge-experiment.css';
 import './motion.css';
 import {connectMotion} from './motion.js';
@@ -255,6 +256,8 @@ document.addEventListener('click', (e) => {
 
     if (type === 'background-send') { document.querySelector('.composer').backgroundSubmit=true;document.querySelector('.composer').requestSubmit(); }
 
+    if (type === 'compare') openCompare({api:window.sufficeDesktop,prompt,toast});
+
     if (type === 'sidebar') sidebarPreferences.choose(value);
 
     if (type === 'model') document.querySelector('#model-label').textContent = value;
@@ -339,7 +342,7 @@ document.addEventListener('click', (e) => {
 
     case 'attach': void document.querySelector('.composer').skills.items().then(items => { skillItems = items; menu(control, [{ label: 'Add files', icon: 'attach', action: 'attach:files' }, { label: 'Skills', icon: 'bolt', children: () => skillItems }]); }); break;
 
-    case 'send-menu': menu(control, [{ label: 'Start session in background', action: 'background-send:start' }, ...sessionMenuItems()]); break;
+    case 'send-menu': menu(control, [{ label: 'Start session in background', action: 'background-send:start' }, ...compareMenuItems(), ...sessionMenuItems()]); break;
 
     case 'sidebar-menu': menu(control, sidebarPreferences.items(), 'Sidebar'); break;
 
