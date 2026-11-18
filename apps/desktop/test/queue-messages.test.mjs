@@ -52,3 +52,53 @@ test('composer queue, send contrast, transcript files and shared editor preferen
 
  }finally{await app.close();}
 });
+async function launchQueue(){
+ const home=await mkdtemp(resolve(tmpdir(),'suffice-queue-'));
+ await writeFile(resolve(home,'desktop-settings.json'),JSON.stringify({'working-send':'Queue'}));
+ const env={...process.env,PI_OFFLINE:'1',SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
+ const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
+ const page=await app.firstWindow();await page.locator('.composer').waitFor();
+ // Mock run streams until aborted (resolves interrupted) or until the test resolves it.
+ await app.evaluate(({ipcMain,BrowserWindow})=>{
+  globalThis.queueRuns=[];
+  for(const action of ['run','thread','threads','steer','models','files','abort'])ipcMain.removeHandler('suffice:'+action);
+  ipcMain.handle('suffice:files',()=>({project:'Fixture',entries:[]}));ipcMain.handle('suffice:models',()=>[{id:'fixture',provider:'openai',name:'Fixture',available:true,efforts:['low']}]);
+  ipcMain.handle('suffice:threads',()=>[]);ipcMain.handle('suffice:thread',(_e,id)=>({id,title:'Initial',cwd:process.cwd(),messages:[]}));ipcMain.handle('suffice:steer',()=>true);
+  ipcMain.handle('suffice:abort',()=>{globalThis.queueRuns.at(-1)?.resolve({threadId:'fixture-thread',interrupted:true});return true;});
+  ipcMain.handle('suffice:run',(_e,payload)=>new Promise(resolve=>{globalThis.queueRuns.push({payload,resolve});BrowserWindow.getAllWindows()[0].webContents.send('suffice:event',{event:'thread_started',id:'fixture-thread',threadId:'fixture-thread',clientId:payload.clientId});}));
+ });
+ await page.reload();await page.addStyleTag({content:'* { transition:none!important; animation:none!important; }'});
+ await page.locator('#prompt').fill('Initial');await page.locator('.composer').evaluate(form=>form.requestSubmit());
+ await page.getByRole('button',{name:'Stop task',exact:true}).waitFor();
+ for(const text of ['queued A','queued B']){await page.locator('#prompt').fill(text);await page.getByRole('button',{name:'Queue message',exact:true}).click();await page.locator('.queued-message-text').filter({hasText:text}).waitFor();}
+ return {app,page,count:()=>app.evaluate(()=>globalThis.queueRuns.length)};
+}
+test('queued messages pause after Stop and expose Send, never Steer',{timeout:60000},async()=>{
+ const {app,page,count}=await launchQueue();
+ try{
+  await page.evaluate(()=>document.addEventListener('suffice-toast',e=>(globalThis.toasts||=[]).push(e.detail)));
+  await page.getByRole('button',{name:'Stop task',exact:true}).click();
+  await page.locator('.queued-paused').filter({hasText:'Paused'}).waitFor({timeout:2000});
+  assert.equal(await page.locator('[data-queue-action="steer"]').count(),0);
+  assert.equal(await page.locator('[data-queue-action="send"]').count(),2);
+  if(process.env.QUEUE_SHOT)await page.screenshot({path:process.env.QUEUE_SHOT});
+  await page.waitForTimeout(4000);assert.equal(await count(),1);assert.equal(await page.locator('.queued-message').count(),2);
+  assert.ok(!(await page.evaluate(()=>globalThis.toasts||[])).some(t=>/no longer running/.test(String(t))));
+ }finally{await app.close();}
+});
+test('Send on a paused row runs it, then the rest drain in order',{timeout:60000},async()=>{
+ const {app,page,count}=await launchQueue();
+ try{
+  await page.getByRole('button',{name:'Stop task',exact:true}).click();
+  await page.locator('.queued-paused').waitFor({timeout:2000});
+  await page.locator('.queued-message').filter({hasText:'queued A'}).getByRole('button',{name:'Send queued message'}).click();
+  await page.waitForFunction(()=>document.querySelector('.thread-messages').textContent.includes('queued A'));
+  assert.equal(await count(),2);assert.equal(await app.evaluate(()=>globalThis.queueRuns[1].payload.prompt),'queued A');
+  assert.equal(await page.locator('[data-queue-action="steer"]').count(),1);assert.equal(await page.locator('.queued-paused').count(),0);
+  await app.evaluate(()=>globalThis.queueRuns[1].resolve({threadId:'fixture-thread',text:'done A'}));
+  await page.waitForFunction(()=>document.querySelector('.thread-messages').textContent.includes('queued B'));
+  assert.equal(await app.evaluate(()=>globalThis.queueRuns[2].payload.prompt),'queued B');
+  const text=await page.locator('.thread-messages').textContent();assert.ok(text.indexOf('queued A')<text.indexOf('queued B'));
+  assert.equal(await page.locator('.queued-message').count(),0);
+ }finally{await app.close();}
+});
