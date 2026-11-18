@@ -4,7 +4,7 @@ import {connectOverlayScrollbar} from './overlay-scrollbar.js';
 // CLI-session prompts reuse the composer-approval markup and classes from approvals.js; styles live in desktop.css.
 const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
 const base=p=>String(p||'').split('/').filter(Boolean).pop()||'';
-const DENY=/^(no\b|deny|reject|cancel|keep planning|tell claude what to change)/i;
+export const DENY=/^(no\b|deny|reject|cancel|keep planning|tell claude what to change)/i;
 const EDIT=/^(Edit|Write|MultiEdit|NotebookEdit)$/;
 const HEAD=/^(Claude Code v|claude-\S+ with \w+ effort)/;
 
