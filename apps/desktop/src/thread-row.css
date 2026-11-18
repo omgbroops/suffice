@@ -159,3 +159,9 @@
 .thread-fork:focus-visible { outline: 1px solid var(--focus); outline-offset: 1px; }
 .thread-fork-mark { display: inline-flex; flex: none; color: var(--text-faint); }
 .thread-fork-mark .icon { width: 12px; height: 12px; }
+
+/* Peek: last prompt, last answer, files and cost under the hover title */
+.thread-peek { display: flex; flex-direction: column; gap: 3px; padding: 6px 0; margin: 0 0 1px; border-block: 1px solid var(--border-subtle, color-mix(in srgb,currentColor 10%,transparent)); }
+.thread-peek-line { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; line-height: 17px; color: var(--text-muted, var(--text-faint)); }
+.thread-peek-prompt { color: var(--text-strong); }
+.thread-peek-foot { font-size: 11px; color: var(--text-faint); font-variant-numeric: tabular-nums; }

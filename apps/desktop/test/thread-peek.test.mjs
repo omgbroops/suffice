@@ -1,0 +1,51 @@
+import electronPath from 'electron';
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {mkdtemp,mkdir,writeFile} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import {resolve} from 'node:path';
+import {_electron} from 'playwright-core';
+import {shortTitle,peekSummary} from '../shared/thread-peek.mjs';
+import {guard} from './electron-guard.mjs';
+const shots=process.env.PEEK_SHOTS;
+test('short titles come from the first prompt without a model',()=>{
+ assert.equal(shortTitle('Hey, can you please fix the double charge bug on retried webhooks? It happens on Stripe.'),'Fix the double charge bug on retried webhooks');
+ assert.equal(shortTitle('  \n## refactor   the router\nmore'),'Refactor the router');
+ assert.equal(shortTitle('x'.repeat(200)).length<=50,true);
+ assert.match(shortTitle('Rebuild the pricing page with new tiers and a comparison table for teams'),/^Rebuild the pricing page.*…$/);
+ assert.equal(shortTitle(''),'Untitled thread');
+ assert.equal(shortTitle('```\ncode only\n```'),'Untitled thread');
+});
+test('peek summary picks last prompt, answer first line, files, cost',()=>{
+ const m=(role,text,extra={})=>({role,content:[{type:'text',text}],...extra});
+ const s=peekSummary({messages:[m('user','first'),m('assistant','old'),m('user','Add retry jitter'),m('assistant','## Done\nSecond line'),m('user','auto',{automatic:true})],usage:{cost:0.0312}},{files:3});
+ assert.deepEqual(s,{prompt:'Add retry jitter',answer:'Done',files:3,cost:'$0.03'});
+ assert.equal(peekSummary(null,null).cost,'');assert.equal(peekSummary({usage:{cost:0.001}}).cost,'<$0.01');
+});
+test('hover for 400ms and Space show the peek card beside the row',{timeout:90000},async()=>{
+ const home=await mkdtemp(resolve(tmpdir(),'suffice-peek-')),hist=await mkdtemp(resolve(tmpdir(),'suffice-peek-h-'));
+ const env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home,SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_SESSIONS_SOCKET:'sfx-pre-thread-peek',SUFFICE_HISTORY_HOME:hist};delete env.ELECTRON_RUN_AS_NODE;
+ const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
+ try{const page=await app.firstWindow();page.setDefaultTimeout(8000);await page.locator('.composer').waitFor();
+ await app.evaluate(({ipcMain,BrowserWindow})=>{BrowserWindow.getAllWindows()[0].setContentSize(1440,900);ipcMain.removeHandler('suffice:threads');ipcMain.removeHandler('suffice:thread');
+  ipcMain.handle('suffice:threads',()=>[{id:'a',title:'Fix double charge on retried webhooks',project:'Halo Pay',branch:'fix/webhooks',provider:'anthropic',model:'claude-sonnet',status:'done',modified:Date.now()-600000,diff:{scope:'chat',added:42,removed:7,files:3}},{id:'b',title:'Rebuild pricing page',project:'Northwind',provider:'anthropic',status:'done',modified:Date.now()-900000}]);
+  ipcMain.handle('suffice:thread',(e,id)=>({id,title:id,messages:[{role:'user',content:[{type:'text',text:'Add retry jitter to the webhook worker'}]},{role:'assistant',content:[{type:'text',text:'Added exponential backoff with jitter.\nTests pass.'}]}],usage:{cost:0.0412}}));});
+ await page.reload();await page.locator('.thread-card').last().waitFor();
+ await page.mouse.move(700,700);await page.waitForTimeout(500);
+ const row=page.locator('[data-thread="a"]'),card=page.locator('.thread-hover-card');
+ await row.hover();await page.waitForTimeout(150);assert.equal(await card.isHidden(),true,'not shown before 400ms');
+ await card.locator('.thread-peek').waitFor({timeout:3000});
+ assert.equal(await card.locator('.thread-peek-prompt').innerText(),'Add retry jitter to the webhook worker');
+ assert.equal(await card.locator('.thread-peek-answer').innerText(),'Added exponential backoff with jitter.');
+ assert.equal(await card.locator('.thread-peek-foot').innerText(),'3 files changed · $0.04');
+ const rb=await row.boundingBox(),cb=await card.boundingBox();assert.ok(cb.x>=rb.x+rb.width,'card sits beside the row');
+ const snap=async n=>{if(!shots)return;await mkdir(shots,{recursive:true});const png=await app.evaluate(async({BrowserWindow})=>(await BrowserWindow.getAllWindows()[0].webContents.capturePage()).toPNG().toString('base64'));await writeFile(resolve(shots,n),Buffer.from(png,'base64'));};
+ await snap('peek-hover-dark.png');await page.evaluate(()=>document.documentElement.dataset.theme='light');await page.evaluate(()=>document.querySelector('.desktop-app')?.setAttribute('data-theme','light'));await page.waitForTimeout(600);await snap('peek-hover-light.png');
+ await page.evaluate(()=>{document.querySelector('.desktop-app')?.setAttribute('data-theme','dark');document.documentElement.dataset.theme='dark';});
+ await page.mouse.move(700,700);await page.waitForFunction(()=>document.querySelector('.thread-hover-card').hidden);
+ await page.locator('[data-thread="b"]').focus();await page.keyboard.press('Space');
+ await card.locator('.thread-hover-title').filter({hasText:'Rebuild pricing page'}).waitFor({timeout:3000});
+ assert.equal(await page.locator('.thread-hover-card').isVisible(),true);assert.equal(await page.locator('.workspace.thread-view').count(),0,'Space did not open the thread');
+ await page.keyboard.press('Space');assert.equal(await card.isHidden(),true,'Space again closes');
+ }finally{await app.close();}
+});

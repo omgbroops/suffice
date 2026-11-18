@@ -1,3 +1,4 @@
+import {shortTitle} from '../shared/thread-peek.mjs';
 import {populateThreadRow,tickThreadTimes,connectThreadHover,formatThreadTime} from './thread-row.js';
 import {threadViewState} from './thread-view-state.js';
 import {connectSessionContextMenu} from './thread-context-menu.js';
@@ -52,7 +53,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   for(const s of list){
    seen.add(s.id);labels.set(s.id,agentLabel(s.agent));if(!activity.has(s.id))activity.set(s.id,(s.created&&s.created<1e12?s.created*1000:s.created)||Date.now());
    if(!states.has(s.id)){states.set(s.id,'starting');sx.onState(s.id,v=>{states.set(s.id,v?.state||'starting');if(v?.since)activity.set(s.id,v.since<1e12?v.since*1000:v.since);paint(s);if(c.active?.id===s.id){c.paintHeader();c.syncRun();}});
-    sx.onUi(s.id,u=>{const had=prompts.get(s.id),hs=busy.get(s.id),first=!uiSeen.has(s.id);uiSeen.add(s.id);const ft=u?.items?.find(i=>i.kind==='user')?.text?.trim().replace(/\s+/g,' ').slice(0,60);if(ft&&!titles.has(s.id)){titles.set(s.id,ft);paint(s);}prompts.set(s.id,u?!!u.prompt:undefined);busy.set(s.id,!!u?.status);const info=u?.prompt?{...u.prompt,detail:describePrompt(u.prompt,u.items)?.text||''}:null,infoChanged=JSON.stringify(info)!==JSON.stringify(promptInfo.get(s.id)||null);promptInfo.set(s.id,info);if(had!==prompts.get(s.id)||hs!==busy.get(s.id)){if(!first)bump(s.id);paint(s);if(c.active?.id===s.id)c.paintHeader();}else if(infoChanged)publish();});}
+    sx.onUi(s.id,u=>{const had=prompts.get(s.id),hs=busy.get(s.id),first=!uiSeen.has(s.id);uiSeen.add(s.id);const ft=u?.items?.find(i=>i.kind==='user')?.text?.trim()&&shortTitle(u.items.find(i=>i.kind==='user').text,60);if(ft&&!titles.has(s.id)){titles.set(s.id,ft);paint(s);}prompts.set(s.id,u?!!u.prompt:undefined);busy.set(s.id,!!u?.status);const info=u?.prompt?{...u.prompt,detail:describePrompt(u.prompt,u.items)?.text||''}:null,infoChanged=JSON.stringify(info)!==JSON.stringify(promptInfo.get(s.id)||null);promptInfo.set(s.id,info);if(had!==prompts.get(s.id)||hs!==busy.get(s.id)){if(!first)bump(s.id);paint(s);if(c.active?.id===s.id)c.paintHeader();}else if(infoChanged)publish();});}
    paint(s);
   }
   for(const [id,row] of rows)if(!seen.has(id)){row.remove();rows.delete(id);}
@@ -109,7 +110,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  // Start flow from the composer: the typed text is the first message; resolves false when nothing started.
  async function start(agent,text){
   const cwd=project();if(!cwd){toast('Choose a project');return false;}
-  try{const s=await sx.start({agent,cwd});bump(s.id);await refresh();if(text){titles.set(s.id,text.replace(/\s+/g,' ').slice(0,60));firstText.set(s.id,text);sendWhenReady(s.id,text);}open(rows.get(s.id)?._s||s,true);return true;}catch(e){toast(e.message);return false;}
+  try{const s=await sx.start({agent,cwd});bump(s.id);await refresh();if(text){titles.set(s.id,shortTitle(text,60));firstText.set(s.id,text);sendWhenReady(s.id,text);}open(rows.get(s.id)?._s||s,true);return true;}catch(e){toast(e.message);return false;}
  }
  // The CLI drops keys until its input box is drawn (and Enter would accept a trust prompt): hold the first message, shown as pending, until the screen parses as ready. Never delivered (exit, error, 45 s with no prompt up): hand it back to the composer.
  // Put a held message back without losing what the user typed since: it goes first, blank line between.
