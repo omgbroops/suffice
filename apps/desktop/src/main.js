@@ -23,6 +23,8 @@ import './thread-row.css';
 import './window-chrome.css';
 import {sessionMenuItems} from './sessions-ui.js';
 import './edge-to-edge-experiment.css';
+import './start-life.css';
+import {connectStartLife} from './start-life.js';
 import './motion.css';
 import {connectMotion} from './motion.js';
 import {connectSharedChrome} from './shared-chrome.js';
@@ -444,3 +446,4 @@ window.sufficeDesktop?.onNotification?.(event=>{if(!event.play)return;const Audi
 
 connectSettingsPrivacy();
 import './focus-modality.js';
+connectStartLife();
