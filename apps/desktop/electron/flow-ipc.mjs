@@ -3,7 +3,9 @@ import path from 'node:path';
 import {createExec,createFakeRunner,createCommandRunner} from '../../../packages/backend/src/runner/index.mjs';
 import {workflows} from '../../../packages/backend/src/app/workflows.mjs';
 
+const MAX_TEXT=32000;
 const str=v=>typeof v==='string'&&v.trim().length>0&&v.length<4096;
+const text=(v,empty)=>{if(typeof v!=='string'||!v.trim())throw new Error(empty);if(v.length>MAX_TEXT)throw new Error(`Keep it under ${MAX_TEXT} characters`);return v.trim();};
 const RUN_ID=/^[A-Za-z0-9._-]+$/;
 export const FLOWS=[
  {id:'plan-build-review',name:'Plan, build, review',note:'Plan, build, run the test command, repair once, review.',fields:['task','test','cwd']},
@@ -46,11 +48,11 @@ export function createFlow({dataDir,env=process.env,send}){
  };
  const argsOf=p=>{
   const f=FLOWS.find(x=>x.id===p?.workflow);if(!f)throw new Error('Unknown workflow');
-  if(f.fields.includes('topic')){if(!str(p.topic))throw new Error('Describe the topic');return {topic:p.topic.trim()};}
-  if(!str(p.task))throw new Error('Describe the task');
+  if(f.fields.includes('topic')){return {topic:text(p.topic,'Describe the topic')};}
+  const task=text(p.task,'Describe the task');
   const [cmd,...args]=str(p.test)?p.test.trim().split(/\s+/):[];if(!cmd)throw new Error('Enter the test command that gates the run');
   if(p.cwd!==undefined&&p.cwd!==''&&(!str(p.cwd)||!path.isAbsolute(p.cwd)))throw new Error('Folder must be an absolute path');
-  return {task:p.task.trim(),test:{cmd,args},...(str(p.cwd)&&{cwd:p.cwd})};
+  return {task,test:{cmd,args},...(str(p.cwd)&&{cwd:p.cwd})};
  };
  const track=id=>{backend.wait(id).then(r=>{if(!r?.ok&&r?.error)errors.set(id,r.error);},()=>{}).finally(poke);};
  const run=id=>{if(!RUN_ID.test(String(id||'')))throw new Error('Invalid run');return id;};

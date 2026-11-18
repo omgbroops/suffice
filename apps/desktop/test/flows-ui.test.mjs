@@ -34,7 +34,10 @@ test('Workflows page starts, gates, approves, cancels, resumes and budget-stops 
 
   // Validation comes from the backend handler and shows as a toast; nothing starts.
   await page.getByRole('button',{name:'New run'}).click();await page.getByRole('button',{name:'Start run'}).click();
-  await page.getByText('Describe the task').waitFor();assert.equal(await page.locator('.flow-row').count(),0);
+  await page.locator('.flow-error',{hasText:'Describe the task'}).waitFor({timeout:1500});await page.getByText('Describe the task').first().waitFor();assert.equal(await page.locator('.flow-row').count(),0);
+  // An 8.8k-character task is accepted, not rejected as empty.
+  await page.locator('[data-field=task]').fill('x'.repeat(8800));await page.locator('[data-field=test]').fill('node -e process.exit(0)');await page.getByRole('button',{name:'Start run'}).click();await page.locator('.flow-form').waitFor({state:'detached'});await page.locator('.flow-row').first().waitFor({timeout:5000});assert.equal(await page.locator('.flow-row').count(),1);
+  await page.getByRole('button',{name:'New run'}).click();
   await page.getByRole('button',{name:/close|dismiss/i}).last().click().catch(()=>{});await page.waitForTimeout(400);
   await page.getByRole('button',{name:'Cancel',exact:true}).click();
 
@@ -77,7 +80,7 @@ test('Workflows page starts, gates, approves, cancels, resumes and budget-stops 
 
  // Restart with a tiny budget: earlier runs persist, and the next run is refused by the budget.
  await launch('1000',async(page,shot)=>{
-  await open(page);await page.locator('.flow-row').first().waitFor();assert.equal(await page.locator('.flow-row').count(),4);
+  await open(page);await page.locator('.flow-row').first().waitFor();assert.equal(await page.locator('.flow-row').count(),5);
   assert.equal(await rowOf(page,'Add a login form').getByText('Done',{exact:true}).count(),1);
   assert.equal(await rowOf(page,'Fix flaky test').getByText('Failed',{exact:true}).count(),1);
   await start(page,'Plan, build, review','Big refactor',OK);

@@ -17,7 +17,8 @@ export function connectFlows({api,toast}){
  workspace.append(view);
  let isOpen_=false,underlay=[],runs=[],limit=0,flows=[],picked='',openId=null,detail=null,composing=false,draft={task:'',test:'',cwd:'',topic:''},busy=false;
  const motion=()=>!preference('reduced-motion',false)&&!matchMedia('(prefers-reduced-motion: reduce)').matches;
- const say=error=>toast(String(error?.message||error).replace(/^Error invoking remote method '[^']+': (Error: )?/,''));
+ let formError='';
+ const say=error=>{formError=String(error?.message||error).replace(/^Error invoking remote method '[^']+': (Error: )?/,'');toast(formError);};
  const guarded=p=>Promise.resolve(p).catch(say);
  const paint=()=>{const n=runs.filter(r=>r.state==='approval').length;count.textContent=String(n);count.hidden=!n;const label=n?`Workflows, ${n} need approval`:'Workflows';nav.setAttribute('aria-label',label);nav.title=label;};
  async function load(){
@@ -61,15 +62,16 @@ export function connectFlows({api,toast}){
   const cur=flows.find(w=>w.id===picked)||flows[0];f.append(kinds,el('div','flow-note',cur?.note||''));
   const field=(key,label,ph,area)=>{const w=el('label','flow-field');w.append(el('span','flow-label',label));const i=el(area?'textarea':'input','issue-input flow-input');if(area)i.rows=3;i.value=draft[key];i.placeholder=ph;i.dataset.field=key;i.addEventListener('input',()=>{draft[key]=i.value;});w.append(i);return w;};
   for(const k of cur?.fields||[]){if(k==='topic')f.append(field('topic','Topic','What to research',true));if(k==='task')f.append(field('task','Task','What to build',true));if(k==='test')f.append(field('test','Test command','npm test'));if(k==='cwd')f.append(field('cwd','Folder','Absolute path, optional'));}
+  if(formError){const er=el('div','flow-error',formError);er.setAttribute('role','alert');f.append(er);}
   const row=el('div','flow-form-actions'),go=btn('issues-act issues-act--primary','Start run'),cancel=btn('issues-act','Cancel');go.type='submit';go.dataset.act='start';cancel.dataset.act='close-form';go.disabled=busy;
   cancel.addEventListener('click',()=>{composing=false;render();});row.append(go,cancel);f.append(row);
-  f.addEventListener('submit',e=>{e.preventDefault();busy=true;go.disabled=true;void api.flow.start({workflow:picked,...draft}).then(r=>{composing=false;draft={task:'',test:'',cwd:'',topic:''};openId=r.runId;detail=null;return load();}).catch(say).finally(()=>{busy=false;render();});});
+  f.addEventListener('submit',e=>{e.preventDefault();formError='';busy=true;go.disabled=true;void api.flow.start({workflow:picked,...draft}).then(r=>{composing=false;draft={task:'',test:'',cwd:'',topic:''};openId=r.runId;detail=null;return load();}).catch(say).finally(()=>{busy=false;render();});});
   return f;
  }
  function render(){
   const keep=document.activeElement?.dataset?.field,pos=view.querySelector('.issues-scroll')?.scrollTop||0;
   const head=el('header','issues-head'),t=el('h1','issues-title','Workflows');head.append(t,el('span','issues-sub',limit?`Budget ${tok(limit)} tokens per run`:'No token budget'));
-  const bb=el('div','issues-bar'),n=el('span','flow-count-label',`${runs.length} ${runs.length===1?'run':'runs'}`),add=btn('issues-act issues-act--primary','New run');add.dataset.act='new';add.disabled=!flows.length;add.addEventListener('click',()=>{composing=!composing;render();view.querySelector('.flow-input')?.focus();});bb.append(n,add);
+  const bb=el('div','issues-bar'),n=el('span','flow-count-label',`${runs.length} ${runs.length===1?'run':'runs'}`),add=btn('issues-act issues-act--primary','New run');add.dataset.act='new';add.disabled=!flows.length;add.addEventListener('click',()=>{composing=!composing;formError='';render();view.querySelector('.flow-input')?.focus();});bb.append(n,add);
   const scroll=el('div','issues-scroll');
   if(composing)scroll.append(form());
   const asks=runs.filter(r=>r.approval);for(const r of asks)scroll.append(approvalCard(r));

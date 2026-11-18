@@ -63,3 +63,4 @@ body:has(.workspace.flows-open) .thread-card[aria-pressed='true'] .row-title { c
 .flows-view { z-index: 5; --issue-band: oklch(1 0 0 / .035); --issue-hover: oklch(1 0 0 / .05); --issue-line: oklch(1 0 0 / .08); --issue-on-fill: #0c0c0c; --issue-yellow: oklch(.85 .14 95); --issue-green: oklch(.74 .17 150); --issue-red: oklch(.7 .17 27); position: absolute; inset: 0; display: flex; flex-direction: column; background: var(--surface-thread); border-radius: inherit; color: var(--text); }
 :root[data-theme='light'] .flows-view { --issue-band: oklch(0 0 0 / .04); --issue-hover: oklch(0 0 0 / .05); --issue-line: oklch(0 0 0 / .08); --issue-on-fill: #fff; --issue-yellow: oklch(.824 .179 91.3); --issue-green: oklch(.617 .208 142.85); --issue-red: oklch(.55 .185 27); }
 .flows-view[hidden] { display: none; }
+.flow-error { margin: 0 0 8px; font-size: 12px; line-height: 17px; color: var(--issue-red); }
