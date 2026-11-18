@@ -36,3 +36,10 @@ test('slopHits counts the old tells and passes a plain reply',()=>{
  assert.ok(slopHits("Hi! I'm Suffice, ready to help — want me to start?")>=4);
  assert.equal(slopHits('Hello. What are you working on?'),0);
 });
+
+test('slopHits catches the raw closers and process narration seen in measurement',()=>{
+ assert.ok(slopHits("Tell me the change you want and I'll make it and check it.")>0);
+ assert.ok(slopHits('Fixed the typo. I re-read the file afterward and the line now reads fine.')>0);
+ assert.ok(/single most likely cause/.test(VOICE_RULES)&&/re-read, re-checked/.test(VOICE_RULES));
+ assert.equal(slopHits('Fixed "shoud" to "should" in notes.txt.'),0);
+});
