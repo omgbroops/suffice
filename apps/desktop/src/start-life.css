@@ -1,0 +1,76 @@
+/* Start screen: Capy geometry (clean-room, measured values), Suffice rules (concentric radii, inset wells, life). */
+::selection { background: color-mix(in srgb, var(--blue) 20%, transparent); color: inherit; }
+
+.desktop-app {
+  --start-width: 694px;
+  --start-send-r: 6px;
+  --start-pad: 12px;
+  --start-edge: 6px; /* gap from send to the card edge: composer radius = send radius + this */
+  --start-ease: cubic-bezier(.4, 0, .2, 1);
+  --start-fill: #ffffff14;
+  --start-wall: .25;
+}
+:root[data-theme='light'] .desktop-app { --start-fill: #0000000d; --start-wall: .2; }
+
+/* Header texture: the wallpaper dither at .25 dark / .20 light, fading into the solid panel by 40% height. */
+.desktop-app:has(.workspace:not(.thread-view)) .app-wallpaper { opacity: var(--start-wall); }
+.desktop-app .workspace:not(.thread-view) { background: linear-gradient(180deg, transparent 0, var(--surface-thread) 40%); }
+.desktop-app .workspace.background-none:not(.thread-view) { background: var(--surface-editor); }
+
+/* Centred block: composer centre sits at 47% of the panel (bar 28 + gap 17.5 above, card 114 / 2 = 57). */
+.desktop-app .workspace:not(.thread-view) .home { padding: 0; }
+.desktop-app .workspace:not(.thread-view) .agent-area { position: absolute; left: 50%; top: calc(47% - 102.5px); width: min(var(--start-width), calc(100% - 64px)); transform: translateX(-50%); }
+
+/* Composer: opaque card, 694 x 114 collapsed, concentric radii (send 6 + edge 6 = 12), no blur. */
+.desktop-app .workspace:not(.thread-view) .composer {
+  --radius-send: var(--start-send-r);
+  --composer-padding: var(--start-pad);
+  display: flex; flex-direction: column; min-height: 114px; width: 100%;
+  padding: var(--start-pad); border-radius: calc(var(--start-send-r) + var(--start-edge));
+  background: var(--surface-card); -webkit-backdrop-filter: none; backdrop-filter: none;
+  box-shadow: var(--shadow-composer);
+}
+.desktop-app .workspace:not(.thread-view) .composer textarea { flex: none; font-size: var(--text-base); line-height: 20px; }
+.desktop-app .workspace:not(.thread-view) .composer textarea::placeholder { color: var(--text-placeholder); }
+.desktop-app .workspace:not(.thread-view) .composer-toolbar { margin: calc(var(--space-1) - 1px) calc(var(--start-edge) - var(--start-pad) - 1px) calc(var(--start-edge) - var(--start-pad) - 1px); }
+.desktop-app .workspace:not(.thread-view) .composer .send-group { height: var(--control-height-sm); border-radius: var(--start-send-r); }
+
+/* Selectors row: bare ghost triggers, project left, branch right, aligned to the card edges. */
+.desktop-app .workspace:not(.thread-view) .project-bar { justify-content: space-between; gap: var(--space-2); margin: 0 0 17.5px; }
+.desktop-app .workspace:not(.thread-view) .project-bar :is(.project-picker, .git-pill) {
+  min-height: var(--control-height-sm); padding: 3px 6px; margin-inline: -6px; border: 0 solid transparent; outline: 0; box-shadow: none;
+  background: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; border-radius: var(--radius-control);
+  color: var(--text-muted); font-size: var(--text-sm); font-weight: var(--weight-medium); line-height: 20px;
+  transition: background-color 100ms var(--start-ease), color 100ms var(--start-ease), filter 100ms var(--start-ease);
+}
+.desktop-app .workspace:not(.thread-view) .project-bar .git-pill { font-size: var(--text-xs); }
+.desktop-app .workspace:not(.thread-view) .project-bar :is(.project-picker, .git-pill):not(:disabled):is(:hover, [aria-expanded='true']) { background: var(--start-fill); color: var(--text); }
+.desktop-app .workspace:not(.thread-view) .project-bar :is(.project-picker, .git-pill):not(:disabled):active { filter: brightness(.97); transform: none; }
+
+/* Life: one real status line and recents, quiet and muted. */
+.start-life { margin-top: var(--space-5); }
+.thread-view .start-life { display: none; }
+.start-status { margin: 0 0 var(--space-5); padding: 0 1px; color: var(--text-faint); font-size: var(--text-xs); line-height: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.start-label { margin: 0 0 var(--space-1); padding: 0 1px; color: var(--text-faint); font-size: var(--text-xs); line-height: 18px; font-weight: var(--weight-medium); }
+.start-recent-list { display: grid; gap: 2px; }
+.start-recent { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); min-height: var(--control-height-sm); margin-inline: -6px; padding: 3px 6px; border: 0; border-radius: var(--radius-control); background: transparent; color: var(--text-muted); font: inherit; font-size: var(--text-sm); text-align: left; cursor: pointer; transition: background-color 100ms var(--start-ease), color 100ms var(--start-ease); }
+.start-recent:hover { background: var(--start-fill); color: var(--text); }
+.start-recent:active { filter: brightness(.97); }
+.start-recent-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.start-recent-age { flex: none; color: var(--text-faint); font-size: var(--text-xs); }
+
+/* New session, selected: 28 high, radius 6, 5% black / 8% white fill, 100ms. */
+.desktop-app .new-session[aria-current='page'] { min-height: var(--control-height-sm); height: var(--control-height-sm); border-radius: var(--radius-control); background: var(--start-fill); }
+.desktop-app .new-session { transition: background-color 100ms var(--start-ease), color 100ms var(--start-ease), transform var(--duration) var(--ease-out); }
+.desktop-app .new-session .icon { width: 14px; height: 14px; }
+
+/* Sidebar skeleton: blurred bars, radius 4, 2 s pulse (0 / 1 / 2 s). */
+.sidebar-skeleton { display: grid; gap: 18px; padding: 8px 14px; animation: sk-pulse 2s var(--start-ease) infinite; -webkit-mask-image: linear-gradient(#000 55%, transparent); mask-image: linear-gradient(#000 55%, transparent); }
+.sidebar-skeleton i { display: block; border-radius: 4px; background: var(--text-faint-2); filter: blur(1px); opacity: .5; }
+.sk-head { width: 56px; height: 10px; }
+.sk-row { display: grid; gap: 8px; }
+.sk-title { width: 86%; height: 12px; }
+.sk-meta { width: 44%; height: 10px; opacity: .3; }
+.sk-row:nth-child(even) .sk-title { width: 70%; }
+@keyframes sk-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
+@media (prefers-reduced-motion: reduce) { .sidebar-skeleton { animation: none; } }
