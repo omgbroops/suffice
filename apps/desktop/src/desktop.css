@@ -27,7 +27,7 @@
 .window-control[data-window='close']:hover { background: #b64949; color: white; }
 .window-drag-region { position: fixed; top: 0; left: var(--sidebar-width); right: var(--window-controls-width); height: 30px; z-index: 80; -webkit-app-region: drag; }
 .desktop-app .sidebar-heading > .brand-wordmark { -webkit-app-region: drag; }
-.desktop-app .new-session { background: transparent; transition: background-color 150ms var(--ease-out),color 150ms var(--ease-out),transform 150ms var(--ease-out); }
+.desktop-app .new-session { background: transparent; transition: background-color var(--duration-hover) var(--ease-out),color var(--duration-hover) var(--ease-out),transform var(--duration-hover) var(--ease-out); }
 @media(max-width:699px){.repo-button{display:inline-flex}}
 .sidebar-sessions { overflow-y: auto; min-height: 0; }
 .session-section { min-height: 0; overflow-y: auto; }
