@@ -243,3 +243,21 @@ test('two processes sharing one budget file cannot both reserve the same room; s
   const after = createBudget({ clock: { now: () => Date.now() }, store: createFileStore(file), limits: [{ name: 'd', tokens: 100, period: 'day' }] });
   assert.equal(after.check(1).remaining, 90); // 10 used, hold gone
 });
+
+test('stale-lock check never takes a lock that is live', async () => {
+  const { spawn } = await import('node:child_process'), fsm = await import('node:fs');
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'bud-lock-')), file = path.join(dir, 'b.json'), marker = `${file}.held`;
+  const child = spawn(process.execPath, ['-e', `const fs=require('fs');fs.mkdirSync(${JSON.stringify(file + '.lock')});fs.writeFileSync(${JSON.stringify(marker)},'1');setTimeout(()=>{fs.unlinkSync(${JSON.stringify(marker)});fs.rmdirSync(${JSON.stringify(file + '.lock')});},700);`]);
+  const nap = new Int32Array(new SharedArrayBuffer(4));
+  for (let i = 0; i < 400 && !fsm.existsSync(marker); i++) Atomics.wait(nap, 0, 0, 10);
+  assert.ok(fsm.existsSync(marker), 'child holds the lock');
+  // a racing breaker saw this live lock as stale once: its first stat of the lock dir reads an old mtime
+  const real = fsm.default.statSync; let lied = false;
+  fsm.default.statSync = (p, ...a) => { const r = real(p, ...a); if (!lied && p === `${file}.lock`) { lied = true; return { ...r, mtimeMs: 0 }; } return r; };
+  let overlap;
+  try { createFileStore(file).withLock(() => { overlap = fsm.existsSync(marker); }); } finally { fsm.default.statSync = real; }
+  await new Promise((r) => child.on('exit', r));
+  assert.equal(lied, true);
+  assert.equal(overlap, false, 'lock was granted while the live holder still held it');
+  await fs.rm(dir, { recursive: true });
+});

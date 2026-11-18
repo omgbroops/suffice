@@ -27,3 +27,19 @@ test('daily budget counts input+output only, never past the room, and names itse
   assert.match(runCapExceeded({inputTokens:0,outputTokens:0,totalTokens:0},{inputTokens:90,outputTokens:20,totalTokens:9e6},{usd:5,tokens:100,daily:true}),/daily token budget is used up/);
   assert.equal(runCapExceeded({inputTokens:0,outputTokens:0,totalTokens:0},{inputTokens:50,outputTokens:20,totalTokens:9e6},{usd:5,tokens:100,daily:true}),null);
 });
+
+test('concurrent runs each hold an estimate, not the whole day, and a refusal says why',async()=>{
+  const {mkdtemp,rm}=await import('node:fs/promises'),{tmpdir}=await import('node:os'),{join}=await import('node:path');
+  const {dailyBudget,reserveRoom,RUN_ESTIMATE,budgetFullMessage}=await import('../electron/usage.mjs');
+  const home=await mkdtemp(join(tmpdir(),'usage-'));
+  const settings={'budget-daily-tokens':String(RUN_ESTIMATE*3)};
+  const caps={tokens:2e6},open=()=>dailyBudget(home,settings);
+  const a=reserveRoom(open(),caps),b=reserveRoom(open(),caps),c=reserveRoom(open(),caps),d=reserveRoom(open(),caps);
+  assert.ok(a.hold&&b.hold&&c.hold,'three runs start while the day has room');
+  assert.equal(d.full,true);assert.equal(d.reserved,true);
+  assert.match(budgetFullMessage(d),/running turns hold/);
+  assert.doesNotMatch(budgetFullMessage(d),/used up/);
+  a.hold.settle({inputTokens:RUN_ESTIMATE,outputTokens:0});b.hold.release();c.hold.release();
+  assert.match(budgetFullMessage({full:true}),/used up/);
+  await rm(home,{recursive:true});
+});

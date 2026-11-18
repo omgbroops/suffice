@@ -157,7 +157,12 @@ export function createFileStore(path) {
       for (let tries = 0; ; tries++) {
         try { fs.mkdirSync(lockDir); break; } catch (e) {
           if (e.code !== 'EEXIST') throw e;
-          try { if (Date.now() - fs.statSync(lockDir).mtimeMs > 10000) fs.rmdirSync(lockDir); } catch {}
+          try { // break a stale lock by renaming it away (atomic), then confirm the renamed dir really was stale; a live lock grabbed by mistake goes back
+            if (Date.now() - fs.statSync(lockDir).mtimeMs > 10000) {
+              const dead = `${lockDir}.${process.pid}.dead`; fs.renameSync(lockDir, dead);
+              if (Date.now() - fs.statSync(dead).mtimeMs > 10000) fs.rmdirSync(dead); else fs.renameSync(dead, lockDir);
+            }
+          } catch {}
           if (tries > 2000) throw new Error('budget: lock busy');
           Atomics.wait(nap, 0, 0, 5);
         }

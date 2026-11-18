@@ -6,7 +6,7 @@ import {invalidateProjectMetadata} from './sidebar-metadata.mjs';
 import {createChatChangeTracker} from './chat-changes.mjs';
 import {createChatGitTracker} from './chat-git.mjs';
 import {createThreadRouter} from './thread-router.mjs';
-import {sessionUsage,runCaps,runCapExceeded,dailyBudget,reserveRoom,recordSpend} from './usage.mjs';
+import {sessionUsage,runCaps,runCapExceeded,dailyBudget,reserveRoom,recordSpend,budgetFullMessage} from './usage.mjs';
 import {installContext,sessionInventory} from '../shared/context-items.mjs';
 import {randomUUID,createHash} from 'node:crypto';
 import {mkdir,realpath,stat} from 'node:fs/promises';
@@ -115,8 +115,8 @@ async function receive(message) {
     turnPresentation={id:randomUUID(),startedAt:payload.turnStartedAt||Date.now(),provider:agent.session.model?.provider||payload.provider,model:agent.session.model?.id||payload.model,modelName:agent.session.model?.name,effort:agent.session.thinkingLevel||payload.effort};
     agent.session.sessionManager?.appendCustomEntry?.('suffice:turn-start',{...turnPresentation,promptHash:createHash('sha256').update(payload.prompt).digest('hex'),displayPrompt:payload.displayPrompt??payload.prompt,attachments:payload.attachmentMetadata||[]});send({event:'turn_started',presentation:turnPresentation});
     await changeTracker?.beginTurn();
-    const caps=runCaps(process.env,payload.desktopSettings),got=reserveRoom(dailyBudget(home,payload.desktopSettings),caps);if(got.full)throw new Error('Stopped: the daily token budget is used up. Raise it in Settings > Usage.');
-    capState={base:sessionUsage(agent.session),caps,message:null,hold:got.hold};if(got.room!=null){capState.room=got.room;if(got.room<caps.tokens){caps.tokens=got.room;caps.daily=true;}}
+    const caps=runCaps(process.env,payload.desktopSettings),got=reserveRoom(dailyBudget(home,payload.desktopSettings),caps);if(got.full)throw new Error(budgetFullMessage(got));
+    capState={base:sessionUsage(agent.session),caps,message:null,hold:got.hold,budget:got.budget};if(got.room!=null){capState.room=got.room;if(got.room<caps.tokens){caps.tokens=got.room;caps.daily=true;}}
     if(sessionPath)await checkpoint(cwd,threadId(sessionPath),payload.displayPrompt??payload.prompt).catch(()=>{});// a checkpoint failure never blocks the turn
     const choices=payload.context,restoreContext=installContext(agent.session,choices);
     pendingTurn=()=>{turns.push({n:++turnCount,at:Date.now(),...sessionInventory(agent.session,agent.session.messages??[]),removed:choices?.exclude||[],summaries:!!choices?.summaries});if(turns.length>10)turns.shift();};

@@ -25,16 +25,18 @@ export function dailyBudget(home,settings={}){
 export function budgetStatus(home,settings={}){return dailyBudget(home,settings)?.status()[0]??null;}
 // Daily budget counts input+output (what the composer meter shows), not cache reads; falls back to totalTokens without the split.
 const spend=u=>u?.inputTokens!=null?u.inputTokens+(u.outputTokens??0):u?.totalTokens??0;
-// Reserves the run's share of the day before it starts (shared file, locked), so concurrent instances cannot all pass the same ceiling.
-// Returns {hold, room} (room null when no ceiling) or {full:true} when nothing is left.
+// Holds a per-run estimate (not the whole day) under the shared file lock, so concurrent instances all start while the day has room.
+// Returns {hold, room, budget} (room null when no ceiling), {full:true} when the day is spent, or {full:true,reserved:true} when running turns hold the rest.
+export const RUN_ESTIMATE=50000;
 export function reserveRoom(budget,caps){
   if(!budget)return {hold:null,room:null};
-  const left=budget.check(0).remaining;if(left<=0)return {full:true};
-  const room=Math.min(left,caps.tokens),hold=budget.reserve(room);
-  return hold.allow?{hold,room}:{full:true};
+  const day=budget.status()[0].remaining;if(day<=0)return {full:true};
+  const room=Math.min(day,caps.tokens),hold=budget.reserve(Math.min(room,RUN_ESTIMATE));
+  return hold.allow?{hold,room,budget}:{full:true,reserved:true};
 }
-// Settles the hold with what the run spent, never past the room reserved: a message that overshoots does not push the day above its ceiling.
-export function recordSpend(state,now){const n=Math.min(spend(now)-spend(state?.base),state?.room??Infinity);state?.hold?.settle({inputTokens:Math.max(0,n),outputTokens:0});}
+export const budgetFullMessage=got=>got.reserved?'Wait: other running turns hold the rest of the daily token budget. Try again when one finishes.':'Stopped: the daily token budget is used up. Raise it in Settings > Usage.';
+// Settles the hold with what the run spent, never past the room reserved or the day's ceiling: concurrent runs may overshoot their estimate but the day stays under its ceiling.
+export function recordSpend(state,now){const n=Math.min(spend(now)-spend(state?.base),state?.room??Infinity,state?.budget?.status()[0].remaining??Infinity);state?.hold?.settle({inputTokens:Math.max(0,n),outputTokens:0});}
 const compact=n=>n>=1e6?`${+(n/1e6).toFixed(1)}M`:n>=1e3?`${+(n/1e3).toFixed(1)}K`:String(n);
 // Returns the stop message when the run delta is strictly over a cap, else null. Unknown cost is checked by tokens alone.
 export function runCapExceeded(base,now,caps){
