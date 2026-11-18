@@ -32,7 +32,7 @@ export function describePrompt(p,items=[]){
  return body?{icon:'file',label:'Request',text:body}:null;
 }
 
-export function createApproval({form,markdown,answer,agent=()=>''}){
+export function createApproval({form,markdown,answer,answerMulti,agent=()=>''}){
  let card=null,sig='',off=()=>{},stopSb=()=>{},later=null;
  function clear(){off();off=()=>{};stopSb();stopSb=()=>{};later?.drop();later=null;if(!card)return;const had=card.contains(document.activeElement);card.remove();card=null;sig='';delete form.dataset.approval;for(const c of form.children)c.inert=false;form.resizePrompt?.();if(had)form.querySelector('textarea')?.focus({preventScroll:true});}
  function draw(p,items){
@@ -52,21 +52,33 @@ export function createApproval({form,markdown,answer,agent=()=>''}){
   later=createLater(form,card);delete later.button.dataset.key;later.button.removeAttribute('aria-keyshortcuts'); // Esc denies in sessions
   const ctl=el('div','approval-controls',''),buttons=[],opts=p.options||[],yes=opts.find(o=>o.index===p.selected)||opts[0],no=opts.find(o=>DENY.test(o.label));
   ctl.append(later.button);
-  for(const [n,o] of opts.entries()){const b=el('button',`provider-dialog-button${o.index===p.selected?' provider-dialog-primary':''}`,o.label);b.type='button';
-   hint(b,o===yes?'Ctrl ↵':o===no?'Esc':String(n+1));
+  const multi=p.multiSelect&&answerMulti,rows=multi?opts.filter(o=>'checked' in o&&!o.other):[],on=new Set(rows.filter(o=>o.checked).map(o=>o.index)),boxes=[];
+  if(multi){ // checkboxes: arrows move, Space/Enter or a digit toggles, Ctrl+Enter or Submit sends the set
+   const list=el('div','approval-options');list.setAttribute('role','group');list.setAttribute('aria-label',p.title||'Options');
+   const toggle=(o,b)=>{on.has(o.index)?on.delete(o.index):on.add(o.index);b.setAttribute('aria-checked',String(on.has(o.index)));};
+   for(const [n,o] of rows.entries()){const b=el('button','approval-option');b.type='button';b.setAttribute('role','checkbox');b.setAttribute('aria-checked',String(o.checked));b.tabIndex=n?-1:0;
+    b.append(el('span','approval-box'),el('span','approval-option-label',o.label));hint(b,String(n+1));b.dataset.index=o.index;
+    b.addEventListener('click',()=>toggle(o,b));
+    b.addEventListener('keydown',e=>{const d=e.key==='ArrowDown'?1:e.key==='ArrowUp'?-1:0;if(!d)return;e.preventDefault();e.stopPropagation();const t=boxes[(n+d+boxes.length)%boxes.length][1];for(const [,x] of boxes)x.tabIndex=-1;t.tabIndex=0;t.focus();});
+    list.append(b);boxes.push([o,b]);}
+   card.append(list);
+  }
+  for(const [n,o] of multi?opts.filter(o=>!rows.includes(o)&&!o.other).entries():opts.entries()){const b=el('button',`provider-dialog-button${!multi&&o.index===p.selected?' provider-dialog-primary':''}`,o.label);b.type='button';
+   if(multi)b.setAttribute('aria-label',o.label);else hint(b,o===yes?'Ctrl ↵':o===no?'Esc':String(n+1));
    b.addEventListener('click',()=>answer(o.index));ctl.append(b);buttons.push([o,b]);}
+  if(multi){const b=el('button','provider-dialog-button provider-dialog-primary','Submit');b.type='button';hint(b,'Ctrl ↵');b.addEventListener('click',()=>answerMulti([...on]));ctl.append(b);buttons.push([{index:-1},b]);}
   card.append(ctl);form.append(card);form.dataset.approval='true';
   if(pending){const [pre,code,lang]=pending;stopSb=connectOverlayScrollbar(pre,{inset:6});if(lang)import('./code-highlight.js').then(({colorCode})=>colorCode(code,lang)).catch(()=>{});}
   for(const c of form.children)c.inert=c!==card;form.resizePrompt?.();
   const key=e=>{
    if(card.hidden)return;
-   if(!e.defaultPrevented&&e.key==='Enter'&&(e.ctrlKey||e.metaKey)&&yes){e.preventDefault();e.stopPropagation();answer(yes.index);return;}
+   if(!e.defaultPrevented&&e.key==='Enter'&&(e.ctrlKey||e.metaKey)&&yes){e.preventDefault();e.stopPropagation();multi?answerMulti([...on]):answer(yes.index);return;}
    if(e.defaultPrevented||e.ctrlKey||e.metaKey||e.altKey)return;
    if(!card.contains(e.target)&&e.target.closest?.('input,textarea,select,[contenteditable]:not([contenteditable="false"])'))return;
-   const n=/^[1-9]$/.test(e.key)?Number(e.key)-1:-1,hit=n>=0?p.options?.[n]:e.key==='Escape'?p.options?.find(o=>DENY.test(o.label)):null;
+   const n=/^[1-9]$/.test(e.key)?Number(e.key)-1:-1;if(multi){const bx=boxes[n];if(bx){e.preventDefault();e.stopPropagation();bx[1].click();bx[1].focus({preventScroll:true});}return;}const hit=n>=0?p.options?.[n]:e.key==='Escape'?p.options?.find(o=>DENY.test(o.label)):null;
    if(!hit)return;e.preventDefault();e.stopPropagation();answer(hit.index);};
   document.addEventListener('keydown',key,true);off=()=>document.removeEventListener('keydown',key,true);
-  if(hadFocus)(ctl.querySelector('.provider-dialog-primary')||buttons[0]?.[1])?.focus({preventScroll:true});
+  if(hadFocus)(boxes[0]?.[1]||ctl.querySelector('.provider-dialog-primary')||buttons[0]?.[1])?.focus({preventScroll:true});
  }
  return {draw,clear};
 }
