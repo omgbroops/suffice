@@ -9,7 +9,7 @@ import {guard} from './electron-guard.mjs';
 const fails=[];const soft=fn=>(...a)=>{try{fn(...a);}catch(e){fails.push(e.message.split('\n')[0]);}};const eq=soft(assert.equal),mt=soft(assert.match),ok=soft(assert.ok);
 const active=page=>page.evaluate(()=>{const a=document.activeElement;return a===document.body?'body':a.id||a.getAttribute('aria-label')||a.className});
 test('shell keyboard: sidebar toggle, new session, thread menu, spotlight, labels and panel menu keep focus',{timeout:90000},async()=>{
- const home=await mkdtemp(resolve(tmpdir(),'suffice-shellkb-')),env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home,SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_SESSIONS_SOCKET:'sfx-r2-shell-keyboard',SUFFICE_HISTORY_HOME:resolve(home,'hist')};delete env.ELECTRON_RUN_AS_NODE;
+ const home=await mkdtemp(resolve(tmpdir(),'suffice-shellkb-')),env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home,SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_SESSIONS_SOCKET:'sfx-r2-shell-keyboard-'+process.pid,SUFFICE_HISTORY_HOME:resolve(home,'hist')};delete env.ELECTRON_RUN_AS_NODE;
  const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
  try{const page=await app.firstWindow();await page.locator('.composer').waitFor();
   await app.evaluate(({ipcMain})=>{ipcMain.removeHandler('suffice:threads');ipcMain.handle('suffice:threads',()=>Array.from({length:4},(_,i)=>({id:'thread-'+i,title:'Thread '+i,project:'Spool',branch:'fix/x',status:'done',modified:Date.now()-i*60000})));});await page.reload();await page.locator('.thread-card').last().waitFor();

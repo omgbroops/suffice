@@ -14,7 +14,7 @@ const seed=async(home,cwd,id,pairs,q='Question')=>{const dir=resolve(home,'sessi
 test('thread switch restores the reading position within 2 px',{timeout:240000},async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-tsw-')),cwd=await mkdtemp(resolve(tmpdir(),'suffice-tsw-proj-'));
  await seed(home,cwd,'long',1140);await seed(home,cwd,'other',3,'Elsewhere');
- const env={...process.env,PI_OFFLINE:'1',SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_HOME:home,SUFFICE_HISTORY_HOME:resolve(home,'history'),SUFFICE_SESSIONS_SOCKET:'sfx-r2-tperf-fin'};delete env.ELECTRON_RUN_AS_NODE;
+ const env={...process.env,PI_OFFLINE:'1',SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_HOME:home,SUFFICE_HISTORY_HOME:resolve(home,'history'),SUFFICE_SESSIONS_SOCKET:'sfx-r2-tperf-fin-'+process.pid};delete env.ELECTRON_RUN_AS_NODE;
  const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
  try{const page=await app.firstWindow();
   await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].setContentSize(1440,900));

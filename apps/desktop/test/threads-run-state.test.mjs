@@ -9,7 +9,7 @@ import {guard} from './electron-guard.mjs';
 
 const SHOTS=process.env.R2_SHOTS||'';
 test('composer run state: empty Enter never aborts, rejected send keeps draft, failures are styled, stale toast clears',{timeout:90000},async()=>{
- const home=await mkdtemp(resolve(tmpdir(),'suffice-runstate-')),env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home,SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_SESSIONS_SOCKET:'sfx-r2-threads-ui',SUFFICE_HISTORY_HOME:resolve(home,'history')};delete env.ELECTRON_RUN_AS_NODE;
+ const home=await mkdtemp(resolve(tmpdir(),'suffice-runstate-')),env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home,SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_SESSIONS_SOCKET:'sfx-r2-threads-ui-'+process.pid,SUFFICE_HISTORY_HOME:resolve(home,'history')};delete env.ELECTRON_RUN_AS_NODE;
  const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
  try{
   const page=await app.firstWindow();await page.locator('.composer').waitFor();

@@ -8,7 +8,7 @@ const tmp=await realpath(await mkdtemp(resolve(tmpdir(),'sfx-nc-')));
 const dirs=['project','data','suffice','home'].map(d=>resolve(tmp,d));for(const d of dirs)await mkdir(d,{recursive:true});
 const [project,data,suffice,home]=dirs;
 const env={...process.env};delete env.ELECTRON_RUN_AS_NODE;
-Object.assign(env,{SUFFICE_HOME:suffice,SUFFICE_START_PROJECT:project,SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_SESSIONS_SOCKET:'sfx-r2-session-transcript',SUFFICE_HISTORY_HOME:home});
+Object.assign(env,{SUFFICE_HOME:suffice,SUFFICE_START_PROJECT:project,SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_SESSIONS_SOCKET:'sfx-r2-session-transcript-'+process.pid,SUFFICE_HISTORY_HOME:home});
 const app=await _electron.launch({executablePath:electronPath,args:['-r','/Users/abhayg/suffice-desktop-wt/ui-shots/no-dialog.cjs',resolve('apps/desktop'),`--user-data-dir=${data}`],env});
 try{
  const page=await app.firstWindow();page.setDefaultTimeout(15000);

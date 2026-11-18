@@ -14,7 +14,7 @@ test('long thread windows its DOM, colors lazy code, and keeps scroll stable',{t
  for(let i=0;i<700;i++){e.push({type:'message',id:'u'+i,parentId:p,timestamp:now,message:{role:'user',content:[{type:'text',text:`Question ${i}`}],timestamp:1000+i}});
   e.push({type:'message',id:'a'+i,parentId:'u'+i,timestamp:now,message:{role:'assistant',provider:'opencode-go',model:'fixture',content:[{type:'text',text:`## Answer ${i}\n\n- item a\n- item b\n\n\`\`\`ts\nlet x${i}=await fetch('/api');\n\`\`\`\n\n${i%50===7?'```mermaid\ngraph TD; A-->B\n```\n\n':''}Inline $e^{i\\pi}+1=0$\n\n${'Long paragraph text. '.repeat(i%7*12)}\n`}]}});p='a'+i;}
  await writeFile(resolve(dir,'thread.jsonl'),e.map(x=>JSON.stringify(x)).join('\n')+'\n');
- const env={...process.env,PI_OFFLINE:'1',SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_HOME:home,SUFFICE_HISTORY_HOME:resolve(home,'history'),SUFFICE_SESSIONS_SOCKET:'sfx-r2-transcript-perf'};delete env.ELECTRON_RUN_AS_NODE;
+ const env={...process.env,PI_OFFLINE:'1',SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_HOME:home,SUFFICE_HISTORY_HOME:resolve(home,'history'),SUFFICE_SESSIONS_SOCKET:'sfx-r2-transcript-perf-'+process.pid};delete env.ELECTRON_RUN_AS_NODE;
  const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
  try{const page=await app.firstWindow();
   await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].setContentSize(1440,900));

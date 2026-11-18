@@ -12,7 +12,7 @@ test('voice: strip, full view, floating orb window, transcript rules, geometry a
  const root=await realpath(await mkdtemp(resolve(tmpdir(),'suffice-voice-')));
  const home=resolve(root,'suffice-home'),fakeHome=resolve(root,'home'),project=resolve(root,'project');
  for(const dir of [home,fakeHome,project])await mkdir(dir);
- const env={PATH:process.env.PATH,HOME:fakeHome,TMPDIR:process.env.TMPDIR,LANG:process.env.LANG,PI_OFFLINE:'1',SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_HOME:home,SUFFICE_START_PROJECT:project,SUFFICE_SESSIONS_SOCKET:'sfx-r2-voice',SUFFICE_HISTORY_HOME:resolve(root,'history')};
+ const env={PATH:process.env.PATH,HOME:fakeHome,TMPDIR:process.env.TMPDIR,LANG:process.env.LANG,PI_OFFLINE:'1',SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_HOME:home,SUFFICE_START_PROJECT:project,SUFFICE_SESSIONS_SOCKET:'sfx-r2-voice-'+process.pid,SUFFICE_HISTORY_HOME:resolve(root,'history')};
  const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop/test/voice-hidden-main.cjs'),'--user-data-dir='+resolve(root,'electron'),'--use-fake-device-for-media-stream','--use-fake-ui-for-media-stream','--mute-audio'],env});
  const errors=[];
  try{
