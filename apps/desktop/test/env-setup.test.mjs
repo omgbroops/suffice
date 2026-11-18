@@ -32,7 +32,7 @@ test('a worktree inherits its project script and has an empty cache',async()=>{
 test('desktop: Settings edits the script, a task shows the collapsible setup card, second task skips',{timeout:240000},async()=>{
  const dir=await repo(),home=await mkdtemp(join(tmpdir(),'suffice-env-')),env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home,SUFFICE_START_PROJECT:dir,SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_SESSIONS_SOCKET:'sfx-agent-env-'+process.pid,SUFFICE_HISTORY_HOME:resolve(home,'history')};delete env.ELECTRON_RUN_AS_NODE;
  const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
- const shot=async(page,name)=>{await page.waitForTimeout(700);if(SHOTS)await page.screenshot({path:resolve(SHOTS,name+'.png')});};
+ const shot=async(page,name)=>{await page.waitForTimeout(700);if(!SHOTS)return;for(const t of ['light','dark']){await page.evaluate(t=>{document.documentElement.dataset.theme=t;},t);await page.waitForTimeout(200);await page.screenshot({path:resolve(SHOTS,`${name}-${t}.png`)});}};
  try{
   const page=app.windows()[0]||await app.firstWindow({timeout:100000});await page.setViewportSize({width:1440,height:900}).catch(()=>{});await page.locator('.composer').waitFor();
   await app.evaluate(({ipcMain})=>{ipcMain.removeHandler('suffice:models');ipcMain.handle('suffice:models',()=>[{id:'fixture',provider:'openai',name:'Fixture model',efforts:['low','medium','high']}]);});await page.reload();await page.locator('.composer').waitFor();

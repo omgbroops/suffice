@@ -1,4 +1,4 @@
-/* Needs you: sidebar entry + digest view. Radii nest: well 12 > row inner 6; wells are inset, never shadowed. */
+/* Needs you: sidebar entry + digest view. Capy digest: tinted group band, flat rows on the page. */
 .needs-nav { justify-content: flex-start; width: 100%; margin-top: 2px; padding: 6px 9px; min-height: 30px; font-size: 13px; color: var(--text); }
 .needs-nav[hidden] { display: none; }
 .needs-nav .icon { width: 17px; height: 17px; }
@@ -9,30 +9,34 @@
 
 .needs-view { position: absolute; inset: 0; z-index: 4; display: flex; flex-direction: column; background: var(--surface-thread); border-radius: inherit; }
 .needs-view[hidden] { display: none; }
-.needs-head { flex: none; display: flex; align-items: baseline; gap: 8px; height: 54px; padding: 17px 24px; box-sizing: border-box; color: var(--text-strong); font-size: 13px; font-weight: 500; }
+/* Capy page bar: 44px, 13/500 title, hairline under. */
+.needs-head { flex: none; display: flex; align-items: center; gap: 8px; height: var(--header-height-pane); padding: 0 16px; box-sizing: border-box; color: var(--text-strong); font-size: var(--text-sm); font-weight: var(--weight-medium); box-shadow: inset 0 -.5px 0 var(--border-strong); }
 .needs-title { margin: 0; font: inherit; outline: none; }
 .needs-total { color: var(--text-muted); font-weight: 450; font-variant-numeric: tabular-nums; }
-.needs-scroll { flex: 1; min-height: 0; overflow-y: auto; scrollbar-gutter: stable both-edges; padding-bottom: 48px; }
-.needs-group { width: min(var(--composer-width), calc(100% - 64px)); margin: 0 auto 20px; }
-.needs-group-label { display: flex; align-items: center; gap: 8px; height: 28px; margin: 0; padding: 0 2px; font-size: 12px; font-weight: 450; color: var(--text-muted); }
-.needs-group-count { color: var(--text-faint); font-variant-numeric: tabular-nums; }
-.needs-list { list-style: none; margin: 4px 0 0; padding: 0; border-radius: 12px; background: var(--surface-active); box-shadow: inset 0 0 0 1px var(--border-strong); overflow: hidden; }
-.needs-row { display: grid; grid-template-columns: 14px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px 10px 10px 14px; }
-.needs-row + .needs-row { box-shadow: inset 0 1px 0 var(--border-strong); }
+.needs-scroll { flex: 1; min-height: 0; overflow-y: auto; scrollbar-gutter: stable both-edges; padding: 12px 0 48px; }
+.needs-group { width: min(var(--content-width), calc(100% - 32px)); margin: 0 auto 12px; }
+/* Group header: tinted band, radius 6, label 12/500 plus muted count (Capy status group). */
+.needs-group-label { display: flex; align-items: center; gap: 8px; height: var(--control-height-sm); margin: 0; padding: 0 8px; border-radius: var(--radius-control); background: var(--surface-nav); font-size: var(--text-xs); font-weight: var(--weight-medium); color: var(--text); }
+.needs-group-count { color: var(--text-faint); font-weight: 450; font-variant-numeric: tabular-nums; }
+/* Rows sit on the page, no outer well; hover fill radius 6, 2-line body. */
+.needs-list { list-style: none; margin: 2px 0 0; padding: 0; }
+.needs-row { display: grid; grid-template-columns: 14px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 8px 8px; border-radius: var(--radius-control); transition: background-color 100ms ease; }
+.needs-row:hover { background: var(--surface-nav); }
 /* colour comes from .thread-state, the same rules the sidebar rows use (dark + light) */
 .needs-state { align-self: start; margin-top: 3px; }
 .needs-body { min-width: 0; }
-.needs-row-title { font-size: 14px; line-height: 20px; letter-spacing: -.01em; color: var(--text-strong); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.needs-why { margin-top: 1px; font-size: 13px; line-height: 18px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.needs-row-title { font-size: var(--text-sm); font-weight: var(--weight-medium); line-height: 18px; letter-spacing: -.01em; color: var(--text-strong); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.needs-why { margin-top: 1px; font-size: var(--text-xs); line-height: 16px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .needs-mono { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; }
-.needs-meta { margin-top: 1px; font-size: 12px; line-height: 16px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.needs-meta { margin-top: 1px; font-size: var(--text-xs); line-height: 16px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .needs-actions { display: flex; gap: 6px; }
-.needs-act { height: 26px; padding: 0 10px; border: 0; border-radius: 6px; font: inherit; font-size: 12px; font-weight: 500; color: var(--text); background: var(--control-raised); box-shadow: var(--shadow-control-inset); cursor: pointer; transition: background-color .12s; }
+.needs-act { height: var(--control-height-sm); padding: 0 10px; border: 0; border-radius: var(--radius-control); font: inherit; font-size: var(--text-xs); font-weight: var(--weight-medium); color: var(--text); background: var(--control-raised); box-shadow: var(--shadow-control-inset); cursor: pointer; transition: background-color 100ms ease, color 100ms ease; }
 .needs-act:hover { background: var(--control-raised-hover); color: var(--text-strong); }
 .needs-act:active { transform: translateY(.5px); }
 .needs-act:disabled { opacity: .5; pointer-events: none; }
-.needs-act--primary { background: var(--send-bg); color: var(--send-fg); box-shadow: none; }
-.needs-act--primary:hover { background: var(--send-active); color: var(--send-fg); }
+/* Accent = the one primary action per row (Approve, Open on a reply). */
+.needs-act--primary { background: var(--primary-bg); color: var(--primary-fg); box-shadow: none; }
+.needs-act--primary:hover { background: var(--primary-hover); color: var(--primary-fg); }
 .needs-act:focus-visible, .needs-nav:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
 .needs-empty { display: grid; place-items: center; min-height: 40vh; }
 .needs-empty-title { font-size: 14px; color: var(--text-muted); }

@@ -14,12 +14,12 @@
 .issues-view { position: absolute; inset: 0; z-index: 4; display: flex; flex-direction: column; background: var(--surface-thread); border-radius: inherit; color: var(--text); }
 .issues-view[hidden], .issues-page[hidden] { display: none; }
 .issues-page { flex: 1; min-height: 0; display: flex; flex-direction: column; }
-.issues-head { flex: none; display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px 0 24px; box-sizing: border-box; color: var(--text-strong); font-size: 13px; font-weight: 500; letter-spacing: -.01em; }
-.issues-bar { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 40px; padding: 0 16px 0 20px; box-sizing: border-box; box-shadow: inset 0 -1px 0 var(--issue-line); }
+.issues-head { flex: none; display: flex; align-items: center; gap: 8px; height: var(--header-height-pane); padding: 0 16px; box-sizing: border-box; color: var(--text-strong); font-size: 13px; font-weight: 500; letter-spacing: -.01em; }
+.issues-bar { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 44px; padding: 0 16px; box-sizing: border-box; box-shadow: inset 0 -.5px 0 var(--issue-line); }
 .issues-title { margin: 0; font: inherit; outline: none; }
 .issues-sub { color: var(--text-muted); font-weight: 450; margin-right: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
 .issues-tabs { display: flex; gap: 6px; }
-.issues-tab { height: 28px; padding: 0 10px; display: inline-flex; align-items: center; gap: 6px; border: 0; border-radius: 6px; font: inherit; font-size: 12px; font-weight: 500; color: var(--text-muted); background: transparent; box-shadow: inset 0 0 0 .5px var(--issue-line); cursor: pointer; transition: background-color .1s, color .1s; }
+.issues-tab { height: 28px; padding: 0 10px; display: inline-flex; align-items: center; gap: 6px; border: 0; border-radius: 6px; font: inherit; font-size: 12px; font-weight: 500; color: var(--text-muted); background: transparent; box-shadow: inset 0 0 0 .5px var(--issue-line); cursor: pointer; transition: background-color 100ms ease, color 100ms ease; }
 .issues-tab:hover { background: var(--issue-hover); color: var(--text-strong); }
 .issues-tab[aria-selected='true'] { background: var(--issue-hover); color: var(--text-strong); box-shadow: none; }
 .issues-tab-count { font-weight: 450; color: var(--text-faint); font-variant-numeric: tabular-nums; }
@@ -60,11 +60,11 @@
 .issues-empty-note { font-size: 13px; color: var(--text-muted); max-width: 340px; text-wrap: balance; }
 .issues-empty .issues-act { margin-top: 10px; }
 
-.issues-act { height: 26px; padding: 0 10px; border: 0; border-radius: 6px; font: inherit; font-size: 12px; font-weight: 500; color: var(--text); background: var(--control-raised); box-shadow: var(--shadow-control-inset); cursor: pointer; transition: background-color .12s; white-space: nowrap; }
+.issues-act { height: var(--control-height-sm); padding: 0 10px; border: 0; border-radius: 6px; font: inherit; font-size: 12px; font-weight: 500; color: var(--text); background: var(--control-raised); box-shadow: var(--shadow-control-inset); cursor: pointer; transition: background-color .12s; white-space: nowrap; }
 .issues-act:hover { background: var(--control-raised-hover); color: var(--text-strong); }
 .issues-act:active { transform: translateY(.5px); }
-.issues-act--primary { background: var(--send-bg); color: var(--send-fg); box-shadow: none; }
-.issues-act--primary:hover { background: var(--send-active); color: var(--send-fg); }
+.issues-act--primary { background: var(--primary-bg); color: var(--primary-fg); box-shadow: none; }
+.issues-act--primary:hover { background: var(--primary-hover); color: var(--primary-fg); }
 
 /* issue page */
 .issue-crumbs { gap: 6px; font-weight: 450; }
@@ -89,6 +89,7 @@
 .issue-prop-value { display: grid; gap: 2px; justify-items: start; min-width: 0; }
 .issue-trigger, .issue-ghost { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 4px; margin-left: -4px; border: 0; border-radius: 6px; background: transparent; font: inherit; font-size: 12px; font-weight: 500; color: var(--text-strong); cursor: pointer; transition: background-color .1s; }
 .issue-trigger:hover, .issue-ghost:hover { background: var(--issue-hover); }
+.issue-trigger, .issue-ghost { transition: background-color 100ms ease, color 100ms ease; }
 .issue-trigger-chevron { width: 10px; height: 10px; color: var(--text-faint); }
 .issue-trigger-none { color: var(--text-muted); }
 .issue-ghost { color: var(--text-faint); }
@@ -107,9 +108,9 @@ button.issue-link-main:hover { background: var(--issue-hover); }
 .issue-link-actions .issue-ghost { margin-left: 0; }
 .issue-thread-state { display: inline-flex; }
 .issue-thread-state .icon { width: 12px; height: 12px; }
-.issue-thread-state[data-status='working'] { color: #60a5fa; }
-.issue-thread-state[data-status='failed'] { color: #f87171; }
-.issue-thread-state:is([data-status='approval'], [data-status='input']) { color: #fbbf24; }
+.issue-thread-state[data-status='working'] { color: var(--blue); }
+.issue-thread-state[data-status='failed'] { color: var(--issue-red); }
+.issue-thread-state:is([data-status='approval'], [data-status='input']) { color: var(--warning-ink); }
 .issue-thread-state:is([data-status='idle'], [data-status=''], [data-status='waiting']) { color: var(--text-faint); }
 .issue-input { height: 24px; width: 260px; padding: 0 8px; border: 0; border-radius: 6px; background: var(--issue-band); box-shadow: inset 0 0 0 1px var(--issue-line); font: inherit; font-size: 12px; color: var(--text-strong); outline: none; }
 .issue-input:focus { box-shadow: inset 0 0 0 1px var(--focus); }
