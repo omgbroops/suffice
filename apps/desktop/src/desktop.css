@@ -41,7 +41,7 @@
 .thread-header { position: absolute; top: 0; left: 0; right: calc(var(--window-controls-width) + 8px); height: 54px; padding: 17px 24px; color: var(--text-strong); font-size: 13px; font-weight: 500; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .thread-view .thread-transcript { position: absolute; inset: 54px 0 16px; display: block; overflow-y: auto; scrollbar-gutter: stable both-edges; scroll-padding-bottom: var(--transcript-bottom-space,184px); }
 /* long threads: skip layout/paint of off-screen blocks; auto remembers real height once rendered */
-.thread-messages > :not(:last-child) { content-visibility: auto; contain-intrinsic-size: auto 120px; }
+.thread-messages > :not(:last-child):not(.message-actions-slot:last-child):not(:has(+ .message-actions-slot:last-child)) { content-visibility: auto; contain-intrinsic-size: auto 120px; }
 .thread-messages { width: min(var(--composer-width),calc(100% - 64px)); margin: 0 auto; padding: 16px 0; font-size: 14px; line-height: 22px; letter-spacing: -.01em; }
 .thread-message { margin: 0 0 16px; overflow-wrap: anywhere; font-size: inherit; line-height: inherit; font-weight: 400; }
 .thread-user { width: fit-content; white-space: pre-wrap; margin-left: auto; max-width: 77%; padding: var(--space-2) var(--space-3); border-radius: var(--radius-card); background: var(--surface-thread-bubble); color: var(--text-strong); }
@@ -128,7 +128,7 @@
 .thread-run-error::before { content: ''; flex: none; align-self: center; width: 12px; height: 12px; background: var(--red); -webkit-mask: var(--x-mask) center/contain no-repeat; mask: var(--x-mask) center/contain no-repeat; }
 .thread-run-error .text-button { flex: none; color: var(--text-muted); text-decoration: underline; text-underline-offset: 3px; }
 .thread-run-error .text-button:hover { color: var(--text-strong); }
-.thread-status { background: linear-gradient(90deg,var(--text-muted) 25%,var(--text) 50%,var(--text-muted) 75%); background-size: 200% 100%; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: status-shimmer 2s linear infinite; text-align: center; }
+.thread-status { background: linear-gradient(90deg,var(--text-muted) 25%,var(--text) 50%,var(--text-muted) 75%); background-size: 200% 100%; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: status-shimmer 2s linear infinite; text-align: left; }
 @keyframes status-shimmer { from { background-position: 140% 0; } to { background-position: -100% 0; } }
 .tool-widget { padding: 0; margin-bottom: 10px; background: transparent; border: 0; }
 .tool-widget-body { margin-top: 8px; padding: 2px 12px; border-radius: var(--radius-panel); background: var(--surface-composer); border: 1px solid var(--border); -webkit-backdrop-filter: var(--glass-filter); backdrop-filter: var(--glass-filter); }

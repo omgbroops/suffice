@@ -1,6 +1,7 @@
 import {shortTitle} from '../shared/thread-peek.mjs';
 import {populateThreadRow,tickThreadTimes,connectThreadHover,formatThreadTime} from './thread-row.js';
 import {threadViewState} from './thread-view-state.js';
+import {sidebarPreferences} from './sidebar-preferences.js';
 import {connectSessionContextMenu} from './thread-context-menu.js';
 import {showPopover,hidePopover} from './popover-motion.js';
 import {el,base,prompt} from './sessions-util.js';
@@ -15,7 +16,7 @@ import './sessions.css';
 const sx=window.sufficeDesktop?.sessions;
 let avail={ok:true,agents:[]};
 sx?.available().then(a=>{avail=a;}).catch(()=>{});
-const STATUS={starting:'working',working:'working',waiting_input:'input',needs_permission:'approval',error:'failed',exited:'done'};
+const STATUS={starting:'starting',working:'working',waiting_input:'input',needs_permission:'approval',error:'failed',exited:'ended'};
 const age=ms=>formatThreadTime(Math.max(0,Math.floor((Date.now()-ms)/1000)));
 const project=()=>document.querySelector('.project-picker')?.dataset.tooltip||'';
 
@@ -61,6 +62,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  }
  function statusOf(s){
   let state=states.get(s.id)||'starting';
+  if(state==='starting'&&busy.has(s.id))return busy.get(s.id)?'working':'idle'; // no state event yet: only the screen can say it works
   if(state==='needs_permission'&&prompts.get(s.id)===false)state='working';
   if(state==='waiting_input'&&busy.get(s.id)&&prompts.get(s.id)===false)state='working'; // badge follows the screen: no prompt on it, no "?"
   if(state==='waiting_input'&&prompts.get(s.id)===false&&!busy.get(s.id))return 'done'; // nothing on screen needs you: clear the badge
@@ -77,8 +79,9 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   row.setAttribute('aria-pressed',String(c.active?.id===s.id));row.title=`${c.name(s)} · ${base(s.cwd)}`;
   tickThreadTimes(row);sortRows();publish();
  }
- // Newest activity first, like the thread list.
- function sortRows(){const order=[...rows.entries()].sort((a,b)=>(activity.get(b[0])||0)-(activity.get(a[0])||0)).map(e=>e[1]);if(order.some((r,i)=>side.children[i]!==r))side.append(...order);}
+ // Same sort and filter choices as the thread list: last activity or name; Running and Needs attention filter by status.
+ const KEEP={all:()=>true,working:st=>st==='working',attention:st=>['approval','input','failed'].includes(st),unread:()=>false,draft:()=>false,archived:()=>false};
+ function sortRows(){const p=sidebarPreferences.get(),nm=r=>c.name(r._s).toLowerCase();const order=[...rows.entries()].sort((a,b)=>p.sort==='name'?nm(a[1]).localeCompare(nm(b[1])):(activity.get(b[0])||0)-(activity.get(a[0])||0)).map(e=>e[1]);if(order.some((r,i)=>side.children[i]!==r))side.append(...order);for(const r of rows.values())r.hidden=!(KEEP[p.filter]||KEEP.all)(r.dataset.status);}
  const unpress=()=>{for(const r of rows.values())r.setAttribute('aria-pressed','false');};
 
  function setMode(m){
@@ -108,9 +111,9 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   unpress();
  }
  // Start flow from the composer: the typed text is the first message; resolves false when nothing started.
- async function start(agent,text){
+ async function start(agent,text,{background=false}={}){
   const cwd=project();if(!cwd){toast('Choose a project');return false;}
-  try{const s=await sx.start({agent,cwd});bump(s.id);await refresh();if(text){titles.set(s.id,shortTitle(text,60));firstText.set(s.id,text);sendWhenReady(s.id,text);}open(rows.get(s.id)?._s||s,true);return true;}catch(e){toast(e.message);return false;}
+  try{const s=await sx.start({agent,cwd});bump(s.id);await refresh();if(text){titles.set(s.id,shortTitle(text,60));firstText.set(s.id,text);sendWhenReady(s.id,text);}if(background)toast('Session started in the background');else open(rows.get(s.id)?._s||s,true);return true;}catch(e){toast(e.message);return false;}
  }
  // The CLI drops keys until its input box is drawn (and Enter would accept a trust prompt): hold the first message, shown as pending, until the screen parses as ready. Never delivered (exit, error, 45 s with no prompt up): hand it back to the composer.
  // Put a held message back without losing what the user typed since: it goes first, blank line between.
@@ -170,9 +173,12 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  document.addEventListener('click',e=>{if(e.target.closest?.('[data-menu-action^="import-chat:"]'))openImport();});
  connectThreadHover(side);
  connectSessionContextMenu(side,{toast,getSession:row=>{const s=row._s;return s&&{id:s.id,title:c.name(s),attach:()=>sx.attachCommand(s.id),show:()=>{if(c.active?.id!==s.id)open(s);setMode('terminal');},stop:async()=>{await sx.stop(s.id);holds.get(s.id)?.();if(c.active?.id===s.id){leave();hooks.clear?.();}await refresh();}};}});
+ sidebarPreferences.subscribe(()=>sortRows());
  threadViewState.subscribe(ev=>{if(ev.type==='update'&&ev.changed?.includes('sidebar')){for(const r of rows.values())paint(r._s);if(c.active)c.paintHeader();}});
  void refresh();
  setInterval(()=>tickThreadTimes(side),30000);
+ // Rows follow tmux: a session that exited drops off the list within one poll, never sits there as running.
+ setInterval(()=>{if(!document.hidden)void refresh();},5000);
  return {
   leave(){if(c.active||import_){leave();import_=null;}},
   isActive:()=>!!c.active&&c.mode==='chat',

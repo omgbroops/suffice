@@ -40,7 +40,9 @@ export function createTaskBoardView({api=window.sufficeDesktop,board,host=docume
  }
  // Redraw on every tick would drop focus on a button; only the live numbers change between state changes.
  board.subscribe(()=>{const focus=open&&root.contains(document.activeElement)?document.activeElement:null,act=focus?.dataset.act,id=focus?.closest('.tb-card')?.dataset.id;draw();if(act)root.querySelector(`.tb-card[data-id="${id}"] [data-act="${act}"]`)?.focus();});
- const setOpen=value=>{if(value===open)return;open=value;root.hidden=!value;document.body.classList.toggle('tasks-open',value);badge.setAttribute('aria-pressed',String(value));if(value){returnFocus=document.activeElement;draw();text.focus();}else{returnFocus?.isConnected&&returnFocus.focus?.();}};
+ const setOpen=(value,restore=true)=>{if(value===open)return;open=value;root.hidden=!value;document.body.classList.toggle('tasks-open',value);badge.setAttribute('aria-pressed',String(value));if(value){returnFocus=document.activeElement;draw();text.focus();}else if(restore){returnFocus?.isConnected&&returnFocus.focus?.();}};
+ // Any click outside the board (sidebar, a thread, settings) leaves it; the click keeps its own focus.
+ document.addEventListener('click',event=>{if(open&&!root.contains(event.target)&&!badge.contains(event.target)&&!event.target.closest('.popover,dialog'))setOpen(false,false);},true);
  text.addEventListener('input',()=>{queue.disabled=!splitTasks(text.value).length;error.textContent='';});
  $('.tb-add').addEventListener('submit',event=>{event.preventDefault();const lines=splitTasks(text.value);if(!lines.length)return;board.add(lines);text.value='';queue.disabled=true;});
  text.addEventListener('keydown',event=>{if(event.key==='Enter'&&(event.metaKey||event.ctrlKey)){event.preventDefault();$('.tb-add').requestSubmit();}});

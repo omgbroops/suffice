@@ -11,9 +11,12 @@ export function deriveFollowups(tools=[],failed=false,reply=''){
  if(tools.length&&String(reply??'').trim().split(/\s+/).length>=40)return ['Summarize what you found','Go deeper'];
  return [];
 }
-export function renderFollowups(node,before,chips,onPick){
- node.querySelectorAll('.thread-followups').forEach(e=>e.remove());if(!chips.length)return null;
- const row=document.createElement('div');row.className='thread-followups';row.setAttribute('role','group');row.setAttribute('aria-label','Suggested next steps');
+// The row lives in the composer, just above its box, and belongs to one thread (owner): it is never part of the transcript.
+export function clearFollowups(host){host.querySelectorAll('.thread-followups').forEach(e=>e.remove());delete host.dataset.followups;}
+export function renderFollowups(host,chips,onPick,owner=''){
+ if(host.querySelector(`.thread-followups[data-owner="${CSS.escape(owner)}"]`)&&chips.length)return host.querySelector('.thread-followups');
+ clearFollowups(host);if(!chips.length)return null;
+ const row=document.createElement('div');row.className='thread-followups';row.dataset.owner=owner;row.setAttribute('role','group');row.setAttribute('aria-label','Suggested next steps');
  chips.forEach((text,i)=>{const chip=document.createElement('button');chip.type='button';chip.className='followup-chip';chip.textContent=text;if(!i){const hint=document.createElement('kbd');hint.textContent='Tab';chip.append(hint);}chip.addEventListener('click',()=>onPick(text));row.append(chip);});
- node.insertBefore(row,before);return row;
+ host.dataset.followups='true';host.append(row);return row;
 }

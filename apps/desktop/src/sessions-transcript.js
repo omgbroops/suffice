@@ -147,7 +147,7 @@ function createCore({hooks,ctx}){
    if(at.has(it.id)){items[at.get(it.id)]=it;continue;}at.set(it.id,items.length);items.push(it);}
   const entries=group(items),keep=new Set();let prev=null;
   for(const e of entries){
-   keep.add(e.id);const sg=JSON.stringify(e.run||e.it)+working,c=cache.get(e.id);let node=c?.el;
+   keep.add(e.id);const sg=JSON.stringify(e.run||e.it)+(e.it?.kind==='user'?'':working),c=cache.get(e.id);let node=c?.el;
    if(!c||c.sig!==sg){
     const n=e.run?buildRun(e.run,later,0,working):build(e.it,later,0,working);
     if(!n){if(c){c.el.remove();cache.delete(e.id);}continue;}
@@ -212,11 +212,15 @@ export function createTranscript(c){
   if(!c.box||!c.active)return;
   const items=!!c.ui?.items?.length;
   if(items!==c.useItems){c.useItems=items;c.box.replaceChildren();tr.reset();}
-  if(items)tr.draw();else{renderChat(c.box,c.lastMsgs);const first=c.firstText.get(c.active.id);if(first&&!c.lastMsgs.some(m=>m.role==='user'))c.box.prepend(Object.assign(el('article','thread-message thread-user thread-pending',first),{ariaBusy:'true'}));if(states.get(c.active.id)==='needs_permission'&&!c.ui?.prompt)notice(c.box,c.active.s);tr.paintStatus();}
+  if(items)tr.draw();else{
+   // The plain view rebuilds only when its content changed: a pending command is mounted once, not once per state event.
+   const first=c.firstText.get(c.active.id),perm=states.get(c.active.id)==='needs_permission'&&!c.ui?.prompt,sig=JSON.stringify([c.lastMsgs.map(m=>[m.role,m.text]),first,perm]);
+   if(c.plainSig!==sig||!c.box.firstChild&&(first||c.lastMsgs.length)){c.plainSig=sig;renderChat(c.box,c.lastMsgs);if(first&&!c.lastMsgs.some(m=>m.role==='user'))c.box.prepend(Object.assign(el('article','thread-message thread-user thread-pending',first),{ariaBusy:'true'}));if(perm)notice(c.box,c.active.s);}
+   tr.paintStatus();}
   if(items&&saved){const st=saved;saved=null;restoreScroll(c.box,st);}
  }
  function showChat(){
-  c.box=el('div','thread-messages session-transcript');hooks.showHistory(c.box);tr.reset();c.useItems=false;saved={...viewState.state};
+  c.box=el('div','thread-messages session-transcript');hooks.showHistory(c.box);tr.reset();c.useItems=false;c.plainSig=null;saved={...viewState.state};
   const s=c.active.s;
   c.unsubs.forEach(f=>f());c.unsubs=[];
   const msgs=m=>Array.isArray(m)?m:m?.messages||[];
