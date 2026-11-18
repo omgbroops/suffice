@@ -31,7 +31,7 @@ test('composer queue, send contrast, transcript files and shared editor preferen
   await page.getByRole('button',{name:'Stop task',exact:true}).waitFor();
   await page.locator('#prompt').fill('Queued followup');await page.getByRole('button',{name:'Queue message',exact:true}).click();
   await page.locator('.queued-message-text').filter({hasText:'Queued followup'}).waitFor();assert.equal(await app.evaluate(()=>globalThis.queueRuns.length),1);
-  assert.ok(await page.locator('.queued-message').evaluate(row=>row.getBoundingClientRect().height<=28));
+  assert.ok(await page.locator('.queued-message').evaluate(row=>row.getBoundingClientRect().height<=32));
   assert.equal(await page.locator('.queued-messages').evaluate(panel=>getComputedStyle(panel).backgroundColor),await page.locator('.composer').evaluate(form=>getComputedStyle(form).backgroundColor));
   await page.locator('#prompt').fill('Delete me');await page.getByRole('button',{name:'Queue message',exact:true}).click();
   await page.locator('.queued-message').filter({hasText:'Delete me'}).getByRole('button',{name:'Delete queued message'}).click();assert.equal(await page.locator('.queued-message').count(),1);

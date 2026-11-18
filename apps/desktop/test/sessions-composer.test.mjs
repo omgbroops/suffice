@@ -49,7 +49,7 @@ try{
  const sid=await page.evaluate(async()=>(await sufficeDesktop.sessions.list()).at(-1).id);
  ok(execFileSync('tmux',['-L',socket,'list-sessions','-F','#{session_name}'],{encoding:'utf8'}).trim().length>0,'session not on the private socket');
  await page.locator('.composer-approval:not([hidden])').waitFor({timeout:20000});await page.waitForTimeout(500);
- await page.locator('.composer-approval button',{hasText:/^\s*(1\.\s*)?Yes\s*$/}).first().click();await page.waitForFunction(()=>!document.querySelector('.composer').dataset.approval,null,{timeout:15000});
+ await page.locator('.composer-approval button',{hasText:/^\s*(1\.\s*)?Yes\b/}).first().click();await page.waitForFunction(()=>!document.querySelector('.composer').dataset.approval,null,{timeout:15000});
  await page.waitForFunction(()=>document.querySelector('.composer').modelSource?.models.length>0&&document.querySelector('.composer').accessSource?.modes.length>1);
  await page.waitForTimeout(1200);
  const composerText=await page.locator('.composer').innerText();
