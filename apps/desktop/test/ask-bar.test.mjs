@@ -26,10 +26,10 @@ async function launch(screen){
  const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop/test/ask-bar-hidden-main.cjs'),'--user-data-dir='+resolve(root,'electron'),'--mute-audio'],env});
  const errors=[];const page=await app.firstWindow();page.on('pageerror',error=>errors.push('main: '+error.message));await page.locator('.composer').waitFor();
  app.on('window',other=>other.on('pageerror',error=>errors.push('window: '+error.message)));
- await page.evaluate(theme=>{localStorage.setItem('suffice-theme',theme);},process.env.ASK_SHOT_THEME||'dark');
+ await page.evaluate(theme=>{localStorage.setItem('suffice-model',JSON.stringify({model:'claude-fixture',provider:'anthropic',effort:'medium'}));window.sufficeSetTheme?.(theme);document.documentElement.dataset.theme=theme;localStorage.setItem('suffice-theme',theme);},process.env.ASK_SHOT_THEME||'dark');
  return {app,page,errors,image,root};
 }
-const shotTo=async(page,name)=>{if(process.env.ASK_SHOT_DIR){await page.waitForTimeout(300);await page.screenshot({path:`${process.env.ASK_SHOT_DIR}/${process.env.ASK_SHOT_THEME||'dark'}-${name}.png`});}};
+const shotTo=async(page,name)=>{if(process.env.ASK_SHOT_DIR){const okay=page.getByRole('button',{name:'Okay',exact:true});if(await okay.count())await okay.first().click().catch(()=>{});await page.waitForTimeout(600);await page.screenshot({path:`${process.env.ASK_SHOT_DIR}/${process.env.ASK_SHOT_THEME||'dark'}-${name}.png`});}};
 const pressShortcut=app=>app.evaluate(({},key)=>{const callback=globalThis.shortcuts.get(key);if(!callback)throw new Error('shortcut not registered');callback();},ACCELERATOR);
 const registered=app=>app.evaluate(({},key)=>globalThis.shortcuts.has(key),ACCELERATOR);
 const openBar=async app=>{const opened=app.waitForEvent('window',{timeout:15000});await pressShortcut(app);const bar=await opened;await bar.locator('.ask-panel').waitFor();return bar;};

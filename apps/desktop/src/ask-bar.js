@@ -60,7 +60,7 @@ export function mountAskBar(api = window.sufficeDesktop) {
   function showPermission(status) {
     const blocked = status === 'denied' || status === 'restricted';
     $('ask-permission-title').textContent = blocked ? 'Screen recording is off' : 'Allow screen recording';
-    $('ask-permission-text').textContent = blocked ? 'Turn on Suffice under Privacy & Security, Screen Recording in System Settings, then restart Suffice. ' + EXPLAIN : EXPLAIN;
+    $('ask-permission-text').textContent = blocked ? 'Turn on Suffice under Privacy & Security, Screen Recording in System Settings, then restart Suffice.' : EXPLAIN;
     $('ask-allow').textContent = blocked ? 'Open System Settings' : 'Allow access';
     $('ask-allow').dataset.status = status;
     wrap.hidden = true; permission.hidden = false; setState('permission'); $('ask-allow').focus();
