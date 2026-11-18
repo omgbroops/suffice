@@ -362,3 +362,13 @@
 .settings-main .env-label { font-size:13px; font-weight:var(--weight-medium); color:var(--text-strong); }
 .settings-main .settings-subtitle { margin-bottom:32px; }
 @media(max-width:850px){ .settings-main .settings-option { padding:12px; } }
+.memory-card { padding:0; }
+.memory-list { list-style:none; margin:0; padding:4px 0; }
+.memory-item { display:grid; grid-template-columns:minmax(0,auto) auto minmax(0,1fr) auto; align-items:center; gap:12px; padding:8px 16px; }
+.memory-title { font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.memory-kind { color:var(--text-muted,inherit); font-size:12px; opacity:.7; }
+.memory-desc-text { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; opacity:.8; }
+.memory-empty { padding:10px 16px; opacity:.7; }
+.memory-form { display:grid; gap:10px; padding:10px 16px 12px; border-top:1px solid color-mix(in srgb,var(--text) 10%,transparent); }
+.memory-form .resource-field { margin:0; padding:0; }
+.memory-form input,.memory-form textarea { width:100%; box-sizing:border-box; background:color-mix(in srgb,var(--text) 4%,transparent); }
