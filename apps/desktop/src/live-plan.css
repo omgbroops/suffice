@@ -1,0 +1,25 @@
+.live-plan { position: sticky; bottom: var(--transcript-bottom-space,184px); z-index: 2; margin: 12px 0 0; padding: 6px 12px; border: 1px solid var(--border-strong); border-radius: 12px; background: var(--surface-glass); backdrop-filter: blur(12px); color: var(--text-muted); font-size: 13px; line-height: 20px; }
+.live-plan[hidden] { display: none; }
+.live-plan summary { display: flex; align-items: center; gap: 10px; padding: 4px 0; cursor: pointer; list-style: none; min-width: 0; }
+.live-plan summary::-webkit-details-marker { display: none; }
+.live-plan summary::before { content: ''; flex: 0 0 auto; width: 5px; height: 5px; border-top: 1px solid currentColor; border-right: 1px solid currentColor; transform: rotate(45deg); margin: 0 2px; transition: transform 160ms var(--ease-out); }
+.live-plan[open] > summary::before { transform: rotate(135deg); }
+.live-plan summary:hover { color: var(--text); }
+.live-plan summary:focus-visible { outline: 1px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
+.live-plan-count { color: var(--text); flex: 0 0 auto; }
+.live-plan-now { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.live-plan-list { list-style: none; margin: 2px 0 4px; padding: 0; }
+.live-plan-list li { display: flex; align-items: flex-start; gap: 10px; padding: 2px 0; }
+.live-plan-box { flex: 0 0 auto; width: 14px; height: 14px; margin-top: 3px; border: 1px solid var(--text-faint); border-radius: 4px; display: grid; place-items: center; }
+.live-plan-box svg { width: 10px; height: 10px; fill: none; stroke: var(--surface-base); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 12; stroke-dashoffset: 12; }
+.live-plan-list li[data-state=done] .live-plan-box { background: var(--green); border-color: var(--green); }
+.live-plan-list li[data-state=done] .live-plan-box svg { stroke-dashoffset: 0; }
+.live-plan-list li[data-state=done] { color: var(--text-faint); }
+.live-plan-list li[data-state=active] { color: var(--text); }
+.live-plan-list li[data-state=active] .live-plan-box { border-color: var(--focus); }
+@media(prefers-reduced-motion:no-preference) {
+ .live-plan-list li.just-done .live-plan-box svg { animation: live-plan-tick 220ms var(--ease-out) both; }
+ .live-plan-list li.just-done .live-plan-box { animation: live-plan-pop 220ms var(--ease-out); }
+}
+@keyframes live-plan-tick { from { stroke-dashoffset: 12; } to { stroke-dashoffset: 0; } }
+@keyframes live-plan-pop { 50% { transform: scale(1.15); } }
