@@ -30,7 +30,7 @@ export function connectContextInspector({api,form,toast}){
  }
 
  function close(){
-  if(!panel)return;const node=panel;panel=null;off?.();off=null;chip.setAttribute('aria-expanded','false');hidePopover(node,()=>node.remove());
+  if(!panel)return;const node=panel;panel=null;off?.();removeEventListener('resize',place);off=null;chip.setAttribute('aria-expanded','false');hidePopover(node,()=>node.remove());
  }
  function open(){
   if(panel){close();return;}
@@ -39,14 +39,14 @@ export function connectContextInspector({api,form,toast}){
   const outside=event=>{if(!panel.contains(event.target)&&!chip.contains(event.target))close();};
   const key=event=>{if(event.key==='Escape'){event.stopPropagation();close();chip.focus();}};
   document.addEventListener('pointerdown',outside,true);document.addEventListener('keydown',key,true);off=()=>{document.removeEventListener('pointerdown',outside,true);document.removeEventListener('keydown',key,true);};
-  chip.setAttribute('aria-expanded','true');showPopover(panel);panel.focus({preventScroll:true});void load();
+  chip.setAttribute('aria-expanded','true');addEventListener('resize',place);showPopover(panel);panel.addEventListener('animationend',()=>place(),{once:true});setTimeout(()=>panel&&place(),250);panel.focus({preventScroll:true});void load();
  }
  chip.addEventListener('click',open);
 
  function place(){
   const r=form.getBoundingClientRect(),w=Math.min(r.width,520);
   panel.style.width=w+'px';panel.style.left=Math.max(12,r.right-w)+'px';
-  panel.style.top=Math.max(12,r.top-panel.offsetHeight-8)+'px';panel.style.setProperty('--popover-origin','bottom right');
+  panel.style.top='';panel.style.bottom=(innerHeight-r.top+8)+'px';panel.style.setProperty('--popover-origin','bottom right');
  }
 
  function paintPanel(){
@@ -67,7 +67,7 @@ export function connectContextInspector({api,form,toast}){
    for(const [kind,label] of KINDS){const sum=items.filter(i=>i.kind===kind).reduce((s,i)=>removed.has(i.id)&&!i.fixed?s:s+i.tokens,0);if(sum){const seg=el('span','context-seg');seg.dataset.kind=kind;seg.style.flexGrow=String(sum);seg.title=`${label}: ${sum.toLocaleString()}`;bar.append(seg);}}
    body.push(bar);
    const row=el('div','context-switch-row');const text=el('div','context-switch-text');text.append(el('span','context-switch-label','Summaries only'),el('span','context-hint','Replace long tool results with a short summary'));
-   const sw=el('button','settings-switch');sw.type='button';sw.setAttribute('role','switch');sw.setAttribute('aria-label','Summaries only');sw.setAttribute('aria-checked',String(summaries));sw.disabled=!live;sw.append(document.createElement('span'));
+   const sw=el('button','settings-switch');sw.type='button';sw.setAttribute('role','switch');sw.setAttribute('aria-label','Summaries only');sw.setAttribute('aria-checked',String(summaries));sw.disabled=!live;if(!live){sw.setAttribute('aria-disabled','true');sw.title='Read-only for past turns';}sw.append(document.createElement('span'));
    sw.addEventListener('click',()=>{choice.summaries=!choice.summaries;paintChip();paintPanel();});row.append(text,sw);body.push(row);
    if(!items.some(i=>i.kind==='system'))body.push(el('p','context-note','System prompt, skills and tools are counted once the next message is sent.'));
    for(const [kind,label] of KINDS){
@@ -79,8 +79,8 @@ export function connectContextInspector({api,form,toast}){
     for(const item of group){
      const gone=removed.has(item.id)&&!item.fixed,li=el('li','context-item');li.dataset.id=item.id;if(gone)li.dataset.removed='';
      const name=el('span','context-item-name',item.label);name.title=item.label;
-     const shown=live&&summaries&&item.summaryTokens!=null?item.summaryTokens:item.tokens;
-     const tok=el('span','context-item-tokens',live&&summaries&&item.summaryTokens!=null?`${fmt(shown)} (summary)`:fmt(shown));li.append(name,tok);
+     const useSum=summaries&&item.summaryTokens!=null,shown=useSum?item.summaryTokens:item.tokens;
+     const tok=el('span','context-item-tokens',useSum?`${fmt(shown)} (summary)`:fmt(shown));li.append(name,tok);
      if(live&&!item.fixed){const b=el('button','context-remove');b.type='button';b.innerHTML=icon(gone?'undo':'close');b.setAttribute('aria-label',`${gone?'Keep':'Remove'} ${item.label} ${gone?'in':'from'} the next turn`);b.title=gone?'Keep in next turn':'Remove from next turn';b.addEventListener('click',()=>{if(gone)choice.exclude.delete(item.id);else choice.exclude.add(item.id);paintChip();paintPanel();});li.append(b);}
      else li.append(el('span','context-remove-gap'));
      list.append(li);

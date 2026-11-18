@@ -60,4 +60,8 @@ test('host reports the inventory and applies choices to the next run only',async
  assert.equal(result.turns.length,1);assert.deepEqual(result.turns[0].removed,[...ids,'tool:grep']);assert.equal(result.turns[0].summaries,true);
  await host({id:4,action:'run',payload:{prompt:'again',effort:'low',cwd}});
  assert.equal(setTools.length,2,'a run with no choices leaves tools alone');
+ await host({id:5,action:'reset'});
+ await host({id:6,action:'run',payload:{prompt:'fresh',effort:'low',cwd}});
+ await host({id:7,action:'context'});
+ assert.deepEqual(sent.find(m=>m.id===7).result.turns.map(t=>t.n),[1],'turns restart at 1 after reset');
 });

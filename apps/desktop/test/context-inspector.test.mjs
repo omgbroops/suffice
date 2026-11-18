@@ -58,6 +58,9 @@ test('context chip opens the inspector; removals and summaries-only reach the ne
   await panel.locator('.context-group[data-kind=tools]').locator('summary').click();
   await panel.locator('.context-group[data-kind=skills]').locator('summary').click();
   await page.mouse.move(5,5);
+  await page.waitForTimeout(300);
+  const gap=await page.evaluate(()=>document.querySelector('.composer').getBoundingClientRect().top-document.querySelector('.context-inspector').getBoundingClientRect().bottom);
+  assert.ok(Math.abs(gap-8)<=1,'panel sits 8px above the composer, got '+gap+' '+await page.evaluate(()=>{const p=document.querySelector('.context-inspector'),c=document.querySelector('.composer');return JSON.stringify([p.style.cssText,innerHeight,c.getBoundingClientRect().top,p.getBoundingClientRect().bottom,getComputedStyle(p).transform])}));
   await shot('02-open');
 
   // remove a tool schema: total drops by its tokens, row is struck, undo restores
@@ -83,6 +86,8 @@ test('context chip opens the inspector; removals and summaries-only reach the ne
   assert.equal(await panel.getByRole('switch',{name:'Summaries only'}).isDisabled(),true);
   assert.equal(await panel.locator('.context-remove').count(),0);
   assert.equal(await panel.locator('.context-item[data-id="tool:browser"]').getAttribute('data-removed'),'');
+  assert.equal(await panel.locator('.context-item',{hasText:'bash result'}).locator('.context-item-tokens').innerText(),'80 (summary)');
+  assert.equal(await panel.locator('.settings-switch').getAttribute('aria-disabled'),'true');
   await shot('05-turn');
   await panel.getByRole('button',{name:'Next turn'}).click();
 

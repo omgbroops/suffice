@@ -40,7 +40,7 @@ async function receive(message) {
     if(action==='threads'){send({id,ok:true,result:await threads.list()});return;}
     if(action==='thread-location'){send({id,ok:true,result:await threads.location(payload.id)});return;}
     if(busy)throw new Error('A task is already running. Stop it before changing sessions.');
-    if(action==='reset'){viewRevision++;turns.length=0;await agent?.dispose();agent=null;resumePath=null;viewedUsage=null;send({event:'usage',usage:null});send({id,ok:true});return;}
+    if(action==='reset'){viewRevision++;turns.length=0;turnCount=0;await agent?.dispose();agent=null;resumePath=null;viewedUsage=null;send({event:'usage',usage:null});send({id,ok:true});return;}
     if(action==='models'){
       if(!runtime)throw new Error('Harness is not ready');
       await runtime.refresh?.({allowNetwork:false});
