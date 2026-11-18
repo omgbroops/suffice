@@ -103,3 +103,26 @@ test('sessions e2e: start, terminal ws, chat, state, re-adopt, stop', { skip }, 
     rmSync(root, { recursive: true, force: true });
   }
 });
+
+test('sessions e2e: an agent that exits reaches state exited with no list() caller', { skip }, async () => {
+  const root = mkdtempSync(path.join(tmpdir(), 'sfx-e2e-x-'));
+  const socketName = `sfx-e2e-x-${process.pid}`;
+  const transcript = path.join(root, 'transcript.jsonl');
+  writeFileSync(transcript, '');
+  const agent = {
+    bin: process.execPath, startArgs: () => [agentScript, transcript], resumeArgs: () => [agentScript, transcript],
+    locateTranscript: () => transcript, listHistory: () => [],
+    parseLine: (o) => [{ id: `${o.k}:${o.t}`, role: o.k === 'u' ? 'user' : 'assistant', text: o.t, ts: 1 }],
+  };
+  const b = createBackend({ dataDir: path.join(root, 'data'), home: root, socketName, sessions: true, sessionAgents: { fake: agent }, idleMs: 150, settleMs: 50 });
+  try {
+    const { id } = await b.sessions.start({ agent: 'fake', cwd: root });
+    await until('READY', async () => (await b.sessions.screen(id)).text.includes('READY>'));
+    spawnSync('tmux', ['-L', socketName, 'kill-session', '-t', `sfx-${id}`]); // the agent process ends; nobody calls list()
+    await until('exited', () => b.slots.read(`session:${id}:state`)?.value?.state === 'exited', 6000);
+  } finally {
+    await b.dispose();
+    spawnSync('tmux', ['-L', socketName, 'kill-server']);
+    rmSync(root, { recursive: true, force: true });
+  }
+});

@@ -33,6 +33,12 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
   const transcript=path.join(dataDir,'fakeclaude-transcript.jsonl');fs.mkdirSync(dataDir,{recursive:true});fs.writeFileSync(transcript,'');
   sessionAgents.fakeclaude={bin:env.SUFFICE_TEST_NODE||'node',startArgs:()=>[claudeAgent,transcript],resumeArgs:()=>[claudeAgent,transcript],locateTranscript:()=>transcript,listHistory:()=>[],parseLine:()=>[]};
  }
+ // Test-only: the classifier picks its rules by agent id ('claude'), so session-state tests register the fake under that id.
+ const stateAgent=env.SUFFICE_TEST_STATE_AGENT;
+ if(stateAgent){
+  const transcript=path.join(dataDir,'state-transcript.jsonl');fs.mkdirSync(dataDir,{recursive:true});fs.writeFileSync(transcript,'');
+  sessionAgents.claude={bin:env.SUFFICE_TEST_NODE||'node',startArgs:()=>[stateAgent,transcript],resumeArgs:()=>[stateAgent,transcript],locateTranscript:()=>transcript,listHistory:()=>[],parseLine:()=>[]};
+ }
  // Test-only: one tui-sim scenario per session. The scenario comes from <dataDir>/sim-run.json at spawn, each session gets its own transcript.
  const simAgent=env.SUFFICE_TEST_SIM_AGENT;
  if(simAgent){

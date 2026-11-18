@@ -21,7 +21,7 @@ export function createSessionState({ clock, slots, idleMs = 1500, settleMs = 300
     const seen = new Set();
     let cur = { state: 'starting', since: clock.now(), reason: 'no signal yet', lastActivity: clock.now(), turns: 0, toolCalls: 0 };
     let pending = null; // {state, reason, at}
-    let hasTranscript = false, last = null, openCalls = 0, lastAt = 0, screen = null, screenAt = 0, exit = null;
+    let hasTranscript = false, last = null, openCalls = 0, lastAt = 0, screen = null, screenAt = 0, exit = null, asked = false, permBase = null;
     const slot = slots?.define({ id: `session:${sessionId}:state`, title: `Session ${sessionId}`, schema: STATE_SCHEMA }, cur);
 
     const touch = () => { cur = { ...cur, lastActivity: clock.now() }; };
@@ -31,6 +31,8 @@ export function createSessionState({ clock, slots, idleMs = 1500, settleMs = 300
       if (screen?.permission) return { state: 'needs_permission', reason: 'screen shows an approval prompt', at: now };
       if (screen?.error) return { state: 'error', reason: 'screen shows an error', at: now };
       if (hasTranscript) {
+        // a declined tool call gets no result: after an approval prompt, a quiet screen with no busy indicator means the user answered no
+        if (openCalls > 0 && asked && screen && !screen.working && now >= screenAt + idleMs) return { state: 'waiting_input', reason: 'tool call unanswered after the approval prompt left the screen', at: screenAt + idleMs };
         if (last !== 'assistant') return { state: 'working', reason: `last message from ${last}`, at: now };
         if (openCalls > 0) return { state: 'working', reason: `${openCalls} tool call(s) unanswered`, at: now };
         const due = lastAt + idleMs;
@@ -50,7 +52,7 @@ export function createSessionState({ clock, slots, idleMs = 1500, settleMs = 300
     }
 
     function evaluate() {
-      if (cur.state === 'exited' || (exit !== null && cur.state === 'error')) return;
+      if (cur.state === 'exited' || (exit !== null && exit !== 0 && cur.state === 'error')) return;
       const now = clock.now();
       const c = candidate(now);
       if (c.state === cur.state) { pending = null; return; }
@@ -66,7 +68,7 @@ export function createSessionState({ clock, slots, idleMs = 1500, settleMs = 300
         let any = false;
         for (const m of messages) {
           if (m?.id != null) { if (seen.has(m.id)) continue; seen.add(m.id); }
-          any = true; hasTranscript = true; last = m.role;
+          any = true; asked = false; hasTranscript = true; last = m.role;
           if (m.role === 'user') cur = { ...cur, turns: cur.turns + 1 };
           if (m.role === 'tool' && m.tool) {
             if ('output' in m.tool) openCalls = Math.max(0, openCalls - 1); // results carry output, calls carry input
@@ -76,7 +78,12 @@ export function createSessionState({ clock, slots, idleMs = 1500, settleMs = 300
         if (any) { lastAt = clock.now(); touch(); }
         evaluate();
       },
-      onScreen(text) { const tail = tailLines(text).join('\n'); screen = classifyScreen(agent, text); if (tail !== lastTail) { lastTail = tail; screenAt = clock.now(); touch(); } evaluate(); },
+      onScreen(text) { const tail = tailLines(text).join('\n'); screen = classifyScreen(agent, text);
+        if (screen.permission) {
+          asked = true;
+          // shortcut: stale = 2+ new lines under the dialog since first seen; a live dialog that grows below its title would be missed, upgrade with a real cursor/redraw signal
+          if (permBase === null) permBase = screen.after; else if (screen.after >= permBase + 2) screen = { ...screen, permission: false };
+        } else permBase = null; if (tail !== lastTail) { lastTail = tail; screenAt = clock.now(); touch(); } evaluate(); },
       onExit(code) { exit = Number.isInteger(code) ? code : 1; touch(); evaluate(); },
       tick: evaluate,
       state: () => ({ ...cur }),

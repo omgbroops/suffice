@@ -201,7 +201,12 @@ export function createSessions({ exec, clock, slots, fs = nodeFs, home = os.home
     const name = need(id);
     if (typeof text !== 'string') throw new TypeError('sessions: text must be a string');
     // tmux eats one trailing ';' (command separator) even after -l --: a doubled one arrives as exactly one
-    if (text) await tmux(['send-keys', '-t', name, '-l', '--', text.endsWith(';') ? `${text};` : text]);
+    // tmux rejects a command over ~16 KB ("command too long"): send in code-point chunks, each its own command
+    const cps = Array.from(text);
+    for (let i = 0; i < cps.length; i += 2000) {
+      const part = cps.slice(i, i + 2000).join('');
+      await tmux(['send-keys', '-t', name, '-l', '--', part.endsWith(';') ? `${part};` : part]);
+    }
     if (enter) await tmux(['send-keys', '-t', name, 'Enter']);
   }
   async function sendBytes(id, bytes) {
