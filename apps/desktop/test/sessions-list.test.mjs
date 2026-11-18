@@ -59,7 +59,7 @@ test('session list, row menu, start flow and send options',{timeout:180000},asyn
   await page.evaluate(()=>{window.__copied=[];navigator.clipboard.writeText=async t=>{window.__copied.push(t);};});
   await rows.first().click({button:'right'});await page.waitForTimeout(300);await shot('row-context-menu.png');
   const items=await page.locator('.thread-context-menu:not([hidden]) [data-menu-action]').allInnerTexts().catch(()=>[]);console.log('menu',JSON.stringify(items));
-  check(()=>assert.deepEqual(items.map(s=>s.trim()),['Copy attach command','Show terminal','Stop session']));
+  check(()=>assert.deepEqual(items.map(s=>s.trim()),['Copy attach command','Attach in Terminal','Show terminal','Stop session']));
   if(!BASELINE){await page.locator('[data-menu-action="session:attach"]').click();await page.waitForTimeout(300);
    const copied=await page.evaluate(()=>window.__copied);assert.ok(copied.some(t=>t.includes(`-L ${SOCKET}`)),'attach command names the private socket: '+JSON.stringify(copied));}
   else await page.keyboard.press('Escape');
