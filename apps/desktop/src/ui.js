@@ -56,6 +56,8 @@ const paths = {
   usage: '<path d="M5 5a9 9 0 1 1-2 7M3 3v6h6"/><path d="M12 7v5l3 2"/>',
   chart: '<rect x="3" y="4" width="18" height="15" rx="2"/><path d="M8 14v-3m4 3V8m4 6v-5M8 22v-3m8 3v-3"/>',
   close: '<path d="m6 6 12 12M6 18 18 6"/>',
+  context: '<path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5M3 17.5l9 5 9-5"/>',
+  undo: '<path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>',
   search: '<circle cx="10" cy="10" r="6"/><path d="m15 15 5 5"/>',
   'move-project':'<path d="M3 7V4h6l3 3h9v13h-8M3 14h9m-3-3 3 3-3 3"/>',
   upload:'<path d="M12 16V3m-5 5 5-5 5 5M4 16v5h16v-5"/>',
