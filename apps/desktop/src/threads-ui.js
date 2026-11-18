@@ -4,7 +4,7 @@ import {displayRunError} from '../shared/run-error.mjs';
 import {connectApprovals} from './approvals.js';
 import {transcriptDivider,isInterruption} from './transcript-divider.js';
 import {connectExtensionUI} from './extension-ui.js';
-import {connectThreadFork} from './thread-fork.js';
+import {connectThreadFork,connectThreadExport} from './thread-fork.js';
 import {preference} from './settings-preferences.js';
 import {connectThreadContextMenu} from './thread-context-menu.js';
 import {connectProjectManagement,projectPathKey} from './project-management.js';
@@ -164,6 +164,7 @@ export function connectThreads({api,prompt,send,toast}){
   savedThreads=threads;const selected=threads.find(thread=>thread.id===activeId);if(selected&&!header.hidden&&!inSession()&&document.activeElement!==header)header.textContent=metadata(selected.id).title||selected.title;for(const thread of threads)optimisticThreads.delete(thread.id);drawThreads();
  }
  api.askBar?.onThread(async id=>{await refresh();const thread=savedThreads.find(thread=>thread.id===id);if(thread)await openSavedThread(thread);});
+ connectThreadExport({api,toast,getActive:()=>activeId});
  connectThreadFork(list,{api,toast,getActive:()=>activeId,onFork:async(fork,detail)=>{await refresh();const thread=savedThreads.find(thread=>thread.id===fork.id);if(!thread)return;if(detail?.draft)viewState.updateFor(fork.id,{draft:detail.draft});await openSavedThread(thread);}});
  document.addEventListener('suffice-open-thread',event=>{const thread=savedThreads.find(thread=>thread.id===event.detail?.id);if(thread)void openSavedThread(thread);});
  // The fork's link back to the thread it came from, shown above the first message.
