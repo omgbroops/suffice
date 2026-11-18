@@ -55,8 +55,7 @@ const shot=async n=>{const b64=await app.evaluate(async({BrowserWindow})=>(await
  await page.locator('.session-import-row').first().waitFor();await page.waitForTimeout(350);
  await shot('import.png');          // (e)
  await page.keyboard.press('Escape');await page.waitForTimeout(300);
- await page.locator('[data-action="send-menu"]').click();await page.waitForTimeout(250);
- await page.locator('[data-menu-action="cli-session:fake"]').click();
+ const cwd=await app.evaluate(()=>process.env.SUFFICE_START_PROJECT);await page.evaluate(([a,p])=>sufficeDesktop.sessions.start({agent:a,cwd:p}),['fake',cwd]);await page.reload();await page.locator('[data-action="send-menu"]').waitFor();await page.locator('.sidebar-cli-sessions .thread-row').first().click();
  await page.locator('.session-row').first().waitFor();
  await page.locator('.thread-header').waitFor();
  await page.locator('#prompt').fill('hello');await page.locator('#prompt').press('Enter');
@@ -70,8 +69,7 @@ const shot=async n=>{const b64=await app.evaluate(async({BrowserWindow})=>(await
  await shot('terminal.png');        // (c)
   // fake Claude: rich chat
   await page.locator('.new-session').click();await page.locator('[data-action="send-menu"]').waitFor({state:'visible'});await page.waitForTimeout(400);
-  await page.locator('[data-action="send-menu"]').click();await page.waitForTimeout(250);
-  await page.locator('[data-menu-action="cli-session:fakeclaude"]').click();
+  const cwd=await app.evaluate(()=>process.env.SUFFICE_START_PROJECT);await page.evaluate(([a,p])=>sufficeDesktop.sessions.start({agent:a,cwd:p}),['fakeclaude',cwd]);await page.reload();await page.locator('[data-action="send-menu"]').waitFor();await page.locator('.sidebar-cli-sessions .thread-row').first().click();
   await page.locator('.composer-approval:not([hidden])').waitFor({timeout:20000});await page.waitForTimeout(600);
   await shot('chat-prompt.png');
   await page.locator('.thread-status').waitFor({timeout:5000});await shot('chat-working.png');
@@ -143,8 +141,7 @@ const shot=async n=>{const b64=await app.evaluate(async({BrowserWindow})=>(await
   await writeFile(resolve(output,'venom-timing.json'),JSON.stringify({slow:SLOW,frames},null,1));
   await page.evaluate(()=>{window.__motionSlow=1;});
  }else{
-  await page.locator('[data-action="send-menu"]').click();await page.waitForTimeout(250);
-  await page.locator('[data-menu-action="cli-session:claude"]').click();
+  const cwd=await app.evaluate(()=>process.env.SUFFICE_START_PROJECT);await page.evaluate(([a,p])=>sufficeDesktop.sessions.start({agent:a,cwd:p}),['claude',cwd]);await page.reload();await page.locator('[data-action="send-menu"]').waitFor();await page.locator('.sidebar-cli-sessions .thread-row').first().click();
   await page.locator('.thread-header').waitFor();
   const sid=await page.evaluate(async()=>(await sufficeDesktop.sessions.list())[0].id);
   const U=()=>page.evaluate(id=>{const u=sufficeDesktop.sessions.ui(id);return {prompt:u?.prompt?.title||null,model:u?.meta?.model||null,mode:u?.meta?.mode||null,status:!!u?.status,kinds:(u?.items||[]).map(i=>i.kind+(i.category?':'+i.category:'')+(i.id&&i.kind==='notice'?':'+i.text:''))};},sid);

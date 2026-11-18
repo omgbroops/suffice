@@ -44,9 +44,8 @@ try{
  const stdPH=await page.locator('#prompt').getAttribute('placeholder');
 
  // 2. open a fake Claude session
- await page.locator('[data-action="send-menu"]').click();await page.waitForTimeout(250);
- await page.locator('[data-menu-action="cli-session:fakeclaude"]').click();
- await page.locator('.thread-header--session').waitFor();
+ const cwd=await app.evaluate(()=>process.env.SUFFICE_START_PROJECT);await page.evaluate(([a,p])=>sufficeDesktop.sessions.start({agent:a,cwd:p}),['fakeclaude',cwd]);await page.reload();await page.locator('[data-action="send-menu"]').waitFor();await page.locator('.sidebar-cli-sessions .thread-row').first().click();
+ await page.locator('.thread-header').waitFor();
  const sid=await page.evaluate(async()=>(await sufficeDesktop.sessions.list()).at(-1).id);
  ok(execFileSync('tmux',['-L',socket,'list-sessions','-F','#{session_name}'],{encoding:'utf8'}).trim().length>0,'session not on the private socket');
  await page.locator('.composer-approval:not([hidden])').waitFor({timeout:20000});await page.waitForTimeout(500);
@@ -58,7 +57,7 @@ try{
  ok(await page.locator('.composer .model-button .provider-logo').count()===1,'model chip has no provider logo');
  ok(await page.locator('.composer .model-button .model-effort').count()===1,'model chip has no effort word');
  ok(!await page.locator('.session-ctl').count(),'header chips still present');
- ok(!await page.locator('.thread-header--session .session-meta .session-ctl').count(),'header controls remain');
+ ok(!await page.locator('.thread-header .session-meta .session-ctl').count(),'header controls remain');
  await shot('session-composer-idle');
 
  await page.evaluate(i=>sufficeDesktop.sessions.send(i,'/clear'),sid);await page.waitForTimeout(1800);

@@ -80,7 +80,7 @@ test('session list, row menu, start flow and send options',{timeout:180000},asyn
   await page.evaluate(()=>{document.querySelector('.composer').modelSelection={provider:'cli',model:'fakeclaude'};});
   await page.evaluate(()=>{window.__bubbles=new Set();const grab=()=>document.querySelectorAll('.thread-user').forEach(n=>window.__bubbles.add(n.textContent.trim()));new MutationObserver(grab).observe(document.body,{childList:true,subtree:true,characterData:true});});
   await page.locator('.send-button').click();
-  if(!BASELINE){await page.locator('.thread-header--session').waitFor();await page.waitForTimeout(500);
+  if(!BASELINE){await page.locator('.thread-header').waitFor();await page.waitForTimeout(500);
    assert.equal(await page.locator('#prompt').inputValue(),'');
    const after=tmux('list-sessions','-F','#{session_name}').split('\n').filter(Boolean).length;assert.equal(after,before+1,'exactly one session created');
    assert.ok((await page.evaluate(()=>[...window.__bubbles])).includes('Add a retry to the uploader'),'user bubble with the typed text appeared');
