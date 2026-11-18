@@ -7,18 +7,18 @@ import {mkdir,mkdtemp,writeFile,realpath} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {execFileSync} from 'node:child_process';
 import assert from 'node:assert/strict';
-const KEY='session-transcript',SHOTS=process.env.SHOTS;if(SHOTS)await mkdir(SHOTS,{recursive:true});
+const KEY='session-transcript',SOCK=`sfx-r2-${KEY}-${process.pid}`,SHOTS=process.env.SHOTS;if(SHOTS)await mkdir(SHOTS,{recursive:true});
 const tmp=await realpath(await mkdtemp(resolve(tmpdir(),'sfx-sess-tr-')));
 const project=resolve(tmp,'demo-project'),data=resolve(tmp,'data'),suffice=resolve(tmp,'suffice'),home=resolve(tmp,'home');
 for(const d of [project,data,suffice,home])await mkdir(d,{recursive:true});
 const env={...process.env};delete env.ELECTRON_RUN_AS_NODE;
-Object.assign(env,{SUFFICE_HOME:suffice,SUFFICE_START_PROJECT:project,SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_SESSIONS_SOCKET:`sfx-r2-${KEY}`,SUFFICE_HISTORY_HOME:home,
+Object.assign(env,{SUFFICE_HOME:suffice,SUFFICE_START_PROJECT:project,SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_SESSIONS_SOCKET:SOCK,SUFFICE_HISTORY_HOME:home,
  SUFFICE_TEST_AGENT:resolve('packages/backend/test/fixtures/sessions/fake-agent.mjs'),SUFFICE_TEST_NODE:process.execPath,SUFFICE_TEST_CLAUDE_AGENT:resolve('packages/backend/test/fixtures/sessions/fake-claude-agent.mjs'),
  NODE_PATH:process.env.NODE_PATH||'/Users/abhayg/suffice-desktop-wt/voice/node_modules'});
 const app=await _electron.launch({executablePath:electronPath,args:['-r','/Users/abhayg/suffice-desktop-wt/ui-shots/no-dialog.cjs',resolve('apps/desktop'),`--user-data-dir=${data}`],env});
 try{
  const page=await app.firstWindow();page.setDefaultTimeout(15000);
- const sock=await app.evaluate(()=>process.env.SUFFICE_SESSIONS_SOCKET);assert.equal(sock,`sfx-r2-${KEY}`,'private socket reaches the app');
+ const sock=await app.evaluate(()=>process.env.SUFFICE_SESSIONS_SOCKET);assert.equal(sock,SOCK,'private socket reaches the app');
  const shot=async n=>{if(!SHOTS)return;const b=await app.evaluate(async({BrowserWindow})=>(await BrowserWindow.getAllWindows()[0].webContents.capturePage()).toPNG().toString('base64'));await writeFile(resolve(SHOTS,n),Buffer.from(b,'base64'));};
  await page.locator('[data-action="send-menu"]').waitFor();
  await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].setBounds({width:1440,height:900}));
@@ -76,4 +76,4 @@ try{
  await page.locator(T).evaluate(e=>{e.parentElement.scrollTop=0;});await page.waitForTimeout(200);await shot('full-top.png');
  // no hard-coded status colors in the transcript css
  console.log('sessions-transcript OK');
-}finally{await app.close().catch(()=>{});try{execFileSync('tmux',['-L',`sfx-r2-${KEY}`,'kill-server'],{stdio:'ignore'});}catch{}}
+}finally{await app.close().catch(()=>{});try{execFileSync('tmux',['-L',SOCK,'kill-server'],{stdio:'ignore'});}catch{}}

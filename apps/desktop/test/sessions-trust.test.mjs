@@ -8,7 +8,7 @@ import {mkdir,mkdtemp,writeFile,readFile,rm,realpath} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {execFileSync} from 'node:child_process';
 
-const SOCKET='sfx-r2-sessions',appDir=resolve(process.env.APP_DIR||'apps/desktop'),shots=resolve(process.env.SHOT_DIR||tmpdir()+'/sfx-trust-shots');
+const SOCKET='sfx-r2-sessions-'+process.pid,appDir=resolve(process.env.APP_DIR||'apps/desktop'),shots=resolve(process.env.SHOT_DIR||tmpdir()+'/sfx-trust-shots');
 
 for(const BOOT of [0,1500,3000])test(`first prompt survives the trust card (CLI boots in ${BOOT} ms)`,{timeout:120000},async()=>{
  await mkdir(shots,{recursive:true});

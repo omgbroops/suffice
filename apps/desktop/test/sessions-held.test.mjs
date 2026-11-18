@@ -8,7 +8,7 @@ import {mkdir,mkdtemp,writeFile,readFile,rm,realpath} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {execFileSync} from 'node:child_process';
 
-const SOCKET='sfx-r2-sessions-held',appDir=resolve(process.env.APP_DIR||'apps/desktop'),shots=resolve(process.env.SHOT_DIR||tmpdir()+'/sfx-held-shots');
+const SOCKET='sfx-r2-sessions-held-'+process.pid,appDir=resolve(process.env.APP_DIR||'apps/desktop'),shots=resolve(process.env.SHOT_DIR||tmpdir()+'/sfx-held-shots');
 
 
 for(const away of [false,true])test(`held first message: pending, then handed back on CLI exit (${away?'after leaving the session':'in the session'})`,{timeout:120000},async()=>{

@@ -6,7 +6,7 @@ import {mkdir,mkdtemp,writeFile,rm,realpath} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {execFileSync} from 'node:child_process';
 import assert from 'node:assert/strict';
-const BEFORE=process.env.MODE==='before',socket='sfx-r2-session-header';
+const BEFORE=process.env.MODE==='before',socket='sfx-r2-session-header-'+process.pid;
 const output=resolve(process.env.SHOTS||'/Users/abhayg/suffice-desktop-wt/ui-shots/r2-session-header');await mkdir(output,{recursive:true});
 const tmp=await realpath(await mkdtemp(resolve(tmpdir(),'sfx-sh-')));
 const home=resolve(tmp,'home'),project=resolve(tmp,'demo-project'),data=resolve(tmp,'data'),suffice=resolve(tmp,'suffice');

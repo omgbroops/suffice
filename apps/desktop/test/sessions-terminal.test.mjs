@@ -5,7 +5,7 @@ import {resolve} from 'node:path';
 import {mkdir,mkdtemp,writeFile,rm,realpath} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {execFileSync} from 'node:child_process';
-const KEY='session-terminal',socket='sfx-test-'+KEY;
+const KEY='session-terminal',socket='sfx-test-'+KEY+'-'+process.pid;
 const shots=process.env.SHOTS_DIR||`/Users/abhayg/suffice-desktop-wt/ui-shots/${KEY}/after`;await mkdir(shots,{recursive:true});
 const tmp=await realpath(await mkdtemp(resolve(tmpdir(),'sfx-term-')));
 const failures=[];const check=(ok,msg)=>{console.log(ok?'ok  ':'FAIL',msg);if(!ok)failures.push(msg);};

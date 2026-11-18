@@ -9,7 +9,7 @@ import {mkdir,mkdtemp,writeFile,readFile,rm,realpath} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {execFileSync} from 'node:child_process';
 
-const KEY='session-approvals',SOCKET=`sfx-test-${KEY}`,BEFORE=process.env.BEFORE==='1';
+const KEY='session-approvals',SOCKET=`sfx-test-${KEY}-${process.pid}`,BEFORE=process.env.BEFORE==='1';
 const appDir=resolve(process.env.APP_DIR||'apps/desktop');
 const shots=resolve(process.env.SHOT_DIR||tmpdir()+'/sfx-approval-shots');
 

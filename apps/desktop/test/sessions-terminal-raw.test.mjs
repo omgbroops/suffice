@@ -6,7 +6,7 @@ import {mkdir,mkdtemp,writeFile,realpath} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {execFileSync} from 'node:child_process';
 import assert from 'node:assert/strict';
-const SHOTS=process.env.SHOTS,socket='sfx-r2-terminal';if(SHOTS)await mkdir(SHOTS,{recursive:true});
+const SHOTS=process.env.SHOTS,socket='sfx-r2-terminal-'+process.pid;if(SHOTS)await mkdir(SHOTS,{recursive:true});
 const tmp=await realpath(await mkdtemp(resolve(tmpdir(),'sfx-sess-raw-')));
 const project=resolve(tmp,'demo-project'),data=resolve(tmp,'data'),suffice=resolve(tmp,'suffice'),home=resolve(tmp,'home');
 for(const d of [project,data,suffice,home])await mkdir(d,{recursive:true});

@@ -10,7 +10,7 @@ import {tmpdir} from 'node:os';
 import {execFileSync} from 'node:child_process';
 import {formatThreadTime} from '../src/thread-row.js';
 
-const SOCKET=process.env.SFX_SOCKET||'sfx-test-session-list-start',BASELINE=process.env.BASELINE==='1',SHOTS=process.env.SHOT_DIR;
+const SOCKET=process.env.SFX_SOCKET||'sfx-test-session-list-start-'+process.pid,BASELINE=process.env.BASELINE==='1',SHOTS=process.env.SHOT_DIR;
 const check=(fn)=>{if(!BASELINE)fn();};
 
 test('formatter: now, Nm, Nh Nm, Nd and never three-digit minutes',()=>{

@@ -6,7 +6,7 @@ import {resolve} from 'node:path';
 import {mkdir,mkdtemp,realpath} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {execFileSync} from 'node:child_process';
-const KEY='composer-controls',socket=`sfx-test-${KEY}`;process.env.SUFFICE_TEST_HIDE_WINDOW='1';process.env.SUFFICE_SESSIONS_SOCKET=socket;
+const KEY='composer-controls',socket=`sfx-test-${KEY}-${process.pid}`;process.env.SUFFICE_TEST_HIDE_WINDOW='1';process.env.SUFFICE_SESSIONS_SOCKET=socket;
 const shots=process.env.COMPOSER_SHOTS||resolve('../ui-shots/composer-controls/after');await mkdir(shots,{recursive:true});
 const tmp=await realpath(await mkdtemp(resolve(tmpdir(),'sfx-composer-')));
 const project=resolve(tmp,'demo-project'),data=resolve(tmp,'data'),suffice=resolve(tmp,'suffice'),home=resolve(tmp,'home');

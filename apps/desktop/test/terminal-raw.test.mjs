@@ -39,7 +39,7 @@ test('write after the pty died ends the session instead of throwing',async()=>{
 test('rendered terminal is raw: platform mono, standard palette, grapheme widths, wheel, interrupt after flood',{timeout:90000},async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-term-raw-')),cwd=await mkdtemp(resolve(tmpdir(),'suffice-term-raw-p-')),dir=resolve(home,'sessions','fixture');await mkdir(dir,{recursive:true});
  const now=new Date().toISOString();await writeFile(resolve(dir,'0.jsonl'),[{type:'session',version:3,id:'fixture-0',timestamp:now,cwd},{type:'message',id:'u0',parentId:null,timestamp:now,message:{role:'user',content:[{type:'text',text:'Raw terminal thread'}],timestamp:Date.now()}}].map(v=>JSON.stringify(v)).join('\n')+'\n');
- const env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home,SUFFICE_HISTORY_HOME:home,SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_SESSIONS_SOCKET:'sfx-r2-terminal',SHELL:'/bin/bash'};delete env.ELECTRON_RUN_AS_NODE;
+ const env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home,SUFFICE_HISTORY_HOME:home,SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_SESSIONS_SOCKET:'sfx-r2-terminal-'+process.pid,SHELL:'/bin/bash'};delete env.ELECTRON_RUN_AS_NODE;
  const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
  try{
   let mainErr='';app.process().stderr.on('data',d=>mainErr+=d);
