@@ -77,8 +77,9 @@ export function connectRightPanel({sidebar,resize,toggle,api}){
   if(terminalTab(type)){try{const terminals=await terminalViews();if(request!==version||id!==store.id||!store.state.panelOpen)return;await terminals.mount(body,id,type,state.terminals[type]?.ordinal);}catch(error){if(request===version&&id===store.id)message('Could not open terminal',error.message,true);}finally{if(request===version)body.setAttribute('aria-busy','false');}return;}
   if(type==='pr'){
    mounted=null;if(prThread!==id){prThread=id;prData=null;Object.assign(prView,{tab:'overview',file:null});}
-   if(prData)drawPr();else message('Loading…');
-   try{const data=await api.prReview();if(request!==version||id!==store.id||!store.state.panelOpen)return;const keep=body.querySelector('.pr-view')?.scrollTop;prData=data;drawPr(body.contains(document.activeElement)&&document.activeElement.matches('.pr-tab'));if(keep)body.querySelector('.pr-view').scrollTop=keep;}catch(error){if(request===version&&id===store.id)message('Couldn’t load the pull request',error.message,true);}finally{if(request===version)body.setAttribute('aria-busy','false');}
+   const keep=body.querySelector('.pq-view')?.scrollTop,focused=body.contains(document.activeElement)&&document.activeElement.matches('.pq-tab');
+   if(prData){drawPr(focused);if(keep)body.querySelector('.pq-view').scrollTop=keep;}else message('Loading…');
+   try{const data=await api.prReview();if(request!==version||id!==store.id||!store.state.panelOpen)return;const now=body.querySelector('.pq-view')?.scrollTop??keep,nowFocus=focused||(body.contains(document.activeElement)&&document.activeElement.matches('.pq-tab'));prData=data;drawPr(nowFocus);if(now)body.querySelector('.pq-view').scrollTop=now;}catch(error){if(request===version&&id===store.id)message('Couldn’t load the pull request',error.message,true);}finally{if(request===version)body.setAttribute('aria-busy','false');}
    return;
   }
   const focusedPath=body.contains(document.activeElement)?document.activeElement.dataset.path:null;

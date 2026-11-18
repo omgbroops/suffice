@@ -3,7 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdtemp,mkdir,writeFile,symlink,chmod} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
-import {resolve} from 'node:path';
+import {resolve} from 'node:path';import {fileURLToPath} from 'node:url';
 import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 import {createRequire} from 'node:module';
@@ -62,7 +62,7 @@ async function launch(path){
  const dir=resolve(home,'sessions','fixture');await mkdir(dir,{recursive:true});const timestamp=new Date().toISOString(),id='one';
  await writeFile(resolve(dir,id+'.jsonl'),[{type:'session',version:3,id,timestamp,cwd},{type:'message',id:'user',parentId:null,timestamp,message:{role:'user',content:[{type:'text',text:'Thread one'}],timestamp:Date.now()}},{type:'message',id:'assistant',parentId:'user',timestamp,message:{role:'assistant',content:[{type:'text',text:'Reply one'}],timestamp:Date.now(),stopReason:'stop'}}].map(e=>JSON.stringify(e)).join('\n')+'\n');
  const env={...process.env,PATH:bin,PI_OFFLINE:'1',SUFFICE_HOME:home,SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_START_PROJECT:cwd,SUFFICE_SESSIONS_SOCKET:'sfx-feat-pr-review-'+process.pid,SUFFICE_HISTORY_HOME:await mkdtemp(resolve(tmpdir(),'suffice-pr-hist-'))};delete env.ELECTRON_RUN_AS_NODE;
- const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
+ const app=await _electron.launch({executablePath:electronPath,args:[...guard,fileURLToPath(new URL('..',import.meta.url)),'--user-data-dir='+resolve(home,'electron')],env});
  return {app,sh,page:await app.firstWindow()};
 }
 const shots=process.env.PR_SHOTS_DIR;
@@ -106,15 +106,25 @@ test('Pull request tab walks overview, checks, files and diff, then empty state'
   const tints=await panel.locator('.pq-diff-file[data-path="src/app.js"]').evaluate(el=>({add:getComputedStyle(el.querySelector('.addition')).backgroundColor,del:getComputedStyle(el.querySelector('.deletion')).backgroundColor}));
   assert.notEqual(tints.add,tints.del);assert.notEqual(tints.add,'rgba(0, 0, 0, 0)');
   await page.getByRole('tab',{name:/Diff/}).waitFor();await snapBoth(app,page,'diff');
+  const gap=await panel.locator('.pq-diff-file[data-path="src/app.js"]').evaluate(el=>el.querySelector('.code-line.hunk').getBoundingClientRect().top-el.querySelector('.pq-diff-head').getBoundingClientRect().bottom);
+  assert.ok(gap>=0&&gap<=1.5,'hunk row flush under diff header, gap '+gap+' '+await panel.locator('.pq-diff-file[data-path="src/app.js"] .pq-diff-code').evaluate(el=>{const c=el.querySelector('.panel-code'),h=el.querySelector('.hunk');return JSON.stringify([c.style.cssText,getComputedStyle(c).paddingTop,getComputedStyle(h).marginTop,h.previousElementSibling&&h.previousElementSibling.className,el.firstElementChild.className,getComputedStyle(el).paddingTop]);}));
   await tab('Overview').click();await tab('Overview').focus();await page.keyboard.press('ArrowRight');
   assert.equal(await tab('Checks').getAttribute('aria-selected'),'true');assert.equal(await tab('Checks').evaluate(el=>document.activeElement===el),true);
   // no PR: close and reopen the panel to refetch
   await writeFile(resolve(sh,'scenario'),'none');
-  await page.getByRole('button',{name:'Toggle right panel'}).click();await page.getByRole('button',{name:'Toggle right panel'}).click();
-  const none=page.locator('.pq-empty[data-state="no-pr"]');await none.waitFor();
+  const toggle=page.getByRole('button',{name:'Toggle right panel'});await toggle.click();await panel.waitFor({state:'hidden'});await toggle.click();await panel.waitFor();
+  const none=page.locator('.pq-empty[data-state="no-pr"]');await none.waitFor({timeout:8000}).catch(async e=>{throw new Error(e.message+' | '+await page.evaluate(()=>document.querySelector('.pq-panel')?.innerText.slice(0,300)))});
   assert.match(await none.textContent(),/No pull request for feat\/pr-demo/);
   await snapBoth(app,page,'no-pr');
   await writeFile(resolve(sh,'scenario'),'pr');await none.getByRole('button',{name:'Refresh'}).click();await panel.waitFor();
+  // refresh keeps scroll and tab focus
+  await tab('Overview').click();
+  await page.addStyleTag({content:'.pq-view{max-height:120px!important;overflow:auto!important}'});
+  const before=await panel.locator('.pq-view').evaluate(el=>{el.scrollTop=40;return el.scrollTop;});assert.ok(before>0,'view scrollable');
+  await panel.getByRole('button',{name:'Refresh pull request'}).click();await page.waitForTimeout(800);
+  assert.equal(await panel.locator('.pq-view').evaluate(el=>el.scrollTop),before,'scroll kept after refresh');
+  await tab('Overview').focus();await panel.getByRole('button',{name:'Refresh pull request'}).evaluate(el=>el.click());await page.waitForTimeout(800);
+  assert.equal(await page.evaluate(()=>document.activeElement?.matches('.pq-tab')),true,'tab focus kept after refresh');
  }finally{await app.close();}
 });
 
