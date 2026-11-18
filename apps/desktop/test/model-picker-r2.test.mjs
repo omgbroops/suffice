@@ -26,7 +26,7 @@ test('model picker keeps focus, groups providers once, labels single-effort mode
   await page.locator('.model-option',{hasText:'Beta'}).click();
   assert.equal(await page.evaluate(()=>document.activeElement?.type),'range','focus returns to the slider after choosing a model');
   await page.locator('.model-stage-button').click();
-  await page.locator('.model-option',{hasText:'Gamma'}).click();
+  await page.locator('.model-search').fill('Gamma');await page.locator('.model-search').press('Enter');
   assert.equal(await page.locator('.effort-track').count(),0);assert.equal(await page.locator('input[type=range]').count(),0);assert.equal((await page.locator('.model-effort').first().innerText()).trim(),'High');
   assert.notEqual(await page.evaluate(()=>document.activeElement?.tagName),'BODY','focus stays in the picker');
   assert.equal(await page.locator('.model-effort').innerText(),'High');

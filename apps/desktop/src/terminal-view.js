@@ -10,7 +10,7 @@ export function createTerminalViews({api,onLabel}){
  // Only the ground colours follow the app so text stays readable; the 16 ANSI colours are xterm's standard palette and 256/true colour pass through untouched.
  function theme(){const css=getComputedStyle(document.documentElement),light=document.documentElement.dataset.theme==='light';return {background:'#00000000',foreground:css.getPropertyValue('--text').trim(),cursor:css.getPropertyValue('--text-strong').trim(),selectionBackground:light?'#00000020':'#ffffff26'};}
  const updateTheme=()=>{for(const view of views.values())view.term.options.theme=theme();};new MutationObserver(updateTheme).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
- function ended(view,code){if(view.exited)return;view.exited=true;view.disposeInput?.();view.term.options.disableStdin=true;view.term.write(`\r\n\x1b[90m[Process exited${Number.isInteger(code)?' '+code:''}]\x1b[0m\r\n`);}
+ function ended(view,code){if(view.exited)return;view.exited=true;view.disposeInput?.();view.term.options.disableStdin=true;view.term.write(`\r\n\x1b[?25l\x1b[90m[Process exited${Number.isInteger(code)?' '+code:''}]\x1b[0m\r\n`);}
  api.onTerminalEvent(event=>{const view=views.get(key(event.threadId,event.id));if(!view||view.closed)return;if(!view.ready){view.queued.push(event);return;}if(event.type==='data'&&event.sequence>view.sequence){view.sequence=event.sequence;view.term.write(event.data);}if(event.type==='exit')ended(view,event.exitCode);});
  async function mount(body,threadId,id,ordinal=1,extra){
   const name=key(threadId,id);let view=views.get(name);
