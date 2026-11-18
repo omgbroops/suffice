@@ -58,5 +58,7 @@ test('long thread windows its DOM, colors lazy code, and keeps scroll stable',{t
   assert.ok(top.nodes<12000,'DOM stays bounded at the top: '+JSON.stringify(top));
   assert.ok(top.lazy>300,'distant blocks are unrendered: '+JSON.stringify(top));
   assert.ok(top.visible>0&&top.visibleEmpty===0,JSON.stringify(top));
+  const clear=await page.evaluate(()=>{const tools=[...document.querySelectorAll('.caption-chat-tools,.thread-header')].map(n=>n.getBoundingClientRect().bottom),tr=document.querySelector('.thread-messages').parentElement.getBoundingClientRect(),u=[...document.querySelectorAll('.thread-messages .thread-user')].find(n=>n.getBoundingClientRect().bottom>tr.top);return {tools:Math.max(...tools),u:u.getBoundingClientRect().top};});
+  assert.ok(clear.u>=clear.tools,'first visible user bubble sits below the toolbar/pill: '+JSON.stringify(clear));
  }finally{await app.close();await rm(home,{recursive:true,force:true});await rm(cwd,{recursive:true,force:true});}
 });

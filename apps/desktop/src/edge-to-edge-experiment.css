@@ -98,8 +98,7 @@
 .desktop-app[data-window-chrome='windows'] .window-controls::after,
 .desktop-app[data-window-chrome='windows'] .window-control-edge { display:none; }
 /* Fade transcript content at the scroll viewport edges. */
-/* No mask-image: masking the scroller repaints it every wheel step; the top clears the header pill instead. */
-.desktop-app .thread-view .thread-transcript { inset-block-start:54px; scroll-padding-top:16px; mask-image:none; }
+.desktop-app .thread-view .thread-transcript { inset-block-start:54px; scroll-padding-top:16px; mask-image:linear-gradient(transparent,black 18px,black calc(100% - 24px),transparent); }
 .desktop-app .thread-view .thread-messages { padding-top:16px; }
 .desktop-app[data-window-chrome='windows'] .window-controls { max-width:min(420px,calc(100vw - var(--sidebar-width) - 16px)); }
 .desktop-app :is(.window-controls,.caption-chat-tools-detached,.caption-chat-tools-macos) .thread-header {
