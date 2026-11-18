@@ -83,7 +83,7 @@ test('real tmux: send delivers text byte-exact (trailing ; and non-ASCII)', { sk
   const transcript = path.join(dir, 'transcript.jsonl');
   fs.writeFileSync(transcript, '');
   const agent = {
-    bin: process.execPath, startArgs: () => [agentScript, transcript], resumeArgs: () => [agentScript, transcript],
+    bin: process.execPath, startArgs: () => [agentScript, transcript, 'raw'], resumeArgs: () => [agentScript, transcript, 'raw'],
     locateTranscript: () => transcript, listHistory: () => [],
     parseLine: (o) => [{ id: `${o.k}:${o.t}`, role: o.k === 'u' ? 'user' : 'assistant', text: o.t, ts: 1 }],
   };
@@ -93,7 +93,7 @@ test('real tmux: send delivers text byte-exact (trailing ; and non-ASCII)', { sk
     const r = await s.start({ agent: 'fake', cwd: dir });
     const seen = new Set(); let waiting = null;
     unChat = s.chat(r.id, (m) => { for (const x of m) seen.add(x.text); if (waiting && seen.has(waiting.t)) waiting.done(); });
-    for (const text of ['x;', ';', 'caf\u00e9 \u2713 \u65e5\u672c;', 'a\\;', 'p;;']) {
+    for (const text of ['x;', ';', 'caf\u00e9 \u2713 \u65e5\u672c;', 'a\\;', 'p;;', 'L'.repeat(1999) + '\u{1F600};' + 'm'.repeat(17000)]) {
       const l = latch(`echo of ${JSON.stringify(text)}`); waiting = { t: `ECHO:${text}`, done: l.done };
       if (seen.has(waiting.t)) l.done();
       await s.send(r.id, text); await l.p;

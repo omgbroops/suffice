@@ -165,7 +165,8 @@ export function createBackend({ dataDir, clock = { now: () => Date.now() }, crea
       const wait = 500 - (clock.now() - w.last);
       if (wait <= 0) emit(id, w); else { w.timer = setTimeout(() => { w.timer = null; if (!w.closed) emit(id, w); }, wait); w.timer.unref?.(); }
     }).then((off) => { if (w.closed) off?.(); else w.offStream = off; }).catch(() => {});
-    if (!tickTimer) { tickTimer = setInterval(() => { try { state.tick(); } catch { /* next tick */ } }, Math.min(250, Math.max(50, settleMs ?? 300))); tickTimer.unref(); }
+    // a dead CLI is noticed only by list(): poll it here so exits reach the state without a caller
+    if (!tickTimer) { let listAt = 0; tickTimer = setInterval(() => { try { state.tick(); } catch { /* next tick */ } if (clock.now() - listAt >= 1000) { listAt = clock.now(); sessionsApi.list().catch(() => {}); } }, Math.min(250, Math.max(50, settleMs ?? 300))); tickTimer.unref(); }
   };
   const sessionsApi = raw && {
     ...raw,

@@ -51,5 +51,7 @@ export function classifyScreen(agent, text) {
   const ls = tailLines(text);
   const set = (k) => [...(rules[agent]?.[k] ?? []), ...rules.generic[k]];
   const hit = (k) => ls.some((l) => set(k).some((r) => r.test(l)));
-  return { blank: ls.length === 0, permission: hit('permission'), working: hit('working'), error: hit('error') };
+  const at = ls.findLastIndex((l) => set('permission').some((r) => r.test(l)));
+  // after = non-blank lines below the last approval-prompt line; growth means output was printed under a dismissed dialog
+  return { blank: ls.length === 0, permission: at >= 0, after: at >= 0 ? ls.slice(at + 1).filter(Boolean).length : 0, working: hit('working'), error: hit('error') };
 }

@@ -58,6 +58,18 @@ test('session state chips follow the classifier',{timeout:240000},async()=>{
   // State change reaches the tab live: send a prompt dialog to this session.
   await send(a.id,'bash');
   await page.waitForFunction(()=>document.querySelector('.session-term-tab .session-state-chip')?.dataset.state==='blocked',null,{timeout:25000});
+  // Esc declines the Bash prompt: the chip must leave Blocked and settle (the fake agent writes no tool_result for a declined call).
+  await page.locator('.xterm-helper-textarea').first().focus();await page.keyboard.press('Escape');
+  await page.waitForFunction(()=>['waiting','idle'].includes(document.querySelector('.session-term-tab .session-state-chip')?.dataset.state),null,{timeout:20000}).catch(async()=>{throw new Error('Esc decline never settled: '+JSON.stringify(await chips()));});
+  console.log('esc settled');
+  // Error screen -> Blocked (failed).
+  await send(a.id,'error');
+  await page.waitForFunction(()=>document.querySelector('.session-term-tab .session-state-chip')?.dataset.state==='blocked',null,{timeout:20000}).catch(async()=>{throw new Error('error screen never Blocked: '+JSON.stringify(await chips()));});
+  console.log('error blocked');
+  // Agent exits with code 0: session ends; the row must not stay Working/Blocked (every remaining chip Idle).
+  await send(a.id,'quit');
+  await page.waitForFunction(()=>{const cs=[...document.querySelectorAll('.sidebar-cli-sessions .session-state-chip')].map(c=>c.dataset.state);return cs.every(s=>s==='idle');},null,{timeout:20000}).catch(async()=>{throw new Error("exit not reflected: "+JSON.stringify(await chips()));});
+  console.log('exit reflected',JSON.stringify(await chips()));
   assert.deepEqual(errors,[]);
  }finally{
   await app.close().catch(()=>{});

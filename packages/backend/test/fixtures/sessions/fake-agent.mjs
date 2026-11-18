@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import readline from 'node:readline';
 
 const transcript = process.argv[2];
+if (process.argv[3] === 'raw') process.stdin.setRawMode(true); // like a real TUI agent: no 1024-byte tty line limit
 process.stdout.write('READY> ');
 readline.createInterface({ input: process.stdin }).on('line', (line) => {
   process.stdout.write(`\nECHO:${line}\nREADY> `);

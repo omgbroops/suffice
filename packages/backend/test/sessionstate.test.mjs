@@ -181,3 +181,58 @@ test('an unchanged screen fed on a timer still goes idle', () => {
   for (let i = 0; i < 8; i++) { t.onScreen(screen); clock.adv(700); t.tick(); }
   assert.equal(t.state().state, 'waiting_input');
 });
+
+test('declined tool call (no result ever written): prompt gone + quiet screen -> waiting_input, not working forever', () => {
+  const { clock, ss } = mk();
+  const t = ss.track('d1', { agent: 'claude' });
+  t.onMessages([user('a'), call('c1')]);
+  t.onScreen(fx('claude-permission'));
+  assert.equal(t.state().state, 'needs_permission');
+  t.onScreen('\n(declined)\n\n> ');
+  clock.adv(300); t.tick();
+  assert.equal(t.state().state, 'working', 'idle window not elapsed');
+  clock.adv(1500); t.tick(); clock.adv(300); t.tick();
+  assert.equal(t.state().state, 'waiting_input');
+});
+
+test('approved tool call keeps working while the busy indicator shows, and without a prior prompt', () => {
+  const { clock, ss } = mk();
+  const t = ss.track('d2', { agent: 'claude' });
+  t.onMessages([user('a'), call('c1')]);
+  t.onScreen(fx('claude-permission'));
+  t.onScreen(fx('claude-working'));
+  clock.adv(5000); t.tick(); clock.adv(300); t.tick();
+  assert.equal(t.state().state, 'working');
+  const u = ss.track('d3', { agent: 'claude' });
+  u.onMessages([user('a'), call('c1')]);
+  u.onScreen('plain quiet screen');
+  clock.adv(5000); u.tick(); clock.adv(300); u.tick();
+  assert.equal(u.state().state, 'working');
+});
+
+test('dialog left on the pane with output printed below it is stale: not needs_permission', () => {
+  const { clock, ss } = mk();
+  const t = ss.track('d4', { agent: 'claude' });
+  t.onMessages([user('a'), call('c1')]);
+  const dialog = fx('claude-permission');
+  t.onScreen(dialog);
+  assert.equal(t.state().state, 'needs_permission');
+  t.onScreen(`${dialog}\n(declined)\n\n> `);
+  assert.equal(t.state().state, 'needs_permission', 'leaves needs_permission only after the settle window');
+  t.onScreen(`${dialog}\n(declined)\n\nmore output\n> `);
+  clock.adv(1600); t.tick(); clock.adv(300); t.tick();
+  assert.equal(t.state().state, 'waiting_input');
+});
+
+test('error screen then a clean exit ends as exited; nonzero exit stays error', () => {
+  const { ss } = mk();
+  const t = ss.track('e1', { agent: 'claude' });
+  t.onScreen('⎿ API Error: 529 overloaded_error');
+  assert.equal(t.state().state, 'error');
+  t.onExit(0);
+  assert.equal(t.state().state, 'exited');
+  const u = ss.track('e2', { agent: 'claude' });
+  u.onScreen('⎿ API Error: 529 overloaded_error');
+  u.onExit(2);
+  assert.equal(u.state().state, 'error');
+});
