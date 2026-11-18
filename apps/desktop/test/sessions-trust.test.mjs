@@ -30,7 +30,7 @@ for(const BOOT of [0,1500,3000])test(`first prompt survives the trust card (CLI 
   await page.locator('.composer-approval .approval-controls button').first().waitFor({timeout:20000});
   await page.screenshot({path:resolve(shots,`01-trust-card-${BOOT}.png`)});
   assert.equal(await page.locator('#prompt').inputValue(),'','prompt is not handed back to the composer');
-  await page.locator('.composer-approval button').first().click();
+  await page.locator('.composer-approval .provider-dialog-primary').click();
   await page.waitForFunction(()=>!document.querySelector('.composer-approval'),null,{timeout:15000});
   const deadline=Date.now()+15000;let got='';
   while(Date.now()<deadline){got=await readFile(simLog,'utf8');if(got.includes('PROMPT:'))break;await page.waitForTimeout(250);}

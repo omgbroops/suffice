@@ -16,7 +16,7 @@ test('fork at an assistant message keeps history up to it, keeps tool results pa
  const {home,cwd,path}=await fixture();
  const fork=await forkSavedThread({sourcePath:path,cwd,home,title:'Original',entryId:'a1'});
  assert.deepEqual(await ids(home,fork.id),['u1','a1','t1']);
- const store=createThreadStore(home),threads=await store.list(),source=threads.find(t=>t.title==='first question'),child=threads.find(t=>t.id===fork.id);
+ const store=createThreadStore(home),threads=await store.list(),source=threads.find(t=>t.title==='First question'),child=threads.find(t=>t.id===fork.id);
  assert.ok(source&&child);assert.equal(child.parent,source.id);assert.equal(source.parent,undefined);assert.equal(child.title,'Fork of Original');
  const middle=await forkSavedThread({sourcePath:path,cwd,home,entryId:'a2'});assert.deepEqual(await ids(home,middle.id),['u1','a1','t1','a2']);
 });

@@ -23,7 +23,7 @@ async function launch(tmp,extra={}){
  await page.evaluate(()=>{document.querySelector('.composer').modelSelection={provider:'cli',model:'fakeclaude'};});
  return {app,page,simLog};
 }
-const trust=async page=>{await page.locator('.composer-approval .approval-controls button').first().waitFor({timeout:20000});await page.locator('.composer-approval button').first().click();await page.waitForFunction(()=>!document.querySelector('.composer-approval'),null,{timeout:15000});};
+const trust=async page=>{await page.locator('.composer-approval .approval-controls button').first().waitFor({timeout:20000});await page.locator('.composer-approval .provider-dialog-primary').click();await page.waitForFunction(()=>!document.querySelector('.composer-approval'),null,{timeout:15000});};
 
 test('Stop from the row menu, then typing, starts one fresh session and never sends to the dead pane',{timeout:120000},async()=>{
  const tmp=await realpath(await mkdtemp(resolve(tmpdir(),'sfx-stop-')));

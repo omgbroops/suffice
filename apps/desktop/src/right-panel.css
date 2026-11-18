@@ -111,7 +111,7 @@ body:not(:has(.thread-view)) .right-sidebar { visibility: hidden; pointer-events
 .editor-search.panel-filter { flex: 0 0 auto; width: calc(100% - 12px); margin: 0 6px 5px; padding: 3px 5px; background: transparent; }
 .editor-tree-scroll { min-height: 0; flex: 1; overflow: auto; padding: 3px 5px 12px; scrollbar-gutter: stable; }
 .editor-preview { min-width: 0; flex: 1; position: relative; }
-.editor-preview .panel-content-bar { height: 35px; padding: 4px 8px; border-color: var(--editor-line); gap: 6px; }
+.editor-preview .panel-content-bar { height: 35px; padding: 4px 8px; border-color: var(--editor-line); gap: 4px; }
 .editor-preview .panel-content-bar:not(:has(.file-type-icon)):not(:has(.panel-path:not(:empty))) { border-bottom-color: transparent; }
 .editor-preview .panel-scroll { inset: 35px 0 0; padding-bottom: 16px; }
 .editor-welcome { position: absolute; left: 50%; top: 20%; transform: translateX(-50%); width: min(320px,calc(100% - 36px)); color: var(--text-muted); font-size: 12px; }
@@ -273,7 +273,7 @@ body:not(:has(.thread-view)) .right-sidebar { visibility: hidden; pointer-events
 .desktop-app[data-theme] .thread-removed { color: var(--diff-del); }
 
 /* Specificity fixes: beat edge-to-edge-experiment.css and styles.css (load later) */
-.desktop-app .workspace .thread-user.thread-user { -webkit-backdrop-filter: var(--glass-filter) !important; backdrop-filter: var(--glass-filter) !important; }
+.desktop-app .workspace .thread-user.thread-user { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
 .desktop-app .right-panel-content.right-panel-content[role='tabpanel']:not([data-terminal='true']) { background: var(--surface-editor); -webkit-backdrop-filter: none; backdrop-filter: none; }
 .desktop-app .panel-title { height: 28px; padding: 0 8px; margin-bottom: var(--space-2); border-radius: var(--radius-control); font-size: 13px; line-height: 15.6px; font-weight: 500; color: var(--text); }
 .session-todo[data-status='pending'] { color: var(--text-muted); }
