@@ -120,6 +120,9 @@
 .action-input { margin: 8px 0; }
 .thread-activity summary::before { transition: transform 160ms var(--ease-out); }
 .thread-status,.thread-reasoning-line { color: var(--text-muted); font-size: 13px; line-height: 22px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; margin: 0 0 20px; }
+.thread-run-error { display: flex; gap: 12px; align-items: baseline; margin: 0 0 20px; color: var(--red); font-size: 13px; line-height: 22px; }
+.thread-run-error .text-button { flex: none; color: var(--text-muted); text-decoration: underline; text-underline-offset: 3px; }
+.thread-run-error .text-button:hover { color: var(--text-strong); }
 .thread-status { background: linear-gradient(100deg,var(--text-muted) 35%,var(--text) 48%,var(--text-muted) 61%); background-size: 240% 100%; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: status-shimmer 2.2s linear infinite; }
 @keyframes status-shimmer { from { background-position: 140% 0; } to { background-position: -100% 0; } }
 .tool-widget { padding: 0; margin-bottom: 10px; background: transparent; border: 0; }
