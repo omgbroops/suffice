@@ -40,6 +40,7 @@ contextBridge.exposeInMainWorld('sufficeDesktop',{
   onTerminalEvent:callback=>{const listener=(_event,value)=>callback(value);ipcRenderer.on('suffice:terminal-event',listener);return()=>ipcRenderer.removeListener('suffice:terminal-event',listener);},
   openExternal:url=>ipcRenderer.invoke('suffice:open-external',url),
   windowControl:action=>ipcRenderer.invoke('suffice:window',action),
+  usageReport:()=>ipcRenderer.invoke('suffice:usage-report'),
   usage:threadId=>ipcRenderer.invoke('suffice:usage',threadId),
   files:directory=>ipcRenderer.invoke('suffice:files',directory),
   file:name=>ipcRenderer.invoke('suffice:file',name),
