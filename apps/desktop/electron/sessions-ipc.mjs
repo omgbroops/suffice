@@ -52,12 +52,12 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
   const sid=row?.id;if(!sid||tracked.has(sid))return;
   const kind=row.agent==='codex'?'codex':row.agent==='claude'||row.agent==='fakeclaude'||row.agent==='simclaude'?'claude':null;if(!kind)return;
   const mapper=kind==='codex'?createCodexMapper():createClaudeMapper();
-  const t={kind,mapper,state:mapper.newState?.()??{},order:[],byId:new Map(),prompt:null,status:null,screenMeta:{},meter:createUsageMeter(),unsubs:[],timer:null,last:0,dirty:false,pending:null};
+  const t={kind,mapper,state:mapper.newState?.()??{},order:[],byId:new Map(),prompt:null,ready:false,status:null,screenMeta:{},meter:createUsageMeter(),unsubs:[],timer:null,last:0,dirty:false,pending:null};
   tracked.set(sid,t);
   const publish=()=>{t.dirty=false;const meta={...(mapper.meta?.(t.state)||{}),...t.screenMeta};
    for(const i of [...t.order].reverse()){const am=/Set model to `([^`]+)`/.exec(t.byId.get(i)?.text||'')?.[1];if(am){meta.model=am;break;}} // the CLI's own ack; transcripts name the model only after a turn
    let usage;try{t.meter.setMeta(meta);const sn=t.meter.snapshot();if(sn.turns)usage={lines:formatUsage(sn),inputTokens:sn.inputTokens,outputTokens:sn.outputTokens};}catch{}
-   send({type:'slot',id:slot(sid),value:{items:t.order.map(i=>t.byId.get(i)),prompt:t.prompt,status:t.status,meta:{...meta,...(usage&&{usage})}}});};
+   send({type:'slot',id:slot(sid),value:{items:t.order.map(i=>t.byId.get(i)),prompt:t.prompt,status:t.status,ready:t.ready,meta:{...meta,...(usage&&{usage})}}});};
   const soon=()=>{if(!t.dirty){t.dirty=true;setTimeout(publish,30).unref?.();}};t.soon=soon;
   const reset=()=>{t.state=mapper.newState?.()??{};t.meter=createUsageMeter();t.order=[];t.byId=new Map();soon();};
   const onLine=line=>{let o;try{o=JSON.parse(line);}catch{return;}
@@ -77,7 +77,8 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
     const sm={...t.screenMeta,...(v&&{version:v}),...(e&&{effort:e}),...(mode?.mode&&{mode:mode.mode}),
      queued:sp('parseQueued',text)?.messages||null,draft:draft?.text||null,backgroundTasks:bg?.count??null,contextWarning:sp('parseContextWarning',text),picker:p?null:sp('parsePicker',text)};
     const changed=JSON.stringify(p)!==JSON.stringify(t.prompt)||JSON.stringify(sm)!==JSON.stringify(t.screenMeta)||JSON.stringify(st)!==JSON.stringify(t.status);
-    t.prompt=p;t.status=st;t.screenMeta=sm;if(changed)soon();}catch{}
+    const rdy=!p&&!!(mode||draft||/^[\w ]{0,12}[❯›>]\s*$/m.test(text)); // main input box on screen: mode line, draft, or bare prompt marker
+    const rc=rdy!==t.ready;t.prompt=p;t.status=st;t.screenMeta=sm;t.ready=rdy;if(changed||rc)soon();}catch{}
   };
   Promise.resolve(backend.sessions.stream(sid,()=>void check())).then(u=>{if(tracked.get(sid)===t)t.unsubs.push(u);else u();}).catch(()=>{});
   void check();soon();

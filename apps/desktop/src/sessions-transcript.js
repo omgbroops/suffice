@@ -79,7 +79,7 @@ function createCore({hooks,ctx}){
   const n=el('div',`session-note${it.level==='info'?'':' is-'+it.level}`,it.text);return mark(n,it.id);
  }
  function build(it,later,depth,working){
-  if(it.kind==='user'||it.kind==='assistant'){const a=el('article',`thread-message thread-${it.kind}`);if(it.kind==='assistant')hooks.markdown(a,it.text);else a.textContent=it.text;return mark(a,it.id);}
+  if(it.kind==='user'||it.kind==='assistant'){const a=el('article',`thread-message thread-${it.kind}`);if(it.kind==='assistant')hooks.markdown(a,it.text);else a.textContent=it.text;if(it.pending){a.classList.add('thread-pending');a.setAttribute('aria-busy','true');}return mark(a,it.id);}
   if(it.kind==='thinking'){const d=el('details','thread-activity'),log=el('div','thread-activity-log'),p=el('div','thread-reasoning');hooks.markdown(p,it.text);log.append(p);d.append(el('summary','','Reasoning'),log);return mark(d,it.id);}
   if(it.kind==='tool'&&it.name==='AskUserQuestion')return buildAsk(it);
   if(it.kind==='tool'&&it.name==='ExitPlanMode'&&it.output?.plan)return buildPlan(it);
@@ -140,7 +140,7 @@ function createCore({hooks,ctx}){
  function draw(){
   const box=ctx.box(),ui=ctx.ui();if(!box||!ui)return;const working=ctx.working(),later=[];
   const items=[],at=new Map(),first=ctx.pendingUser?.();
-  if(first)items.push({kind:'user',id:'pending-user',text:first});
+  if(first)items.push({kind:'user',id:'pending-user',text:first,pending:true});
   for(let it of ui.items){if(hide(it))continue;if(it.kind==='subagent'&&ctx.sub(it.callId))it={...it,...ctx.sub(it.callId)};
    if(at.has(it.id)){items[at.get(it.id)]=it;continue;}at.set(it.id,items.length);items.push(it);}
   const entries=group(items),keep=new Set();let prev=null;
@@ -202,7 +202,7 @@ export function createTranscript(c){
   if(!c.box||!c.active)return;
   const items=!!c.ui?.items?.length;
   if(items!==c.useItems){c.useItems=items;c.box.replaceChildren();tr.reset();}
-  if(items)tr.draw();else{renderChat(c.box,c.lastMsgs);const first=c.firstText.get(c.active.id);if(first&&!c.lastMsgs.some(m=>m.role==='user'))c.box.prepend(el('article','thread-message thread-user',first));if(states.get(c.active.id)==='needs_permission'&&!c.ui?.prompt)notice(c.box,c.active.s);tr.paintStatus();}
+  if(items)tr.draw();else{renderChat(c.box,c.lastMsgs);const first=c.firstText.get(c.active.id);if(first&&!c.lastMsgs.some(m=>m.role==='user'))c.box.prepend(Object.assign(el('article','thread-message thread-user thread-pending',first),{ariaBusy:'true'}));if(states.get(c.active.id)==='needs_permission'&&!c.ui?.prompt)notice(c.box,c.active.s);tr.paintStatus();}
  }
  function showChat(){
   c.box=el('div','thread-messages session-transcript');hooks.showHistory(c.box);tr.reset();c.useItems=false;
