@@ -28,6 +28,7 @@ import {connectSessions} from './sessions-ui.js';
 import {connectNeedsYou} from './needs-you.js';
 import {connectSideChat} from './side-chat.js';
 import {connectIssues} from './issues.js';
+import {connectFlows} from './flows.js';
 import {connectContextInspector} from './context-inspector.js';
 import {deriveFollowups,renderFollowups} from './followups.js';
 import {connectThreadWorktree} from './thread-worktree.js';
@@ -303,6 +304,7 @@ export function connectThreads({api,prompt,send,toast}){
  async function retryThread(id){const thread=savedThreads.find(t=>t.id===id),job=jobs.get(id);if(!thread||!job?.text||job.running)return false;await openSavedThread(thread);const draft=prompt.value.trim();if(busy||(draft&&draft!==job.text.trim()))return false;prompt.value=job.text;prompt.dispatchEvent(new Event('input'));form.requestSubmit();return true;}
  connectNeedsYou({api,approvals,toast,retry:retryThread,markRead:id=>updateMetadata(id,{unread:false})});
  connectIssues({api,toast});
+ connectFlows({api,toast});
  api.onClearCache?.(()=>{savedHistories.clear();});
  document.addEventListener('suffice-preference',event=>{if(event.detail.id==='collapse-work')document.querySelectorAll('.thread-activity').forEach(group=>group.open=!event.detail.value);if(event.detail.id==='new-project'&&!activeId)form.dataset.requireProject=String(event.detail.value==='Ask each time');});
  document.addEventListener('suffice-project-selected',()=>{delete form.dataset.requireProject;});

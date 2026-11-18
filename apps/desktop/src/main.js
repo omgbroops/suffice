@@ -115,6 +115,8 @@ document.querySelector('#app').innerHTML = `
 
     ${button('Issues', { icon: 'bug', className: 'issues-nav', action: 'issues', content: '<span class="issues-nav-label">Issues</span><span class="issues-count" hidden>0</span>' })}
 
+    ${button('Workflows', { icon: 'branch', className: 'flows-nav', action: 'flows', content: '<span class="flows-nav-label">Workflows</span><span class="flows-count" hidden>0</span>' })}
+
     <div class="session-section"><div class="section-label"><span id="sidebar-section-label">Threads</span></div><div class="sidebar-sessions">${sessions.map((s, i) => sessionRow(s, i, true)).join('')}</div></div>
 
 
@@ -439,6 +441,7 @@ const spotlight=createSpotlight({commands:()=>[
  {id:'tasks',title:'Tasks: open the board',icon:'plan',run:()=>taskBoard.open()},
  {id:'needs-you',title:'Needs you',icon:'inbox',run:()=>document.dispatchEvent(new Event('suffice-open-needs-you'))},
  {id:'issues',title:'Issues',icon:'bug',run:()=>document.dispatchEvent(new Event('suffice-open-issues'))},
+ {id:'flows',title:'Workflows',icon:'branch',run:()=>document.dispatchEvent(new Event('suffice-open-flows'))},
  {id:'whats-new',title:'Help: What\'s new',icon:'agent',keywords:'help release notes updates',run:()=>whatsNew.open()},
  {id:'new',title:'New session',icon:'plus',keys:[mod,'N'],run:()=>document.querySelector('.new-session').click()},
  {id:'export-md',title:'Export thread as Markdown',icon:'files',run:()=>document.dispatchEvent(new CustomEvent('suffice-export-thread',{detail:{kind:'md'}}))},

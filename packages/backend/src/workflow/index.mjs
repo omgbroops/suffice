@@ -167,7 +167,7 @@ export function createEngine({ journalFor, runners, budget, bus, clock, approve,
         const verdict = await ask('action.approve', { tool: 'workflow', action: 'approval', target: String(name) }, s.path);
         const r = await memo(key, async () => {
           await journal.append({ type: 'approval', stepKey: key, data: { name } }); // asked, no answer yet
-          const approved = verdict?.decision === 'deny' ? false : !!(await approve({ name, details }));
+          const approved = verdict?.decision === 'deny' ? false : !!(await approve({ name, details, runId }));
           await note('approval', { name, approved }, key);
           return { approved };
         });
