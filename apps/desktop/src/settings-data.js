@@ -35,6 +35,7 @@ export const settingsSections=[
  ]},
  {id:'context',title:'Context & memory',icon:'context',category:'Agent',groups:[
   group('Context window',[toggle('auto-compact','Automatic compaction',true),select('compact-at','Compact at','80%',['70%','80%','90%']),toggle('context-ring','Show context usage',true)]),
+  group('Token savings',[toggle('defer-mcp-schemas','Load MCP tool details on demand',true,'Sends tool names and one-line descriptions; full schemas load on first use.'),toggle('compact-tool-results','Shorten large tool results',true,'The full text stays on this device and the agent can retrieve it by id.'),select('compact-limit','Shorten results over','2,000 tokens',['1,000 tokens','2,000 tokens','4,000 tokens','8,000 tokens'])]),
   group('Repository context',[toggle('project-instructions','Read project instructions',true),toggle('git-context','Include Git context',true),toggle('remember-context','Remember project context',false,'Reuse the last response in new sessions for this project.')]),
  ]},
  {id:'projects',title:'Projects & Git',icon:'branch',category:'Workspace',groups:[
