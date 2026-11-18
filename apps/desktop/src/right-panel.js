@@ -16,7 +16,15 @@ export function connectRightPanel({sidebar,resize,toggle,api}){
  const tabs=document.createElement('div');tabs.className='right-panel-tabs';tabs.setAttribute('role','tablist');tabs.setAttribute('aria-label','Right panel tabs');
  const add=panelIconButton('Add panel tab','plus');add.setAttribute('aria-expanded','false');add.setAttribute('aria-haspopup','menu');
  const menu=document.createElement('div');menu.className='popover panel-tab-menu';menu.hidden=true;menu.setAttribute('role','menu');menu.setAttribute('aria-label','Panel options');document.body.append(menu);
- const body=document.createElement('section');body.id='right-panel-content';body.className='right-panel-content';header.append(tabs,add);sidebar.append(header,body);
+ const body=document.createElement('section');body.id='right-panel-content';body.className='right-panel-content';
+ const svgButton=(label,paths)=>{const button=panelIconButton(label,'plus');button.innerHTML=`<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;return button;};
+ const expand=svgButton('Expand panel','<path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/>');expand.setAttribute('aria-pressed','false');
+ const collapse=svgButton('Collapse panel','<path d="m13 6 6 6-6 6M5 6l6 6-6 6"/>');
+ const actions=document.createElement('div');actions.className='right-panel-actions';actions.append(expand,collapse);
+ header.append(tabs,add,actions);sidebar.append(header,body);
+ let restoreWidth=null;
+ expand.addEventListener('click',()=>{const root=document.documentElement.style;if(restoreWidth===null){restoreWidth=root.getPropertyValue('--right-panel-width');root.setProperty('--right-panel-width',`${Math.max(360,Math.min(960,innerWidth-document.querySelector('.sidebar').getBoundingClientRect().width-376))}px`);}else{if(restoreWidth)root.setProperty('--right-panel-width',restoreWidth);else root.removeProperty('--right-panel-width');restoreWidth=null;}expand.setAttribute('aria-pressed',String(restoreWidth!==null));expand.title=expand.ariaLabel=restoreWidth!==null?'Restore panel width':'Expand panel';});
+ collapse.addEventListener('click',()=>{if(store.id)store.update({panelOpen:false});});
  let version=0,scrollTimer,refreshTimer,focusFilter=false,directoryThread=null,tabSignature='',mounted=null,terminalsPromise;
  const directories=new Map();
  const terminalViews=()=>terminalsPromise??=import('./terminal-view.js').then(({createTerminalViews})=>createTerminalViews({api,onLabel:(threadId,id,label)=>{if(store.id===threadId&&store.state.tabs.includes(id)&&store.state.terminals[id]?.label!==label)store.update({terminals:{...store.state.terminals,[id]:{...store.state.terminals[id],label}}});}}));
