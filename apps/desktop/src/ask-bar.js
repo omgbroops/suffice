@@ -9,13 +9,13 @@ const read = (key, fallback) => { try { return localStorage.getItem(key) ?? fall
 const write = (key, value) => { try { localStorage.setItem(key, value); } catch {} };
 const selection = () => { try { return JSON.parse(localStorage.getItem('suffice-model')) || undefined; } catch { return undefined; } };
 
-export function mountAskBar(api = window.sufficeDesktop) {
+export function mountAskBar(api = window.sufficeDesktop, floater = false) {
   document.documentElement.classList.add('ask-bar-window', 'desktop-app');
   const bridge = api.askBar;
   const root = document.querySelector('#app');
   root.innerHTML = `<div class="ask-panel" role="dialog" aria-label="Ask Suffice" data-state="idle">
     <form class="ask-form">
-      <div class="ask-field"><textarea id="ask-input" rows="1" maxlength="20000" placeholder="Ask about your screen" aria-label="Question" spellcheck="true"></textarea></div>
+      <div class="ask-field"><textarea id="ask-input" rows="1" maxlength="20000" placeholder="${floater ? 'Ask Suffice' : 'Ask about your screen'}" aria-label="Question" spellcheck="true"></textarea></div>
       <div class="ask-row">
         <button type="button" class="ask-chip" id="ask-screen" aria-pressed="true" title="Attach a screenshot of the current screen when asking">${icon('monitor')}<span>Screen</span></button>
         <span class="ask-model" id="ask-model"></span>
@@ -37,13 +37,14 @@ export function mountAskBar(api = window.sufficeDesktop) {
   const $ = (id) => root.querySelector('#' + id);
   const panel = root.querySelector('.ask-panel'), form = root.querySelector('.ask-form'), input = $('ask-input'), chip = $('ask-screen');
   const permission = $('ask-permission'), wrap = $('ask-answer-wrap'), answer = $('ask-answer'), meta = $('ask-meta'), actions = $('ask-actions');
-  let screenOn = read('suffice-ask-screen', 'true') !== 'false', working = false, threadId = null, text = '', shot = null, markdown = null, frame = 0;
+  let screenOn = !floater && read('suffice-ask-screen', 'true') !== 'false', working = false, threadId = null, text = '', shot = null, markdown = null, frame = 0;
 
   const setState = (state) => { panel.dataset.state = state; };
   const syncChip = () => { chip.setAttribute('aria-pressed', String(screenOn)); };
   const model = selection();
   $('ask-model').textContent = model?.model || 'Default model';
   syncChip();
+  if (floater) { chip.hidden = true; root.querySelector('.ask-keys').hidden = true; }
 
   const grow = () => { input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 112) + 'px'; };
   input.addEventListener('input', grow);
@@ -100,6 +101,7 @@ export function mountAskBar(api = window.sufficeDesktop) {
       threadId = result.threadId; showAnswer(result.text || 'No answer came back.');
       meta.replaceChildren(...(shot ? [shot] : []), Object.assign(document.createElement('span'), { textContent: shot ? 'Screen attached' : 'Answered' }));
       actions.hidden = !threadId; setState('answered');
+      if (floater && threadId) void bridge.send(threadId); // the floater only collects the question; the thread lives in the main window
     } catch (error) { fail(error.message); }
     finally { working = false; form.removeAttribute('aria-busy'); }
   }

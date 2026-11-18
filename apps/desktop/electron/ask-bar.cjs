@@ -2,12 +2,14 @@
 // Tests set SUFFICE_TEST_SCREEN_STATUS (granted|denied|not-determined) and SUFFICE_TEST_SCREEN_IMAGE (a PNG path) so no real capture or macOS prompt happens.
 const fs = require('node:fs');
 const ACCELERATOR = 'Control+Alt+Space';
+const FLOATER_WIDTH = 460, GAP = 14;
 const WIDTH = 680, TOP_MIN = 48, MIN_HEIGHT = 96, MAX_HEIGHT = 600;
 const SETTINGS_PANE = 'x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture';
+const place = (a, x, y, h) => ({ x: Math.round(Math.min(Math.max(x, a.x), a.x + a.width - FLOATER_WIDTH)), y: Math.round(Math.min(Math.max(y, a.y), a.y + a.height - h)) });
 const alive = (w) => !!w && !w.isDestroyed?.();
 
 function createAskBar({ BrowserWindow, screen, globalShortcut, desktopCapturer, systemPreferences, shell, preloadPath, entryPath, hidden = false, env = process.env, platform = process.platform }) {
-  let bar = null, registered = false, capturing = false;
+  let bar = null, registered = false, capturing = false, width = WIDTH, at = null;
   let stub = env.SUFFICE_TEST_SCREEN_STATUS || null; // shortcut: test stub only; real runs read the OS status each time
   const status = () => stub || (platform === 'darwin' ? systemPreferences.getMediaAccessStatus('screen') : 'granted');
   const cursorDisplay = () => screen.getDisplayNearestPoint(screen.getCursorScreenPoint());
@@ -48,11 +50,14 @@ function createAskBar({ BrowserWindow, screen, globalShortcut, desktopCapturer, 
       return registered;
     },
     toggle() { return alive(bar) ? api.close() : api.open(); },
-    open() {
+    // open({x, y}) is the floater: a narrower bar just below that screen point (clamped to its display) that hands its answer to the main window as soon as it arrives.
+    open(point) {
       if (alive(bar)) { if (!hidden) { bar.show(); bar.focus(); } return bar; }
-      const a = cursorDisplay().workArea;
+      at = point || null; width = at ? FLOATER_WIDTH : WIDTH;
+      const a = at ? screen.getDisplayNearestPoint(at).workArea : cursorDisplay().workArea;
+      const pos = at ? place(a, at.x - 24, at.y + GAP, MIN_HEIGHT) : { x: Math.round(a.x + (a.width - width) / 2), y: Math.round(a.y + Math.max(TOP_MIN, a.height * 0.16)) };
       bar = new BrowserWindow({
-        width: WIDTH, height: MIN_HEIGHT, x: Math.round(a.x + (a.width - WIDTH) / 2), y: Math.round(a.y + Math.max(TOP_MIN, a.height * 0.16)),
+        width, height: MIN_HEIGHT, ...pos,
         show: false, frame: false, transparent: true, hasShadow: false, alwaysOnTop: true, skipTaskbar: true, resizable: false,
         fullscreenable: false, minimizable: false, maximizable: false, title: 'Suffice ask',
         webPreferences: { preload: preloadPath, contextIsolation: true, nodeIntegration: false, sandbox: true },
@@ -66,12 +71,14 @@ function createAskBar({ BrowserWindow, screen, globalShortcut, desktopCapturer, 
       w.on('blur', () => { if (!hidden && !capturing && bar === w) api.close(); });
       w.on('closed', () => { if (bar === w) bar = null; });
       w.once('ready-to-show', () => { if (!hidden) { w.show(); w.focus(); } });
-      void w.loadFile(entryPath, { hash: 'ask-bar' });
+      void w.loadFile(entryPath, { hash: at ? 'ask-bar-floater' : 'ask-bar' });
       return w;
     },
     resize(height) {
       if (!alive(bar) || !Number.isFinite(height)) return;
-      bar.setSize(WIDTH, Math.round(Math.min(MAX_HEIGHT, Math.max(MIN_HEIGHT, height))));
+      const h = Math.round(Math.min(MAX_HEIGHT, Math.max(MIN_HEIGHT, height)));
+      if (!at) return bar.setSize(width, h);
+      const b = bar.getBounds(); bar.setBounds({ ...place(screen.getDisplayNearestPoint(at).workArea, b.x, b.y, h), width, height: h });
     },
     close() { const w = bar; bar = null; if (alive(w)) w.close(); },
   };
