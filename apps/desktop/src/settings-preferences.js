@@ -1,6 +1,6 @@
 import {setTheme} from './theme.js';
 import {settingsSections} from './settings-data.js';
-export const supportedSettings=new Set(settingsSections.flatMap(section=>section.groups.flatMap(group=>group.rows)).filter(row=>row.id&&['toggle','select','segment','palette','action','range'].includes(row.type)).map(row=>row.id));
+export const supportedSettings=new Set(settingsSections.flatMap(section=>section.groups.flatMap(group=>group.rows)).filter(row=>row.id&&['toggle','select','segment','themes','palette','action','range'].includes(row.type)).map(row=>row.id));
 supportedSettings.add('sidebar-collapsed');supportedSettings.add('file-open-app');supportedSettings.add('disabled-models');supportedSettings.add('approval-mode');
 let saved={};try{saved=JSON.parse(localStorage.getItem('suffice-settings-v1'))||{};}catch{}
 export function preference(id,fallback){return saved[id]??fallback;}
