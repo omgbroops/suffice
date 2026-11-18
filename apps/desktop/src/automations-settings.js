@@ -80,7 +80,7 @@ export function mountAutomationSettings(content,section,api){
   for(const item of items){
    const last=lastRunText(item),el=document.createElement('div');el.className='settings-option automation-row';el.dataset.automation=item.id;
    const project=item.project.split(/[\\/]/).filter(Boolean).pop();
-   el.innerHTML=`<div class="settings-option-copy"><div><span class="settings-option-label">${esc(item.name)}</span><p>${esc(describe(item.trigger))} · ${esc(project)}${item.model?' · '+esc(item.model):''}</p><p class="automation-times"><span class="automation-last" data-tone="${last.tone}">${esc(last.text)}</span><span>${esc(nextRunText(item))}</span></p></div></div>`;
+   el.dataset.tile='';el.innerHTML=`<div class="settings-option-copy"><span class="settings-tile" aria-hidden="true">${icon('calendar')}</span><div><span class="settings-option-label">${esc(item.name)}</span><p>${esc(describe(item.trigger))} · ${esc(project)}${item.model?' · '+esc(item.model):''}</p><p class="automation-times"><span class="automation-last" data-tone="${last.tone}">${esc(last.text)}</span><span>${esc(nextRunText(item))}</span></p></div></div>`;
    const actions=document.createElement('div');actions.className='resource-actions';
    actions.append(button('Run now',()=>api.runAutomation(item.id)),button('Edit',()=>edit(item)),button('Delete',()=>api.removeAutomation(item.id)),switchFor(item));
    el.append(actions);card.append(el);

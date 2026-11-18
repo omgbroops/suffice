@@ -334,3 +334,31 @@
 .env-foot { display:flex; align-items:center; justify-content:space-between; gap:12px; }
 .env-note { margin:0; font-size:12px; line-height:18px; color:var(--text-muted); overflow-wrap:anywhere; }
 .env-card .settings-configure { flex:0 0 auto; }
+
+/* Settings anatomy (Capy settings decomposition): card of divided rows, min-h 60, 32px tile r6, ghost actions, outline primary. */
+.settings-main .settings-card { border-radius:var(--radius-card); }
+.settings-main .settings-option { min-height:60px; padding:12px 16px; box-sizing:border-box; }
+.settings-main .settings-option + .settings-option { border-top:var(--hairline) solid color-mix(in srgb,var(--text) 10%,transparent); }
+.settings-main .settings-option-copy { flex:1; }
+.settings-main .settings-option-copy > div { min-width:0; }
+.settings-main .settings-option p { margin:2px 0 0; font-weight:400; }
+.settings-main .settings-option[data-tile] p { font-size:12px; line-height:15px; }
+.settings-tile { flex:0 0 32px; width:32px; height:32px; display:grid; place-items:center; border-radius:6px; background:color-mix(in srgb,var(--text) 6%,transparent); color:var(--text-strong); }
+.settings-tile .icon,.settings-tile svg { width:16px; height:16px; }
+.settings-main .resource-actions { gap:4px; }
+.desktop-app.desktop-app:not([data-theme=__]) .settings-main .settings-select.settings-configure { background:transparent; box-shadow:none; min-width:0; padding:0 10px; color:var(--text-muted); font-weight:var(--weight-medium); }
+.desktop-app.desktop-app:not([data-theme=__]) .settings-main .settings-select.settings-configure:hover { background:var(--hover-fill); color:var(--text-strong); }
+.desktop-app.desktop-app:not([data-theme=__]) .settings-main .settings-select.settings-configure.resource-primary { color:var(--text-strong); box-shadow:inset 0 0 0 var(--hairline) color-mix(in srgb,var(--text) 22%,transparent); }
+.desktop-app.desktop-app:not([data-theme=__]) .settings-main .settings-select.settings-configure.resource-primary:hover { background:var(--hover-fill); }
+.desktop-app.desktop-app:not([data-theme=__]) .settings-main .settings-select.settings-configure.settings-destructive { color:var(--red,#d9534f); }
+.desktop-app.desktop-app:not([data-theme=__]) .settings-main .settings-select.settings-configure.settings-destructive:hover { background:color-mix(in srgb,var(--red,#d9534f) 12%,transparent); }
+.settings-main .settings-group-empty { padding:16px; font-size:13px; line-height:16px; color:var(--text-faint); }
+.settings-main .usage-view { margin-bottom:40px; }
+.settings-main .usage-status { margin:0; padding:0; }
+.settings-main .env-card { padding:0; }
+.settings-main .env-card .resource-field { margin:0; padding:12px 16px 0; }
+.settings-main .env-card .env-foot { padding:10px 16px 12px; }
+.settings-main .env-card .resource-field textarea { background:color-mix(in srgb,var(--text) 4%,transparent); }
+.settings-main .env-label { font-size:13px; font-weight:var(--weight-medium); color:var(--text-strong); }
+.settings-main .settings-subtitle { margin-bottom:32px; }
+@media(max-width:850px){ .settings-main .settings-option { padding:12px; } }

@@ -19,9 +19,9 @@ export function drawMcps({api,data,state,scope,row,button,editor,toggle,perform,
  const set=(key,enabled)=>perform({action:'mcp-scope',level,key,enabled,id:scopeId});
  const reset=(item,key)=>level!=='global'&&item.source===level?[button('Reset',()=>set(key,null))]:[];
  const origin=item=>item.source!=='default'&&item.source!==level?' · set '+(item.source==='global'?'everywhere':'by '+item.source):'';
- for(const t of state.toolkits)row(t.name,`${t.detail} · ${t.tools.length} tools${t.tokens?` · ~${tokenText(t.tokens)} tokens`:' · not counted'}${origin(t)}`,[...reset(t,'toolkit:'+t.id),toggle(t.enabled,enabled=>set('toolkit:'+t.id,enabled),t.name+' toolkit')]);
+ for(const t of state.toolkits)row(t.name,`${t.detail} · ${t.tools.length} tools${t.tokens?` · ~${tokenText(t.tokens)} tokens`:' · not counted'}${origin(t)}`,[...reset(t,'toolkit:'+t.id),toggle(t.enabled,enabled=>set('toolkit:'+t.id,enabled),t.name+' toolkit')],'plug');
  for(const s of state.servers){const h=s.health,summary=h?(h.ok?`${h.tools.length} tools · ~${tokenText(h.tokens)} tokens`:'Check failed: '+h.error):'Not checked';
-  row(s.name,`${summary}${h&&!h.ok?'':' · '+s.detail}${origin(s)}`,[button('Check',async()=>{status.textContent='Checking '+s.name+'…';await perform({action:'mcp-health',name:s.name});}),...(s.remote?[button('Sign in',()=>perform({action:'mcp-login',name:s.name})),button('Sign out',()=>perform({action:'mcp-logout',name:s.name}))]:[]),...reset(s,s.id),toggle(s.enabled,enabled=>level==='global'?perform({action:'mcp-toggle',name:s.name,enabled}):set(s.id,enabled),s.name)]);}
+  row(s.name,`${summary}${h&&!h.ok?'':' · '+s.detail}${origin(s)}`,[button('Check',async()=>{status.textContent='Checking '+s.name+'…';await perform({action:'mcp-health',name:s.name});}),...(s.remote?[button('Sign in',()=>perform({action:'mcp-login',name:s.name})),button('Sign out',()=>perform({action:'mcp-logout',name:s.name}))]:[]),...reset(s,s.id),toggle(s.enabled,enabled=>level==='global'?perform({action:'mcp-toggle',name:s.name,enabled}):set(s.id,enabled),s.name)],'plug');}
  if(!state.servers.length)row('No servers added','Add a command or URL, or paste a snippet.');
  row('Tool schemas in context',`~${tokenText(state.tokens)} tokens across ${state.activeCount} enabled toolkits and servers. Estimated from schema size; checked servers only.`);
 }
