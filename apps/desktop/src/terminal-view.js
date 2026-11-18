@@ -1,7 +1,7 @@
 import {preference} from './settings-preferences.js';
 import {Terminal} from '@xterm/xterm';
 import {FitAddon} from '@xterm/addon-fit';
-import {Unicode11Addon} from '@xterm/addon-unicode11';
+import {UnicodeGraphemesAddon} from '@xterm/addon-unicode-graphemes';
 import '@xterm/xterm/css/xterm.css';
 import './terminal.css';
 export function createTerminalViews({api,onLabel}){
@@ -15,7 +15,7 @@ export function createTerminalViews({api,onLabel}){
  async function mount(body,threadId,id,ordinal=1,extra){
   const name=key(threadId,id);let view=views.get(name);
   if(!view){const node=document.createElement('div');node.className='terminal-session';node.setAttribute('aria-label','Terminal session');
-   const term=new Terminal({fontFamily:'ui-monospace, Menlo, Consolas, "DejaVu Sans Mono", monospace',fontSize:12,lineHeight:1,scrollback:parseInt(preference('scrollback','5,000 lines').replace(',','')),theme:theme(),allowTransparency:true,allowProposedApi:true});const fit=new FitAddon();term.loadAddon(fit);term.loadAddon(new Unicode11Addon());term.unicode.activeVersion='11';
+   const term=new Terminal({fontFamily:'ui-monospace, Menlo, Consolas, "DejaVu Sans Mono", monospace',fontSize:12,lineHeight:1,scrollback:parseInt(preference('scrollback','5,000 lines').replace(',','')),theme:theme(),allowTransparency:true,allowProposedApi:true});const fit=new FitAddon();term.loadAddon(fit);term.loadAddon(new UnicodeGraphemesAddon());
    view={node,term,fit,ready:false,queued:[],sequence:0,closed:false,threadId,id};views.set(name,view);body.replaceChildren(node);term.open(node);
    // Output may never read or replace the system clipboard using OSC 52.
    term.parser.registerOscHandler(52,()=>true);

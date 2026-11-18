@@ -1,5 +1,5 @@
 import electronPath from 'electron';
-// Hidden: the session Terminal view shows the tmux pane raw (tmux mouse on, platform mono, unicode 11). Private tmux socket sfx-r2-terminal. SHOTS=<dir> writes a PNG.
+// Hidden: the session Terminal view shows the tmux pane raw (tmux mouse on, platform mono, grapheme widths). Private tmux socket sfx-r2-terminal. SHOTS=<dir> writes a PNG.
 import {_electron} from 'playwright-core';
 import {resolve} from 'node:path';
 import {mkdir,mkdtemp,writeFile,realpath} from 'node:fs/promises';
@@ -12,8 +12,7 @@ const project=resolve(tmp,'demo-project'),data=resolve(tmp,'data'),suffice=resol
 for(const d of [project,data,suffice,home])await mkdir(d,{recursive:true});
 const env={...process.env};delete env.ELECTRON_RUN_AS_NODE;
 Object.assign(env,{SUFFICE_HOME:suffice,SUFFICE_START_PROJECT:project,SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_SESSIONS_SOCKET:socket,SUFFICE_HISTORY_HOME:home,
- SUFFICE_TEST_AGENT:resolve('packages/backend/test/fixtures/sessions/fake-agent.mjs'),SUFFICE_TEST_NODE:process.execPath,SUFFICE_TEST_CLAUDE_AGENT:resolve('packages/backend/test/fixtures/sessions/fake-claude-agent.mjs'),
- NODE_PATH:process.env.NODE_PATH||'/Users/abhayg/suffice-desktop-wt/voice/node_modules'});
+ SUFFICE_TEST_AGENT:resolve('packages/backend/test/fixtures/sessions/fake-agent.mjs'),SUFFICE_TEST_NODE:process.execPath,SUFFICE_TEST_CLAUDE_AGENT:resolve('packages/backend/test/fixtures/sessions/fake-claude-agent.mjs')});
 const app=await _electron.launch({executablePath:electronPath,args:['-r','/Users/abhayg/suffice-desktop-wt/ui-shots/no-dialog.cjs',resolve('apps/desktop'),`--user-data-dir=${data}`],env});
 try{
  const page=await app.firstWindow();page.setDefaultTimeout(15000);

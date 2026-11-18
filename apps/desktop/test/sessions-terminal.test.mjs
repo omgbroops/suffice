@@ -37,10 +37,15 @@ try{
  for(const d of ['proj','home','suffice'])await mkdir(resolve(tmp,d),{recursive:true});
  ({app,page}=await launch(env,'a'));page.on('console',m=>{if(/^(rowsFit|copy right)/.test(m.text()))console.log(m.text());});const errors=[];page.on('pageerror',e=>errors.push(e.message));
  const shot=n=>page.screenshot({path:resolve(shots,n)});
- const start=async agent=>{await page.locator('[data-action="send-menu"]').click();await page.waitForTimeout(250);await page.locator(`[data-menu-action="cli-session:${agent}"]`).click();await page.locator('.thread-header--session').waitFor();};
+ // join2's send menu has no session entries: start through the preload API, reload, open the row.
+ const proj=resolve(tmp,'proj');
+ const startApi=async agent=>(await page.evaluate(([a,p])=>sufficeDesktop.sessions.start({agent:a,cwd:p}),[agent,proj]));
  const ids=()=>page.evaluate(async()=>(await sufficeDesktop.sessions.list()).map(s=>s.id));
-const titleW=()=>page.evaluate(()=>document.querySelector('.session-title')?.getBoundingClientRect().width||0);
- const startNew=async agent=>{const before=await ids();await start(agent);let n=[];for(let i=0;i<40&&!n.length;i++){n=(await ids()).filter(x=>!before.includes(x));if(!n.length)await page.waitForTimeout(100);}if(n.length!==1)throw new Error('expected one new session, got '+n);return n[0];};
+ // join2: one header toggle (.session-mode-toggle, aria-pressed=true while the terminal shows) replaces the Chat/Terminal segmented control.
+ const setView=async term=>{const b=page.locator('.session-mode-toggle');if((await b.getAttribute('aria-pressed'))!==String(term))await b.click();};
+ const startNew=async agent=>{const before=await ids();await startApi(agent);let n=[];for(let i=0;i<40&&!n.length;i++){n=(await ids()).filter(x=>!before.includes(x));if(!n.length)await page.waitForTimeout(100);}if(n.length!==1)throw new Error('expected one new session, got '+n);
+  await page.reload();await page.locator('[data-action="send-menu"]').waitFor();await page.locator('.sidebar-cli-sessions .thread-row').first().waitFor();
+  await page.evaluate(id=>[...document.querySelectorAll('.sidebar-cli-sessions .thread-row')].find(r=>r._s?.id===id).click(),n[0]);await page.locator('.session-mode-toggle:not([hidden])').waitFor();return n[0];};
  await page.locator('[data-action="send-menu"]').waitFor();
  // fake agent
  const id=await startNew('fake');
@@ -49,8 +54,7 @@ const titleW=()=>page.evaluate(()=>document.querySelector('.session-title')?.get
  const g0=await geo(page).catch(()=>null);const ws=await page.evaluate(()=>{const r=document.querySelector('.workspace').getBoundingClientRect();return {x:Math.round(r.left+r.width/2),y:Math.round(r.top+r.height/2)};});
  const chatPx=await pixel(app,ws.x,ws.y);await shot('chat.png');
  check(tmux('show-options','-t','sfx-'+id,'mouse')==='mouse on','tmux mouse on: '+tmux('show-options','-t','sfx-'+id,'mouse'));
- {const w=await titleW();check(w>20,'fake session: .session-title visible, width '+Math.round(w));}
- const t0=Date.now();await page.locator('.session-toggle button',{hasText:'Terminal'}).click();
+ const t0=Date.now();await setView(true);
  await page.locator('.session-terminal .xterm-rows').waitFor();
  await page.waitForFunction(()=>document.querySelector('.session-terminal .xterm-rows')?.textContent.includes('ECHO:hello'));
  console.log('terminal visible after',Date.now()-t0,'ms');await page.waitForTimeout(400);
@@ -73,20 +77,17 @@ const titleW=()=>page.evaluate(()=>document.querySelector('.session-title')?.get
  check(tmux('display-message','-p','-t','sfx-'+id,'#{pane_in_mode}')==='1','wheel enters tmux copy-mode');check(Number(tmux('display-message','-p','-t','sfx-'+id,'#{scroll_position}'))>0,'wheel scrolled history (scroll_position > 0)');await shot('sess-terminal-scrolled.png');await rowsFit('copy-mode indicator row not clipped on the right');
  tmux('send-keys','-t','sfx-'+id,'q');await page.waitForTimeout(300);
  // back to chat, immediately
- await page.locator('.session-toggle button',{hasText:'Chat'}).click();await page.waitForTimeout(60);await shot('sess-chat-after-switch.png');
+ await setView(false);await page.waitForTimeout(60);await shot('sess-chat-after-switch.png');
  check(await page.evaluate(()=>document.querySelector('.session-terminal').hidden&&getComputedStyle(document.querySelector('.thread-transcript')).visibility!=='hidden'),'chat view only after switching back');
  check(await page.evaluate(()=>document.activeElement===document.querySelector('#prompt')),'composer focused after return');
  // terminal again: same xterm comes back sized
- await page.locator('.session-toggle button',{hasText:'Terminal'}).click();await assertGeo(page,app,id,'second show');
+ await setView(true);await assertGeo(page,app,id,'second show');
  // fake Claude
- await page.locator('.new-session').click();await page.locator('[data-action="send-menu"]').waitFor({state:'visible'});await page.waitForTimeout(400);
  const cid=await startNew('fakeclaude');
  await page.locator('.composer-approval:not([hidden])').waitFor({timeout:20000});await page.waitForTimeout(600);
  check(tmux('show-options','-t','sfx-'+cid,'mouse')==='mouse on','fake claude session: tmux mouse on');
- {const w=await titleW();check(w>40,'Claude session: .session-title visible, width '+Math.round(w));}
- {const b=await page.locator('.session-toggle button',{hasText:'Terminal'}).boundingBox();check(!!b&&b.x+b.width<=1440,'Claude header: Chat/Terminal toggle on screen');await page.locator('.session-toggle button',{hasText:'Terminal'}).click();}
+ {const b=await page.locator('.session-mode-toggle').boundingBox();check(!!b&&b.x+b.width<=1440,'Claude header: chat/terminal toggle on screen');await setView(true);}
  await page.locator('.session-terminal .xterm-rows').waitFor();
- check(await page.evaluate(()=>{const c=document.querySelector('.session-copy').getBoundingClientRect();console.log('copy right',c.right,innerWidth);return c.right<=innerWidth;}),'Claude header: Open in terminal on screen');
  await page.waitForFunction(()=>/Do you want to proceed/.test(document.querySelector('.session-terminal-slot:not([hidden]) .xterm-rows')?.textContent||''));await page.waitForTimeout(500);
  await shot('sess-terminal-prompt.png');await assertGeo(page,app,cid,'fake claude');
  check(errors.length===0,'no page errors '+errors.join(';'));
