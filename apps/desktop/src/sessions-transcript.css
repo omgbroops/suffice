@@ -34,8 +34,8 @@
 .desktop-app .workspace .thread-messages .thread-user[data-clamp] { cursor: pointer; overflow: hidden; }
 .desktop-app .workspace .thread-messages .thread-user[data-clamp='true'] { max-height: 288px; -webkit-mask-image: linear-gradient(to bottom,#000 calc(100% - 1.5rem),transparent); mask-image: linear-gradient(to bottom,#000 calc(100% - 1.5rem),transparent); }
 .desktop-app .workspace .thread-messages .thread-user[data-clamp='true']:hover { -webkit-mask-image: linear-gradient(to bottom,#000 calc(100% - 2rem),transparent); mask-image: linear-gradient(to bottom,#000 calc(100% - 2rem),transparent); }
-/* Activity rows: top-level Worked / Working rows centred and muted, no chevron; failure is a red x. */
-.thread-messages > .thread-activity > summary { justify-content: center; width: auto; font-size: 12px; }
+/* Activity rows: top-level Worked / Working rows sit on the message column's left edge, muted, no chevron; failure is a red x. */
+.thread-messages > .thread-activity > summary { justify-content: flex-start; width: auto; font-size: 12px; }
 .thread-messages > .thread-activity > summary::before { display: none; }
 .thread-messages > .thread-activity > summary:hover { color: var(--text-muted); }
 .thread-detail[data-status="error"] > summary, .session-sub[data-status="error"] > summary { color: var(--text-muted); }
