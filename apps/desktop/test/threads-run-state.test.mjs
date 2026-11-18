@@ -32,6 +32,11 @@ test('composer run state: empty Enter never aborts, rejected send keeps draft, f
   await page.waitForFunction(()=>document.querySelector('.composer').dataset.running==='false'&&document.querySelector('#prompt').value==='keep me',{},{timeout:3000});
   await shot('01-reject-draft-kept');
   await app.evaluate(()=>{globalThis.reject=null});
+  // Retry after a rejected send re-sends the kept text even though the composer still holds it
+  await page.locator('.thread-run-error').getByRole('button',{name:'Retry'}).click();
+  await page.waitForFunction(()=>true);
+  await page.waitForTimeout(500);
+  assert.deepEqual(await app.evaluate(()=>[...globalThis.runs.keys()]),['keep me'],'Retry must start exactly one run');
   await page.getByRole('button',{name:'New session',exact:true}).click();await page.waitForFunction(()=>!document.querySelector('.workspace').classList.contains('thread-view'));
   await page.evaluate(()=>{document.querySelector('#prompt').value='';});
   // stale toast clears when a run starts
