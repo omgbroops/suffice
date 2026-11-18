@@ -69,7 +69,17 @@ export function createBudget({ clock, store, limits }) {
     return { start, used: w && w.start === start ? w.used : 0 };
   };
   const applies = (l, tags) => !l.tag || tags?.[l.tag.key] === l.tag.value;
-  const persist = () => store.save({ windows: used });
+  // Windows are shared by every window on one data dir: apply this instance's deltas to what is on disk under the store's lock, never overwrite it with a stale copy.
+  const refresh = () => { if (store.update) used = { ...(store.load()?.windows ?? {}) }; };
+  const persist = (deltas) => {
+    if (!store.update) return store.save({ windows: used });
+    used = store.update((s) => {
+      const w = { ...(s?.windows ?? {}) };
+      if (!deltas) return { windows: { ...used } };
+      for (const [k, d] of deltas) w[k] = { start: d.start, used: (w[k]?.start === d.start ? w[k].used : 0) + d.n };
+      return { windows: w };
+    }).windows;
+  };
   const holds = new Set(); // in-flight reservations: {n, tags}
   const held = (l, tags) => {
     let n = 0;
@@ -79,6 +89,7 @@ export function createBudget({ clock, store, limits }) {
 
   function check(estimate, tags) {
     count(estimate, 'estimate');
+    refresh();
     const now = clock.now();
     let tight = null;
     for (const l of lim) {
@@ -95,8 +106,9 @@ export function createBudget({ clock, store, limits }) {
     if (!usage || typeof usage !== 'object') fail('usage must be an object');
     const n = count(usage.inputTokens, 'inputTokens') + count(usage.outputTokens, 'outputTokens');
     const now = clock.now();
-    for (const l of lim) if (applies(l, tags)) { const v = view(l, now, tags); used[slot(l, tags)] = { start: v.start, used: v.used + n }; }
-    persist();
+    const deltas = [];
+    for (const l of lim) if (applies(l, tags)) { const v = view(l, now, tags); used[slot(l, tags)] = { start: v.start, used: v.used + n }; deltas.push([slot(l, tags), { start: v.start, n }]); }
+    persist(deltas);
   }
   // check + hold in one synchronous step, so parallel callers cannot all pass the same peek
   function reserve(estimate, tags) {
@@ -133,6 +145,19 @@ export function createFileStore(path) {
       const tmp = `${path}.${process.pid}.tmp`;
       fs.writeFileSync(tmp, JSON.stringify(state));
       fs.renameSync(tmp, path);
+    },
+    // load, change, save under a lock file so several processes on one file never lose each other's writes
+    update(fn) {
+      const lock = `${path}.lock`, wait = new Int32Array(new SharedArrayBuffer(4));
+      for (let i = 0; ; i++) {
+        try { fs.closeSync(fs.openSync(lock, 'wx')); break; } catch (e) {
+          if (e.code !== 'EEXIST') throw e;
+          try { if (Date.now() - fs.statSync(lock).mtimeMs > 10000) fs.rmSync(lock, { force: true }); } catch { /* released meanwhile */ } // a crashed holder
+          if (i > 2000) throw new Error('budget: store is locked');
+          Atomics.wait(wait, 0, 0, 5);
+        }
+      }
+      try { const next = fn(this.load()); this.save(next); return next; } finally { fs.rmSync(lock, { force: true }); }
     },
   };
 }

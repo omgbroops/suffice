@@ -1,0 +1,66 @@
+/* Workflows: sidebar entry + run list. Reuses the Issues page bands, buttons and inputs; radii nest 8 > 6 > 3, no circles. */
+.flows-nav { justify-content: flex-start; width: 100%; margin-top: 2px; padding: 6px 9px; min-height: 30px; font-size: 13px; color: var(--text); }
+.flows-nav .icon { width: 17px; height: 17px; }
+.flows-nav-label { flex: 1; text-align: left; }
+.flows-nav[aria-current='page'] { background: var(--surface-nav); color: var(--text-strong); }
+.flows-count { min-width: 16px; height: 16px; padding: 0 5px; border-radius: 8px; font-size: 11px; line-height: 16px; font-weight: 500; text-align: center; font-variant-numeric: tabular-nums; color: var(--text-muted); background: var(--issue-hover, oklch(1 0 0 / .05)); }
+.flows-count[hidden] { display: none; }
+.flows-nav:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+
+.flow-count-label { font-size: 12px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+
+.flow-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.flow-head-row { display: flex; align-items: center; gap: 8px; }
+.flow-row { flex: 1; min-width: 0; display: grid; grid-template-columns: 10px minmax(0, 1fr) auto 112px 170px 32px; align-items: center; gap: 12px; height: 42px; padding: 0 8px; border: 0; border-radius: 6px; background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.flow-row:hover, .flow-row[aria-expanded='true'] { background: var(--issue-hover); }
+.flow-row:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+.flow-title { font-size: 14px; font-weight: 450; color: var(--text-strong); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.flow-kind { font-size: 12px; color: var(--text-faint); white-space: nowrap; }
+.flow-status { font-size: 12px; color: var(--text-muted); white-space: nowrap; }
+.flow-age { font-size: 12px; color: var(--text-faint); text-align: right; font-variant-numeric: tabular-nums; }
+.flow-acts { flex: none; display: flex; gap: 6px; min-width: 0; }
+.flow-state { width: 8px; height: 8px; border-radius: 2px; background: var(--text-faint); }
+.flow-state[data-state='running'] { background: var(--issue-yellow); }
+.flow-state[data-state='approval'] { background: var(--warning-ink, var(--issue-yellow)); }
+.flow-state[data-state='ended'] { background: var(--issue-green); }
+.flow-state[data-state='failed'] { background: var(--issue-red); }
+.flow-budget { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.flow-budget-track { flex: 1; height: 4px; border-radius: 2px; background: var(--issue-hover); overflow: hidden; }
+.flow-budget-fill { display: block; height: 100%; border-radius: 2px; background: var(--text-muted); }
+.flow-budget-fill[data-level='high'] { background: var(--issue-red); }
+.flow-budget-text { font-size: 11px; color: var(--text-faint); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.flow-reason { margin: 0 8px 4px 28px; font-size: 12px; line-height: 17px; color: var(--issue-red); }
+.flow-timeline { list-style: none; margin: 2px 8px 8px 28px; padding: 0; display: grid; gap: 2px; }
+.flow-step { display: flex; align-items: center; gap: 8px; min-height: 22px; font-size: 12px; color: var(--text); }
+.flow-step-mark { width: 6px; height: 6px; border-radius: 1.5px; background: var(--text-faint); flex: none; }
+.flow-step[data-kind='ok'] .flow-step-mark { background: var(--issue-green); }
+.flow-step[data-kind='bad'] .flow-step-mark { background: var(--issue-red); }
+.flow-step[data-kind='ask'] .flow-step-mark { background: var(--issue-yellow); }
+.flow-step--none { color: var(--text-faint); }
+
+.flow-approval { margin: 0 0 12px; padding: 12px 14px; border-radius: 8px; background: var(--issue-band); box-shadow: inset 0 0 0 .5px var(--issue-line); display: grid; gap: 6px; }
+.flow-approval-title { font-size: 13px; font-weight: 500; color: var(--text-strong); }
+.flow-approval-sub { font-size: 12px; color: var(--text-muted); }
+.flow-approval-body { margin: 4px 0; max-height: 160px; overflow: auto; padding: 8px 10px; border-radius: 6px; background: var(--surface-thread); box-shadow: inset 0 0 0 .5px var(--issue-line); font: 12px/17px var(--font-mono, ui-monospace, monospace); color: var(--text); white-space: pre-wrap; }
+.flow-approval-body:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+.flow-approval-actions, .flow-form-actions { display: flex; gap: 8px; }
+
+.flow-form { margin: 0 0 16px; padding: 14px; border-radius: 8px; background: var(--issue-band); display: grid; gap: 10px; max-width: 640px; }
+.flow-kinds { display: flex; flex-wrap: wrap; gap: 6px; }
+.flow-kind-btn { height: 28px; padding: 0 10px; border: 0; border-radius: 6px; font: inherit; font-size: 12px; font-weight: 500; color: var(--text-muted); background: transparent; box-shadow: inset 0 0 0 .5px var(--issue-line); cursor: pointer; }
+.flow-kind-btn:hover { background: var(--issue-hover); color: var(--text-strong); }
+.flow-kind-btn[aria-checked='true'] { background: var(--issue-hover); color: var(--text-strong); box-shadow: none; }
+.flow-kind-btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+.flow-note { font-size: 12px; color: var(--text-muted); }
+.flow-field { display: grid; gap: 4px; }
+.flow-label { font-size: 12px; color: var(--text-faint); }
+.flow-input { width: 100%; height: auto; min-height: 28px; padding: 6px 8px; box-sizing: border-box; resize: vertical; }
+input.flow-input { height: 28px; }
+@media (max-width: 900px) { .flow-kind { display: none; } .flow-row { grid-template-columns: 10px minmax(0, 1fr) 96px 150px 28px; } }
+body:has(.workspace.flows-open) :is(.caption-chat-tools, .right-sidebar) { visibility: hidden; }
+body:has(.workspace.flows-open) .thread-row[aria-pressed='true'] { background: transparent; }
+body:has(.workspace.flows-open) .thread-card[aria-pressed='true'] .row-title { color: inherit; }
+.flows-view { z-index: 5; --issue-band: oklch(1 0 0 / .035); --issue-hover: oklch(1 0 0 / .05); --issue-line: oklch(1 0 0 / .08); --issue-on-fill: #0c0c0c; --issue-yellow: oklch(.85 .14 95); --issue-green: oklch(.74 .17 150); --issue-red: oklch(.7 .17 27); position: absolute; inset: 0; display: flex; flex-direction: column; background: var(--surface-thread); border-radius: inherit; color: var(--text); }
+:root[data-theme='light'] .flows-view { --issue-band: oklch(0 0 0 / .04); --issue-hover: oklch(0 0 0 / .05); --issue-line: oklch(0 0 0 / .08); --issue-on-fill: #fff; --issue-yellow: oklch(.824 .179 91.3); --issue-green: oklch(.617 .208 142.85); --issue-red: oklch(.55 .185 27); }
+.flows-view[hidden] { display: none; }
+.flow-error { margin: 0 0 8px; font-size: 12px; line-height: 17px; color: var(--issue-red); }

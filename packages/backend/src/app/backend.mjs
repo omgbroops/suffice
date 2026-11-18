@@ -108,12 +108,32 @@ export function createBackend({ dataDir, clock = { now: () => Date.now() }, crea
     try { return host.get('workflows', name); } catch { return undefined; }
   };
 
+  // One window owns a run at a time: a lock file {pid, owner} per run. Written to a temp file and linked in, so a reader never sees a half-written lock.
+  const owner = randomBytes(6).toString('hex');
+  const lockPath = (id) => path.join(runsDir, `${id}.lock`);
+  const alive = (pid) => { try { process.kill(pid, 0); return true; } catch (e) { return e.code === 'EPERM'; } };
+  const heldElsewhere = (id) => { try { const l = JSON.parse(fs.readFileSync(lockPath(id), 'utf8')); return l.owner !== owner && alive(l.pid); } catch { return false; } };
+  function claim(id) {
+    const tmp = `${lockPath(id)}.${owner}.tmp`;
+    fs.writeFileSync(tmp, JSON.stringify({ pid: process.pid, owner }));
+    try {
+      for (let i = 0; i < 3; i++) {
+        try { fs.linkSync(tmp, lockPath(id)); return; } catch (e) { if (e.code !== 'EEXIST') throw e; }
+        if (heldElsewhere(id)) throw new Error(`run ${id} is running in another Suffice window`);
+        fs.rmSync(lockPath(id), { force: true }); // shortcut: two windows clearing the same dead lock at once can both win, upgrade to flock if that ever shows
+      }
+      throw new Error(`run ${id} is running in another Suffice window`);
+    } finally { fs.rmSync(tmp, { force: true }); }
+  }
+  const release = (id) => { try { if (JSON.parse(fs.readFileSync(lockPath(id), 'utf8')).owner === owner) fs.rmSync(lockPath(id), { force: true }); } catch { /* already gone */ } };
+
   function launch(runId, fn, args) {
+    claim(runId);
     const ac = new AbortController();
     const wrapped = (api, a) => fn(api, a, { runId, handoff });
     const done = engine.run(runId, wrapped, args, { signal: ac.signal })
       .catch((e) => ({ ok: false, error: e.message })) // an engine bug becomes a failed result, never an unhandled rejection
-      .finally(() => active.delete(runId));
+      .finally(() => { active.delete(runId); release(runId); });
     active.set(runId, { ac, done });
     finished.set(runId, done);
     return done;
@@ -216,7 +236,7 @@ export function createBackend({ dataDir, clock = { now: () => Date.now() }, crea
       const fn = typeof workflow === 'function' ? workflow : lookup(workflow);
       if (typeof fn !== 'function') throw new Error(`unknown workflow: ${String(workflow)}`);
       const runId = `r${Date.now().toString(36)}${randomBytes(3).toString('hex')}`;
-      if (typeof workflow === 'string') fs.writeFileSync(metaPath(runId), JSON.stringify({ workflow, args }));
+      if (typeof workflow === 'string') { const tmp = `${metaPath(runId)}.tmp`; fs.writeFileSync(tmp, JSON.stringify({ workflow, args })); fs.renameSync(tmp, metaPath(runId)); }
       launch(runId, fn, args);
       return runId;
     },
@@ -245,7 +265,7 @@ export function createBackend({ dataDir, clock = { now: () => Date.now() }, crea
         let workflow = null;
         try { workflow = JSON.parse(fs.readFileSync(metaPath(r.runId), 'utf8')).workflow; } catch { /* run without meta */ }
         const end = (await journalFor(r.runId).read()).findLast((e) => e.type === 'run.end');
-        const state = active.has(r.runId) ? 'running' : !end ? 'interrupted' : end.data?.ok ? 'ended' : 'failed';
+        const state = active.has(r.runId) || heldElsewhere(r.runId) ? 'running' : !end ? 'interrupted' : end.data?.ok ? 'ended' : 'failed';
         out.push({ ...r, workflow, state });
       }
       return out.sort((a, b) => (b.first ?? 0) - (a.first ?? 0) || (a.runId < b.runId ? 1 : -1));

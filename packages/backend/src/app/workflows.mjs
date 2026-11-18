@@ -26,6 +26,18 @@ async function planBuildReview(api, a) {
   return { repaired, review };
 }
 
+// plan, then a human approves before anything is built; a denial ends the run (resume asks nothing new)
+async function planApproveBuild(api, a) {
+  need(a);
+  await api.phase('plan');
+  const plan = await api.agent(`Plan the work for: ${a.task}`, { key: 'plan', label: 'planner', cwd: a.cwd });
+  await api.approval('build-plan', { task: a.task, plan: String(plan).slice(0, 2000) });
+  await api.phase('build');
+  await api.agent(`Implement this plan.\nTask: ${a.task}\nPlan:\n${plan}`, { key: 'build', label: 'builder', cwd: a.cwd });
+  await api.gate('tests', await runTest(api, a));
+  return { plan };
+}
+
 async function researchRelay(api, a, { runId, handoff }) {
   if (!a?.topic || typeof a.topic !== 'string') throw new TypeError('args.topic: expected a string');
   const lanes = Number.isInteger(a.lanes) && a.lanes > 0 ? a.lanes : 2;
@@ -53,4 +65,4 @@ async function bestOfN(api, a) {
   return { attempts: attempts.map((x, i) => x ?? { attempt: i, passed: false, size: 0 }), winner: ok[0]?.attempt ?? null };
 }
 
-export const workflows = { 'plan-build-review': planBuildReview, 'research-relay': researchRelay, 'best-of-n': bestOfN };
+export const workflows = { 'plan-build-review': planBuildReview, 'plan-approve-build': planApproveBuild, 'research-relay': researchRelay, 'best-of-n': bestOfN };
