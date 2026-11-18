@@ -4,6 +4,7 @@ contextBridge.exposeInMainWorld('sufficeDesktop',{
   windowChrome:process.argv.find(arg=>/^--suffice-window-chrome=(windows|macos-native|macos-preview)$/.test(arg))?.split('=')[1]||'windows',
   deleteThread:id=>ipcRenderer.invoke('suffice:delete-thread',id),
   updateProject:payload=>ipcRenderer.invoke('suffice:update-project',payload),
+  environment:payload=>ipcRenderer.invoke('suffice:environment',payload),
   removeProject:folder=>ipcRenderer.invoke('suffice:remove-project',folder),
   fileOpenOptions:payload=>ipcRenderer.invoke('suffice:file-open-options',payload),
   openFileIn:payload=>ipcRenderer.invoke('suffice:file-open-in',payload),
