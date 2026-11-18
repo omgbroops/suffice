@@ -9,7 +9,7 @@ import {createThreadRouter} from './thread-router.mjs';
 import {sessionUsage} from './usage.mjs';
 import {randomUUID,createHash} from 'node:crypto';
 import {mkdir,realpath,stat} from 'node:fs/promises';
-import {resolve,dirname} from 'node:path';
+import {resolve,dirname,sep} from 'node:path';
 import {SessionManager} from '@earendil-works/pi-coding-agent';
 import {createThreadStore,threadId} from './threads.mjs';
 import {createSufficeSession,parseOptions} from '@suffice/harness';
@@ -38,6 +38,7 @@ async function receive(message) {
     if(action==='threads'){send({id,ok:true,result:await threads.list()});return;}
     if(action==='thread-location'){send({id,ok:true,result:await threads.location(payload.id)});return;}
     if(busy)throw new Error('A task is already running. Stop it before changing sessions.');
+    if(action==='attach'){const base=await realpath(resolve(home,'side-chats')),file=await realpath(payload.path);if(!file.startsWith(base+sep))throw new Error('Side chat path is outside its directory');resumePath=file;workspace=await realpath(payload.cwd);send({id,ok:true});return;}
     if(action==='reset'){viewRevision++;await agent?.dispose();agent=null;resumePath=null;viewedUsage=null;send({event:'usage',usage:null});send({id,ok:true});return;}
     if(action==='models'){
       if(!runtime)throw new Error('Harness is not ready');
@@ -71,7 +72,7 @@ async function receive(message) {
     if(!agent){
       workspace=cwd;
       const options=parseOptions(['--cwd',cwd]);
-      options.effort=payload.effort;
+      options.effort=payload.effort;if(payload.side)options.access='read';
       options.home=home;options.additionalContext=await projectContext(home,cwd,payload.desktopSettings||{});const newlyCreated=!resumePath;options.desktopSettings=payload.desktopSettings||{};options.extensions=[createReducerExtension({dir:resolve(home,'tool-outputs'),settings:options.desktopSettings})];options.onTitleChanged=()=>send({event:'history_changed'});if(options.desktopSettings['allow-network']===false){options.browser=false;options.desktop=false;}
       if(selected){options.model=selected.id;options.modelObject=selected;}
       if(resumePath)options.sessionManager=SessionManager.open(resumePath,dirname(resumePath));

@@ -12,7 +12,7 @@ export function transcriptMessages(projection,journal=projection.entries.map(ent
   if(entry.type==='custom'&&entry.customType==='suffice:interrupted'){
    if(output.at(-1)?.kind!=='interrupted')output.push({role:'status',kind:'interrupted',content:[]});
   }else{
-   output.push(...present(entry,messages));
+   output.push(...present(entry,messages).map(message=>({...message,entryId:entry.id})));
    if(messages.at(-1)?.role==='assistant'&&messages.at(-1)?.stopReason==='aborted')output.push({role:'status',kind:'interrupted',content:[]});
   }
  }

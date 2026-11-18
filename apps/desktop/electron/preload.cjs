@@ -52,7 +52,7 @@ contextBridge.exposeInMainWorld('sufficeDesktop',{
   diff:name=>ipcRenderer.invoke('suffice:diff',name),
   status:()=>ipcRenderer.invoke('suffice:status'),
   models:options=>ipcRenderer.invoke('suffice:models',options),
-  forkThread:id=>ipcRenderer.invoke('suffice:fork-thread',id),
+  forkThread:(id,at)=>ipcRenderer.invoke('suffice:fork-thread',id,at),sideRun:payload=>ipcRenderer.invoke('suffice:side-run',payload),sideEnd:id=>ipcRenderer.invoke('suffice:side-end',id),
   threads:()=>ipcRenderer.invoke('suffice:threads'),
   openThread:id=>ipcRenderer.invoke('suffice:thread',id),
   initialProject:()=>ipcRenderer.invoke('suffice:initial-project'),
