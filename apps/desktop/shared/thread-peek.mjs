@@ -6,7 +6,7 @@ export function shortTitle(text,max=48){
  const body=String(text??'').replace(/```[\s\S]*?```/g,' ').split(/\n/).map(l=>l.trim()).find(Boolean)||'';
  let t=body.replace(/^[#>*\-\s]+/,'').replace(/\s+/g,' ').trim();
  const first=t.match(/^.+?[.!?](?=\s|$)/)?.[0];if(first&&first.length>=12)t=first.replace(/[.!?]+$/,'');
- t=t.replace(lead,'').trim()||t;
+ const rest=t.replace(lead,'').trim();if(rest.split(' ').length>1)t=rest; // a lone word left over ("hello there") is the message, not filler
  if(!t)return 'Untitled thread';
  return clip(t[0].toUpperCase()+t.slice(1),max);
 }

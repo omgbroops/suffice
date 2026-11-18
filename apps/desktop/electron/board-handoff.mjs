@@ -17,10 +17,10 @@ export function createBoardHandoff({root}){
   async removeNote(project,name){const m=memory(project),ok=await m.remove(name);await m.index();return ok;},
   // Writes the handoff record and returns the text that seeds the new thread.
   async handoff(thread,project){
-   const turns=normalize(thread.messages),edited=[...new Set(turns.flatMap(t=>t.tools.filter(x=>x.diff).map(x=>x.input?.path||x.input?.file_path||x.input?.file||'file')))].slice(0,8);
+   const turns=normalize(thread.messages),edited=[...new Set(turns.flatMap(t=>t.tools.filter(x=>x.diff).map(x=>x.input?.path||x.input?.file_path||x.input?.file||'file')))];
    const last=turns.at(-1),lastUser=[...turns].reverse().find(t=>t.role==='user'),lastAssistant=[...turns].reverse().find(t=>t.role==='assistant'&&t.text);
    const failed=[...new Set(turns.flatMap(t=>t.tools.filter(x=>x.isError).map(x=>x.name)))];
-   const done=edited.length?edited.map(f=>'Edited '+f):lastAssistant?[first(lastAssistant.text)]:[];
+   const done=edited.length?[...edited.slice(0,8).map(f=>'Edited '+f),...(edited.length>8?['+'+(edited.length-8)+' more edited (listed in the handoff record)']:[])]:lastAssistant?[first(lastAssistant.text)]:[];
    const open=[...(last?.role==='user'?['Unanswered: '+first(last.text)]:[]),...failed.map(n=>'Failed tool: '+n)];
    if(!done.length&&!open.length)throw new Error('This thread has nothing to hand off yet');
    const next=open[0]?'Resolve: '+open[0].replace(/^[^:]+: /,''):lastUser?'Continue from: '+first(lastUser.text):'Continue';

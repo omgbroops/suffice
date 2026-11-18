@@ -60,3 +60,16 @@ test('desktop: Hand off opens a new thread seeded with the summary; Settings kee
   assert.deepEqual(errors,[]);
  }finally{await app.close();}
 });
+
+test('handoff lists every edit or a +N more marker; titles keep a lone greeting; memory names transliterate and reject',async()=>{
+ const {shortTitle}=await import('../shared/thread-peek.mjs');
+ const {memoryName}=await import('../src/memory-name.js');
+ const root=await mkdtemp(resolve(tmpdir(),'bh-fix-')),bh=createBoardHandoff({root});
+ const messages=[{role:'user',content:[{type:'text',text:'edit lots'}]},{role:'assistant',content:Array.from({length:12},(_,i)=>({type:'toolCall',id:'c'+i,name:'edit',arguments:{path:'f'+i+'.js',old_string:'a',new_string:'b'}}))}];
+ const {text}=await bh.handoff({title:'t',messages},'/p');
+ assert.equal(text.match(/- Edited /g).length,8);assert.match(text,/\+4 more edited/);
+ assert.equal(shortTitle('hello there'),'Hello there');
+ assert.equal(memoryName('Café rules'),'cafe-rules');
+ assert.throws(()=>memoryName('../escape'),/cannot contain/);
+ assert.throws(()=>memoryName('n'.repeat(200)),/too long/);
+});
