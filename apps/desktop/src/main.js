@@ -110,7 +110,7 @@ document.querySelector('#app').innerHTML = `
 
     <div class="sidebar-collapsed-tools" role="group" aria-label="Sidebar and search">
       ${button('Open sidebar', { icon: 'panel', className: 'sidebar-reopen', action: 'toggle-sidebar' })}
-      ${button('Search sessions', { icon: 'search', action: 'search-sessions' })}
+      ${button('Search sessions', { icon: 'search', action: 'search-collapsed' })}
     </div>
 
     <div class="home">
@@ -322,7 +322,7 @@ document.addEventListener('click', (e) => {
 
     case 'new': prompt.value = ''; send.disabled = true; document.querySelector('.composer').attachments?.clear(); prompt.focus(); if (innerWidth < 700) document.body.classList.remove('sidebar-open'); break;
 
-    case 'toggle-sidebar': if (innerWidth < 700) document.body.classList.toggle('sidebar-open'); else {const collapsed=document.body.classList.toggle('sidebar-collapsed');void savePreference('sidebar-collapsed',collapsed).catch(error=>toast(error.message));} break;
+    case 'toggle-sidebar': if (innerWidth < 700) document.body.classList.toggle('sidebar-open'); else {const collapsed=document.body.classList.toggle('sidebar-collapsed');void savePreference('sidebar-collapsed',collapsed).catch(error=>toast(error.message));focusSidebarToggle();} break;
 
 
     case 'model-menu': menu(control, ['Normal Fast', 'Normal', 'Deep'].map(label => ({ label, detail: { 'Normal Fast': 'Quick, everyday tasks', Normal: 'Balanced reasoning', Deep: 'Complex, considered work' }[label], action: `model:${label}`, selected: label === document.querySelector('#model-label').textContent }))); break;
@@ -339,7 +339,7 @@ document.addEventListener('click', (e) => {
     case 'workspace-menu': menu(control, [{ label: 'Sidebar', children: () => sidebarPreferences.items() }, { label: 'Background', children: backgroundOptions }, { label: 'Theme', children: themeOptions }, { label: 'Workspace settings', action: 'settings:open' }]); break;
 
 
-    case 'search-sessions': showSearch(); break;
+    case 'search-sessions': case 'search-collapsed': showSearch(); break;
 
     case 'settings': showSettings(); break;
 
@@ -354,6 +354,9 @@ document.addEventListener('click', (e) => {
   }
 
 });
+
+// Keep focus on the toggle that is visible now; the pressed one is hidden or moved.
+function focusSidebarToggle(){document.querySelector(document.body.classList.contains('sidebar-collapsed')?'.sidebar-reopen':'.sidebar-heading [data-action=toggle-sidebar]')?.focus();}
 
 function themeOptions() {
   return ['dark', 'light'].map(theme => ({ label: theme === 'dark' ? 'Dark' : 'Light', action: `theme:${theme}`, selected: getTheme() === theme }));
@@ -432,7 +435,7 @@ document.addEventListener('suffice-preference',event=>{const {id,value}=event.de
 document.querySelector('.atmosphere').dataset.motion=preference('background-motion',true)&&!preference('reduced-motion',false)?'running':'paused';
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!event.defaultPrevented&&preference('escape',false)&&!document.querySelector('.settings-main:not([hidden])')&&document.querySelector('.composer')?.dataset.running==='true')void window.sufficeDesktop.abort(threadViewState.id);});
 
-document.addEventListener('keydown',event=>{if(!(event.ctrlKey||event.metaKey))return;if(event.key.toLowerCase()==='n'){event.preventDefault();Promise.resolve(settingsPage?.close()).then(()=>document.querySelector('.new-session').click());}if(event.key.toLowerCase()==='b'){event.preventDefault();document.querySelector('[data-action=toggle-sidebar]').click();}});
+document.addEventListener('keydown',event=>{if(!(event.ctrlKey||event.metaKey))return;if(event.key.toLowerCase()==='n'){event.preventDefault();Promise.resolve(settingsPage?.close()).then(()=>{document.querySelector('.new-session').click();prompt.focus();});}if(event.key.toLowerCase()==='b'){event.preventDefault();document.querySelector('[data-action=toggle-sidebar]').click();}});
 
 window.sufficeDesktop?.onNotification?.(event=>{if(!event.play)return;const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;const audio=new Audio(),oscillator=audio.createOscillator(),gain=audio.createGain(),duration=event.sound==='Click'?.05:event.sound==='Chime'?.3:.16;oscillator.frequency.value=event.sound==='Click'?180:event.sound==='Chime'?740:440;gain.gain.setValueAtTime(.06,audio.currentTime);gain.gain.exponentialRampToValueAtTime(.001,audio.currentTime+duration);oscillator.connect(gain);gain.connect(audio.destination);oscillator.start();oscillator.stop(audio.currentTime+duration);oscillator.onended=()=>audio.close();});
 
