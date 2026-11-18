@@ -59,3 +59,10 @@
 .thread-live-stop:hover { background: var(--selected-fill); }
 .thread-live:not([hidden]) ~ .thread-status { display: none; }
 @media (prefers-reduced-motion: no-preference) { .thread-live { animation: motion-rise 160ms var(--ease-out, ease-out); } }
+
+/* One left-aligned message column; fork icon is a rounded rectangle; toast is not a pill. */
+.desktop-app .workspace .thread-messages .thread-user { margin-left: 0; max-width: 100%; }
+.desktop-app .message-fork { border-radius: var(--radius-control); }
+.message-fork:disabled { opacity: .4; pointer-events: none; }
+.desktop-app .toast[popover] { border-radius: var(--radius-card); }
+.desktop-app .message-actions-slot[data-role='user'] { justify-content: flex-start; }
