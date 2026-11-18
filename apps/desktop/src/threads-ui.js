@@ -14,6 +14,7 @@ import {setProjectGroupExpanded} from './project-group-motion.js';
 import {sidebarPreferences} from './sidebar-preferences.js';
 import {connectOverlayScrollbar} from './overlay-scrollbar.js';
 import {icon} from './ui.js';
+import {shortTitle} from '../shared/thread-peek.mjs';
 import {populateThreadRow,tickThreadTimes,connectThreadHover,projectBadge} from './thread-row.js';
 import {threadViewState as viewState} from './thread-view-state.js';
 import {renderMessageMarkdown} from './message-markdown.js';
@@ -158,7 +159,7 @@ export function connectThreads({api,prompt,send,toast}){
  window.addEventListener('focus',markViewed);document.addEventListener('visibilitychange',markViewed);new MutationObserver(markViewed).observe(document.documentElement,{attributes:true,attributeFilter:['class']});
  connectThreadContextMenu(list,{projectManagement,isGrouped:()=>sidebarPreferences.get().group==='project',getThread:id=>{const thread=[...optimisticThreads.values(),...savedThreads].find(t=>t.id===id);return thread?{...thread,title:metadata(id).title||thread.title,running:!!jobs.get(id)?.running}:null;},metadata,update:updateMetadata,onArchive:id=>{if(activeId===id)clear();},onDelete:async id=>{await api.deleteThread(id);if(activeId===id)clear();savedThreads=savedThreads.filter(thread=>thread.id!==id);optimisticThreads.delete(id);savedHistories.delete(id);jobs.delete(id);viewState.remove(id);drawThreads();document.dispatchEvent(new CustomEvent('suffice-thread-deleted',{detail:{id}}));},toast});
  function addOptimistic(id,title,project=document.querySelector('.project-picker')?.textContent.trim()||'Project'){
-  optimisticThreads.set(id,{id,title:title.slice(0,90),project,modified:Date.now()});drawThreads();
+  optimisticThreads.set(id,{id,title:shortTitle(title),project,modified:Date.now()});drawThreads();
  }
  function adoptOptimistic(previous,id){const thread=optimisticThreads.get(previous);if(thread){optimisticThreads.delete(previous);optimisticThreads.set(id,{...thread,id});}}
  async function refresh(){

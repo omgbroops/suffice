@@ -68,7 +68,7 @@
 .desktop-app .sidebar { --scrollbar-thumb: #ffffff1a; --scrollbar-thumb-hover: #ffffff29; }
 .desktop-app[data-theme='light'] .sidebar { --scrollbar-thumb: #0000001f; --scrollbar-thumb-hover: #00000033; }
 .desktop-app .session-section { display: flex; flex-direction: column; overflow: hidden; }
-.desktop-app .session-section > .section-label { flex-shrink: 0; padding-right: 3px; }
+.desktop-app .session-section > .section-label { flex-shrink: 0; padding-right: 2px; }
 .desktop-app .sidebar-sessions { overflow-y: auto; scrollbar-gutter: stable; padding-right: 6px; margin-right: -2px; }
 .thread-no-branch .icon { width: 12px; height: 12px; flex-shrink: 0; }
 
@@ -188,3 +188,9 @@
 .thread-fork:focus-visible { outline: 1px solid var(--focus); outline-offset: 1px; }
 .thread-fork-mark { display: inline-flex; flex: none; color: var(--text-faint); }
 .thread-fork-mark .icon { width: 12px; height: 12px; }
+
+/* Peek: last prompt, last answer, files and cost under the hover title */
+.thread-peek { display: flex; flex-direction: column; gap: 3px; padding: 6px 0; margin: 0 0 1px; border-block: 1px solid var(--border-subtle, color-mix(in srgb,currentColor 10%,transparent)); }
+.thread-peek-line { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; line-height: 17px; color: var(--text-muted, var(--text-faint)); }
+.thread-peek-prompt { color: var(--text-strong); }
+.thread-peek-foot { font-size: 11px; color: var(--text-faint); font-variant-numeric: tabular-nums; }
