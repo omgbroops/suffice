@@ -38,6 +38,7 @@ export const settingsSections=[
   group('Ask bar',[toggle('local-agent','Screen-aware ask bar'),toggle('keys-trigger','Double-tap Option opens Suffice',true)]),
   group('Voice',[toggle('voice-input','Voice input',true),toggle('voice-auto-send','Send when speech ends')]),
   group('Execution',[select('execution-shell','Command shell','Native Bash',['Native Bash','PowerShell','System default']),toggle('allow-network','Browser & desktop tools',true),toggle('background-agents','Allow background agents',true)]),
+  group('Computer use',[toggle('computer-use','Computer use sessions',false,'Lets an agent drive a web page for you. Risky steps wait for your approval.')]),
   group('Transcript',[toggle('collapse-work','Collapse completed actions',true),toggle('show-reasoning','Show reasoning status',true),toggle('stream-markdown','Render Markdown while streaming',true)]),
  ]},
  {id:'context',subtitle:'',title:'Context & memory',icon:'context',category:'Agent',groups:[

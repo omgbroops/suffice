@@ -30,6 +30,7 @@ import {connectNeedsYou} from './needs-you.js';
 import {connectSideChat} from './side-chat.js';
 import {connectIssues} from './issues.js';
 import {connectFlows} from './flows.js';
+import {connectComputer} from './computer.js';
 import {connectContextInspector} from './context-inspector.js';
 import {deriveFollowups,renderFollowups,clearFollowups} from './followups.js';
 import {connectThreadWorktree} from './thread-worktree.js';
@@ -341,6 +342,7 @@ export function connectThreads({api,prompt,send,toast}){
  connectNeedsYou({api,approvals,toast,retry:retryThread,markRead:id=>updateMetadata(id,{unread:false})});
  connectIssues({api,toast});
  connectFlows({api,toast});
+ connectIssues({api,toast});connectComputer({api,toast});
  api.onClearCache?.(()=>{savedHistories.clear();});
  document.addEventListener('suffice-preference',event=>{if(event.detail.id==='collapse-work')document.querySelectorAll('.thread-activity').forEach(group=>group.open=!event.detail.value);if(event.detail.id==='new-project'&&!activeId)form.dataset.requireProject=String(event.detail.value==='Ask each time');});
  document.addEventListener('suffice-project-selected',()=>{delete form.dataset.requireProject;});

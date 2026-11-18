@@ -3,6 +3,7 @@ import {execFile} from 'node:child_process';
 import path from 'node:path';
 import os from 'node:os';
 import {createFlow} from './flow-ipc.mjs';
+import {createComputer} from './computer-ipc.mjs';
 import {createBackend} from '../../../packages/backend/src/app/backend.mjs';
 import {createIpcBridge} from '../../../packages/backend/src/app/ipc.mjs';
 import {createClaudeMapper} from '../../../packages/backend/src/tui/claude.mjs';
@@ -43,8 +44,9 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
  const historyHome=env.SUFFICE_HISTORY_HOME||(env.SUFFICE_TEST_HIDE_WINDOW==='1'?fs.mkdtempSync(path.join(os.tmpdir(),'sfx-history-')):process.env.HOME);
  const socket=env.SUFFICE_SESSIONS_SOCKET||'suffice';
  const flow=createFlow({dataDir,env,send});
+ const computer=createComputer({dataDir,env,send});
  const backend=createBackend({dataDir,sessions:true,history:true,socketName:socket,home:historyHome,sessionAgents,exec:flow.exec,approve:flow.approve,runners:flow.runners,limits:flow.limits,...((testAgent||simAgent)&&{idleMs:400,settleMs:100})});
- flow.attach(backend);
+ flow.attach(backend);computer.attach(backend);
  const bridge=createIpcBridge(backend);
  bridge.subscribe(send);
  const call=async message=>{const r=await bridge.handle(message);if(!r.ok)throw new Error(r.error);return r.result;};
@@ -157,6 +159,7 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
   async attach(sessionId){const rows=await call({type:'sessions.list'});const row=rows.find(r=>r.id===sessionId);if(!row)throw new Error('Unknown session');return {command:['tmux','-L',socket,'-f','/dev/null','set-option','-t','sfx-'+row.id,'mouse','on',';','attach','-t','sfx-'+row.id],cwd:row.cwd};},
   handlers:{
    ...flow.handlers,
+   ...computer.handlers,
    'sessions-available':()=>{
     const caps=backend.capabilities().sessions;
     if(!caps?.ok)return {ok:false,reason:caps?.reason==='tmux not found'?'Needs tmux':caps?.reason||'Unavailable',agents:[]};

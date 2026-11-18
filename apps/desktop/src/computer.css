@@ -1,0 +1,65 @@
+/* Computer use: sidebar entry, session list, replay strip, approval prompt. Reuses the Issues page bands, buttons and inputs; radii nest 8 > 6 > 3, no circles. */
+.computer-nav { justify-content: flex-start; width: 100%; margin-top: 2px; padding: 6px 9px; min-height: 30px; font-size: 13px; color: var(--text); }
+.computer-nav[hidden] { display: none; }
+.computer-nav .icon { width: 17px; height: 17px; }
+.computer-nav-label { flex: 1; text-align: left; }
+.computer-nav[aria-current='page'] { background: var(--surface-nav); color: var(--text-strong); }
+.computer-count { min-width: 16px; height: 16px; padding: 0 5px; border-radius: 8px; font-size: 11px; line-height: 16px; font-weight: 500; text-align: center; font-variant-numeric: tabular-nums; color: var(--text-muted); background: var(--issue-hover, oklch(1 0 0 / .05)); }
+.computer-count[hidden] { display: none; }
+.computer-nav:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+
+.computer-view { z-index: 5; --issue-band: oklch(1 0 0 / .035); --issue-hover: oklch(1 0 0 / .05); --issue-line: oklch(1 0 0 / .08); --issue-on-fill: #0c0c0c; --issue-yellow: oklch(.85 .14 95); --issue-green: oklch(.74 .17 150); --issue-red: oklch(.7 .17 27); position: absolute; inset: 0; display: flex; flex-direction: column; background: var(--surface-thread); border-radius: inherit; color: var(--text); }
+:root[data-theme='light'] .computer-view { --issue-band: oklch(0 0 0 / .04); --issue-hover: oklch(0 0 0 / .05); --issue-line: oklch(0 0 0 / .08); --issue-on-fill: #fff; --issue-yellow: oklch(.824 .179 91.3); --issue-green: oklch(.617 .208 142.85); --issue-red: oklch(.55 .185 27); }
+.computer-view[hidden] { display: none; }
+body:has(.workspace.computer-open) :is(.caption-chat-tools, .right-sidebar) { visibility: hidden; }
+body:has(.workspace.computer-open) .thread-row[aria-pressed='true'] { background: transparent; }
+body:has(.workspace.computer-open) .thread-card[aria-pressed='true'] .row-title { color: inherit; }
+
+.cu-count-label { font-size: 12px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.cu-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.cu-head-row { display: flex; align-items: center; gap: 8px; }
+.cu-row { flex: 1; min-width: 0; display: grid; grid-template-columns: 10px minmax(0, 1fr) 150px 112px 72px 32px; align-items: center; gap: 12px; height: 42px; padding: 0 8px; border: 0; border-radius: 6px; background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.cu-row:hover, .cu-row[aria-expanded='true'] { background: var(--issue-hover); }
+.cu-row:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+.cu-title { font-size: 14px; font-weight: 450; color: var(--text-strong); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cu-host, .cu-steps-count, .cu-age { font-size: 12px; color: var(--text-faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
+.cu-age { text-align: right; }
+.cu-status { font-size: 12px; color: var(--text-muted); white-space: nowrap; }
+.cu-state { width: 8px; height: 8px; border-radius: 2px; background: var(--text-faint); }
+.cu-state[data-state='running'] { background: var(--issue-yellow); }
+.cu-state[data-state='approval'] { background: var(--warning-ink, var(--issue-yellow)); }
+.cu-state[data-state='done'] { background: var(--issue-green); }
+.cu-state[data-state='failed'] { background: var(--issue-red); }
+.cu-reason { margin: 0 8px 4px 28px; font-size: 12px; line-height: 17px; color: var(--issue-red); }
+
+.cu-detail { margin: 4px 8px 12px 28px; display: grid; gap: 8px; min-width: 0; }
+.cu-replayed { font-size: 12px; color: var(--text-muted); }
+.cu-none { font-size: 12px; color: var(--text-faint); }
+.cu-answer { font-size: 13px; line-height: 19px; color: var(--text-strong); padding: 8px 10px; border-radius: 6px; background: var(--issue-band); }
+.cu-strip { list-style: none; margin: 0; padding: 0 0 6px; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: thin; }
+.cu-strip:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
+.cu-step { flex: none; width: 168px; padding: 8px 10px; border-radius: 6px; background: var(--issue-band); box-shadow: inset 0 0 0 .5px var(--issue-line); display: grid; gap: 4px; align-content: start; }
+.cu-step-head { display: flex; align-items: center; justify-content: space-between; }
+.cu-step-n { font-size: 11px; color: var(--text-faint); font-variant-numeric: tabular-nums; }
+.cu-step-mark { width: 6px; height: 6px; border-radius: 1.5px; background: var(--text-faint); }
+.cu-step[data-state='ok'] .cu-step-mark { background: var(--issue-green); }
+.cu-step[data-state='bad'] .cu-step-mark, .cu-step[data-state='denied'] .cu-step-mark { background: var(--issue-red); }
+.cu-step-action { font-size: 13px; font-weight: 500; color: var(--text-strong); }
+.cu-step-target { font-size: 12px; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-height: 17px; }
+.cu-step-note { font-size: 11px; color: var(--issue-red); line-height: 15px; }
+.cu-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.cu-tag { display: inline-flex; align-items: center; height: 18px; padding: 0 6px; border-radius: 4px; font-size: 11px; color: var(--text); box-shadow: inset 0 0 0 .5px var(--issue-yellow); }
+
+.cu-approval { margin: 0 0 12px; padding: 12px 14px; border-radius: 8px; background: var(--issue-band); box-shadow: inset 0 0 0 .5px var(--issue-yellow); display: grid; gap: 6px; max-width: 640px; }
+.cu-approval-title { font-size: 13px; font-weight: 500; color: var(--text-strong); }
+.cu-approval-sub { font-size: 13px; color: var(--text-strong); }
+.cu-approval-reason, .cu-approval-goal { font-size: 12px; color: var(--text-muted); line-height: 17px; }
+.cu-approval-actions, .cu-form-actions { display: flex; gap: 8px; margin-top: 4px; }
+
+.cu-form { margin: 0 0 16px; padding: 14px; border-radius: 8px; background: var(--issue-band); display: grid; gap: 10px; max-width: 640px; }
+.cu-field { display: grid; gap: 4px; }
+.cu-label { font-size: 12px; color: var(--text-faint); }
+.cu-input { width: 100%; height: auto; min-height: 28px; padding: 6px 8px; box-sizing: border-box; resize: vertical; }
+input.cu-input { height: 28px; }
+.cu-error { font-size: 12px; line-height: 17px; color: var(--issue-red); }
+@media (max-width: 900px) { .cu-host { display: none; } .cu-row { grid-template-columns: 10px minmax(0, 1fr) 96px 60px 28px; } }

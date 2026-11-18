@@ -98,6 +98,7 @@ contextBridge.exposeInMainWorld('sufficeDesktop',{
   compareDiscard:id=>ipcRenderer.invoke('suffice:compare-discard',id),
   onEvent:callback=>{const listener=(_event,value)=>callback(value);ipcRenderer.on('suffice:event',listener);return()=>ipcRenderer.removeListener('suffice:event',listener);},
   flow:(()=>{const inv=(n,p)=>ipcRenderer.invoke('suffice:flow-'+n,p),subs=new Set();ipcRenderer.on('suffice:sessions-event',(_e,m)=>{if(m?.type==='flow')for(const f of subs)f();});return {workflows:()=>inv('workflows'),start:p=>inv('start',p),list:()=>inv('list'),detail:id=>inv('detail',id),approve:(id,approved)=>inv('approve',{id,approved}),cancel:id=>inv('cancel',id),resume:id=>inv('resume',id),onChange:cb=>{subs.add(cb);return()=>subs.delete(cb);}};})(),
+  computer:(()=>{const inv=(n,p)=>ipcRenderer.invoke('suffice:computer-'+n,p),subs=new Set();ipcRenderer.on('suffice:sessions-event',(_e,m)=>{if(m?.type==='computer')for(const f of subs)f();});return {start:p=>inv('start',p),list:()=>inv('list'),detail:id=>inv('detail',id),approve:(id,approved)=>inv('approve',{id,approved}),cancel:id=>inv('cancel',id),onChange:f=>{subs.add(f);return()=>subs.delete(f);}};})(),
   sessions:(()=>{const inv=(n,p)=>ipcRenderer.invoke('suffice:'+n,p);const last=new Map(),subs=new Set();
    ipcRenderer.on('suffice:sessions-event',(_e,m)=>{if(m?.type!=='slot')return;last.set(m.id,m.value);for(const f of subs)f(m.id,m.value);});
    const watch=(slot,cb)=>{const f=(id,v)=>{if(id===slot)cb(v);};subs.add(f);if(last.has(slot))cb(last.get(slot));return()=>subs.delete(f);};
