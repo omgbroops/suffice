@@ -7,7 +7,7 @@ import {_electron} from 'playwright-core';
 import {resolve} from 'node:path';
 import {mkdir,mkdtemp,realpath} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
-import {guard} from './electron-guard.mjs';
+import {guard,killTmux} from './electron-guard.mjs';
 
 test('needs you actions: pre-load approval, retry, dismiss resurfaces, command menu, session approve',{timeout:240000},async()=>{
  const tmp=await realpath(await mkdtemp(resolve(tmpdir(),'sfx-needs-act-'))),SOCKET=`sfx-feat-needs-you-act-${process.pid}`;
@@ -99,5 +99,5 @@ test('needs you actions: pre-load approval, retry, dismiss resurfaces, command m
   await page.locator(`.needs-row[data-key=${key}] .needs-act[data-act=approve]`).click();
   await page.locator(`.needs-row[data-key=${key}]`).waitFor({state:'detached',timeout:30000});
   assert.deepEqual(errors,[]);
- }finally{await app.close();}
+ }finally{await app.close();killTmux(SOCKET);}
 });
