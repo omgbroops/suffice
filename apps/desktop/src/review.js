@@ -1,3 +1,4 @@
+import {icon} from './ui.js';
 // Review agent: runs the reviewer on the current diff and keeps findings per thread for inline annotations.
 const results=new Map();
 export const reviewFor=id=>results.get(id);
@@ -28,12 +29,15 @@ export function noteNode(finding){
  note.append(chip,body,apply);return note;
 }
 export function reviewButton(id,api){
- const state=reviewFor(id),button=document.createElement('button');button.type='button';button.className='button button--ghost review-button';button.textContent='Review changes';button.setAttribute('aria-label','Review changes');
- const status=document.createElement('span');status.className='review-status';status.setAttribute('role','status');
+ const state=reviewFor(id),button=document.createElement('button');button.type='button';button.className='button button--subtle review-button';button.setAttribute('aria-label','Review changes');
+ button.innerHTML=`${icon('tick')}<span></span>`;
+ const status=button.querySelector('span');status.setAttribute('role','status');
+ let strip=null;
  if(state?.state==='running'){button.disabled=true;button.setAttribute('aria-busy','true');status.textContent='Reviewing…';}
- else if(state?.state==='error')status.textContent=state.error;
+ else if(state?.state==='error'){strip=document.createElement('div');strip.className='review-status review-strip';strip.setAttribute('role','status');strip.textContent=state.error;}
  else if(state?.state==='done')status.textContent=state.findings.length?`${state.findings.length} finding${state.findings.length===1?'':'s'}`:'No issues found';
- button.addEventListener('click',()=>void runReview(api,id));return [status,button];
+ if(status.textContent)status.className='review-status';else status.textContent='Review changes';button.title='Review changes';
+ button.addEventListener('click',()=>void runReview(api,id));return [button,strip];
 }
 // Counts on the changed-file rows tell which files carry findings without opening each one.
 export function decorateRows(list,id){

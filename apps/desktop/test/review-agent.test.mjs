@@ -1,3 +1,4 @@
+// Isolation: the Electron env sets SUFFICE_HISTORY_HOME (and SUFFICE_SESSIONS_SOCKET) so batch runs never touch real history.
 import electronPath from 'electron';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -50,21 +51,22 @@ test('Review changes in the Changes panel annotates diff lines; Apply fix sends 
   const shot=async name=>{if(!SHOTS)return;await mkdir(SHOTS,{recursive:true});await writeFile(resolve(SHOTS,name+'.png'),Buffer.from(await app.evaluate(async({BrowserWindow})=>(await BrowserWindow.getAllWindows()[0].webContents.capturePage()).toPNG().toString('base64')),'base64'));};
   const themes=async name=>{for(const theme of ['dark','light']){await page.locator('html').evaluate((el,value)=>{el.dataset.theme=value;},theme);await page.waitForTimeout(200);await shot(`${name}-${theme}`);}await page.locator('html').evaluate(el=>{el.dataset.theme='dark';});};
   assert.equal(await page.locator('.review-note').count(),0);await themes('1-idle');
+  const fit=async()=>{const path=await page.locator('.panel-content-bar .panel-path').evaluate(el=>({s:el.scrollWidth,c:el.clientWidth}));assert.equal(path.s,path.c,'file path truncated');const panel=await page.locator('.editor-preview').boundingBox();for(const sel of ['.file-open-split','.panel-content-bar > [aria-label="Back"]']){const box=await page.locator(sel).boundingBox();const name=sel;assert.ok(box&&box.x>=panel.x&&box.x+box.width<=panel.x+panel.width+0.5,name+' outside panel '+JSON.stringify([box,panel]));}};await fit();
   const button=page.getByRole('button',{name:'Review changes',exact:true});await button.click();
-  await page.locator('.review-button[aria-busy="true"]').waitFor();assert.equal(await page.locator('.review-status').innerText(),'Reviewing…');await themes('2-running');
+  await page.locator('.review-button[aria-busy="true"]').waitFor();assert.equal(await page.locator('.review-status').innerText(),'Reviewing…');await fit();await themes('2-running');
   await page.locator('.review-note').first().waitFor();assert.equal(await page.locator('.review-note').count(),2);
   assert.deepEqual(await app.evaluate(()=>globalThis.reviewCalls),[{model:'fake-1',provider:'fake',effort:'low'}]);
   assert.equal(await page.locator('.review-status').innerText(),'2 findings');assert.equal(await page.locator('.review-badge').innerText(),'2');
   // The note sits directly under line 2 of the new file.
   const placed=await page.locator('.review-note').first().evaluate(note=>note.previousElementSibling.querySelector('.code-number:nth-of-type(2)').textContent);assert.equal(placed,'2');
-  assert.equal(await page.locator('.review-note[data-severity="high"] .review-message').innerText(),'Divides by zero when count is 0.');await themes('3-findings');
+  assert.equal(await page.locator('.review-note[data-severity="high"] .review-message').innerText(),'Divides by zero when count is 0.');await fit();await themes('3-findings');
   await page.getByRole('button',{name:'Split diff',exact:true}).click();await page.locator('.panel-code[data-layout="split"] .review-note').first().waitFor();await themes('4-split');await page.getByRole('button',{name:'Split diff',exact:true}).click();await page.locator('.panel-code[data-layout="unified"] .review-note').first().waitFor();
   await page.locator('.review-note[data-severity="high"] .review-apply').click();
   await page.waitForFunction(()=>true);const runs=await app.evaluate(async()=>{for(let i=0;i<50&&!globalThis.runCalls.length;i++)await new Promise(r=>setTimeout(r,50));return globalThis.runCalls;});
   assert.equal(runs.length,1);assert.match(runs[0].prompt,/^Fix this review finding in src\/math\.js at line 2 \(high\): Divides by zero when count is 0\.\nSuggested fix: Return 0 when count is 0\./);
   assert.equal(await page.locator('.review-note[data-severity="high"] .review-apply').innerText(),'Sent');
   await app.evaluate(({ipcMain})=>{ipcMain.removeHandler('suffice:review');ipcMain.handle('suffice:review',()=>{throw new Error('Model unavailable. Connect this provider in Settings.');});});
-  await button.click();await page.locator('.review-status',{hasText:'Model unavailable'}).waitFor();await themes('5-error');
+  await button.click();await page.locator('.review-status',{hasText:'Model unavailable'}).waitFor();await fit();await themes('5-error');
   assert.deepEqual(errors,[]);
  }finally{await app.close();}
 });

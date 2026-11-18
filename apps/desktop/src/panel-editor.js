@@ -25,7 +25,7 @@ export function createPanelEditor({body,type,view,project,onPatch,onTab,onRefres
  const scroller=document.createElement('div');scroller.className='panel-scroll';scroller.tabIndex=0;scroller.setAttribute('aria-label',type==='files'?'File preview':'Change preview');preview.append(bar,scroller);shell.append(explorer,preview);body.append(shell);
  function drawBar(){
   bar.replaceChildren();const toggle=control('Show explorer','panel',()=>onPatch({explorerOpen:true}));toggle.hidden=view.explorerOpen!==false;bar.append(toggle);
-  const path=textElement('span','panel-path',view.file||(type==='changes'?'All changes':''));path.title=view.file||'';if(view.file)bar.append(fileIcon(view.file));bar.append(path);if(type==='changes'&&review)bar.append(...review);
+  const path=textElement('span','panel-path',view.file||(type==='changes'?'All changes':''));path.title=view.file||'';if(view.file)bar.append(fileIcon(view.file));bar.append(path);if(type==='changes'&&review)bar.append(review[0]);preview.querySelector('.review-strip')?.remove();if(review[1])bar.after(review[1]);
   if(view.file){
    const options=document.createElement('div');options.className='editor-view-options';const wrap=control('Wrap lines','wrap',()=>void savePreference('wrap-lines',!view.wrap));wrap.setAttribute('aria-pressed',String(!!view.wrap));options.append(wrap);
    if(type==='changes'){
