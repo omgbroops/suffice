@@ -1,46 +1,49 @@
 .desktop-app .sidebar-sessions { gap: 4px; }
-.desktop-app .thread-row.thread-card { display: flex; flex-direction: column; align-items: stretch; gap: 3px; padding: 9px 12px; min-height: 76px; width: 100%; border-radius: 7px; text-align: left; background: transparent; color: var(--text); font-weight: 400; }
-.desktop-app :is(.thread-card[aria-pressed='true'],.new-session[aria-current='page']) { background: var(--surface-active); }
+.desktop-app .thread-row.thread-card { display: flex; flex-direction: column; align-items: stretch; gap: 2px; padding: 4px 8px; min-height: 46px; width: 100%; border-radius: var(--radius-control); text-align: left; background: transparent; color: var(--text); font-weight: 400; }
+.desktop-app :is(.thread-card[aria-pressed='true'],.new-session[aria-current='page']) { background: var(--hover-fill); }
 .desktop-app :is(.thread-card,.new-session):hover { background: var(--hover-fill); }
 .thread-card-heading,.thread-project-line,.thread-branch-line { display: flex; align-items: center; min-width: 0; gap: 6px; }
-.desktop-app .thread-card .row-title { flex: 1; min-width: 0; font-size: 13px; line-height: 20px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.thread-card[data-unread='true'] .row-title { color: var(--text-strong); }
-.thread-project-line { color: var(--text-muted); font-size: 12px; line-height: 16px; }
+.desktop-app .thread-card .row-title { flex: 1; min-width: 0; font-size: 13px; line-height: 20px; font-weight: 450; overflow: hidden; text-overflow: clip; white-space: nowrap; mask-image: linear-gradient(to right,#000 calc(100% - 16px),transparent); }
+.thread-card[data-unread='true'] .row-title { color: var(--text-strong); font-weight: var(--weight-semibold); }
+.thread-project-line { color: var(--text-faint); font-size: 12px; line-height: 16px; }
 .thread-project-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
 .thread-project-icon { width: 14px; height: 14px; flex: 0 0 14px; display: inline-flex; justify-content: center; align-items: center; border-radius: 25%; overflow: hidden; }
 .thread-project-icon img,.thread-project-icon svg { width: 100%; height: 100%; object-fit: contain; }
 .thread-monogram { color: var(--project-color); background: color-mix(in srgb,var(--project-color) 14%,transparent); font: 700 7.5px/14px var(--font-mono); letter-spacing: -.6px; }
-.thread-branch-line { color: var(--text-faint); font-size: 11px; line-height: 15px; min-height: 15px; }
+.thread-branch-line { color: var(--text-faint); font-size: 12px; line-height: 16px; min-height: 16px; }
+.thread-checks { flex-shrink: 0; color: var(--warning-ink); }
 .thread-branch,.thread-no-branch { flex: 1; min-width: 0; display: flex; align-items: center; gap: 5px; }
 .thread-branch span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .thread-branch .icon { width: 12px; height: 12px; flex-shrink: 0; }
-.thread-state { display: inline-flex; color: #34b698; flex-shrink: 0; }
+.thread-state { display: inline-flex; color: var(--text-faint); flex-shrink: 0; }
+.thread-state circle.dot { fill: currentColor; stroke: none; }
 .thread-state .icon { width: 14px; height: 14px; }
-:is(.thread-card,.thread-hover-card)[data-status='working'] .thread-state { color: #60a5fa; }
-:is(.thread-card,.thread-hover-card)[data-status='working'] .thread-state svg { animation: thread-working 1.2s linear infinite; }
-:is(.thread-card,.thread-hover-card)[data-status='failed'] .thread-state { color: #f87171; }
-:is(.thread-card,.thread-hover-card):is([data-status='approval'],[data-status='input']) .thread-state { color: #fbbf24; }
+:is(.thread-card,.thread-hover-card)[data-status='working'] .thread-state { color: var(--text); }
+:is(.thread-card,.thread-hover-card)[data-status='working'] .thread-state circle.dot { animation: thread-dot 1.2s ease-in-out infinite; }
+.thread-state circle.dot:nth-child(3n+2) { animation-delay: .15s !important; }
+.thread-state circle.dot:nth-child(3n) { animation-delay: .3s !important; }
+.thread-state circle.dot:nth-child(n+4):nth-child(-n+6) { animation-delay: .1s; }
+.thread-state circle.dot:nth-child(n+7) { animation-delay: .2s; }
+:is(.thread-card,.thread-hover-card)[data-status='failed'] .thread-state { color: var(--red); }
+:is(.thread-card,.thread-hover-card):is([data-status='approval'],[data-status='input']) .thread-state { color: var(--warning-ink); }
 :is(.thread-card,.thread-hover-card):is([data-status='idle'],[data-status='waiting']) .thread-state { color: var(--text-faint); }
-.desktop-app .thread-card .thread-age { font-size: 11px; line-height: 16px; font-variant-numeric: tabular-nums; color: var(--text-faint); }
-.thread-card[data-status='working'] .thread-age { color: #60a5fa; }
+.desktop-app .thread-card .thread-age { font-size: 12px; line-height: 20px; font-variant-numeric: tabular-nums; color: var(--text-faint); }
+.thread-card[data-unread='true'] .thread-age { color: var(--text-strong); }
+.thread-card[data-status='working'] .thread-age { color: var(--text); }
 .thread-provider,.thread-terminal,.thread-pr,.thread-diff { display: inline-flex; align-items: center; gap: 3px; flex-shrink: 0; }
 .thread-provider img,.thread-provider .icon { width: 13px; height: 13px; opacity: .65; }
 .thread-terminal .icon,.thread-pr .icon,.thread-draft .icon { width: 12px; height: 12px; }
-.thread-pr { color: #a78bfa; border-radius: 3px; cursor: pointer; }
-.thread-pr[data-state='OPEN'] { color: #34b698; }.thread-pr[data-state='CLOSED'] { color: #f87171; }
+.thread-pr { color: var(--purple); opacity: .8; border-radius: var(--radius-sm); cursor: pointer; }
+.thread-pr[data-state='OPEN'] { color: var(--green); }.thread-pr[data-state='CLOSED'] { color: var(--warning-ink); }
 .thread-pr:hover { text-decoration: underline; }
-.thread-added { color: #34b698; }.thread-removed { color: #f87171; }
+.thread-added { color: var(--diff-add); }.thread-removed { color: var(--diff-del); }
 .thread-hover-card { position: fixed; z-index: 150; width: 290px; display: flex; flex-direction: column; gap: 7px; padding: 12px; border-radius: 12px; background: var(--surface-composer); backdrop-filter: var(--glass-filter); box-shadow: var(--shadow-overlay); font-size: 12px; line-height: 17px; color: var(--text-muted); pointer-events: none; overflow-wrap: anywhere; }
 .thread-hover-card[hidden] { display: none; }.thread-hover-title { color: var(--text-strong); font-size: 13px; font-weight: 500; margin-bottom: 3px; }
-@keyframes thread-working { to { transform: rotate(360deg); } }
-@media(prefers-reduced-motion:reduce){.thread-card[data-status='working'] .thread-state svg { animation: none; }}
+@keyframes thread-dot { 0%,100% { opacity: .25; } 50% { opacity: 1; } }
+@media(prefers-reduced-motion:reduce){.thread-card[data-status='working'] .thread-state circle.dot { animation: none; }}
 
 .desktop-app { --sidebar-width: 260px; }
 .desktop-app[data-theme='light'] .thread-monogram { color: var(--project-color-light); background: color-mix(in srgb,var(--project-color-light) 14%,transparent); }
-.desktop-app[data-theme='light'] .thread-state,.desktop-app[data-theme='light'] .thread-added,.desktop-app[data-theme='light'] .thread-pr[data-state='OPEN'] { color: #059669; }
-.desktop-app[data-theme='light'] :is(.thread-card,.thread-hover-card)[data-status='working'] :is(.thread-state,.thread-age) { color: #2563eb; }
-.desktop-app[data-theme='light'] :is(.thread-card,.thread-hover-card)[data-status='failed'] .thread-state,.desktop-app[data-theme='light'] .thread-removed { color: #dc2626; }
-.desktop-app[data-theme='light'] :is(.thread-card,.thread-hover-card):is([data-status='approval'],[data-status='input']) .thread-state { color: #d97706; }
 
 .desktop-app:not([data-theme='light']) .thread-provider img { filter: invert(1); }
 .thread-provider-history { display: inline-flex; align-items: center; gap: 3px; margin-left: auto; }
@@ -55,11 +58,11 @@
 .thread-hover-icon > .icon,.thread-hover-icon img { width: 13px; height: 13px; }
 .thread-hover-icon .thread-provider { display: flex; align-items: center; }
 .thread-hover-value { min-width: 0; overflow-wrap: anywhere; }
-.thread-hover-warning { color: #d99c20; }
+.thread-hover-warning { color: var(--warning-ink); }
 .thread-hover-warning .thread-hover-icon { color: inherit; }
 .thread-hover-footer { margin-top: 2px; padding-top: 7px; border-top: .5px solid var(--border); font-size: 11px; }
 
-.thread-hover-card[data-status='working'] .thread-state { color: #60a5fa; }
+.thread-hover-card[data-status='working'] .thread-state { color: var(--text); }
 
 /* Keep a single navigation scroller, with breathing room beside each row. */
 .desktop-app .sidebar { --scrollbar-thumb: #ffffff1a; --scrollbar-thumb-hover: #ffffff29; }
@@ -70,7 +73,7 @@
 .thread-no-branch .icon { width: 12px; height: 12px; flex-shrink: 0; }
 
 /* Full-width navigation with a quiet, independent scrollbar at the outer edge. */
-.desktop-app .thread-row.thread-card { padding: 6px 10px; gap: 2px; min-height: 68px; }
+.desktop-app .thread-row.thread-card { padding: 4px 8px; gap: 2px; min-height: 46px; }
 .desktop-app .sidebar-sessions { scrollbar-width: none; scrollbar-gutter: auto; padding-right: 0; margin-right: 0; }
 .desktop-app .sidebar-sessions::-webkit-scrollbar { display: none; }
 .overlay-scroll-host { position: relative; }
@@ -79,20 +82,22 @@
 .sidebar-scroll-thumb { width: 3px; margin-left: 3px; border-radius: 8px; background: var(--scrollbar-thumb); }
 .sidebar-scroll-rail:hover .sidebar-scroll-thumb,.sidebar-scroll-rail.dragging .sidebar-scroll-thumb { background: var(--scrollbar-thumb-hover); }
 .desktop-app .session-section { overflow: visible; }
-.sidebar-options { display: grid; place-items: center; margin-left: auto; width: 25px; height: 25px; padding: 5px; border: 0; border-radius: 6px; background: transparent; color: var(--text-faint); cursor: pointer; -webkit-app-region: no-drag; }
+.sidebar-options { display: grid; place-items: center; margin-left: auto; width: 28px; height: 28px; padding: 7px; border: 0; border-radius: var(--radius-control); background: transparent; color: var(--text-faint); cursor: pointer; -webkit-app-region: no-drag; }
 .sidebar-options:hover,.sidebar-options[aria-expanded='true'] { background: var(--hover-fill); color: var(--text-muted); }
 .sidebar-options .icon { width: 14px; height: 14px; }
 .thread-project-group { display: flex; flex-direction: column; gap: 2px; }
-.thread-project-group + .thread-project-group { margin-top: 4px; }
-.thread-group-toggle { display: flex; align-items: center; gap: 6px; padding: 5px 10px; min-height: 28px; width: 100%; background: transparent; border: 0; border-radius: 6px; color: var(--text-muted); font: inherit; font-size: 12px; text-align: left; cursor: pointer; }
+.thread-project-group + .thread-project-group { margin-top: 12px; }
+.thread-group-toggle { display: flex; align-items: center; gap: 6px; padding: 0 8px; min-height: 28px; width: 100%; background: transparent; border: 0; border-radius: var(--radius-control); color: var(--text-faint); font: inherit; font-size: 12px; text-align: left; cursor: pointer; }
 .thread-group-toggle:hover { background: var(--hover-fill); }
 .thread-group-toggle > span:first-of-type { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.thread-group-toggle .icon { width: 11px; height: 11px; flex-shrink: 0; }
+.thread-group-toggle .icon { width: 12px; height: 12px; flex-shrink: 0; opacity: 0; transition: opacity var(--duration-hover) var(--ease-out); }
+.thread-group-toggle:is(:hover,:focus-visible) .icon,.thread-group-toggle[aria-expanded='false'] .icon { opacity: 1; }
+.thread-group-toggle:is(:hover,:focus-visible) { color: var(--text); }
 .thread-group-toggle[aria-expanded='false'] .icon { transform: rotate(-90deg); }
-.thread-group-count { margin-left: auto; color: var(--text-faint); font-size: 11px; }
+.thread-group-count { color: var(--text-muted); font-size: 12px; }
 .thread-group-rows { display: flex; flex-direction: column; gap: 2px; }
 .thread-group-rows[hidden] { display: none; }
-.desktop-app [data-group='project'] .thread-card { min-height: 49px; }
+.desktop-app [data-group='project'] .thread-card { min-height: 46px; }
 .desktop-app [data-compact='true'] .thread-card { min-height: 34px; padding: 6px 10px; }
 [data-compact='true'] .thread-card-heading { gap: 7px; }
 [data-compact='true'] .thread-card-heading > .thread-project-icon { flex-shrink: 0; }
@@ -103,7 +108,7 @@
 
 /* Completed checks add noise to single-line rows; active and attention states stay visible. */
 [data-compact='true'] .thread-card[data-status='done']:not([data-unread='true']) .thread-state { display: none; }
-.thread-unread-dot { width:7px; height:7px; display:block; border-radius:50%; background:var(--blue); }
+.thread-unread-dot { width:6px; height:6px; margin:4px; display:block; border-radius:50%; background:var(--accent); }
 .thread-pin { display:flex; align-items:center; color:var(--text-faint); }
 .thread-pin .icon { width:12px; height:12px; }
 .project-pin .icon { width:12px; height:12px; transform:none!important; color:var(--text-faint); }
@@ -137,12 +142,13 @@
  .desktop-app .thread-card .row-title,.thread-group-toggle > .icon { transition: none; }
 }
 
-.desktop-app .sidebar-sessions > .thread-card + .thread-card { margin-top: 3px; }
-.thread-group-rows { gap: 3px; }
+.desktop-app .sidebar-sessions > .thread-card + .thread-card { margin-top: 2px; }
+.thread-group-rows { gap: 2px; }
 .desktop-app .thread-card[aria-pressed='true'] .row-title { color: var(--text-strong); }
 .desktop-app .thread-card[data-unread='true'] .row-title { color:var(--text-strong); }
 
-.thread-group-name { flex: 1; min-width: 0; }
+.thread-group-name { flex: 0 1 auto; min-width: 0; }
+.thread-group-toggle > .icon { order: 3; margin-left: auto; }
 .thread-project-diff { display: inline-flex; gap: 3px; flex-shrink: 0; font-size: 10px; font-variant-numeric: tabular-nums; }
 .thread-project-diff + .thread-group-count { margin-left: 3px; }
 
@@ -151,3 +157,25 @@
 .thread-provider .settings-provider-placeholder,.message-turn-model .settings-provider-placeholder { width:13px; height:13px; flex:0 0 13px; font-size:8px; line-height:13px; border-radius:3px; }
 
 .spotlight-result .settings-provider-placeholder { width:13px; height:13px; flex:0 0 13px; font-size:8px; line-height:13px; border-radius:3px; }
+
+/* Sidebar chrome: 28px header buttons at the 6px control radius, 14px icons. */
+.desktop-app .sidebar-heading .sidebar-tools .button { width: var(--button-height); height: var(--button-height); min-width: var(--button-height); min-height: var(--button-height); padding: 7px; border-radius: var(--radius-button); }
+.desktop-app .sidebar-heading .sidebar-tools .icon,.desktop-app .sidebar-tools [data-action=settings] .icon { width: var(--icon-size-sm); height: var(--icon-size-sm); }
+
+/* Collapsible section label: the name toggles the list; the chevron shows on hover, the count follows the name. */
+.desktop-app .section-label > #sidebar-section-label { display: inline-flex; align-items: center; gap: 6px; height: 28px; cursor: pointer; border-radius: var(--radius-control); transition: color var(--duration-hover) var(--ease-out); }
+.desktop-app .section-label > #sidebar-section-label:is(:hover,:focus-visible) { color: var(--text); }
+.desktop-app .section-label > #sidebar-section-label::after { content: attr(data-count); color: var(--text-muted); }
+.desktop-app .session-section[data-collapsed='true'] .sidebar-sessions { display: none; }
+.section-chevron { width: 12px; height: 12px; opacity: 0; transition: opacity var(--duration-hover) var(--ease-out),transform var(--duration) var(--ease-out); }
+#sidebar-section-label:is(:hover,:focus-visible) .section-chevron,.session-section[data-collapsed='true'] .section-chevron { opacity: 1; }
+.session-section[data-collapsed='true'] .section-chevron { transform: rotate(-90deg); }
+@media (prefers-reduced-motion: reduce) { .section-chevron { transition: none; } }
+.section-chevron { order: 2; }
+
+/* Two lines: title row, then project and branch/meta side by side. */
+.desktop-app .thread-row.thread-card { display: grid; grid-template-columns: auto minmax(0,1fr); column-gap: 6px; align-content: center; align-items: center; }
+.desktop-app .thread-row.thread-card > .thread-card-heading { grid-column: 1 / -1; }
+.thread-card > .thread-card-heading + .thread-branch-line { grid-column: 1 / -1; }
+.thread-branch-line > .thread-state { margin-left: auto; }
+.thread-project-line > .thread-project-name { flex: 0 1 auto; max-width: 9em; }
