@@ -20,7 +20,7 @@ test('model picker keeps focus, groups providers once, labels single-effort mode
   const button=page.getByRole('button',{name:'Choose model and effort',exact:true});await page.waitForFunction(()=>!document.querySelector('.model-button').disabled&&document.querySelector('#model-label')?.textContent==='Alpha');
   await button.click();
   await page.locator('.model-stage-button').click();
-  const titles=await page.locator('.model-provider-title').allInnerTexts();assert.deepEqual(titles,['openai','anthropic','Agent CLIs']);
+  const titles=await page.locator('.model-provider-title').allInnerTexts();assert.deepEqual(titles,['OpenAI','Anthropic','Agent CLIs']);
   assert.equal(await page.locator('.model-option').count(),3);assert.equal(await page.locator('.agent-option').count(),1);
   await page.locator('.model-search').fill('claude');assert.equal(await page.locator('.agent-option').count(),1);assert.equal(await page.locator('.model-empty').count(),0,'no empty message while an agent row matches');await page.locator('.model-search').fill('');
   await page.locator('.model-option',{hasText:'Beta'}).click();

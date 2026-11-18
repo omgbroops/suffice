@@ -24,6 +24,7 @@ import './window-chrome.css';
 import {sessionMenuItems} from './sessions-ui.js';
 import './edge-to-edge-experiment.css';
 import './motion.css';
+import './overlays.css';
 import {connectMotion} from './motion.js';
 import {connectSharedChrome} from './shared-chrome.js';
 import '@fontsource/jetbrains-mono/400.css';
@@ -202,7 +203,7 @@ function toast(message) {
  if(el.parentElement!==document.body)document.body.append(el);
  // Preserve Chromium's standard property: CSS minification retains only the WebKit alias.
  el.style.backdropFilter='var(--shared-chrome-filter)';
- el.setAttribute('popover','manual');el.innerHTML=`<div class="toast-content">${icon(/error|failed|unsuccessful|unavailable|could not|unknown/i.test(String(message))?'warning':'info')}<span class="toast-message"></span><button type="button" class="toast-dismiss">Okay</button></div>`;el.querySelector('.toast-message').textContent=String(message);
+ el.setAttribute('popover','manual');el.innerHTML=`<div class="toast-content">${icon(/error|failed|unsuccessful|unavailable|could not|unknown/i.test(String(message))?'warning':'info')}<span class="toast-message"></span><button type="button" class="toast-dismiss" aria-label="Dismiss">${icon('close')}</button></div>`;el.querySelector('.toast-message').textContent=String(message);
  el.hidden=false;if(!el.matches(':popover-open'))el.showPopover();
  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
  const close=()=>{clearTimeout(toastTimeout);toastMotion.forEach(animation=>animation.cancel());if(reduced){el.hidePopover();el.hidden=true;return;}const motion=el.animate([{transform:'translateY(0)'},{transform:'translateY(10px)'}],{duration:130,easing:'ease-in',fill:'forwards'});toastMotion=[motion,el.firstElementChild.animate([{opacity:1},{opacity:0}],{duration:120,fill:'forwards'})];motion.onfinish=()=>{el.hidePopover();el.hidden=true;};};
