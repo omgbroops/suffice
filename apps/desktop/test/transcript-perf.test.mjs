@@ -58,7 +58,13 @@ test('long thread windows its DOM, colors lazy code, and keeps scroll stable',{t
   assert.ok(top.nodes<12000,'DOM stays bounded at the top: '+JSON.stringify(top));
   assert.ok(top.lazy>300,'distant blocks are unrendered: '+JSON.stringify(top));
   assert.ok(top.visible>0&&top.visibleEmpty===0,JSON.stringify(top));
-  const clear=await page.evaluate(()=>{const tools=[...document.querySelectorAll('.caption-chat-tools,.thread-header')].map(n=>n.getBoundingClientRect().bottom),tr=document.querySelector('.thread-messages').parentElement.getBoundingClientRect(),u=[...document.querySelectorAll('.thread-messages .thread-user')].find(n=>n.getBoundingClientRect().bottom>tr.top);return {tools:Math.max(...tools),u:u.getBoundingClientRect().top};});
-  assert.ok(clear.u>=clear.tools,'first visible user bubble sits below the toolbar/pill: '+JSON.stringify(clear));
+  // Scrolled state: a user bubble whose top sits 20 px above the toolbar bottom must be clipped by the scroller, not painted under the header pill.
+  await page.evaluate(()=>{const tools=Math.max(...[...document.querySelectorAll('.caption-chat-tools,.thread-header')].map(n=>n.getBoundingClientRect().bottom)),t=document.querySelector('.thread-messages').parentElement;t.scrollTop=t.scrollHeight*.3;const u=[...t.querySelectorAll('.thread-user')].find(n=>n.getBoundingClientRect().top>tools+100);t.scrollTop+=u.getBoundingClientRect().top-(tools-20);});
+  await page.waitForTimeout(800);
+  await page.evaluate(()=>{const tools=Math.max(...[...document.querySelectorAll('.caption-chat-tools,.thread-header')].map(n=>n.getBoundingClientRect().bottom)),t=document.querySelector('.thread-messages').parentElement,u=[...t.querySelectorAll('.thread-user')].find(n=>n.getBoundingClientRect().top>tools-60);t.scrollTop+=u.getBoundingClientRect().top-(tools-20);});
+  await page.waitForTimeout(400);
+  const clear=await page.evaluate(()=>{const tools=Math.max(...[...document.querySelectorAll('.caption-chat-tools,.thread-header')].map(n=>n.getBoundingClientRect().bottom)),y=tools-5,u=[...document.querySelectorAll('.thread-messages .thread-user')].find(n=>{const r=n.getBoundingClientRect();return r.top<y&&r.bottom>y;});if(!u)return {tools,none:true};const r=u.getBoundingClientRect();document.querySelectorAll('.window-drag-region').forEach(n=>{n.style.pointerEvents='none';});const hit=document.elementFromPoint(r.left+10,y);return {tools,top:r.top,bottom:r.bottom,hit:!!hit&&!!hit.closest('.thread-user')};});
+  assert.ok(!clear.none,'a user bubble straddles the toolbar bottom: '+JSON.stringify(clear));
+  assert.ok(!clear.hit,'user bubble must not paint under the toolbar/pill: '+JSON.stringify(clear));
  }finally{await app.close();await rm(home,{recursive:true,force:true});await rm(cwd,{recursive:true,force:true});}
 });
