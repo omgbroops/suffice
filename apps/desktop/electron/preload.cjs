@@ -54,6 +54,8 @@ contextBridge.exposeInMainWorld('sufficeDesktop',{
   files:directory=>ipcRenderer.invoke('suffice:files',directory),
   file:name=>ipcRenderer.invoke('suffice:file',name),
   changes:()=>ipcRenderer.invoke('suffice:changes'),
+  rewindList:id=>ipcRenderer.invoke('suffice:rewind-list',id),
+  rewindRestore:payload=>ipcRenderer.invoke('suffice:rewind-restore',payload),
   startHints:()=>ipcRenderer.invoke('suffice:start-hints'),
   diff:name=>ipcRenderer.invoke('suffice:diff',name),
   status:()=>ipcRenderer.invoke('suffice:status'),

@@ -4,9 +4,10 @@ import {createCollectionNavigation} from './components/ui/collection-navigation.
 import {createPanelEditor} from './panel-editor.js';
 import {showPopover,hidePopover,keyboardInteraction} from './popover-motion.js';
 import {threadViewState as store} from './thread-view-state.js';
+import {mountRewind} from './rewind-view.js';
 import {renderFileTree,renderChanges,renderCode,textElement} from './panel-content.js';
 
-const options={files:{label:'Files',icon:'files'},changes:{label:'Changes',icon:'changes'},terminal:{label:'Terminal',icon:'terminal'}};
+const options={files:{label:'Files',icon:'files'},changes:{label:'Changes',icon:'changes'},rewind:{label:'Rewind',icon:'rewind'},terminal:{label:'Terminal',icon:'terminal'}};
 export function panelIconButton(label,glyph){const button=document.createElement('button');button.type='button';button.className='button button--ghost';button.setAttribute('aria-label',label);button.title=label;button.innerHTML=icon(glyph);return button;}
 const textNode=textElement;
 export function connectRightPanel({sidebar,resize,toggle,api}){
@@ -24,6 +25,7 @@ export function connectRightPanel({sidebar,resize,toggle,api}){
  const optionFor=type=>terminalTab(type)?{label:store.state.terminals[type]?.label||'Terminal',icon:'terminal'}:options[type];
  api.onClearCache?.(()=>{directories.clear();mounted=null;if(store.state.panelOpen)void load();});
  document.addEventListener('suffice-preference',event=>{if(['hidden-files','gitignored','file-sort'].includes(event.detail.id)){directories.clear();mounted=null;if(store.state.panelOpen)void load();}});
+ document.addEventListener('suffice-rewind-restored',()=>{directories.clear();mounted=null;});
  const refreshPanel=()=>{directories.clear();mounted=null;void load();};
  function closeMenu(){menuNavigation.reset();hidePopover(menu);add.setAttribute('aria-expanded','false');}
  function activate(type){const current=store.state;if(type==='terminal'){const ordinal=Math.max(Number(current.terminalSequence)||0,...Object.values(current.terminals).map(value=>Number(value.ordinal)||0))+1;type='terminal:'+crypto.randomUUID();store.update({terminalSequence:ordinal,terminals:{...current.terminals,[type]:{ordinal,label:ordinal===1?'Terminal':'Terminal '+ordinal}},tabs:[...current.tabs,type],activeTab:type});closeMenu();return;}store.update({tabs:current.tabs.includes(type)?current.tabs:[...current.tabs,type],activeTab:type});closeMenu();}
@@ -72,6 +74,7 @@ export function connectRightPanel({sidebar,resize,toggle,api}){
   if(!type){body.removeAttribute('role');body.removeAttribute('aria-labelledby');body.removeAttribute('aria-busy');body.replaceChildren();const launcher=document.createElement('div');launcher.className='panel-launcher';choices(launcher);body.append(launcher);return;}
   body.setAttribute('role','tabpanel');body.setAttribute('aria-labelledby','panel-tab-'+type);body.setAttribute('aria-busy','true');
   if(terminalTab(type)){try{const terminals=await terminalViews();if(request!==version||id!==store.id||!store.state.panelOpen)return;await terminals.mount(body,id,type,state.terminals[type]?.ordinal);}catch(error){if(request===version&&id===store.id)message('Could not open terminal',error.message,true);}finally{if(request===version)body.setAttribute('aria-busy','false');}return;}
+  if(type==='rewind'){mounted=null;await mountRewind(body,{api,id,valid:()=>request===version&&id===store.id&&store.state.panelOpen});if(request===version)body.setAttribute('aria-busy','false');return;}
   const focusedPath=body.contains(document.activeElement)?document.activeElement.dataset.path:null;
   const view=state[type],layoutKey=JSON.stringify([id,type,view.directory,view.filterOpen,view.explorerOpen,view.expanded]);
   if(mounted?.layoutKey===layoutKey&&mounted.editor.shell.isConnected){await loadPreview(mounted,view,request);if(request===version)body.setAttribute('aria-busy','false');return;}
@@ -112,7 +115,7 @@ export function connectRightPanel({sidebar,resize,toggle,api}){
  store.subscribe(event=>{const changedView=['files','changes'].some(type=>event.changed?.includes(type)&&(event.state[type].file!==previous[type].file||event.state[type].directory!==previous[type].directory||event.state[type].filterOpen!==previous[type].filterOpen||event.state[type].explorerOpen!==previous[type].explorerOpen||JSON.stringify(event.state[type].expanded)!==JSON.stringify(previous[type].expanded)||event.state[type].wrap!==previous[type].wrap||event.state[type].diffLayout!==previous[type].diffLayout));previous=event.state;event.changedView=changedView;sync(event);});
  toggle.addEventListener('click',()=>{if(store.id)store.update({panelOpen:!store.state.panelOpen});});
  const saveWidth=()=>{if(store.id)store.update({panelWidth:Math.round(sidebar.getBoundingClientRect().width)});};resize.addEventListener('lostpointercapture',saveWidth);resize.addEventListener('keydown',saveWidth);resize.addEventListener('dblclick',saveWidth);
- api.onEvent(event=>{if(event.event==='tool_end'&&store.state.panelOpen){clearTimeout(refreshTimer);refreshTimer=setTimeout(refreshPanel,300);}});document.addEventListener('suffice:thread-updated',refreshPanel);
+ api.onEvent(event=>{if(event.event==='tool_end'&&store.state.panelOpen&&store.state.activeTab!=='rewind'){clearTimeout(refreshTimer);refreshTimer=setTimeout(refreshPanel,300);}});document.addEventListener('suffice:thread-updated',refreshPanel);
  document.addEventListener('keydown',event=>{if(!store.id||!store.state.panelOpen||!store.state.activeTab||terminalTab(store.state.activeTab)||!(event.ctrlKey||event.metaKey))return;const type=store.state.activeTab;if(event.key.toLowerCase()==='p'){event.preventDefault();focusFilter=true;patchView(type,{explorerOpen:true,filterOpen:true});body.querySelector('.panel-filter')?.focus();}if(event.key==='\\'){event.preventDefault();patchView(type,{explorerOpen:store.state[type].explorerOpen===false});}});
  sync();
 }
