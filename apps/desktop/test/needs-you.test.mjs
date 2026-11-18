@@ -105,7 +105,9 @@ test('needs you digest: count, live updates, row actions, sessions, states',{tim
   await expectCount(3);
   await page.locator('.needs-nav').click();await page.locator('.needs-view').waitFor({state:'visible'});
   const sessionRow=page.locator(`.needs-row[data-key=session-${sid}]`);assert.equal(await sessionRow.count(),1);
-  assert.deepEqual(await sessionRow.locator('.needs-act').allInnerTexts(),['Open']);
+  assert.deepEqual(await sessionRow.locator('.needs-act').allInnerTexts(),['Approve','Deny','Open']);
+  // only the digest entry reads as selected while it is open
+  assert.equal(await page.locator('.thread-row[aria-pressed=true]').count(),0);
   await both('with-session');
   await sessionRow.locator('.needs-act[data-act=open]').click();
   await page.locator('.needs-view').waitFor({state:'hidden'});await page.locator('.composer-approval:not([hidden])').waitFor();

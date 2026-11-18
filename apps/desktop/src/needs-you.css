@@ -19,10 +19,8 @@
 .needs-list { list-style: none; margin: 4px 0 0; padding: 0; border-radius: 12px; background: var(--surface-active); box-shadow: inset 0 0 0 1px var(--border-strong); overflow: hidden; }
 .needs-row { display: grid; grid-template-columns: 14px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px 10px 10px 14px; }
 .needs-row + .needs-row { box-shadow: inset 0 1px 0 var(--border-strong); }
-.needs-state { display: inline-flex; align-self: start; margin-top: 3px; color: #34b698; }
-.needs-state .icon { width: 14px; height: 14px; }
-.needs-row[data-status='failed'] .needs-state { color: #f87171; }
-.needs-row[data-status='approval'] .needs-state, .needs-row[data-status='input'] .needs-state { color: #fbbf24; }
+/* colour comes from .thread-state, the same rules the sidebar rows use (dark + light) */
+.needs-state { align-self: start; margin-top: 3px; }
 .needs-body { min-width: 0; }
 .needs-row-title { font-size: 14px; line-height: 20px; letter-spacing: -.01em; color: var(--text-strong); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .needs-why { margin-top: 1px; font-size: 13px; line-height: 18px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -41,3 +39,6 @@
 @media (prefers-reduced-motion: reduce) { .needs-act { transition: none; } .needs-act:active { transform: none; } }
 /* The thread's own chrome (title chip, panel toggle) sits above the page; hide it while the digest is open. */
 body:has(.workspace.needs-open) :is(.caption-chat-tools,.right-sidebar) { visibility: hidden; }
+/* Only the Needs you entry reads as selected while the digest is open. */
+body:has(.workspace.needs-open) .thread-row[aria-pressed='true'] { background: transparent; }
+body:has(.workspace.needs-open) .thread-card[aria-pressed='true'] .row-title { color: inherit; }

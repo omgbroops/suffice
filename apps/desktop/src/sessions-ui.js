@@ -7,7 +7,7 @@ import {createTranscript} from './sessions-transcript.js';
 import {createControls} from './sessions-controls.js';
 import {connectSessionHeader,viewId,storedTitle} from './sessions-header.js';
 import {createTerminal} from './sessions-terminal.js';
-import {createApproval} from './sessions-approval.js';
+import {createApproval,describePrompt} from './sessions-approval.js';
 import {updateSessionDirectory} from './thread-directory.js';
 import './sessions.css';
 
@@ -25,7 +25,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  if(!sx)return {leave(){},isActive:()=>false,stop:()=>false,send(){},start:async()=>{toast('Sessions are unavailable');return false;}};
  const side=el('div','sidebar-cli-sessions');
  document.querySelector('.sidebar-sessions').before(side);
- const busy=new Map(),rows=new Map(),states=new Map(),prompts=new Map(),subs=new Map(),labels=new Map(),titles=new Map(),firstText=new Map(),handBack=new Map(),activity=new Map();
+ const busy=new Map(),rows=new Map(),states=new Map(),prompts=new Map(),subs=new Map(),labels=new Map(),titles=new Map(),firstText=new Map(),handBack=new Map(),activity=new Map(),promptInfo=new Map();
  let import_=null,republished=false;
  const uiSeen=new Set();const bump=id=>{activity.set(id,Date.now());};
  const agentLabel=a=>({claude:'Claude Code',codex:'Codex'}[a]||(/claude/.test(a)?'Claude Code':/codex/.test(a)?'Codex':avail.agents.find(x=>x.id===a)?.label||a));
@@ -52,7 +52,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   for(const s of list){
    seen.add(s.id);labels.set(s.id,agentLabel(s.agent));if(!activity.has(s.id))activity.set(s.id,(s.created&&s.created<1e12?s.created*1000:s.created)||Date.now());
    if(!states.has(s.id)){states.set(s.id,'starting');sx.onState(s.id,v=>{states.set(s.id,v?.state||'starting');if(v?.since)activity.set(s.id,v.since<1e12?v.since*1000:v.since);paint(s);if(c.active?.id===s.id){c.paintHeader();c.syncRun();}});
-    sx.onUi(s.id,u=>{const had=prompts.get(s.id),hs=busy.get(s.id),first=!uiSeen.has(s.id);uiSeen.add(s.id);const ft=u?.items?.find(i=>i.kind==='user')?.text?.trim().replace(/\s+/g,' ').slice(0,60);if(ft&&!titles.has(s.id)){titles.set(s.id,ft);paint(s);}prompts.set(s.id,u?!!u.prompt:undefined);busy.set(s.id,!!u?.status);if(had!==prompts.get(s.id)||hs!==busy.get(s.id)){if(!first)bump(s.id);paint(s);if(c.active?.id===s.id)c.paintHeader();}});}
+    sx.onUi(s.id,u=>{const had=prompts.get(s.id),hs=busy.get(s.id),first=!uiSeen.has(s.id);uiSeen.add(s.id);const ft=u?.items?.find(i=>i.kind==='user')?.text?.trim().replace(/\s+/g,' ').slice(0,60);if(ft&&!titles.has(s.id)){titles.set(s.id,ft);paint(s);}prompts.set(s.id,u?!!u.prompt:undefined);busy.set(s.id,!!u?.status);const info=u?.prompt?{...u.prompt,detail:describePrompt(u.prompt,u.items)?.text||''}:null,infoChanged=JSON.stringify(info)!==JSON.stringify(promptInfo.get(s.id)||null);promptInfo.set(s.id,info);if(had!==prompts.get(s.id)||hs!==busy.get(s.id)){if(!first)bump(s.id);paint(s);if(c.active?.id===s.id)c.paintHeader();}else if(infoChanged)publish();});}
    paint(s);
   }
   for(const [id,row] of rows)if(!seen.has(id)){row.remove();rows.delete(id);}
@@ -65,7 +65,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   if(state==='waiting_input'&&prompts.get(s.id)===false&&!busy.get(s.id))return 'done'; // nothing on screen needs you: clear the badge
   return STATUS[state]||'working';
  }
- function publish(){updateSessionDirectory([...rows.values()].map(r=>({id:'session-'+r._s.id,title:c.name(r._s),project:base(r._s.cwd),status:statusOf(r._s),modified:activity.get(r._s.id)||Date.now(),agent:labels.get(r._s.id),open:()=>open(r._s)})));}
+ function publish(){updateSessionDirectory([...rows.values()].map(r=>({id:'session-'+r._s.id,title:c.name(r._s),project:base(r._s.cwd),status:statusOf(r._s),modified:activity.get(r._s.id)||Date.now(),agent:labels.get(r._s.id),prompt:promptInfo.get(r._s.id)||null,answer:index=>sx.control(r._s.id,'answerPrompt',{index}),open:()=>open(r._s)})));}
  function paint(s){
   let row=rows.get(s.id);
   if(!row){row=el('button','thread-row session-row session-row--sidebar');row.type='button';row.addEventListener('click',()=>open(row._s));rows.set(s.id,row);side.append(row);}

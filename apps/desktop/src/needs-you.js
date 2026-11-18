@@ -3,6 +3,7 @@ import {formatThreadTime} from './thread-row.js';
 import {preference} from './settings-preferences.js';
 import {displayRunError} from '../shared/run-error.mjs';
 import {icon} from './ui.js';
+import {DENY} from './sessions-approval.js';
 import './needs-you.css';
 
 import {collectNeeds,GROUPS} from './needs-collect.js';
@@ -19,21 +20,26 @@ export function connectNeedsYou({api,approvals,toast,retry,markRead}){
  const view=el('section','needs-view');view.hidden=true;view.setAttribute('aria-label','Needs you');
  const head=el('header','needs-head');const title=el('h1','needs-title','Needs you');const total=el('span','needs-total');head.append(title,total);
  const scroll=el('div','needs-scroll');view.append(head,scroll);workspace.append(view);
- let isOpen=false,underlay=[],pending=false;
+ let isOpen=false,underlay=[],pending=false,pressed=[];
+ const fetched=new Map(); // thread id -> approvals raised before this page loaded, read from the running thread
+ const clearPressed=()=>{for(const row of document.querySelectorAll('.thread-row[aria-pressed=true]')){if(!pressed.includes(row))pressed.push(row);row.setAttribute('aria-pressed','false');}};
  const current=()=>collectNeeds({threads:getThreadDirectory().threads,sessions:getSessionDirectory(),dismissed:readDismissed()});
- const requestsFor=id=>approvals.pending().filter(event=>[event.threadId,event.clientId].includes(id));
+ const requestsFor=id=>{const live=approvals.pending().filter(event=>[event.threadId,event.clientId].includes(id));return live.length?live:fetched.get(id)||[];};
+ // Session prompt options: Approve is the highlighted non-deny option, Deny the first that reads as a refusal.
+ const choice=record=>{const options=record.prompt?.options||[],deny=options.find(o=>DENY.test(o.label)),allow=options.find(o=>o!==deny&&o.index===record.prompt.selected)||options.find(o=>o!==deny);return allow&&deny&&record.answer?{allow,deny}:null;};
  const motion=()=>!preference('reduced-motion',false)&&!matchMedia('(prefers-reduced-motion: reduce)').matches;
 
  function reason(item){
   const {record}=item;
   if(item.group==='failed')return record.error?displayRunError(record.error,record.provider):'The run did not finish';
   if(item.group==='done')return 'Finished while you were away';
+  if(item.kind==='session'&&record.prompt)return (record.prompt?.detail||record.prompt?.title||'Waiting for your approval').split('\n')[0];
   if(record.status==='approval'){const request=requestsFor(record.id)[0];if(request){const input=request.input||{};return typeof input.command==='string'?input.command:request.name;}return 'Waiting for your approval';}
   return 'Waiting for your reply';
  }
  function actions(item){
   const {record}=item,list=[];
-  if(item.group==='wait'&&record.status==='approval'&&item.kind==='thread'&&requestsFor(record.id).length)list.push(['approve','Approve',true],['deny','Deny']);
+  if(item.group==='wait'&&(item.kind==='thread'?record.status==='approval'&&requestsFor(record.id).length:choice(record)))list.push(['approve','Approve',true],['deny','Deny']);
   if(item.group==='failed'&&record.canRetry)list.push(['retry','Retry',true]);
   list.push(['open','Open',!list.length]);
   if(item.group!=='wait')list.push(['dismiss','Dismiss']);
@@ -41,7 +47,7 @@ export function connectNeedsYou({api,approvals,toast,retry,markRead}){
  }
  function row(item){
   const {record}=item,li=el('li','needs-row');li.dataset.key=record.id;li.dataset.group=item.group;li.dataset.status=record.status;
-  const state=el('span','needs-state');state.innerHTML=icon(GLYPH[record.status==='done'?'done':record.status]||'info');
+  const state=el('span','needs-state thread-state');state.innerHTML=icon(GLYPH[record.status==='done'?'done':record.status]||'info');
   const body=el('div','needs-body');body.append(el('div','needs-row-title',record.title||'Untitled'));
   const why=el('div','needs-why',reason(item));if(record.status==='approval')why.classList.add('needs-mono');
   const meta=[record.project,record.agent,formatThreadTime(Math.max(0,Math.floor((Date.now()-record.modified)/1000)))].filter(Boolean).join(' · ');
@@ -55,7 +61,13 @@ export function connectNeedsYou({api,approvals,toast,retry,markRead}){
   const items=current();
   count.textContent=String(items.length);count.hidden=!items.length;
   nav.setAttribute('aria-label',items.length?`Needs you, ${items.length} waiting`:'Needs you');nav.title=nav.getAttribute('aria-label');
+  for(const id of [...fetched.keys()])if(!items.some(item=>item.record.id===id&&item.record.status==='approval'))fetched.delete(id);
   if(!isOpen)return;
+  clearPressed();
+  for(const item of items)if(item.kind==='thread'&&item.record.status==='approval'&&!approvals.pending().some(e=>[e.threadId,e.clientId].includes(item.record.id))&&!fetched.has(item.record.id)){
+   const id=item.record.id;fetched.set(id,[]);
+   Promise.resolve(api.openThread?.(id)).then(thread=>{if(fetched.has(id)){fetched.set(id,thread?.runtime?.approvals||[]);schedule();}}).catch(()=>{});
+  }
   const focus=document.activeElement?.closest?.('.needs-view')?document.activeElement:null,keep=focus&&focus.dataset.act?[focus.dataset.key,focus.dataset.act]:null;
   total.textContent=items.length?String(items.length):'';
   scroll.replaceChildren();
@@ -75,7 +87,7 @@ export function connectNeedsYou({api,approvals,toast,retry,markRead}){
   if(isOpen){scroll.querySelector('.needs-act')?.focus();return;}
   isOpen=true;
   underlay=[...workspace.querySelectorAll('.home,.thread-transcript,.thread-header')].map(element=>({element,inert:element.inert}));for(const {element} of underlay)element.inert=true;
-  view.hidden=false;workspace.classList.add('needs-open');nav.setAttribute('aria-current','page');newSession?.removeAttribute('aria-current');
+  view.hidden=false;workspace.classList.add('needs-open');pressed=[];clearPressed();nav.setAttribute('aria-current','page');newSession?.removeAttribute('aria-current');
   render();if(motion())view.animate([{opacity:0,transform:'translateY(6px)'},{opacity:1,transform:'none'}],{duration:150,easing:'cubic-bezier(.2,.8,.2,1)'});
   (scroll.querySelector('.needs-act')||view.querySelector('.needs-title')).focus?.({preventScroll:true});
  }
@@ -84,7 +96,8 @@ export function connectNeedsYou({api,approvals,toast,retry,markRead}){
   for(const {element,inert} of underlay)element.inert=inert;underlay=[];
   view.hidden=true;workspace.classList.remove('needs-open');nav.removeAttribute('aria-current');
   if(!workspace.classList.contains('thread-view'))newSession?.setAttribute('aria-current','page');
-  if(restoreFocus)nav.focus({preventScroll:true});
+  if(restoreFocus){for(const row of pressed)if(row.isConnected&&!document.querySelector('.thread-row[aria-pressed=true]'))row.setAttribute('aria-pressed','true');nav.focus({preventScroll:true});}
+  pressed=[];
  }
  const find=key=>current().find(item=>item.record.id===key);
  view.addEventListener('click',async event=>{
@@ -96,7 +109,10 @@ export function connectNeedsYou({api,approvals,toast,retry,markRead}){
   if(act==='dismiss'){if(item.group==='done')markRead(record.id);else{const map=readDismissed();map[record.id]=record.modified;try{localStorage.setItem(DISMISS_KEY,JSON.stringify(map));}catch{}}render();return;}
   if(act==='approve'||act==='deny'){
    button.disabled=true;
-   try{for(const request of requestsFor(record.id))await api.approvalAnswer({threadId:request.threadId||request.clientId,requestId:request.requestId,allow:act==='approve'});}
+   try{
+    if(item.kind==='session'){const pick=choice(record);await record.answer((act==='approve'?pick.allow:pick.deny).index);}
+    else{for(const request of requestsFor(record.id))await api.approvalAnswer({threadId:request.threadId||request.clientId,requestId:request.requestId,allow:act==='approve'});fetched.delete(record.id);}
+   }
    catch(error){toast(error.message);button.disabled=false;}
   }
  });
