@@ -39,7 +39,7 @@ test('fork at a message, lineage on rows and transcript, side chat drawer that n
    ipcMain.handle('suffice:models',()=>[{id:'fixture',provider:'anthropic',name:'Fixture',available:true,efforts:['low']}]);
    ipcMain.handle('suffice:threads',()=>globalThis.threads);
    ipcMain.handle('suffice:thread',(_e,id)=>({id,title:globalThis.threads.find(t=>t.id===id)?.title||id,cwd:project,messages:globalThis.messagesOf[id]||[],running:false}));
-   ipcMain.handle('suffice:run',()=>{globalThis.runs++;return {};});
+   ipcMain.handle('suffice:run',()=>{globalThis.runs++;return globalThis.live?{text:'Ship it behind a flag.',threadId:'a'.repeat(32)}:{};});
    ipcMain.handle('suffice:fork-thread',(_e,id,at)=>{globalThis.forks.push({id,at});if(!globalThis.threads.some(t=>t.id===B))globalThis.threads.unshift({id:B,title:'Fork of Plan the Postgres migration',project:'billing',cwd:project,modified:Date.now(),status:'done',provider:'anthropic',parent:id});return {id:B,cwd:project};});
    ipcMain.handle('suffice:side-run',(_e,payload)=>{globalThis.sides.push(payload);const w=BrowserWindow.getAllWindows()[0];const answer=`Rolling back means flipping the read flag back to the old database. It stays writable for **seven days** after cutover, so no restore is needed.`;w.webContents.send('suffice:event',{event:'assistant_start',clientId:payload.clientId});w.webContents.send('suffice:event',{event:'text',text:answer,clientId:payload.clientId});return {text:answer};});
    ipcMain.handle('suffice:side-end',(_e,id)=>{globalThis.sides.push({ended:id});return null;});
@@ -109,6 +109,17 @@ test('fork at a message, lineage on rows and transcript, side chat drawer that n
   await page.waitForFunction(()=>!document.body.classList.contains('side-chat-open'));
   await page.keyboard.press('Control+Shift+U');await page.waitForFunction(()=>document.body.classList.contains('side-chat-open'));
   await page.locator('[data-side="close"]').click();await page.waitForFunction(()=>!document.body.classList.contains('side-chat-open'));
+  // a message sent in this view can be forked right away, without reopening the thread
+  await app.evaluate(({},{A,now})=>{const text=t=>[{type:'text',text:t}];globalThis.live=true;globalThis.messagesOf[A]=[...globalThis.messagesOf[A],{entryId:'u3',role:'user',timestamp:now,content:text('Summarize the plan')},{entryId:'a3',role:'assistant',timestamp:now,content:text('Ship it behind a flag.')}];},{A,now});
+  await source().click();await page.locator('.thread-message').nth(3).waitFor();
+  await page.locator('#prompt').fill('Summarize the plan');await page.locator('#prompt').press('Enter');
+  await page.locator('.thread-message.thread-assistant').filter({hasText:'Ship it behind a flag.'}).waitFor();
+  await page.waitForFunction(()=>!document.querySelector('.thread-status'));
+  await page.locator('.thread-message.thread-assistant').last().hover();
+  await page.locator('.message-toolbar:not([hidden]) .message-fork').click();
+  await page.waitForFunction(()=>document.querySelector('.thread-fork-origin'));
+  assert.deepEqual((await app.evaluate(()=>globalThis.forks)).at(-1),{id:A,at:{entryId:'a3',before:false}});
+
   assert.deepEqual(errors,[]);
  }finally{await app.close();}
 });

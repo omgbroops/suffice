@@ -34,6 +34,8 @@ export function connectMessageActions(workspace,transcript){
   user(element,{timestamp,text,attachments=[],images=[],entryId}={}){const info={role:'user',anchor:element,timestamp,text:text??element.textContent,entryId};register(element,info);const grid=sentAttachmentGrid(attachments,images);if(grid){element.before(grid);register(grid,info);}return info;},
   turn(meta={},active=false){return {role:'assistant',meta:{...meta},active,anchor:null,texts:new Map()};},
   assistant(element,turn,text,entryId){if(entryId)turn.entryId=entryId;turn.anchor=element;turn.texts.set(element,text);register(element,turn);},
+  // Live messages get their transcript entry id after the turn is saved, which turns on their fork button.
+  resolve(element,entryId){const info=owners.get(element);if(!info||!entryId)return;info.entryId=entryId;if(shown===info&&!bar.hidden){const at=bar.scrollTop;shown=null;show(info);bar.scrollTop=at;}},
   work(element,turn){turn.anchor=element;register(element,turn);},
   complete(turn,meta={}){Object.assign(turn.meta,meta);turn.active=false;if(hovered===turn){hide();show(turn);}}
  };
