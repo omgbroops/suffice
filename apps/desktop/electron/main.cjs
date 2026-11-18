@@ -106,12 +106,22 @@ if(primary)app.whenReady().then(async()=>{
   handle('select-project',async(id,options)=>{const revision=++viewedThreadRevision,item=(await projects.list()).find(p=>p.id===id);if(!item)throw new Error('Project not found');if(!options?.restore&&(await settings.get())['project-open']==='New window'&&selectedProject!==item.path){openProjectWindow(item.path);return {openedNewWindow:true};}if(revision===viewedThreadRevision){await request('reset');selectedProject=item.path;if(revision===viewedThreadRevision)project=item.path;}return {...await projectIdentityMetadata(item.path),...item,git:await projects.git(item.path)};});
   let viewedThreadRevision=0,viewedThreadId=null;
   handle('thread',async id=>{viewedThreadId=id;const revision=++viewedThreadRevision;if(threadLocations.has(id))project=threadLocations.get(id);const thread=await request('thread',{id});threadLocations.set(id,thread.cwd);if(revision===viewedThreadRevision)project=thread.cwd;return thread;});
+  const threadWorktree=require('./thread-worktree.cjs'),worktreeDirectory=prefs=>prefs['worktree-location']==='Custom location'&&prefs['worktree-path']?prefs['worktree-path']:path.join(settingsHome,'worktrees');
+  const worktreeCwd=async id=>{if(typeof id!=='string')throw new Error('Invalid thread');return threadLocations.get(id)||(await request('thread',{id})).cwd;};
+  handle('thread-worktree',async id=>threadWorktree.status(await worktreeCwd(id)));
+  handle('thread-worktree-action',async({id,action}={})=>{
+   if(!['diff','merge','pr','discard'].includes(action))throw new Error('Invalid worktree action');
+   if(threadRuns.has(id)&&action!=='diff')throw new Error('Wait for the agent to finish first');
+   const cwd=await worktreeCwd(id);
+   if(action==='discard'){const {repo}=await threadWorktree.discard(cwd);threadLocations.set(id,repo);return {repo};}
+   return action==='pr'?threadWorktree.pr(cwd,{dryRun:process.env.SUFFICE_PR_DRY_RUN==='1'}):threadWorktree[action](cwd);
+  });
   handle('branches',()=>require('./branches.cjs').list(project));
   handle('select-branch',async payload=>{
    if(branchBusy)throw new Error('A branch change is already in progress');
    if(!payload?.newWorktree&&(running||preparing))throw new Error('Finish running agents before changing this checkout, or use New worktree.');
    if(!project)throw new Error('Choose a project first');branchBusy=true;++viewedThreadRevision;
-   try{const prefs=await settings.get(),result=await require('./branches.cjs').select(project,payload,prefs['worktree-location']==='Custom location'&&prefs['worktree-path']?prefs['worktree-path']:path.join(settingsHome,'worktrees'));
+   try{const prefs=await settings.get(),result=await require('./branches.cjs').select(project,payload,worktreeDirectory(prefs));
     if(result.newWorktree){project=selectedProject=result.path;viewedThreadId=null;await request('reset');}
     const item=await projects.add(project);return {...item,...await projectIdentityMetadata(project),git:await projects.git(project),newWorktree:result.newWorktree};
    }finally{branchBusy=false;}
@@ -128,6 +138,7 @@ if(primary)app.whenReady().then(async()=>{
     if(!project)throw new Error('Choose a project above the composer first');
     if(!payload||typeof payload.prompt!=='string'||payload.prompt.length>1000000||!['off','minimal','low','medium','high','xhigh','max'].includes(payload.effort)||(payload.model!==undefined&&(typeof payload.model!=='string'||typeof payload.provider!=='string')))throw new Error('Invalid task');
     const prefs={...await settings.get()};if(payload.approvalMode!==undefined){if(!['Ask before every action','Ask when needed','Never ask'].includes(payload.approvalMode))throw new Error('Invalid approval mode');prefs['approval-mode']=payload.approvalMode;}if((inBackground||running>0)&&!prefs['background-agents'])throw new Error('Background agents are disabled in settings');let cwd=threadLocations.get(payload.threadId)||project;
+    if(payload.ownWorktree===true&&!payload.threadId&&typeof payload.clientId==='string'&&!threadLocations.has(payload.clientId))cwd=(await threadWorktree.create(cwd,worktreeDirectory(prefs))).path;
     if(typeof payload.clientId==='string')threadLocations.set(payload.clientId,cwd);
     running++;const attachmentGroup=[];attachmentGroups.set(payload.threadId||payload.clientId,attachmentGroup);
     try{const attached=await prepareAttachments(app.getPath('userData'),payload.attachments);if(attached.directory)attachmentGroup.push(attached.directory);const task={prompt:payload.prompt+attached.context,displayPrompt:payload.prompt,attachmentMetadata:attached.metadata,images:attached.images,clientId:typeof payload.clientId==='string'?payload.clientId.slice(0,128):null,effort:payload.effort,model:payload.model,provider:payload.provider,threadId:payload.threadId,cwd,desktopSettings:prefs};try{const result=await request('run',task);await notify('finished','Agent finished');return result;}catch(error){await notify('failed','Agent encountered an error');if(prefs.diagnostics){await require('node:fs/promises').appendFile(path.join(settingsHome,'desktop-diagnostics.jsonl'),JSON.stringify({at:new Date().toISOString(),type:'task_error',name:error.name})+'\n',{mode:0o600});}throw error;}}finally{running--;for(const [key,group] of attachmentGroups)if(group===attachmentGroup)attachmentGroups.delete(key);if(!prefs['save-attachments'])for(const directory of attachmentGroup)await removeAttachmentCopy(app.getPath('userData'),directory).catch(()=>{});}
