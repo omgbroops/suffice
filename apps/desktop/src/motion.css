@@ -1,0 +1,20 @@
+/* Shared motion: transform + opacity only, --ease-out, 150-200 ms, honours reduced motion (styles.css kills all motion under the media query). */
+@keyframes motion-rise { from { opacity: 0; transform: translateY(6px); } }
+@keyframes motion-fade { from { opacity: 0; } }
+@media (prefers-reduced-motion: no-preference) {
+  /* Approval card replaces the composer controls; they fade back when it resolves. */
+  .composer-approval:not([hidden]) { animation: motion-rise 180ms var(--ease-out); }
+  .composer[data-returning] > :not(.composer-approval) { animation: motion-fade var(--duration) var(--ease-out); }
+  /* Queued rows and disclosure bodies (class set by motion.js on a user click, so redraws never replay it). */
+  .queued-messages:not([hidden]) { animation: motion-rise var(--duration) var(--ease-out); }
+  .thread-activity[data-reveal] > .thread-activity-log { animation: motion-rise var(--duration) var(--ease-out); }
+  /* Right panel: transform slide only; the workspace margin snaps (layout is never animated). */
+  .desktop-app .right-sidebar,.desktop-app .right-panel-open .right-sidebar { transition: transform 200ms var(--ease-out),visibility 200ms; }
+}
+@media (prefers-reduced-motion: no-preference) and (min-width: 700px) {
+  /* Sidebar collapse: display is a discrete transition so the exit plays before it is removed. Ready flag keeps first paint still. */
+  .desktop-app[data-motion-ready] .sidebar { transition: opacity 180ms var(--ease-out),transform 180ms var(--ease-out),display 180ms allow-discrete; }
+  .desktop-app[data-motion-ready] .sidebar-collapsed .sidebar,.desktop-app[data-motion-ready] .sidebar-collapsed.sidebar { opacity: 0; transform: translateX(-16px); }
+  @starting-style { .desktop-app[data-motion-ready] .sidebar { opacity: 0; transform: translateX(-16px); } }
+  .desktop-app[data-keyboard='true'] .sidebar,.desktop-app[data-keyboard='true'] .right-sidebar { transition: none; }
+}

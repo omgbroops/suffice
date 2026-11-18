@@ -23,6 +23,8 @@ import './thread-row.css';
 import './window-chrome.css';
 import {sessionMenuItems} from './sessions-ui.js';
 import './edge-to-edge-experiment.css';
+import './motion.css';
+import {connectMotion} from './motion.js';
 import {connectSharedChrome} from './shared-chrome.js';
 import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/500.css';
@@ -176,6 +178,7 @@ document.querySelector('#app').innerHTML = `
 `;
 
 connectSharedChrome(document.querySelector('.workspace'));
+connectMotion();
 let unmountAtmosphere = mountAtmosphere(document.querySelector('.atmosphere'));
 
 const prompt = document.querySelector('#prompt');
