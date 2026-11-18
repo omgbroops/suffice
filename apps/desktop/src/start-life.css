@@ -16,7 +16,7 @@
 .life-hello { margin: 0; font-size: 30px; line-height: 36px; font-weight: var(--weight-medium); letter-spacing: -.025em; color: var(--text-strong); }
 .life-sub { display: flex; justify-content: center; margin: var(--space-3) 0 0; }
 .life-sub:empty { display: none; }
-.life-needs { height: var(--control-height-xs); padding: 0 var(--space-3); border-radius: var(--radius-5); background: color-mix(in srgb, var(--blue) 16%, transparent); box-shadow: inset 0 0 0 var(--hairline) color-mix(in srgb, var(--blue) 45%, transparent); color: var(--text-strong); font-size: var(--text-xs); }
+.life-needs { height: var(--control-height-xs); padding: 0 var(--space-3); border-radius: var(--radius-2); background: color-mix(in srgb, var(--blue) 16%, transparent); box-shadow: inset 0 0 0 var(--hairline) color-mix(in srgb, var(--blue) 45%, transparent); color: var(--text-strong); font-size: var(--text-xs); }
 
 /* Starter cards: raised, three across, each carrying one crop of the wallpaper's dither. */
 .life-tail { margin-top: var(--space-6); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-3); }
@@ -33,7 +33,7 @@
 
 /* Sidebar skeleton: blurred bars, radius 4, 2 s pulse (0 / 1 / 2 s). */
 .sidebar-skeleton { display: grid; gap: 18px; padding: 8px 14px; animation: sk-pulse 2s var(--start-ease) infinite; -webkit-mask-image: linear-gradient(#000 55%, transparent); mask-image: linear-gradient(#000 55%, transparent); }
-.sidebar-skeleton i { display: block; border-radius: 4px; background: var(--text-faint-2); filter: blur(1px); opacity: .5; }
+.sidebar-skeleton i { display: block; border-radius: var(--radius-1); background: var(--text-faint-2); filter: blur(1px); opacity: .5; }
 .sk-head { width: 56px; height: 10px; }
 .sk-row { display: grid; gap: 8px; }
 .sk-title { width: 86%; height: 12px; }

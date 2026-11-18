@@ -40,8 +40,10 @@ test('Start screen: mark and title, typed suggestion from real repo state, three
   assert.equal(new Set(sums).size,3,'distinct card images '+sums);
   assert.equal(await page.locator('.life-needs').count(),0);
   // Typewriter: the placeholder grows one character at a time, ~30 ms each, then rests on the full suggestion.
-  const full='Fix the failing test “retries after a timeout”  ·  Tab to use';
+  const full='Fix the failing test “retries after a timeout”';
   await page.waitForFunction(t=>document.querySelector('#prompt').placeholder===t,full,{timeout:12000});
+  // The Tab keycap sits right after the text; click = accept.
+  await page.locator('.suggest-key').waitFor({state:'visible'});
   const entrance=await page.evaluate(()=>[...document.querySelectorAll('.life-in')].map(e=>{const a=e.getAnimations()[0];return a?a.effect.getComputedTiming().endTime:0;}));
   assert.ok(Math.max(...entrance)<=400,'entrance under 400ms: '+entrance);
   await page.reload();await page.locator('.start-card').first().waitFor();
@@ -60,8 +62,9 @@ test('Start screen: mark and title, typed suggestion from real repo state, three
   assert.equal(await page.locator('.life-needs').textContent(),'1 needs you');
   await page.evaluate(()=>{const r=document.querySelector('.sidebar .thread-row');r.dataset.status='done';r.append(document.createElement('i'));});
   await page.waitForFunction(()=>!document.querySelector('.life-needs'));
+  await page.locator('.suggest-key').click();assert.match(await page.locator('#prompt').inputValue(),/^Fix the failing test/);await page.locator('#prompt').fill('');
   // Tab on an empty box writes the real-state suggestion in.
-  const prompt=page.locator('#prompt');await prompt.click();await page.keyboard.press('Tab');
+  const prompt=page.locator('#prompt');await prompt.click({position:{x:8,y:8}});await page.keyboard.press('Tab');
   assert.match(await prompt.inputValue(),/^Fix the failing test “retries after a timeout”$/);
   // A starter card fills the composer with its full prompt, ready to send.
   await prompt.fill('');await page.locator('.start-card').nth(1).click();

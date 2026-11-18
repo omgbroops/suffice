@@ -1,4 +1,13 @@
-/* Suffice foundations. Brand geometry and Inter come from suffice-platform. */
+/* Suffice foundations. Brand geometry and Inter come from suffice-platform.
+ * SCALES (final; every screen uses these names, never a literal px):
+ *  radius  --radius-1..6 = 4 6 8 12 16 22. Rounded rectangles only: no circles, no pills. Nested shape = parent radius - inset.
+ *  radius  roles: --radius-control/-button 6, --radius-card 8, --radius-panel/-composer 12, --radius-menu 10.
+ *  inset   --inset-composer 6 (box padding); --radius-composer-inset = composer radius - inset = inner button radius.
+ *  space   --space-1..10 = 4 8 12 16 20 24 32 40, times --density (Compact .875 / Comfy 1 / Spacious 1.125).
+ *  height  --control-height-xs/sm/(none)/lg = 24 28 32 44, times --density. Icons --icon-size-xs/sm/lg = 12 14 18.
+ *  motion  --duration-hover (100 ms), --ease-out; --duration-grow 160 ms for width-expanding controls; honour reduced motion.
+ * Material: buttons raised, fields inset (see screen.css). Add new names here, in this file only.
+ */
 :root,
 .theme-preview[data-theme='dark'] {
   color-scheme: dark;
@@ -112,10 +121,11 @@
   --border-popover: 1px;
   --inset-menu: calc(var(--menu-inset) + var(--border-popover));
   --radius-menu-item: calc(var(--radius-menu) - var(--inset-menu));
-  --radius-send: var(--radius-5);
-  --inset-composer-corner: calc(var(--radius-6) - var(--radius-5));
-  --radius-composer: calc(var(--radius-send) + var(--inset-composer-corner));
-  --radius-composer-inset: calc(var(--radius-composer) - var(--composer-padding) - 1px);
+  --inset-composer: 6px;
+  --radius-composer: var(--radius-4);
+  --radius-composer-inset: calc(var(--radius-composer) - var(--inset-composer));
+  --radius-send: var(--radius-composer-inset);
+  --duration-grow: 160ms;
   --sidebar-width: 240px;
   --content-width: 944px;
   --composer-width: 720px;

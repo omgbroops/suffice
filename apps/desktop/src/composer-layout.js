@@ -10,7 +10,7 @@ export function connectComposerLayout({form,prompt,toast=()=>{}}){
  if(!form||!prompt||form.dataset.layout==='box')return;
  const area=form.parentElement,toolbar=form.querySelector('.composer-toolbar');
  const attach=form.querySelector('[data-action="attach"]'),group=form.querySelector('.send-group'),voice=form.querySelector('.voice-start');
- const access=form.querySelector('.access-mode-picker'),model=form.querySelector('.model-button'),chip=form.querySelector('.context-chip');
+ const access=form.querySelector('.access-mode-picker'),effort=form.querySelector('.effort-picker'),model=form.querySelector('.model-button'),chip=form.querySelector('.context-chip');
  const bar=area.querySelector('.project-bar'),ring=document.querySelector('.context-ring');
  // Row inside the box: + | text | dictate, voice or send.
  const row=el('div','composer-row'),actions=el('div','composer-actions');
@@ -23,7 +23,7 @@ export function connectComposerLayout({form,prompt,toast=()=>{}}){
  const meta=el('div','composer-meta'),left=el('div','composer-meta-left'),right=el('div','composer-meta-right');
  if(bar)left.append(bar);
  if(chip)left.append(chip);
- for(const node of [access,model,ring])if(node)right.append(node);
+ for(const node of [access,effort,model,ring])if(node)right.append(node);
  meta.append(left,right);form.after(meta);
  // Typed text turns the voice button into Send.
  const sync=()=>{const on=!!prompt.value.trim()||!!form.attachments?.count;form.dataset.hasInput=String(on);};

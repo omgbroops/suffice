@@ -139,7 +139,7 @@ document.querySelector('#app').innerHTML = `
 
           <label class="sr-only" for="prompt">What would you like to build?</label>
 
-          <textarea id="prompt" placeholder="Ask Suffice to build features, fix bugs, or work on your code" rows="2"></textarea>
+          <textarea id="prompt" placeholder="Ask Suffice" rows="2"></textarea>
 
           <div class="attachment-chip" hidden></div>
 
