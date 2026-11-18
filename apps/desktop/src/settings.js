@@ -13,7 +13,7 @@ import {settingsSections} from './settings-data.js';
 import {createMenu} from './menu.js';
 import {connectScrollEdges} from './components/ui/scroll-edges.js';
 import './settings.css';
-import {preference,savePreference,supportedSettings,previewBackgroundDimming,previewSurfaceOpacity} from './settings-preferences.js';
+import {preference,savePreference,supportedSettings,previewSurfaceOpacity} from './settings-preferences.js';
 import {backgroundPresets} from './backgrounds/presets.js';
 import {providerIcon} from './provider-icons.js';
 import {threadViewState} from './thread-view-state.js';
@@ -95,7 +95,7 @@ export function createSettings(){
  main.addEventListener('click',event=>{const button=event.target.closest('[data-delete-thread]');if(button)document.dispatchEvent(new CustomEvent('suffice-delete-thread',{detail:{id:button.dataset.deleteThread}}));});
  document.addEventListener('suffice-thread-deleted',()=>{if(active&&selected==='archived')render();});
  threadViewState.subscribe(event=>{if(active&&selected==='archived'&&event.changed?.includes('sidebar'))render();});
- main.addEventListener('input',event=>{const input=event.target;if(!input.matches('[data-range]'))return;(input.dataset.range==='surface-opacity'?previewSurfaceOpacity:previewBackgroundDimming)(input.value);input.style.setProperty('--dim-progress',(Number(input.value)-Number(input.min))/(Number(input.max)-Number(input.min))*100+'%');input.nextElementSibling.value=input.value+'%';});
+ main.addEventListener('input',event=>{const input=event.target;if(!input.matches('[data-range]'))return;previewSurfaceOpacity(input.value);input.style.setProperty('--dim-progress',(Number(input.value)-Number(input.min))/(Number(input.max)-Number(input.min))*100+'%');input.nextElementSibling.value=input.value+'%';});
  main.addEventListener('change',event=>{if(event.target.matches('[data-range]'))void commit({id:event.target.dataset.range},Number(event.target.value));});
  const findRow=id=>settingsSections.flatMap(section=>section.groups.flatMap(group=>group.rows)).find(row=>row.id===id);
  async function handleClick(event){

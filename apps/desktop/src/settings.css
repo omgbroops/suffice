@@ -369,7 +369,6 @@
 .settings-nav-label { color:color-mix(in srgb,var(--blue) 55%,var(--text-faint)); }
 .settings-section h1 { display:flex; align-items:center; gap:var(--space-2); }
 .settings-section h1::before { content:''; width:4px; height:18px; border-radius:var(--radius-1); background:var(--blue); }
-.settings-group h2::before { content:''; display:inline-block; width:6px; height:6px; margin-right:var(--space-2); border-radius:var(--radius-xs); background:var(--blue); vertical-align:middle; }
 .desktop-app.desktop-app .settings-switch { width:30px; height:18px; border-radius:var(--radius-2); padding:2px; box-shadow:var(--shadow-control-inset); }
 .desktop-app.desktop-app .settings-switch span { width:12px; height:12px; border-radius:var(--radius-1); }
 .desktop-app.desktop-app .settings-switch[aria-checked=true] { background:var(--blue); border-color:transparent; }
@@ -394,3 +393,5 @@
 .settings-section h1 { margin-bottom:var(--space-6); }
 .desktop-app.settings-open .workspace { background:transparent; }
 .settings-avatar { font-size:var(--text-xl); color:var(--text-strong); }
+
+.settings-group h2:empty { display:none; }
