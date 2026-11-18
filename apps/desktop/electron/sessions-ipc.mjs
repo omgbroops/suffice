@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import {execFile} from 'node:child_process';
 import path from 'node:path';
 import os from 'node:os';
 import {createBackend} from '../../../packages/backend/src/app/backend.mjs';
@@ -166,6 +167,8 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
    'sessions-stop':p=>{untrack(id(p));return call({type:'sessions.stop',id:id(p)});},
    'sessions-send':p=>call({type:'sessions.send',id:id(p?.id),text:typeof p?.text==='string'?p.text:''}).catch(ended),
    'sessions-attach-command':p=>call({type:'sessions.attachCommand',id:id(p)}),
+   // Opens the session's tmux attach in Terminal.app; hidden test runs only report the command.
+   'sessions-attach-terminal':async p=>{const command=await call({type:'sessions.attachCommand',id:id(p)});if(process.env.SUFFICE_TEST_HIDE_WINDOW==='1')return {command,opened:false};await new Promise((ok,no)=>execFile('osascript',['-e','tell application "Terminal" to do script "'+command.replace(/[\\"]/g,'\\$&')+'"'],e=>e?no(e):ok()));return {command,opened:true};},
    'history-list':async p=>{await call({type:'history.scan'});return call({type:'history.list',opts:{limit:200,...(str(p?.query)&&{query:p.query})}});},
    'history-read':p=>call({type:'history.read',entry:{source:String(p?.source),path:String(p?.path)}}),
    'sessions-resume':async p=>{const agent=AGENT_BY_SOURCE[p?.source];if(!agent||!str(p?.sessionId)||!str(p?.cwd))throw new Error('Cannot resume this chat');await ready;const r=await call({type:'sessions.resume',agent,cwd:folder(p.cwd),sessionId:p.sessionId});track(r);attachSubs(r);return r;},

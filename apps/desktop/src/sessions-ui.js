@@ -174,7 +174,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
 
  document.addEventListener('click',e=>{if(e.target.closest?.('[data-menu-action^="import-chat:"]'))openImport();});
  connectThreadHover(side);
- connectSessionContextMenu(side,{toast,getSession:row=>{const s=row._s;return s&&{id:s.id,title:c.name(s),attach:()=>sx.attachCommand(s.id),show:()=>{if(c.active?.id!==s.id)open(s);setMode('terminal');},stop:async()=>{await sx.stop(s.id);holds.get(s.id)?.();if(c.active?.id===s.id){leave();hooks.clear?.();}await refresh();}};}});
+ connectSessionContextMenu(side,{toast,getSession:row=>{const s=row._s;return s&&{id:s.id,title:c.name(s),attach:()=>sx.attachCommand(s.id),attachTerminal:()=>sx.attachTerminal(s.id),show:()=>{if(c.active?.id!==s.id)open(s);setMode('terminal');},stop:async()=>{await sx.stop(s.id);holds.get(s.id)?.();if(c.active?.id===s.id){leave();hooks.clear?.();}await refresh();}};}});
  sidebarPreferences.subscribe(()=>sortRows());
  threadViewState.subscribe(ev=>{if(ev.type==='update'&&ev.changed?.includes('sidebar')){for(const r of rows.values())paint(r._s);if(c.active)c.paintHeader();}});
  void refresh();
