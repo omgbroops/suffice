@@ -32,17 +32,18 @@ for(const away of [false,true])test(`held first message: pending, then handed ba
   await page.waitForTimeout(500);
   await page.screenshot({path:resolve(shots,`held-pending-${away}.png`)});
   if(away){await page.locator('.new-session').click();await page.locator('#prompt').waitFor();}
+  await page.locator('#prompt').fill('second thought');
   const t0=Date.now();
   await page.waitForFunction(()=>/did not|exited/.test(document.querySelector('.toast')?.textContent||''),null,{timeout:15000});
   assert.ok(Date.now()-t0<9000,'exit is detected well before the 45 s timeout');
   await page.screenshot({path:resolve(shots,`held-handback-${away}.png`)});
   const val=await page.locator('#prompt').inputValue();
   if(away){
-   assert.equal(val,'','text is not written into another view\'s composer');
+   assert.equal(val,'second thought','held text is not written into another view\'s composer');
    assert.match(await page.locator('.toast').textContent(),/Add a retry/,'toast names the session');
    await page.locator('.session-row--sidebar').first().click();
-   await page.waitForFunction(()=>document.querySelector('#prompt')?.value==='Add a retry to the uploader');
-  }else assert.equal(val,'Add a retry to the uploader');
+   await page.waitForFunction(()=>document.querySelector('#prompt')?.value==='Add a retry to the uploader\n\nsecond thought');
+  }else assert.equal(val,'Add a retry to the uploader\n\nsecond thought','held message is prepended, typed text kept');
   assert.deepEqual(errors,[]);
  }finally{
   await app.close().catch(()=>{});

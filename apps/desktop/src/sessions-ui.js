@@ -91,7 +91,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   uiUnsub=sx.onUi(s.id,u=>{c.ui=u;sh.usage(u?.meta);ctl.update();ctl.paintMeta();if(c.mode==='chat')drawChat();drawPrompt();ctl.syncDraft();c.syncRun();});
   c.cat=null;c.lastDraft='';c.cardsSig='';sx.catalog?.(s.id).then(k=>{if(c.active?.id===s.id)ctl.setCatalog(k);}).catch(()=>{});
   ctl.attach();
-  if(handBack.has(s.id)){const p=document.querySelector('#prompt');if(p&&!p.value)p.value=handBack.get(s.id);handBack.delete(s.id);}
+  if(handBack.has(s.id)){restore(handBack.get(s.id));handBack.delete(s.id);}
   subs.clear();c.subLimit.clear();subUnsub=sx.onSubagents?.(s.id,l=>{subs.clear();for(const x of l||[])subs.set(x.callId,x);if(c.mode==='chat')drawChat();});
  }
  function leave(){
@@ -109,10 +109,12 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   try{const s=await sx.start({agent,cwd});bump(s.id);await refresh();if(text){titles.set(s.id,text.replace(/\s+/g,' ').slice(0,60));firstText.set(s.id,text);sendWhenReady(s.id,text);}open(rows.get(s.id)?._s||s,true);return true;}catch(e){toast(e.message);return false;}
  }
  // The CLI drops keys until its input box is drawn (and Enter would accept a trust prompt): hold the first message, shown as pending, until the screen parses as ready. Never delivered (exit, error, 45 s with no prompt up): hand it back to the composer.
+ // Put a held message back without losing what the user typed since: it goes first, blank line between.
+ function restore(text){const p=document.querySelector('#prompt');if(p)p.value=p.value?`${text}\n\n${p.value}`:text;}
  function sendWhenReady(id,text){
   let t=0,poll=0,gone=false,off=()=>{},offState=()=>{};const stop=()=>{gone=true;clearTimeout(t);clearInterval(poll);off();offState();};
   const giveUp=why=>{if(gone)return;stop();firstText.delete(id);const here=c.active?.id===id,name=titles.get(id)||'session';
-   if(here){const p=document.querySelector('#prompt');if(p&&!p.value)p.value=text;}else handBack.set(id,text);
+   if(here)restore(text);else handBack.set(id,text);
    toast(here?why:`${why}: ${name}`);if(here&&c.mode==='chat')drawChat();};
   const arm=()=>{clearTimeout(t);t=setTimeout(()=>giveUp('Agent did not start, message not sent'),45000);};
   arm();
