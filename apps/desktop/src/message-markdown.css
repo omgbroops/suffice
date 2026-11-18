@@ -3,7 +3,7 @@
 .message-math .katex-display { margin:16px 0; overflow-x:auto; overflow-y:hidden; padding:4px 0 7px; scrollbar-width:thin; scrollbar-color:color-mix(in srgb,var(--text-muted) 25%,transparent) transparent; }
 .message-math .katex-error { color:var(--text-muted)!important; white-space:pre-wrap; }
 .code-copy-host { position:relative; }
-.thread-message pre > .code-copy { position:absolute; top:7px; right:7px; opacity:0; pointer-events:none; background:var(--surface-composer); box-shadow:var(--shadow-control); backdrop-filter:var(--glass-filter); border-radius:6px; color:var(--text-muted); }
+.thread-message pre > .code-copy { position:absolute; top:7px; right:7px; opacity:0; pointer-events:none; background:var(--surface-composer); box-shadow:var(--shadow-control-inset); backdrop-filter:var(--glass-filter); border-radius:6px; color:var(--text-muted); }
 .thread-message pre:is(:hover,:focus-within) > .code-copy { opacity:1; pointer-events:auto; }
 @media(hover:none){.thread-message pre > .code-copy { opacity:1; pointer-events:auto; }}
 @media(prefers-reduced-motion:no-preference){.thread-message pre > .code-copy { transition:opacity 100ms ease-out; }}
