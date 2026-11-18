@@ -46,6 +46,7 @@ test('skills library: create, edit, delete in Settings, then attach from the com
   await page.getByRole('menuitemradio',{name:'Code review'}).click();
   await page.locator('.skill-chip',{hasText:'Code review'}).waitFor();
   await page.getByRole('button',{name:'Add attachment'}).click();await page.getByRole('menuitem',{name:'Skills',exact:true}).click();
+  await page.waitForFunction(()=>document.querySelectorAll('[data-menu-action="skill:starter-code-review"]').length===1);
   assert.equal(await page.getByRole('menuitemradio',{name:'Code review'}).getAttribute('aria-checked'),'true');
   await page.getByRole('menuitemradio',{name:'Repo notes'}).click();
   assert.equal(await page.evaluate(()=>document.querySelector('.composer').skills.ids().length),2);
