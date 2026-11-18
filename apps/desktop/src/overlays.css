@@ -161,9 +161,11 @@
 @keyframes toast-in { from { opacity: 0; transform: translateY(12px) scale(.96); } to { opacity: 1; transform: none; } }
 @media(prefers-reduced-motion:reduce){ .desktop-app .toast { animation: none; } .desktop-app .popover[data-motion='true'] { transition: none; transform: none; } }
 
-/* Tasks "Discard?" bubble: under the add box's right edge, clear of the header controls. */
-.tb-add { position: relative; }
-.tb-discard { position: absolute; right: var(--space-2); top: calc(100% + var(--space-1)); display: flex; align-items: center; gap: var(--space-2); padding: var(--space-1) var(--space-1) var(--space-1) var(--space-3); border-radius: var(--radius-card); background: var(--surface-menu); box-shadow: inset 0 0 0 var(--hairline) var(--border-strong), var(--overlay-outset); font: 500 13px/16px var(--font-sans); color: var(--text-strong); z-index: 5; }
+/* Tasks "Discard?" bubble: fixed beside the control that triggered it (placed in JS). */
+.tb-discard { position: fixed; display: flex; align-items: center; gap: var(--space-2); padding: var(--space-1) var(--space-1) var(--space-1) var(--space-3); border-radius: var(--radius-card); background: var(--surface-menu); box-shadow: inset 0 0 0 var(--hairline) var(--border-strong), var(--overlay-outset); font: 500 13px/16px var(--font-sans); color: var(--text-strong); z-index: 5; }
 .tb-discard[hidden] { display: none; }
 .tb-discard button { height: var(--control-height-xs); padding: 0 var(--space-2); border: 0; border-radius: calc(var(--radius-card) - var(--space-1)); background: var(--surface-hover); color: var(--text); font: 500 12px/16px var(--font-sans); cursor: pointer; }
 .tb-discard .tb-drop { background: var(--red); color: #fff; }
+
+/* Only the open view is highlighted in the sidebar. */
+body.tasks-open :is(.issues-nav,.needs-nav,.new-session)[aria-current='page'] { background: transparent; color: inherit; }
