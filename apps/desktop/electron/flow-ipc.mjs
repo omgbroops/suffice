@@ -65,7 +65,7 @@ export function createFlow({dataDir,env=process.env,send}){
    'flow-list':async()=>{const rows=await backend.listRuns(),out=[];for(const r of rows){const s=sum(r.runId,await backend.events(r.runId),r);delete s.timeline;out.push(s);}return {limit,runs:out.sort((a,b)=>b.last-a.last)};},
    'flow-detail':async id=>{const r=(await backend.listRuns()).find(x=>x.runId===run(id));if(!r)throw new Error('Unknown run');return sum(r.runId,await backend.events(r.runId),r);},
    'flow-approve':p=>{const e=pending.get(p?.id);if(!e)throw new Error('That approval was already answered');pending.delete(p.id);e.res(!!p.approved);poke();return true;},
-   'flow-cancel':id=>{run(id);const ok=backend.cancelRun(id);drop(id);poke();return ok;},
+   'flow-cancel':id=>{run(id);const ok=backend.cancelRun(id);drop(id);poke();if(!ok)throw new Error('That run is not running in this window');return true;},
    'flow-resume':async id=>{await backend.resumeRun(run(id));track(id);poke();return true;},
   },
  };

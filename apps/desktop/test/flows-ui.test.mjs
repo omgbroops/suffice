@@ -12,7 +12,7 @@ const shots=process.env.FLOW_SHOTS;
 test('Workflows page starts, gates, approves, cancels, resumes and budget-stops real backend runs, and keeps them across a restart',{timeout:180000},async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-flow-ui-'));
  const launch=async(tokens,body)=>{
-  const env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home,SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_TEST_NO_SCHEDULER:'1',SUFFICE_FLOW_RUNNER:'fake',SUFFICE_FLOW_RUN_TOKENS:tokens,SUFFICE_SESSIONS_SOCKET:'sfx-fleet-workflow-flow-1',SUFFICE_HISTORY_HOME:await mkdtemp(resolve(tmpdir(),'suffice-flow-hist-'))};delete env.ELECTRON_RUN_AS_NODE;
+  const env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home,SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_TEST_NO_SCHEDULER:'1',SUFFICE_FLOW_RUNNER:'fake',SUFFICE_FLOW_RUN_TOKENS:tokens,SUFFICE_SESSIONS_SOCKET:'sfx-fl2-workflow-flow-1',SUFFICE_HISTORY_HOME:await mkdtemp(resolve(tmpdir(),'suffice-flow-hist-'))};delete env.ELECTRON_RUN_AS_NODE;
   const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'profile')],env});
   try{const page=await app.firstWindow(),errors=[];page.on('pageerror',e=>errors.push(e.message));
    await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].setSize(1440,900));await page.waitForTimeout(300);
