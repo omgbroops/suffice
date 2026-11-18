@@ -107,10 +107,14 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   const cwd=project();if(!cwd){toast('Choose a project');return false;}
   try{const s=await sx.start({agent,cwd});bump(s.id);await refresh();if(text){titles.set(s.id,text.replace(/\s+/g,' ').slice(0,60));firstText.set(s.id,text);sendWhenReady(s.id,text);}open(rows.get(s.id)?._s||s,true);return true;}catch(e){toast(e.message);return false;}
  }
- // The CLI drops keys while its folder-trust (or any) prompt is up, and Enter would accept it for the user: hold the first message until the screen has shown no prompt for 400 ms.
+ // The CLI drops keys until its input box is drawn (and Enter would accept a trust prompt): hold the first message, shown as pending, until the screen parses as ready. Never delivered (exit, error, 45 s with no prompt up): hand it back to the composer.
  function sendWhenReady(id,text){
-  let t=0,off=()=>{};const stop=()=>{clearTimeout(t);off();};
-  off=sx.onUi(id,u=>{clearTimeout(t);if(!u||u.prompt)return;t=setTimeout(()=>{stop();sx.send(id,text).catch(e=>toast(e.message));},400);});
+  let t=0,off=()=>{},offState=()=>{};const stop=()=>{clearTimeout(t);off();offState();};
+  const giveUp=why=>{stop();firstText.delete(id);const p=document.querySelector('#prompt');if(p&&!p.value)p.value=text;toast(why);if(c.active?.id===id&&c.mode==='chat')drawChat();};
+  const arm=()=>{clearTimeout(t);t=setTimeout(()=>giveUp('Agent did not start, message not sent'),45000);};
+  arm();
+  off=sx.onUi(id,u=>{if(!u)return;if(u.ready){stop();sx.send(id,text).catch(e=>giveUp(e.message));}else if(u.prompt){clearTimeout(t);t=0;}else if(!t)arm();});
+  offState=sx.onState(id,v=>{if(v?.state==='exited'||v?.state==='error')giveUp('Agent exited, message not sent');});
  }
 
  // Import: searchable history, read-only in the chat renderer, Resume starts a live session.
