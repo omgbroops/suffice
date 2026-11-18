@@ -3,10 +3,12 @@ import {threadViewState,restoreThreadViews} from './thread-view-state.js';
 import {preference,savePreference,initializePreferences} from './settings-preferences.js';
 import {createSettings} from './settings.js';
 import {createSpotlight} from './spotlight.js';
+import {createTaskBoardView} from './task-board.js';
 import {sidebarPreferences} from './sidebar-preferences.js';
 import {connectComposerSize} from './composer-size.js';
 import {connectAttachments} from './attachments.js';
 import {connectComposerQuick} from './composer-quick.js';
+import {connectSkills} from './skills-ui.js';
 import {connectSendControls} from './send-controls.js';
 import { connectDesktop } from './desktop.js';
 import './desktop.css';
@@ -24,6 +26,7 @@ import './composer-quick.css';
 import './thread-row.css';
 import './window-chrome.css';
 import {sessionMenuItems} from './sessions-ui.js';
+import {compareMenuItems,openCompare} from './compare-ui.js';
 import './edge-to-edge-experiment.css';
 import './motion.css';
 import {connectMotion} from './motion.js';
@@ -194,6 +197,7 @@ const send = document.querySelector('.send-button');
 const popover = document.querySelector('#popover');
 
 const { open: menu, close: closeMenu } = createMenu(popover);
+let skillItems = [];
 
 const dialog = document.querySelector('dialog');
 
@@ -259,6 +263,8 @@ document.addEventListener('click', (e) => {
 
     if (type === 'background-send') { document.querySelector('.composer').backgroundSubmit=true;document.querySelector('.composer').requestSubmit(); }
 
+    if (type === 'compare') openCompare({api:window.sufficeDesktop,prompt,toast});
+
     if (type === 'sidebar') sidebarPreferences.choose(value);
 
     if (type === 'model') document.querySelector('#model-label').textContent = value;
@@ -268,6 +274,8 @@ document.addEventListener('click', (e) => {
     if (type === 'shortcut') { prompt.value = value + ' '; prompt.dispatchEvent(new Event('input')); prompt.focus(); }
 
     if (type === 'attach') document.querySelector('#file-input').click();
+    if (type === 'skill') document.querySelector('.composer').skills.toggle(value);
+    if (type === 'skills') document.dispatchEvent(new CustomEvent('suffice-open-settings', { detail: { section: 'skills' } }));
 
     if (type === 'settings') showSettings();
 
@@ -339,9 +347,9 @@ document.addEventListener('click', (e) => {
     case 'repo-menu': menu(control, ['suffice-cloud', 'suffice', 'suffice-platform'].map(label => ({ label, action: `repo:${label}` }))); break;
 
 
-    case 'attach': document.querySelector('#file-input').click(); break;
+    case 'attach': void document.querySelector('.composer').skills.items().then(items => { skillItems = items; menu(control, [{ label: 'Add files', icon: 'attach', action: 'attach:files' }, { label: 'Skills', icon: 'bolt', children: () => skillItems }]); }); break;
 
-    case 'send-menu': menu(control, [{ label: 'Start session in background', action: 'background-send:start' }, ...sessionMenuItems()]); break;
+    case 'send-menu': menu(control, [{ label: 'Start session in background', action: 'background-send:start' }, ...compareMenuItems(), ...sessionMenuItems()]); break;
 
     case 'sidebar-menu': menu(control, sidebarPreferences.items(), 'Sidebar'); break;
 
@@ -408,7 +416,9 @@ let settingsPage;
 document.addEventListener('suffice-open-settings',event=>{closeMenu();(settingsPage??=createSettings()).open(event.detail?.section);});
 function showSettings() { closeMenu(); if(settingsPage?.isOpen)settingsPage.close();else (settingsPage??=createSettings()).open(); }
 
+const taskBoard=createTaskBoardView();
 const spotlight=createSpotlight({commands:()=>[
+ {id:'tasks',title:'Tasks: open the board',icon:'inbox',run:()=>taskBoard.open()},
  {id:'new',title:'New session',icon:'plus',run:()=>document.querySelector('.new-session').click()},
  {id:'needs-you',title:'Needs you',icon:'inbox',run:()=>document.dispatchEvent(new Event('suffice-open-needs-you'))},
  {id:'issues',title:'Issues',icon:'bug',run:()=>document.dispatchEvent(new Event('suffice-open-issues'))},
@@ -440,6 +450,7 @@ setupSidebarResize();
 connectSendControls(document.querySelector('.composer'),prompt,send);
 connectComposerSize(document.querySelector('.composer'),prompt);
 connectAttachments({form:document.querySelector('.composer'),prompt,send,input:document.querySelector('#file-input'),toast});
+connectSkills({form:document.querySelector('.composer'),toast});
 connectDesktop({prompt,send,toast,escapeHtml});
 if(window.sufficeDesktop)connectComposerQuick({form:document.querySelector('.composer'),prompt,api:window.sufficeDesktop,toast});
 import { connectVoice } from './voice/voice-ui.js';

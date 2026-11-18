@@ -62,6 +62,10 @@ if(primary)app.whenReady().then(async()=>{
   handle('voice-transcribe',payload=>{const audio=payload?.audio;const bytes=audio instanceof ArrayBuffer?new Uint8Array(audio):audio instanceof Uint8Array?audio:null;if(!bytes||typeof payload.mimeType!=='string'||payload.mimeType.length>100||(payload.prompt!==undefined&&(typeof payload.prompt!=='string'||payload.prompt.length>500)))throw new Error('Invalid voice recording');return voiceTranscriber.transcribe({audio:bytes,mimeType:payload.mimeType,prompt:payload.prompt});});
   const resources=(await import('./resources.mjs')).createResourceService(settingsHome,{choosePath:async kind=>{const result=await dialog.showOpenDialog(win,{title:'Add '+kind,properties:kind==='extensions'?['openFile']:['openDirectory']});return result.canceled?null:result.filePaths[0];}});
   app.on('will-quit',()=>resources.dispose());
+  const skillLibrary=(await import('./skills.mjs')).createSkillLibrary(settingsHome);
+  handle('skills',()=>skillLibrary.list(project));
+  handle('skill-save',skill=>skillLibrary.save(skill,project));
+  handle('skill-delete',id=>skillLibrary.remove(id,project));
   handle('resources',()=>resources.list());
   handle('resource-action',payload=>resources.action(payload));
   handle('approval-answer',payload=>{if(!payload||typeof payload.threadId!=='string'||!Number.isSafeInteger(payload.requestId)||typeof payload.allow!=='boolean')throw new Error('Invalid approval answer');return request('approval-answer',payload);});
@@ -95,6 +99,14 @@ if(primary)app.whenReady().then(async()=>{
   handle('rewind-restore',async payload=>{const id=payload?.threadId;if(threadRuns.has(id)||background?.has?.(id))throw new Error('Stop this thread before rewinding it');return (await import('./rewind.mjs')).restore(threadLocations.get(id)||project,id,payload?.checkpoint);});
   handle('start-hints',()=>require('./repo-hints.cjs').hints(project));
   handle('diff',name=>workspaceFiles.diff(project,name));
+  handle('review',async payload=>{
+   if(!project)throw new Error('Choose a project first');if(typeof payload?.model!=='string'||typeof payload?.provider!=='string')throw new Error('Pick a model first');
+   const {reviewPrompt}=await import('./review.mjs'),changed=await workspaceFiles.changes(project),entries=changed.entries.filter(entry=>!entry.binary).slice(0,40);
+   if(!entries.length)throw new Error('No changes to review');
+   const files=[];for(const entry of entries){try{const result=await workspaceFiles.diff(project,entry.path);if(!result.binary&&result.text){const lines=result.text.replace(/\n$/,'').split('\n');files.push({path:entry.path,text:result.untracked?`@@ -0,0 +1,${lines.length} @@\n`+lines.map(line=>'+'+line).join('\n'):result.text});}}catch{}}
+   if(!files.length)throw new Error('No text changes to review');
+   return request('review',{cwd:project,prompt:reviewPrompt(files),paths:files.map(file=>file.path),model:payload.model,provider:payload.provider,effort:payload.effort});
+  });
   handle('clipboard-files',()=>clipboardFiles(clipboard));
   const threadLocations=new Map();
   const automations=(await import('./automations.mjs')).createAutomations({home:settingsHome,projectPaths:async()=>(await projects.list()).map(item=>item.path),onChange:()=>{if(win&&!win.isDestroyed())win.webContents.send('suffice:event',{event:'automations_changed'});},run:async item=>{const prefs={...await settings.get()},result=await background.run({prompt:item.prompt,displayPrompt:item.prompt,attachmentMetadata:[],images:[],clientId:'automation-'+item.id+'-'+Date.now(),effort:item.effort,model:item.model,provider:item.provider,cwd:item.project,desktopSettings:prefs});if(result?.threadId)threadLocations.set(result.threadId,item.project);if(win&&!win.isDestroyed())win.webContents.send('suffice:event',{event:'history_changed'});return result;}});
@@ -125,6 +137,9 @@ if(primary)app.whenReady().then(async()=>{
   handle('threads',async()=>{const threads=await request('threads'),items=await projects.list(),hidden=new Set((await projects.hidden()).map(projectKey));for(const thread of threads)threadLocations.set(thread.id,thread.cwd);return threads.filter(t=>t.id!==askThread&&(!t.cwd||!hidden.has(projectKey(t.cwd)))).map(t=>{const item=t.cwd?items.find(p=>projectKey(p.path)===projectKey(t.cwd)):null;if(!item)return t;return {...t,project:item.name,projectPinned:!!item.pinned,...('projectIcon' in item?{projectIcon:item.projectIcon}:{}),...('projectImage' in item?{projectImage:item.projectImage}:{})};});});
   handle('delete-thread',async id=>{if(typeof id!=='string'||!/^[a-f0-9]{32}$/.test(id))throw new Error('Invalid thread');if(threadRuns.has(id)||background?.has(id))throw new Error('Stop this thread before deleting it');if(deletingThreads.has(id))throw new Error('Thread deletion is already in progress');deletingThreads.add(id);try{const file=await request('delete-thread',{id});await shell.trashItem(file);threadLocations.delete(id);return true;}finally{deletingThreads.delete(id);}});
   async function knownProject(folder){if(typeof folder!=='string')throw new Error('Invalid project');const known=(await projects.list()).some(p=>projectKey(p.path)===projectKey(folder))||[...threadLocations.values()].some(p=>p&&projectKey(p)===projectKey(folder));if(!known)throw new Error('Project not found');return folder;}
+  const envSetup=require('./env-setup.cjs').createEnvSetup({file:path.join(settingsHome,'env-setup-cache.json')});
+  const envScript=async cwd=>require('./env-setup.cjs').scriptFor(cwd,await projects.list());
+  handle('environment',async payload=>{if(!project)throw new Error('Choose a project first');if(payload&&typeof payload==='object'){await projects.add(project);await projects.update(project,{envSetup:payload.script});}return {path:project,name:path.basename(project),script:await envScript(project)||'',lastRun:await envSetup.status(project)};});
   handle('update-project',async payload=>{const folder=await knownProject(payload?.path);await projects.add(folder);return projects.update(folder,payload.patch);});
   handle('remove-project',async folder=>{await knownProject(folder);await projects.remove(folder);if(selectedProject&&projectKey(selectedProject)===projectKey(folder))selectedProject=null;if(project&&projectKey(project)===projectKey(folder))project=selectedProject;return true;});
   handle('open-project-folder',async folder=>{await knownProject(folder);const error=await shell.openPath(folder);if(error)throw new Error(error);return true;});
@@ -135,12 +150,22 @@ if(primary)app.whenReady().then(async()=>{
   handle('select-project',async(id,options)=>{const revision=++viewedThreadRevision,item=(await projects.list()).find(p=>p.id===id);if(!item)throw new Error('Project not found');if(!options?.restore&&(await settings.get())['project-open']==='New window'&&selectedProject!==item.path){openProjectWindow(item.path);return {openedNewWindow:true};}if(revision===viewedThreadRevision){await request('reset');selectedProject=item.path;if(revision===viewedThreadRevision)project=item.path;}return {...await projectIdentityMetadata(item.path),...item,git:await projects.git(item.path)};});
   let viewedThreadRevision=0,viewedThreadId=null;
   handle('thread',async id=>{viewedThreadId=id;const revision=++viewedThreadRevision;if(threadLocations.has(id))project=threadLocations.get(id);const thread=await request('thread',{id});threadLocations.set(id,thread.cwd);if(revision===viewedThreadRevision)project=thread.cwd;return thread;});
+  const threadWorktree=require('./thread-worktree.cjs'),worktreeDirectory=prefs=>prefs['worktree-location']==='Custom location'&&prefs['worktree-path']?prefs['worktree-path']:path.join(settingsHome,'worktrees');
+  const worktreeCwd=async id=>{if(typeof id!=='string')throw new Error('Invalid thread');return threadLocations.get(id)||(await request('thread',{id})).cwd;};
+  handle('thread-worktree',async id=>threadWorktree.status(await worktreeCwd(id)));
+  handle('thread-worktree-action',async({id,action}={})=>{
+   if(!['diff','merge','pr','discard'].includes(action))throw new Error('Invalid worktree action');
+   if(threadRuns.has(id)&&action!=='diff')throw new Error('Wait for the agent to finish first');
+   const cwd=await worktreeCwd(id);
+   if(action==='discard'){const {repo}=await threadWorktree.discard(cwd);threadLocations.set(id,repo);return {repo};}
+   return action==='pr'?threadWorktree.pr(cwd,{dryRun:process.env.SUFFICE_PR_DRY_RUN==='1'}):threadWorktree[action](cwd);
+  });
   handle('branches',()=>require('./branches.cjs').list(project));
   handle('select-branch',async payload=>{
    if(branchBusy)throw new Error('A branch change is already in progress');
    if(!payload?.newWorktree&&(running||preparing))throw new Error('Finish running agents before changing this checkout, or use New worktree.');
    if(!project)throw new Error('Choose a project first');branchBusy=true;++viewedThreadRevision;
-   try{const prefs=await settings.get(),result=await require('./branches.cjs').select(project,payload,prefs['worktree-location']==='Custom location'&&prefs['worktree-path']?prefs['worktree-path']:path.join(settingsHome,'worktrees'));
+   try{const prefs=await settings.get(),result=await require('./branches.cjs').select(project,payload,worktreeDirectory(prefs));
     if(result.newWorktree){project=selectedProject=result.path;viewedThreadId=null;await request('reset');}
     const item=await projects.add(project);return {...item,...await projectIdentityMetadata(project),git:await projects.git(project),newWorktree:result.newWorktree};
    }finally{branchBusy=false;}
@@ -157,9 +182,11 @@ if(primary)app.whenReady().then(async()=>{
     if(!project&&!payload?.askBar)throw new Error('Choose a project above the composer first');
     if(!payload||typeof payload.prompt!=='string'||payload.prompt.length>1000000||!['off','minimal','low','medium','high','xhigh','max'].includes(payload.effort)||(payload.model!==undefined&&(typeof payload.model!=='string'||typeof payload.provider!=='string')))throw new Error('Invalid task');
     const prefs={...await settings.get()};if(payload.approvalMode!==undefined){if(!['Ask before every action','Ask when needed','Never ask'].includes(payload.approvalMode))throw new Error('Invalid approval mode');prefs['approval-mode']=payload.approvalMode;}if((inBackground||running>0)&&!prefs['background-agents'])throw new Error('Background agents are disabled in settings');let cwd=threadLocations.get(payload.threadId)||project||require('node:os').homedir();
+    if(payload.ownWorktree===true&&!payload.threadId&&typeof payload.clientId==='string'&&!threadLocations.has(payload.clientId))cwd=(await threadWorktree.create(cwd,worktreeDirectory(prefs))).path;
     if(typeof payload.clientId==='string')threadLocations.set(payload.clientId,cwd);
+    const script=await envScript(cwd);if(script)await envSetup.run(cwd,script,e=>{if(win&&!win.isDestroyed())win.webContents.send('suffice:event',{...e,event:'env_setup',clientId:payload.clientId,threadId:payload.threadId});});
     running++;const attachmentGroup=[];attachmentGroups.set(payload.threadId||payload.clientId,attachmentGroup);const runThread=()=>payload.threadId||clientThreads.get(payload.clientId);
-    try{const attached=await prepareAttachments(app.getPath('userData'),payload.attachments);if(attached.directory)attachmentGroup.push(attached.directory);const task={prompt:payload.prompt+attached.context,displayPrompt:payload.prompt,attachmentMetadata:attached.metadata,images:attached.images,clientId:typeof payload.clientId==='string'?payload.clientId.slice(0,128):null,effort:payload.effort,model:payload.model,provider:payload.provider,threadId:payload.threadId,cwd,desktopSettings:prefs};try{const result=await request('run',task);await notify('finished','Agent finished',runThread());return result;}catch(error){await notify('failed','Agent encountered an error',runThread());if(prefs.diagnostics){await require('node:fs/promises').appendFile(path.join(settingsHome,'desktop-diagnostics.jsonl'),JSON.stringify({at:new Date().toISOString(),type:'task_error',name:error.name})+'\n',{mode:0o600});}throw error;}}finally{running--;for(const [key,group] of attachmentGroups)if(group===attachmentGroup)attachmentGroups.delete(key);if(!prefs['save-attachments'])for(const directory of attachmentGroup)await removeAttachmentCopy(app.getPath('userData'),directory).catch(()=>{});}
+    try{const attached=await prepareAttachments(app.getPath('userData'),payload.attachments);if(attached.directory)attachmentGroup.push(attached.directory);const task={skillContext:await skillLibrary.context(payload.skills,cwd),prompt:payload.prompt+attached.context,displayPrompt:payload.prompt,attachmentMetadata:attached.metadata,images:attached.images,clientId:typeof payload.clientId==='string'?payload.clientId.slice(0,128):null,effort:payload.effort,model:payload.model,provider:payload.provider,threadId:payload.threadId,cwd,desktopSettings:prefs};try{const result=await request('run',task);await notify('finished','Agent finished',runThread());return result;}catch(error){await notify('failed','Agent encountered an error',runThread());if(prefs.diagnostics){await require('node:fs/promises').appendFile(path.join(settingsHome,'desktop-diagnostics.jsonl'),JSON.stringify({at:new Date().toISOString(),type:'task_error',name:error.name})+'\n',{mode:0o600});}throw error;}}finally{running--;for(const [key,group] of attachmentGroups)if(group===attachmentGroup)attachmentGroups.delete(key);if(!prefs['save-attachments'])for(const directory of attachmentGroup)await removeAttachmentCopy(app.getPath('userData'),directory).catch(()=>{});}
       }finally{preparing--;if(runId){const count=threadRuns.get(runId)-1;if(count)threadRuns.set(runId,count);else threadRuns.delete(runId);}}
   }
   // Dock badge = threads with an unseen Needs-you event; focusing the window clears it. Tests swap in a recording Notification so nothing real shows.
@@ -193,6 +220,15 @@ if(primary)app.whenReady().then(async()=>{
     }finally{askClient=null;}
   });
   askHandle('send',async id=>{if(typeof id!=='string'||id!==askThread)throw new Error('Nothing to send');askThread=null;if(!win.isDestroyed()){win.webContents.send('suffice:ask-bar-thread',id);win.show();win.focus();}askBar.close();return true;});
+  const fakeCompare=process.env.SUFFICE_TEST_COMPARE_AGENT;// test-only provider: a script run in each worktree
+  const compare=(await import('./best-of-n.mjs')).createBestOfN({directory:path.join(settingsHome,'worktrees'),runCandidate:async({cwd,prompt,model,provider,effort,clientId})=>{
+   if(fakeCompare){const {stdout}=await require('node:util').promisify(require('node:child_process').execFile)(process.execPath,[fakeCompare],{cwd,env:{...process.env,ELECTRON_RUN_AS_NODE:'1',COMPARE_MODEL:model,COMPARE_PROMPT:prompt}});return JSON.parse(stdout);}
+   return request('run',{prompt,displayPrompt:prompt,clientId,effort,model,provider,cwd,desktopSettings:{...await settings.get()}});
+  }});
+  handle('compare-models',async()=>fakeCompare?['alpha','beta','gamma'].map(name=>({id:'fake-'+name,name:'Fake '+name,provider:'fake',efforts:[]})):(await request('models',{})).filter(model=>model.available));
+  handle('compare-run',payload=>{if(!project)throw new Error('Choose a project above the composer first');return compare.run({project,prompt:payload?.prompt,candidates:payload?.candidates});});
+  handle('compare-keep',payload=>compare.keep(payload?.id,payload?.index));
+  handle('compare-discard',id=>compare.discard(id));
   handle('abort',threadId=>request('abort',{threadId}));
   handle('steer',async payload=>{if(!payload||typeof payload.prompt!=='string'||!payload.prompt.trim()||payload.prompt.length>1000000)throw new Error('Invalid steering message');const attached=await prepareAttachments(app.getPath('userData'),payload.attachments);if(attached.directory)attachmentGroups.get(payload.threadId)?.push(attached.directory);return request('steer',{threadId:payload.threadId,prompt:payload.prompt+attached.context,displayPrompt:payload.prompt,attachmentMetadata:attached.metadata,images:attached.images});});
   handle('reset',async()=>{viewedThreadId=null;const revision=++viewedThreadRevision;await request('reset');if(revision===viewedThreadRevision)project=selectedProject;});

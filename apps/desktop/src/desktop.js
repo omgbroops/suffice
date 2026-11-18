@@ -7,6 +7,7 @@ import { connectThreads } from './threads-ui.js';
 import { connectProjects } from './projects-ui.js';
 import {connectModels} from './models-ui.js';
 import {connectUsageHint} from './usage-hint.js';
+import {connectToolsChip} from './mcp-chip.js';
 import {connectTooltips} from './tooltips.js';
 import {connectWorkspaceTools} from './workspace-tools.js';
 import {connectStartLife} from './start-life.js';
@@ -35,6 +36,7 @@ export function connectDesktop({prompt,send,toast,escapeHtml}) {
   connectProjects({api,toast});
   connectModels({api,toast});
   connectUsageHint({form:prompt.form,prompt});
+  connectToolsChip(prompt.form,api);
   connectComposerOverflow(prompt.form);
   connectWorkspaceTools(api);
   connectChatChangesWidget();

@@ -13,6 +13,7 @@ import {resolve,dirname,sep} from 'node:path';
 import {SessionManager} from '@earendil-works/pi-coding-agent';
 import {createThreadStore,threadId} from './threads.mjs';
 import {checkpoint} from './rewind.mjs';
+import {parseFindings} from './review.mjs';
 import {createSufficeSession,parseOptions} from '@suffice/harness';
 import {getSupportedThinkingLevels} from '@earendil-works/pi-ai/compat';
 
@@ -47,6 +48,12 @@ async function receive(message) {
       const available=await runtime.getAvailable();const models=payload.all?runtime.getModels():available;
       send({id,ok:true,result:models.map(model=>({id:model.id,name:model.name,provider:model.provider,available:available.some(item=>item.id===model.id&&item.provider===model.provider),efforts:model.reasoning?getSupportedThinkingLevels(model):[]}))});return;
     }
+    if(action==='review'){
+      if(!runtime)throw new Error('Harness is not ready');
+      const selected=(await runtime.getAvailable()).find(model=>model.id===payload.model&&model.provider===payload.provider);if(!selected)throw new Error('Model unavailable. Connect this provider in Settings.');
+      const cwd=await realpath(payload.cwd),options=parseOptions(['--cwd',cwd]);Object.assign(options,{home,access:'read',browser:false,desktop:false,effort:['off','minimal','low','medium','high','xhigh','max'].includes(payload.effort)?payload.effort:'low',model:selected.id,modelObject:selected,sessionManager:SessionManager.inMemory(cwd),desktopSettings:{}});
+      busy=true;let reviewer;try{reviewer=await createSession(options,runtime,{});send({id,ok:true,result:{findings:parseFindings(await reviewer.run(payload.prompt),payload.paths)}});}finally{busy=false;await reviewer?.dispose();}return;
+    }
     if(action==='thread'){
       const revision=++viewRevision,thread=await threads.open(payload.id,(provider,model)=>runtime?.getModel?.(provider,model));
       if(revision===viewRevision){await agent?.dispose();agent=null;resumePath=thread.path;workspace=thread.cwd;viewedUsage=thread.usage;send({event:'usage',usage:viewedUsage});}
@@ -68,13 +75,14 @@ async function receive(message) {
     if(payload.model){selected=(await runtime.getAvailable()).find(model=>model.id===payload.model&&model.provider===payload.provider);if(!selected)throw new Error('Model unavailable. Connect this provider in Settings.');if(!(selected.reasoning?getSupportedThinkingLevels(selected):['off']).includes(payload.effort))throw new Error('Unsupported effort for this model');}
     const cwd=await realpath(payload.cwd);
     if(!(await stat(cwd)).isDirectory())throw new Error('Choose a project directory');
-    busy=true;ownsRun=true;abortRequested=false;const nextPreferences=JSON.stringify(payload.desktopSettings||{});if(agent&&preferencesKey!==nextPreferences){resumePath=agent.sessionPath();await agent.dispose();agent=null;}preferencesKey=nextPreferences;
+    busy=true;ownsRun=true;abortRequested=false;const nextPreferences=JSON.stringify([payload.desktopSettings||{},payload.skillContext||'']);if(agent&&preferencesKey!==nextPreferences){resumePath=agent.sessionPath();await agent.dispose();agent=null;}preferencesKey=nextPreferences;
     if(agent&&workspace!==cwd){await agent.dispose();agent=null;}
     if(!agent){
       workspace=cwd;
       const options=parseOptions(['--cwd',cwd]);
       options.effort=payload.effort;if(payload.side)options.access='read';
-      options.home=home;options.additionalContext=await projectContext(home,cwd,payload.desktopSettings||{});const newlyCreated=!resumePath;options.desktopSettings=payload.desktopSettings||{};options.extensions=[createReducerExtension({dir:resolve(home,'tool-outputs'),settings:options.desktopSettings})];options.onTitleChanged=()=>send({event:'history_changed'});if(options.desktopSettings['allow-network']===false){options.browser=false;options.desktop=false;}
+      options.home=home;options.additionalContext=(await projectContext(home,cwd,payload.desktopSettings||{}))+(payload.skillContext||'');const newlyCreated=!resumePath;options.desktopSettings=payload.desktopSettings||{};options.extensions=[createReducerExtension({dir:resolve(home,'tool-outputs'),settings:options.desktopSettings})];options.onTitleChanged=()=>send({event:'history_changed'});if(options.desktopSettings['allow-network']===false){options.browser=false;options.desktop=false;}
+
       if(selected){options.model=selected.id;options.modelObject=selected;}
       if(resumePath)options.sessionManager=SessionManager.open(resumePath,dirname(resumePath));
       changeTracker=createChatChangeTracker({cwd,home,getId:()=>agent?.sessionPath()?threadId(agent.sessionPath()):null,onChange:(diff,turnDiff)=>{invalidateProjectMetadata(cwd);send({event:'changes',diff,turnDiff});}});

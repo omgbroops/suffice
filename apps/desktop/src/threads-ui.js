@@ -26,6 +26,7 @@ import {connectSessions} from './sessions-ui.js';
 import {connectNeedsYou} from './needs-you.js';
 import {connectSideChat} from './side-chat.js';
 import {connectIssues} from './issues.js';
+import {connectThreadWorktree} from './thread-worktree.js';
 
 export function connectThreads({api,prompt,send,toast}){
  connectExtensionUI(api,toast);const approvals=connectApprovals(api,toast);
@@ -40,7 +41,7 @@ export function connectThreads({api,prompt,send,toast}){
  const transcript=document.createElement('section');transcript.className='thread-transcript';transcript.setAttribute('aria-label','Thread transcript');
  let history=document.createElement('div');history.className='thread-messages';transcript.append(history);workspace.append(transcript);
  connectDisclosureMotion(transcript);
- const header=document.createElement('header');header.className='thread-header';header.hidden=true;workspace.append(header);const messageActions=connectMessageActions(workspace,transcript);
+ const header=document.createElement('header');header.className='thread-header';header.hidden=true;workspace.append(header);const messageActions=connectMessageActions(workspace,transcript);connectThreadWorktree({api,workspace,toast});const threadActive=id=>document.dispatchEvent(new CustomEvent('suffice-thread-active',{detail:{id}}));
  let busy=false,opening=false,activeId=null,refreshVersion=0,openRevision=0,previousMotion;
  const savedHistories=new Map();let selectionReady=Promise.resolve();
  const jobs=new Map(),recovering=new Map();
@@ -75,7 +76,7 @@ export function connectThreads({api,prompt,send,toast}){
   const wasThread=workspace.classList.contains('thread-view');
   const change=()=>{
    if(workspace.classList.contains('thread-view')){const canvas=document.querySelector('.atmosphere');if(previousMotion===undefined)delete canvas.dataset.motion;else canvas.dataset.motion=previousMotion;canvas.dispatchEvent(new Event('motion-change'));}
-   sessionStorage.removeItem('suffice-active-thread');workspace.classList.remove('thread-view');newSession.setAttribute('aria-current','page');header.hidden=true;showHistory(document.createElement('div'));history.className='thread-messages';activeId=null;viewState.select(null);restoreView();syncRunning();
+   sessionStorage.removeItem('suffice-active-thread');threadActive(null);workspace.classList.remove('thread-view');newSession.setAttribute('aria-current','page');header.hidden=true;showHistory(document.createElement('div'));history.className='thread-messages';activeId=null;viewState.select(null);restoreView();syncRunning();
    list.querySelectorAll('.thread-row').forEach(row=>row.setAttribute('aria-pressed','false'));
   };
   if(wasThread)transition.leave(change);else{transition.cancel();change();}
@@ -192,7 +193,7 @@ export function connectThreads({api,prompt,send,toast}){
   const entering=!workspace.classList.contains('thread-view');
   const selection=api.openThread(thread.id);selectionReady=selection;selection.catch(()=>{});
   transition.cancel();
-  activeId=thread.id;viewState.select(thread.id);following=false;
+  activeId=thread.id;threadActive(thread.id);viewState.select(thread.id);following=false;
   const job=jobs.get(thread.id),cached=savedHistories.get(thread.id);
   const reusable=job?.history||(cached?.modified===thread.modified?cached.node:null);
   showHistory(reusable||document.createElement('div'));history.className='thread-messages';
@@ -249,7 +250,7 @@ export function connectThreads({api,prompt,send,toast}){
  }
  function createJob(id,title,node){
   const job={id,title,history:node,running:true,approvalRequests:new Set(),startedAt:Date.now(),provider:form.modelSelection?.provider,model:form.modelSelection?.model,terminalCount:0};jobs.set(id,job);job.turn=messageActions.turn({...form.modelSelection,startedAt:job.startedAt},true);
-  let current=null,streamed='',reasoning='',group=null,log=null,compaction=null;const tools=new Map();
+  let current=null,streamed='',reasoning='',group=null,log=null,compaction=null,envCard=null,envLog=null;const tools=new Map();
   const statusLine=document.createElement('div');statusLine.className='thread-status';statusLine.setAttribute('role','status');statusLine.textContent='Working';node.append(statusLine);
   const status=text=>{statusLine.textContent=text;statusLine.hidden=false;};
   const response=()=>{if(!current){current=document.createElement('article');current.className='thread-message thread-assistant';node.insertBefore(current,statusLine);messageActions.assistant(current,job.turn,'');}return current;};
@@ -257,6 +258,15 @@ export function connectThreads({api,prompt,send,toast}){
   job.addSteering=(text,attachments=[],timestamp=Date.now(),images=[])=>{const bubble=document.createElement('article');bubble.className='thread-message thread-user';bubble.textContent=text;node.insertBefore(bubble,statusLine);messageActions.user(bubble,{text,timestamp,attachments,images});group=log=null;return bubble;};
   job.event=event=>{
    if(event.sequence&&event.sequence<=(job.lastSequence||0))return;if(event.sequence)job.lastSequence=event.sequence;
+   if(event.event==='env_setup'){
+    if(!envCard){envCard=document.createElement('details');envCard.className='thread-activity env-setup-card';envCard.dataset.state='running';const summary=document.createElement('summary');summary.textContent='Setting up environment';envLog=document.createElement('pre');envLog.className='env-setup-log';envLog.tabIndex=0;envCard.append(summary,envLog);node.insertBefore(envCard,statusLine);}
+    const summary=envCard.firstChild;if(event.phase==='start')envCard.open=true;
+    if(event.phase==='output'){envLog.textContent+=event.text;envLog.scrollTop=envLog.scrollHeight;}
+    if(event.phase==='skipped'){envCard.dataset.state='skipped';summary.textContent='Environment ready · setup skipped, lockfiles unchanged';}
+    if(event.phase==='done'){envCard.dataset.state='done';summary.textContent='Environment ready';envCard.open=false;}
+    if(event.phase==='failed'){envCard.dataset.state='failed';summary.textContent='Environment setup failed · exit '+event.code;envCard.open=true;}
+    if(node===history)bottom();return;
+   }
    if(event.event==='steering'){job.addSteering(event.text,event.attachments,event.timestamp,event.images);current=null;streamed='';return;}
    if(event.event==='turn_started')Object.assign(job.turn.meta,event.presentation);
    if(event.event==='compaction_start'){group=log=null;statusLine.hidden=true;if(!compaction){compaction=transcriptDivider('compacting');node.insertBefore(compaction,statusLine);}if(node===history)bottom();return;}
@@ -277,12 +287,12 @@ export function connectThreads({api,prompt,send,toast}){
    if(event.event==='text')group=log=null;
    if(node===history)bottom();
   };
-  job.finish=(result,error)=>{if(!job.running)return;const interrupted=result?.interrupted||isInterruption(error);if(compaction){compaction.remove();compaction=null;}if(interrupted){node.insertBefore(transcriptDivider('interrupted'),statusLine);error=null;}else if(error){current=null;streamed='';node.querySelectorAll('.thread-run-error').forEach(e=>e.remove());const box=document.createElement('div');box.className='thread-run-error';box.setAttribute('role','alert');const msg=document.createElement('span');msg.textContent=displayRunError(error.message,job.provider);const retry=document.createElement('button');retry.type='button';retry.className='text-button';retry.textContent='Retry';retry.onclick=()=>{const draft=prompt.value.trim();if(busy||(draft&&draft!==(job.text||'').trim()))return;prompt.value=job.text||'';prompt.dispatchEvent(new Event('input'));form.requestSubmit();};box.append(msg,retry);node.insertBefore(box,statusLine);}else if(result?.text){markdown(response(),result.text);messageActions.assistant(response(),job.turn,result.text);}messageActions.complete(job.turn,{...result?.presentation,endedAt:result?.presentation?.endedAt||Date.now()});statusLine.remove();if(preference('collapse-work',true))node.querySelectorAll('.thread-activity').forEach(group=>group.open=false);approvals.clear(job.id);job.approvalRequests.clear();job.running=false;job.failed=!!error;job.error=error?displayRunError(error.message,job.provider):undefined;job.terminalCount=0;if(!error)updateMetadata(job.id,{unread:!isViewing(job.id)});if(node===history&&isViewing(job.id))localStorage.setItem('suffice-thread-seen:'+job.id,String(Date.now()));drawThreads();if(node===history){syncRunning();saveView();bottom();document.dispatchEvent(new Event('suffice:usage-change'));}document.dispatchEvent(new Event('suffice:thread-updated'));void refresh().catch(()=>{});if(!error&&!interrupted)void resolveEntryIds(job.id,node);document.dispatchEvent(new CustomEvent('suffice-run-finished',{detail:{id:job.id,completed:!error&&!interrupted}}));};
+  job.finish=(result,error)=>{if(!job.running)return;const interrupted=result?.interrupted||isInterruption(error);if(compaction){compaction.remove();compaction=null;}if(interrupted){node.insertBefore(transcriptDivider('interrupted'),statusLine);error=null;}else if(error){current=null;streamed='';node.querySelectorAll('.thread-run-error').forEach(e=>e.remove());const box=document.createElement('div');box.className='thread-run-error';box.setAttribute('role','alert');const msg=document.createElement('span');msg.textContent=displayRunError(error.message,job.provider);const retry=document.createElement('button');retry.type='button';retry.className='text-button';retry.textContent='Retry';retry.onclick=()=>{const draft=prompt.value.trim();if(busy||(draft&&draft!==(job.text||'').trim()))return;prompt.value=job.text||'';prompt.dispatchEvent(new Event('input'));form.requestSubmit();};box.append(msg,retry);node.insertBefore(box,statusLine);}else if(result?.text){markdown(response(),result.text);messageActions.assistant(response(),job.turn,result.text);}messageActions.complete(job.turn,{...result?.presentation,endedAt:result?.presentation?.endedAt||Date.now()});statusLine.remove();if(preference('collapse-work',true))node.querySelectorAll('.thread-activity').forEach(group=>group.open=group.dataset.state==='failed');approvals.clear(job.id);job.approvalRequests.clear();job.running=false;job.failed=!!error;job.error=error?displayRunError(error.message,job.provider):undefined;job.terminalCount=0;if(!error)updateMetadata(job.id,{unread:!isViewing(job.id)});if(node===history&&isViewing(job.id))localStorage.setItem('suffice-thread-seen:'+job.id,String(Date.now()));drawThreads();if(node===history){syncRunning();saveView();bottom();document.dispatchEvent(new Event('suffice:usage-change'));}document.dispatchEvent(new Event('suffice:thread-updated'));void refresh().catch(()=>{});if(!error&&!interrupted)void resolveEntryIds(job.id,node);document.dispatchEvent(new CustomEvent('suffice-run-finished',{detail:{id:job.id,completed:!error&&!interrupted}}));};
   return job;
  }
  form.steerQueuedMessage=async(item,id)=>{const target=jobs.get(id);if(!target?.running)throw new Error('This chat is no longer running');await api.steer({threadId:id,prompt:item.prompt,attachments:item.attachments});target.addSteering(item.prompt,item.attachments);if(activeId===id)bottom(true);};
- form.runQueuedMessage=(item,id)=>{const previous=jobs.get(id);if(!previous||previous.running)throw new Error('Chat is not ready for a queued message');const node=previous.history;node.querySelectorAll('.thread-run-error').forEach(e=>e.remove());const user=document.createElement('article');user.className='thread-message thread-user';user.textContent=item.prompt;node.append(user);messageActions.user(user,{text:item.prompt,timestamp:Date.now(),attachments:item.attachments});const job=createJob(id,previous.title,node);job.provider=item.selection?.provider;job.model=item.selection?.model;job.turn=messageActions.turn({...item.selection,startedAt:job.startedAt},true);if(activeId===id){syncRunning();bottom(true);}drawThreads();void api.run({prompt:item.prompt,...item.selection,effort:item.selection?.effort||'low',approvalMode:item.approvalMode,attachments:item.attachments,threadId:id,clientId:id}).then(result=>{adoptJob(job,result.threadId);job.finish(result);}).catch(error=>job.finish(null,error));};
- function adoptJob(job,id){if(!id||id===job.id)return;const previous=job.id;if(job.issue){document.dispatchEvent(new CustomEvent('suffice-thread-started',{detail:{issue:job.issue,threadId:id}}));job.issue=null;}jobs.delete(previous);jobs.set(id,job);job.id=id;adoptOptimistic(previous,id);if(activeId!==previous&&viewState.read(previous).approvalMode)viewState.updateFor(id,{approvalMode:viewState.read(previous).approvalMode});if(activeId===previous){activeId=id;viewState.adopt(id);sessionStorage.setItem('suffice-active-thread',id);}drawThreads();}
+ form.runQueuedMessage=(item,id)=>{const previous=jobs.get(id);if(!previous||previous.running)throw new Error('Chat is not ready for a queued message');const node=previous.history;node.querySelectorAll('.thread-run-error').forEach(e=>e.remove());const user=document.createElement('article');user.className='thread-message thread-user';user.textContent=item.prompt;node.append(user);messageActions.user(user,{text:item.prompt,timestamp:Date.now(),attachments:item.attachments});const job=createJob(id,previous.title,node);job.provider=item.selection?.provider;job.model=item.selection?.model;job.turn=messageActions.turn({...item.selection,startedAt:job.startedAt},true);if(activeId===id){syncRunning();bottom(true);}drawThreads();void api.run({prompt:item.prompt,...item.selection,effort:item.selection?.effort||'low',approvalMode:item.approvalMode,attachments:item.attachments,skills:item.skills,threadId:id,clientId:id}).then(result=>{adoptJob(job,result.threadId);job.finish(result);}).catch(error=>job.finish(null,error));};
+ function adoptJob(job,id){if(!id||id===job.id)return;const previous=job.id;if(job.issue){document.dispatchEvent(new CustomEvent('suffice-thread-started',{detail:{issue:job.issue,threadId:id}}));job.issue=null;}jobs.delete(previous);jobs.set(id,job);job.id=id;adoptOptimistic(previous,id);if(activeId!==previous&&viewState.read(previous).approvalMode)viewState.updateFor(id,{approvalMode:viewState.read(previous).approvalMode});if(activeId===previous){activeId=id;threadActive(id);viewState.adopt(id);sessionStorage.setItem('suffice-active-thread',id);}drawThreads();}
  async function retryThread(id){const thread=savedThreads.find(t=>t.id===id),job=jobs.get(id);if(!thread||!job?.text||job.running)return false;await openSavedThread(thread);const draft=prompt.value.trim();if(busy||(draft&&draft!==job.text.trim()))return false;prompt.value=job.text;prompt.dispatchEvent(new Event('input'));form.requestSubmit();return true;}
  connectNeedsYou({api,approvals,toast,retry:retryThread,markRead:id=>updateMetadata(id,{unread:false})});
  connectIssues({api,toast});
@@ -294,6 +304,7 @@ export function connectThreads({api,prompt,send,toast}){
   const job=jobs.get(event.threadId)||jobs.get(event.clientId)||(!event.threadId&&!event.clientId?visibleJob():null);
   if(event.event==='background_started'){adoptOptimistic(event.clientId,event.threadId);void refresh().catch(()=>{});return;}
   if(event.event==='background_completed'){void refresh().catch(()=>{});return;}
+  if(event.event==='env_setup'&&job&&!job.running){job.event(event);return;}// the failure can land after the rejected run
   if(!job?.running){recovering.get(event.threadId)?.push(event);if(event.event==='run_completed')void refresh().catch(()=>{});return;}
   if(event.event==='run_completed'){job.finish(event.result,event.error?new Error(event.error):null);return;}
   if(event.event==='thread_started'){adoptJob(job,event.id);void refresh().catch(()=>{});return;}
@@ -322,7 +333,7 @@ export function connectThreads({api,prompt,send,toast}){
   if(form.modelsDisabled){toast('Enable a model in Settings → Models first');return;}if(form.dataset.requireProject==='true'){toast('Choose a project above the composer first');return;}const inBackground=form.backgroundSubmit||form.backgroundIntent;if(!busy&&inBackground&&!preference('background-agents',true)){toast('Background agents are disabled in settings');return;}form.backgroundSubmit=false;
   let attachments;opening=true;try{attachments=await form.attachments?.payload();}catch(error){toast(error.message);return;}finally{opening=false;}
   if(busy){
-   const textToSteer=text;if(form.workingSendMode==='Queue'){form.queueMessage({prompt:textToSteer,attachments,selection:{...form.modelSelection},approvalMode:form.approvalMode});prompt.value='';form.attachments?.clear();saveView();form.resizePrompt?.();syncRunning();return;}
+   const textToSteer=text;if(form.workingSendMode==='Queue'){form.queueMessage({prompt:textToSteer,attachments,skills:form.skills?.ids(),selection:{...form.modelSelection},approvalMode:form.approvalMode});prompt.value='';form.attachments?.clear();saveView();form.resizePrompt?.();syncRunning();return;}
    const target=visibleJob(),origin=activeId;
    prompt.value='';form.attachments?.clear();saveView();form.resizePrompt?.();syncRunning();
    try{await api.steer({threadId:origin,prompt:textToSteer,attachments});const bubble=target.addSteering(textToSteer,attachments);if(activeId===origin){transition.reveal(bubble,'user',0);bottom(true);}}catch(error){toast(error.message);if(activeId===origin&&!prompt.value){prompt.value=textToSteer;prompt.dispatchEvent(new Event('input'));}}return;
@@ -337,7 +348,7 @@ export function connectThreads({api,prompt,send,toast}){
   if(entering||inBackground)addOptimistic(id,text);if(entering)viewState.updateFor(origin,{draft:''});
   if(!inBackground){if(entering){transition.cancel();viewState.select(id);viewState.update({model:selection});activeId=id;}threadView(job.title,entering);transition.reveal(user,'user',entering?undefined:0);}
   prompt.value='';form.attachments?.clear();viewState.update({draft:''});form.resizePrompt?.();syncRunning();bottom(true);
-  const payload={prompt:text,...selection,approvalMode,attachments,clientId:id,...(!id.startsWith('pending:')?{threadId:id}:{})};
+  const payload={prompt:text,...selection,approvalMode,attachments,skills:form.skills?.ids(),clientId:id,...(id.startsWith('pending:')&&form.ownWorktree?{ownWorktree:true}:{}),...(!id.startsWith('pending:')?{threadId:id}:{})};
   void selectionReady.catch(()=>{}).then(()=>form.projectSelection).then(()=>(inBackground?api.runBackground(payload):api.run(payload))).then(result=>{adoptJob(job,result.threadId);job.finish(result);}).catch(error=>{
    if(job.id.startsWith('pending:')){optimisticThreads.delete(job.id);drawThreads();}job.finish(null,error);
    if(!isInterruption(error)&&inBackground)toast(displayRunError(error.message,job.provider));

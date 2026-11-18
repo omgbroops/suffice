@@ -2,6 +2,7 @@ import {icon} from './ui.js';
 import {fileIcon} from './file-icons.js';
 import {setProjectGroupExpanded} from './project-group-motion.js';
 import {createCollectionNavigation} from './components/ui/collection-navigation.js';
+import {noteNode} from './review.js';
 
 export function textElement(tag,className,text){const el=document.createElement(tag);el.className=className;el.textContent=text;return el;}
 function fillFolderRow(row,name,expanded){
@@ -27,13 +28,14 @@ export function splitDiffRows(rows){
   const deleted=[],added=[];while(index<rows.length&&['addition','deletion'].includes(rows[index].kind)){const line=rows[index++];(line.kind==='deletion'?deleted:added).push(line);}for(let pair=0;pair<Math.max(deleted.length,added.length);pair++)result.push({left:deleted[pair]??null,right:added[pair]??null});
  }return result;
 }
-export function renderCode(container,result,isDiff=false,{wrap=false,diffLayout='unified'}={}){
+export function renderCode(container,result,isDiff=false,{wrap=false,diffLayout='unified',annotations=[]}={}){
  if(result.binary){container.append(textElement('p','panel-inline-note','Binary file'));return;}
  const diff=isDiff;
  const rows=diff&&!result.untracked?parseUnifiedDiff(result.text):(result.text?result.text.split('\n'):[]).slice(0,result.text.endsWith('\n')?-1:undefined).map((text,index)=>({kind:diff?'addition':'context',text,old:null,new:index+1}));
  const limit=5000,sourceRows=rows.slice(0,limit),paint=[];
  if(result.truncated||rows.length>limit)container.append(textElement('p','panel-inline-note','Preview truncated'));
  const code=document.createElement('div');code.className='panel-code'+(diff?' panel-diff':'');code.dataset.wrap=String(wrap);code.dataset.layout=diff?diffLayout:'unified';code.setAttribute('role','region');code.setAttribute('aria-label',diff?'File diff':'File contents');
+ const placed=new Set(),notesAfter=line=>{if(!diff||line?.new==null||line.kind==='deletion')return[];return annotations.filter(finding=>finding.line===line.new&&!placed.has(finding)&&placed.add(finding)).map(noteNode);};
  function lineNode(line,side){
   const row=document.createElement('div');row.className='code-line '+(line?.kind||'diff-empty');if(!line)return row;
   if(diff&&!side){const old=textElement('span','code-number',line.old??'');old.setAttribute('aria-hidden','true');row.append(old);}
@@ -43,8 +45,9 @@ export function renderCode(container,result,isDiff=false,{wrap=false,diffLayout=
  }
  if(diff&&diffLayout==='split'){
   const labels=document.createElement('div');labels.className='split-diff-labels';labels.append(textElement('span','','Before'),textElement('span','','After'));code.append(labels);
-  for(const pair of splitDiffRows(sourceRows)){if(pair.hunk){const header=textElement('div','code-line hunk split-hunk',pair.hunk.text);code.append(header);continue;}const row=document.createElement('div');row.className='split-diff-row';row.append(lineNode(pair.left,'left'),lineNode(pair.right,'right'));code.append(row);}
- }else for(const line of sourceRows)code.append(lineNode(line));
+  for(const pair of splitDiffRows(sourceRows)){if(pair.hunk){const header=textElement('div','code-line hunk split-hunk',pair.hunk.text);code.append(header);continue;}const row=document.createElement('div');row.className='split-diff-row';row.append(lineNode(pair.left,'left'),lineNode(pair.right,'right'));code.append(row,...notesAfter(pair.right));}
+ }else for(const line of sourceRows)code.append(lineNode(line),...notesAfter(line));
+ if(diff)code.append(...annotations.filter(finding=>!placed.has(finding)).map(noteNode));
  if(!rows.length)container.append(textElement('p','panel-inline-note',diff?'No text diff':'Empty file'));else container.append(code);
  if(paint.length)void import('./code-highlight.js').then(async({highlightLines,appendTokens})=>{
   const tokens=await highlightLines(paint.map(({line})=>line.kind==='hunk'?'':line.text).join('\n'),result.path);

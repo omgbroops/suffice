@@ -1,11 +1,15 @@
 import {filterSufficeResources,isolateSufficeResourceLoader} from '../../../packages/cli/src/resource-scope.mjs';
 import {mkdir,readFile,writeFile,rename,realpath} from 'node:fs/promises';
-import {resolve,join,relative} from 'node:path';
+import {resolve,join,relative,basename} from 'node:path';
 import {randomUUID} from 'node:crypto';
 import {spawn} from 'node:child_process';
+import {TOOLKITS,scopeLookup,projectKey} from '../../../packages/cli/src/mcp-scope.mjs';
+import {parseSnippet} from './mcp-snippet.mjs';
+import {checkServer,estimateTokens} from './mcp-health.mjs';
 import {SettingsManager,DefaultPackageManager,DefaultResourceLoader} from '@earendil-works/pi-coding-agent';
 export function createResourceService(home,{choosePath}={}){
- let tail=Promise.resolve(),mutations=Promise.resolve();const children=new Set();
+ let tail=Promise.resolve(),mutations=Promise.resolve(),schemas;const children=new Set();
+ const queue=fn=>{const job=mutations.then(fn);mutations=job.catch(()=>{});return job;};
  const json=async file=>{try{return JSON.parse(await readFile(resolve(home,file),'utf8'));}catch(e){if(e.code==='ENOENT')return {};throw e;}};
  const save=(file,value)=>{const job=tail.then(async()=>{await mkdir(home,{recursive:true});const target=resolve(home,file),temporary=target+'.'+randomUUID()+'.tmp';await writeFile(temporary,JSON.stringify(value,null,2),{mode:0o600});await rename(temporary,target);});tail=job.catch(()=>{});return job;};
  async function list(){
@@ -16,6 +20,35 @@ export function createResourceService(home,{choosePath}={}){
   const loader=isolateSufficeResourceLoader(new DefaultResourceLoader({cwd:home,agentDir:home,settingsManager:settings,packageManager:{resolve:async()=>resolved,resolveExtensionSources:async()=>({extensions:[],skills:[],prompts:[],themes:[]})},noExtensions:true,noThemes:true,noContextFiles:true}),home);
   await loader.reload();
   return {mcp:mcp.mcpServers||{},skills:loader.getSkills().skills.map(s=>({name:s.name,description:s.description,path:s.filePath,enabled:state.skills?.[s.name]!==false})),templates:loader.getPrompts().prompts.map(p=>({name:p.name,description:p.description,path:p.filePath,enabled:state.templates?.[p.name]!==false})),extensions:resolved.extensions.filter(e=>!e.path.startsWith('builtin:')).map(e=>({path:e.path,enabled:e.enabled,...e.metadata})),packages:settings.getSettings().packages||[],diagnostics:[...loader.getSkills().diagnostics,...loader.getPrompts().diagnostics],settings:settings.getSettings()};
+ }
+
+ // Real tool schemas of the built-in toolkits, loaded once; an unreadable engine just shows no cost.
+ const toolkitSchemas=()=>schemas??=import('../../../packages/cli/src/tools.mjs').then(m=>new Map(m.repositoryTools({workspace:home,access:'full'}).map(t=>[t.name,t]))).catch(()=>new Map());
+ async function state(p={}){
+  const level=['global','project','thread'].includes(p.level)?p.level:'global';
+  const scope=await json('mcp-scope.json'),health=await json('mcp-health.json'),servers=(await json('mcp.json')).mcpServers||{},known=await toolkitSchemas();
+  const look=scopeLookup(scope,{project:typeof p.project==='string'&&p.project?projectKey(p.project):null,thread:typeof p.thread==='string'?p.thread:null,level});
+  const short=t=>t.length>48?t.slice(0,47)+'…':t;
+  const toolkits=Object.entries(TOOLKITS).map(([id,t])=>{const o=look('toolkit:'+id),found=t.tools.filter(n=>known.has(n));return {id,kind:'toolkit',name:t.title,detail:t.detail,tools:t.tools,tokens:found.length?estimateTokens(found.map(n=>known.get(n))):0,enabled:o?.enabled??true,source:o?.source||'default'};});
+  const items=Object.entries(servers).map(([name,c])=>{const o=look(name),h=health[name];return {id:name,kind:'server',name,detail:c.url||short([c.command,...(c.args||[])].map((a,i)=>i&&!String(a).startsWith('/')?a:basename(String(a))).join(' ')),remote:!!c.url,enabled:o?.enabled??c.enabled!==false,source:o?.source||'default',health:h?{ok:h.ok,error:h.error,tools:h.tools,tokens:h.tokens,at:h.at}:null};});
+  const tokens=[...toolkits,...items].reduce((n,x)=>n+(x.enabled?(x.tokens??x.health?.tokens??0):0),0);
+  return {level,toolkits,servers:items,tokens,activeCount:[...toolkits,...items].filter(x=>x.enabled).length};
+ }
+ async function health(name){
+  const servers=(await json('mcp.json')).mcpServers||{};if(!Object.hasOwn(servers,name))throw new Error('Unknown server');
+  const result=await checkServer(servers[name],{cwd:home,track:c=>{children.add(c);c.once('close',()=>children.delete(c));}});
+  await queue(async()=>{const all=await json('mcp-health.json');all[name]=result;await save('mcp-health.json',all);});
+  return list();
+ }
+ async function scopeSet(p){
+  const level=p.level,key=p.key;
+  if(!['global','project','thread'].includes(level))throw new Error('Unknown scope');
+  if(typeof key!=='string'||!(key.startsWith('toolkit:')?Object.hasOwn(TOOLKITS,key.slice(8)):/^[a-zA-Z0-9_-]+$/.test(key)))throw new Error('Unknown tool');
+  if(level!=='global'&&(typeof p.id!=='string'||!p.id))throw new Error(level==='project'?'Select a project first':'Open a thread first');
+  if(p.enabled!==null&&typeof p.enabled!=='boolean')throw new Error('Invalid value');
+  const scope=await json('mcp-scope.json'),bucket=level==='global'?(scope.global??={}):((scope[level==='project'?'projects':'threads']??={})[level==='project'?projectKey(p.id):p.id]??={});
+  if(p.enabled===null)delete bucket[key];else bucket[key]=p.enabled;
+  await save('mcp-scope.json',scope);return list();
  }
  async function action(p){if(!p||typeof p.action!=='string')throw new Error('Invalid resource action');
  if(p.action==='resource-toggle'){if(!['skills','templates'].includes(p.kind)||typeof p.name!=='string')throw new Error('Invalid resource');const state=await json('resource-state.json');state[p.kind]={...state[p.kind],[p.name]:p.enabled===true};await save('resource-state.json',state);return list();}
@@ -37,6 +70,9 @@ export function createResourceService(home,{choosePath}={}){
  }
  if(['install','update','remove'].includes(p.action)){if(typeof p.source!=='string'||p.source.length>1000||!p.source.trim())throw new Error('Enter a package source');const settings=SettingsManager.create(home,home,{projectTrusted:false}),manager=new DefaultPackageManager({cwd:home,agentDir:home,settingsManager:settings});if(p.action==='install')await manager.installAndPersist(p.source);if(p.action==='update')await manager.update(p.source);if(p.action==='remove')await manager.removeAndPersist(p.source);await settings.flush();return list();}
  if(['mcp-check','mcp-login','mcp-logout'].includes(p.action)){const args=p.action==='mcp-check'?['mcp','list']:['mcp',p.action==='mcp-login'?'login':'logout',p.name];if(p.name&&!/^[a-zA-Z0-9_-]+$/.test(p.name))throw new Error('Invalid server');const entry=(await import('node:url')).fileURLToPath(import.meta.resolve('@earendil-works/pi-coding-agent'));const cli=resolve(entry,'..','bundle','cli.js');return new Promise((resolveResult,reject)=>{const child=spawn(process.execPath,[cli,...args],{cwd:home,env:{...process.env,ELECTRON_RUN_AS_NODE:'1',PI_CODING_AGENT_DIR:home},windowsHide:true,stdio:['ignore','pipe','pipe']});children.add(child);child.once('close',()=>children.delete(child));let output='';const take=chunk=>{output=(output+chunk.toString()).slice(-60000);};child.stdout.on('data',take);child.stderr.on('data',take);child.on('error',error=>{clearTimeout(timer);reject(error);});const timer=setTimeout(()=>child.kill(),p.action==='mcp-login'?180000:30000);child.on('exit',code=>{clearTimeout(timer);resolveResult({output,ok:code===0});});});}
+ if(p.action==='mcp-state')return state(p);
+ if(p.action==='mcp-scope')return scopeSet(p);
+ if(p.action==='mcp-install'){const incoming=parseSnippet(p.text,typeof p.name==='string'&&p.name.trim()?p.name.trim():undefined).mcpServers,current=(await json('mcp.json')).mcpServers||{};const clash=Object.keys(incoming).filter(n=>Object.hasOwn(current,n));if(clash.length)throw new Error('Already installed: '+clash.join(', '));return action({action:'mcp-save',text:JSON.stringify({...await json('mcp.json'),mcpServers:{...current,...incoming}})});}
  throw new Error('Unknown resource action');}
- return {list,dispose(){for(const child of children)child.kill();children.clear();},action:payload=>{const job=mutations.then(()=>action(payload));mutations=job.catch(()=>{});return job;}};
+ return {list,dispose(){for(const child of children)child.kill();children.clear();},action:payload=>payload?.action==='mcp-health'&&typeof payload.name==='string'?health(payload.name):queue(()=>action(payload))};
 }
