@@ -8,7 +8,7 @@ import {_electron} from 'playwright-core';
 import {guard} from './electron-guard.mjs';
 
 const SHOTS=process.env.R2_SHOTS||'';
-test('composer run state: empty Enter never aborts, rejected send keeps draft, failures are styled, stale toast clears',{timeout:90000},async()=>{
+test('composer run state: empty Enter never aborts, rejected send is not refilled, failures are styled, stale toast clears',{timeout:90000},async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-runstate-')),env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home,SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_SESSIONS_SOCKET:'sfx-r2-threads-ui-'+process.pid,SUFFICE_HISTORY_HOME:resolve(home,'history')};delete env.ELECTRON_RUN_AS_NODE;
  const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
  try{
@@ -26,13 +26,13 @@ test('composer run state: empty Enter never aborts, rejected send keeps draft, f
   const shot=async n=>{if(SHOTS){await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].setBounds({x:0,y:0,width:1440,height:900}));await page.waitForTimeout(400);await page.screenshot({path:resolve(SHOTS,n+'.png')});}};
   await page.reload();await page.locator('.composer').waitFor();
   const submit=()=>page.locator('.composer').evaluate(el=>el.requestSubmit());
-  // rejected send keeps the draft
+  // rejected send stays in the transcript with Retry; the composer is not refilled
   await app.evaluate(()=>{globalThis.reject='No provider is connected'});
   await page.locator('#prompt').fill('keep me');await submit();
-  await page.waitForFunction(()=>document.querySelector('.composer').dataset.running==='false'&&document.querySelector('#prompt').value==='keep me',{},{timeout:3000});
+  await page.locator('.thread-run-error').waitFor();await page.waitForFunction(()=>document.querySelector('.composer').dataset.running==='false'&&document.querySelector('#prompt').value==='',{},{timeout:3000});
   await shot('01-reject-draft-kept');
   await app.evaluate(()=>{globalThis.reject=null});
-  // Retry after a rejected send re-sends the kept text even though the composer still holds it
+  // Retry after a rejected send re-sends the failed text
   await page.locator('.thread-run-error').getByRole('button',{name:'Retry'}).click();
   await page.waitForFunction(()=>true);
   await page.waitForTimeout(500);
