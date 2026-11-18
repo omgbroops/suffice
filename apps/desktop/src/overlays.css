@@ -144,3 +144,26 @@
 .desktop-app .toast-dismiss:hover { background: var(--hover-menu); color: var(--text); }
 .toast-dismiss .icon { width: 14px; height: 14px; }
 @media(prefers-reduced-motion:reduce){ .desktop-app :is(.detail-dialog,.provider-dialog)[open] { animation: none; } }
+
+/* Effort fluid: the fill is a canvas driven by effort-fluid.js (provider colour); the CSS fill below is only the no-canvas fallback. */
+.desktop-app .effort-fill { inset: 0; width: 100%; background: none; box-shadow: none; transition: none; }
+.desktop-app .effort-fill::after { display: none; }
+.effort-fill canvas { display: block; width: 100%; height: 100%; image-rendering: pixelated; }
+
+/* Short spring-in for every popover, dialog and toast (overshoot ~4%); close stays a plain fade. */
+.desktop-app { --ease-spring: cubic-bezier(.34, 1.45, .64, 1); }
+.desktop-app .popover[data-motion='true'] { transform: scale(.95); transform-origin: var(--popover-origin, top left); transition: opacity var(--duration-close) var(--ease-out), transform var(--duration-close) var(--ease-out); }
+.desktop-app .popover[data-motion='true'][data-open='true'] { transform: scale(1); transition: opacity 120ms var(--ease-out), transform 220ms var(--ease-spring); }
+.desktop-app .popover[data-instant='true'] { transition: none; }
+.desktop-app .context-usage-details { background: var(--surface-menu) !important; -webkit-backdrop-filter: none; backdrop-filter: none; border-radius: var(--radius-popover); }
+.desktop-app :is(.detail-dialog,.provider-dialog)[open] { animation-timing-function: var(--ease-spring); animation-duration: 240ms; }
+.desktop-app .toast { animation: toast-in 240ms var(--ease-spring); }
+@keyframes toast-in { from { opacity: 0; transform: translateY(12px) scale(.96); } to { opacity: 1; transform: none; } }
+@media(prefers-reduced-motion:reduce){ .desktop-app .toast { animation: none; } .desktop-app .popover[data-motion='true'] { transition: none; transform: none; } }
+
+/* Tasks "Discard?" bubble: sits over the add box, concentric with its radius. */
+.tb-add { position: relative; }
+.tb-discard { position: absolute; right: var(--space-2); bottom: calc(100% - var(--space-2)); display: flex; align-items: center; gap: var(--space-2); padding: var(--space-1) var(--space-1) var(--space-1) var(--space-3); border-radius: var(--radius-card); background: var(--surface-menu); box-shadow: inset 0 0 0 var(--hairline) var(--border-strong), var(--overlay-outset); font: 500 13px/16px var(--font-sans); color: var(--text-strong); z-index: 5; }
+.tb-discard[hidden] { display: none; }
+.tb-discard button { height: var(--control-height-xs); padding: 0 var(--space-2); border: 0; border-radius: calc(var(--radius-card) - var(--space-1)); background: var(--surface-hover); color: var(--text); font: 500 12px/16px var(--font-sans); cursor: pointer; }
+.tb-discard .tb-drop { background: var(--red); color: #fff; }

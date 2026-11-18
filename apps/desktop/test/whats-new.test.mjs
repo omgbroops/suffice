@@ -1,4 +1,4 @@
-// Hidden test (SUFFICE_TEST_HIDE_WINDOW=1): the What's new sheet opens from Cmd+K, lists every entry, and Try it opens the feature.
+// Hidden test (SUFFICE_TEST_HIDE_WINDOW=1): the What's new sheet opens from Cmd+K, lists every entry, and clicking a row opens the feature.
 // SHOT_DIR sets the screenshot folder. Private tmux socket only.
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -10,10 +10,10 @@ import {tmpdir} from 'node:os';
 import {guard} from './electron-guard.mjs';
 import {WHATS_NEW} from '../src/whats-new-data.js';
 
-test('whats-new data: unique ids, short copy, an entry point and a Try target each',()=>{
+test('whats-new data: unique ids, short copy, a section and a Try target each',()=>{
  assert.ok(WHATS_NEW.length>=10);
  assert.equal(new Set(WHATS_NEW.map(i=>i.id)).size,WHATS_NEW.length);
- for(const i of WHATS_NEW){assert.ok(i.title&&i.line.length<=70,i.id);assert.ok(i.entry.length&&Object.keys(i.try).length===1,i.id);}
+ for(const i of WHATS_NEW){assert.ok(i.title&&i.line.length<=70,i.id);assert.ok(i.section&&Object.keys(i.try).length===1,i.id);}
 });
 
 test('whats-new sheet: Cmd+K entry, rows, Try it, shown once',{timeout:240000},async()=>{
@@ -39,7 +39,7 @@ test('whats-new sheet: Cmd+K entry, rows, Try it, shown once',{timeout:240000},a
   await page.locator('.spotlight-result',{hasText:"What's new"}).click();
   await sheet.waitFor();
   assert.equal(await sheet.locator('li').count(),WHATS_NEW.length);
-  assert.equal(await sheet.locator('.whats-new-try').count(),WHATS_NEW.length);
+  assert.equal(await sheet.locator('.whats-new-item').count(),WHATS_NEW.length);assert.equal(await sheet.locator('.whats-new-banner').count(),4);
   await shot('sheet','dark');await shot('sheet','light');await page.evaluate(()=>{document.documentElement.dataset.theme='dark';});
   // Esc closes and marks seen
   await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('dialog.whats-new').open);
@@ -47,14 +47,14 @@ test('whats-new sheet: Cmd+K entry, rows, Try it, shown once',{timeout:240000},a
   assert.equal(await page.evaluate(()=>window.sufficeWhatsNew.maybeShow()),false,'seen release does not reopen');
   // Try it: Tasks opens the palette filtered to the command; Automations opens its settings page
   await page.evaluate(()=>window.sufficeWhatsNew.open());
-  await sheet.locator('li[data-id=tasks] .whats-new-try').click();
+  await sheet.locator('li[data-id=tasks] .whats-new-item').click();
   await page.waitForFunction(()=>!document.querySelector('dialog.whats-new').open);
   assert.equal(await page.locator('#spotlight-query').inputValue(),'Tasks');
   assert.ok(await page.locator('.spotlight-result',{hasText:'Tasks'}).count());
   await shot('try-tasks','dark');
   await page.keyboard.press('Escape');
   await page.evaluate(()=>window.sufficeWhatsNew.open());
-  await sheet.locator('li[data-id=automations] .whats-new-try').click();
+  await sheet.locator('li[data-id=automations] .whats-new-item').click();
   await page.locator('.settings-page, [data-settings], .settings').first().waitFor({state:'attached'});
   assert.deepEqual(errors,[]);
  }finally{await app.close().catch(()=>{});}
