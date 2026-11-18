@@ -28,7 +28,7 @@ try{
  // working: standard live line
  await page.locator('.thread-messages > .thread-status').waitFor();
  const live=await page.locator('.thread-messages > .thread-status').textContent();
- assert.match(live,/^(Working|Thinking) (\d+m )?\d+s/);assert.ok(!/[↓↑]|Newspapering/.test(live),live);
+ assert.match(live,/^(Working|Thinking) for (\d+m )?\d+s/);assert.ok(!/[↓↑]|Newspapering/.test(live),live);
  assert.equal(await page.locator('.thread-messages .thread-activity[data-running="true"] .thread-state').count()>0,true,'spinner while working');
  await shot('working.png');
  // approve -> done

@@ -2,6 +2,13 @@ import {icon} from './ui.js';
 import {providerMark} from './provider-icons.js';
 import {sentAttachmentGrid} from './attachment-view.js';
 const duration=ms=>ms<1000?'<1s':ms<60000?`${Math.floor(ms/1000)}s`:`${Math.floor(ms/60000)}m ${Math.floor(ms/1000)%60}s`;
+// Long prompts collapse to 288px with a bottom fade; click or Enter/Space expands.
+export function clampLong(element,text=element.textContent){
+ if((text||'').length<=420)return;element.dataset.clamp='true';element.tabIndex=0;element.setAttribute('role','button');element.setAttribute('aria-expanded','false');
+ const flip=()=>{const open=element.dataset.clamp==='true';element.dataset.clamp=open?'false':'true';element.setAttribute('aria-expanded',String(open));};
+ element.addEventListener('click',()=>{if(!getSelection()?.toString())flip();});
+ element.addEventListener('keydown',event=>{if(event.target===element&&(event.key==='Enter'||event.key===' ')){event.preventDefault();flip();}});
+}
 export function connectMessageActions(workspace,transcript){
  const owners=new WeakMap(),bar=document.createElement('div');bar.className='message-toolbar';bar.hidden=true;bar.setAttribute('role','toolbar');workspace.append(bar);let shown=null,hovered=null,timer;
  const owner=node=>{while(node&&node!==workspace){if(owners.has(node))return owners.get(node);node=node.parentElement;}return null;};
@@ -30,7 +37,7 @@ export function connectMessageActions(workspace,transcript){
  return {
   hide,
   reposition(){if(shown)position();},
-  user(element,{timestamp,text,attachments=[],images=[]}={}){const info={role:'user',anchor:element,timestamp,text:text??element.textContent};register(element,info);const grid=sentAttachmentGrid(attachments,images);if(grid){element.before(grid);register(grid,info);}return info;},
+  user(element,{timestamp,text,attachments=[],images=[]}={}){const info={role:'user',anchor:element,timestamp,text:text??element.textContent};register(element,info);clampLong(element,info.text);const grid=sentAttachmentGrid(attachments,images);if(grid){element.before(grid);register(grid,info);}return info;},
   turn(meta={},active=false){return {role:'assistant',meta:{...meta},active,anchor:null,texts:new Map()};},
   assistant(element,turn,text){turn.anchor=element;turn.texts.set(element,text);register(element,turn);},
   work(element,turn){turn.anchor=element;register(element,turn);},

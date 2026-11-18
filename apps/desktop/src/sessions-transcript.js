@@ -5,6 +5,7 @@ import {threadState} from './thread-row.js';
 import {createToolWidget} from './tool-widget.js';
 import {decorateActivitySummary,syncActivityGroup} from './activity-groups.js';
 import {transcriptDivider} from './transcript-divider.js';
+import {clampLong} from './message-actions.js';
 import {renderCode} from './panel-content.js';
 import {summarizeTools} from '../../../packages/backend/src/tui/summary.mjs';
 import './sessions-transcript.css';
@@ -80,7 +81,7 @@ function createCore({hooks,ctx}){
   const n=el('div',`session-note${it.level==='info'?'':' is-'+it.level}`,it.text);return mark(n,it.id);
  }
  function build(it,later,depth,working){
-  if(it.kind==='user'||it.kind==='assistant'){const a=el('article',`thread-message thread-${it.kind}`);if(it.kind==='assistant')hooks.markdown(a,it.text);else a.textContent=it.text;if(it.pending){a.classList.add('thread-pending');a.setAttribute('aria-busy','true');}return mark(a,it.id);}
+  if(it.kind==='user'||it.kind==='assistant'){const a=el('article',`thread-message thread-${it.kind}`);if(it.kind==='assistant')hooks.markdown(a,it.text);else{a.textContent=it.text;clampLong(a,it.text);}if(it.pending){a.classList.add('thread-pending');a.setAttribute('aria-busy','true');}return mark(a,it.id);}
   if(it.kind==='thinking'){const d=el('details','thread-activity'),log=el('div','thread-activity-log'),p=el('div','thread-reasoning');hooks.markdown(p,it.text);log.append(p);d.append(el('summary','','Reasoning'),log);return mark(d,it.id);}
   if(it.kind==='tool'&&it.name==='AskUserQuestion')return buildAsk(it);
   if(it.kind==='tool'&&it.name==='ExitPlanMode'&&it.output?.plan)return buildPlan(it);
@@ -163,13 +164,13 @@ function createCore({hooks,ctx}){
   if(t)ctx.onFirstUser(t);
   paintStatus(items);
  }
- // The standard live line: "Working 6s" / "Thinking 6s", plus "· N background" when tasks run.
+ // The standard live line: "Working for 6s" / "Thinking for 6s", plus "· N background" when tasks run.
  function paintStatus(items=[]){
   const box=ctx.box();if(!box)return;const st=ctx.ui()?.status;
   if(!st){if(statusEl?.parentNode){statusEl.remove();hooks.bottom();}return;}
   if(!statusEl){statusEl=el('div','thread-status');statusEl.setAttribute('role','status');}
   const last=[...ctx.ui().items].reverse().find(i=>!hide(i)),bg=ctx.background();
-  const text=[`${last?.kind==='thinking'?'Thinking':'Working'} ${dur(st.elapsedSec||0)}`,bg>0&&`${bg} background`].filter(Boolean).join(' · ');
+  const text=[`${last?.kind==='thinking'?'Thinking':'Working'} for ${dur(st.elapsedSec||0)}`,bg>0&&`${bg} background`].filter(Boolean).join(' · ');
   if(statusEl.textContent!==text)statusEl.textContent=text;
   const added=statusEl.parentNode!==box||box.lastChild!==statusEl;if(added){box.append(statusEl);hooks.bottom();}
  }

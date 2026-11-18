@@ -82,3 +82,69 @@
 @media(hover:hover) and (prefers-reduced-motion:no-preference) { .message-toolbar { animation:message-toolbar-in 100ms ease-out; } }
 @keyframes message-toolbar-in { from { opacity:0; } to { opacity:1; } }
 @media(max-width:699px) { .message-toolbar { gap:8px; font-size:11px; }.message-turn-model span { max-width:110px; } }
+
+/* Composer design pass (Capy decomp). Radii stay concentric: every inner radius = outer radius - its inset. */
+.desktop-app.desktop-app .composer {
+  --composer-padding:12px; --toolbar-bleed:4px;
+  --send-inset:calc(var(--composer-padding) + var(--hairline) + 1px - var(--toolbar-bleed));
+  --radius-send:calc(var(--radius-composer) - var(--send-inset));
+  padding:var(--composer-padding); outline-color:color-mix(in srgb,var(--text) 10%,transparent);
+  transition:box-shadow var(--duration-hover) var(--ease-out);
+}
+.desktop-app.desktop-app .workspace .composer { background:var(--surface-card); -webkit-backdrop-filter:none; backdrop-filter:none; }
+.desktop-app.desktop-app .composer:focus-within { box-shadow:var(--composer-shadow),inset 0 0 0 1px color-mix(in srgb,var(--text) 40%,transparent); }
+.desktop-app.desktop-app .composer textarea { min-height:52px; font-size:var(--ui-text); line-height:17px; }
+.desktop-app.desktop-app .thread-view .composer textarea { min-height:17px; }
+.desktop-app.desktop-app .composer textarea::placeholder { color:color-mix(in srgb,var(--text) 40%,transparent); }
+.desktop-app .composer .composer-toolbar { margin:var(--space-2) calc(var(--toolbar-bleed) * -1) calc(var(--toolbar-bleed) * -1); gap:var(--space-1); }
+/* Left cluster: +, model, access; mic and send sit right. */
+.desktop-app .composer .composer-toolbar .toolbar-group { display:contents; }
+.desktop-app .composer .composer-toolbar [data-action='attach'] { order:-3; }
+.desktop-app .composer .composer-toolbar .model-button { order:-2; }
+.desktop-app .composer .composer-toolbar .access-mode-picker { order:-1; }
+.desktop-app .composer .composer-toolbar .send-group { order:2; }
+.desktop-app .composer .composer-toolbar .toolbar-right > :has(+ .send-group) { margin-left:auto; }
+.desktop-app .composer-toolbar [data-action='attach'] { padding:7px; transition:background-color var(--duration-hover) var(--ease-out),color var(--duration-hover) var(--ease-out); }
+.desktop-app .composer-toolbar [data-action='attach'] .icon { width:var(--icon-size-sm); height:var(--icon-size-sm); }
+.desktop-app .composer-toolbar [data-action='attach']:hover { background:color-mix(in srgb,var(--text) 5%,transparent); }
+.desktop-app .composer .model-button { gap:6px; }
+.desktop-app .composer .model-button #model-label { color:var(--text-muted); font-weight:var(--weight-medium); }
+.desktop-app .composer .model-button .icon { width:var(--icon-size-sm); height:var(--icon-size-sm); color:color-mix(in srgb,var(--text) 36%,transparent); }
+.desktop-app .composer .model-button .provider-logo { width:14px; height:14px; }
+/* Send: 28 accent plate, accent from the role token (mono until the user picks one). */
+.desktop-app.desktop-app .composer .send-group,
+.desktop-app.desktop-app .composer .send-group:has(.send-button:disabled),
+.desktop-app.desktop-app .composer .send-group:has(.send-button:not(:disabled)) {
+  height:var(--control-height-sm); border-radius:var(--radius-send); opacity:1; margin-left:var(--space-1);
+  background:var(--accent); color:var(--accent-fg);
+  box-shadow:inset 0 0 0 var(--hairline) color-mix(in srgb,var(--accent) 80%,#000),inset 0 1px 0 #ffffff1f;
+  -webkit-backdrop-filter:none; backdrop-filter:none;
+  transition:background-color var(--duration-hover) var(--ease-out),opacity var(--duration-hover) var(--ease-out);
+}
+.desktop-app.desktop-app .composer .send-group:has(.send-button:disabled) { opacity:.55; }
+.desktop-app.desktop-app .composer .send-group:has(.send-button:not(:disabled)):hover { background:var(--primary-hover); }
+.desktop-app.desktop-app .composer .send-group .button,
+.desktop-app.desktop-app .composer .send-group:has(.send-button:disabled) .button { color:var(--accent-fg); min-height:var(--control-height-sm); height:var(--control-height-sm); }
+.desktop-app .composer .send-group .send-button { width:var(--control-height-sm); padding:7px; }
+.desktop-app .composer .send-group .send-button .icon { width:var(--icon-size-sm); height:var(--icon-size-sm); }
+.desktop-app .composer .send-group .send-options { width:20px; padding:4px 6px 4px 2px; }
+.desktop-app .composer .send-group .send-options .icon { width:var(--icon-size-xs); height:var(--icon-size-xs); }
+/* Queued messages: 32 rows on an opaque plate. */
+.desktop-app .queued-messages { background:var(--surface-card); -webkit-backdrop-filter:none; backdrop-filter:none; }
+.desktop-app .queued-message { height:32px; font-size:var(--ui-text); }
+/* Environment bar and branch/worktree menus. */
+.desktop-app.desktop-app .workspace .project-bar .git-pill { background:transparent; box-shadow:none; border-color:transparent; -webkit-backdrop-filter:none; backdrop-filter:none; padding:3px 8px; font-size:var(--ui-text); color:var(--text-muted); }
+.desktop-app.desktop-app .workspace .project-bar .git-pill:not(:disabled):is(:hover,[aria-expanded='true']) { background:color-mix(in srgb,var(--text) 5%,transparent); color:var(--text); }
+.desktop-app .project-bar .git-pill:not(:disabled)::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--success); flex:0 0 6px; }
+.desktop-app .popover .popover-heading { font-size:var(--ui-text); font-weight:400; padding:var(--space-2); }
+.desktop-app .popover .project-search { padding:var(--space-2) var(--space-3); border-bottom:var(--hairline) solid var(--overlay-edge); border-radius:0; min-height:36px; }
+.desktop-app .popover .branch-worktree { padding:var(--space-1) var(--space-2); }
+.desktop-app .popover .menu-item.project-option { min-height:36px; }
+/* Permission card buttons: 24 high, concentric pill, one accent action. */
+.desktop-app .composer-approval .approval-controls .provider-dialog-button { min-height:var(--control-height-xs); height:var(--control-height-xs); padding:0 var(--space-2); min-width:0; border-radius:var(--approval-inner); font-size:var(--text-xs); background:transparent; box-shadow:none; color:var(--text-muted); transition:background-color var(--duration-hover) var(--ease-out),color var(--duration-hover) var(--ease-out),transform var(--duration-hover) var(--ease-out); }
+.desktop-app .composer-approval .approval-controls .provider-dialog-button:hover:not(:disabled) { background:color-mix(in srgb,var(--text) 5%,transparent); color:var(--text); }
+.desktop-app .composer-approval .approval-controls .approval-always { box-shadow:inset 0 0 0 var(--hairline) var(--control-edge); }
+.desktop-app .composer-approval .approval-controls .provider-dialog-primary { background:var(--accent); color:var(--accent-fg); box-shadow:inset 0 0 0 var(--hairline) color-mix(in srgb,var(--accent) 80%,#000),inset 0 1px 0 #ffffff1f; display:inline-flex; align-items:center; gap:var(--space-2); }
+.desktop-app .composer-approval .approval-controls .provider-dialog-primary:hover:not(:disabled) { background:var(--primary-hover); color:var(--accent-fg); }
+.desktop-app .composer-approval .approval-controls .provider-dialog-button:disabled { opacity:.55; }
+.approval-kbd { font:inherit; font-size:var(--text-2xs); opacity:.6; }

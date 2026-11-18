@@ -1,68 +1,77 @@
 /* Tactile roles mapped to Suffice's existing charcoal, glass and geometry. */
 .desktop-app {
-  --ui-weight: 500;
+  --ui-weight: 450;
   --ui-text: 13px;
   --ui-leading: 20px;
   --ui-meta: 12px;
   --hairline: .5px;
-  --control-edge: #ffffff09;
-  --overlay-edge: #ffffff07;
+  --control-edge: #ffffff1f;
+  --overlay-edge: #ffffff14;
   --control-raised: #202020;
   --control-raised-hover: #262626;
   --field-well: #1b1b1b;
   --field-well-focus: #202020;
-  --selected-fill: #ffffff0f;
-  --hover-fill: #ffffff08;
-  --shadow-control: inset 0 1px 0 #ffffff09,0 0 0 var(--hairline) var(--control-edge),0 1px 2px #00000066;
-  --shadow-raised: inset 0 1px 0 #ffffff09,inset 0 0 0 .5px #ffffff03,0 0 0 var(--hairline) var(--overlay-edge),0 2px 4px #00000055,0 10px 28px -8px #00000080;
-  --shadow-overlay: inset 0 1px 0 #ffffff09,0 0 0 var(--hairline) var(--overlay-edge),0 2px 4px #00000055,0 8px 20px -6px #00000080;
-  --shadow-dialog: var(--shadow-raised);
+  --selected-fill: #ffffff1c;
+  --hover-fill: #ffffff14;
+  /* Rings are inset; outset shadows only on floating layers (overlay, composer, sheet). */
+  --shadow-card: inset 0 0 0 1px var(--overlay-edge);
+  --shadow-control: inset 0 1px 0 #ffffff09,inset 0 0 0 var(--hairline) var(--control-edge);
+  --shadow-overlay: inset 0 0 0 var(--hairline) var(--control-edge),0 3px 8px #00000021,0 2px 5px #00000021,0 1px 1px #00000021;
+  --shadow-composer: 0 3px 8px #00000017,0 2px 5px #00000017,0 1px 1px #0000001a;
+  --shadow-raised: var(--shadow-card),var(--shadow-composer);
+  --shadow-sheet: var(--shadow-overlay);
+  --shadow-dialog: var(--shadow-sheet);
   /* Nested surfaces are wells (inset shadow, darker fill); only floating layers cast outset shadows. */
   --well-bg: color-mix(in srgb,var(--surface-composer) 68%,#000);
   --shadow-well: inset 0 1px 3px #00000080,inset 0 0 0 1px #0000004d;
   --shadow-control-inset: inset 0 1px 0 #ffffff0d,inset 0 0 0 var(--hairline) #ffffff12;
   --composer-shadow: var(--shadow-raised);
+  --accent: var(--primary-bg);
+  --accent-fg: var(--primary-fg);
   --primary-bg: #ededed;
   --primary-fg: #171717;
   --primary-hover: color-mix(in srgb,var(--primary-bg),var(--primary-fg) 7%);
   --focus-ring: #999999;
-  --text-muted: #a8a8a8;
-  --text-faint: #999999;
-  --sidebar-meta: #999999;
-  --menu-caption: #999999;
+  --text-muted: #99999a;
+  --text-faint: #707071;
+  --sidebar-meta: #99999a;
+  --menu-caption: #99999a;
   --shadow-float: var(--shadow-overlay);
 }
 .desktop-app[data-theme='light'] {
-  --control-edge: #18181814;
-  --overlay-edge: #18181812;
+  --control-edge: #0000001c;
+  --overlay-edge: #00000014;
   --control-raised: #ffffff;
   --control-raised-hover: #fcfcfc;
   --field-well: #eeeeee;
   --field-well-focus: #e8e8e8;
-  --selected-fill: #1818180e;
-  --hover-fill: #18181806;
-  --shadow-control: 0 0 0 1px var(--control-edge),0 1px 2px #1818181f;
-  --shadow-raised: 0 0 0 1px var(--overlay-edge),0 1px 2px #1818181a,0 3px 4px -2px #18181814;
-  --shadow-overlay: 0 0 0 1px var(--overlay-edge),0 1px 2px #1818181a,0 4px 8px -4px #18181824;
-  --shadow-dialog: 0 0 0 1px var(--overlay-edge),0 1px 2px #1818181a,0 6px 8px -4px #18181824;
+  --selected-fill: #00000014;
+  --hover-fill: #0000000d;
+  --shadow-card: inset 0 0 0 .5px var(--control-edge);
+  --shadow-control: inset 0 0 0 var(--hairline) var(--control-edge);
+  --shadow-overlay: inset 0 0 0 var(--hairline) var(--control-edge),0 6px 18px #00000008,0 3px 9px #0000000a,0 1px 1px #0000000d;
+  --shadow-composer: 0 4px 12px #00000006,0 2px 6px #00000008,0 1px 1px #0000000a;
+  --shadow-raised: var(--shadow-card),var(--shadow-composer);
+  --shadow-sheet: inset 0 0 0 var(--hairline) var(--control-edge),0 9px 48px #00000014,0 6px 24px #0000001a,0 1px 1px #0000000a;
+  --shadow-dialog: var(--shadow-sheet);
   --well-bg: color-mix(in srgb,var(--surface-composer) 94%,#181818);
-  --shadow-well: inset 0 1px 2px #1818181f,inset 0 0 0 1px var(--control-edge);
+  --shadow-well: inset 0 1px 3px #00000014,inset 0 0 0 1px #00000010;
   --shadow-control-inset: inset 0 -1px 0 #18181814,inset 0 0 0 1px var(--control-edge);
-  --composer-shadow: 0 12px 32px #15243a12,0 2px 6px #15243a0a,inset 0 1px 0 #ffffff80;
+  --composer-shadow: var(--shadow-raised);
   --primary-bg: #181818;
   --primary-fg: #ffffff;
   --focus-ring: #707070;
-  --text-muted: #646464;
-  --text-faint: #707070;
-  --sidebar-meta: #707070;
-  --menu-caption: #707070;
+  --text-muted: #6f6f71;
+  --text-faint: #8c8c8e;
+  --sidebar-meta: #6f6f71;
+  --menu-caption: #6f6f71;
 }
 .desktop-app body { font-weight: var(--ui-weight); line-height: var(--ui-leading); letter-spacing: -.01em; }
 .desktop-app :is(button,input,textarea) { touch-action: manipulation; }
 .desktop-app button { user-select: none; }
 .desktop-app .sidebar { font-family: var(--font-sans); }
 .desktop-app :is(.button,.menu-item,.workspace-tool,.window-control,.session-row,.model-stage-button) {
-  font-weight: var(--ui-weight); transition: background-color 150ms var(--ease-out),color 150ms var(--ease-out),transform 150ms var(--ease-out);
+  font-weight: var(--ui-weight); transition: background-color var(--duration-hover) var(--ease-out),color var(--duration-hover) var(--ease-out),transform var(--duration-hover) var(--ease-out);
 }
 .desktop-app :is(.button,.menu-item) { font-size: var(--ui-text); line-height: var(--ui-leading); }
 .desktop-app :is(.button,.workspace-tool,.window-control):active:not(:disabled) { transform: scale(.97); }
@@ -131,10 +140,10 @@
 .desktop-app .right-sidebar,.desktop-app .right-panel-open .right-sidebar,.desktop-app .workspace { transition: none; }
 .desktop-app .right-sidebar-resizer { left: -4px; right: auto; }
 .desktop-app:has(.right-sidebar-resizer:hover) .workspace::after,.desktop-app:has(.right-sidebar-resizer:focus-visible) .workspace::after,.desktop-app[data-resizing-panel='right'] .workspace::after { border-right-color: var(--border-focus); }
-.desktop-app :is(button,input,textarea):focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.desktop-app :is(button,input,textarea):focus-visible { outline: 1px solid var(--focus-ring); outline-offset: -1px; }
 .desktop-app .composer textarea:focus-visible { outline: none; }
 .desktop-app:not([data-keyboard='true']) :is(input,textarea):focus-visible { outline: none; box-shadow: none; }
-.desktop-app .popover .menu-item:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--focus-ring); }
+.desktop-app .popover .menu-item:focus-visible { outline: none; box-shadow: inset 0 0 0 1px var(--focus-ring); }
 .desktop-app[data-keyboard='true'] :is(.button,.menu-item,.workspace-tool,.window-control,.session-row,.model-stage-button) { transition: none; transform: none; }
 .desktop-app[data-keyboard='true'] :is(.workspace,.right-sidebar) { transition: none; }
 @media(hover:hover) and (pointer:fine){

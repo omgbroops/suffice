@@ -21,3 +21,50 @@
 .tool-diff { margin-top: 6px; }
 .thread-user.thread-pending[aria-busy=true] { opacity: .6; transition: opacity .2s ease; }
 @media(prefers-reduced-motion:reduce) { .thread-user.thread-pending { transition: none; } }
+
+/* Capy-measured thread layer. Overrides use .desktop-app so they win over the shared glass rules in tactile, right-panel and edge-to-edge. */
+.desktop-app .workspace .thread-messages { line-height: 19.5px; }
+/* User bubble: flat selected-fill well, no blur, no outset shadow (Abhay: inset over outset). */
+.desktop-app .workspace .thread-messages .thread-user,
+.desktop-app.solid-surfaces .workspace .thread-messages .thread-user {
+  background: var(--selected-fill) !important; border: 0; outline: 0; box-shadow: none !important;
+  -webkit-backdrop-filter: none; backdrop-filter: none;
+  border-radius: var(--radius-card); padding: var(--space-2) var(--space-3); max-width: 77%; font-weight: 450; line-height: 19.5px;
+}
+.desktop-app .workspace .thread-messages .thread-user[data-clamp] { cursor: pointer; overflow: hidden; }
+.desktop-app .workspace .thread-messages .thread-user[data-clamp='true'] { max-height: 288px; -webkit-mask-image: linear-gradient(to bottom,#000 calc(100% - 1.5rem),transparent); mask-image: linear-gradient(to bottom,#000 calc(100% - 1.5rem),transparent); }
+.desktop-app .workspace .thread-messages .thread-user[data-clamp='true']:hover { -webkit-mask-image: linear-gradient(to bottom,#000 calc(100% - 2rem),transparent); mask-image: linear-gradient(to bottom,#000 calc(100% - 2rem),transparent); }
+/* Activity rows: top-level Worked / Working rows centred and muted, no chevron; failure is a red x. */
+.thread-messages > .thread-activity > summary { justify-content: center; width: auto; font-size: 12px; }
+.thread-messages > .thread-activity > summary::before { display: none; }
+.thread-messages > .thread-activity > summary:hover { color: var(--text-muted); }
+.thread-detail[data-status="error"] > summary, .session-sub[data-status="error"] > summary { color: var(--text-muted); }
+.thread-detail[data-status="error"] > summary::after, .session-sub[data-status="error"] > summary::after,
+.thread-activity:has(> .thread-activity-log .thread-detail[data-status="error"]) > summary::after {
+  content: ''; flex: none; width: 12px; height: 12px; background: var(--red); -webkit-mask: var(--x-mask) center/contain no-repeat; mask: var(--x-mask) center/contain no-repeat;
+}
+.thread-messages > .thread-activity > summary { padding-left: 0; }
+.session-note { line-height: 16.25px; font-weight: 450; }
+/* Mono error / output block */
+.desktop-app .tool-widget-body { border-radius: var(--radius-control); border: 0; padding: 0 var(--space-3); }
+.desktop-app .tool-widget .tool-input, .desktop-app .tool-widget .tool-output { font: 13px/1.5 'Geist Mono',var(--font-mono),ui-monospace,monospace; padding: var(--space-2) 0; }
+.desktop-app .tool-widget .tool-input + .tool-output { border-top: 0; }
+/* Hover toolbar copy: 24 ghost icon button, radius 6, 12px glyph */
+.desktop-app .message-copy { width: 24px; height: 24px; border-radius: var(--radius-control); transition: background-color var(--duration-hover) var(--ease-out),color var(--duration-hover) var(--ease-out); }
+.desktop-app .message-copy:hover { background: var(--selected-fill); }
+.desktop-app .message-copy .icon { width: 12px; height: 12px; }
+/* File chips: 240x48, 36 icon tile; inset hairline instead of outset plate. Radius 10 = tile 4 + 6 pad (concentric). */
+.desktop-app .attachment-card:not(.attachment-image) {
+  width: 240px; max-width: 100%; height: 48px; padding: 6px 8px 6px 6px; gap: 8px; border-radius: 10px;
+  background: var(--surface-card); box-shadow: inset 0 0 0 var(--hairline) var(--control-edge); transition: background-color var(--duration-hover) var(--ease-out);
+}
+.desktop-app .attachment-card:not(.attachment-image):hover { background: color-mix(in srgb,var(--surface-card) 92%,var(--text)); }
+.desktop-app .attachment-card > .file-type-icon { width: 36px; height: 36px; flex-basis: 36px; padding: 9px; box-sizing: border-box; border-radius: 4px; background: var(--selected-fill); }
+.desktop-app .attachment-info { font-size: 13px; line-height: 18px; flex: 1; }
+.desktop-app .attachment-info > span:first-child { font-weight: 500; text-overflow: clip; -webkit-mask-image: linear-gradient(to right,#000 calc(100% - 8px),transparent); mask-image: linear-gradient(to right,#000 calc(100% - 8px),transparent); }
+.desktop-app .attachment-size { font-size: 11px; line-height: 14px; color: var(--text-faint); }
+.desktop-app .attachment-card.attachment-image { border-radius: var(--radius-card); background: var(--selected-fill); }
+.desktop-app .sent-attachments { max-width: 77%; gap: 4px; margin-bottom: 16px; }
+.desktop-app .image-preview-content { border-radius: var(--radius-card); }
+@media(prefers-reduced-motion:no-preference) { .image-preview[open] { animation: preview-in var(--duration) var(--ease-out); } }
+@keyframes preview-in { from { opacity: 0; } to { opacity: 1; } }
