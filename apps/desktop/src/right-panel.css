@@ -216,3 +216,20 @@ body:not(:has(.thread-view)) .right-sidebar { visibility: hidden; pointer-events
 .editor-tree-scroll[data-fade-bottom='true'] { --fade-bottom:14px; }
 @media(prefers-reduced-motion:reduce){.change-folder .tree-chevron { transition:none; }}
 @container code-preview (max-width:300px){.editor-view-options [data-change-nav] { display:none; }}
+/* Review agent: findings sit in the diff as inset notes; radii nest (note 9 > chip 5 > button 5 inside 4px padding). */
+.review-button { flex-shrink:0; min-height:23px; height:23px; padding:0 8px; font-size:12px; font-weight:500; }
+.review-status { flex-shrink:0; font-size:11px; color:var(--text-muted); font-variant-numeric:tabular-nums; max-width:40%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.review-badge { flex-shrink:0; min-width:16px; padding:0 5px; border-radius:8px; background:color-mix(in srgb,var(--red) 16%,transparent); color:var(--red); font-size:10px; line-height:16px; text-align:center; font-variant-numeric:tabular-nums; }
+.review-note { --sev:var(--text-muted); position:sticky; left:8px; display:flex; align-items:flex-start; gap:8px; width:min(440px,calc(100cqw - 64px)); margin:4px 8px 6px 44px; padding:7px 7px 7px 8px; border-radius:9px; background:color-mix(in srgb,var(--sev) 8%,var(--surface-active)); box-shadow:inset 0 0 0 .5px color-mix(in srgb,var(--sev) 28%,transparent); font:12px/17px var(--font-sans); white-space:normal; animation:review-note-in 140ms var(--ease-out) both; }
+.review-note[data-severity='high'] { --sev:var(--red); }
+.review-note[data-severity='medium'] { --sev:var(--blue); }
+.panel-code[data-wrap='true'] .review-note { width:auto; position:static; }
+.review-severity { flex-shrink:0; padding:0 6px; border-radius:5px; background:color-mix(in srgb,var(--sev) 18%,transparent); color:var(--sev); font-size:10px; font-weight:560; line-height:17px; text-transform:uppercase; letter-spacing:.04em; }
+.review-body { flex:1; min-width:0; }
+.review-message,.review-fix { margin:0; overflow-wrap:anywhere; }
+.review-message { color:var(--text); }
+.review-fix { margin-top:2px; color:var(--text-muted); }
+.review-apply { flex-shrink:0; min-height:21px; height:21px; padding:0 8px; border-radius:5px; font-size:11px; }
+@keyframes review-note-in { from { opacity:0; transform:translateY(-3px); } }
+@media (prefers-reduced-motion:reduce) { .review-note { animation:none; } }
+.panel-scroll { container-type:inline-size; }

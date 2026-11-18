@@ -11,6 +11,7 @@ import {mkdir,realpath,stat} from 'node:fs/promises';
 import {resolve,dirname} from 'node:path';
 import {SessionManager} from '@earendil-works/pi-coding-agent';
 import {createThreadStore,threadId} from './threads.mjs';
+import {parseFindings} from './review.mjs';
 import {createSufficeSession,parseOptions} from '@suffice/harness';
 import {getSupportedThinkingLevels} from '@earendil-works/pi-ai/compat';
 
@@ -43,6 +44,12 @@ async function receive(message) {
       await runtime.refresh?.({allowNetwork:false});
       const available=await runtime.getAvailable();const models=payload.all?runtime.getModels():available;
       send({id,ok:true,result:models.map(model=>({id:model.id,name:model.name,provider:model.provider,available:available.some(item=>item.id===model.id&&item.provider===model.provider),efforts:model.reasoning?getSupportedThinkingLevels(model):[]}))});return;
+    }
+    if(action==='review'){
+      if(!runtime)throw new Error('Harness is not ready');
+      const selected=(await runtime.getAvailable()).find(model=>model.id===payload.model&&model.provider===payload.provider);if(!selected)throw new Error('Model unavailable. Connect this provider in Settings.');
+      const cwd=await realpath(payload.cwd),options=parseOptions(['--cwd',cwd]);Object.assign(options,{home,access:'read',browser:false,desktop:false,effort:['off','minimal','low','medium','high','xhigh','max'].includes(payload.effort)?payload.effort:'low',model:selected.id,modelObject:selected,sessionManager:SessionManager.inMemory(cwd),desktopSettings:{}});
+      busy=true;let reviewer;try{reviewer=await createSession(options,runtime,{});send({id,ok:true,result:{findings:parseFindings(await reviewer.run(payload.prompt),payload.paths)}});}finally{busy=false;await reviewer?.dispose();}return;
     }
     if(action==='thread'){
       const revision=++viewRevision,thread=await threads.open(payload.id,(provider,model)=>runtime?.getModel?.(provider,model));
