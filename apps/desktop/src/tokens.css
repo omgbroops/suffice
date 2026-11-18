@@ -1,5 +1,6 @@
 /* Suffice foundations. Brand geometry and Inter come from suffice-platform. */
-:root {
+:root,
+.theme-preview[data-theme='dark'] {
   color-scheme: dark;
   --menu-inset: 4px;
   --font-sans: 'Inter Variable', sans-serif;
@@ -100,7 +101,8 @@
   --ease-in-out: cubic-bezier(.77, 0, .175, 1);
 }
 
-:root[data-theme='light'] {
+:root[data-theme='light'],
+.theme-preview[data-theme='light'] {
   color-scheme: light;
   --text: #292929;
   --text-strong: #111111;
@@ -155,4 +157,37 @@
   --red: #b55750;
   --shadow-float: 0 8px 24px #00000012, 0 1px 3px #0000000a;
   --shadow-panel: 0 1px 3px #00000004, 0 6px 24px #00000004;
+}
+
+/* Theme gallery palettes. Neutral surface ramps only; text, accents and geometry stay shared.
+   Selectors also match .theme-preview so gallery cards render from these exact tokens. */
+[data-palette='oled'][data-theme='dark'] {
+  --surface-base: #000000; --surface-field: #000000; --surface-sidebar: #000000; --surface-thread: #000000;
+  --surface-thread-bubble: #141414; --surface-thread-composer: #050505c2; --surface-composer: #050505c2;
+  --surface-menu: #0a0a0aeb; --surface-glass: #050505b8; --help-bg: #0a0a0a;
+}
+[data-palette='oled'][data-theme='light'] {
+  --surface-base: #ffffff; --surface-field: #ffffff; --surface-sidebar: #ffffff; --surface-thread: #ffffff;
+  --surface-thread-bubble: #f1f1f1; --surface-thread-composer: #ffffffe6; --surface-composer: #ffffffe6;
+  --surface-menu: #fffffff5; --surface-glass: #ffffffe0; --help-bg: #f1f1f1;
+}
+[data-palette='paper'][data-theme='dark'] {
+  --surface-base: #151412; --surface-field: #121110; --surface-sidebar: #1a1917; --surface-thread: #171614;
+  --surface-thread-bubble: #24221f; --surface-thread-composer: #1a1917c2; --surface-composer: #1a1917c2;
+  --surface-menu: #1d1b19eb; --surface-glass: #1a1917b8; --help-bg: #1d1b19;
+}
+[data-palette='paper'][data-theme='light'] {
+  --surface-base: #f1eee8; --surface-field: #faf8f4; --surface-sidebar: #f5f2ec; --surface-thread: #fbf9f5;
+  --surface-thread-bubble: #ece8e0; --surface-thread-composer: #f5f2ece6; --surface-composer: #f5f2ece6;
+  --surface-menu: #fdfbf8f0; --surface-glass: #fdfbf8d6; --help-bg: #e7e3da;
+}
+[data-palette='graphite'][data-theme='dark'] {
+  --surface-base: #17191c; --surface-field: #131518; --surface-sidebar: #1c1e22; --surface-thread: #191b1f;
+  --surface-thread-bubble: #272a2f; --surface-thread-composer: #1c1e22c2; --surface-composer: #1c1e22c2;
+  --surface-menu: #202327eb; --surface-glass: #1c1e22b8; --help-bg: #202327;
+}
+[data-palette='graphite'][data-theme='light'] {
+  --surface-base: #e6e8eb; --surface-field: #f1f2f4; --surface-sidebar: #eceef1; --surface-thread: #f4f5f7;
+  --surface-thread-bubble: #dfe2e6; --surface-thread-composer: #eceef1e6; --surface-composer: #eceef1e6;
+  --surface-menu: #f6f7f8f0; --surface-glass: #f6f7f8d6; --help-bg: #dcdfe3;
 }

@@ -1,0 +1,5 @@
+import {getTheme} from './theme.js';
+export const effectiveMode=getTheme;
+const palettes=[['default','Default'],['oled','OLED'],['paper','Paper'],['graphite','Graphite']];
+// Each preview is a .theme-preview scope carrying data-theme/data-palette, so its colors are the app's real tokens.
+export const themeGalleryHtml=(current,mode)=>`<div class="theme-gallery" role="group" aria-label="Theme gallery">${palettes.flatMap(([id,name])=>['dark','light'].map(m=>{const on=id===current&&m===mode;return `<button type="button" class="theme-card" aria-pressed="${on}" aria-label="${name} ${m}" data-theme-card="${id}-${m}"><span class="theme-preview" data-theme="${m}" data-palette="${id}" aria-hidden="true"><span class="tp-side"><i></i><i></i><i></i></span><span class="tp-main"><span class="tp-bubble"></span><span class="tp-line"></span><span class="tp-line tp-short"></span><span class="tp-composer"><span class="tp-send"></span></span></span></span><span class="theme-name">${name}<small>${m==='dark'?'Dark':'Light'}</small></span></button>`;})).join('')}</div>`;

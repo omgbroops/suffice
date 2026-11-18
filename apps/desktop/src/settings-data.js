@@ -10,6 +10,7 @@ export const settingsSections=[
   group('Privacy',[toggle('private-labels','Hide sensitive details',false,'Conceal paths and account details while sharing your screen.')]),
  ]},
  {id:'appearance',title:'Appearance',icon:'agent',category:'Personal',groups:[
+  group('Themes',[{id:'palette',label:'Theme gallery',type:'themes',value:'default',options:['default','oled','paper','graphite']}]),
   group('Theme',[{id:'mode',label:'Mode',value:'Dark',options:['System','Light','Dark'],type:'segment'},select('background','Background','Pixel horizon',['Moonlit lake','ASCII gradient','Pixel horizon','Orbital','Oceanic Shimmer','None']),{id:'accent',label:'Accent color',value:'#7b9ed5',type:'palette'},toggle('glass','Translucent surfaces',true),{id:'surface-opacity',label:'Surface opacity',detail:'Opacity of translucent surfaces.',type:'range',value:72,min:0,max:100,whenGlass:true}]),
   group('Background visibility',[toggle('chat-background','Show background in chat',true),toggle('settings-background','Show background in settings',true),{id:'background-dimming',label:'Background dimming',detail:'Dim the wallpaper in chats and settings.',type:'range',value:35}]),
   group('Motion',[toggle('background-motion','Animate background',true),toggle('reduced-motion','Reduce motion')]),
