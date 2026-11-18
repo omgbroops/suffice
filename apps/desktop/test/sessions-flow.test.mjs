@@ -40,6 +40,8 @@ test('double Send starts one session; a 4000-char prompt keeps the row title cle
   await page.locator('.send-button').dblclick();
   await trust(page);await rows(page).first().waitFor();await page.waitForTimeout(1500);
   assert.equal(await rows(page).count(),1);
+  const tmux=execFileSync('tmux',['-L',SOCKET,'list-sessions','-F','#{session_name}'],{encoding:'utf8'}).trim().split('\n').filter(Boolean);
+  assert.equal(tmux.length,1,'double Send leaves one tmux session: '+tmux.join(','));
   const [t,a]=await Promise.all(['.row-title','.thread-age'].map(s=>rows(page).first().locator(s).evaluate(e=>{const r=e.getBoundingClientRect();return {l:r.left,r:r.right};})));
   assert.ok(t.r<=a.l+1,`title ends ${t.r} after age starts ${a.l}`);
  });
