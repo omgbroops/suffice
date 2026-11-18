@@ -31,7 +31,7 @@ test('theme gallery applies instantly, previews use real tokens, choice persists
    await page.locator(`[data-theme-card="${id}-${mode}"]`).click();
    await page.locator(`[data-theme-card="${id}-${mode}"][aria-pressed=true]`).waitFor();
    assert.equal(await page.evaluate(()=>[document.documentElement.dataset.palette,document.documentElement.dataset.theme].join('-')),`${id}-${mode}`);
-   assert.equal(await page.locator('.settings-segment [aria-pressed=true]').first().textContent(),mode==='dark'?'Dark':'Light');
+   assert.equal(await page.locator('.settings-theme[aria-pressed=true] .settings-theme-name').first().textContent(),mode==='dark'?'Dark':'Light');
   }
   await page.locator('[data-theme-card="graphite-light"]').click();
   // dark/light shots of every palette state

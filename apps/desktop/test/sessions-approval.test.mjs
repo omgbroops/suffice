@@ -54,7 +54,7 @@ test('session approval cards',{timeout:240000},async()=>{
    assert.equal(await card.locator('.approval-preview-host > pre.approval-preview').count(),1);
    assert.match(await card.locator('pre.approval-preview').textContent(),/rm -rf build/);
    assert.equal(await card.locator('.approval-controls .provider-dialog-button').count(),3);
-   assert.equal(await card.locator('.approval-controls .provider-dialog-primary').textContent(),'Yes Ctrl+↵');
+   assert.equal(await card.locator('.approval-controls .provider-dialog-primary').textContent(),'Yes');assert.equal(await card.locator('.approval-controls .provider-dialog-primary').getAttribute('data-key'),'Ctrl ↵');
    assert.equal(await page.locator('.composer').getAttribute('data-approval'),'true');
    assert.ok(await page.evaluate(()=>[...document.querySelector('.composer').children].every(c=>c.matches('.composer-approval')||c.inert)),'other composer children inert');
    // The card floats above the composer; the composer stays visible (same placement as standard chat, see approvals-ui.test).
@@ -99,8 +99,8 @@ test('session approval cards',{timeout:240000},async()=>{
    const text=await card.locator('.approval-plan').evaluate(e=>[...e.querySelectorAll('*')].filter(n=>!n.children.length).map(n=>n.textContent.trim()));
    assert.ok(text.includes('Context')&&text.includes('Change'),'Context and Change are separate elements: '+JSON.stringify(text));
    assert.ok(!text.some(t=>/Context.*Change/.test(t)));
-   assert.deepEqual(await card.locator('.approval-controls .provider-dialog-button').allTextContents(),['Tell Claude what to change','Yes, manually approve edits','Yes, and use auto mode Ctrl+↵']); // Allow sits last
-   assert.equal(await card.locator('.provider-dialog-primary').textContent(),'Yes, and use auto mode Ctrl+↵');
+   assert.deepEqual(await card.locator('.approval-controls .provider-dialog-button').allTextContents(),['Tell Claude what to change','Yes, manually approve edits','Yes, and use auto mode']); // Allow sits last
+   assert.equal(await card.locator('.provider-dialog-primary').textContent(),'Yes, and use auto mode');
    await page.keyboard.press('Escape'); // deny option: "Tell Claude what to change"
    await gone();assert.equal((await keys()).at(-1),'3');
   }else{await type('3');await gone().catch(()=>{});}
@@ -109,7 +109,7 @@ test('session approval cards',{timeout:240000},async()=>{
   await open('/ask','Which color');
   await shot('question.png');
   if(!BEFORE){
-   assert.deepEqual(await card.locator('.approval-controls .provider-dialog-button').allTextContents(),['Type something.','Blue','Red Ctrl+↵']);
+   assert.deepEqual(await card.locator('.approval-controls .provider-dialog-button').allTextContents(),['Type something.','Blue','Red']);
    assert.equal(await card.locator('.approval-action').count(),0,'a plain question has no tool preview');
    await page.keyboard.press('Escape');await page.waitForTimeout(400);
    assert.ok(await card.count(),'Escape does nothing when the CLI has no deny option');
