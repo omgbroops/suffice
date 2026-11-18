@@ -49,8 +49,8 @@
 .settings-switch span { display:block; width:16px; height:16px; border-radius:50%; background:linear-gradient(#fff,#e0e0e0); box-shadow:inset 0 1px 0 #fff,inset 0 -1px 2px #0003; transition:transform 180ms cubic-bezier(.2,.8,.2,1); }
 .settings-switch[aria-checked=true] { background:var(--blue); }
 .settings-switch[aria-checked=true] span { transform:translateX(14px); }
-.settings-segment { position:relative; display:flex; padding:3px; border-radius:8px; background:var(--hover-fill); gap:2px; flex-shrink:0; }
-.settings-segment-indicator { position:absolute; top:3px; bottom:3px; border-radius:6px; background:var(--control-raised-hover); box-shadow:var(--shadow-control-inset); pointer-events:none; transform-origin:left center; }
+.settings-segment { --seg-r:8px; --seg-inset:3px; position:relative; display:flex; padding:var(--seg-inset); border-radius:var(--seg-r); background:var(--hover-fill); gap:2px; flex-shrink:0; }
+.settings-segment-indicator { position:absolute; top:var(--seg-inset); bottom:var(--seg-inset); border-radius:calc(var(--seg-r) - var(--seg-inset)); background:var(--control-raised-hover); box-shadow:var(--shadow-control-inset); pointer-events:none; transform-origin:left center; }
 .settings-segment button { position:relative; z-index:1; }
 .settings-segment button { padding:4px 11px; border:0; border-radius:6px; background:transparent; color:var(--text-muted); font-size:12px; }
 .settings-segment button[aria-pressed=true] { background:transparent; color:var(--text-strong); }

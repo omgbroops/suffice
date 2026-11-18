@@ -71,7 +71,10 @@
 .desktop-app .project-bar :is(.project-picker,.git-pill):active { transform: none; }
 .desktop-app :is(.button--subtle:not(.new-session),.project-bar .project-picker,.git-pill) { border-color: transparent; box-shadow: var(--shadow-control-inset); }
 .desktop-app .button--subtle:not(.new-session) { background: var(--control-raised); color: var(--text); }
-.desktop-app .project-bar :is(.project-picker,.git-pill) { border-radius: 10px; min-height: 28px; line-height: 20px; }
+.desktop-app .project-bar :is(.project-picker,.git-pill) { --pill-r: 10px; --pill-inset: 7px; border-radius: var(--pill-r); min-height: 28px; line-height: 20px; }
+/* Project icon sits 7px from the pill edge on every side (6px padding + 1px border; 7px top from min-height), so its curve is pill radius minus inset. */
+.desktop-app .project-bar .project-picker { padding-left: calc(var(--pill-inset) - 1px); }
+.desktop-app .project-bar .project-picker > .thread-project-icon { border-radius: calc(var(--pill-r) - var(--pill-inset)); }
 .desktop-app :is(.button--primary,.send-group) { background: var(--primary-bg); color: var(--primary-fg); box-shadow: 0 0 0 var(--hairline) var(--primary-bg),0 1px 2px #00000080; }
 .desktop-app .send-group .button { color: var(--primary-fg); }
 .desktop-app .button:disabled { opacity: .6; transform: none; }
