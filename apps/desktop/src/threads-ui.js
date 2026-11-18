@@ -1,3 +1,4 @@
+import {parsePlan,createLivePlan} from './live-plan.js';
 import {syncActivityGroup} from './activity-groups.js';
 import {connectMessageActions} from './message-actions.js';
 import {displayRunError} from '../shared/run-error.mjs';
@@ -251,7 +252,7 @@ export function connectThreads({api,prompt,send,toast}){
  function createJob(id,title,node){
   const job={id,title,history:node,running:true,approvalRequests:new Set(),startedAt:Date.now(),provider:form.modelSelection?.provider,model:form.modelSelection?.model,terminalCount:0};jobs.set(id,job);job.turn=messageActions.turn({...form.modelSelection,startedAt:job.startedAt},true);
   let current=null,streamed='',reasoning='',group=null,log=null,compaction=null,envCard=null,envLog=null;const tools=new Map();
-  const statusLine=document.createElement('div');statusLine.className='thread-status';statusLine.setAttribute('role','status');statusLine.textContent='Working';node.append(statusLine);
+  const statusLine=document.createElement('div');statusLine.className='thread-status';statusLine.setAttribute('role','status');statusLine.textContent='Working';node.append(statusLine);const plan=createLivePlan();node.append(plan.element);
   const status=text=>{statusLine.textContent=text;statusLine.hidden=false;};
   const response=()=>{if(!current){current=document.createElement('article');current.className='thread-message thread-assistant';node.insertBefore(current,statusLine);messageActions.assistant(current,job.turn,'');}return current;};
   // The status is the live insertion point, not a footer below queued messages.
@@ -279,6 +280,7 @@ export function connectThreads({api,prompt,send,toast}){
    if(event.event==='reasoning'){reasoning+=event.text||'';if(preference('show-reasoning',true))status(plainReasoning(reasoning));}
    if(event.event==='tool')status(`Running ${event.name}`);
    if(event.event==='tool_start'){
+    const items=parsePlan(event.name,event.input);if(items)plan.update(items);
     if(/bash|shell|terminal/.test(event.name)){job.terminalCount++;drawThreads();}
     current=null;streamed='';if(!group){group=document.createElement('details');group.className='thread-activity';const summary=document.createElement('summary');summary.textContent='Work';log=document.createElement('div');log.className='thread-activity-log';group.append(summary,log);node.insertBefore(group,statusLine);messageActions.work(group,job.turn);}
     const widget=createToolWidget({name:event.name,text:JSON.stringify(event.input||{},null,2),done:false});if(!preference('collapse-work',true))group.open=true;tools.set(event.id,widget);log.append(widget.element);syncActivityGroup(group);status(`Running ${event.name}`);reasoning='';

@@ -24,6 +24,7 @@ import './right-panel.css';
 import './composer-files.css';
 import './composer-quick.css';
 import './thread-row.css';
+import './live-plan.css';
 import './window-chrome.css';
 import {sessionMenuItems} from './sessions-ui.js';
 import {compareMenuItems,openCompare} from './compare-ui.js';
