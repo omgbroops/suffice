@@ -143,7 +143,7 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
  };
  return {
   socket,
-  async attach(sessionId){const rows=await call({type:'sessions.list'});const row=rows.find(r=>r.id===sessionId);if(!row)throw new Error('Unknown session');return {command:['tmux','-L',socket,'-f','/dev/null','attach','-t','sfx-'+row.id],cwd:row.cwd};},
+  async attach(sessionId){const rows=await call({type:'sessions.list'});const row=rows.find(r=>r.id===sessionId);if(!row)throw new Error('Unknown session');return {command:['tmux','-L',socket,'-f','/dev/null','set-option','-t','sfx-'+row.id,'mouse','on',';','attach','-t','sfx-'+row.id],cwd:row.cwd};},
   handlers:{
    'sessions-available':()=>{
     const caps=backend.capabilities().sessions;
