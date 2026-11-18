@@ -89,6 +89,8 @@ if(primary)app.whenReady().then(async()=>{
   handle('issues-create',async({projectId,fields}={})=>{if(!(await projects.list()).some(p=>p.id===projectId))throw new Error('Project not found');return issues.create(projectId,fields);});
   handle('issues-update',({id,patch}={})=>issues.update(id,patch));
   handle('issues-delete',id=>issues.remove(id));
+  handle('budget-get',async()=>(await import('./budget-caps.mjs')).budgetState(settingsHome));
+  handle('budget-set',async caps=>{const m=await import('./budget-caps.mjs');m.writeCaps(settingsHome,caps);return m.budgetState(settingsHome);});
   handle('usage-report',async()=>(await import('./usage-report.mjs')).readUsageReport(settingsHome));
   handle('usage',threadId=>request('usage',{threadId}));
   handle('context',threadId=>request('context',{threadId}));
