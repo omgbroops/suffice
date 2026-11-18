@@ -3,6 +3,7 @@ import {threadViewState,restoreThreadViews} from './thread-view-state.js';
 import {preference,savePreference,initializePreferences} from './settings-preferences.js';
 import {createSettings} from './settings.js';
 import {createSpotlight} from './spotlight.js';
+import {createWhatsNew} from './whats-new.js';
 import {createTaskBoardView} from './task-board.js';
 import {settingsSections} from './settings-data.js';
 import {sidebarPreferences} from './sidebar-preferences.js';
@@ -428,10 +429,17 @@ const taskBoard=createTaskBoardView();
 const act=action=>{const el=document.createElement('button');el.dataset.menuAction=action;document.body.append(el);el.click();el.remove();};
 const mod=/Mac|iPhone|iPad/.test(navigator.platform)?'⌘':'Ctrl';
 const flatten=(items,prefix,parent='')=>items.flatMap(item=>item.children?flatten(item.children(),prefix,item.label):item.action?[{id:item.action,title:`${prefix}: ${parent?parent+' · ':''}${item.label}`,action:item.action}]:[]);
+const whatsNew=createWhatsNew({mod,run:item=>{const t=item.try;
+ if(t.palette!==undefined)spotlight.open({query:t.palette});
+ else if(t.event)document.dispatchEvent(new Event(t.event));
+ else if(t.settings)document.dispatchEvent(new CustomEvent('suffice-open-settings',{detail:{section:t.settings}}));
+ else if(t.threadMenu){const row=document.querySelector('.thread-row');if(row){const r=row.getBoundingClientRect();row.dispatchEvent(new MouseEvent('contextmenu',{bubbles:true,cancelable:true,clientX:r.left+r.width/2,clientY:r.top+r.height/2}));}else document.querySelector('.new-session')?.click();}
+ else if(t.composer)document.querySelector('.composer textarea, #prompt')?.focus();}});
 const spotlight=createSpotlight({commands:()=>[
  {id:'tasks',title:'Tasks: open the board',icon:'inbox',run:()=>taskBoard.open()},
  {id:'needs-you',title:'Needs you',icon:'inbox',run:()=>document.dispatchEvent(new Event('suffice-open-needs-you'))},
  {id:'issues',title:'Issues',icon:'bug',run:()=>document.dispatchEvent(new Event('suffice-open-issues'))},
+ {id:'whats-new',title:'Help: What\'s new',icon:'agent',keywords:'help release notes updates',run:()=>whatsNew.open()},
  {id:'new',title:'New session',icon:'plus',keys:[mod,'N'],run:()=>document.querySelector('.new-session').click()},
  {id:'export-md',title:'Export thread as Markdown',icon:'files',run:()=>document.dispatchEvent(new CustomEvent('suffice-export-thread',{detail:{kind:'md'}}))},
  {id:'export-html',title:'Export thread as HTML',icon:'files',run:()=>document.dispatchEvent(new CustomEvent('suffice-export-thread',{detail:{kind:'html'}}))},
@@ -454,6 +462,7 @@ const spotlight=createSpotlight({commands:()=>[
  ...settingsSections.map(section=>({id:'settings:'+section.id,title:section.title,detail:section.category,icon:section.icon,scope:'settings',run:()=>document.dispatchEvent(new CustomEvent('suffice-open-settings',{detail:{section:section.id}}))}))
 ]});
 function showSearch(keyboard=false){spotlight.open({keyboard});}
+window.sufficeWhatsNew=whatsNew;setTimeout(()=>whatsNew.maybeShow(),1500);
 
 dialog.addEventListener('click', (e) => { if (e.target === dialog) { const r = dialog.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) dialog.close(); } });
 

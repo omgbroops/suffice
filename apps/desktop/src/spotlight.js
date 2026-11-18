@@ -71,5 +71,5 @@ export function createSpotlight({commands}){
  });
  setInterval(()=>{if(dialog.open)tickThreadTimes(list);},1000);
  document.addEventListener('suffice-thread-directory',()=>{if(dialog.open)render();});
- return {open({keyboard=false}={}){if(dialog.open){cancelClose();input.focus();return;}previousFocus=document.activeElement;scope='all';selected=0;input.value='';chips.clear();closeMenu(false);render();dialog.showModal();input.focus();cancelContentFade=fadeGlassContent(dialog);},close};
+ return {open({keyboard=false,query=''}={}){if(dialog.open){cancelClose();input.focus();return;}previousFocus=document.activeElement;scope='all';selected=0;input.value=query;chips.clear();closeMenu(false);render();dialog.showModal();input.focus();cancelContentFade=fadeGlassContent(dialog);},close};
 }
