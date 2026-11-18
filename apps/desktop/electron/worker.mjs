@@ -1,6 +1,7 @@
 import {createDesktopExtensionUI} from './extension-ui.mjs';
 import {createSufficeModelRuntime,modelRuntimeOptions} from '../../../packages/cli/src/model-runtime.mjs';
 import {projectContext,rememberProject,threadTitle} from './engine-settings.mjs';
+import {createReducerExtension} from '../../../packages/backend/src/tokens/index.mjs';
 import {invalidateProjectMetadata} from './sidebar-metadata.mjs';
 import {createChatChangeTracker} from './chat-changes.mjs';
 import {createChatGitTracker} from './chat-git.mjs';
@@ -71,7 +72,7 @@ async function receive(message) {
       workspace=cwd;
       const options=parseOptions(['--cwd',cwd]);
       options.effort=payload.effort;
-      options.home=home;options.additionalContext=await projectContext(home,cwd,payload.desktopSettings||{});const newlyCreated=!resumePath;options.desktopSettings=payload.desktopSettings||{};options.onTitleChanged=()=>send({event:'history_changed'});if(options.desktopSettings['allow-network']===false){options.browser=false;options.desktop=false;}
+      options.home=home;options.additionalContext=await projectContext(home,cwd,payload.desktopSettings||{});const newlyCreated=!resumePath;options.desktopSettings=payload.desktopSettings||{};options.extensions=[createReducerExtension({dir:resolve(home,'tool-outputs'),settings:options.desktopSettings})];options.onTitleChanged=()=>send({event:'history_changed'});if(options.desktopSettings['allow-network']===false){options.browser=false;options.desktop=false;}
       if(selected){options.model=selected.id;options.modelObject=selected;}
       if(resumePath)options.sessionManager=SessionManager.open(resumePath,dirname(resumePath));
       changeTracker=createChatChangeTracker({cwd,home,getId:()=>agent?.sessionPath()?threadId(agent.sessionPath()):null,onChange:(diff,turnDiff)=>{invalidateProjectMetadata(cwd);send({event:'changes',diff,turnDiff});}});
