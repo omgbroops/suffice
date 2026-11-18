@@ -121,6 +121,7 @@ document.querySelector('#app').innerHTML = `
     ${button('Needs you', { icon: 'inbox', className: 'needs-nav', action: 'needs-you', attrs: 'hidden', content: '<span class="needs-nav-label">Needs you</span><span class="needs-count" hidden>0</span>' })}
 
     ${button('Computer use', { icon: 'bolt', className: 'computer-nav', action: 'computer', attrs: 'hidden', content: '<span class="computer-nav-label">Computer use</span><span class="computer-count" hidden>0</span>' })}
+    ${button('Scheduled', { icon: 'calendar', className: 'scheduled-nav', action: 'scheduled', content: '<span class="issues-nav-label">Scheduled</span>' })}
 
     ${button('Issues', { icon: 'bug', className: 'issues-nav', action: 'issues', content: '<span class="issues-nav-label">Issues</span><span class="issues-count" hidden>0</span>' })}
     </nav>
@@ -461,6 +462,7 @@ const spotlight=createSpotlight({commands:()=>[
  {id:'issues',title:'Issues',icon:'bug',run:()=>document.dispatchEvent(new Event('suffice-open-issues'))},
  {id:'flows',title:'Workflows',icon:'branch',run:()=>document.dispatchEvent(new Event('suffice-open-flows'))},
  {id:'computer',title:'Computer use',icon:'bolt',run:()=>document.dispatchEvent(new Event('suffice-open-computer'))},
+ {id:'scheduled',title:'Scheduled',icon:'calendar',run:()=>document.dispatchEvent(new Event('suffice-open-scheduled'))},
  {id:'whats-new',title:'Help: What\'s new',icon:'agent',keywords:'help release notes updates',run:()=>whatsNew.open()},
  {id:'new',title:'New session',icon:'plus',keys:[mod,'N'],run:()=>document.querySelector('.new-session').click()},
  {id:'export-md',title:'Export thread as Markdown',icon:'files',run:()=>document.dispatchEvent(new CustomEvent('suffice-export-thread',{detail:{kind:'md'}}))},

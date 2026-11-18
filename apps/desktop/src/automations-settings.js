@@ -36,11 +36,15 @@ export function nextRunText(item,now=Date.now()){
 export function mountAutomationSettings(content,section,api){
  if(section!=='automations')return;
  const host=content.querySelector('#settings-title-automations')?.closest('.settings-section');if(!host)return;for(const group of host.querySelectorAll('.settings-group'))group.remove();
+ mountAutomations(host,api);
+}
+// Shared by the Settings section and the Scheduled sidebar page.
+export function mountAutomations(host,api){
  const status=document.createElement('p');status.className='resource-status';status.role='status';
  const card=document.createElement('div');card.className='settings-card automation-card';host.append(status,card);
  const fail=error=>{status.textContent=clean(error);};
  const button=(text,fn,cls='')=>{const b=document.createElement('button');b.type='button';b.className='settings-select settings-configure '+cls;b.textContent=text;b.onclick=async()=>{b.disabled=true;status.textContent='';try{await fn();}catch(e){fail(e);}finally{b.disabled=false;}};return b;};
- const switchFor=(item)=>{const b=document.createElement('button');b.type='button';b.className='settings-switch';b.role='switch';b.setAttribute('aria-label','Enable '+item.name);b.setAttribute('aria-checked',String(item.enabled));b.innerHTML='<span></span>';b.onclick=async()=>{try{await api.toggleAutomation({id:item.id,enabled:!item.enabled});}catch(e){fail(e);}};return b;};
+ const switchFor=(item)=>{const b=document.createElement('button');b.type='button';b.className='settings-switch';b.role='switch';b.setAttribute('aria-label','Enable '+item.name);b.setAttribute('aria-checked',String(item.enabled));b.innerHTML='<span></span>';let want=item.enabled;/* each click flips the last requested state, so two quick clicks cancel out */b.onclick=async()=>{want=!want;try{await api.toggleAutomation({id:item.id,enabled:want});}catch(e){want=item.enabled;fail(e);}};return b;};
 
  async function edit(item){
   const [projects,models]=await Promise.all([api.projects(),api.models().catch(()=>[])]);
@@ -66,9 +70,9 @@ export function mountAutomationSettings(content,section,api){
   const sync=()=>{for(const el of dialog.querySelectorAll('[data-when]'))el.hidden=el.dataset.when!==kind.value;};sync();kind.onchange=sync;
   const close=()=>{dialog.close();dialog.remove();};for(const b of dialog.querySelectorAll('[data-close]'))b.onclick=close;
   dialog.addEventListener('cancel',()=>dialog.remove());
-  form.onsubmit=async event=>{event.preventDefault();const f=form.elements,[provider,...rest]=f.model.value.split('|'),k=kind.value;
+  let saving=false;form.onsubmit=async event=>{event.preventDefault();if(saving)return;saving=true;const f=form.elements,[provider,...rest]=f.model.value.split('|'),k=kind.value;
    const trigger={kind:k,...(k==='daily'?{time:f.time.value}:{}),...(k==='hourly'?{minute:Number(f.minute.value)}:{}),...(k==='cron'?{cron:f.cron.value}:{})};
-   try{await api.saveAutomation({id:item?.id,name:f.name.value,project:f.project.value,prompt:f.prompt.value,trigger,effort:f.effort.value,...(provider?{provider,model:rest.join('|')}:{})});close();}catch(e){error.textContent=clean(e);}};
+   try{await api.saveAutomation({id:item?.id,name:f.name.value,project:f.project.value,prompt:f.prompt.value,trigger,effort:f.effort.value,...(provider?{provider,model:rest.join('|')}:{})});close();}catch(e){error.textContent=clean(e);}finally{saving=false;}};
   document.body.append(dialog);dialog.showModal();form.elements.name.focus();
  }
 
