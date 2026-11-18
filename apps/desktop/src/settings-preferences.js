@@ -27,6 +27,7 @@ export function applyPreferences(){
  const fonts={Inter:'"Inter Variable",sans-serif',Geist:'Geist,sans-serif',System:'system-ui', 'JetBrains Mono':'"JetBrains Mono",monospace','Geist Mono':'"Geist Mono",monospace','System mono':'monospace'};
  if(saved['interface-font'])root.style.setProperty('--font-sans',fonts[saved['interface-font']]);
  if(saved['code-font'])root.style.setProperty('--font-mono',fonts[saved['code-font']]);
+ {const w={Narrow:['720px','600px'],Wide:['1200px','960px']}[saved['chat-width']];if(w){root.style.setProperty('--content-width',w[0]);root.style.setProperty('--composer-width',w[1]);}else{root.style.removeProperty('--content-width');root.style.removeProperty('--composer-width');}}
  if(saved['text-size'])root.style.setProperty('--ui-text',saved['text-size']);
  root.classList.toggle('hide-file-icons',saved['file-icons']===false);root.dataset.settingsDensity=saved.density==='Compact'?'Compact':'Comfortable';root.dataset.density=({Compact:'compact',Spacious:'spacious'})[saved.density]||'comfy';root.dataset.chrome='glass';root.dataset.editorLines=String(saved['line-numbers']!==false);root.style.setProperty('--editor-tab-size',parseInt(saved['tab-size'])||2);
 }
