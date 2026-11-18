@@ -113,6 +113,8 @@ document.querySelector('#app').innerHTML = `
 
     ${button('Needs you', { icon: 'inbox', className: 'needs-nav', action: 'needs-you', attrs: 'hidden', content: '<span class="needs-nav-label">Needs you</span><span class="needs-count" hidden>0</span>' })}
 
+    ${button('Computer use', { icon: 'bolt', className: 'computer-nav', action: 'computer', attrs: 'hidden', content: '<span class="computer-nav-label">Computer use</span><span class="computer-count" hidden>0</span>' })}
+
     ${button('Issues', { icon: 'bug', className: 'issues-nav', action: 'issues', content: '<span class="issues-nav-label">Issues</span><span class="issues-count" hidden>0</span>' })}
 
     <div class="session-section"><div class="section-label"><span id="sidebar-section-label">Threads</span></div><div class="sidebar-sessions">${sessions.map((s, i) => sessionRow(s, i, true)).join('')}</div></div>
@@ -439,6 +441,7 @@ const spotlight=createSpotlight({commands:()=>[
  {id:'tasks',title:'Tasks: open the board',icon:'plan',run:()=>taskBoard.open()},
  {id:'needs-you',title:'Needs you',icon:'inbox',run:()=>document.dispatchEvent(new Event('suffice-open-needs-you'))},
  {id:'issues',title:'Issues',icon:'bug',run:()=>document.dispatchEvent(new Event('suffice-open-issues'))},
+ {id:'computer',title:'Computer use',icon:'bolt',run:()=>document.dispatchEvent(new Event('suffice-open-computer'))},
  {id:'whats-new',title:'Help: What\'s new',icon:'agent',keywords:'help release notes updates',run:()=>whatsNew.open()},
  {id:'new',title:'New session',icon:'plus',keys:[mod,'N'],run:()=>document.querySelector('.new-session').click()},
  {id:'export-md',title:'Export thread as Markdown',icon:'files',run:()=>document.dispatchEvent(new CustomEvent('suffice-export-thread',{detail:{kind:'md'}}))},

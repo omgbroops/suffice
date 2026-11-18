@@ -39,6 +39,7 @@ export const settingsSections=[
  ...[['mcps','MCPs','plug'],['skills','Skills','deep'],['extensions','Extensions','puzzle'],['templates','Prompt templates','files']].map(([id,title,icon])=>({id,subtitle:SUBTITLES[id],title,icon,category:'Agent',groups:[{title:'Resources',rows:[],empty:'Loading…'}]})),
  {id:'agent',subtitle:'How agents run commands and show their work.',title:'Agent behavior',icon:'bolt',category:'Agent',groups:[
   group('Execution',[select('execution-shell','Command shell','Native Bash',['Native Bash','PowerShell','System default']),toggle('allow-network','Browser & desktop tools',true,'Shell commands retain native OS network access.'),toggle('background-agents','Allow background agents',true)]),
+  group('Computer use',[toggle('computer-use','Computer use sessions',false,'Lets an agent drive a web page for you. Risky steps wait for your approval.')]),
   group('Transcript',[toggle('collapse-work','Collapse completed actions',true),toggle('show-reasoning','Show reasoning status',true),toggle('stream-markdown','Render Markdown while streaming',true)]),
  ]},
  {id:'context',subtitle:'What agents remember and when they compact.',title:'Context & memory',icon:'context',category:'Agent',groups:[
