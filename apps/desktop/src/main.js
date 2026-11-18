@@ -6,6 +6,7 @@ import {createSpotlight} from './spotlight.js';
 import {sidebarPreferences} from './sidebar-preferences.js';
 import {connectComposerSize} from './composer-size.js';
 import {connectAttachments} from './attachments.js';
+import {connectSkills} from './skills-ui.js';
 import {connectSendControls} from './send-controls.js';
 import { connectDesktop } from './desktop.js';
 import './desktop.css';
@@ -188,6 +189,7 @@ const send = document.querySelector('.send-button');
 const popover = document.querySelector('#popover');
 
 const { open: menu, close: closeMenu } = createMenu(popover);
+let skillItems = [];
 
 const dialog = document.querySelector('dialog');
 
@@ -262,6 +264,8 @@ document.addEventListener('click', (e) => {
     if (type === 'shortcut') { prompt.value = value + ' '; prompt.dispatchEvent(new Event('input')); prompt.focus(); }
 
     if (type === 'attach') document.querySelector('#file-input').click();
+    if (type === 'skill') document.querySelector('.composer').skills.toggle(value);
+    if (type === 'skills') document.dispatchEvent(new CustomEvent('suffice-open-settings', { detail: { section: 'skills' } }));
 
     if (type === 'settings') showSettings();
 
@@ -333,7 +337,7 @@ document.addEventListener('click', (e) => {
     case 'repo-menu': menu(control, ['suffice-cloud', 'suffice', 'suffice-platform'].map(label => ({ label, action: `repo:${label}` }))); break;
 
 
-    case 'attach': document.querySelector('#file-input').click(); break;
+    case 'attach': void document.querySelector('.composer').skills.items().then(items => { skillItems = items; menu(control, [{ label: 'Add files', icon: 'attach', action: 'attach:files' }, { label: 'Skills', icon: 'bolt', children: () => skillItems }]); }); break;
 
     case 'send-menu': menu(control, [{ label: 'Start session in background', action: 'background-send:start' }, ...sessionMenuItems()]); break;
 
@@ -430,6 +434,7 @@ setupSidebarResize();
 connectSendControls(document.querySelector('.composer'),prompt,send);
 connectComposerSize(document.querySelector('.composer'),prompt);
 connectAttachments({form:document.querySelector('.composer'),prompt,send,input:document.querySelector('#file-input'),toast});
+connectSkills({form:document.querySelector('.composer'),toast});
 connectDesktop({prompt,send,toast,escapeHtml});
 import { connectVoice } from './voice/voice-ui.js';
 const voice=window.sufficeDesktop?connectVoice({form:document.querySelector('.composer'),prompt,toast}):null;

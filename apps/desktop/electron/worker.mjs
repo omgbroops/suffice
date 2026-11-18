@@ -65,13 +65,13 @@ async function receive(message) {
     if(payload.model){selected=(await runtime.getAvailable()).find(model=>model.id===payload.model&&model.provider===payload.provider);if(!selected)throw new Error('Model unavailable. Connect this provider in Settings.');if(!(selected.reasoning?getSupportedThinkingLevels(selected):['off']).includes(payload.effort))throw new Error('Unsupported effort for this model');}
     const cwd=await realpath(payload.cwd);
     if(!(await stat(cwd)).isDirectory())throw new Error('Choose a project directory');
-    busy=true;ownsRun=true;abortRequested=false;const nextPreferences=JSON.stringify(payload.desktopSettings||{});if(agent&&preferencesKey!==nextPreferences){resumePath=agent.sessionPath();await agent.dispose();agent=null;}preferencesKey=nextPreferences;
+    busy=true;ownsRun=true;abortRequested=false;const nextPreferences=JSON.stringify([payload.desktopSettings||{},payload.skillContext||'']);if(agent&&preferencesKey!==nextPreferences){resumePath=agent.sessionPath();await agent.dispose();agent=null;}preferencesKey=nextPreferences;
     if(agent&&workspace!==cwd){await agent.dispose();agent=null;}
     if(!agent){
       workspace=cwd;
       const options=parseOptions(['--cwd',cwd]);
       options.effort=payload.effort;
-      options.home=home;options.additionalContext=await projectContext(home,cwd,payload.desktopSettings||{});const newlyCreated=!resumePath;options.desktopSettings=payload.desktopSettings||{};options.onTitleChanged=()=>send({event:'history_changed'});if(options.desktopSettings['allow-network']===false){options.browser=false;options.desktop=false;}
+      options.home=home;options.additionalContext=(await projectContext(home,cwd,payload.desktopSettings||{}))+(payload.skillContext||'');const newlyCreated=!resumePath;options.desktopSettings=payload.desktopSettings||{};options.onTitleChanged=()=>send({event:'history_changed'});if(options.desktopSettings['allow-network']===false){options.browser=false;options.desktop=false;}
       if(selected){options.model=selected.id;options.modelObject=selected;}
       if(resumePath)options.sessionManager=SessionManager.open(resumePath,dirname(resumePath));
       changeTracker=createChatChangeTracker({cwd,home,getId:()=>agent?.sessionPath()?threadId(agent.sessionPath()):null,onChange:(diff,turnDiff)=>{invalidateProjectMetadata(cwd);send({event:'changes',diff,turnDiff});}});
