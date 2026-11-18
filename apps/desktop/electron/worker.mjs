@@ -12,6 +12,7 @@ import {mkdir,realpath,stat} from 'node:fs/promises';
 import {resolve,dirname} from 'node:path';
 import {SessionManager} from '@earendil-works/pi-coding-agent';
 import {createThreadStore,threadId} from './threads.mjs';
+import {checkpoint} from './rewind.mjs';
 import {createSufficeSession,parseOptions} from '@suffice/harness';
 import {getSupportedThinkingLevels} from '@earendil-works/pi-ai/compat';
 
@@ -102,6 +103,7 @@ async function receive(message) {
     turnPresentation={id:randomUUID(),startedAt:payload.turnStartedAt||Date.now(),provider:agent.session.model?.provider||payload.provider,model:agent.session.model?.id||payload.model,modelName:agent.session.model?.name,effort:agent.session.thinkingLevel||payload.effort};
     agent.session.sessionManager?.appendCustomEntry?.('suffice:turn-start',{...turnPresentation,promptHash:createHash('sha256').update(payload.prompt).digest('hex'),displayPrompt:payload.displayPrompt??payload.prompt,attachments:payload.attachmentMetadata||[]});send({event:'turn_started',presentation:turnPresentation});
     await changeTracker?.beginTurn();
+    if(sessionPath)await checkpoint(cwd,threadId(sessionPath),payload.displayPrompt??payload.prompt).catch(()=>{});// a checkpoint failure never blocks the turn
     const text=await agent.run(payload.prompt,{images:payload.images});finishPresentation('completed');
     await changeTracker?.flush().catch(()=>{});if(payload.desktopSettings?.['remember-context'])await rememberProject(home,cwd,text);
     send({id,ok:true,result:{text,presentation:turnPresentation,sessionPath:agent.sessionPath(),threadId:agent.sessionPath()?threadId(agent.sessionPath()):null,usage:agent.totals}});

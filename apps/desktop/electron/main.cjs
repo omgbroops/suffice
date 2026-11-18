@@ -83,6 +83,8 @@ if(primary)app.whenReady().then(async()=>{
   handle('file-open-options',payload=>fileOpeners.options(threadLocations.get(payload?.threadId)||project,payload?.path));
   handle('file-open-in',payload=>fileOpeners.open(threadLocations.get(payload?.threadId)||project,payload?.path,payload?.application));
   handle('changes',()=>workspaceFiles.changes(project));
+  handle('rewind-list',async id=>(await import('./rewind.mjs')).list(threadLocations.get(id)||project,id));
+  handle('rewind-restore',async payload=>{const id=payload?.threadId;if(threadRuns.has(id)||background?.has?.(id))throw new Error('Stop this thread before rewinding it');return (await import('./rewind.mjs')).restore(threadLocations.get(id)||project,id,payload?.checkpoint);});
   handle('start-hints',()=>require('./repo-hints.cjs').hints(project));
   handle('diff',name=>workspaceFiles.diff(project,name));
   handle('clipboard-files',()=>clipboardFiles(clipboard));
