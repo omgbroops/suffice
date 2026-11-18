@@ -6,7 +6,7 @@ const group=(title,rows)=>({title,rows});
 
 export const settingsSections=[
  {id:'general',subtitle:'',title:'General',icon:'settings',category:'Personal',groups:[
-  group('Defaults',[select('approval-mode','Permission mode','Ask when needed',['Ask before every action','Ask when needed','Never ask']),select('default-directory','Default directory','~/Suffice',['~/Suffice','Last used project','Home'])]),
+  group('Defaults',[select('default-model','Default model','Last used',['Last used']),select('default-effort','Reasoning effort','Medium',['Low','Medium','High','Extra high','Max']),select('approval-mode','Permission mode','Ask when needed',['Ask before every action','Ask when needed','Never ask']),select('default-directory','Default directory','~/Suffice',['~/Suffice','Last used project','Home'])]),
   group('Application',[select('language','Language','System',['System','English']),select('send','Send messages with','Enter',['Enter','Ctrl + Enter']),toggle('startup','Launch at login'),toggle('tray','Keep running in the background',false)]),
   group('Conversations',[select('working-send','While agent is working','Steer',['Queue','Steer']),toggle('escape','Stop agent with Escape'),toggle('close-panel','Close right panel with its last tab'),select('naming','Thread naming','Automatic',['Automatic','First message','Untitled']),select('new-project','New threads use','Last used project',['Last used project','Ask each time'])]),
  ]},
@@ -27,9 +27,7 @@ export const settingsSections=[
   group('Navigation',[keys('Previous / next item','↑ ↓'),keys('Open selection','Enter'),keys('Close menu','Esc')]),
  ]},
  {id:'account',subtitle:'',title:'Account',icon:'pin',category:'Personal',groups:[group('Profile',[{id:'avatar',label:'Profile picture',type:'avatar'}])]},
- {id:'models',subtitle:'',title:'Models',icon:'deep',category:'Agent',groups:[
-  group('Defaults',[select('default-model','Default model','Last used',['Last used']),select('default-effort','Reasoning effort','Medium',['Low','Medium','High','Extra high','Max'])]),
- ]},
+ {id:'models',subtitle:'',title:'Models',icon:'deep',category:'Agent',groups:[]},
  {id:'usage',subtitle:'',title:'Usage',icon:'chart',category:'Agent',groups:[
   group('Optimizer',[toggle('optimizer-hint','Suggest cheaper settings',true),toggle('optimizer-auto','Apply suggestions automatically',false)]),
  ]},
@@ -68,3 +66,5 @@ export const settingsSections=[
   group('Suffice',[{label:'Desktop app',value:'Development',type:'text'},{label:'Harness',value:'Suffice',type:'text'},{label:'Preferences',value:'Saved on this device',type:'text'}]),
  ]},
 ];
+// Nav shows these 9 tabs; each stacks its member sections on one page.
+export const settingsTabs=[['general','General','settings',['general','notifications','privacy','archived','about']],['appearance','Appearance','monitor',['appearance']],['models','Models','deep',['models','providers']],['agent','Agent','bolt',['agent','context','automations']],['mcps','Tools & MCP','plug',['mcps','skills','extensions','templates']],['usage','Usage','chart',['usage']],['projects','Projects','branch',['projects','files','terminal']],['shortcuts','Shortcuts','keyboard',['shortcuts']],['account','Account','pin',['account']]].map(([id,title,icon,sections])=>({id,title,icon,sections}));
