@@ -5,7 +5,7 @@ import {invalidateProjectMetadata} from './sidebar-metadata.mjs';
 import {createChatChangeTracker} from './chat-changes.mjs';
 import {createChatGitTracker} from './chat-git.mjs';
 import {createThreadRouter} from './thread-router.mjs';
-import {sessionUsage} from './usage.mjs';
+import {sessionUsage,runCaps,runCapExceeded} from './usage.mjs';
 import {randomUUID,createHash} from 'node:crypto';
 import {mkdir,realpath,stat} from 'node:fs/promises';
 import {resolve,dirname} from 'node:path';
@@ -21,7 +21,7 @@ export function createHarnessHost({send,createRuntime=options=>createSufficeMode
 let agent,runtime,workspace,changeTracker,busy=false,abortRequested=false;
 const extensionPrompts=new Map();let extensionSequence=0;
 const approvals=new Map();let approvalSequence=0,preferencesKey='';
-let resumePath=null,viewedUsage=null,viewRevision=0;
+let resumePath=null,viewedUsage=null,viewRevision=0,capState=null;
 const threads=threadStore??createThreadStore(home);
 async function receive(message) {
   const {id,action,payload={}}=message;
@@ -88,7 +88,7 @@ async function receive(message) {
           if(event.result){const entry=agent.session.sessionManager?.getEntries().findLast(entry=>entry.type==='compaction');agent.session.sessionManager?.appendCustomEntry('suffice:compaction',{entryId:entry?.id,reason:event.reason});}
           send({event:'compaction_end',reason:event.reason,completed:!!event.result,aborted:event.aborted,errorMessage:event.errorMessage});
         }
-        if(['message_end','tool_execution_end','agent_end'].includes(event.type))send({event:'usage',usage:sessionUsage(agent.session)});
+        if(['message_end','tool_execution_end','agent_end'].includes(event.type)){const usage=sessionUsage(agent.session);send({event:'usage',usage});const stop=capState&&!capState.message&&runCapExceeded(capState.base,usage,capState.caps);if(stop){capState.message=stop;agent.abort();}}
         if(event.type==='message_update'&&event.assistantMessageEvent?.type==='text_delta')send({event:'text',text:event.assistantMessageEvent.delta});
         if(event.type==='message_start'&&event.message?.role==='assistant')send({event:'assistant_start'});
         if(event.type==='message_update'&&event.assistantMessageEvent?.type==='thinking_delta')send({event:'reasoning',text:event.assistantMessageEvent.delta});
@@ -101,11 +101,12 @@ async function receive(message) {
     turnPresentation={id:randomUUID(),startedAt:payload.turnStartedAt||Date.now(),provider:agent.session.model?.provider||payload.provider,model:agent.session.model?.id||payload.model,modelName:agent.session.model?.name,effort:agent.session.thinkingLevel||payload.effort};
     agent.session.sessionManager?.appendCustomEntry?.('suffice:turn-start',{...turnPresentation,promptHash:createHash('sha256').update(payload.prompt).digest('hex'),displayPrompt:payload.displayPrompt??payload.prompt,attachments:payload.attachmentMetadata||[]});send({event:'turn_started',presentation:turnPresentation});
     await changeTracker?.beginTurn();
-    const text=await agent.run(payload.prompt,{images:payload.images});finishPresentation('completed');
+    capState={base:sessionUsage(agent.session),caps:runCaps(),message:null};
+    const text=await agent.run(payload.prompt,{images:payload.images});if(capState.message)throw new Error(capState.message);finishPresentation('completed');
     await changeTracker?.flush().catch(()=>{});if(payload.desktopSettings?.['remember-context'])await rememberProject(home,cwd,text);
     send({id,ok:true,result:{text,presentation:turnPresentation,sessionPath:agent.sessionPath(),threadId:agent.sessionPath()?threadId(agent.sessionPath()):null,usage:agent.totals}});
-  } catch(error){finishPresentation(abortRequested?'interrupted':'failed');if(ownsRun)await changeTracker?.flush().catch(()=>{});if(ownsRun&&abortRequested){agent?.session.sessionManager?.appendCustomEntry('suffice:interrupted');send({id,ok:true,result:{interrupted:true,presentation:turnPresentation,threadId:agent?.sessionPath()?threadId(agent.sessionPath()):null}});}else send({id,ok:false,error:error.message});}
-  finally {if(ownsRun)busy=false;}
+  } catch(error){finishPresentation(abortRequested?'interrupted':'failed');if(ownsRun)await changeTracker?.flush().catch(()=>{});if(ownsRun&&abortRequested){agent?.session.sessionManager?.appendCustomEntry('suffice:interrupted');send({id,ok:true,result:{interrupted:true,presentation:turnPresentation,threadId:agent?.sessionPath()?threadId(agent.sessionPath()):null}});}else send({id,ok:false,error:capState?.message||error.message});}
+  finally {if(ownsRun){busy=false;capState=null;}}
 }
 return receive;
 }
