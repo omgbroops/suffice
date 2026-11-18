@@ -43,3 +43,23 @@ test('concurrent runs each hold an estimate, not the whole day, and a refusal sa
   assert.match(budgetFullMessage({full:true}),/used up/);
   await rm(home,{recursive:true});
 });
+
+test('a run is bounded by its hold: three runs of 120000 on a 300000 day never pass the ceiling and none takes the day',async()=>{
+  const {mkdtemp,rm}=await import('node:fs/promises'),{tmpdir}=await import('node:os'),{join}=await import('node:path');
+  const {dailyBudget,reserveRoom,topUp,recordSpend}=await import('../electron/usage.mjs');
+  const home=await mkdtemp(join(tmpdir(),'usage-'));
+  const settings={'budget-daily-tokens':'300000'},open=()=>dailyBudget(home,settings);
+  const runs=[0,1,2].map(()=>{const got=reserveRoom(open(),{tokens:2e6});return {state:{base:{inputTokens:0,outputTokens:0},hold:got.hold,room:got.room,budget:got.budget},spent:0,stopped:null};});
+  assert.ok(runs.every(r=>r.state.hold),'all three start');
+  for(let step=0;step<20;step++)for(const r of runs){ // runs spend in interleaved 10000 steps
+    if(r.stopped||r.spent>=120000)continue;
+    r.spent+=10000;r.stopped=topUp(r.state,{inputTokens:r.spent,outputTokens:0});
+    if(r.stopped)r.spent-=10000;
+  }
+  const settled=runs.map(r=>{recordSpend(r.state,{inputTokens:r.spent,outputTokens:0});return r.spent;});
+  const day=open().status()[0];
+  assert.equal(day.used,settled.reduce((a,b)=>a+b,0));assert.ok(day.used<=300000);assert.equal(day.held,0);
+  assert.ok(runs.filter(r=>r.stopped).every(r=>/Wait|Stopped/.test(r.stopped)));
+  assert.ok(Math.max(...settled)<300000,'no single run took the whole day');
+  await rm(home,{recursive:true});
+});

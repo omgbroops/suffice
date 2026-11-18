@@ -113,7 +113,7 @@ export function createBudget({ clock, store, limits }) {
   function reserve(estimate, tags) {
     const h = { id: `${process.pid}-${Math.random().toString(36).slice(2)}`, pid: process.pid, n: estimate, tags };
     const d = txn(() => { const r = peek(estimate, tags); if (r.allow) { mine.push(h); holds.push(h); } return r; });
-    if (!d.allow) return { ...d, release() {}, settle() {} };
+    if (!d.allow) return { ...d, release() {}, settle() {}, extend: () => false, held: 0 };
     const drop = (usage) => txn(() => {
       const i = holds.findIndex((x) => x.id === h.id);
       if (i < 0) return;
@@ -121,7 +121,9 @@ export function createBudget({ clock, store, limits }) {
       mine.splice(mine.findIndex((x) => x.id === h.id), 1);
       if (usage) add(usage, tags);
     });
-    return { ...d, release: () => drop(), settle: (usage) => drop(usage) };
+    // extend: grow this hold under the lock while the window has room, so a long run keeps reserving as it spends
+    const extend = (more) => txn(() => { const r = peek(more, tags); if (r.allow) h.n += more; return r.allow; });
+    return { ...d, release: () => drop(), settle: (usage) => drop(usage), extend, get held() { return h.n; } };
   }
 
   return {
@@ -130,8 +132,8 @@ export function createBudget({ clock, store, limits }) {
       sync();
       const now = clock.now();
       return lim.map((l) => {
-        const ceiling = ceilingAt(l, now), u = view(l, now).used;
-        return { name: l.name, period: l.period, tokens: l.tokens, ceiling, used: u, remaining: Math.max(0, ceiling - u) };
+        const ceiling = ceilingAt(l, now), u = view(l, now).used, h = held(l);
+        return { name: l.name, period: l.period, tokens: l.tokens, ceiling, used: u, held: h, remaining: Math.max(0, ceiling - u - h) }; // remaining is what a new run can still reserve
       });
     },
     setLimits(next) { // keeps usage of windows whose name survives
@@ -141,8 +143,35 @@ export function createBudget({ clock, store, limits }) {
   };
 }
 
-export function createFileStore(path) {
+export function createFileStore(path, { tries = 2000 } = {}) {
   const lockDir = `${path}.lock`, nap = new Int32Array(new SharedArrayBuffer(4));
+  const alive = (pid) => { try { process.kill(pid, 0); return true; } catch (e) { return e.code === 'EPERM'; } };
+  const owner = (dir) => { try { return fs.readFileSync(`${dir}/owner`, 'utf8'); } catch { return null; } };
+  // A lock is stale only when its holder process is gone; a holder that is merely paused (SIGSTOP, thermal guard) keeps it. Ownerless dirs are legacy locks, stale after 60 s.
+  const stale = (dir) => {
+    const o = owner(dir);
+    if (o) return !alive(parseInt(o, 10));
+    try { return Date.now() - fs.statSync(dir).mtimeMs > 60000; } catch { return false; }
+  };
+  // The directory is built complete (owner file inside), then renamed into place: rename onto a non-empty dir fails, so the owner is never missing and two takers never both win.
+  const take = (dir, token) => {
+    const tmp = `${dir}.${token}.tmp`;
+    fs.mkdirSync(tmp); fs.writeFileSync(`${tmp}/owner`, token);
+    try { fs.renameSync(tmp, dir); return true; } catch (e) {
+      fs.rmSync(tmp, { recursive: true, force: true });
+      if (e.code === 'EEXIST' || e.code === 'ENOTEMPTY') return false;
+      throw e;
+    }
+  };
+  const drop = (dir, token) => { if (owner(dir) === token) fs.rmSync(dir, { recursive: true, force: true }); };
+  const away = (dir, token) => { const dead = `${dir}.${token}.dead`; fs.renameSync(dir, dead); fs.rmSync(dead, { recursive: true, force: true }); };
+  // Only the holder of the break mutex removes a stale lock, and nobody else can create the lock while the stale dir stands, so a live lock is never removed.
+  // shortcut: a break mutex whose owner died is renamed away unguarded; a pid reused by a stranger would keep a lock until that process exits, upgrade if pids get reused on the hosts.
+  const breakStale = (token) => {
+    const brk = `${lockDir}.brk`;
+    if (!take(brk, token)) { if (stale(brk)) away(brk, token); return; }
+    try { if (stale(lockDir)) away(lockDir, token); } finally { drop(brk, token); }
+  };
   return {
     load() {
       try { return JSON.parse(fs.readFileSync(path, 'utf8')); } catch (e) { if (e.code === 'ENOENT') return null; throw e; }
@@ -152,22 +181,14 @@ export function createFileStore(path) {
       fs.writeFileSync(tmp, JSON.stringify(state));
       fs.renameSync(tmp, path);
     },
-    // Cross-process mutex: mkdir is atomic. A lock older than 10 s belongs to a dead holder and is broken.
     withLock(fn) {
-      for (let tries = 0; ; tries++) {
-        try { fs.mkdirSync(lockDir); break; } catch (e) {
-          if (e.code !== 'EEXIST') throw e;
-          try { // break a stale lock by renaming it away (atomic), then confirm the renamed dir really was stale; a live lock grabbed by mistake goes back
-            if (Date.now() - fs.statSync(lockDir).mtimeMs > 10000) {
-              const dead = `${lockDir}.${process.pid}.dead`; fs.renameSync(lockDir, dead);
-              if (Date.now() - fs.statSync(dead).mtimeMs > 10000) fs.rmdirSync(dead); else fs.renameSync(dead, lockDir);
-            }
-          } catch {}
-          if (tries > 2000) throw new Error('budget: lock busy');
-          Atomics.wait(nap, 0, 0, 5);
-        }
+      const token = `${process.pid}-${Math.random().toString(36).slice(2)}`;
+      for (let n = 0; !take(lockDir, token); n++) {
+        try { if (stale(lockDir)) breakStale(token); } catch {}
+        if (n > tries) throw new Error('budget: lock busy');
+        Atomics.wait(nap, 0, 0, 5);
       }
-      try { return fn(); } finally { try { fs.rmdirSync(lockDir); } catch {} }
+      try { return fn(); } finally { try { drop(lockDir, token); } catch {} }
     },
   };
 }

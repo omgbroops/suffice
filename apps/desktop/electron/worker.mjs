@@ -6,7 +6,7 @@ import {invalidateProjectMetadata} from './sidebar-metadata.mjs';
 import {createChatChangeTracker} from './chat-changes.mjs';
 import {createChatGitTracker} from './chat-git.mjs';
 import {createThreadRouter} from './thread-router.mjs';
-import {sessionUsage,runCaps,runCapExceeded,dailyBudget,reserveRoom,recordSpend,budgetFullMessage} from './usage.mjs';
+import {sessionUsage,runCaps,runCapExceeded,topUp,dailyBudget,reserveRoom,recordSpend,budgetFullMessage} from './usage.mjs';
 import {installContext,sessionInventory} from '../shared/context-items.mjs';
 import {randomUUID,createHash} from 'node:crypto';
 import {mkdir,realpath,stat} from 'node:fs/promises';
@@ -102,7 +102,7 @@ async function receive(message) {
           if(event.result){const entry=agent.session.sessionManager?.getEntries().findLast(entry=>entry.type==='compaction');agent.session.sessionManager?.appendCustomEntry('suffice:compaction',{entryId:entry?.id,reason:event.reason});}
           send({event:'compaction_end',reason:event.reason,completed:!!event.result,aborted:event.aborted,errorMessage:event.errorMessage});
         }
-        if(['message_end','tool_execution_end','agent_end'].includes(event.type)){const usage=sessionUsage(agent.session);send({event:'usage',usage});const stop=capState&&!capState.message&&runCapExceeded(capState.base,usage,capState.caps);if(stop){capState.message=stop;agent.abort();}}
+        if(['message_end','tool_execution_end','agent_end'].includes(event.type)){const usage=sessionUsage(agent.session);send({event:'usage',usage});const stop=capState&&!capState.message&&(runCapExceeded(capState.base,usage,capState.caps)||topUp(capState,usage));if(stop){capState.message=stop;agent.abort();}}
         if(event.type==='message_update'&&event.assistantMessageEvent?.type==='text_delta')send({event:'text',text:event.assistantMessageEvent.delta});
         if(event.type==='message_start'&&event.message?.role==='assistant'){send({event:'assistant_start'});pendingTurn?.();pendingTurn=null;}
         if(event.type==='message_update'&&event.assistantMessageEvent?.type==='thinking_delta')send({event:'reasoning',text:event.assistantMessageEvent.delta});
