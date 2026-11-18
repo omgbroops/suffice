@@ -1,5 +1,5 @@
 // Import chats other coding agents already keep on disk into one searchable list.
-// Search covers title + first user message + cwd from the index only; full-text over message bodies is out of scope.
+// list()/search() match the index only (title, first user message, cwd). find() adds full text: sessions the index misses are read and matched on message bodies, each hit carrying a snippet.
 import nodeFs from 'node:fs';
 import path from 'node:path';
 import { assertShape } from '../contract.mjs';
@@ -111,6 +111,35 @@ export function createHistory({ fs = nodeFs, home, clock, slots, sources = defau
       .slice(offset, offset + limit).map(([, e]) => pub(e));
   }
 
+  const snip = (text, terms) => {
+    const t = text.replace(/\s+/g, ' ').trim(), low = t.toLowerCase();
+    const at = Math.min(...terms.map((w) => { const k = low.indexOf(w); return k < 0 ? Infinity : k; }));
+    const a = Number.isFinite(at) ? Math.max(0, at - 40) : 0;
+    return (a ? '…' : '') + t.slice(a, a + 160) + (a + 160 < t.length ? '…' : '');
+  };
+
+  // Index hits first (best score), then body hits newest first. Bodies are read for at most `deep` sessions and `budgetMs`, so a huge history stays responsive.
+  async function find(query, { limit = 100, deep = 300, budgetMs = 2000, signal, ...opts } = {}) {
+    const terms = String(query ?? '').toLowerCase().split(/\s+/).filter(Boolean);
+    if (!terms.length) return list({ ...opts, limit });
+    const idx = load();
+    const out = list({ ...opts, query, limit }).map((e) => ({ ...e, snippet: snip(idx[e.path]?.firstUser || e.title || e.cwd || '', terms) }));
+    const seen = new Set(out.map((e) => e.path));
+    const t0 = clock.now();
+    let n = 0;
+    for (const e of list({ ...opts, limit: Number.MAX_SAFE_INTEGER })) {
+      if (out.length >= limit || n >= deep || signal?.aborted || clock.now() - t0 > budgetMs) break;
+      if (seen.has(e.path)) continue;
+      if (++n % 8 === 0) await new Promise((r) => setImmediate(r));
+      try {
+        const text = (await read(e)).filter((m) => typeof m.text === 'string' && m.text).map((m) => m.text).join('\n');
+        const low = text.toLowerCase();
+        if (terms.every((w) => low.includes(w))) out.push({ ...e, snippet: snip(text, terms) });
+      } catch { /* unreadable session: not a hit */ }
+    }
+    return out;
+  }
+
   async function read(entry) {
     const s = sources.find((x) => x.id === entry?.source);
     if (!s) throw new TypeError(`history.read: unknown source '${entry?.source}'`);
@@ -118,7 +147,7 @@ export function createHistory({ fs = nodeFs, home, clock, slots, sources = defau
   }
 
   return {
-    scan, list, read,
+    scan, list, read, find,
     search: (query, opts = {}) => list({ ...opts, query }),
     sources: async () => { for (const s of sources) detected[s.id] = !!(await s.detect({ home, fs })); return sourceInfo(); },
     viewSpec: () => ({

@@ -283,3 +283,19 @@ test('scanning 40,000 files stays under 150 MB of RSS growth (scan and rescan)',
     assert.equal(o.kinds.interactive + (o.kinds.headless ?? 0), 40_000);
   } finally { nodeFs.rmSync(home, { recursive: true, force: true }); }
 });
+
+test('find: index hit and body-only hit carry snippets; non-matches stay out', async () => {
+  const home = mk();
+  claudeFile(home, 'p1', 's1', '/proj/a', 'fix the login redirect', 1_700_000_100);
+  claudeFile(home, 'p2', 's2', '/proj/b', 'unrelated start', 1_700_000_200);
+  const h = createHistory({ home, clock });
+  await h.scan();
+  const r = await h.find('login');
+  assert.deepEqual(r.map((e) => e.cwd), ['/proj/a']);
+  assert.match(r[0].snippet, /login redirect/);
+  const body = await h.find('reply one'); // only in assistant bodies, not in the index
+  assert.deepEqual(body.map((e) => e.cwd).sort(), ['/proj/a', '/proj/b']);
+  assert.match(body[0].snippet, /reply one/);
+  assert.deepEqual(await h.find('zzz-nothing'), []);
+  assert.equal((await h.find('reply one', { deep: 1 })).length, 1);
+});

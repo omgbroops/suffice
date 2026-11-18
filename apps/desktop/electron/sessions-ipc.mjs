@@ -40,6 +40,7 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
  // Test mode never reads the real history: an explicit SUFFICE_HISTORY_HOME wins, else a fresh empty dir.
  const historyHome=env.SUFFICE_HISTORY_HOME||(env.SUFFICE_TEST_HIDE_WINDOW==='1'?fs.mkdtempSync(path.join(os.tmpdir(),'sfx-history-')):process.env.HOME);
  const socket=env.SUFFICE_SESSIONS_SOCKET||'suffice';
+ let lastScan=0;
  const backend=createBackend({dataDir,sessions:true,history:true,socketName:socket,home:historyHome,sessionAgents,...((testAgent||simAgent)&&{idleMs:400,settleMs:100})});
  const bridge=createIpcBridge(backend);
  bridge.subscribe(send);
@@ -167,6 +168,7 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
    'sessions-send':p=>call({type:'sessions.send',id:id(p?.id),text:typeof p?.text==='string'?p.text:''}).catch(ended),
    'sessions-attach-command':p=>call({type:'sessions.attachCommand',id:id(p)}),
    'history-list':async p=>{await call({type:'history.scan'});return call({type:'history.list',opts:{limit:200,...(str(p?.query)&&{query:p.query})}});},
+   'history-search':async p=>{if(Date.now()-lastScan>30000){lastScan=Date.now();await call({type:'history.scan'});}return call({type:'history.find',query:str(p?.query)?p.query:'',opts:{limit:50}});},
    'history-read':p=>call({type:'history.read',entry:{source:String(p?.source),path:String(p?.path)}}),
    'sessions-resume':async p=>{const agent=AGENT_BY_SOURCE[p?.source];if(!agent||!str(p?.sessionId)||!str(p?.cwd))throw new Error('Cannot resume this chat');await ready;const r=await call({type:'sessions.resume',agent,cwd:folder(p.cwd),sessionId:p.sessionId});track(r);attachSubs(r);return r;},
   },
