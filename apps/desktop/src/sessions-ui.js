@@ -105,7 +105,12 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  // Start flow from the composer: the typed text is the first message; resolves false when nothing started.
  async function start(agent,text){
   const cwd=project();if(!cwd){toast('Choose a project');return false;}
-  try{const s=await sx.start({agent,cwd});bump(s.id);await refresh();if(text){titles.set(s.id,text.replace(/\s+/g,' ').slice(0,60));firstText.set(s.id,text);await sx.send(s.id,text);}open(rows.get(s.id)?._s||s,true);return true;}catch(e){toast(e.message);return false;}
+  try{const s=await sx.start({agent,cwd});bump(s.id);await refresh();if(text){titles.set(s.id,text.replace(/\s+/g,' ').slice(0,60));firstText.set(s.id,text);sendWhenReady(s.id,text);}open(rows.get(s.id)?._s||s,true);return true;}catch(e){toast(e.message);return false;}
+ }
+ // The CLI drops keys while its folder-trust (or any) prompt is up, and Enter would accept it for the user: hold the first message until the screen has shown no prompt for 400 ms.
+ function sendWhenReady(id,text){
+  let t=0,off=()=>{};const stop=()=>{clearTimeout(t);off();};
+  off=sx.onUi(id,u=>{clearTimeout(t);if(!u||u.prompt)return;t=setTimeout(()=>{stop();sx.send(id,text).catch(e=>toast(e.message));},400);});
  }
 
  // Import: searchable history, read-only in the chat renderer, Resume starts a live session.

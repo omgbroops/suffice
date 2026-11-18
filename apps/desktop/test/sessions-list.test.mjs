@@ -87,7 +87,9 @@ test('session list, row menu, start flow and send options',{timeout:180000},asyn
    // The first user item in the agent's transcript is the typed text (fake agent writes the first typed line as its first prompt).
    await page.waitForFunction(()=>[...document.querySelectorAll('.thread-user')].some(n=>n.textContent.trim()==='Add a retry to the uploader'));
    const sid=await page.evaluate(()=>window.sufficeDesktop.sessions.list().then(l=>l.map(s=>s.id)));
-   const firsts=await page.evaluate(ids=>ids.map(i=>window.sufficeDesktop.sessions.ui(i)?.items?.find(x=>x.kind==='user')?.text),sid);
+   // The first message is held until the CLI screen shows no prompt, so the agent's own user item arrives a moment after the bubble.
+   const firstsOf=()=>page.evaluate(ids=>ids.map(i=>window.sufficeDesktop.sessions.ui(i)?.items?.find(x=>x.kind==='user')?.text),sid);
+   let firsts=await firstsOf();for(let n=0;n<40&&!firsts.includes('Add a retry to the uploader');n++){await page.waitForTimeout(250);firsts=await firstsOf();}
    assert.ok(firsts.includes('Add a retry to the uploader'),'first user item equals typed text: '+JSON.stringify(firsts));
    assert.equal((await page.locator('.sidebar-cli-sessions .thread-row[aria-pressed="true"] .thread-card-title').innerText()).trim(),'Add a retry to the uploader');
   }else await page.waitForTimeout(1500);

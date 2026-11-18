@@ -5,13 +5,13 @@ import {icon} from './ui.js';
 
 export function connectApprovals(api,toast){
  const form=document.querySelector('.composer'),prompt=form.querySelector('textarea'),requests=new Map();let shown=null,disconnectPreview=()=>{};
- const panel=document.createElement('section');panel.className='composer-approval';panel.hidden=true;panel.setAttribute('aria-label','Agent approval');form.append(panel);
+ let panel=null; // in the DOM only while a request is pending
  const key=event=>`${event.threadId||event.clientId}:${event.requestId}`;
  const belongs=event=>[event.threadId,event.clientId].filter(Boolean).includes(threadViewState.id);
  function draw(){
   const next=[...requests.entries()].find(([,event])=>belongs(event));
-  if(!next){disconnectPreview();disconnectPreview=()=>{};const hadFocus=panel.contains(document.activeElement);shown=null;panel.hidden=true;delete form.dataset.approval;for(const child of form.children)if(child!==panel)child.inert=false;form.resizePrompt?.();if(hadFocus)prompt.focus({preventScroll:true});return;}
-  if(shown===next[0])return;disconnectPreview();shown=next[0];const event=next[1];panel.replaceChildren();panel.hidden=false;form.dataset.approval='true';for(const child of form.children)if(child!==panel)child.inert=true;
+  if(!next){disconnectPreview();disconnectPreview=()=>{};const hadFocus=!!panel?.contains(document.activeElement);shown=null;panel?.remove();panel=null;delete form.dataset.approval;for(const child of form.children)if(child!==panel)child.inert=false;form.resizePrompt?.();if(hadFocus)prompt.focus({preventScroll:true});return;}
+  if(shown===next[0])return;disconnectPreview();shown=next[0];const event=next[1];panel?.remove();panel=document.createElement('section');panel.className='composer-approval';panel.setAttribute('aria-label','Agent approval');form.append(panel);form.dataset.approval='true';for(const child of form.children)if(child!==panel)child.inert=true;
   const title=document.createElement('h3');title.textContent='Allow this action?';
   const heading=document.createElement('div');heading.className='approval-action';heading.innerHTML=icon('terminal');const name=document.createElement('span');name.textContent=actionTitle({name:event.name,text:JSON.stringify(event.input??{})});heading.append(name);
   const preview=document.createElement('pre');preview.className='approval-preview';preview.tabIndex=0;preview.setAttribute('aria-label','Requested action');const code=document.createElement('code');code.textContent=event.name==='codemode'&&typeof event.input?.code==='string'?event.input.code:typeof event.input?.command==='string'?event.input.command:JSON.stringify(event.input??{},null,2);preview.append(code);const previewHost=document.createElement('div');previewHost.className='approval-preview-host';previewHost.append(preview);
