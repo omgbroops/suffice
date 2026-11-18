@@ -63,3 +63,18 @@ test('a run is bounded by its hold: three runs of 120000 on a 300000 day never p
   assert.ok(Math.max(...settled)<300000,'no single run took the whole day');
   await rm(home,{recursive:true});
 });
+
+test('settle never spends other runs\' holds, and one run\'s room is a fair share not the day',async()=>{
+  const {mkdtemp,rm}=await import('node:fs/promises'),{tmpdir}=await import('node:os'),{join}=await import('node:path');
+  const {dailyBudget,reserveRoom,recordSpend,RUN_ESTIMATE}=await import('../electron/usage.mjs');
+  const home=await mkdtemp(join(tmpdir(),'usage-'));
+  const open=()=>dailyBudget(home,{'budget-daily-tokens':'200000'});
+  const a=reserveRoom(open(),{tokens:2e6}),b=reserveRoom(open(),{tokens:2e6});
+  assert.equal(a.room,2e6,'room is the run cap, not the day remainder');
+  assert.equal(a.hold.held,RUN_ESTIMATE);
+  // run a reports far more than its room; b still holds its estimate
+  recordSpend({base:{totalTokens:0},hold:a.hold,room:a.room,budget:a.budget},{totalTokens:900000});
+  const st=open().status()[0];
+  assert.ok(st.used+b.hold.held<=st.ceiling,'ceiling holds with b still holding: used '+st.used);
+  b.hold.release();await rm(home,{recursive:true,force:true});
+});

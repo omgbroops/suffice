@@ -31,12 +31,12 @@ export const RUN_ESTIMATE=50000;
 export function reserveRoom(budget,caps){
   if(!budget)return {hold:null,room:null};
   const st=budget.status()[0];if(st.remaining+st.held<=0)return {full:true};const day=st.remaining;if(day<=0)return {full:true,reserved:true};
-  const room=Math.min(day,caps.tokens),hold=budget.reserve(Math.min(room,RUN_ESTIMATE));
+  const room=caps.tokens,hold=budget.reserve(Math.min(day,room,RUN_ESTIMATE)); // room is the run's own cap, not a snapshot of the day: topUp grows the hold under the lock while the day has space
   return hold.allow?{hold,room,budget}:{full:true,reserved:true};
 }
 export const budgetFullMessage=got=>got.reserved?'Wait: other running turns hold the rest of the daily token budget. Try again when one finishes.':'Stopped: the daily token budget is used up. Raise it in Settings > Usage.';
-// Settles the hold with what the run spent, never past the room reserved or the day's ceiling: concurrent runs may overshoot their estimate but the day stays under its ceiling.
-export function recordSpend(state,now){const n=Math.min(spend(now)-spend(state?.base),state?.room??Infinity,(()=>{const s=state?.budget?.status()[0];return s?s.remaining+s.held:Infinity;})());state?.hold?.settle({inputTokens:Math.max(0,n),outputTokens:0});}
+// Settles the hold with what the run spent, never past the room reserved or this run's own hold plus the free room (other runs' holds are not spendable): concurrent runs may overshoot their estimate but the day stays under its ceiling.
+export function recordSpend(state,now){const n=Math.min(spend(now)-spend(state?.base),state?.room??Infinity,(()=>{const s=state?.budget?.status()[0];return s?s.remaining+state.hold.held:Infinity;})());state?.hold?.settle({inputTokens:Math.max(0,n),outputTokens:0});}
 const compact=n=>n>=1e6?`${+(n/1e6).toFixed(1)}M`:n>=1e3?`${+(n/1e3).toFixed(1)}K`:String(n);
 // Returns the stop message when the run delta is strictly over a cap, else null. Unknown cost is checked by tokens alone.
 // A run may spend only what it holds: past the hold it reserves another estimate (up to its room); a refusal stops it with the day's own message.
