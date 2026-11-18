@@ -5,6 +5,7 @@
 }
 .desktop-app body { isolation:isolate; }
 .desktop-app #app { background:transparent; }
+.desktop-app:not([data-chrome='glass']) .app-wallpaper { visibility:hidden; }
 .desktop-app .app-wallpaper { position:fixed; inset:0; z-index:0; width:100vw; height:100svh; pointer-events:none; }
 .desktop-app .app-wallpaper::after {
   content:''; position:absolute; inset:0; z-index:2; pointer-events:none;
@@ -27,7 +28,7 @@
 .desktop-app:not(.settings-open):not(.hide-chat-background) .workspace.thread-view[data-thread-background='atmosphere'] .thread-backdrop { background:#000; opacity:var(--background-dim,.35); }
 .desktop-app[data-theme='light']:not(.settings-open):not(.hide-chat-background) .workspace.thread-view[data-thread-background='atmosphere'] .thread-backdrop { background:#fff; }
 /* One continuous glass sheet for both the sidebar and the surrounding inset. */
-.desktop-app body::before {
+.desktop-app[data-chrome='glass'] body::before {
   content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
   background:var(--shared-chrome-fill);
   background-image:none;
@@ -60,12 +61,14 @@
   background:transparent; border-color:transparent; box-shadow:none;
   -webkit-backdrop-filter:none; backdrop-filter:none;
 }
-.desktop-app .workspace { z-index:2; margin:4px 4px 4px var(--sidebar-width); min-height:calc(100svh - 8px); }
-.desktop-app .workspace.thread-view:not(.background-none) { background:transparent; }
-.desktop-app .sidebar-collapsed .workspace { margin-left:4px; }
-.desktop-app .right-panel-open .workspace { margin-right:calc(var(--right-panel-width) + 4px); }
-.desktop-app.settings-open body.right-panel-open .workspace { margin-right:4px; }
-.desktop-app .workspace .home { min-height:calc(100svh - 8px); }
+.desktop-app .workspace { z-index:2; margin:var(--panel-margin) var(--panel-margin) var(--panel-margin) var(--sidebar-width); min-height:calc(100svh - 2 * var(--panel-margin)); background:var(--surface-thread); border-radius:var(--radius-panel); transition:margin var(--duration-layout) var(--ease-out); }
+.desktop-app .workspace.thread-view:not(.background-none) { background:var(--surface-thread); }
+.desktop-app .sidebar-collapsed .workspace { margin-left:var(--panel-margin); }
+/* One card: the open right pane continues the workspace; a single hairline divides them. */
+.desktop-app .right-panel-open .workspace { margin-right:var(--right-panel-width); border-top-right-radius:0; border-bottom-right-radius:0; }
+.desktop-app .right-panel-open .workspace::after { border-right-color:transparent; }
+.desktop-app.settings-open body.right-panel-open .workspace { margin-right:var(--panel-margin); border-radius:var(--radius-panel); }
+.desktop-app .workspace .home { min-height:calc(100svh - 2 * var(--panel-margin)); }
 .desktop-app .workspace.thread-view .home { min-height:0; }
 .desktop-app:has(.workspace.thread-view[data-thread-background='atmosphere']) .app-wallpaper,
 .desktop-app.settings-open .app-wallpaper { transform:scale(1.06); filter:blur(14px); }
@@ -97,7 +100,7 @@
 .desktop-app[data-window-chrome='windows'] .window-controls::after,
 .desktop-app[data-window-chrome='windows'] .window-control-edge { display:none; }
 /* Fade transcript content at the scroll viewport edges. */
-.desktop-app .thread-view .thread-transcript { inset-block-start:54px; scroll-padding-top:16px; mask-image:linear-gradient(transparent,black 18px,black calc(100% - 24px),transparent); }
+.desktop-app .thread-view .thread-transcript { inset-block-start:52px; scroll-padding-top:16px; mask-image:linear-gradient(transparent,black 18px,black calc(100% - 24px),transparent); }
 .desktop-app .thread-view .thread-messages { padding-top:16px; }
 .desktop-app[data-window-chrome='windows'] .window-controls { max-width:min(420px,calc(100vw - var(--sidebar-width) - 16px)); }
 .desktop-app :is(.window-controls,.caption-chat-tools-detached,.caption-chat-tools-macos) .thread-header {
@@ -147,12 +150,6 @@
   background-clip:border-box;
 }
 .desktop-app .caption-chat-tools-detached { transform:translateX(0); }
-.desktop-app .right-panel-tabs .panel-tab,
-.desktop-app .right-panel-tabs .panel-tab[data-active='true']:is(:hover,:focus-within) {
-  background:var(--shared-chrome-fill);
-  -webkit-backdrop-filter:var(--shared-chrome-filter);
-  backdrop-filter:var(--shared-chrome-filter);
-}
 
 /* Collapsed navigation remains readable over every wallpaper. */
 .sidebar-collapsed-tools { display:none; }

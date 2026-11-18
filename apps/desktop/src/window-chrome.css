@@ -1,9 +1,9 @@
 /* One header width accommodates the wordmark, toolbar and macOS captions. */
-.desktop-app { --sidebar-width:280px; }
-.desktop-app .sidebar { min-width:280px; }
+.desktop-app { --sidebar-width:240px; }
+.desktop-app .sidebar { min-width:224px; }
 
 .desktop-app[data-window-chrome^='macos'] { --window-controls-width:0px; }
-.desktop-app[data-window-chrome^='macos'] .sidebar-heading { padding-left:80px; }
+.desktop-app[data-window-chrome^='macos'] .sidebar-heading { padding-left:68px; }
 .desktop-app[data-window-chrome^='macos'] .sidebar-heading > .brand-wordmark { flex-shrink:0; }
 .desktop-app[data-window-chrome^='macos'] .sidebar-tools { flex-shrink:0; }
 .desktop-app[data-window-chrome^='macos'] .window-controls {
@@ -48,3 +48,84 @@
 .desktop-app[data-window-chrome^='macos'] .sidebar-collapsed .sidebar-reopen { left:96px; }
 .desktop-app[data-window-chrome^='macos'] .sidebar-collapsed .thread-header { left:124px; }
 .desktop-app[data-window-chrome^='macos'] .sidebar-collapsed .window-drag-region { left:132px; }
+
+/* Frame: chrome ground, one opaque panel, 44px pane headers, 28px header controls.
+   html.desktop-app outranks the earlier shared sheets without !important. */
+html.desktop-app {
+  --header-control-size: var(--control-height-sm);
+  --chrome-center-y: calc(var(--panel-margin) + var(--header-height-pane) / 2);
+  --workspace-tools-width: calc(var(--control-height-sm) * 2 + 2px);
+  --pane-pad: 8px;
+}
+html.desktop-app .sidebar { background: transparent; border: 0; padding: 0 var(--panel-margin) 16px; min-width: 0; }
+html.desktop-app[data-window-chrome^='macos'] .sidebar-heading { padding-top: 3px; }
+html.desktop-app .sidebar-heading { height: var(--header-height-pane); padding: 0 2px 0 var(--panel-margin); }
+html.desktop-app[data-window-chrome^='macos'] .sidebar-heading { padding-left: 68px; }
+html.desktop-app .sidebar-heading > .brand-wordmark { font-size: 13px; line-height: 20px; height: var(--control-height-sm); padding: 0 6px; border-radius: var(--radius-control); }
+html.desktop-app .sidebar-tools { gap: 0; }
+html.desktop-app[data-window-chrome^='macos'] .sidebar-heading > .brand-wordmark { padding: 0; }
+
+/* Header controls: 28 box, 14 icon, 6 radius, 100ms colour feedback, brightness press. */
+html.desktop-app :is(.sidebar-tools,.workspace-tools,.right-panel-header,.sidebar-collapsed-tools) .button {
+  width: var(--control-height-sm); height: var(--control-height-sm); min-width: var(--control-height-sm); min-height: var(--control-height-sm);
+  padding: 0; display: inline-grid; place-items: center; border-radius: var(--radius-control);
+  transition: background var(--duration-hover) ease, color var(--duration-hover) ease, filter var(--duration-hover) ease;
+}
+html.desktop-app :is(.sidebar-tools,.workspace-tools,.right-panel-header,.sidebar-collapsed-tools) .button .icon { width: var(--icon-size-sm); height: var(--icon-size-sm); }
+html.desktop-app :is(.sidebar-tools,.workspace-tools,.right-panel-header,.sidebar-collapsed-tools) .button:hover { background: var(--surface-hover); }
+html.desktop-app :is(.sidebar-tools,.workspace-tools,.right-panel-header,.sidebar-collapsed-tools) .button:active:not(:disabled) { transform: none; filter: brightness(.97); }
+html.desktop-app :is(.sidebar-tools,.workspace-tools,.right-panel-header,.sidebar-collapsed-tools) .button:is([data-selected='true'],[aria-pressed='true']) { background: var(--surface-hover); color: var(--text-strong); }
+html.desktop-app :is(.sidebar-tools,.workspace-tools,.right-panel-header,.sidebar-collapsed-tools) .button:disabled { opacity: .55; cursor: not-allowed; }
+html.desktop-app .sidebar-reopen { position: static; width: var(--control-height-sm); height: var(--control-height-sm); min-height: var(--control-height-sm); background: transparent; }
+html.desktop-app .sidebar-reopen > .icon { width: var(--icon-size-sm); height: var(--icon-size-sm); }
+
+/* Collapsed navigation sits in the sidebar header row, bare. */
+html.desktop-app .sidebar-collapsed .sidebar-collapsed-tools { top: calc(var(--header-height-pane) / 2 - var(--control-height-sm) / 2); left: var(--panel-margin); padding: 0; gap: 0; border-radius: 0; background: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; }
+html.desktop-app[data-window-chrome^='macos'] .sidebar-collapsed .sidebar-collapsed-tools,
+html.desktop-app[data-window-chrome='macos-native'] body.sidebar-collapsed .sidebar-collapsed-tools { padding-left: 68px; top: calc(3px + var(--header-height-pane) / 2 - var(--control-height-sm) / 2); }
+html.desktop-app .sidebar-collapsed .sidebar-collapsed-tools .button { width: var(--control-height-sm); height: var(--control-height-sm); min-width: var(--control-height-sm); min-height: var(--control-height-sm); padding: 0; }
+
+/* Sidebar collapse: slide + fade over 200ms instead of display:none. */
+html.desktop-app .sidebar { transition: transform var(--duration-layout) var(--ease-out), opacity var(--duration-layout) var(--ease-out), visibility var(--duration-layout); }
+html.desktop-app .sidebar-collapsed .sidebar { display: flex; transform: translateX(-100%); opacity: 0; visibility: hidden; pointer-events: none; }
+html.desktop-app .right-sidebar,html.desktop-app .right-panel-open .right-sidebar { transition: transform 220ms var(--ease-out), visibility 220ms; }
+
+/* Pane header: 44px strip inside the panel; title tab left, tools right. */
+html.desktop-app .caption-chat-tools:is(.caption-chat-tools-macos,.caption-chat-tools-detached) { 
+  position: fixed; top: var(--panel-margin); left: calc(var(--sidebar-width) + var(--pane-pad)); right: calc(var(--panel-margin) + var(--pane-pad));
+  height: var(--header-height-pane); max-width: none; padding: 0; margin: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none;
+  -webkit-backdrop-filter: none; backdrop-filter: none; justify-content: space-between; align-items: center; gap: 2px; pointer-events: none; z-index: 100;
+}
+html.desktop-app .caption-chat-tools > * { pointer-events: auto; }
+html.desktop-app .caption-chat-tools.caption-chat-tools-detached { right: calc(var(--right-panel-width) + var(--pane-pad)); transform: none; }
+html.desktop-app .sidebar-collapsed .caption-chat-tools:is(.caption-chat-tools-macos,.caption-chat-tools-detached) { left: calc(var(--panel-margin) + var(--pane-pad) + 160px); }
+html.desktop-app :is(.window-controls,.caption-chat-tools-detached,.caption-chat-tools-macos) .thread-header {
+  position: static; flex: 0 1 auto; min-width: 0; max-width: 360px; height: var(--control-height-sm); padding: 0 var(--space-2); margin: 0 auto 0 0;
+  border-radius: var(--radius-control); background: var(--surface-hover); color: var(--text-strong);
+  font-size: var(--text-sm); font-weight: var(--weight-medium); line-height: var(--control-height-sm); letter-spacing: -.01em;
+}
+html.desktop-app :is(.window-controls,.caption-chat-tools-detached,.caption-chat-tools-macos) .workspace-tools:not([hidden]) { gap: 2px; margin-left: auto; }
+html.desktop-app :is(.window-controls,.caption-chat-tools-detached,.caption-chat-tools-macos) .workspace-tool { width: var(--control-height-sm); height: var(--control-height-sm); min-width: var(--control-height-sm); min-height: var(--control-height-sm); padding: 0; border-radius: var(--radius-control); }
+html.desktop-app .workspace::before { display: none; }
+html.desktop-app .thread-view .thread-transcript { inset: var(--header-height-pane) 0 var(--panel-margin); }
+
+/* Right pane = the same card: hairline divider, 44px tab strip. */
+html.desktop-app .right-sidebar { inset: var(--panel-margin) var(--panel-margin) var(--panel-margin) auto; width: calc(var(--right-panel-width) - var(--panel-margin)); background: var(--surface-thread); border-radius: 0 var(--radius-panel) var(--radius-panel) 0; }
+html.desktop-app .right-sidebar::after { content: ''; position: absolute; inset: 0; border-radius: inherit; border: .5px solid var(--border-strong); border-left-color: var(--border); pointer-events: none; z-index: 6; }
+html.desktop-app .right-panel-header { top: 0; left: var(--pane-pad); right: var(--pane-pad); height: var(--header-height-pane); gap: 2px; }
+html.desktop-app .right-panel-tabs { gap: 2px; }
+html.desktop-app .right-panel-content { inset: var(--header-height-pane) 0 0; }
+html.desktop-app .right-panel-content[role='tabpanel'] { border: 0; border-top: .5px solid var(--border); border-radius: 0 0 var(--radius-panel) 0; background: transparent; }
+html.desktop-app .panel-tab { border-radius: var(--radius-control); height: var(--control-height-sm); }
+html.desktop-app .panel-tab[data-active='true'] { background: var(--surface-hover); outline: 0; color: var(--text); }
+html.desktop-app .right-panel-tabs .panel-tab:not([data-active='true']) { color: color-mix(in srgb, var(--text) 68%, transparent); }
+html.desktop-app .panel-tab:hover { background: var(--surface-hover); }
+html.desktop-app .right-panel-tabs .panel-tab-select { height: var(--control-height-sm); padding: 0 var(--space-2); gap: 6px; font-weight: var(--weight-medium); }
+html.desktop-app .panel-tab-icon,html.desktop-app .panel-tab .icon { width: var(--icon-size-sm); height: var(--icon-size-sm); flex-basis: var(--icon-size-sm); }
+/* Close: concentric (tab radius 6 - inset 4 = 2); always on the selected tab. */
+html.desktop-app .right-panel-tabs .panel-tab .panel-tab-close { border-radius: calc(var(--radius-control) - 4px); left: 4px; top: 4px; width: 20px; height: 20px; min-height: 20px; padding: 3px; }
+html.desktop-app .right-panel-tabs .panel-tab .panel-tab-close .icon { width: var(--icon-size-sm); height: var(--icon-size-sm); }
+html.desktop-app .right-panel-tabs .panel-tab[data-active='true'] .panel-tab-select { padding-right: 28px; }
+html.desktop-app .right-panel-tabs .panel-tab[data-active='true'] .panel-tab-close { left: auto; right: 4px; opacity: 1; pointer-events: auto; }
+
+html.desktop-app[data-window-chrome^='macos'] .window-controls { top: 0; width: 76px; height: var(--header-height-pane); padding: 0 8px; align-items: center; background: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: none; }

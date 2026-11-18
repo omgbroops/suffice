@@ -50,5 +50,5 @@ export function setupPanelResize({handle,panel:sidebar,property,key,side='left',
 }
 
 export function setupSidebarResize(){
-  setupPanelResize({handle:document.querySelector('.sidebar-resizer'),panel:document.querySelector('.sidebar'),property:'--sidebar-width',key:'suffice-sidebar-width',minimum:280,maximum:()=>Math.min(400,Math.max(280,innerWidth-480))});
+  setupPanelResize({handle:document.querySelector('.sidebar-resizer'),panel:document.querySelector('.sidebar'),property:'--sidebar-width',key:'suffice-sidebar-width',minimum:224,maximum:()=>Math.min(330,Math.max(224,innerWidth-480))});
 }
