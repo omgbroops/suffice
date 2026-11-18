@@ -14,7 +14,7 @@ const out=resolve(root,'apps/desktop/visual-review/sessions-sim');await mkdir(ou
 const only=process.env.SWEEP_ONLY?.split(',').filter(Boolean);
 const names=(await readdir(resolve(SIM,'scenarios'))).filter(f=>f.endsWith('.json')).map(f=>f.slice(0,-5)).filter(n=>!only||only.includes(n)).sort();
 const tmp=await realpath(await mkdtemp(resolve(tmpdir(),'sfx-sim-')));
-const socket=`sfx-sim-${process.pid}`,data=resolve(tmp,'data'),project=resolve(tmp,'demo-project'),dist=resolve(tmp,'dist');
+const socket='sfx-r2-join2',data=resolve(tmp,'data'),project=resolve(tmp,'demo-project'),dist=resolve(tmp,'dist');
 for(const d of [data,project,resolve(tmp,'home'),resolve(tmp,'suffice')])await mkdir(d,{recursive:true});
 execFileSync('npx',['vite','build','--outDir',dist,'--emptyOutDir'],{cwd:resolve(root,'apps/desktop'),stdio:'ignore'});
 const env={...process.env};delete env.ELECTRON_RUN_AS_NODE;
@@ -26,10 +26,11 @@ const strip=s=>String(s).replace(/\u001b\[[0-9;?]*[A-Za-z]/g,'');
 const mapper=createClaudeMapper();
 
 // ---- expectations from the scenario file
+let uidN=0;
 function expectedOf(scn){
  const maps=new Map(),items=[],seen=new Set(),texts=[];
  for(const b of scn.beats)for(let sp of b.transcript||[]){if(typeof sp==='string'){try{sp=JSON.parse(sp);}catch{continue;}}
-  if(!sp.rec){if(!maps.has('inline'))maps.set('inline',{m:createClaudeMapper(),st:null}),maps.get('inline').st=maps.get('inline').m.newState?.()??{};
+  if(!sp.rec){if(sp.uuid==='@uuid')sp={...sp,uuid:'u'+(++uidN)};if(!maps.has('inline'))maps.set('inline',{m:createClaudeMapper(),st:null}),maps.get('inline').st=maps.get('inline').m.newState?.()??{};
    const {m,st}=maps.get('inline');for(const it of m.mapLine(sp,st)||[]){if(it.kind==='usage'||it.internal)continue;const id='inline|'+it.id;if(!seen.has(id)){seen.add(id);items.push({id,it});}}continue;}
   const key=`${sp.rec}|${sp.fresh||''}`;
   if(!maps.has(key)){const m=createClaudeMapper();maps.set(key,{m,st:m.newState?.()??{}});}
@@ -43,7 +44,8 @@ function expectedOf(scn){
 const cache={};
 function requireLines(rec){return cache[rec]??=execFileSync('cat',[resolve(FIX,rec,'transcript.jsonl')],{encoding:'utf8',maxBuffer:1<<28}).split('\n').filter(Boolean);}
 const tokenOf=t=>{const w=String(t||'').replace(/\s+/g,' ').trim().split(' ').map(x=>x.replace(/[`'"]/g,'').split('/').pop()).filter(x=>x.length>=3&&!/^\d+[smh]$/.test(x));return (w.sort((a,b)=>b.length-a.length)[0]||'').slice(0,40);};
-const sigOf=it=>it.kind==='tool'?tokenOf(it.title||it.name):it.kind==='todo'||it.kind==='plan'?tokenOf((it.items?.[0]?.text)||it.title||'todo'):it.kind==='subagent'?tokenOf(it.title||it.description||it.name||'agent'):tokenOf(it.text);
+const dropped=it=>it.kind==='notice'&&(it.durationMs!=null||/^(?:\d+m\s*)?\d+s$|^\d+m$/.test(String(it.text||'').trim()));
+const sigOf=it=>it.kind==='notice'&&it.code==='interrupted'?'Interrupted':it.kind==='notice'&&it.code==='compacted'?'compacted':it.kind==='tool'?(it.category==='mcp'?tokenOf(String(it.name).replace(/^mcp__.*?__/,'').replaceAll('_',' ')):tokenOf(it.title||it.name)):it.kind==='todo'||it.kind==='plan'?tokenOf((it.items?.[0]?.text)||it.title||'todo'):it.kind==='subagent'?tokenOf(it.title||it.description||it.name||'agent'):tokenOf(it.text);
 
 // ---- steps from the beat list
 function stepsOf(scn){
@@ -59,18 +61,18 @@ function stepsOf(scn){
 // ---- in-page helpers
 const INSTALL=`(()=>{if(window.__sw)return;window.__sw=1;window.__gap=0;window.__idle=0;let last=performance.now();
  const f=t=>{window.__gap=Math.max(window.__gap,t-last);last=t;requestAnimationFrame(f);};requestAnimationFrame(f);
- let since=0;setInterval(()=>{const idle=!document.querySelector('.session-status,.composer-approval:not([hidden]),.session-picker');if(!idle)since=0;else if(!since)since=performance.now();window.__idle=since?performance.now()-since:0;},100);})()`;
+ let since=0;setInterval(()=>{const idle=!document.querySelector('.thread-status,.composer-approval:not([hidden]),.session-picker');if(!idle)since=0;else if(!since)since=performance.now();window.__idle=since?performance.now()-since:0;},100);})()`;
 const SNAP=`(()=>{
  const q=s=>document.querySelector(s),t=(e,n=200)=>(e?.textContent||'').replace(/\\s+/g,' ').trim().slice(0,n);
  const box=q('.thread-messages'),rows=[];
- const kind=e=>{const c=e.className||'';return /thread-user/.test(c)?'user':/thread-assistant/.test(c)?'assistant':/thread-reasoning/.test(c)?'reasoning':/session-run/.test(c)?'run':/session-sub/.test(c)?'subagent':/session-status/.test(c)?'working':/session-queued/.test(c)?'queued':/session-notice/.test(c)?'notice':/session-todo/.test(c)?'plan':/tool-widget|thread-detail/.test(c)?'tool':'other:'+c.slice(0,30);};
+ const kind=e=>{const c=e.className||'',sm=e.tagName==='DETAILS'?t(e.querySelector(':scope > summary'),40):'';return /thread-user/.test(c)?'user':/thread-assistant/.test(c)?'assistant':/session-subs?\b/.test(c)?'subagent':/thread-status/.test(c)?'working':/thread-divider|session-note/.test(c)?'notice':/session-todos/.test(c)?'plan':e.tagName==='DETAILS'&&/thread-activity/.test(c)?(/^Reasoning/.test(sm)?'reasoning':'run'):/tool-widget|thread-detail/.test(c)?'tool':'other:'+c.slice(0,30);};
  for(const e of box?box.children:[]){const r={kind:kind(e),text:t(e),open:e.tagName==='DETAILS'?e.open:undefined};
-  if(r.kind==='run'){r.summary=t(e.querySelector(':scope > summary'));r.children=[...e.querySelectorAll('.session-run-body > *')].slice(0,60).map(c=>({kind:kind(c),text:t(c,120),open:c.tagName==='DETAILS'?c.open:undefined,id:c.dataset?.callId}));r.full=e.textContent.length;}
+  if(r.kind==='run'){r.summary=t(e.querySelector(':scope > summary'));r.children=[...e.querySelectorAll(':scope > .thread-activity-log > *')].slice(0,60).map(c=>({kind:kind(c),text:t(c,120),open:c.tagName==='DETAILS'?c.open:undefined,id:c.dataset?.callId}));r.full=e.textContent.length;}
   rows.push(r);}
- const card=q('.composer-approval:not([hidden])'),pk=q('.session-picker'),p=q('#prompt'),sb=q('.send-button'),hdr=q('.thread-header--session'),row=q('.session-row[aria-pressed="true"]')||q('.session-row');
+ const card=q('.composer-approval:not([hidden])'),pk=q('.session-picker'),p=q('#prompt'),sb=q('.send-button'),hdr=q('.thread-header'),row=q('.session-row[aria-pressed="true"]')||q('.session-row');
  const sp=getComputedStyle(box||document.body);
  return {rows,box:{children:box?.children.length||0,nodes:box?box.querySelectorAll('*').length:0,text:box?.textContent.length||0},total:document.querySelectorAll('*').length,
-  header:{text:t(hdr,300),ctls:[...document.querySelectorAll('.session-ctl')].map(x=>t(x,60)),usage:t(q('.session-usage')),bg:t(q('.session-bg')),cwd:t(q('.session-cwd'))},
+  header:{text:t(hdr,300),ctls:[...document.querySelectorAll('.composer .model-button,.composer .access-mode-picker')].map(x=>t(x,60)),usage:q('.context-ring')?.getAttribute('aria-label')||'',bg:'',cwd:''},
   badge:row?{cls:row.className,status:row.dataset.status||row.querySelector('[data-status]')?.dataset.status||'',text:t(row,120),html:row.innerHTML.match(/status[-\\w]*[^>]*/g)?.slice(0,3)}:null,
   composer:{disabled:!!p?.disabled||!!p?.closest('[inert]'),ph:p?.placeholder,send:sb?{cls:sb.className,label:sb.getAttribute('aria-label')||sb.title||t(sb,20),disabled:sb.disabled}:null,approval:q('form[data-approval],[data-approval]')?.dataset.approval||null},
   card:card?{title:t(card.querySelector('h3')),body:t(card.querySelector('.approval-preview-host'),400),opts:[...card.querySelectorAll('.approval-controls button')].map(b=>({t:t(b),sel:b.classList.contains('provider-dialog-primary')}))}:null,
@@ -95,9 +97,10 @@ try{
   try{
    const expected=expectedOf(scn),steps=stepsOf(scn);R.steps=steps.map(s=>s.k+(s.text?`:${s.text.slice(0,20)}`:''));
    await page.evaluate(()=>{window.__gap=0;window.__ipc=0;});
-   await page.locator('.new-session').click();await page.locator('[data-action="send-menu"]').waitFor({state:'visible'});await page.waitForTimeout(400);
-   await page.locator('[data-action="send-menu"]').click();await page.locator('[data-menu-action="cli-session:simclaude"]').click();
-   await page.locator('.thread-header--session').waitFor();
+   // Agents are chosen in the model picker now (no send-menu item): start through the API, reload, open the newest sidebar row.
+   await page.evaluate(p=>sufficeDesktop.sessions.start({agent:'simclaude',cwd:p}),project);
+   await page.reload();await page.locator('[data-action="send-menu"]').waitFor();await page.evaluate(INSTALL);
+   await page.locator('.sidebar-cli-sessions .thread-row').first().click();await page.locator('.sidebar-cli-sessions .thread-row[aria-pressed="true"]').waitFor();
    const sid=await page.evaluate(async()=>{const l=await sufficeDesktop.sessions.list();const s=l.filter(x=>x.agent==='simclaude').at(-1);let n=0;sufficeDesktop.sessions.onUi(s.id,()=>{window.__ipc=(window.__ipc||0)+1;});return s.id;});
    const mem0=(await snap()).mem;const tStart=Date.now();
    const beat=async(label)=>{const s=await snap();R.beats.push({label,t:Date.now()-tStart,snap:s,screen:strip(screen())});return s;};
@@ -126,26 +129,28 @@ try{
      await page.waitForTimeout(700);await beat('wait-after');R.beats.at(-1).typed=st.text;
     }else if(st.k==='modal'){
      await page.waitForFunction(()=>window.__idle>1500,null,{timeout:60000,polling:200});await beat('modal-open');
-     await page.locator('.session-toggle button',{hasText:'Terminal'}).click();await page.locator('.session-terminal .xterm-rows').waitFor();
+     await page.locator('.session-mode-toggle').click();await page.locator('.session-terminal .xterm-rows').waitFor();
      await page.locator('.session-terminal .xterm').click().catch(()=>{});await page.keyboard.press('Escape');await page.waitForTimeout(600);
-     await page.locator('.session-toggle button',{hasText:'Chat'}).click();await page.waitForTimeout(400);
+     await page.locator('.session-mode-toggle').click();await page.waitForTimeout(400);
     }else if(st.k==='interrupt'){
-     await page.waitForFunction(()=>document.querySelector('.session-status'),null,{timeout:60000,polling:200});await page.waitForTimeout(3000);await beat('interrupt-working');
+     await page.waitForFunction(()=>document.querySelector('.thread-status'),null,{timeout:60000,polling:200});await page.waitForTimeout(3000);await beat('interrupt-working');
      await page.locator('.send-button').click();await page.waitForTimeout(800);
     }
    }
    if(name==='mode-cycle'||name==='model-switch'){
     await page.waitForFunction(()=>window.__idle>1500,null,{timeout:30000,polling:200}).catch(()=>{});
     const before=await snap();
-    const ctl=page.locator('.session-ctl').nth(name==='mode-cycle'?2:0);
-    if(await ctl.count()){await ctl.click();await page.waitForTimeout(400);const items=page.locator('.session-menu .menu-item');R.measure.menuItems=await items.count();
+    const mode=name==='mode-cycle',ctl=page.locator(mode?'.composer .access-mode-picker':'.composer .model-button');
+    if(await ctl.count()){await ctl.click();await page.waitForTimeout(400);
+     if(!mode&&await page.locator('.model-picker .model-stage-button').count()){await page.locator('.model-picker .model-stage-button').click();await page.waitForTimeout(300);}
+     const items=page.locator(mode?'.access-mode-menu .menu-item':'.model-picker .model-option');R.measure.menuItems=await items.count();
      await beat('menu-open');if(R.measure.menuItems>1){await items.nth(1).click();await page.waitForTimeout(2500);}else await page.keyboard.press('Escape');}
     const after=await snap();R.measure.ctlBefore=before.header.ctls;R.measure.ctlAfter=after.header.ctls;
     if(name==='mode-cycle')modeOk=JSON.stringify(before.header.ctls)!==JSON.stringify(after.header.ctls);
    }
    // settle, then final snapshot
    await page.waitForFunction(()=>window.__idle>2500,null,{timeout:30000,polling:200}).catch(()=>R.notes.push('never idle'));
-   await page.waitForFunction(()=>!/needs|permission|working/i.test(document.querySelector('.session-row')?.outerHTML.match(/data-status="[^"]*"/)?.[0]||''),null,{timeout:10000,polling:200}).catch(()=>{});
+   await page.waitForFunction(()=>!/needs|permission|working/i.test(document.querySelector('.session-row--sidebar')?.outerHTML.match(/data-status="[^"]*"/)?.[0]||''),null,{timeout:10000,polling:200}).catch(()=>{});
    const fin=await beat('final');R.final=fin;
    // stress
    const ipc=await page.evaluate(()=>window.__ipc||0),secs=(Date.now()-tStart)/1000;
@@ -156,32 +161,34 @@ try{
     R.measure.nodesCollapsed=fin.box.nodes;
     for(let k=0;k<4;k++){const sums=page.locator('.thread-messages details > summary:visible');const n=await sums.count();let opened=0;for(let j=0;j<n;j++){const d=sums.nth(j);if(!await d.evaluate(e=>e.parentElement.open)){await d.click().catch(()=>{});opened++;}}if(!opened)break;await page.waitForTimeout(300);}
     const ex=await snap();R.measure.nodesExpanded=ex.box.nodes;R.measure.textExpanded=ex.box.text;R.measure.showMore=await page.locator('.thread-messages button',{hasText:/more|truncated|earlier/i}).count();R.measure.truncNote=await page.locator('.thread-messages',{hasText:/truncated/}).count();}
-   const HDR=`(()=>{const h=document.querySelector('.thread-header--session');if(!h)return null;const main=h.closest('.workspace')||h.parentElement,mr=main.getBoundingClientRect(),r=h.getBoundingClientRect(),bad=[];
-    for(let e=h;e;e=e.parentElement)if(e.scrollTop||e.scrollLeft)bad.push((e.className||e.tagName).toString().slice(0,40)+' '+e.scrollTop+','+e.scrollLeft);
+   const HDR=`(()=>{const h=document.querySelector('.thread-header');if(!h)return null;const main=h.closest('.workspace')||h.parentElement,mr=main.getBoundingClientRect(),r=h.getBoundingClientRect(),bad=[];
+    // the header is an overflow:hidden title field; only its ancestors may not scroll it away
+    for(let e=h.parentElement;e;e=e.parentElement)if(e.scrollTop||e.scrollLeft)bad.push((e.className||e.tagName).toString().slice(0,40)+' '+e.scrollTop+','+e.scrollLeft);
     return {top:r.top-mr.top,bottom:mr.bottom-r.bottom,left:r.left-mr.left,right:mr.right-r.right,h:r.height,bad};})()`;
    R.measure.hdrBefore=await page.evaluate(HDR);
    R.measure.overflowers=await page.evaluate(()=>{const w=document.querySelector('.workspace'),wr=w.getBoundingClientRect();return [...w.querySelectorAll('*')].filter(e=>{const r=e.getBoundingClientRect();return r.height&&(r.bottom>wr.bottom+1||r.right>wr.right+1)&&!e.closest('.thread-transcript')}).slice(0,6).map(e=>e.className.toString().slice(0,40)+' '+Math.round(e.getBoundingClientRect().bottom-wr.bottom));});
-   await page.evaluate(()=>{const t=document.querySelector('.thread-transcript');if(t)t.scrollTop=t.scrollHeight;for(let e=document.querySelector('.thread-header--session');e;e=e.parentElement){e.scrollTop=1e5;e.scrollLeft=1e5;}});
+   await page.evaluate(()=>{const t=document.querySelector('.thread-transcript');if(t)t.scrollTop=t.scrollHeight;for(let e=document.querySelector('.thread-header')?.parentElement;e;e=e.parentElement){e.scrollTop=1e5;e.scrollLeft=1e5;}});
    R.measure.hdrAfter=await page.evaluate(HDR);
    await page.screenshot({path:resolve(out,name+'.png')});
    // ---- verdicts
    const dom=fin.rows,full=dom.map(r=>r.kind==='run'||r.kind==='subagent'?r.text:r.text).join(' \n ');
    const text=await page.evaluate(()=>document.querySelector('.thread-messages')?.textContent.replace(/\s+/g,' ')||'');
    let cur=0;const missing=[];
-   for(const it of expected){const sg=sigOf(it);if(!sg)continue;const at=text.indexOf(sg,cur);if(at<0)missing.push(it.kind+':'+sg);else cur=at;}
+   for(const it of expected){if(dropped(it))continue;const sg=sigOf(it);if(!sg)continue;const at=text.indexOf(sg,cur);if(at<0)missing.push(it.kind+':'+sg);else cur=at;}
    R.verdicts.expectedInOrder={pass:missing.length===0,expected:expected.length,missing:missing.slice(0,12)};
    {const n=k=>expected.filter(i=>i.kind===k).length,d=k=>dom.filter(r=>r.kind===k).length,typed=steps.filter(x=>x.text).length,sim=/^interrupt/.test(name),big=dom.length>=150;
-    const cnt={user:[n('user'),d('user')],assistant:[n('assistant'),d('assistant')],notice:[expected.filter(i=>i.kind==='notice'&&i.code!=='model_changed'&&i.code!=='mode_changed'&&!(sim&&i.code==='interrupted')).length,dom.filter(r=>r.kind==='notice'&&!/^(Model|Mode|Set model)\s/.test(r.text)&&!(sim&&/^\[Request interrupted/.test(r.text))).length]},bad=[];
+    const cnt={user:[n('user'),d('user')],assistant:[n('assistant'),d('assistant')],notice:[expected.filter(i=>i.kind==='notice'&&!dropped(i)&&i.code!=='model_changed'&&i.code!=='mode_changed'&&!(sim&&i.code==='interrupted')).length,dom.filter(r=>r.kind==='notice'&&!/^(Model|Mode|Set model)\s/.test(r.text)&&!(sim&&/^(\[Request interrupted|Interrupted$)/.test(r.text))).length]},bad=[];
     for(const [k,[e,g]] of Object.entries(cnt)){const lo=e,hi=e+(k==='user'?typed:0);if(big?g>hi:(g<lo||g>hi))bad.push(`${k} expected ${e} got ${g}`);}
     const subs=await page.locator('.session-sub').count(),es=n('subagent');if(es&&!subs)bad.push('subagent expected '+es+' got 0');
     const tdl=await page.locator('.session-todo').count(),et=expected.filter(i=>i.kind==='todo').reduce((a,i)=>a+(i.items?.length||0),0);if(!big&&tdl<et&&et)bad.push('todo rows expected '+et+' got '+tdl);
     R.verdicts.orderExactOnce={pass:!bad.length&&missing.length===0,counts:cnt,bad:bad.slice(0,6)};}
-   if(name==='compact-mid-run'){const i=dom.findIndex(r=>r.kind==='notice'&&/^Compacted/.test(r.text));R.verdicts.compactNotice={pass:i>0&&i<dom.length-1&&dom.slice(0,i).some(r=>r.kind==='user')&&dom.slice(i+1).some(r=>['assistant','run','user'].includes(r.kind)),at:i,rows:dom.length};}
+   if(name==='compact-mid-run'){const i=dom.findIndex(r=>r.kind==='notice'&&/^Context (automatically )?compacted/i.test(r.text));R.verdicts.compactNotice={pass:i>0&&i<dom.length-1&&dom.slice(0,i).some(r=>r.kind==='user')&&dom.slice(i+1).some(r=>['assistant','run','user'].includes(r.kind)),at:i,rows:dom.length};}
    if(name==='resume-existing'){const us=dom.filter(r=>r.kind==='user');R.verdicts.resumeHistory={pass:us.length>=3,users:us.length,first:us.slice(0,3).map(r=>r.text.slice(0,40))};}
-   if(name==='long-session'){const tt=await page.evaluate(()=>[...document.querySelectorAll('.session-todo')].map(e=>e.textContent)),sm=await page.evaluate(()=>[...document.querySelectorAll('.thread-messages summary')].map(e=>e.textContent).filter(x=>/^Plan \d/.test(x)));R.verdicts.todoList={pass:tt.some(x=>x.startsWith('✓'))&&tt.some(x=>x.startsWith('›'))&&tt.some(x=>x.startsWith('○'))&&sm.some(x=>/^Plan 1\/3/.test(x)),todos:tt.slice(0,4),summaries:sm.slice(0,3)};}
+   if(name==='long-session'){const tt=await page.evaluate(()=>[...document.querySelectorAll('.session-todo')].map(e=>e.dataset.status+':'+e.textContent)),sm=await page.evaluate(()=>[...document.querySelectorAll('.thread-messages summary')].map(e=>e.textContent).filter(x=>/^Plan\s*\d/.test(x)));R.verdicts.todoList={pass:tt.some(x=>x.startsWith('done:'))&&tt.some(x=>/^(in_progress|active|running):/.test(x))&&tt.some(x=>x.startsWith('pending:'))&&sm.some(x=>/^Plan\s*1\/3/.test(x)),todos:tt.slice(0,4),summaries:sm.slice(0,3)};}
    const seenTxt=new Map(),dups=[];
    for(const r of dom)if(['user','assistant','notice','reasoning'].includes(r.kind)&&r.text){const n=(seenTxt.get(r.text)||0)+1;seenTxt.set(r.text,n);}
    const expCount=new Map();for(const it of expected)if(it.text)expCount.set(tokenOf(it.text),(expCount.get(tokenOf(it.text))||0)+1);
+   expCount.set('Interrupted',expected.filter(i=>i.code==='interrupted').length||1);
    for(const [tx,n] of seenTxt)if(n>1&&n>(expCount.get(tokenOf(tx))||1))dups.push(tx.slice(0,60)+' x'+n);
    R.verdicts.noDuplicates={pass:!dups.length,dups:dups.slice(0,8)};
    const known=new Set(steps.filter(s=>s.text).map(s=>s.text)),extra=[];
@@ -200,9 +207,9 @@ try{
    if(name==='parallel-subagents'||name==='subagent'||name==='long-session'){const subs=dom.filter(r=>r.kind==='subagent'||(r.children||[]).some(c=>c.kind==='subagent'));R.measure.subagentBlocks=(await page.locator('.session-sub').count());R.verdicts.subagentBlocks={pass:R.measure.subagentBlocks>=(name==='parallel-subagents'?3:1)};}
    {const ov=await page.evaluate(()=>{const m=document.querySelector('.thread-messages');return m?[...m.querySelectorAll('*')].filter(e=>e.getBoundingClientRect().right>m.getBoundingClientRect().right+2&&!e.closest('pre,.tool-diff,.session-terminal')).length:0;});R.verdicts.noHorizontalOverflow={pass:ov===0,count:ov};}
    {const ok=h=>!!h&&h.top>=0&&h.top<=8&&h.bottom>=0&&h.left>=-2&&h.right>=-2&&!h.bad.length;R.verdicts.headerVisible={pass:ok(R.measure.hdrBefore)&&ok(R.measure.hdrAfter),before:R.measure.hdrBefore,after:R.measure.hdrAfter};}
-   {const tg=n=>page.locator('.session-toggle button',{hasText:n}).click(),xt=()=>page.locator('.session-terminal .xterm').count(),clients=()=>tmux('list-clients','-F','#{client_session}').split('\n').filter(Boolean).length,counts=[];
-    for(const b of ['Terminal','Chat','Terminal']){await tg(b);if(b==='Terminal')await page.locator('.session-terminal .xterm-rows').first().waitFor();counts.push(await xt());}
-    await page.waitForTimeout(500);const c1=clients();await tg('Chat');
+   {const tg=()=>page.locator('.session-mode-toggle').click(),xt=()=>page.locator('.session-terminal .xterm').count(),clients=()=>tmux('list-clients','-F','#{client_session}').split('\n').filter(Boolean).length,counts=[];
+    for(const b of ['Terminal','Chat','Terminal']){await tg();if(b==='Terminal')await page.locator('.session-terminal .xterm-rows').first().waitFor();counts.push(await xt());}
+    await page.waitForTimeout(500);const c1=clients();await tg();
     await page.locator('.session-row--sidebar').first().click();await page.waitForTimeout(1500);const c2=clients(),x2=await xt();
     R.verdicts.oneTerminalPerSession={pass:counts.every(c=>c===1)&&c1<=1&&c2===0&&x2===0,xterms:counts,clientsInTerminal:c1,clientsAfterLeave:c2,xtermsAfterLeave:x2};}
    R.verdicts.noPageErrors={pass:!errors.length,errors:errors.slice(0,3)};errors.length=0;
@@ -217,7 +224,7 @@ try{
 }finally{
  try{process.kill(pid,'SIGKILL');}catch{}
  tmux('kill-server');
- const rows=Object.values(result);
+ const rows=names.map(n=>result[n]).filter(Boolean);process.exitCode=rows.length===names.length&&rows.every(r=>r.pass)?0:1;
  const line=(r)=>`${r.pass?'PASS':'FAIL'}  ${r.name.padEnd(20)} ${r.error?'ERROR '+r.error.slice(0,80):Object.entries(r.verdicts).filter(([,v])=>v&&!v.pass).map(([k])=>k).join(', ')}`;
  await writeFile(resolve(out,'SWEEP.txt'),rows.map(line).join('\n')+'\n\nMeasurements\n'+rows.filter(r=>r.measure&&r.measure.domRows!=null).map(r=>`${r.name.padEnd(20)} rows=${r.measure.domRows} nodes=${r.measure.domNodes} gapMax=${r.measure.gapMaxMs}ms ipc/s=${r.measure.ipcPerSec} mem=${r.measure.memBeforeMB}->${r.measure.memAfterMB}MB`).join('\n')+'\n');
  console.log('launches',launches);

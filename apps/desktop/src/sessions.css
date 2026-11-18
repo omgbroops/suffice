@@ -9,3 +9,8 @@
 body:has(.session-row) .sidebar-empty { display: none; }
 .popover.session-import .session-import-row { align-items: flex-start; justify-content: flex-start; text-align: left; }
 .session-import-row > span { align-self: flex-start; text-align: left; }
+/* Session row line 3: provider mark + agent name, same layout as a thread's branch chip. */
+.thread-agent { flex: 1; min-width: 0; display: flex; align-items: center; gap: 5px; }
+.thread-agent > span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Terminal mode: the transcript must not show through the terminal layer. */
+.workspace:has(.session-terminal[data-solid]) .thread-messages { visibility: hidden; }

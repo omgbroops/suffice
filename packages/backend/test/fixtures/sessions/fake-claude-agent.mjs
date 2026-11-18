@@ -19,7 +19,11 @@ const dialog=()=>console.log(` Bash command
 
  Esc to cancel`);
 await sleep(300);
-line({type:'user',message:{content:'Clean the build output and fix the greeting.'}});
+// FAKE_CLAUDE_TYPED_FIRST=1: the first typed line (up to 2 s) becomes the first user prompt, like a real session started with a message.
+let firstPrompt='Clean the build output and fix the greeting.';
+if(process.env.FAKE_CLAUDE_TYPED_FIRST==='1'){if(process.stdin.isTTY)process.stdin.setRawMode(true);
+ firstPrompt=await new Promise(r=>{let b='';const h=d=>{b+=String(d);const m=/^([^\r\n]+)[\r\n]/.exec(b);if(m){process.stdin.off('data',h);clearTimeout(tm);r(m[1]);}};const tm=setTimeout(()=>{process.stdin.off('data',h);r(firstPrompt);},2000);process.stdin.on('data',h);});}
+line({type:'user',message:{content:firstPrompt}});
 asst([{type:'thinking',thinking:'Check what is in the build folder first, then fix the greeting and list the work.'}]);
 use('t1','Bash',{command:'ls build && echo done',description:'List build'});
 res('t1','a.o\nb.o\nmain.o\ndone',{stdout:'a.o\nb.o\nmain.o\ndone\n',stderr:''});

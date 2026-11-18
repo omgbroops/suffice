@@ -9,7 +9,7 @@ import {guard} from './electron-guard.mjs';
 const REAL=process.env.SUFFICE_REAL_CLAUDE==='1';
 const output=resolve('apps/desktop/visual-review/sessions-ui');await mkdir(output,{recursive:true});
 const tmp=await realpath(await mkdtemp(resolve(tmpdir(),'sfx-sessions-ui-')));
-const socket=`sfx-cap-${process.pid}`;
+const socket=process.env.SUFFICE_SESSIONS_SOCKET||`sfx-cap-${process.pid}`;
 const home=resolve(tmp,'home'),project=resolve(tmp,'demo-project'),data=resolve(tmp,'data'),suffice=resolve(tmp,'suffice');
 for(const d of [project,data,suffice])await mkdir(d,{recursive:true});
 const j=(...rows)=>rows.map(r=>JSON.stringify(r)).join('\n')+'\n';
@@ -43,7 +43,10 @@ let page;const appPid=app.process().pid;try{
  await page.locator('[data-action="send-menu"]').waitFor();
  await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].setBounds({width:1440,height:900}));
  await page.waitForFunction(()=>innerWidth===1440&&innerHeight===900);
- const shot=n=>page.screenshot({path:resolve(output,n)});
+// the model/mode controls live in the standard composer; a missing one fails the run instead of skipping the step
+   const need=sel=>{const l=page.locator(sel);return {click:async()=>{if(!await l.count())throw new Error('composer control missing: '+sel);await l.first().click();}};};
+ // capturePage reads the compositor directly; page.screenshot waits for a frame the hidden window may not produce (12 s timeouts at ctl-stop)
+const shot=async n=>{const b64=await app.evaluate(async({BrowserWindow})=>(await BrowserWindow.getAllWindows()[0].webContents.capturePage()).toPNG().toString('base64'));await writeFile(resolve(output,n),Buffer.from(b64,'base64'));};
  if(!REAL){
  // (d) start menu
  await page.locator('[data-action="send-menu"]').click();await page.waitForTimeout(300);
@@ -52,39 +55,37 @@ let page;const appPid=app.process().pid;try{
  await page.locator('.session-import-row').first().waitFor();await page.waitForTimeout(350);
  await shot('import.png');          // (e)
  await page.keyboard.press('Escape');await page.waitForTimeout(300);
- await page.locator('[data-action="send-menu"]').click();await page.waitForTimeout(250);
- await page.locator('[data-menu-action="cli-session:fake"]').click();
+ const cwd=await app.evaluate(()=>process.env.SUFFICE_START_PROJECT);await page.evaluate(([a,p])=>sufficeDesktop.sessions.start({agent:a,cwd:p}),['fake',cwd]);await page.reload();await page.locator('[data-action="send-menu"]').waitFor();await page.locator('.sidebar-cli-sessions .thread-row').first().click();
  await page.locator('.session-row').first().waitFor();
- await page.locator('.thread-header--session').waitFor();
+ await page.locator('.thread-header').waitFor();
  await page.locator('#prompt').fill('hello');await page.locator('#prompt').press('Enter');
  await page.locator('.thread-message',{hasText:'ECHO:hello'}).waitFor({timeout:15000});
  await page.waitForTimeout(900);
  await shot('chat.png');            // (a)+(b) sidebar row with state and Chat view
- await page.locator('.session-toggle button',{hasText:'Terminal'}).click();
+ await page.locator('.session-mode-toggle').click();
  await page.locator('.session-terminal .xterm-rows').waitFor({timeout:15000});
  await page.waitForFunction(()=>document.querySelector('.session-terminal .xterm-rows')?.textContent.includes('ECHO:hello'),null,{timeout:15000});
  await page.waitForTimeout(300);
  await shot('terminal.png');        // (c)
   // fake Claude: rich chat
   await page.locator('.new-session').click();await page.locator('[data-action="send-menu"]').waitFor({state:'visible'});await page.waitForTimeout(400);
-  await page.locator('[data-action="send-menu"]').click();await page.waitForTimeout(250);
-  await page.locator('[data-menu-action="cli-session:fakeclaude"]').click();
+  const cwd=await app.evaluate(()=>process.env.SUFFICE_START_PROJECT);await page.evaluate(([a,p])=>sufficeDesktop.sessions.start({agent:a,cwd:p}),['fakeclaude',cwd]);await page.reload();await page.locator('[data-action="send-menu"]').waitFor();await page.locator('.sidebar-cli-sessions .thread-row').first().click();
   await page.locator('.composer-approval:not([hidden])').waitFor({timeout:20000});await page.waitForTimeout(600);
   await shot('chat-prompt.png');
-  await page.locator('.session-status').waitFor({timeout:5000});await shot('chat-working.png');
+  await page.locator('.thread-status').waitFor({timeout:5000});await shot('chat-working.png');
   await page.locator('.composer-approval button',{hasText:/^\s*(1\.\s*)?Yes\s*$/}).first().click();await page.waitForTimeout(300);if(await page.locator('dialog.detail-dialog[open]').count())throw new Error('detail dialog opened after Yes');
-  await page.waitForFunction(()=>!document.querySelector('.session-status')&&document.querySelector('.session-run')?.dataset.running==='false',null,{timeout:15000});await page.waitForTimeout(500);
+  await page.waitForFunction(()=>!document.querySelector('.thread-status')&&document.querySelector('.thread-activity[data-running]')?.dataset.running==='false',null,{timeout:15000});await page.waitForTimeout(500);
   await shot('chat-summary-collapsed.png');
-  {const r=page.locator('.session-run:has(.tool-diff)').first();if(!await r.evaluate(e=>e.open)){await r.locator('> summary').click();await page.waitForTimeout(400);}}
+  {const r=page.locator('.thread-activity:has(.tool-diff)').first();if(!await r.evaluate(e=>e.open)){await r.locator('> summary').click();await page.waitForTimeout(400);}}
   await shot('chat-summary-open.png');
   // subagent blocks: a2 running, a1 done with a nested child
   const subs=page.locator('.session-sub'),scrollTo=l=>l.evaluate(e=>e.scrollIntoView({block:'center'}));
   if(await subs.count()!==2)throw new Error('expected 2 subagent blocks, got '+await subs.count());
-  const runText=await page.locator('.session-run:has(.session-sub) > summary').first().textContent();if(!/ran 1 subagent.*running 1 subagent/.test(runText))throw new Error('run summary: '+runText);
+  const runText=await page.locator('.thread-activity:has(.session-sub) > summary').first().textContent();if(!/and 1 more/.test(runText))throw new Error('run summary: '+runText);
   await scrollTo(subs.nth(1));await page.waitForTimeout(200);await shot('subagent-running.png');
   await scrollTo(subs.nth(0));await page.waitForTimeout(200);await shot('subagent-done-collapsed.png');
   await subs.nth(0).locator('> summary').click();await page.waitForTimeout(400);await scrollTo(subs.nth(0));await shot('subagent-open.png');
-  await subs.nth(0).locator('.session-run:has(.session-sub)').first().locator('> summary').click();await page.waitForTimeout(300);
+  await subs.nth(0).locator('.thread-activity:has(.session-sub)').first().locator('> summary').click();await page.waitForTimeout(300);
   await subs.nth(0).locator('.session-sub').first().locator('> summary').click();await page.waitForTimeout(400);await scrollTo(subs.nth(0).locator('.session-sub').first());await shot('subagent-nested.png');
   await page.locator('.tool-widget:has(.tool-diff) summary').first().click().catch(()=>{});
   await page.waitForTimeout(400);
@@ -99,16 +100,17 @@ let page;const appPid=app.process().pid;try{
    const type=async t=>{await page.evaluate(([i,t])=>sufficeDesktop.sessions.send(i,t),[sid,t]);await page.waitForTimeout(1800);};
    const reset=async()=>{await page.keyboard.press('Escape');await type('/clear');await page.mouse.click(720,450);await page.waitForTimeout(300);};
    await type('/clear');
-   await page.locator('.session-ctl').first().click();await page.waitForTimeout(350);await shot('ctl-model-picker.png');await page.keyboard.press('Escape');await page.waitForTimeout(200);
+   await page.locator('.composer .model-button').click();await page.waitForTimeout(350);await shot('ctl-model-picker.png');await page.keyboard.press('Escape');await page.waitForTimeout(200);
    // the header picker must end session-only, never a saved default
    {const r=await page.evaluate(([i])=>sufficeDesktop.sessions.control(i,'setModel',{id:'sonnet'}),[sid]);
     if(!/for this session only/.test(r?.confirmation||'')||/saved as your default/.test(r?.confirmation||'')||r.savesDefault)throw new Error('model switch not session-only: '+JSON.stringify(r));console.log('model-ctl session-only: '+r.confirmation.trim());
     await page.waitForTimeout(500);await shot('ctl-model-session-only.png');}
-   await page.locator('.session-ctl').nth(2).click();await page.waitForTimeout(350);await shot('ctl-mode.png');await page.keyboard.press('Escape');await page.waitForTimeout(200);
+   await page.locator('.access-mode-picker').click();await page.waitForTimeout(350);await shot('ctl-mode.png');await page.keyboard.press('Escape');await page.waitForTimeout(200);
    await page.locator('#prompt').click();await page.keyboard.type('/co');await page.waitForTimeout(400);await shot('ctl-slash.png');await page.keyboard.press('Escape');await page.locator('#prompt').fill('');
    await type('/model');await shot('ctl-native-picker.png');await reset();
    await type('/queue');await shot('ctl-queued.png');await reset();
-   await type('/bg');await page.waitForSelector('.session-bg',{timeout:8000});await page.locator('.session-bg').click();await page.waitForTimeout(350);await shot('ctl-background.png');await page.keyboard.press('Escape');await reset();
+   await type('/bg');// The background chip leaves the header here (composer-controls track re-homes it), so assert the session meta the chip reads.
+   await page.waitForFunction(i=>{const b=sufficeDesktop.sessions.ui(i)?.meta?.backgroundTasks;return (typeof b==='number'?b:Number(b?.count)||0)>0;},sid,{timeout:8000});await shot('ctl-background.png');await reset();
    await type('/plan');await shot('ctl-plan-approval.png');
    const rowState=()=>page.evaluate(()=>{const r=document.querySelector('.session-row[aria-pressed="true"]');const t=r?.querySelector('.thread-state');return t?[t.getAttribute('data-status'),t.getAttribute('aria-label'),t.className,t.textContent.trim()].join('|'):'none';});
    console.log('badge12 prompt-open',await rowState());
@@ -127,7 +129,7 @@ let page;const appPid=app.process().pid;try{
    if(extra)jobs.push(new Promise(r=>setTimeout(async()=>{await w.webContents.executeJavaScript(extra.js);r();},extra.at*SLOW)));
    await Promise.all(jobs);return out.sort((a,b)=>a[0]-b[0]);},{clickJs,times,SLOW,extra});
   const save=async(rows,prefix)=>{const log=[];for(const [i,r] of rows.entries()){await writeFile(resolve(output,`${prefix}-${i}.png`),Buffer.from(r[1],'base64'));log.push({frame:i,at:r[0],actualMs:r[2]});}return log;};
-  const T="document.querySelector('.session-toggle button:last-child').click()",C="document.querySelector('.session-toggle button:first-child').click()";
+  const T="document.querySelector('.session-mode-toggle').click()",C="document.querySelector('.session-mode-toggle').click()";
   const frames={};
   frames.spread=await save(await grab(T,[0,60,120,200,300,420,520]),'spread');
   await page.waitForTimeout(600*SLOW);
@@ -139,9 +141,8 @@ let page;const appPid=app.process().pid;try{
   await writeFile(resolve(output,'venom-timing.json'),JSON.stringify({slow:SLOW,frames},null,1));
   await page.evaluate(()=>{window.__motionSlow=1;});
  }else{
-  await page.locator('[data-action="send-menu"]').click();await page.waitForTimeout(250);
-  await page.locator('[data-menu-action="cli-session:claude"]').click();
-  await page.locator('.thread-header--session').waitFor();
+  const cwd=await app.evaluate(()=>process.env.SUFFICE_START_PROJECT);await page.evaluate(([a,p])=>sufficeDesktop.sessions.start({agent:a,cwd:p}),['claude',cwd]);await page.reload();await page.locator('[data-action="send-menu"]').waitFor();await page.locator('.sidebar-cli-sessions .thread-row').first().click();
+  await page.locator('.thread-header').waitFor();
   const sid=await page.evaluate(async()=>(await sufficeDesktop.sessions.list())[0].id);
   const U=()=>page.evaluate(id=>{const u=sufficeDesktop.sessions.ui(id);return {prompt:u?.prompt?.title||null,model:u?.meta?.model||null,mode:u?.meta?.mode||null,status:!!u?.status,kinds:(u?.items||[]).map(i=>i.kind+(i.category?':'+i.category:'')+(i.id&&i.kind==='notice'?':'+i.text:''))};},sid);
   const log=[],fail=[];const t0=Date.now();
@@ -151,8 +152,8 @@ let page;const appPid=app.process().pid;try{
     await page.evaluate(([id,i])=>sufficeDesktop.sessions.control(id,'answerPrompt',{index:i}),[sid,o.index]);await page.waitForTimeout(2500);continue;}
    if(u.model)break;await page.waitForTimeout(1000);}
   const waitMeta=async(k,re)=>{try{await page.waitForFunction(([id,k,re])=>new RegExp(re,'i').test(sufficeDesktop.sessions.ui(id)?.meta?.[k]||''),[sid,k,re],{timeout:20000});return true;}catch{return false;}};
-  const pick=async(idx,re)=>{await page.locator('.session-ctl').nth(idx).click();await page.waitForTimeout(400);await page.locator('.popover .menu-item',{hasText:re}).first().click();};
-  const mask=[page.locator('.session-title')];
+  const pick=async(idx,re)=>{if(idx===0){await page.locator('.composer .model-button').click();await page.waitForTimeout(300);await page.locator('.model-picker .model-stage-button').click();await page.waitForTimeout(300);await page.locator('.model-picker .model-option',{hasText:re}).first().click();}else{await page.locator('.access-mode-picker').click();await page.waitForTimeout(400);await page.locator('.popover .menu-item',{hasText:re}).first().click();}};
+  const mask=[page.locator('.thread-header')];
   log.push('start '+JSON.stringify(await U()));
   // (d) model first (item 7)
   await pick(0,/sonnet/i);const a1=await waitMeta('model','sonnet');log.push('a sonnet '+a1);await page.waitForTimeout(600);await shot('real-ctl-model.png');await shot('real-ctl-model-session-only.png');
@@ -164,7 +165,7 @@ let page;const appPid=app.process().pid;try{
   try{
   // (b) mode
   const m0=(await U()).mode;log.push('mode0 '+m0);
-  const ci=await page.locator('.session-ctl').count()-1;
+  const ci=1;
   await pick(ci,/plan/i);const b1=await waitMeta('mode','plan');log.push('b plan '+b1);await page.waitForTimeout(600);await shot('real-ctl-mode.png');
   await pick(ci,new RegExp(m0&&!/plan/i.test(m0)?m0.replace(/[^a-z]/gi,'.'):'manual','i'));const b2=await waitMeta('mode',m0&&!/plan/i.test(m0)?m0.replace(/[^a-z]/gi,'.'):'manual|default');log.push('b back '+b2);if(!b1||!b2)log.push('SOFT mode failed');
   // (c) interrupt
@@ -172,7 +173,7 @@ let page;const appPid=app.process().pid;try{
   const t1=Date.now();
   for(let i=0;i<60;i++){const u=await U();if(u.prompt){const pr=await page.evaluate(id=>sufficeDesktop.sessions.ui(id).prompt,sid);const o=pr.options.find(x=>/^yes/i.test(x.label))||pr.options[0];log.push('c prompt:'+pr.title);await page.evaluate(([id,i])=>sufficeDesktop.sessions.control(id,'answerPrompt',{index:i}),[sid,o.index]);break;}if(Date.now()-t1>3000)break;await page.waitForTimeout(500);}
   await page.waitForTimeout(300);
-  const wasWorking=await page.evaluate(()=>document.querySelector('.session-run')?.dataset.running==='true'||!!document.querySelector('.session-status'));log.push('c working '+wasWorking);
+  const wasWorking=await page.evaluate(()=>document.querySelector('.thread-activity')?.dataset.running==='true'||!!document.querySelector('.thread-status'));log.push('c working '+wasWorking);
   await page.locator('.send-button').click();
   let intr=false;try{await page.waitForFunction(id=>(sufficeDesktop.sessions.ui(id)?.items||[]).some(i=>i.kind==='notice'&&/interrupted/i.test(i.text||'')),sid,{timeout:15000});intr=true;}catch{}
   log.push('c interrupted '+intr);if(!intr)log.push('SOFT interrupt failed');
@@ -186,7 +187,7 @@ let page;const appPid=app.process().pid;try{
  await writeFile(resolve(output,'verification.json'),JSON.stringify({viewport:{width:1440,height:900},pageErrors:errors},null,2));
  if(errors.length)throw new Error(errors.join('\n'));
  console.log(JSON.stringify({ready:true,output}));
-}catch(e){try{await page.screenshot({path:'/private/tmp/claude-501/-Users-abhayg--claude/88968a81-d5d8-4bde-b35e-a21bdddc9620/scratchpad/fail.png'});}catch{}try{console.error('DBG',JSON.stringify(await page.evaluate(async()=>({u:await Promise.all((await sufficeDesktop.sessions.list()).map(async x=>[x.id,(u=>JSON.stringify({m:u?.meta,p:u?.prompt,s:u?.status,n:u?.items?.length}))(sufficeDesktop.sessions.ui(x.id))])),h:document.querySelector('.thread-header--session')?.outerHTML.slice(0,100),ss:document.querySelectorAll('.session-status').length,last:[...document.querySelectorAll('.thread-messages')].map(b=>b.children.length+':'+b.lastElementChild?.className),term:!!document.querySelector('.session-terminal:not([hidden])'),t:document.querySelector('.session-terminal')?.innerHTML.slice(0,200),r:document.querySelector('.session-terminal .xterm-rows')?.textContent.slice(0,300)}))));}catch{}console.error('FAIL',e.message.slice(0,1500));process.exitCode=1;}finally{
+}catch(e){try{await page.screenshot({path:'/private/tmp/claude-501/-Users-abhayg--claude/88968a81-d5d8-4bde-b35e-a21bdddc9620/scratchpad/fail.png'});}catch{}try{console.error('DBG',JSON.stringify(await page.evaluate(async()=>({u:await Promise.all((await sufficeDesktop.sessions.list()).map(async x=>[x.id,(u=>JSON.stringify({m:u?.meta,p:u?.prompt,s:u?.status,n:u?.items?.length}))(sufficeDesktop.sessions.ui(x.id))])),h:document.querySelector('.thread-header')?.outerHTML.slice(0,100),ss:document.querySelectorAll('.session-status').length,last:[...document.querySelectorAll('.thread-messages')].map(b=>b.children.length+':'+b.lastElementChild?.className),term:!!document.querySelector('.session-terminal:not([hidden])'),t:document.querySelector('.session-terminal')?.innerHTML.slice(0,200),r:document.querySelector('.session-terminal .xterm-rows')?.textContent.slice(0,300)}))));}catch{}console.error('FAIL',e.message.slice(0,1500));process.exitCode=1;}finally{
  if(REAL&&settings0&&!await settingsSame()){console.error('LOUD: settings.json default keys CHANGED during the real run; restoring them');process.exitCode=1;
   try{const o=JSON.parse(await readFile(settingsPath,'utf8'));for(const k of SKEYS){if(settings0[k]===undefined)delete o[k];else o[k]=settings0[k];}await writeFile(settingsPath,JSON.stringify(o,null,2)+'\n');}catch(e){console.error('LOUD: restore failed',e.message);}}
  await Promise.race([app.close(),new Promise(r=>setTimeout(r,5000))]).catch(()=>{});

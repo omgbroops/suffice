@@ -30,7 +30,9 @@ function diffCounts(d) {
   return null;
 }
 
-export function summarizeTools(items) {
+// working=false (session idle/done/stopped): a leftover 'running' item reads as past tense. Activity clauses cap at MAX, then 'and N more'; failures always show.
+const MAX = 3;
+export function summarizeTools(items, { working = true } = {}) {
   const parts = new Map(); // category -> { part, done, running }
   let failed = 0, denied = 0, running = 0;
   for (const it of items || []) {
@@ -40,7 +42,7 @@ export function summarizeTools(items) {
     let e = parts.get(key);
     if (!e) parts.set(key, (e = { part: { category: key, count: 0 }, done: 0, running: 0 }));
     e.part.count++;
-    if (it.status === 'running') { e.running++; running++; } else e.done++;
+    if (it.status === 'running' && working) { e.running++; running++; } else e.done++;
     if (it.status === 'error') failed++;
     if (it.status === 'denied') denied++;
     if (key === 'edit') for (const d of it.output?.diff || []) {
@@ -61,6 +63,7 @@ export function summarizeTools(items) {
     }
     if (run) out.push(phrase(now, run, one, many));
   }
+  if (out.length > MAX) out.splice(MAX, out.length, `and ${out.length - MAX} more`);
   if (failed) out.push(`${failed} failed`);
   if (denied) out.push(`${denied} denied`);
   let text = out.join(', ');
