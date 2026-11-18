@@ -109,6 +109,8 @@ if(primary)app.whenReady().then(async()=>{
    if(!files.length)throw new Error('No text changes to review');
    return request('review',{cwd:project,prompt:reviewPrompt(files),paths:files.map(file=>file.path),model:payload.model,provider:payload.provider,effort:payload.effort});
   });
+  const prReview=require('./pr-review.cjs').createPrReview();
+  handle('pr-review',()=>prReview.load(project));
   handle('clipboard-files',()=>clipboardFiles(clipboard));
   const threadLocations=new Map();
   const automations=(await import('./automations.mjs')).createAutomations({home:settingsHome,projectPaths:async()=>(await projects.list()).map(item=>item.path),onChange:()=>{if(win&&!win.isDestroyed())win.webContents.send('suffice:event',{event:'automations_changed'});},run:async item=>{const prefs={...await settings.get()},result=await background.run({prompt:item.prompt,displayPrompt:item.prompt,attachmentMetadata:[],images:[],clientId:'automation-'+item.id+'-'+Date.now(),effort:item.effort,model:item.model,provider:item.provider,cwd:item.project,desktopSettings:prefs});if(result?.threadId)threadLocations.set(result.threadId,item.project);if(win&&!win.isDestroyed())win.webContents.send('suffice:event',{event:'history_changed'});return result;}});
