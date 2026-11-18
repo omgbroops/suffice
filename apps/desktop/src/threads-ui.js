@@ -177,6 +177,16 @@ export function connectThreads({api,prompt,send,toast}){
   }catch{}
  }
  function forkOrigin(thread){const parent=thread.parent&&savedThreads.find(t=>t.id===thread.parent);if(!parent)return;const note=document.createElement('div');note.className='thread-fork-origin';const link=document.createElement('button');link.type='button';link.className='thread-fork-origin-link';link.innerHTML=icon('branch');const label=document.createElement('span');label.textContent='Forked from '+(metadata(parent.id).title||parent.title);link.append(label);link.addEventListener('click',()=>document.dispatchEvent(new CustomEvent('suffice-open-thread',{detail:{id:parent.id}})));note.append(link);history.prepend(note);}
+ // Edit-and-resend branches the saved thread just before its last user turn, then puts that text in the composer. The original thread is untouched. shortcut: attachments are not carried into the branch, upgrade if edits need them.
+ document.addEventListener('suffice-edit-last',async event=>{
+  const id=activeId,text=event.detail?.text;if(!id||busy||!text)return;
+  if(!/^[a-f0-9]{32}$/.test(id)){toast('Wait for this thread to save before editing');return;}
+  try{
+   const fork=await api.forkThread(id,{before:'last-user'});if(fork===null||activeId!==id)return;
+   if(!fork.id)clear();else{await refresh();const branch=savedThreads.find(thread=>thread.id===fork.id);if(!branch)throw new Error('Could not open the edited branch');await openSavedThread(branch);}
+   prompt.value=text;prompt.dispatchEvent(new Event('input',{bubbles:true}));prompt.focus();prompt.setSelectionRange(text.length,text.length);toast('Editing in a new branch. Press Enter to resend.');
+  }catch(error){toast(error.message);}
+ });
  async function openSavedThread(thread){
   if(!thread)return;const version=++openRevision;saveView();sessionStorage.setItem('suffice-active-thread',thread.id);if(!jobs.has(thread.id))recovering.set(thread.id,[]);
   const entering=!workspace.classList.contains('thread-view');
