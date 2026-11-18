@@ -31,6 +31,7 @@ contextBridge.exposeInMainWorld('sufficeDesktop',{
   settingsAction:action=>ipcRenderer.invoke('suffice:settings-action',action),
   onClearCache:callback=>{ipcRenderer.on('suffice:clear-cache',callback);return()=>ipcRenderer.removeListener('suffice:clear-cache',callback);},
   onNotification:callback=>{const listener=(_e,value)=>callback(value);ipcRenderer.on('suffice:notification',listener);return()=>ipcRenderer.removeListener('suffice:notification',listener);},
+  onOpenThread:callback=>{const listener=(_e,id)=>callback(id);ipcRenderer.on('suffice:open-thread',listener);return()=>ipcRenderer.removeListener('suffice:open-thread',listener);},
   preferences:()=>ipcRenderer.invoke('suffice:preferences'),
   onProviderAuth:callback=>{const listener=(_event,value)=>callback(value);ipcRenderer.on('suffice:provider-auth',listener);return()=>ipcRenderer.removeListener('suffice:provider-auth',listener);},
   terminalCreate:payload=>ipcRenderer.invoke('suffice:terminal-create',payload),
