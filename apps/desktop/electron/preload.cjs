@@ -56,6 +56,8 @@ contextBridge.exposeInMainWorld('sufficeDesktop',{
   initialProject:()=>ipcRenderer.invoke('suffice:initial-project'),
   chooseProject:()=>ipcRenderer.invoke('suffice:project'),
   branches:()=>ipcRenderer.invoke('suffice:branches'),
+  threadWorktree:id=>ipcRenderer.invoke('suffice:thread-worktree',id),
+  threadWorktreeAction:payload=>ipcRenderer.invoke('suffice:thread-worktree-action',payload),
   selectBranch:payload=>ipcRenderer.invoke('suffice:select-branch',payload),
   projects:()=>ipcRenderer.invoke('suffice:projects'),
   selectProject:(id,options)=>ipcRenderer.invoke('suffice:select-project',id,options),
