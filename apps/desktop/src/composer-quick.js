@@ -16,13 +16,14 @@ const COMMANDS=[
 ];
 const label=value=>String(value).charAt(0).toUpperCase()+String(value).slice(1);
 export function connectComposerQuick({form,prompt,api,toast}){
- const pop=document.createElement('div');pop.className='popover slash-menu composer-suggest';pop.hidden=true;document.body.append(pop);const menu=createMenu(pop);
+ const pop=document.createElement('div');pop.className='popover slash-menu composer-suggest';pop.hidden=true;const menu=createMenu(pop);
  let rows=[],index=0,dismissed=null,files={at:0,pending:null};
  const open=()=>rows.length>0&&pop.dataset.open==='true';
  function close(){if(!rows.length)return;rows=[];menu.close();}
  function mark(next){index=next;[...pop.querySelectorAll('.menu-item')].forEach((button,i)=>{button.toggleAttribute('data-active',i===next);button.setAttribute('aria-selected',String(i===next));if(i===next){button.scrollIntoView({block:'nearest'});prompt.setAttribute('aria-activedescendant',button.id||(button.id='quick-option-'+i));}});}
  function show(list,heading){
   if(!list.length){close();return;}
+  if(!pop.isConnected)document.body.append(pop);// attached on first use so the session composer's own .slash-menu stays unique
   rows=list;form.setAttribute('aria-expanded','false');// menu.open() toggles closed when its trigger already reads expanded
   menu.open(form,list.map((row,i)=>({label:row.label,icon:row.icon,action:'quick:'+i,separator:row.separator})),heading);
   pop.setAttribute('role','listbox');pop.querySelectorAll('.menu-item').forEach((button,i)=>{button.setAttribute('role','option');if(rows[i].detail){const detail=document.createElement('span');detail.className='slash-detail';detail.textContent=rows[i].detail;button.append(detail);}});
@@ -63,6 +64,7 @@ export function connectComposerQuick({form,prompt,api,toast}){
   return {heading:'Files and threads',rows:[...found,...threads]};
  }
  async function update(){
+  if(form.dataset.session!==undefined){close();return;}// live CLI sessions have their own slash menu (sessions-controls)
   const value=prompt.value;
   if(dismissed===value){return;}dismissed=null;
   const slash=slashRows(value);
