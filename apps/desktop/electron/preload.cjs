@@ -49,6 +49,7 @@ contextBridge.exposeInMainWorld('sufficeDesktop',{
   file:name=>ipcRenderer.invoke('suffice:file',name),
   changes:()=>ipcRenderer.invoke('suffice:changes'),
   diff:name=>ipcRenderer.invoke('suffice:diff',name),
+  review:payload=>ipcRenderer.invoke('suffice:review',payload),
   status:()=>ipcRenderer.invoke('suffice:status'),
   models:options=>ipcRenderer.invoke('suffice:models',options),
   forkThread:id=>ipcRenderer.invoke('suffice:fork-thread',id),

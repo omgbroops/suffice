@@ -87,6 +87,14 @@ if(primary)app.whenReady().then(async()=>{
   handle('file-open-in',payload=>fileOpeners.open(threadLocations.get(payload?.threadId)||project,payload?.path,payload?.application));
   handle('changes',()=>workspaceFiles.changes(project));
   handle('diff',name=>workspaceFiles.diff(project,name));
+  handle('review',async payload=>{
+   if(!project)throw new Error('Choose a project first');if(typeof payload?.model!=='string'||typeof payload?.provider!=='string')throw new Error('Pick a model first');
+   const {reviewPrompt}=await import('./review.mjs'),changed=await workspaceFiles.changes(project),entries=changed.entries.filter(entry=>!entry.binary).slice(0,40);
+   if(!entries.length)throw new Error('No changes to review');
+   const files=[];for(const entry of entries){try{const result=await workspaceFiles.diff(project,entry.path);if(!result.binary&&result.text){const lines=result.text.replace(/\n$/,'').split('\n');files.push({path:entry.path,text:result.untracked?`@@ -0,0 +1,${lines.length} @@\n`+lines.map(line=>'+'+line).join('\n'):result.text});}}catch{}}
+   if(!files.length)throw new Error('No text changes to review');
+   return request('review',{cwd:project,prompt:reviewPrompt(files),paths:files.map(file=>file.path),model:payload.model,provider:payload.provider,effort:payload.effort});
+  });
   handle('clipboard-files',()=>clipboardFiles(clipboard));
   const threadLocations=new Map();
   terminals=require('./terminals.cjs').createTerminalManager({resolveCwd:async id=>(await settings.get())['working-directory']==='Home directory'?require('node:os').homedir():threadLocations.get(id),resolveShell:async()=>{const prefs=await settings.get();if(process.platform==='win32'&&prefs['terminal-shell']==='PowerShell')return path.join(process.env.SystemRoot,'System32/WindowsPowerShell/v1.0/powershell.exe');if(prefs['terminal-shell']==='System default')return process.platform==='win32'?process.env.ComSpec:process.env.SHELL||'/bin/bash';return (await import('../../../packages/cli/src/shell.mjs')).nativeShellPath()||process.env.SHELL||'/bin/bash';},emit:event=>{if(win&&!win.isDestroyed())win.webContents.send('suffice:terminal-event',event);}});
