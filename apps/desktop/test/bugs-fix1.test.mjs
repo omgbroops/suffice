@@ -162,7 +162,7 @@ test('45: session context menu is the shared opaque popover',async()=>{
  const m=await menu.evaluate(n=>{const it=[...n.querySelectorAll('.menu-item')];const r=it.map(i=>i.getBoundingClientRect());return {labels:it.map(i=>i.textContent.trim()),header:[...n.querySelectorAll('.popover-heading')].filter(h=>getComputedStyle(h).display!=='none').map(h=>h.textContent.trim()),gaps:r.slice(1).map((b,i)=>Math.round(b.top-r[i].bottom)),heights:r.map(b=>Math.round(b.height))};});
  console.log('45s',JSON.stringify(m));
  assert.deepEqual(m.header,[],'no visible Session header');
- assert.deepEqual(m.labels,['Copy attach command','Copy title','Show terminal','Stop session']);assert.ok(m.heights.every(h=>h===m.heights[0]),'uniform item height '+m.heights);assert.equal(new Set(m.gaps.slice(0,-1)).size,1,'uneven gaps between items '+m.gaps);
+ assert.deepEqual(m.labels,['Show terminalO','Copy attach commandC','Copy titleT','Stop sessionS']);assert.ok(m.heights.every(h=>h===m.heights[0]),'uniform item height '+m.heights);assert.ok(m.gaps.every(g=>g===4||g===13),'gaps are item gap 4 or separator gap 13 '+m.gaps);
  assert.equal(alpha(s.bg),1,'menu background '+s.bg);assert.ok(['none',''].includes(s.filter),'no backdrop blur: '+s.filter);
  await shot('45-session-menu.png');await page.keyboard.press('Escape');
 });

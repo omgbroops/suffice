@@ -32,6 +32,9 @@ import {connectContextInspector} from './context-inspector.js';
 import {deriveFollowups,renderFollowups,clearFollowups} from './followups.js';
 import {connectThreadWorktree} from './thread-worktree.js';
 
+const DATE_LABELS=['Today','Yesterday','Last 7 days','Last 30 days','Older'];
+const dayStart=t=>{const d=new Date(t);d.setHours(0,0,0,0);return d.getTime();};
+export function dateLabel(ms,now=Date.now()){const days=Math.round((dayStart(now)-dayStart(ms))/864e5);return days<=0?'Today':days===1?'Yesterday':days<8?'Last 7 days':days<31?'Last 30 days':'Older';}
 export function connectThreads({api,prompt,send,toast}){
  connectExtensionUI(api,toast);const approvals=connectApprovals(api,toast);
  const workspace=document.querySelector('.workspace'),form=document.querySelector('.composer');
@@ -141,7 +144,8 @@ export function connectThreads({api,prompt,send,toast}){
  sidebarPreferences.subscribe(drawThreads);
  connectThreadHover(list);
  setInterval(()=>tickThreadTimes(list),1000);
- viewState.subscribe(event=>{if(event.type==='update'&&event.changed?.some(key=>['draft','sidebar'].includes(key)))drawThreads();});
+ let batching=false;const batch=fn=>{batching=true;try{fn();}finally{batching=false;drawThreads();}};
+ viewState.subscribe(event=>{if(!batching&&event.type==='update'&&event.changed?.some(key=>['draft','sidebar'].includes(key)))drawThreads();});
  const metadata=id=>viewState.read(id).sidebar||{};
  const updateMetadata=(id,patch)=>viewState.updateFor(id,{sidebar:{...metadata(id),...patch}});
  // The caption stays the same node so window chrome can move it between layouts.
@@ -157,7 +161,19 @@ export function connectThreads({api,prompt,send,toast}){
  const projectManagement=connectProjectManagement(list,{api,toast,archiveProject:async folder=>{for(const thread of [...savedThreads,...optimisticThreads.values()])if(sameProject(thread.cwd,folder)&&!jobs.get(thread.id)?.running){updateMetadata(thread.id,{archived:true});if(activeId===thread.id)clear();}},removedProject:async folder=>{if(sameProject(savedThreads.find(t=>t.id===activeId)?.cwd,folder))clear();await refresh();},movedThread:async id=>{if(activeId===id)clear();jobs.delete(id);savedHistories.delete(id);await refresh();}});
  document.addEventListener('suffice-projects-updated',()=>void refresh().catch(error=>toast(error.message)));
  window.addEventListener('focus',markViewed);document.addEventListener('visibilitychange',markViewed);new MutationObserver(markViewed).observe(document.documentElement,{attributes:true,attributeFilter:['class']});
- connectThreadContextMenu(list,{projectManagement,isGrouped:()=>sidebarPreferences.get().group==='project',getThread:id=>{const thread=[...optimisticThreads.values(),...savedThreads].find(t=>t.id===id);return thread?{...thread,title:metadata(id).title||thread.title,running:!!jobs.get(id)?.running}:null;},metadata,update:updateMetadata,onArchive:id=>{if(activeId===id)clear();},onDelete:async id=>{await api.deleteThread(id);if(activeId===id)clear();savedThreads=savedThreads.filter(thread=>thread.id!==id);optimisticThreads.delete(id);savedHistories.delete(id);jobs.delete(id);viewState.remove(id);drawThreads();document.dispatchEvent(new CustomEvent('suffice-thread-deleted',{detail:{id}}));},toast});
+ const known=()=>[...optimisticThreads.values(),...savedThreads.filter(t=>!optimisticThreads.has(t.id))];
+ const sectionNames=()=>[...new Set(known().map(t=>metadata(t.id).section).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+ const nestTargets=id=>{const below=t=>{for(let u=metadata(t.id).under,n=0;u&&n<20;u=metadata(u).under,n++)if(u===id)return true;return false;};return known().filter(t=>t.id!==id&&!metadata(t.id).archived&&!below(t)).sort((a,b)=>b.modified-a.modified).slice(0,15).map(t=>({id:t.id,title:metadata(t.id).title||t.title}));};
+ // Drag a row within its group to reorder it (switches Sort to Manual) or onto a section header to move it there.
+ let dragId=null;const clearDrop=()=>list.querySelectorAll('.dragging,.drop-before,.drop-after,.drop-into').forEach(n=>n.classList.remove('dragging','drop-before','drop-after','drop-into'));
+ const dragRow=()=>dragId&&list.querySelector(`.thread-row[data-thread="${CSS.escape(dragId)}"]`);
+ list.addEventListener('dragstart',e=>{const row=e.target.closest?.('.thread-row[data-thread]');if(!row||String(row.dataset.thread).startsWith('session-')){return;}dragId=row.dataset.thread;e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',dragId);row.classList.add('dragging');});
+ list.addEventListener('dragend',()=>{dragId=null;clearDrop();});
+ list.addEventListener('dragover',e=>{if(!dragId)return;const row=e.target.closest('.thread-row[data-thread]'),head=e.target.closest('.thread-group-toggle[data-kind="section"]'),mine=dragRow();clearDrop();mine?.classList.add('dragging');if(row&&mine&&row!==mine&&row.parentElement===mine.parentElement){e.preventDefault();const r=row.getBoundingClientRect();row.classList.add(e.clientY>r.top+r.height/2?'drop-after':'drop-before');}else if(head){e.preventDefault();head.classList.add('drop-into');}});
+ list.addEventListener('drop',e=>{if(!dragId)return;const id=dragId,row=e.target.closest('.thread-row[data-thread]'),head=e.target.closest('.thread-group-toggle[data-kind="section"]'),mine=dragRow();const after=row?.classList.contains('drop-after');dragId=null;clearDrop();
+  if(row&&mine&&row!==mine&&row.parentElement===mine.parentElement){e.preventDefault();const ids=[...mine.parentElement.children].filter(n=>n.matches?.('.thread-row[data-thread]')).map(n=>n.dataset.thread).filter(x=>x!==id);ids.splice(ids.indexOf(row.dataset.thread)+(after?1:0),0,id);batch(()=>{ids.forEach((x,i)=>updateMetadata(x,{rank:i}));if(sidebarPreferences.get().sort!=='manual')sidebarPreferences.choose('sort=manual');});}
+  else if(head){e.preventDefault();updateMetadata(id,{section:head.dataset.groupLabel});}});
+ connectThreadContextMenu(list,{sections:sectionNames,nestTargets,openFolder:cwd=>api.openProjectFolder(cwd),projectManagement,isGrouped:()=>sidebarPreferences.get().group==='project',getThread:id=>{const thread=[...optimisticThreads.values(),...savedThreads].find(t=>t.id===id);return thread?{...thread,title:metadata(id).title||thread.title,running:!!jobs.get(id)?.running}:null;},metadata,update:updateMetadata,onArchive:id=>{if(activeId===id)clear();},onDelete:async id=>{await api.deleteThread(id);if(activeId===id)clear();savedThreads=savedThreads.filter(thread=>thread.id!==id);optimisticThreads.delete(id);savedHistories.delete(id);jobs.delete(id);viewState.remove(id);drawThreads();document.dispatchEvent(new CustomEvent('suffice-thread-deleted',{detail:{id}}));},toast});
  function addOptimistic(id,title,project=document.querySelector('.project-picker')?.textContent.trim()||'Project'){
   optimisticThreads.set(id,{id,title:shortTitle(title),project,modified:Date.now()});drawThreads();
  }
@@ -228,29 +244,45 @@ export function connectThreads({api,prompt,send,toast}){
   const unread=thread=>!!metadata(thread.id).unread;
   const status=thread=>{const job=jobs.get(thread.id);return job?(job.running?(job.approvalRequests.size?'approval':'working'):job.failed?'failed':'done'):thread.status;};
   updateThreadDirectory(all.map(thread=>{const job=jobs.get(thread.id);return {...thread,status:status(thread),unread:unread(thread),archived:!!metadata(thread.id).archived,canRetry:!!job?.text&&!job.running,...(job?{provider:job.provider||thread.provider,startedAt:job.startedAt,turnDiff:job.turnDiff,...(job.diff?{diff:job.diff}:{})}: {})};}),openSavedThread);
-  const threads=all.filter(thread=>prefs.filter==='archived'?metadata(thread.id).archived:!metadata(thread.id).archived&&(prefs.filter==='all'||prefs.filter==='working'&&status(thread)==='working'||prefs.filter==='attention'&&['approval','input','failed'].includes(status(thread))||prefs.filter==='unread'&&unread(thread)||prefs.filter==='draft'&&!!viewState.read(thread.id).draft)).sort((a,b)=>Number(!!b.projectPinned)-Number(!!a.projectPinned)||Number(!!metadata(b.id).pinned)-Number(!!metadata(a.id).pinned)||(prefs.sort==='name'?a.title.localeCompare(b.title):b.modified-a.modified));
+  const rank=t=>metadata(t.id).rank??1e9;
+  const sorted=all.filter(thread=>prefs.filter==='archived'?metadata(thread.id).archived:!metadata(thread.id).archived&&(prefs.filter==='all'||prefs.filter==='working'&&status(thread)==='working'||prefs.filter==='attention'&&['approval','input','failed'].includes(status(thread))||prefs.filter==='unread'&&unread(thread)||prefs.filter==='draft'&&!!viewState.read(thread.id).draft)).sort((a,b)=>Number(!!b.projectPinned)-Number(!!a.projectPinned)||Number(!!metadata(b.id).pinned)-Number(!!metadata(a.id).pinned)||(prefs.sort==='manual'?rank(a)-rank(b)||b.modified-a.modified:prefs.sort==='name'?a.title.localeCompare(b.title):b.modified-a.modified));
+  // "Move under" nests a thread beneath another visible one: children follow their parent, in the parent's group.
+  const byId=new Map(sorted.map(t=>[t.id,t])),parentOf=t=>{const u=metadata(t.id).under;return u&&u!==t.id?byId.get(u):undefined;};
+  const kids=new Map(),roots=[];for(const t of sorted){const p=parentOf(t);if(p){if(!kids.has(p.id))kids.set(p.id,[]);kids.get(p.id).push(t);}else roots.push(t);}
+  const threads=[],depthOf=new Map(),rootOf=new Map(),seen=new Set();
+  const walk=(t,depth,root)=>{if(seen.has(t.id))return;seen.add(t.id);threads.push(t);depthOf.set(t.id,Math.min(depth,3));rootOf.set(t.id,root);for(const k of kids.get(t.id)||[])walk(k,depth+1,root);};
+  for(const t of roots)walk(t,0,t);for(const t of sorted)walk(t,0,t);// a nesting cycle has no root: show its members flat
   sectionLabel.textContent=prefs.group==='project'?'Threads':prefs.filter==='all'?'Threads':({working:'Running',attention:'Needs attention',unread:'Unread',draft:'Drafts',archived:'Archived'})[prefs.filter];
   list.dataset.compact=String(prefs.compact);list.dataset.group=prefs.group;
-  for(const field of ['branch','provider','diff'])list.dataset[field]=String(prefs[field]);
   list.replaceChildren();
   const groups=new Map();
+  const groupOf=root=>{
+   const name=metadata(root.id).section;if(name)return {key:'section:'+name,kind:'section',label:name,weight:0};
+   if(prefs.group==='project'){const key=root.cwd||root.project||'__none';return {key,kind:'project',label:root.project||'No project',weight:3};}
+   if(prefs.group==='date'){if(metadata(root.id).pinned)return {key:'date:Pinned',kind:'date',label:'Pinned',weight:1};const label=dateLabel(root.modified);return {key:'date:'+label,kind:'date',label,weight:2+DATE_LABELS.indexOf(label)};}
+   return null;
+  };
+  for(const thread of threads){const g=groupOf(rootOf.get(thread.id));if(!g)continue;if(!groups.has(g.key))groups.set(g.key,{...g,sample:thread,rows:[]});groups.get(g.key).rows.push(thread);}
+  const bodies=new Map();
+  for(const group of [...groups.values()].sort((a,b)=>a.weight-b.weight)){
+   const key=group.key,box=document.createElement('section');box.className='thread-project-group';box.dataset.kind=group.kind;
+   const label=document.createElement('button');label.type='button';label.className='thread-group-toggle';label.dataset.kind=group.kind;label.dataset.groupLabel=group.label;label.dataset.projectPath=group.kind==='project'?group.sample.cwd||'':'';label.setAttribute('aria-expanded',String(!collapsedProjects.has(key)));label.innerHTML=icon('chevron');
+   const name=document.createElement('span');name.className='thread-group-name';name.textContent=group.label;const count=document.createElement('span');count.className='thread-group-count';count.textContent=String(group.rows.length);
+   if(group.kind==='project')label.append(projectBadge(group.sample));label.append(name);
+   if(group.kind==='project'&&group.sample.projectPinned){const pin=document.createElement('span');pin.className='project-pin';pin.setAttribute('aria-label','Pinned project');pin.innerHTML=icon('pin');label.append(pin);}
+   const diff0=group.kind==='project'&&group.sample.projectDiff;
+   if(diff0&&(diff0.added||diff0.removed)){const diff=document.createElement('span');diff.className='thread-project-diff';diff.setAttribute('aria-label',diff0.scope==='branch'?'Project branch changes, including uncommitted edits':'Project uncommitted changes');const added=document.createElement('span'),removed=document.createElement('span');added.className='thread-added';removed.className='thread-removed';added.textContent='+'+diff0.added;removed.textContent='−'+diff0.removed;diff.append(added,removed);label.append(diff);}label.append(count);
+   const body=document.createElement('div');body.className='thread-group-rows';body.hidden=collapsedProjects.has(key);body.inert=body.hidden;
+   label.addEventListener('click',()=>{if(collapsedProjects.has(key))collapsedProjects.delete(key);else collapsedProjects.add(key);try{localStorage.setItem('suffice-sidebar-collapsed-v1',JSON.stringify([...collapsedProjects]));}catch{}const expanded=!collapsedProjects.has(key);label.setAttribute('aria-expanded',String(expanded));setProjectGroupExpanded(body,expanded);});
+   box.append(label,body);list.append(box);bodies.set(key,body);
+  }
   for(const thread of threads){
-   let target=list;
-   if(prefs.group==='project'){
-    const key=thread.cwd||thread.project||'__none';
-    if(!groups.has(key)){
-     const group=document.createElement('section');group.className='thread-project-group';
-     const label=document.createElement('button');label.type='button';label.className='thread-group-toggle';label.dataset.projectPath=thread.cwd||'';label.setAttribute('aria-expanded',String(!collapsedProjects.has(key)));label.innerHTML=icon('chevron');
-     const name=document.createElement('span');name.className='thread-group-name';name.textContent=thread.project||'No project';const count=document.createElement('span');count.className='thread-group-count';count.textContent=String(threads.filter(t=>(t.cwd||t.project||'__none')===key).length);label.append(projectBadge(thread),name);if(thread.projectPinned){const pin=document.createElement('span');pin.className='project-pin';pin.setAttribute('aria-label','Pinned project');pin.innerHTML=icon('pin');label.append(pin);}
-     if(thread.projectDiff&&(thread.projectDiff.added||thread.projectDiff.removed)){const diff=document.createElement('span');diff.className='thread-project-diff';diff.setAttribute('aria-label',thread.projectDiff.scope==='branch'?'Project branch changes, including uncommitted edits':'Project uncommitted changes');const added=document.createElement('span'),removed=document.createElement('span');added.className='thread-added';removed.className='thread-removed';added.textContent='+'+thread.projectDiff.added;removed.textContent='\u2212'+thread.projectDiff.removed;diff.append(added,removed);label.append(diff);}label.append(count);
-     const body=document.createElement('div');body.className='thread-group-rows';body.hidden=collapsedProjects.has(key);body.inert=body.hidden;label.addEventListener('click',()=>{if(collapsedProjects.has(key))collapsedProjects.delete(key);else collapsedProjects.add(key);try{localStorage.setItem('suffice-sidebar-collapsed-v1',JSON.stringify([...collapsedProjects]));}catch{}const expanded=!collapsedProjects.has(key);label.setAttribute('aria-expanded',String(expanded));setProjectGroupExpanded(body,expanded);});group.append(label,body);list.append(group);groups.set(key,body);
-    }target=groups.get(key);
-   }
-   const row=document.createElement('button');row.type='button';row.className='thread-row session-row session-row--sidebar';row.dataset.thread=thread.id;row.dataset.project=thread.project;row.setAttribute('aria-pressed',String(thread.id===activeId));row.title=`${thread.title} · ${thread.project}`;
-   const job=jobs.get(thread.id);const origin=thread.parent&&all.find(t=>t.id===thread.parent);const details={...thread,...(origin?{forkOf:{id:origin.id,title:origin.title}}:{}),...(job?{status:status(thread),error:job.failed?job.error:undefined,startedAt:job.startedAt,provider:job.provider||thread.provider,model:job.model||thread.model,terminalCount:job.terminalCount,...(job.diff?{diff:job.diff}:{})}: {})};populateThreadRow(row,details,{draft:!!viewState.read(thread.id).draft,unread:unread(thread),pinned:!!metadata(thread.id).pinned});
+   const g=groupOf(rootOf.get(thread.id)),target=g?bodies.get(g.key):list;
+   const row=document.createElement('button');row.type='button';row.className='thread-row session-row session-row--sidebar';row.draggable=true;row.dataset.thread=thread.id;row.dataset.project=thread.project;row.style.setProperty('--depth',String(depthOf.get(thread.id)));row.setAttribute('aria-pressed',String(thread.id===activeId));row.title=`${thread.title} · ${thread.project}`;
+   const job=jobs.get(thread.id);const origin=thread.parent&&all.find(t=>t.id===thread.parent);const details={...thread,...(origin?{forkOf:{id:origin.id,title:origin.title}}:{}),...(job?{status:status(thread),error:job.failed?job.error:undefined,startedAt:job.startedAt,provider:job.provider||thread.provider,model:job.model||thread.model,terminalCount:job.terminalCount,...(job.diff?{diff:job.diff}:{})}: {})};populateThreadRow(row,details,{draft:!!viewState.read(thread.id).draft,unread:unread(thread),pinned:!!metadata(thread.id).pinned,nested:depthOf.get(thread.id)>0,badge:g?.kind!=='project'});
    row.addEventListener('click',()=>void openSavedThread(thread));target.append(row);
   }
-  if(!threads.length){const empty=document.createElement('div');empty.className='sidebar-empty';empty.textContent=all.length?'No matching threads':'No threads yet';list.append(empty);}
+  if(!threads.length&&all.length){const empty=document.createElement('div');empty.className='sidebar-empty';empty.textContent='None';list.append(empty);}
   tickThreadTimes(list);list.scrollTop=scroll;
  }
  // Follow-up chips sit above the composer for the thread on screen only.
