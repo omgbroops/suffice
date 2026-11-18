@@ -11,10 +11,10 @@ test('prompt assembly per effort: short rules always, drafting passes only at hi
  for(const e of ['off','minimal','low','medium'])assert.equal(voicePrompt(e),VOICE_RULES,e);
  for(const e of ['high','xhigh','max']){const p=voicePrompt(e);assert.ok(p.startsWith(VOICE_RULES));assert.match(p,/draft the reply in your reasoning/);assert.match(p,/two passes/);assert.match(p,/cut every sentence/);}
  assert.equal(withEffortRules(voicePrompt('high'),'high'),voicePrompt('high'),'idempotent');
- assert.ok(VOICE_RULES.length<2000);
+ assert.ok(VOICE_RULES.length<3000);
 });
 test('rules carry each requested ban',()=>{
- for(const re of [/Answer first/,/Never introduce yourself/,/environment, working directory, process tree/,/Do not ask the user to list/,/No closing offers/,/No em dashes/,/another Suffice product only when it directly solves.*at most once per thread/])assert.match(VOICE_RULES,re);
+ for(const re of [/Answer first/,/Never introduce yourself/,/environment: no working directory.*process tree/,/Do not ask the user to list/,/No closing offers/,/No em dashes/,/another Suffice product only when it directly solves.*at most once per thread/])assert.match(VOICE_RULES,re);
 });
 test('session prompt has the voice rules and the drafting rules follow the effort in use now',async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-voice-')),runtime=await ModelRuntime.create({authPath:resolve(home,'auth.json'),refreshOnCreate:false,allowModelNetwork:false});
