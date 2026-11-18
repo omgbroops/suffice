@@ -98,10 +98,11 @@
 /* Access and effort rest as an icon; hover, keyboard focus or an open menu grows the label in (width, --duration-grow). */
 .desktop-app.desktop-app .composer-meta :is(.access-mode-picker, .effort-picker) { --pad: calc((var(--control-height-sm) - var(--icon-size-sm)) / 2); gap: 0; padding: 0 var(--pad); }
 .desktop-app .composer-meta :is(.access-mode-picker, .effort-picker) > span:not(.icon) { display: inline-block; max-width: 0; margin-left: 0; opacity: 0; overflow: hidden; white-space: nowrap; transition: max-width var(--duration-grow) var(--ease-out), margin-left var(--duration-grow) var(--ease-out), opacity var(--duration-grow) var(--ease-out); }
-.desktop-app .composer-meta :is(.access-mode-picker, .effort-picker):is(:hover, :focus-visible, [aria-expanded='true']) > span:not(.icon) { max-width: 16ch; margin-left: var(--space-2); opacity: 1; }
+.desktop-app .composer-meta :is(.access-mode-picker, .effort-picker):is(:hover, :focus-visible) > span:not(.icon) { max-width: 16ch; margin-left: var(--space-2); opacity: 1; }
 .desktop-app .composer-meta .effort-picker[hidden] { display: none; }
 /* Menu rows carry a label only; the detail sentences are cut. */
 .desktop-app .access-mode-menu .access-mode-detail { display: none; }
+.desktop-app .access-mode-menu .popover-heading { margin-bottom: var(--space-1); }
 /* Only the chosen row shows a tick. */
 .desktop-app .menu-item > .menu-check--empty { visibility: hidden; }
 /* Usage: a rounded-rectangle meter, not a ring. */
@@ -109,7 +110,7 @@
 .desktop-app .composer-meta .context-ring svg { display: none; }
 .desktop-app .composer-meta .context-ring::before, .desktop-app .composer-meta .context-ring::after { content: ''; position: absolute; left: 50%; top: 50%; height: 8px; border-radius: var(--radius-xs); }
 .desktop-app .composer-meta .context-ring::before { width: 16px; transform: translate(-50%, -50%); background: color-mix(in srgb, var(--text) 30%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text) 25%, transparent); }
-.desktop-app .composer-meta .context-ring::after { width: calc(var(--context-percent, 0) * .16px); max-width: 16px; transform: translate(-8px, -50%); background: var(--blue); transition: width var(--duration-grow) var(--ease-out); }
+.desktop-app .composer-meta .context-ring::after { width: max(3px, calc(var(--context-percent, 0) * .16px)); max-width: 16px; transform: translate(-8px, -50%); background: var(--blue); transition: width var(--duration-grow) var(--ease-out); }
 .desktop-app .composer-meta .context-ring[data-level='warning']::after { background: var(--purple); }
 .desktop-app .composer-meta .context-ring[data-level='critical']::after { background: var(--red); }
 /* Suggestion keycap: sits right after the placeholder text. */

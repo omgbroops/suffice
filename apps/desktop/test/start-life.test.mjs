@@ -23,7 +23,7 @@ test('Start screen: mark and title, typed suggestion from real repo state, three
  const M=(ts,id,p,m)=>({type:'message',id,parentId:p,timestamp:ts,message:{...m,timestamp:Date.parse(ts)}});
  for(const [id,title,ago] of [['one','Fix the flaky sidebar test',35],['two','Add dark mode to settings',190],['three','Explain the session restore flow',1800]]){const ts=new Date(Date.now()-ago*60000).toISOString();
   await writeFile(resolve(dir,id+'.jsonl'),[{type:'session',version:3,id,timestamp:ts,cwd},M(ts,'u',null,{role:'user',content:[{type:'text',text:title}]}),M(ts,'b','u',{role:'assistant',stopReason:'stop',content:[{type:'text',text:'Done.'}]})].map(e=>JSON.stringify(e)).join('\n')+'\n');}
- const env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home,SUFFICE_START_PROJECT:cwd,SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_SESSIONS_SOCKET:'sfx-feat-start-life-'+process.pid,SUFFICE_HISTORY_HOME:resolve(home,'history')};delete env.ELECTRON_RUN_AS_NODE;
+ const env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home,SUFFICE_START_PROJECT:cwd,SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_SESSIONS_SOCKET:'sfx-fix3-screen2-'+process.pid,SUFFICE_HISTORY_HOME:resolve(home,'history')};delete env.ELECTRON_RUN_AS_NODE;
  const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
  try{
   const page=await app.firstWindow();await page.locator('.composer').waitFor();page.setDefaultTimeout(8000);
@@ -46,9 +46,12 @@ test('Start screen: mark and title, typed suggestion from real repo state, three
   await page.locator('.suggest-key').waitFor({state:'visible'});
   const entrance=await page.evaluate(()=>[...document.querySelectorAll('.life-in')].map(e=>{const a=e.getAnimations()[0];return a?a.effect.getComputedTiming().endTime:0;}));
   assert.ok(Math.max(...entrance)<=400,'entrance under 400ms: '+entrance);
+  // Record every placeholder change from the first paint (init script runs before the page's own code).
+  await page.addInitScript(()=>{window.__ph=[];new MutationObserver(()=>{const p=document.querySelector('#prompt');if(p&&window.__ph.at(-1)!==p.placeholder.length)window.__ph.push(p.placeholder.length);}).observe(document,{subtree:true,childList:true,attributes:true,attributeFilter:['placeholder']});});
   await page.reload();await page.locator('.start-card').first().waitFor();
-  const seen=await page.evaluate(()=>new Promise(r=>{const p=document.querySelector('#prompt'),lens=[];const t0=performance.now();const id=setInterval(()=>{const n=p.placeholder.length;if(lens.at(-1)!==n)lens.push(n);if(performance.now()-t0>6000||n>=60){clearInterval(id);r(lens);}},10);}));
-  assert.ok(seen.filter(n=>n>0&&n<60).length>=15,'placeholder is typed out, saw '+JSON.stringify(seen));
+  await page.waitForFunction(t=>document.querySelector('#prompt').placeholder===t,full,{timeout:12000});
+  const seen=await page.evaluate(()=>window.__ph);
+  assert.ok(seen.filter(n=>n>0&&n<full.length).length>=15,'placeholder is typed out, saw '+JSON.stringify(seen));
   // Reduced motion: the suggestion is never typed; the placeholder only ever holds the full text.
   await page.emulateMedia({reducedMotion:'reduce'});await page.reload();await page.locator('.start-card').first().waitFor();
   const calm=await page.evaluate(()=>new Promise(r=>{const p=document.querySelector('#prompt'),seen=new Set();const t0=performance.now();const id=setInterval(()=>{seen.add(p.placeholder);if(performance.now()-t0>3500){clearInterval(id);r([...seen]);}},10);}));
