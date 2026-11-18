@@ -83,6 +83,8 @@ if(primary)app.whenReady().then(async()=>{
   handle('file-open-in',payload=>fileOpeners.open(threadLocations.get(payload?.threadId)||project,payload?.path,payload?.application));
   handle('changes',()=>workspaceFiles.changes(project));
   handle('diff',name=>workspaceFiles.diff(project,name));
+  const prReview=require('./pr-review.cjs').createPrReview();
+  handle('pr-review',()=>prReview.load(project));
   handle('clipboard-files',()=>clipboardFiles(clipboard));
   const threadLocations=new Map();
   terminals=require('./terminals.cjs').createTerminalManager({resolveCwd:async id=>(await settings.get())['working-directory']==='Home directory'?require('node:os').homedir():threadLocations.get(id),resolveShell:async()=>{const prefs=await settings.get();if(process.platform==='win32'&&prefs['terminal-shell']==='PowerShell')return path.join(process.env.SystemRoot,'System32/WindowsPowerShell/v1.0/powershell.exe');if(prefs['terminal-shell']==='System default')return process.platform==='win32'?process.env.ComSpec:process.env.SHELL||'/bin/bash';return (await import('../../../packages/cli/src/shell.mjs')).nativeShellPath()||process.env.SHELL||'/bin/bash';},emit:event=>{if(win&&!win.isDestroyed())win.webContents.send('suffice:terminal-event',event);}});

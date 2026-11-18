@@ -18,6 +18,7 @@ import '@fontsource/geist-mono/500.css';
 import './styles.css';
 import './tactile.css';
 import './right-panel.css';
+import './pr-review.css';
 import './composer-files.css';
 import './thread-row.css';
 import './window-chrome.css';

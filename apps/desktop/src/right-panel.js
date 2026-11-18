@@ -5,8 +5,9 @@ import {createPanelEditor} from './panel-editor.js';
 import {showPopover,hidePopover,keyboardInteraction} from './popover-motion.js';
 import {threadViewState as store} from './thread-view-state.js';
 import {renderFileTree,renderChanges,renderCode,textElement} from './panel-content.js';
+import {renderPullRequest} from './pr-review.js';
 
-const options={files:{label:'Files',icon:'files'},changes:{label:'Changes',icon:'changes'},terminal:{label:'Terminal',icon:'terminal'}};
+const options={files:{label:'Files',icon:'files'},changes:{label:'Changes',icon:'changes'},pr:{label:'Pull request',icon:'merge'},terminal:{label:'Terminal',icon:'terminal'}};
 export function panelIconButton(label,glyph){const button=document.createElement('button');button.type='button';button.className='button button--ghost';button.setAttribute('aria-label',label);button.title=label;button.innerHTML=icon(glyph);return button;}
 const textNode=textElement;
 export function connectRightPanel({sidebar,resize,toggle,api}){
@@ -19,6 +20,8 @@ export function connectRightPanel({sidebar,resize,toggle,api}){
  const body=document.createElement('section');body.id='right-panel-content';body.className='right-panel-content';header.append(tabs,add);sidebar.append(header,body);
  let version=0,scrollTimer,refreshTimer,focusFilter=false,directoryThread=null,tabSignature='',mounted=null,terminalsPromise;
  const directories=new Map();
+ let prData=null,prThread=null;const prView={tab:'overview',file:null}; // shortcut: sub-tab is not persisted across restarts
+ const drawPr=focus=>renderPullRequest(body,prData,{view:{...prView,focus},onView:({focus:f,...patch})=>{Object.assign(prView,patch);drawPr(f);},onRefresh:()=>void load(),onOpen:url=>void api.openExternal(url).catch(()=>{})});
  const terminalViews=()=>terminalsPromise??=import('./terminal-view.js').then(({createTerminalViews})=>createTerminalViews({api,onLabel:(threadId,id,label)=>{if(store.id===threadId&&store.state.tabs.includes(id)&&store.state.terminals[id]?.label!==label)store.update({terminals:{...store.state.terminals,[id]:{...store.state.terminals[id],label}}});}}));
  const terminalTab=type=>type?.startsWith('terminal:');
  const optionFor=type=>terminalTab(type)?{label:store.state.terminals[type]?.label||'Terminal',icon:'terminal'}:options[type];
@@ -72,6 +75,12 @@ export function connectRightPanel({sidebar,resize,toggle,api}){
   if(!type){body.removeAttribute('role');body.removeAttribute('aria-labelledby');body.removeAttribute('aria-busy');body.replaceChildren();const launcher=document.createElement('div');launcher.className='panel-launcher';choices(launcher);body.append(launcher);return;}
   body.setAttribute('role','tabpanel');body.setAttribute('aria-labelledby','panel-tab-'+type);body.setAttribute('aria-busy','true');
   if(terminalTab(type)){try{const terminals=await terminalViews();if(request!==version||id!==store.id||!store.state.panelOpen)return;await terminals.mount(body,id,type,state.terminals[type]?.ordinal);}catch(error){if(request===version&&id===store.id)message('Could not open terminal',error.message,true);}finally{if(request===version)body.setAttribute('aria-busy','false');}return;}
+  if(type==='pr'){
+   mounted=null;if(prThread!==id){prThread=id;prData=null;Object.assign(prView,{tab:'overview',file:null});}
+   if(prData)drawPr();else message('Loading…');
+   try{const data=await api.prReview();if(request!==version||id!==store.id||!store.state.panelOpen)return;const keep=body.querySelector('.pr-view')?.scrollTop;prData=data;drawPr(body.contains(document.activeElement)&&document.activeElement.matches('.pr-tab'));if(keep)body.querySelector('.pr-view').scrollTop=keep;}catch(error){if(request===version&&id===store.id)message('Couldn’t load the pull request',error.message,true);}finally{if(request===version)body.setAttribute('aria-busy','false');}
+   return;
+  }
   const focusedPath=body.contains(document.activeElement)?document.activeElement.dataset.path:null;
   const view=state[type],layoutKey=JSON.stringify([id,type,view.directory,view.filterOpen,view.explorerOpen,view.expanded]);
   if(mounted?.layoutKey===layoutKey&&mounted.editor.shell.isConnected){await loadPreview(mounted,view,request);if(request===version)body.setAttribute('aria-busy','false');return;}
