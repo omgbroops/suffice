@@ -6,6 +6,7 @@ import {connectApprovals} from './approvals.js';
 import {transcriptDivider,isInterruption} from './transcript-divider.js';
 import {connectExtensionUI} from './extension-ui.js';
 import {connectThreadFork,connectThreadExport} from './thread-fork.js';
+import {connectThreadHandoff} from './thread-handoff.js';
 import {preference} from './settings-preferences.js';
 import {connectThreadContextMenu} from './thread-context-menu.js';
 import {connectProjectManagement,projectPathKey} from './project-management.js';
@@ -189,6 +190,7 @@ export function connectThreads({api,prompt,send,toast}){
  }
  api.askBar?.onThread(async id=>{await refresh();const thread=savedThreads.find(thread=>thread.id===id);if(thread)await openSavedThread(thread);});
  connectThreadExport({api,toast,getActive:()=>activeId});
+ connectThreadHandoff({api,toast,newThread:()=>newSession.click()});
  connectThreadFork(list,{api,toast,getActive:()=>activeId,onFork:async(fork,detail)=>{await refresh();const thread=savedThreads.find(thread=>thread.id===fork.id);if(!thread)return;if(detail?.draft)viewState.updateFor(fork.id,{draft:detail.draft});await openSavedThread(thread);}});
  document.addEventListener('suffice-open-thread',event=>{const thread=savedThreads.find(thread=>thread.id===event.detail?.id);if(thread)void openSavedThread(thread);});
  // The fork's link back to the thread it came from, shown above the first message.

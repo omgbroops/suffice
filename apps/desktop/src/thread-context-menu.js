@@ -19,7 +19,7 @@ export function connectThreadContextMenu(list,{getThread,metadata,update,onArchi
    {label:state.pinned?'Unpin':'Pin',icon:'pin',action:'thread:pin',key:'P',separator:!!selected.cwd},
    {label:state.unread?'Mark as read':'Mark as unread',icon:'inbox',action:'thread:read',key:'U'},
    {label:'Rename',icon:'pencil',action:'thread:rename',key:'R'},
-   ...(!selected.running?[{label:'Fork',icon:'branch',action:'thread:fork',key:'F'}]:[]),
+   ...(!selected.running?[{label:'Fork',icon:'branch',action:'thread:fork',key:'F'},{label:'Hand off',icon:'move-project',action:'thread:handoff'}]:[]),
    {label:'Move to section',icon:'folder',separator:true,children:()=>[...names.map(name=>({label:name,selected:name===section,action:'thread:section='+encodeURIComponent(name)})),{label:'New section',action:'thread:section-new',separator:!!names.length},...(section?[{label:'Remove from section',action:'thread:section-none'}]:[])]},
    {label:'Move under',icon:'branch',children:()=>targets.length||under?[...targets.map(t=>({label:t.title,selected:t.id===under,action:'thread:under='+encodeURIComponent(t.id)})),...(under?[{label:'No parent',action:'thread:under-none',separator:!!targets.length}]:[])]:[{label:'No other threads',action:'thread:noop',disabled:true}]},
    ...(!selected.running&&projectManagement?[{label:'Move to project',icon:'move-project',children:()=>projectManagement.moveItems(selected)}]:[]),
@@ -34,6 +34,7 @@ export function connectThreadContextMenu(list,{getThread,metadata,update,onArchi
   if(!selected)return;const [action,arg]=full.split(/=(.*)/s);const state=metadata(selected.id);
   try{
    if(action==='fork')document.dispatchEvent(new CustomEvent('suffice-fork-thread',{detail:{id:selected.id}}));
+   else if(action==='handoff')document.dispatchEvent(new CustomEvent('suffice-handoff-thread',{detail:{id:selected.id}}));
    else if(action==='delete')confirmDelete(selected);
    else if(action.startsWith('export-'))document.dispatchEvent(new CustomEvent('suffice-export-thread',{detail:{id:selected.id,kind:action.slice(7)}}));
    else if(action==='rename')askName('title',selected.title);
@@ -49,7 +50,7 @@ export function connectThreadContextMenu(list,{getThread,metadata,update,onArchi
    else if(action.startsWith('copy-'))await navigator.clipboard.writeText(action==='copy-title'?selected.title:selected.cwd);
   }catch(error){toast(error.message);}
  }
- const ACTIONS=new Set(['rename','pin','read','archive','delete','fork','export-md','export-html','export-copy','copy-title','copy-directory','section','section-new','section-none','under','under-none','open-folder']);
+ const ACTIONS=new Set(['rename','pin','read','archive','delete','fork','handoff','export-md','export-html','export-copy','copy-title','copy-directory','section','section-new','section-none','under','under-none','open-folder']);
  document.addEventListener('click',event=>{const button=event.target.closest('[data-menu-action]');if(!button?.closest('.thread-context-menu,.popover--submenu')||!selected)return;const full=button.dataset.menuAction;if(!full.startsWith('thread:')||!ACTIONS.has(full.slice(7).split('=')[0]))return;menu.close();void run(full.slice(7));});
  // Single-key shortcuts while the menu is open.
  const KEYS={p:'pin',u:'read',r:'rename',f:'fork',a:'archive',d:'delete'};
