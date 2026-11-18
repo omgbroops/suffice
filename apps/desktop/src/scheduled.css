@@ -1,0 +1,12 @@
+/* Scheduled page: sits over the workspace like Issues; rows reuse the settings card. */
+.scheduled-nav { justify-content: flex-start; width: 100%; margin-top: 2px; padding: 6px 9px; min-height: 30px; font-size: 13px; color: var(--text); }
+.scheduled-nav .icon { width: 17px; height: 17px; }
+.scheduled-nav[aria-current='page'] { background: var(--surface-nav); color: var(--text-strong); }
+.scheduled-nav:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+.scheduled-view { position: absolute; inset: 0; z-index: 4; display: flex; flex-direction: column; background: var(--surface-thread); border-radius: inherit; color: var(--text); overflow-y: auto; }
+.scheduled-view[hidden] { display: none; }
+.scheduled-page { width: min(760px, 100%); margin: 0 auto; padding: 56px 24px 40px; }
+.scheduled-head { margin-bottom: 20px; }
+.scheduled-title { margin: 0; font-size: 22px; font-weight: 500; letter-spacing: -.02em; color: var(--text-strong); outline: none; }
+.scheduled-body .resource-status:empty { display: none; }
+body:has(.workspace.scheduled-open) :is(.caption-chat-tools, .right-sidebar) { visibility: hidden; }

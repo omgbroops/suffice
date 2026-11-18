@@ -36,6 +36,10 @@ export function nextRunText(item,now=Date.now()){
 export function mountAutomationSettings(content,section,api){
  if(section!=='automations')return;
  const host=content.querySelector('#settings-title-automations')?.closest('.settings-section');if(!host)return;for(const group of host.querySelectorAll('.settings-group'))group.remove();
+ mountAutomations(host,api);
+}
+// Shared by the Settings section and the Scheduled sidebar page.
+export function mountAutomations(host,api){
  const status=document.createElement('p');status.className='resource-status';status.role='status';
  const card=document.createElement('div');card.className='settings-card automation-card';host.append(status,card);
  const fail=error=>{status.textContent=clean(error);};
