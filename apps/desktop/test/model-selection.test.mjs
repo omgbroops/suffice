@@ -11,7 +11,7 @@ test('choosing an enabled Grok model clears a stale unavailable-model send guard
  const home=await mkdtemp(resolve(tmpdir(),'suffice-model-guard-')),env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
  const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'profile')],env});
  try{
-  await app.evaluate(({ipcMain})=>{ipcMain.removeHandler('suffice:models');ipcMain.handle('suffice:models',()=>[{provider:'xai',id:'grok-fixture',name:'Grok fixture',available:true,efforts:[]}]);ipcMain.removeHandler('suffice:run');ipcMain.handle('suffice:run',(_event,payload)=>{globalThis.grokRequest=payload;return {text:'Grok fixture reply'};});});
+  await app.evaluate(({ipcMain})=>{ipcMain.removeHandler('suffice:models');ipcMain.handle('suffice:models',()=>[{provider:'openai',id:'missing-model',name:'Missing',available:false,efforts:[]},{provider:'xai',id:'grok-fixture',name:'Grok fixture',available:true,efforts:[]}]);ipcMain.removeHandler('suffice:run');ipcMain.handle('suffice:run',(_event,payload)=>{globalThis.grokRequest=payload;return {text:'Grok fixture reply'};});});
   const page=await app.firstWindow();await page.evaluate(async()=>{await window.sufficeDesktop.desktopPreference({id:'default-model',value:'openai|missing-model'});localStorage.setItem('suffice-model',JSON.stringify({provider:'openai',model:'missing-model',effort:'high'}));});await page.reload();
   await page.waitForFunction(()=>document.querySelector('.composer')?.modelsDisabled===true);
   await page.getByRole('button',{name:'Choose model and effort',exact:true}).click();await page.getByRole('button',{name:'Grok fixture',exact:true}).click();
