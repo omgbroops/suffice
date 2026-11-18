@@ -9,7 +9,11 @@ import {guard} from './electron-guard.mjs';
 import {deriveFollowups} from '../src/followups.js';
 test('derive chips from the run',()=>{
  assert.deepEqual(deriveFollowups([]),[]);
- assert.deepEqual(deriveFollowups([{name:'read',input:{}}]),['Summarize what you found','Go deeper']);
+ const longReply=Array(60).fill('word').join(' ');
+ assert.deepEqual(deriveFollowups([{name:'read',input:{}}],false,longReply),['Summarize what you found','Go deeper']);
+ assert.deepEqual(deriveFollowups([{name:'read',input:{}}],false,'Hello. What are you working on?'),[],'small talk and questions back get no chips');
+ assert.deepEqual(deriveFollowups([{name:'read',input:{}}],false,'Hello.'),[],'a short reply gets no read-only chips');
+ assert.deepEqual(deriveFollowups([{name:'edit',input:{}}],false,'Which file should I change?'),[],'a question back gets no chips');
  assert.deepEqual(deriveFollowups([{name:'edit',input:{}}]),['Run the tests','Commit this','Explain the diff']);
  assert.deepEqual(deriveFollowups([{name:'edit'},{name:'bash',input:{command:'node --test tests'}}]),['Commit this','Explain the diff','Review for bugs']);
  assert.deepEqual(deriveFollowups([{name:'bash',input:{command:'ls'},isError:true}]),['Fix the error','Explain what failed']);
