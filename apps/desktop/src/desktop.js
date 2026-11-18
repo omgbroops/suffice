@@ -9,6 +9,7 @@ import {connectModels} from './models-ui.js';
 import {connectUsageHint} from './usage-hint.js';
 import {connectTooltips} from './tooltips.js';
 import {connectWorkspaceTools} from './workspace-tools.js';
+import {connectStartLife} from './start-life.js';
 // Desktop-only behavior; the existing shell markup, tokens and controls stay.
 export function connectDesktop({prompt,send,toast,escapeHtml}) {
   const api=window.sufficeDesktop;
@@ -37,6 +38,7 @@ export function connectDesktop({prompt,send,toast,escapeHtml}) {
   connectComposerOverflow(prompt.form);
   connectWorkspaceTools(api);
   connectChatChangesWidget();
+  connectStartLife({api});
   {
     const title=document.querySelector('.thread-header'),tools=document.querySelector('.workspace-tools');
     const chatTools=document.createElement('div');chatTools.className='caption-chat-tools'+(mac?' caption-chat-tools-macos':'');chatTools.append(title,tools);
