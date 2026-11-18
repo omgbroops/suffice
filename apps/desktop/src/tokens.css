@@ -64,19 +64,21 @@
   --info: #4da3ff;
   --diff-add: #60ae5c;
   --diff-del: #db6c66;
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 20px;
-  --space-6: 24px;
-  --space-8: 32px;
-  --space-10: 40px;
-  --control-height: 32px;
-  --control-height-xs: 24px;
-  --control-height-sm: 28px;
-  --control-height-lg: 44px;
-  --button-height: 28px;
+  /* Density: one factor drives the spacing scale, control heights and row heights. Compact .875, Comfy 1, Spacious 1.125. */
+  --density: 1;
+  --space-1: calc(4px * var(--density));
+  --space-2: calc(8px * var(--density));
+  --space-3: calc(12px * var(--density));
+  --space-4: calc(16px * var(--density));
+  --space-5: calc(20px * var(--density));
+  --space-6: calc(24px * var(--density));
+  --space-8: calc(32px * var(--density));
+  --space-10: calc(40px * var(--density));
+  --control-height: calc(32px * var(--density));
+  --control-height-xs: calc(24px * var(--density));
+  --control-height-sm: calc(28px * var(--density));
+  --control-height-lg: calc(44px * var(--density));
+  --button-height: var(--control-height-sm);
   --control-icon-size: 16px;
   --icon-size-xs: 12px;
   --icon-size-sm: 14px;
@@ -89,22 +91,29 @@
   --panel-padding: 12px;
   --composer-padding: 16px;
   --panel-gap: 16px;
-  --row-height: 46px;
+  --row-height: calc(46px * var(--density));
+  /* Radius scale: 4 / 6 / 8 / 12 / 16 / 22. A nested shape uses its parent's radius minus the gap between them. */
+  --radius-1: 4px;
+  --radius-2: 6px;
+  --radius-3: 8px;
+  --radius-4: 12px;
+  --radius-5: 16px;
+  --radius-6: 22px;
   --radius-xs: 2px;
   --radius-sm: 3px;
-  --radius-control: 6px;
-  --radius-button: 6px;
-  --radius-card: 8px;
-  --radius-panel: 12px;
+  --radius-control: var(--radius-2);
+  --radius-button: var(--radius-2);
+  --radius-card: var(--radius-3);
+  --radius-panel: var(--radius-4);
   --radius-menu: 10px;
   --menu-width: 208px;
-  --menu-row-height: 28px;
+  --menu-row-height: calc(28px * var(--density));
   /* Nested radius = parent radius - inset (padding + border), so the gap to the parent's curve is even. */
   --border-popover: 1px;
   --inset-menu: calc(var(--menu-inset) + var(--border-popover));
   --radius-menu-item: calc(var(--radius-menu) - var(--inset-menu));
-  --radius-send: 16px;
-  --inset-composer-corner: 11px;
+  --radius-send: var(--radius-5);
+  --inset-composer-corner: calc(var(--radius-6) - var(--radius-5));
   --radius-composer: calc(var(--radius-send) + var(--inset-composer-corner));
   --radius-composer-inset: calc(var(--radius-composer) - var(--composer-padding) - 1px);
   --sidebar-width: 240px;
@@ -245,3 +254,6 @@
   --border: #1a2a3c10; --border-strong: #1a2a3c1a; --sidebar-border: #1a2a3c12;
   --shell-tint: #dde3ea; --veil: #eef1f5; --veil-k: 2.4;
 }
+
+:root[data-density='compact'] { --density: .875; }
+:root[data-density='spacious'] { --density: 1.125; }

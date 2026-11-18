@@ -6,8 +6,8 @@ import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import {_electron} from 'playwright-core';
 import {guard} from './electron-guard.mjs';
-// At 720x540 every composer footer control must sit inside the composer box with no horizontal overflow.
-test('composer footer stays inside the composer at 720x540',{timeout:90000},async()=>{
+// At 720x540 every control in the composer box and in the row below it must sit inside the composer width with no horizontal overflow.
+test('composer controls stay inside the composer width at 720x540',{timeout:90000},async()=>{
  const root=await realpath(await mkdtemp(resolve(tmpdir(),'suffice-footer-')));
  const home=resolve(root,'suffice-home'),fakeHome=resolve(root,'home'),project=resolve(root,'project');
  for(const dir of [home,fakeHome,project])await mkdir(dir);
@@ -18,11 +18,11 @@ test('composer footer stays inside the composer at 720x540',{timeout:90000},asyn
   await app.evaluate(({BrowserWindow})=>{const w=BrowserWindow.getAllWindows()[0];w.setMinimumSize(100,100);w.setContentSize(720,540);});
   await page.setViewportSize({width:720,height:540}).catch(()=>{});
   await page.waitForFunction(()=>innerWidth<=720);await page.waitForTimeout(500);
-  const r=await page.evaluate(()=>{const c=document.querySelector('.composer').getBoundingClientRect(),t=document.querySelector('.composer-toolbar');
-   const out=[...t.querySelectorAll('button,.tools-chip,.access-mode-picker')].filter(e=>e.getClientRects().length).map(e=>{const b=e.getBoundingClientRect();return {n:e.className+'|'+(e.getAttribute('aria-label')||''),l:b.left,r:b.right}}).filter(b=>b.l<c.left-0.5||b.r>c.right+0.5);
-   return {c:[c.left,c.right],tb:(b=>[b.left,b.right])(t.getBoundingClientRect()),kids:[...t.children].map(k=>[k.className,k.getBoundingClientRect().left,k.getBoundingClientRect().right]),w:innerWidth,scroll:t.scrollWidth,client:t.clientWidth,out};});
+  const r=await page.evaluate(()=>{const c=document.querySelector('.composer').getBoundingClientRect(),rows=[document.querySelector('.composer-row'),document.querySelector('.composer-meta')];
+   const out=rows.flatMap(t=>[...t.querySelectorAll('button')]).filter(e=>e.getClientRects().length).map(e=>{const b=e.getBoundingClientRect();return {n:e.className+'|'+(e.getAttribute('aria-label')||''),l:b.left,r:b.right}}).filter(b=>b.l<c.left-0.5||b.r>c.right+0.5);
+   return {c:[c.left,c.right],w:innerWidth,over:rows.filter(t=>t.scrollWidth>t.clientWidth).map(t=>t.className),out};});
   assert.ok(r.w<=720,'viewport '+r.w);
-  assert.ok(r.scroll<=r.client,'toolbar overflows '+JSON.stringify(r));
+  assert.deepEqual(r.over,[],'composer rows overflow '+JSON.stringify(r));
   assert.deepEqual(r.out,[],'controls outside composer '+JSON.stringify(r));
  }finally{await app.close().catch(()=>{});}
 });

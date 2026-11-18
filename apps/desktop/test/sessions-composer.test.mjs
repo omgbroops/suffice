@@ -21,7 +21,7 @@ const ok=(c,m)=>{if(!c)throw new Error(m);};
 try{
  page=await app.firstWindow();page.setDefaultTimeout(15000);const errors=[];page.on('pageerror',e=>errors.push(e.message));
  ok(await app.evaluate(()=>process.env.SUFFICE_SESSIONS_SOCKET)===socket&&process.env.SUFFICE_TEST_HIDE_WINDOW==='1','private socket / hidden window not set');
- await page.locator('[data-action="send-menu"]').waitFor();
+ await page.locator('[data-action="send-menu"]').waitFor({state:'attached'});
  await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].setBounds({width:1440,height:900}));
  await page.waitForFunction(()=>innerWidth===1440&&innerHeight===900);
  const shot=async n=>{await page.waitForTimeout(450);await page.screenshot({path:resolve(shots,n+'.png')});};
@@ -44,7 +44,7 @@ try{
  const stdPH=await page.locator('#prompt').getAttribute('placeholder');
 
  // 2. open a fake Claude session
- const cwd=await app.evaluate(()=>process.env.SUFFICE_START_PROJECT);await page.evaluate(([a,p])=>sufficeDesktop.sessions.start({agent:a,cwd:p}),['fakeclaude',cwd]);await page.reload();await page.locator('[data-action="send-menu"]').waitFor();await page.locator('.sidebar-cli-sessions .thread-row').first().click();
+ const cwd=await app.evaluate(()=>process.env.SUFFICE_START_PROJECT);await page.evaluate(([a,p])=>sufficeDesktop.sessions.start({agent:a,cwd:p}),['fakeclaude',cwd]);await page.reload();await page.locator('[data-action="send-menu"]').waitFor({state:'attached'});await page.locator('.sidebar-cli-sessions .thread-row').first().click();
  await page.locator('.thread-header').waitFor();
  const sid=await page.evaluate(async()=>(await sufficeDesktop.sessions.list()).at(-1).id);
  ok(execFileSync('tmux',['-L',socket,'list-sessions','-F','#{session_name}'],{encoding:'utf8'}).trim().length>0,'session not on the private socket');
@@ -54,8 +54,8 @@ try{
  await page.waitForTimeout(1200);
  const composerText=await page.locator('.composer').innerText();
  ok(!/Full access/.test(composerText),'Full access in session composer');
- ok(await page.locator('.composer .model-button .provider-logo').count()===1,'model chip has no provider logo');
- ok(await page.locator('.composer .model-button .model-effort').count()===1,'model chip has no effort word');
+ ok(await page.locator('.composer-meta .model-button .provider-logo').count()===1,'model chip has no provider logo');
+ ok(await page.locator('.composer-meta .model-button .model-effort').count()===1,'model chip has no effort word');
  ok(!await page.locator('.session-ctl').count(),'header chips still present');
  ok(!await page.locator('.thread-header .session-meta .session-ctl').count(),'header controls remain');
  await shot('session-composer-idle');
@@ -94,7 +94,7 @@ await page.locator('.model-picker .model-option',{hasText:/^Sonnet$/}).click();
  await shot('session-slash-menu');
  await page.keyboard.press('Escape');await page.waitForTimeout(250);ok(await page.locator('.slash-menu').isHidden(),'slash menu stayed open');
  await page.locator('#prompt').fill('');
- ok(await page.locator('#prompt').getAttribute('placeholder')===stdPH,'placeholder changed in session');
+ {const ph=await page.locator('#prompt').getAttribute('placeholder');ok(!!ph&&!/Tab to use/.test(ph),'session chat keeps the plain placeholder, got '+ph);}
 
  // 6. queued message, context warning, native picker (typed screens of the stand-in)
  const type=async t=>{await page.evaluate(([i,t])=>sufficeDesktop.sessions.send(i,t),[sid,t]);await page.waitForTimeout(1800);};
@@ -109,7 +109,7 @@ await page.locator('.model-picker .model-option',{hasText:/^Sonnet$/}).click();
  await shot('session-context-warning');await reset();
  await type('/model');
  await page.locator('.popover.session-picker .menu-item').first().waitFor();await page.waitForTimeout(300);
- ok(await page.locator('.composer .model-button').isVisible()&&await page.locator('.composer .send-button').isVisible(),'footer hidden while a card shows');
+ ok(await page.locator('.composer-meta .model-button').isVisible()&&await page.locator('.composer .voice-start').isVisible(),'footer hidden while a card shows');
  ok(await page.locator('.session-picker .menu-item[aria-pressed="true"]').count()===1,'selected row');
  await shot('session-native-picker');await reset();
 

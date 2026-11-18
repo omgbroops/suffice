@@ -486,6 +486,8 @@ connectDesktop({prompt,send,toast,escapeHtml});
 if(window.sufficeDesktop)connectComposerQuick({form:document.querySelector('.composer'),prompt,api:window.sufficeDesktop,toast});
 import { connectVoice } from './voice/voice-ui.js';
 const voice=window.sufficeDesktop?connectVoice({form:document.querySelector('.composer'),prompt,toast}):null;
+import {connectComposerLayout} from './composer-layout.js';
+if(window.sufficeDesktop)connectComposerLayout({form:document.querySelector('.composer'),prompt,toast});
 
 document.addEventListener('suffice-preference',event=>{const {id,value}=event.detail;if(id==='background'){localStorage.setItem('suffice-background',value);unmountAtmosphere();const url=new URL(location.href);url.searchParams.set('background',value);history.replaceState(null,'',url);unmountAtmosphere=mountAtmosphere(document.querySelector('.atmosphere'));}if(id==='background-motion'||id==='reduced-motion'||id==='background'){document.querySelector('.atmosphere').dataset.motion=preference('background-motion',true)&&!preference('reduced-motion',false)?'running':'paused';}});
 document.querySelector('.atmosphere').dataset.motion=preference('background-motion',true)&&!preference('reduced-motion',false)?'running':'paused';

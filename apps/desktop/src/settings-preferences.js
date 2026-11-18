@@ -28,7 +28,7 @@ export function applyPreferences(){
  if(saved['interface-font'])root.style.setProperty('--font-sans',fonts[saved['interface-font']]);
  if(saved['code-font'])root.style.setProperty('--font-mono',fonts[saved['code-font']]);
  if(saved['text-size'])root.style.setProperty('--ui-text',saved['text-size']);
- root.classList.toggle('hide-file-icons',saved['file-icons']===false);root.dataset.settingsDensity=saved.density||'Comfortable';root.dataset.editorLines=String(saved['line-numbers']!==false);root.style.setProperty('--editor-tab-size',parseInt(saved['tab-size'])||2);
+ root.classList.toggle('hide-file-icons',saved['file-icons']===false);root.dataset.settingsDensity=saved.density==='Compact'?'Compact':'Comfortable';root.dataset.density=({Compact:'compact',Spacious:'spacious'})[saved.density]||'comfy';root.dataset.chrome='glass';root.dataset.editorLines=String(saved['line-numbers']!==false);root.style.setProperty('--editor-tab-size',parseInt(saved['tab-size'])||2);
 }
 system.addEventListener('change',()=>{if(saved.mode==='System')applyPreferences();});
 const bridge=globalThis.window?.sufficeDesktop;// macOS scheme comes from nativeTheme; the hidden window's matchMedia can disagree

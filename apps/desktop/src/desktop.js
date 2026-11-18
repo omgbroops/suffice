@@ -1,13 +1,10 @@
 import {fileLinkPath} from './file-links.js';
-import {connectComposerOverflow} from './composer-overflow.js';
 import {connectQueuedMessages} from './queued-messages.js';
 import {connectChatChangesWidget} from './chat-changes-widget.js';
 import {connectAccessModePicker} from './access-mode-picker.js';
 import { connectThreads } from './threads-ui.js';
 import { connectProjects } from './projects-ui.js';
 import {connectModels} from './models-ui.js';
-import {connectUsageHint} from './usage-hint.js';
-import {connectToolsChip} from './mcp-chip.js';
 import {connectTooltips} from './tooltips.js';
 import {connectWorkspaceTools} from './workspace-tools.js';
 import {connectStartLife} from './start-life.js';
@@ -35,9 +32,6 @@ export function connectDesktop({prompt,send,toast,escapeHtml}) {
   connectQueuedMessages(prompt.form,prompt,toast);
   connectProjects({api,toast});
   connectModels({api,toast});
-  connectUsageHint({form:prompt.form,prompt});
-  connectToolsChip(prompt.form,api);
-  connectComposerOverflow(prompt.form);
   connectWorkspaceTools(api);
   connectChatChangesWidget();
   connectStartLife({api});

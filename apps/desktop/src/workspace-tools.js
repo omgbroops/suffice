@@ -40,7 +40,7 @@ export function connectWorkspaceTools(api){
   }
   let revision=0;
   async function refresh(){if(inSession())return;const version=++revision;try{const usage=await api.usage(viewState.id);if(version===revision)update(usage);}catch{/* Keep the last receipt if the harness is restarting. */}}
-  function position(){const r=ring.getBoundingClientRect();details.style.top=`${r.bottom+7}px`;details.style.left=`${Math.max(8,Math.min(r.right-details.offsetWidth,innerWidth-details.offsetWidth-8))}px`;}
+  function position(){const r=ring.getBoundingClientRect(),below=r.bottom+7+details.offsetHeight<=innerHeight-8;details.style.top=`${below?r.bottom+7:Math.max(8,r.top-7-details.offsetHeight)}px`;details.style.left=`${Math.max(8,Math.min(r.right-details.offsetWidth,innerWidth-details.offsetWidth-8))}px`;}
   let delay;
   function hide(){clearTimeout(delay);details.hidden=true;ring.setAttribute('aria-expanded','false');}
   function show(){clearTimeout(delay);void refresh();delay=setTimeout(()=>{details.hidden=false;ring.setAttribute('aria-expanded','true');position();},300);}

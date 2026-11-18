@@ -27,13 +27,13 @@ test('session approval cards',{timeout:240000},async()=>{
  try{
   const page=await app.firstWindow(),errors=[];page.setDefaultTimeout(15000);page.on('pageerror',e=>errors.push(e.message));
   assert.equal(await app.evaluate(()=>process.env.SUFFICE_SESSIONS_SOCKET),SOCKET,'private tmux socket reaches the app');
-  await page.locator('[data-action="send-menu"]').waitFor();
+  await page.locator('[data-action="send-menu"]').waitFor({state:'attached'});
   await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].setBounds({width:1440,height:900}));
   await page.waitForFunction(()=>innerWidth===1440&&innerHeight===900);
   const shot=async n=>{await page.waitForTimeout(350);const b64=await app.evaluate(async({BrowserWindow})=>(await BrowserWindow.getAllWindows()[0].webContents.capturePage()).toPNG().toString('base64'));await writeFile(resolve(shots,n),Buffer.from(b64,'base64'));};
   // Agents are chosen in the model picker now (no send-menu item): start through the API, then open its sidebar row.
   await page.evaluate(p=>sufficeDesktop.sessions.start({agent:'fakeclaude',cwd:p}),project);
-  await page.reload();await page.locator('[data-action="send-menu"]').waitFor();
+  await page.reload();await page.locator('[data-action="send-menu"]').waitFor({state:'attached'});
   await page.locator('.sidebar-cli-sessions .thread-row').first().click();
   await page.locator('.thread-header').waitFor();
   if(process.env.THEME)await page.locator('html').evaluate((el,t)=>{el.dataset.theme=t;},process.env.THEME); // SHOT_DIR runs per theme

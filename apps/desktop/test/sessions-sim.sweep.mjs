@@ -84,7 +84,7 @@ const pid=app.process().pid;let launches=1;
 let result={};try{result=JSON.parse(await readFile(resolve(out,'SWEEP.json'),'utf8'));}catch{}
 try{
  const page=await app.firstWindow();page.setDefaultTimeout(15000);const errors=[];page.on('pageerror',e=>errors.push(e.message));
- await page.locator('[data-action="send-menu"]').waitFor();
+ await page.locator('[data-action="send-menu"]').waitFor({state:'attached'});
  await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].setBounds({width:1440,height:900}));
  await page.waitForFunction(()=>innerWidth===1440&&innerHeight===900);
  await page.evaluate(INSTALL);
@@ -99,7 +99,7 @@ try{
    await page.evaluate(()=>{window.__gap=0;window.__ipc=0;});
    // Agents are chosen in the model picker now (no send-menu item): start through the API, reload, open the newest sidebar row.
    await page.evaluate(p=>sufficeDesktop.sessions.start({agent:'simclaude',cwd:p}),project);
-   await page.reload();await page.locator('[data-action="send-menu"]').waitFor();await page.evaluate(INSTALL);
+   await page.reload();await page.locator('[data-action="send-menu"]').waitFor({state:'attached'});await page.evaluate(INSTALL);
    await page.locator('.sidebar-cli-sessions .thread-row').first().click();await page.locator('.sidebar-cli-sessions .thread-row[aria-pressed="true"]').waitFor();
    const sid=await page.evaluate(async()=>{const l=await sufficeDesktop.sessions.list();const s=l.filter(x=>x.agent==='simclaude').at(-1);let n=0;sufficeDesktop.sessions.onUi(s.id,()=>{window.__ipc=(window.__ipc||0)+1;});return s.id;});
    const mem0=(await snap()).mem;const tStart=Date.now();

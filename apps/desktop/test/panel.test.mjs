@@ -39,7 +39,7 @@ test('thread panels, file views, tabs and drafts restore independently, includin
   await page.getByRole('button',{name:'Collapse sidebar',exact:true}).click();
   const reopen=page.getByRole('button',{name:'Open sidebar',exact:true});
   assert.deepEqual(await size('.sidebar-reopen'),await size('.workspace-tools > button:last-child'));
-  const alignment=await page.evaluate(()=>{const center=el=>{const r=el.getBoundingClientRect();return r.top+r.height/2;};const title=document.querySelector('.thread-header'),range=document.createRange();range.selectNodeContents(title);const r=range.getBoundingClientRect();return {reopen:center(document.querySelector('.sidebar-reopen')),window:center(document.querySelector('.workspace-tool')),title:r.y+r.height/2,titleX:r.x,buttonRight:document.querySelector('.sidebar-reopen').getBoundingClientRect().right};});
+  const alignment=await page.evaluate(()=>{const center=el=>{const r=el.getBoundingClientRect();return r.top+r.height/2;};const title=document.querySelector('.thread-header'),range=document.createRange();range.selectNodeContents(title);const r=range.getBoundingClientRect();return {reopen:center(document.querySelector('.sidebar-reopen')),window:center(document.querySelector('.side-chat-toggle')),title:r.y+r.height/2,titleX:r.x,buttonRight:document.querySelector('.sidebar-reopen').getBoundingClientRect().right};});
   assert.ok(Math.abs(alignment.reopen-25)<.5);assert.ok(Math.abs(alignment.title-alignment.window)<1.5);assert.ok(alignment.titleX>=alignment.buttonRight+6);
   assert.equal(await reopen.evaluate(el=>getComputedStyle(el).backgroundColor),'rgba(0, 0, 0, 0)');
   await page.screenshot({path:resolve('apps/desktop/desktop-collapsed-header.png')});
@@ -71,7 +71,7 @@ test('thread panels, file views, tabs and drafts restore independently, includin
   await page.screenshot({path:resolve('apps/desktop/desktop-files-tree.png')});
   await page.getByRole('treeitem',{name:'hello.txt',exact:true}).click();await page.locator('.panel-code').filter({hasText:'after'}).waitFor();
   await page.getByRole('button',{name:'Add panel tab'}).click();assert.equal(await page.getByRole('menuitem',{name:'Close tab',exact:true}).count(),0);await page.getByRole('menu',{name:'Panel options'}).getByRole('menuitem',{name:'Changes',exact:true}).click();
-  const tabAlignment=await page.evaluate(()=>{const cy=el=>{const r=el.getBoundingClientRect();return r.top+r.height/2;};return {window:cy(document.querySelector('.workspace-tool')),tabs:[...document.querySelectorAll('[role="tab"]')].map(cy),header:document.querySelector('.right-panel-header').getBoundingClientRect().toJSON(),controls:document.querySelector('.window-controls').getBoundingClientRect().toJSON()};});
+  const tabAlignment=await page.evaluate(()=>{const cy=el=>{const r=el.getBoundingClientRect();return r.top+r.height/2;};return {window:cy(document.querySelector('.side-chat-toggle')),tabs:[...document.querySelectorAll('[role="tab"]')].map(cy),header:document.querySelector('.right-panel-header').getBoundingClientRect().toJSON(),controls:document.querySelector('.window-controls').getBoundingClientRect().toJSON()};});
   assert.ok(tabAlignment.tabs.every(y=>Math.abs(y-tabAlignment.window)<.5));
   assert.ok(tabAlignment.header.right<=tabAlignment.controls.x-6||tabAlignment.header.x>=tabAlignment.controls.right);
   await page.locator('.panel-path').filter({hasText:'changed files'}).waitFor();

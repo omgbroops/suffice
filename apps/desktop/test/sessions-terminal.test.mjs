@@ -44,9 +44,9 @@ try{
  // join2: one header toggle (.session-mode-toggle, aria-pressed=true while the terminal shows) replaces the Chat/Terminal segmented control.
  const setView=async term=>{const b=page.locator('.session-mode-toggle');if((await b.getAttribute('aria-pressed'))!==String(term))await b.click();};
  const startNew=async agent=>{const before=await ids();await startApi(agent);let n=[];for(let i=0;i<40&&!n.length;i++){n=(await ids()).filter(x=>!before.includes(x));if(!n.length)await page.waitForTimeout(100);}if(n.length!==1)throw new Error('expected one new session, got '+n);
-  await page.reload();await page.locator('[data-action="send-menu"]').waitFor();await page.locator('.sidebar-cli-sessions .thread-row').first().waitFor();
+  await page.reload();await page.locator('[data-action="send-menu"]').waitFor({state:'attached'});await page.locator('.sidebar-cli-sessions .thread-row').first().waitFor();
   await page.evaluate(id=>[...document.querySelectorAll('.sidebar-cli-sessions .thread-row')].find(r=>r._s?.id===id).click(),n[0]);await page.locator('.session-mode-toggle:not([hidden])').waitFor();return n[0];};
- await page.locator('[data-action="send-menu"]').waitFor();
+ await page.locator('[data-action="send-menu"]').waitFor({state:'attached'});
  // fake agent
  const id=await startNew('fake');
  await page.locator('#prompt').fill('hello');await page.locator('#prompt').press('Enter');

@@ -22,7 +22,7 @@ for(const BOOT of [0,1500,3000])test(`first prompt survives the trust card (CLI 
  const app=await _electron.launch({executablePath:electronPath,args:['-r','/Users/abhayg/suffice-desktop-wt/ui-shots/no-dialog.cjs',appDir,`--user-data-dir=${data}`],env});
  try{
   const page=await app.firstWindow(),errors=[];page.setDefaultTimeout(15000);page.on('pageerror',e=>errors.push(e.message));
-  await page.locator('[data-action="send-menu"]').waitFor();
+  await page.locator('[data-action="send-menu"]').waitFor({state:'attached'});
   await page.evaluate(()=>{document.querySelector('.composer').modelSelection={provider:'cli',model:'fakeclaude'};});
   assert.equal(await page.locator('.composer-approval').count(),0,'no approval section in the DOM while nothing is pending');
   await page.locator('#prompt').fill('Add a retry to the uploader');

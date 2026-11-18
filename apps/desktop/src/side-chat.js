@@ -42,7 +42,7 @@ export function connectSideChat({api,form,toast,markdown}){
  panel.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();event.stopPropagation();set(false);document.querySelector('#prompt')?.focus();}});
  panel.addEventListener('click',async event=>{const control=event.target.closest('[data-side]');if(!control)return;if(control.dataset.side==='close'){set(false);document.querySelector('#prompt')?.focus();}if(control.dataset.side==='new'){if(chats.get(activeId)?.running){toast('Wait for the answer to finish');return;}await end(activeId,{keep:true});}});
  document.addEventListener('suffice-side-chat-toggle',()=>{if(eligible())set(!open);else toast('Open a thread to start a side chat');});
- document.addEventListener('keydown',event=>{if((event.metaKey||event.ctrlKey)&&event.shiftKey&&!event.altKey&&event.code==='KeyU'){event.preventDefault();document.dispatchEvent(new Event('suffice-side-chat-toggle'));}});
+ document.addEventListener('keydown',event=>{if((event.metaKey||event.ctrlKey)&&event.shiftKey&&!event.altKey&&event.code==='KeyU'&&!document.querySelector('form.composer')?.dataset.voice){event.preventDefault();document.dispatchEvent(new Event('suffice-side-chat-toggle'));}});
  document.addEventListener('suffice-thread-deleted',event=>{const id=event.detail?.id;if(id)void end(id);});
  viewState.subscribe(event=>{if(event.type!=='select'&&event.type!=='adopt')return;activeId=event.id;if(open&&!eligible())set(false);else if(open)paint();});
  activeId=viewState.id;

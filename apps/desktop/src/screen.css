@@ -1,0 +1,116 @@
+/* Start screen and composer. Material rule: buttons come out (raised), fields go in (sunk). Geometry rule: nested radius = outer radius - inset.
+   Loaded last on purpose; it supersedes the earlier composer passes. */
+.desktop-app {
+  --on-accent: #0a1220;
+  --raised-fill: #202228c2;
+  --raised-hover: #2c2e36d6;
+  --raised-shadow: inset 0 1px 0 #ffffff1f, inset 0 0 0 var(--hairline) #ffffff1a, 0 1px 2px #0000006b;
+  --well-fill: color-mix(in srgb, #000 58%, transparent);
+  --well-shadow: inset 0 2px 5px #000000a8, inset 0 0 0 1px #ffffff12, 0 1px 0 #ffffff12;
+  --composer-inset: 6px;
+  --composer-btn: var(--control-height);
+  --composer-radius: calc(var(--composer-btn) / 2 + var(--composer-inset));
+}
+.desktop-app[data-theme='light'] {
+  --on-accent: #ffffff;
+  --raised-fill: #ffffffd9;
+  --raised-hover: #ffffff;
+  --raised-shadow: inset 0 1px 0 #ffffff, inset 0 0 0 var(--hairline) #0000001f, 0 1px 2px #00000017;
+  --well-fill: color-mix(in srgb, #000 6%, #ffffff66);
+  --well-shadow: inset 0 2px 4px #00000024, inset 0 0 0 1px #00000014, 0 1px 0 #ffffffd9;
+}
+
+/* Shell: the wallpaper shows through the sidebar and the main panel (the build before the frame pass). */
+.desktop-app.desktop-app:not(.solid-surfaces) .workspace:not(.background-none),
+.desktop-app.desktop-app:not(.solid-surfaces) .workspace.thread-view:not(.background-none) { background: transparent; }
+.desktop-app:not(.solid-surfaces):has(.workspace:not(.thread-view):not(.background-none)) .app-wallpaper { opacity: 1; filter: none; }
+.desktop-app:not(.solid-surfaces):has(.workspace:not(.thread-view)) .app-wallpaper::after { opacity: 0; }
+
+/* The box: sunk into the page. 1-2 lines high, holding + / text / dictate, voice or send. */
+.desktop-app.desktop-app .composer {
+  display: block; width: 100%; min-height: 0; padding: var(--composer-inset);
+  border: 0; outline: 0; border-radius: var(--composer-radius);
+  background: var(--well-fill); box-shadow: var(--well-shadow);
+  -webkit-backdrop-filter: blur(14px) saturate(1.05); backdrop-filter: blur(14px) saturate(1.05);
+  transition: box-shadow var(--duration-hover) var(--ease-out);
+}
+.desktop-app.desktop-app .workspace .composer { background: var(--well-fill); outline: 0; }
+.desktop-app.desktop-app .composer:focus-within { box-shadow: var(--well-shadow), inset 0 0 0 1px color-mix(in srgb, var(--blue) 55%, transparent); }
+.desktop-app.solid-surfaces .composer { -webkit-backdrop-filter: none; backdrop-filter: none; }
+.composer-row { display: flex; align-items: flex-end; gap: var(--space-1); min-width: 0; }
+.desktop-app.desktop-app .composer .composer-row > textarea { flex: 1; min-width: 0; width: auto; margin: 0; padding: calc((var(--composer-btn) - 20px) / 2) var(--space-2); min-height: var(--composer-btn); max-height: min(280px, 38vh); font-size: var(--text-base); line-height: 20px; box-sizing: border-box; scrollbar-gutter: auto; }
+.desktop-app.desktop-app .composer textarea::placeholder { color: color-mix(in srgb, var(--text) 34%, transparent); opacity: 1; }
+.desktop-app.desktop-app .thread-view .composer textarea,
+.desktop-app.desktop-app .composer .composer-row > textarea { min-height: var(--composer-btn); }
+.composer-actions { display: flex; align-items: center; gap: var(--space-1); flex: none; }
+.composer-actions .send-group { margin: 0; }
+
+/* Buttons in the box: raised circles, radius = box radius - inset. */
+.desktop-app .composer-row :is([data-action='attach'], .dictate-button, .voice-start),
+.desktop-app .composer .composer-actions .send-group {
+  width: var(--composer-btn); height: var(--composer-btn); min-width: var(--composer-btn); min-height: var(--composer-btn); padding: 0; flex: none;
+  display: inline-flex; align-items: center; justify-content: center; border-radius: calc(var(--composer-radius) - var(--composer-inset));
+  border: 0; color: var(--text); background: var(--raised-fill); box-shadow: var(--raised-shadow);
+  -webkit-backdrop-filter: none; backdrop-filter: none;
+}
+.desktop-app .composer-row :is([data-action='attach'], .dictate-button, .voice-start):hover:not(:disabled) { background: var(--raised-hover); color: var(--text-strong); }
+.desktop-app .composer-row :is([data-action='attach'], .dictate-button, .voice-start):active:not(:disabled) { transform: scale(.96); box-shadow: inset 0 1px 2px #00000040; }
+.desktop-app .composer-row :is([data-action='attach'], .dictate-button, .voice-start) .icon { width: 17px; height: 17px; }
+.desktop-app .composer-row .voice-start { color: var(--blue); background: color-mix(in srgb, var(--blue) 14%, var(--raised-fill)); }
+.desktop-app .composer-row .dictate-button[aria-pressed='true'] { color: var(--on-accent); background: var(--blue); }
+/* Send: accent plate, only when there is something to send (or a run to stop). The voice button takes its place when the box is empty. */
+.desktop-app .composer:not([data-has-input='true']):not([data-running='true']) .send-group { display: none; }
+.desktop-app .composer[data-has-input='true'] .voice-start, .desktop-app .composer[data-running='true'] .voice-start { display: none; }
+.desktop-app.desktop-app .composer .composer-actions .send-group,
+.desktop-app.desktop-app .composer .composer-actions .send-group:has(.send-button:disabled),
+.desktop-app.desktop-app .composer .composer-actions .send-group:has(.send-button:not(:disabled)) {
+  width: auto; min-width: var(--composer-btn); gap: 0; overflow: hidden; opacity: 1; background: var(--accent); color: var(--accent-fg);
+  box-shadow: inset 0 1px 0 #ffffff40, inset 0 0 0 var(--hairline) #00000040, 0 1px 2px #0000006b;
+}
+.desktop-app.desktop-app .composer .composer-actions .send-group:has(.send-button:not(:disabled)):hover { background: color-mix(in srgb, var(--accent) 88%, var(--accent-fg)); }
+.desktop-app.desktop-app .composer .composer-actions .send-group .button { color: var(--accent-fg); width: var(--composer-btn); height: var(--composer-btn); min-height: var(--composer-btn); padding: 0; border-radius: 0; }
+.desktop-app.desktop-app .composer .composer-actions .send-group .send-options { width: calc(var(--composer-btn) * .66); margin-left: calc(var(--composer-btn) * -.2); }
+.desktop-app .composer .composer-actions .send-group .send-button .icon { width: 18px; height: 18px; }
+
+/* Row below the box. */
+.composer-meta { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-1) var(--space-2); margin-top: var(--space-2); min-width: 0; }
+.composer-meta-left, .composer-meta-right { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-1); min-width: 0; }
+.composer-meta .project-bar { display: flex; justify-content: flex-start; gap: var(--space-1); margin: 0; }
+.thread-view .composer-meta .project-bar { display: none; }
+.desktop-app.desktop-app .composer-meta :is(.project-picker, .git-pill, .worktree-toggle, .access-mode-picker, .model-button, .context-chip, .context-ring) {
+  display: inline-flex; align-items: center; gap: var(--space-2); height: var(--control-height-sm); min-height: var(--control-height-sm); padding: 0 var(--space-3); margin: 0;
+  border: 0; border-radius: var(--radius-3); font-size: var(--text-xs); line-height: 20px; font-weight: var(--weight-medium); color: var(--text-muted);
+  background: var(--raised-fill); box-shadow: var(--raised-shadow); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); max-width: 240px;
+}
+.desktop-app.desktop-app .composer-meta :is(.project-picker, .git-pill, .worktree-toggle, .access-mode-picker, .model-button, .context-chip, .context-ring):hover:not(:disabled),
+.desktop-app.desktop-app .composer-meta :is(.project-picker, .git-pill, .access-mode-picker, .model-button, .context-ring)[aria-expanded='true'] { background: var(--raised-hover); color: var(--text); }
+.desktop-app .composer-meta :is(.project-picker, .git-pill, .worktree-toggle, .access-mode-picker, .model-button, .context-chip, .context-ring):active:not(:disabled) { transform: none; box-shadow: inset 0 1px 2px #00000040; }
+.desktop-app .composer-meta .project-picker { padding-left: calc(var(--space-3) - 3px); }
+.desktop-app .composer-meta .project-picker > .thread-project-icon { border-radius: calc(var(--radius-3) - 3px); }
+.desktop-app .composer-meta .git-pill:disabled { opacity: 1; }
+.desktop-app .composer-meta .git-pill::before { display: none; }
+.desktop-app .composer-meta .model-button #model-label { color: var(--text); font-weight: var(--weight-medium); }
+.desktop-app .composer-meta .model-button .model-effort { color: var(--text-muted); }
+.desktop-app .composer-meta .access-mode-picker .icon, .desktop-app .composer-meta .project-picker > .icon, .desktop-app .composer-meta .git-pill .icon { width: var(--icon-size-sm); height: var(--icon-size-sm); }
+.desktop-app .composer-meta .access-mode-picker { color: var(--text-muted); }
+.desktop-app .composer-meta .context-chip .icon { display: none; }
+.desktop-app .composer-meta .context-chip span::after { content: ' tokens'; }
+.desktop-app .composer-meta .context-ring { position: static; width: var(--control-height-sm); padding: 0; justify-content: center; }
+.desktop-app .composer-meta .context-ring svg { width: 15px; height: 15px; }
+.desktop-app .composer-meta .context-ring-value { stroke: var(--blue); }
+/* Usage ring and token count mean nothing before a thread exists. */
+.workspace:not(.thread-view) .composer-meta :is(.context-ring, .context-chip) { display: none; }
+
+/* Fields go in: every text field on this screen is a sunk well. */
+.desktop-app .popover :is(.project-search, .model-search) { background: var(--well-fill); box-shadow: var(--well-shadow); border-radius: var(--radius-3); }
+
+/* Queued messages sit on the same well as the box they belong to. */
+.desktop-app .queued-messages { background: var(--well-fill); }
+
+/* Starter cards: raised. */
+.desktop-app .start-card { background: var(--raised-fill); box-shadow: var(--raised-shadow); transition: background-color var(--duration-hover) var(--ease-out), transform var(--duration-hover) var(--ease-out); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+.desktop-app .start-card:hover { background: var(--raised-hover); box-shadow: var(--raised-shadow), inset 0 0 0 1px color-mix(in srgb, var(--blue) 45%, transparent); }
+.desktop-app .start-card:active { transform: scale(.985); }
+.desktop-app .start-card:focus-visible { outline: 1px solid var(--blue); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) { .desktop-app .start-card, .desktop-app .composer-row .button { transition: none; } .desktop-app .start-card:active, .desktop-app .composer-row .button:active { transform: none; } }

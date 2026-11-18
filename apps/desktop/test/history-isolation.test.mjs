@@ -22,7 +22,7 @@ async function run(key,explicitHistory){
  let app;
  try{
   app=await _electron.launch({executablePath:electronPath,args:['-r','/Users/abhayg/suffice-desktop-wt/ui-shots/no-dialog.cjs',resolve('apps/desktop'),`--user-data-dir=${data}`],env});
-  const page=await app.firstWindow();await page.locator('[data-action="send-menu"]').waitFor({timeout:20000});
+  const page=await app.firstWindow();await page.locator('[data-action="send-menu"]').waitFor({state:'attached',timeout:20000});
   return JSON.stringify(await page.evaluate(()=>Promise.all([sufficeDesktop.sessions.list(),sufficeDesktop.sessions.history.list({query:''})])));
  }finally{try{await app?.close();}catch{}try{execFileSync('tmux',['-L','sfx-test-'+key,'kill-server'],{stdio:'ignore'});}catch{}await rm(tmp,{recursive:true,force:true}).catch(()=>{});}
 }

@@ -185,7 +185,8 @@ if(primary)app.whenReady().then(async()=>{
   async function runTask(payload,inBackground=false){
     if(deletingThreads.has(payload?.threadId))throw new Error('This thread is being deleted');
     if(branchBusy)throw new Error('Wait for the branch change to finish');preparing++;const runId=payload?.threadId;if(runId)threadRuns.set(runId,(threadRuns.get(runId)||0)+1);try{
-    if(!project&&!payload?.askBar)throw new Error('Choose a project above the composer first');
+    // No project chosen: run in ~/Suffice, created on first use (SUFFICE_DEFAULT_PROJECT overrides it for tests).
+    if(!project&&!payload?.askBar){const dir=process.env.SUFFICE_DEFAULT_PROJECT||path.join(require('node:os').homedir(),'Suffice');await require('node:fs/promises').mkdir(dir,{recursive:true});await request('reset');project=selectedProject=dir;await projects.add(dir).catch(()=>{});}
     if(!payload||typeof payload.prompt!=='string'||payload.prompt.length>1000000||!['off','minimal','low','medium','high','xhigh','max'].includes(payload.effort)||(payload.model!==undefined&&(typeof payload.model!=='string'||typeof payload.provider!=='string')))throw new Error('Invalid task');
     const prefs={...await settings.get()};if(payload.approvalMode!==undefined){if(!['Ask before every action','Ask when needed','Never ask'].includes(payload.approvalMode))throw new Error('Invalid approval mode');prefs['approval-mode']=payload.approvalMode;}if((inBackground||running>0)&&!prefs['background-agents'])throw new Error('Background agents are disabled in settings');let cwd=threadLocations.get(payload.threadId)||project||require('node:os').homedir();
     if(payload.ownWorktree===true&&!payload.threadId&&typeof payload.clientId==='string'&&!threadLocations.has(payload.clientId))cwd=(await threadWorktree.create(cwd,worktreeDirectory(prefs))).path;

@@ -38,7 +38,7 @@ export function connectContextInspector({api,form,toast}){
   document.body.append(panel);paintPanel();
   const outside=event=>{if(!panel.contains(event.target)&&!chip.contains(event.target))close();};
   const key=event=>{if(event.key==='Escape'){event.stopPropagation();close();chip.focus();}};
-  document.addEventListener('pointerdown',outside,true);document.addEventListener('keydown',key,true);off=()=>{document.removeEventListener('pointerdown',outside,true);document.removeEventListener('keydown',key,true);};
+  document.addEventListener('pointerdown',outside,true);document.addEventListener('keydown',key,true);let frame=0,lastTop=-1;const follow=()=>{if(!panel)return;const top=form.getBoundingClientRect().top;if(top!==lastTop){lastTop=top;place();}frame=requestAnimationFrame(follow);};follow();off=()=>{cancelAnimationFrame(frame);document.removeEventListener('pointerdown',outside,true);document.removeEventListener('keydown',key,true);};
   chip.setAttribute('aria-expanded','true');addEventListener('resize',place);showPopover(panel);panel.addEventListener('animationend',()=>place(),{once:true});setTimeout(()=>panel&&place(),250);panel.focus({preventScroll:true});void load();
  }
  chip.addEventListener('click',open);

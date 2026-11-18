@@ -74,10 +74,10 @@ test('standard chat permission card: Later, Deny, Always allow, Allow, key hints
 test('session permission card: lead title, Later chip, Ctrl+Enter',{timeout:240000},async()=>{
  const L=await launch({SUFFICE_TEST_AGENT:resolve('packages/backend/test/fixtures/sessions/fake-agent.mjs'),SUFFICE_TEST_NODE:process.execPath,SUFFICE_TEST_CLAUDE_AGENT:resolve('apps/desktop/test/sessions-approval-agent.mjs')}),{page,tmp,simLog}=L;
  try{
-  await page.locator('[data-action="send-menu"]').waitFor();
+  await page.locator('[data-action="send-menu"]').waitFor({state:'attached'});
   const project=resolve(tmp,'demo-project');
   await page.evaluate(p=>sufficeDesktop.sessions.start({agent:'fakeclaude',cwd:p}),project);
-  await page.reload();await page.locator('[data-action="send-menu"]').waitFor();
+  await page.reload();await page.locator('[data-action="send-menu"]').waitFor({state:'attached'});
   await page.locator('.sidebar-cli-sessions .thread-row').first().click();await page.locator('.thread-header').waitFor();
   const sid=await page.evaluate(async()=>(await sufficeDesktop.sessions.list()).at(-1).id),card=page.locator('.composer-approval:not([hidden])');
   const type=t=>page.evaluate(([i,t])=>sufficeDesktop.sessions.send(i,t),[sid,t]),keys=async()=>(await readFile(simLog,'utf8')).split('\n').filter(Boolean).map(l=>JSON.parse(l));

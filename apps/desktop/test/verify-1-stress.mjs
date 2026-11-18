@@ -53,7 +53,7 @@ async function startSess(scn,text){
  await setScn(scn);
  const id=await page.evaluate(async({p,text})=>{const s=await sufficeDesktop.sessions.start({agent:'simclaude',cwd:p});if(text)await sufficeDesktop.sessions.send(s.id,text);return s.id;},{p:project,text});
  await page.waitForTimeout(3000);
- for(let k=0;k<3;k++){await page.reload();await page.locator('[data-action="send-menu"]').waitFor();await page.evaluate(INSTALL);
+ for(let k=0;k<3;k++){await page.reload();await page.locator('[data-action="send-menu"]').waitFor({state:'attached'});await page.evaluate(INSTALL);
   if(await page.locator('.sidebar-cli-sessions .thread-row').first().waitFor({timeout:8000}).then(()=>true).catch(()=>false))break;}
  if(!(await page.locator('.sidebar-cli-sessions .thread-row').count()))return id;
  await page.locator('.sidebar-cli-sessions .thread-row').first().click();
@@ -65,7 +65,7 @@ const E=(x)=>x;
 
 try{
  page=await app.firstWindow();page.setDefaultTimeout(20000);page.on('pageerror',e=>pageErrors.push(String(e.message).slice(0,200)));
- await page.locator('[data-action="send-menu"]').waitFor();
+ await page.locator('[data-action="send-menu"]').waitFor({state:'attached'});
  // ---- A: first prompt sent before the trust card is answered (bash-allow starts with a trust card)
  {
   const idA=await startSess('bash-allow','FIRSTPROMPT-ALPHA first message');

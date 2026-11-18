@@ -38,7 +38,7 @@ async function run(view){
   await page.waitForFunction(()=>innerWidth===1440&&innerHeight===900);
   let start;
   if(view==='chat'){start=Date.now();await page.locator(ROWS).filter({hasText:'Question 0'}).first().click();}
-  else{await page.locator('[data-action="send-menu"]').waitFor();await page.evaluate(([a,p])=>sufficeDesktop.sessions.start({agent:a,cwd:p}),['fakeclaude',cwd]);await page.reload();await page.locator('[data-action="send-menu"]').waitFor();start=Date.now();await page.locator(ROWS).first().click();}
+  else{await page.locator('[data-action="send-menu"]').waitFor({state:'attached'});await page.evaluate(([a,p])=>sufficeDesktop.sessions.start({agent:a,cwd:p}),['fakeclaude',cwd]);await page.reload();await page.locator('[data-action="send-menu"]').waitFor({state:'attached'});start=Date.now();await page.locator(ROWS).first().click();}
   // last message present = opened (chat: all blocks exist; session: last pair text rendered)
   await page.waitForFunction(n=>{const b=document.querySelector('.thread-messages');return b&&b.textContent.includes('Question '+(n-1));},pairs,{timeout:120000});
   const open=Date.now()-start;await page.waitForTimeout(1500);

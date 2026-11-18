@@ -16,10 +16,10 @@ Object.assign(env,{SUFFICE_HOME:suffice,SUFFICE_START_PROJECT:project,SUFFICE_TE
 const app=await _electron.launch({executablePath:electronPath,args:['-r','/Users/abhayg/suffice-desktop-wt/ui-shots/no-dialog.cjs',resolve('apps/desktop'),`--user-data-dir=${data}`],env});
 try{
  const page=await app.firstWindow();page.setDefaultTimeout(15000);
- await page.locator('[data-action="send-menu"]').waitFor();
+ await page.locator('[data-action="send-menu"]').waitFor({state:'attached'});
  await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].setBounds({width:1440,height:900}));
  await page.waitForFunction(()=>innerWidth===1440&&innerHeight===900);
- await page.evaluate(([a,p])=>sufficeDesktop.sessions.start({agent:a,cwd:p}),['fakeclaude',project]);await page.reload();await page.locator('[data-action="send-menu"]').waitFor();
+ await page.evaluate(([a,p])=>sufficeDesktop.sessions.start({agent:a,cwd:p}),['fakeclaude',project]);await page.reload();await page.locator('[data-action="send-menu"]').waitFor({state:'attached'});
  await page.locator('.sidebar-cli-sessions .thread-row').first().click();
  await page.locator('.session-mode-toggle').click();
  await page.locator('.session-terminal-slot .xterm-screen').waitFor();await page.waitForTimeout(1200);

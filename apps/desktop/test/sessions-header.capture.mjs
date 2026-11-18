@@ -20,12 +20,12 @@ const app=await _electron.launch({executablePath:electronPath,args:['-r','/Users
 const pid=app.process().pid;let page,failed=null;
 try{
  page=await app.firstWindow();page.setDefaultTimeout(15000);
- await page.locator('[data-action="send-menu"]').waitFor();
+ await page.locator('[data-action="send-menu"]').waitFor({state:'attached'});
  assert.equal(await app.evaluate(()=>process.env.SUFFICE_SESSIONS_SOCKET),socket,'private socket not set');
  await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].setBounds({width:1440,height:900}));
  await page.waitForFunction(()=>innerWidth===1440&&innerHeight===900);
  const shot=async n=>{await page.waitForTimeout(250);const b64=await app.evaluate(async({BrowserWindow})=>(await BrowserWindow.getAllWindows()[0].webContents.capturePage()).toPNG().toString('base64'));await writeFile(resolve(output,n),Buffer.from(b64,'base64'));};
- const startFake=async()=>{const cwd=await app.evaluate(()=>process.env.SUFFICE_START_PROJECT);await page.evaluate(([a,p])=>sufficeDesktop.sessions.start({agent:a,cwd:p}),['fakeclaude',cwd]);await page.reload();await page.locator('[data-action="send-menu"]').waitFor();await page.locator('.sidebar-cli-sessions .thread-row').first().click();await page.locator('.session-row').first().waitFor();await page.waitForFunction(()=>/session/i.test(document.querySelector('.thread-header')?.textContent||''));await page.waitForTimeout(1500);};
+ const startFake=async()=>{const cwd=await app.evaluate(()=>process.env.SUFFICE_START_PROJECT);await page.evaluate(([a,p])=>sufficeDesktop.sessions.start({agent:a,cwd:p}),['fakeclaude',cwd]);await page.reload();await page.locator('[data-action="send-menu"]').waitFor({state:'attached'});await page.locator('.sidebar-cli-sessions .thread-row').first().click();await page.locator('.session-row').first().waitFor();await page.waitForFunction(()=>/session/i.test(document.querySelector('.thread-header')?.textContent||''));await page.waitForTimeout(1500);};
  const norm=await page.evaluate(()=>{const h=document.querySelector('.thread-header'),was=h.hidden;h.hidden=false;document.querySelector('.workspace')?.classList.add('thread-view');const b=document.querySelector('.caption-chat-tools'),r=h.getBoundingClientRect();const o={h:r.height,pad:getComputedStyle(h).padding,toolPad:getComputedStyle(b).padding};h.hidden=was;document.querySelector('.workspace')?.classList.remove('thread-view');return o;});console.log('normal',JSON.stringify(norm));
  await startFake();
  const sock=await page.evaluate(()=>[...document.querySelectorAll('.session-row')].length);assert.ok(sock>=1);

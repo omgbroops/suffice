@@ -43,7 +43,7 @@ export async function launch({key,out}={}){
   page=await app.firstWindow();page.setDefaultTimeout(12000);
   page.on('console',m=>{if(m.type()==='error')console.error('PAGE',m.text().slice(0,200));});
   page.on('pageerror',e=>console.error('PAGEERROR',e.message));
-  await page.locator('[data-action="send-menu"]').waitFor();
+  await page.locator('[data-action="send-menu"]').waitFor({state:'attached'});
   await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].setBounds({width:1440,height:900}));
   await page.waitForFunction(()=>innerWidth===1440&&innerHeight===900);
   // The socket env must have reached the main process: a throwaway fake session reports the attach command it would use.

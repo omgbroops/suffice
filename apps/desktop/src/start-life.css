@@ -1,87 +1,30 @@
-/* Start screen: Capy geometry (clean-room, measured values), Suffice rules (concentric radii, inset wells, life). */
+/* Start screen. The wallpaper shows through at full strength; the block is centred; geometry comes from tokens.css. */
 ::selection { background: color-mix(in srgb, var(--blue) 20%, transparent); color: inherit; }
 
-.desktop-app {
-  --start-width: 694px;
-  --start-send-r: 6px;
-  --start-pad: 12px;
-  --start-edge: 6px; /* gap from send to the card edge: composer radius = send radius + this */
-  --start-ease: cubic-bezier(.4, 0, .2, 1);
-  --start-fill: #ffffff14;
-  --start-wall: .25;
-  --start-dot-filter: grayscale(1) brightness(12);
-}
-.desktop-app[data-theme='light'] { --start-fill: #0000000d; --start-wall: .2; --start-dot-filter: grayscale(1) invert(1) brightness(16) invert(1); }
+.desktop-app { --start-width: var(--composer-width); --start-ease: cubic-bezier(.4, 0, .2, 1); }
 
-/* Header texture; the edge-to-edge veil would mask the dots, so it is off here. */
-.desktop-app:has(.workspace:not(.thread-view)) .app-wallpaper::after { opacity: 0; }
-/* Mono dither dots: the horizon dither spans only ~9 levels at this opacity, so stretch it on the start screen. */
-.desktop-app:has(.workspace:not(.thread-view)) .app-wallpaper { filter: var(--start-dot-filter); }
-/* Header texture: the wallpaper dither at .25 dark / .20 light, fading into the solid panel by 40% height. */
-.desktop-app:has(.workspace:not(.thread-view)) .app-wallpaper { opacity: var(--start-wall); }
-.desktop-app .workspace:not(.thread-view) { background: linear-gradient(180deg, transparent 0, var(--surface-thread) 40%); }
-.desktop-app .workspace.background-none:not(.thread-view) { background: var(--surface-editor); }
-
-/* Centred block: composer centre sits at 47% of the panel (bar 28 + gap 17.5 above, card 114 / 2 = 57). */
 .desktop-app .workspace:not(.thread-view) .home { padding: 0; }
-.desktop-app .workspace:not(.thread-view) .agent-area { position: absolute; left: 50%; top: calc(47% - 102.5px); width: min(var(--start-width), calc(100% - 64px)); transform: translateX(-50%); }
+.desktop-app .workspace:not(.thread-view) .agent-area { position: absolute; left: 50%; top: 46%; width: min(var(--start-width), calc(100% - var(--space-8) * 2)); transform: translate(-50%, -50%); }
+.desktop-app .workspace:not(.thread-view) .dashboard { display: none; }
 
-/* Composer: opaque card, 694 x 114 collapsed, concentric radii (send 6 + edge 6 = 12), no blur. */
-.desktop-app .workspace:not(.thread-view) .composer {
-  --radius-send: var(--start-send-r);
-  --composer-padding: var(--start-pad);
-  display: flex; flex-direction: column; min-height: 114px; width: 100%;
-  padding: var(--start-pad); border-radius: calc(var(--start-send-r) + var(--start-edge));
-  background: var(--surface-card); -webkit-backdrop-filter: none; backdrop-filter: none;
-  box-shadow: var(--shadow-composer); border-width: .5px;
-}
-.desktop-app .workspace:not(.thread-view) .composer textarea { flex: none; font-size: var(--text-base); line-height: 20px; }
-.desktop-app .workspace:not(.thread-view) .composer textarea::placeholder { color: var(--text-placeholder); }
-.desktop-app .workspace:not(.thread-view) .composer-toolbar { margin: calc(var(--space-1) - .5px) calc(var(--start-edge) - var(--start-pad) - .5px) calc(var(--start-edge) - var(--start-pad) - .5px); }
-.desktop-app .workspace:not(.thread-view) .composer .send-group { height: var(--control-height-sm); border-radius: var(--start-send-r); }
+/* Mark, title, optional Needs-you pill. Hidden inside a thread. */
+.workspace.thread-view .life { display: none; }
+.life-in { animation: life-in 200ms var(--ease-out) backwards; animation-delay: calc(var(--i, 0) * 36ms); }
+@keyframes life-in { from { opacity: 0; transform: translateY(6px); } }
+.life-head { margin: 0 0 var(--space-6); text-align: center; }
+.life-mark { display: block; margin: 0 0 var(--space-3); font-family: 'Geist Pixel', monospace; font-size: var(--text-xl); line-height: 28px; letter-spacing: -.03em; color: var(--blue); }
+.life-hello { margin: 0; font-size: 30px; line-height: 36px; font-weight: var(--weight-medium); letter-spacing: -.025em; color: var(--text-strong); }
+.life-sub { display: flex; justify-content: center; margin: var(--space-3) 0 0; }
+.life-sub:empty { display: none; }
+.life-needs { height: var(--control-height-xs); padding: 0 var(--space-3); border-radius: var(--radius-5); background: color-mix(in srgb, var(--blue) 16%, transparent); box-shadow: inset 0 0 0 var(--hairline) color-mix(in srgb, var(--blue) 45%, transparent); color: var(--text-strong); font-size: var(--text-xs); }
 
-/* Selectors row: bare ghost triggers, project left, branch right, aligned to the card edges. */
-.desktop-app .workspace:not(.thread-view) .project-bar { justify-content: space-between; gap: var(--space-2); margin: 0 0 17.5px; }
-.desktop-app .workspace:not(.thread-view) .project-bar :is(.project-picker, .git-pill) {
-  min-height: var(--control-height-sm); padding: 3px 6px; margin-inline: -6px; border: 0 solid transparent; outline: 0; box-shadow: none;
-  background: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; border-radius: var(--radius-control);
-  color: var(--text-muted); font-size: var(--text-sm); font-weight: var(--weight-medium); line-height: 20px;
-  transition: background-color 100ms var(--start-ease), color 100ms var(--start-ease), filter 100ms var(--start-ease);
-}
-.desktop-app .workspace:not(.thread-view) .project-bar .git-pill { font-size: var(--text-xs); }
-.desktop-app .workspace:not(.thread-view) .project-bar :is(.project-picker, .git-pill):not(:disabled):is(:hover, [aria-expanded='true']) { background: var(--start-fill); color: var(--text); }
-.desktop-app .workspace:not(.thread-view) .project-bar :is(.project-picker, .git-pill):not(:disabled):active { filter: brightness(.97); transform: none; }
-
-/* Start screen. Opacity and transform only; tokens from tokens.css. Greeting and strip hide inside a thread. */
-.workspace.thread-view .life{display:none}
-.life-in{animation:life-in 200ms var(--ease-out) backwards;animation-delay:calc(var(--i,0)*36ms)}
-@keyframes life-in{from{opacity:0;transform:translateY(6px)}}
-.life-head{margin:0 0 var(--space-5);text-align:center}
-.life-hello{margin:0;font-size:28px;line-height:34px;font-weight:500;letter-spacing:-.02em;color:var(--text-strong)}
-.life-sub{display:flex;align-items:center;justify-content:center;gap:var(--space-2);margin:var(--space-1) 0 0;font-size:14px;line-height:24px;color:var(--text-muted)}
-.life-dot{color:var(--text-faint)}
-.life-needs{padding:0 var(--space-2);height:24px;border-radius:999px;background:var(--surface-hover);font-size:12px;color:var(--text-muted);transition:background var(--duration) var(--ease-out)}
-.life-needs[data-count]:not([data-count='0']){color:var(--text-strong);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--blue) 40%,transparent)}
-.life-needs:not(:disabled):hover{background:var(--surface-hover-strong)}
-.life-needs:disabled{cursor:default}
-.life-tail{margin-top:var(--space-4)}
-.life-label{margin:0 0 var(--space-2) 4px;font-size:12px;line-height:18px;color:var(--text-muted)}
-.life-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-2)}
-.life-card{display:flex;flex-direction:column;gap:2px;min-width:0;padding:var(--space-3);border:var(--hairline) solid var(--border-strong);border-radius:var(--radius-card);background:var(--surface-card);text-align:left;color:var(--text);cursor:pointer;transition:background var(--duration) var(--ease-out),transform var(--duration) var(--ease-out)}
-.life-card:hover{background:var(--surface-hover-strong)}
-.life-card:active{transform:scale(.985)}
-.life-card:focus-visible{outline:1px solid var(--focus);outline-offset:1px}
-.life-card-head{display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);margin-bottom:var(--space-1)}
-.life-card-time{font-size:12px;line-height:16px;color:var(--text-faint)}
-.life-card-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;line-height:20px;color:var(--text-strong)}
-.life-card-meta{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;line-height:16px;color:var(--text-muted)}
-.life-card[data-status='working']{border-color:color-mix(in srgb,var(--blue) 28%,var(--border-strong))}
-.composer textarea.life-ph-out::placeholder{opacity:0}
-.composer textarea::placeholder{transition:opacity 160ms var(--ease-out)}
-.life-quiet .life-card .thread-state svg{animation:none}
-@media (prefers-reduced-motion:reduce){.life *,.life{animation:none!important;transition:none!important}.composer textarea::placeholder{transition:none}}
-/* Greeting sits above the selectors; lift the block so the composer stays at 47%. */
-.desktop-app .workspace:not(.thread-view) .agent-area[data-life='on'] { top: calc(47% - 102.5px - 82px); }
+/* Starter cards: raised, three across, each carrying one crop of the wallpaper's dither. */
+.life-tail { margin-top: var(--space-6); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-3); }
+.start-card { --card-inset: var(--space-2); display: flex; flex-direction: column; gap: var(--space-2); min-width: 0; padding: var(--card-inset); border: 0; border-radius: var(--radius-4); text-align: left; color: var(--text); cursor: pointer; }
+.start-card-art { display: block; width: 100%; height: calc(88px * var(--density)); border-radius: calc(var(--radius-4) - var(--card-inset)); image-rendering: pixelated; box-shadow: inset 0 0 0 var(--hairline) #ffffff1f; }
+.start-card-title { padding: 0 var(--space-1) var(--space-1); font-size: var(--text-sm); line-height: 20px; font-weight: var(--weight-medium); color: var(--text-strong); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.composer textarea::placeholder { transition: none; }
+@media (prefers-reduced-motion: reduce) { .life *, .life { animation: none !important; transition: none !important; } }
 
 /* New session, selected: 28 high, radius 6, 5% black / 8% white fill, 100ms. */
 .desktop-app .new-session[aria-current='page'] { min-height: var(--control-height-sm); height: var(--control-height-sm); border-radius: var(--radius-control); }

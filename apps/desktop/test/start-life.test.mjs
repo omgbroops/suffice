@@ -14,7 +14,7 @@ test('repo hints parse TODO/FIXME lines and JUnit failures',()=>{
  assert.deepEqual(parseJunit('<testcase name="ok" classname="a"/><testcase name="saves &quot;x&quot;"><failure message="m"/></testcase><testcase name="fine"></testcase>'),['saves "x"']);
 });
 const SHOTS=process.env.SUFFICE_START_SHOTS;
-test('Start screen: greeting, Needs-you, real-state Try placeholder, 3 recent cards, Tab to use',{timeout:90000},async()=>{
+test('Start screen: mark and title, typed suggestion from real repo state, three starter cards that fill the composer',{timeout:90000},async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-startlife-')),cwd=resolve(home,'proj');await mkdir(cwd,{recursive:true});
  await writeFile(resolve(cwd,'app.js'),'// TODO: cache the lookup\n');await writeFile(resolve(cwd,'junit.xml'),'<testsuite><testcase name="retries after a timeout"><failure message="x"/></testcase></testsuite>');
  execFileSync('git',['-C',cwd,'init','-q','-b','main']);execFileSync('git',['-C',cwd,'add','app.js']);execFileSync('git',['-C',cwd,'-c','user.name=F','-c','user.email=f@example.invalid','commit','-qm','f']);
@@ -27,33 +27,41 @@ test('Start screen: greeting, Needs-you, real-state Try placeholder, 3 recent ca
  const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
  try{
   const page=await app.firstWindow();await page.locator('.composer').waitFor();page.setDefaultTimeout(8000);
-  const shot=async p=>{await mkdir(SUFFICE_DIR(),{recursive:true});await writeFile(p,Buffer.from(await app.evaluate(async({BrowserWindow})=>(await BrowserWindow.getAllWindows()[0].webContents.capturePage()).toPNG().toString('base64')),'base64'));};
-  const SUFFICE_DIR=()=>SHOTS;
+  const shot=async p=>{await mkdir(SHOTS,{recursive:true});await writeFile(p,Buffer.from(await app.evaluate(async({BrowserWindow})=>(await BrowserWindow.getAllWindows()[0].webContents.capturePage()).toPNG().toString('base64')),'base64'));};
   if(SHOTS)await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].setContentSize(1440,900));
-  await page.locator('.life-card').first().waitFor();
-  assert.match(await page.locator('.life-hello').textContent(),/^(Still up|Good (morning|afternoon|evening))$/);
-  assert.match(await page.locator('.life-where').textContent(),/proj on main/);
-  assert.equal(await page.locator('.life-card').count(),3);
-  assert.equal(await page.locator('.life-needs').getAttribute('data-count'),'0');
-  await page.waitForFunction(()=>/^Try: Fix the failing test “retries after a timeout”  ·  Tab to use$/.test(document.querySelector('#prompt').placeholder));
+  await page.locator('.start-card').first().waitFor();
+  assert.match(await page.locator('.life-hello').textContent(),/\?$|build/);
+  assert.equal(await page.locator('.life-mark').textContent(),'[suffice]');
+  assert.equal(await page.locator('.life-label,.life-card').count(),0,'the pick-up strip is gone');
+  assert.equal(await page.locator('.start-card').count(),3);
+  assert.equal(await page.locator('.start-card canvas.start-card-art').count(),3);
+  // Each card carries a distinct image: three different pixel buffers.
+  const sums=await page.locator('.start-card-art').evaluateAll(c=>c.map(x=>{const d=x.getContext('2d').getImageData(0,0,x.width,x.height).data;let h=0;for(let i=0;i<d.length;i+=97)h=(h*31+d[i])|0;return h;}));
+  assert.equal(new Set(sums).size,3,'distinct card images '+sums);
+  assert.equal(await page.locator('.life-needs').count(),0);
+  // Typewriter: the placeholder grows one character at a time, ~30 ms each, then rests on the full suggestion.
+  const full='Fix the failing test “retries after a timeout”  ·  Tab to use';
+  await page.waitForFunction(t=>document.querySelector('#prompt').placeholder===t,full,{timeout:12000});
   const entrance=await page.evaluate(()=>[...document.querySelectorAll('.life-in')].map(e=>{const a=e.getAnimations()[0];return a?a.effect.getComputedTiming().endTime:0;}));
   assert.ok(Math.max(...entrance)<=400,'entrance under 400ms: '+entrance);
-  if(SHOTS)for(const th of ['dark','light']){await page.evaluate(t=>{localStorage.setItem('suffice-theme',t);},th);await page.reload();await page.locator('.life-card').first().waitFor();await page.waitForTimeout(900);await shot(resolve(SHOTS,'home-'+th+'.png'));}
-  // Needs-you: a thread waiting on approval raises the count and the pill opens it.
+  await page.reload();await page.locator('.start-card').first().waitFor();
+  const seen=await page.evaluate(()=>new Promise(r=>{const p=document.querySelector('#prompt'),lens=[];const t0=performance.now();const id=setInterval(()=>{const n=p.placeholder.length;if(lens.at(-1)!==n)lens.push(n);if(performance.now()-t0>6000||n>=60){clearInterval(id);r(lens);}},10);}));
+  assert.ok(seen.filter(n=>n>0&&n<60).length>=15,'placeholder is typed out, saw '+JSON.stringify(seen));
+  if(SHOTS)for(const th of ['dark','light']){await page.evaluate(t=>{localStorage.setItem('suffice-theme',t);},th);await page.reload();await page.locator('.start-card').first().waitFor();await page.waitForTimeout(4000);await shot(resolve(SHOTS,'home-'+th+'.png'));}
+  // Needs-you: a thread waiting on approval raises the pill and it opens that thread.
   await page.evaluate(()=>{const r=document.querySelector('.sidebar .thread-row');r.dataset.status='approval';r.append(document.createElement('i'));});
-  await page.waitForFunction(()=>document.querySelector('.life-needs').dataset.count==='1');
+  await page.waitForFunction(()=>document.querySelector('.life-needs')?.dataset.count==='1');
   assert.equal(await page.locator('.life-needs').textContent(),'1 needs you');
-  const raise=async()=>{await page.evaluate(()=>{const r=document.querySelector('.sidebar .thread-row');r.dataset.status='approval';r.append(document.createElement('i'));});await page.waitForFunction(()=>document.querySelector('.life-needs').dataset.count==='1');};
-  if(SHOTS)for(const th of ['dark','light']){await page.evaluate(t=>{localStorage.setItem('suffice-theme',t);},th);await page.reload();await page.locator('.life-card').first().waitFor();await raise();assert.equal(await page.evaluate(()=>document.documentElement.getAttribute('data-theme')),th);await page.waitForTimeout(900);await shot(resolve(SHOTS,'needs-'+th+'.png'));}
   await page.evaluate(()=>{const r=document.querySelector('.sidebar .thread-row');r.dataset.status='done';r.append(document.createElement('i'));});
-  await page.waitForFunction(()=>document.querySelector('.life-needs').dataset.count==='0');
-  // Idle motion stops on typing: the quiet flag is set and the placeholder stops rotating.
-  const prompt=page.locator('#prompt');await prompt.click();assert.equal(await page.locator('.agent-area.life-quiet').count(),1);
-  await page.keyboard.press('Tab');
+  await page.waitForFunction(()=>!document.querySelector('.life-needs'));
+  // Tab on an empty box writes the real-state suggestion in.
+  const prompt=page.locator('#prompt');await prompt.click();await page.keyboard.press('Tab');
   assert.match(await prompt.inputValue(),/^Fix the failing test “retries after a timeout”$/);
-  assert.equal(await page.locator('.agent-area.life-quiet').count(),1);
-  if(SHOTS){await page.evaluate(()=>document.documentElement.setAttribute('data-theme','dark'));await page.waitForTimeout(300);await shot(resolve(SHOTS,'typed-dark.png'));}
-  // Clicking a card opens that thread, which hides the start screen.
-  await prompt.fill('');await page.locator('.life-card').first().click();await page.locator('.workspace.thread-view').waitFor();assert.equal(await page.locator('.life-head').isVisible(),false);
+  // A starter card fills the composer with its full prompt, ready to send.
+  await prompt.fill('');await page.locator('.start-card').nth(1).click();
+  assert.match(await prompt.inputValue(),/^Run the tests, find the first failure/);
+  assert.equal(await page.locator('.composer').getAttribute('data-has-input'),'true');
+  // Opening a thread hides the start screen.
+  await prompt.fill('');await page.locator('.sidebar .thread-row').first().click();await page.locator('.workspace.thread-view').waitFor();assert.equal(await page.locator('.life-head').isVisible(),false);
  }finally{await app.close();}
 });
