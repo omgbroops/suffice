@@ -52,13 +52,13 @@ export function connectStartLife({api}={}){
  const head=mk('div','life life-head'),tail=mk('div','life life-tail');
  const mark=mk('span','life-mark','[suffice]');mark.setAttribute('aria-hidden','true');
  head.append(mark,mk('h2','life-hello'),mk('div','life-sub'));
- const base=prompt.placeholder;let hints={failing:[],todos:[]},list=[],first=true,timer=0,typed=false,typer=0;
+ const base=prompt.placeholder;let hints={failing:[],todos:[]},list=[],first=true,timer=0,typed=false,typer=0,ready=false;
  const home=()=>!workspace?.classList.contains('thread-view');
  const full=()=>list.length&&home()?`${list[0]}  \u00b7  Tab to use`:base;
- const setPh=()=>{if(typer)return;prompt.placeholder=full();};
+ const setPh=()=>{if(typer||(!typed&&motionOk()&&home()))return;prompt.placeholder=full();};
  // Typewriter: once, ~30 ms a character, in the placeholder's greyed colour. Focus, typing or reduced motion finishes it at once.
  function typeOnce(){
-  if(typed)return;typed=true;
+  if(typed||!ready)return;typed=true;
   const text=full();
   if(!motionOk()||prompt.value||!home()){prompt.placeholder=text;return;}
   let i=0;prompt.placeholder='';
@@ -67,14 +67,15 @@ export function connectStartLife({api}={}){
   prompt.addEventListener('focus',stop);prompt.addEventListener('input',stop);
  }
  if(motionOk()&&home())prompt.placeholder='';
- setTimeout(()=>typeOnce(),1500);
+ // Start typing once the repo hints have landed (so the typed text is the real suggestion), or after 1.5 s at the latest.
+ const go=()=>{ready=true;typeOnce();};setTimeout(go,1500);
  const rows=()=>[...new Set(document.querySelectorAll('.sidebar .thread-row'))].filter(r=>r._threadDetails);
  // Tab on an empty box writes the suggestion in, ready to send with Enter.
  const fill=text=>{prompt.value=text;prompt.dispatchEvent(new Event('input',{bubbles:true}));prompt.focus();prompt.setSelectionRange(text.length,text.length);};
  prompt.addEventListener('keydown',e=>{if(e.key==='Tab'&&!e.shiftKey&&!prompt.value&&list.length&&home()&&!document.querySelector('.thread-followups')){e.preventDefault();fill(list[0]);}});
  async function pull(){
   const [h,c]=await Promise.all([api?.startHints?.().catch(()=>null),api?.changes?.().catch(()=>null)]);
-  hints=h||{failing:[],todos:[]};hints.changes=(c?.entries||[]).map(e=>e.path);draw();
+  hints=h||{failing:[],todos:[]};hints.changes=(c?.entries||[]).map(e=>e.path);draw();setTimeout(go,30);
  }
  function draw(){clearTimeout(timer);timer=setTimeout(render,0);}
  function render(){

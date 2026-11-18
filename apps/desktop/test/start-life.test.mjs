@@ -47,6 +47,12 @@ test('Start screen: mark and title, typed suggestion from real repo state, three
   await page.reload();await page.locator('.start-card').first().waitFor();
   const seen=await page.evaluate(()=>new Promise(r=>{const p=document.querySelector('#prompt'),lens=[];const t0=performance.now();const id=setInterval(()=>{const n=p.placeholder.length;if(lens.at(-1)!==n)lens.push(n);if(performance.now()-t0>6000||n>=60){clearInterval(id);r(lens);}},10);}));
   assert.ok(seen.filter(n=>n>0&&n<60).length>=15,'placeholder is typed out, saw '+JSON.stringify(seen));
+  // Reduced motion: the suggestion is never typed; the placeholder only ever holds the full text.
+  await page.emulateMedia({reducedMotion:'reduce'});await page.reload();await page.locator('.start-card').first().waitFor();
+  const calm=await page.evaluate(()=>new Promise(r=>{const p=document.querySelector('#prompt'),seen=new Set();const t0=performance.now();const id=setInterval(()=>{seen.add(p.placeholder);if(performance.now()-t0>3500){clearInterval(id);r([...seen]);}},10);}));
+  assert.ok(calm.includes(full),'full suggestion shown '+JSON.stringify(calm));
+  assert.deepEqual(calm.filter(v=>v!==full&&v!==''&&full.startsWith(v)),[],'no partial text under reduced motion '+JSON.stringify(calm));
+  await page.emulateMedia({reducedMotion:'no-preference'});await page.reload();await page.locator('.start-card').first().waitFor();
   if(SHOTS)for(const th of ['dark','light']){await page.evaluate(t=>{localStorage.setItem('suffice-theme',t);},th);await page.reload();await page.locator('.start-card').first().waitFor();await page.waitForTimeout(4000);await shot(resolve(SHOTS,'home-'+th+'.png'));}
   // Needs-you: a thread waiting on approval raises the pill and it opens that thread.
   await page.evaluate(()=>{const r=document.querySelector('.sidebar .thread-row');r.dataset.status='approval';r.append(document.createElement('i'));});

@@ -42,8 +42,9 @@ test('context chip opens the inspector; removals and summaries-only reach the ne
   await page.reload();await page.locator('.composer').waitFor();
   const shot=async name=>{if(!SHOTS)return;for(const theme of ['dark','light']){await page.evaluate(t=>{document.documentElement.dataset.theme=t;},theme);await page.waitForTimeout(250);const b64=await app.evaluate(async({BrowserWindow})=>{const w=BrowserWindow.getAllWindows()[0];w.setContentSize(1440,900);await new Promise(r=>setTimeout(r,250));return (await w.webContents.capturePage()).toPNG().toString('base64');});await writeFile(resolve(SHOTS,`${name}-${theme}.png`),Buffer.from(b64,'base64'));}await page.evaluate(()=>{document.documentElement.dataset.theme='dark';});};
 
-  // not offered before a thread is open
-  assert.equal(await page.locator('.context-chip').isVisible(),false);
+  // the start footer shows the count (0 tokens) but there is nothing to inspect before a thread is open
+  assert.equal((await page.locator('.context-chip').textContent()).trim(),'0');
+  assert.equal(await page.locator('.context-chip').evaluate(e=>e.closest('.composer-meta-left')!==null),true);
   await page.locator('.thread-row').filter({hasText:'Fix login redirect'}).click();
   const chip=page.getByRole('button',{name:'Context inspector'});await chip.waitFor();
   await page.waitForFunction(()=>document.querySelector('.context-chip').textContent.trim()==='14k');

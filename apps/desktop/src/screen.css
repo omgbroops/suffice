@@ -76,7 +76,6 @@
 .composer-meta { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-1) var(--space-2); margin-top: var(--space-2); min-width: 0; }
 .composer-meta-left, .composer-meta-right { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-1); min-width: 0; }
 .composer-meta .project-bar { display: flex; justify-content: flex-start; gap: var(--space-1); margin: 0; }
-.thread-view .composer-meta .project-bar { display: none; }
 .desktop-app.desktop-app .composer-meta :is(.project-picker, .git-pill, .worktree-toggle, .access-mode-picker, .model-button, .context-chip, .context-ring) {
   display: inline-flex; align-items: center; gap: var(--space-2); height: var(--control-height-sm); min-height: var(--control-height-sm); padding: 0 var(--space-3); margin: 0;
   border: 0; border-radius: var(--radius-3); font-size: var(--text-xs); line-height: 20px; font-weight: var(--weight-medium); color: var(--text-muted);
@@ -98,8 +97,11 @@
 .desktop-app .composer-meta .context-ring { position: static; width: var(--control-height-sm); padding: 0; justify-content: center; }
 .desktop-app .composer-meta .context-ring svg { width: 15px; height: 15px; }
 .desktop-app .composer-meta .context-ring-value { stroke: var(--blue); }
-/* Usage ring and token count mean nothing before a thread exists. */
-.workspace:not(.thread-view) .composer-meta :is(.context-ring, .context-chip) { display: none; }
+/* Branch and worktree options live in the project menu. */
+.project-git-row { display: flex; flex-wrap: wrap; gap: var(--space-1); padding: var(--space-1) var(--space-2) var(--space-2); }
+.project-git-row > [hidden] { display: none; }
+.desktop-app.desktop-app .project-git-row :is(.git-pill, .worktree-toggle).button, .desktop-app.desktop-app .project-git-row :is(.git-pill, .worktree-toggle) { background: transparent; box-shadow: none; }
+.thread-view .composer-meta .project-bar { display: flex; }
 
 /* Fields go in: every text field on this screen is a sunk well. */
 .desktop-app .popover :is(.project-search, .model-search) { background: var(--well-fill); box-shadow: var(--well-shadow); border-radius: var(--radius-3); }
