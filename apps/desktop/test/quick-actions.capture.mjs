@@ -2,7 +2,7 @@ import {mkdir,writeFile} from 'node:fs/promises';
 import {resolve} from 'node:path';
 import {launchQuick,openThread} from './quick-actions-lib.mjs';
 // Hidden-window screenshots of every quick-action state, dark and light, via capturePage.
-const out=resolve('/Users/abhayg/suffice-desktop-wt/ui-shots/forge/feat/quick-actions');await mkdir(out,{recursive:true});
+const out=resolve(process.env.SHOT_DIR||'/Users/abhayg/suffice-desktop-wt/ui-shots/forge/feat/quick-actions');await mkdir(out,{recursive:true});
 const {app,page}=await launchQuick('suffice-quick-shots-');
 const shot=async name=>{await page.waitForTimeout(350);const b64=await app.evaluate(async({BrowserWindow})=>(await BrowserWindow.getAllWindows()[0].webContents.capturePage()).toPNG().toString('base64'));await writeFile(resolve(out,name+'.png'),Buffer.from(b64,'base64'));};
 const prompt=page.locator('#prompt');

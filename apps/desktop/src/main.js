@@ -34,6 +34,7 @@ import {compareMenuItems,openCompare} from './compare-ui.js';
 import './edge-to-edge-experiment.css';
 import './motion.css';
 import './overlays.css';
+import './chat-polish.css';
 import {connectMotion} from './motion.js';
 import {connectSharedChrome} from './shared-chrome.js';
 import '@fontsource/jetbrains-mono/400.css';
