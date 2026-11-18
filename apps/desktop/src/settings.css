@@ -362,3 +362,38 @@
 .settings-main .env-label { font-size:13px; font-weight:var(--weight-medium); color:var(--text-strong); }
 .settings-main .settings-subtitle { margin-bottom:32px; }
 @media(max-width:850px){ .settings-main .settings-option { padding:12px; } }
+
+/* Settings accent pass: --blue (user accent) marks the selected nav item, toggles, sliders and section heads. Rounded rectangles only. */
+.desktop-app.desktop-app .settings-page .settings-nav-item[aria-current=page] { background:color-mix(in srgb,var(--blue) 16%,transparent); color:var(--text-strong); box-shadow:inset 2px 0 0 var(--blue); }
+.desktop-app.desktop-app .settings-page .settings-nav-item[aria-current=page] .icon { color:var(--blue); opacity:1; }
+.settings-nav-label { color:color-mix(in srgb,var(--blue) 55%,var(--text-faint)); }
+.settings-section h1 { display:flex; align-items:center; gap:var(--space-2); }
+.settings-section h1::before { content:''; width:4px; height:18px; border-radius:var(--radius-1); background:var(--blue); }
+.desktop-app.desktop-app .settings-switch { width:30px; height:18px; border-radius:var(--radius-2); padding:2px; box-shadow:var(--shadow-control-inset); }
+.desktop-app.desktop-app .settings-switch span { width:12px; height:12px; border-radius:var(--radius-1); }
+.desktop-app.desktop-app .settings-switch[aria-checked=true] { background:var(--blue); border-color:transparent; }
+.desktop-app.desktop-app .settings-switch[aria-checked=true] span { transform:translateX(12px); }
+.desktop-app.desktop-app .settings-dim-slider input::-webkit-slider-thumb { width:14px; height:18px; margin-top:-6.5px; border-radius:var(--radius-1); background:var(--blue); box-shadow:0 1px 3px #00000050; }
+.desktop-app.desktop-app .settings-dim-slider input::-webkit-slider-runnable-track { border-radius:var(--radius-1); }
+.settings-palette { gap:var(--space-2); }
+.settings-palette button { width:22px; height:22px; border-radius:var(--radius-2); }
+.settings-palette button[aria-pressed=true] { outline:2px solid var(--text-strong); outline-offset:2px; }
+.theme-gallery { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.theme-card[aria-pressed=true] { box-shadow:inset 0 0 0 2px var(--blue); background:color-mix(in srgb,var(--blue) 10%,transparent); }
+.theme-card { border-radius:var(--radius-card); }
+.theme-preview { border-radius:var(--radius-1); }
+.tp-send { border-radius:var(--radius-xs); }
+.settings-theme[aria-pressed=true] { outline-color:var(--blue); }
+.settings-avatar-row { display:flex; align-items:center; gap:var(--space-3); }
+.settings-avatar { width:44px; height:44px; display:grid; place-items:center; overflow:hidden; border-radius:var(--radius-4); background:var(--control-raised); box-shadow:var(--shadow-control-inset); color:var(--text-muted); }
+.settings-avatar img { width:100%; height:100%; object-fit:cover; }
+.settings-avatar .icon { width:20px; height:20px; }
+/* Wallpaper shows through the settings page at the surface-opacity strength. */
+.desktop-app.desktop-app:not(.solid-surfaces):not(.hide-settings-background) .settings-main { background:color-mix(in srgb,var(--surface-thread) calc(var(--surface-opacity,72%) * .55),transparent); -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); }
+.settings-section h1 { margin-bottom:var(--space-6); }
+.desktop-app.settings-open .workspace { background:transparent; }
+.settings-avatar { font-size:var(--text-xl); color:var(--text-strong); }
+
+.settings-group h2:empty { display:none; }
+.settings-section h2.settings-sub { margin:0 0 var(--space-6); color:var(--text-strong); font-size:var(--text-lg); line-height:24px; letter-spacing:-.01em; font-weight:var(--weight-medium); }
+.settings-section + .settings-section { padding-top:var(--space-6); border-top:1px solid var(--border,rgba(128,128,128,.2)); }

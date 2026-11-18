@@ -36,5 +36,5 @@ test('surface opacity accepts its full percentage range and persists',async()=>{
  await store.set('surface-opacity',0);assert.equal((await store.get())['surface-opacity'],0);
  await store.set('surface-opacity',100);assert.equal((await createSettingsStore(home).get())['surface-opacity'],100);
  await assert.rejects(store.set('surface-opacity',101),/Invalid preference/);
- await assert.rejects(store.set('background-dimming',81),/Invalid preference/);
+ await assert.rejects(store.set('background-dimming',50),/Unknown preference/);
 });
