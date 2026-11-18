@@ -46,9 +46,9 @@ test('session list, row menu, start flow and send options',{timeout:180000},asyn
   const rows=page.locator('.sidebar-cli-sessions .thread-row');
   check(()=>{});
   // Row content: provider logo on line 3, no monitor "CLI" chip, minutes never over 59.
-  const info=await rows.evaluateAll(rs=>rs.map(r=>({title:r.querySelector('.thread-card-title').textContent,line3:r.querySelector('.thread-branch-line').innerText.trim(),img:!!r.querySelector('.thread-branch-line img.settings-provider-icon'),noBranch:!!r.querySelector('.thread-no-branch'),age:r.querySelector('.thread-age').textContent})));
+  const info=await rows.evaluateAll(rs=>rs.map(r=>({title:r.querySelector('.thread-card-title').textContent,filler:/Claude Code|No Git/.test(r.innerText),img:!!r.querySelector('.thread-provider img.settings-provider-icon'),age:r.querySelector('.thread-age').textContent})));
   console.log(JSON.stringify(info));
-  check(()=>{for(const r of info){assert.equal(r.img,true,'provider logo');assert.equal(r.noBranch,false);assert.match(r.line3,/^Claude Code$/);assert.doesNotMatch(r.age,/\d{3,}m/);}
+  check(()=>{for(const r of info){assert.equal(r.img,true,'provider logo');assert.equal(r.filler,false,'no Claude Code / Git filler line');assert.doesNotMatch(r.age,/\d{3,}m/);}
    assert.ok(info.some(r=>r.title==='Renamed in header'),'rename wins');
    assert.deepEqual(info.map(r=>r.title).sort(),['Port the parser to Rust','Renamed in header']);});
   await shot('sidebar.png');
@@ -59,7 +59,7 @@ test('session list, row menu, start flow and send options',{timeout:180000},asyn
   await page.evaluate(()=>{window.__copied=[];navigator.clipboard.writeText=async t=>{window.__copied.push(t);};});
   await rows.first().click({button:'right'});await page.waitForTimeout(300);await shot('row-context-menu.png');
   const items=await page.locator('.thread-context-menu:not([hidden]) [data-menu-action]').allInnerTexts().catch(()=>[]);console.log('menu',JSON.stringify(items));
-  check(()=>assert.deepEqual(items.map(s=>s.trim()),['Copy attach command','Copy title','Show terminal','Stop session']));
+  check(()=>assert.deepEqual(items.map(s=>s.split('\n')[0].trim()),['Show terminal','Copy attach command','Copy title','Stop session']));
   if(!BASELINE){await page.locator('[data-menu-action="session:attach"]').click();await page.waitForTimeout(300);
    const copied=await page.evaluate(()=>window.__copied);assert.ok(copied.some(t=>t.includes(`-L ${SOCKET}`)),'attach command names the private socket: '+JSON.stringify(copied));}
   else await page.keyboard.press('Escape');

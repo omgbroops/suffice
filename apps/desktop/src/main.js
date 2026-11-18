@@ -7,6 +7,7 @@ import {createWhatsNew} from './whats-new.js';
 import {createTaskBoardView} from './task-board.js';
 import {settingsSections} from './settings-data.js';
 import {sidebarPreferences} from './sidebar-preferences.js';
+import {accountItems,connectAccount} from './sidebar-account.js';
 import {connectComposerSize} from './composer-size.js';
 import {connectAttachments} from './attachments.js';
 import {connectComposerQuick} from './composer-quick.js';
@@ -36,6 +37,7 @@ import './edge-to-edge-experiment.css';
 import './motion.css';
 import './overlays.css';
 import './chat-polish.css';
+import './sidebar.css';
 import {connectMotion} from './motion.js';
 import {connectSharedChrome} from './shared-chrome.js';
 import '@fontsource/jetbrains-mono/400.css';
@@ -107,18 +109,22 @@ document.querySelector('#app').innerHTML = `
   <aside class="sidebar" id="session-sidebar" aria-label="Session navigation">
     <div class="sidebar-resizer" role="separator" tabindex="0" aria-label="Resize sidebar" aria-orientation="vertical" aria-controls="session-sidebar" aria-valuemin="280" aria-valuemax="400" aria-valuenow="280"></div>
 
-    <div class="sidebar-heading"><button type="button" class="brand-wordmark brand-home" data-action="brand-home" aria-label="Suffice home">[suffice]</button><div class="sidebar-tools">${button('Settings', { icon: 'gear', action: 'settings' })}${button('Search sessions', { icon: 'search', action: 'search-sessions' })}${button('Collapse sidebar', { icon: 'panel', action: 'toggle-sidebar' })}</div></div>
+    <div class="sidebar-heading"><button type="button" class="brand-wordmark brand-home" data-action="brand-home" aria-label="Suffice home">[suffice]</button><div class="sidebar-tools">${button('Collapse sidebar', { icon: 'panel', action: 'toggle-sidebar' })}</div></div>
 
-    ${button('New session', { icon: 'plus', variant: 'subtle', className: 'new-session', action: 'new', content: 'New session' })}
-
+    <nav class="sidebar-nav" aria-label="Navigation">
+    ${button('New session', { icon: 'plus', variant: 'subtle', className: 'new-session', action: 'new', content: '<span class="nav-label">New</span>' })}
+    ${button('Search', { icon: 'search', className: 'nav-item', action: 'search-sessions', content: '<span class="nav-label">Search</span>' })}
+    ${button('Projects', { icon: 'folder', className: 'nav-item projects-nav', action: 'projects', content: '<span class="nav-label">Projects</span>' })}
+    ${button('Scheduled', { icon: 'calendar', className: 'nav-item', action: 'scheduled', content: '<span class="nav-label">Scheduled</span>' })}
+    ${button('Plugins', { icon: 'plug', className: 'nav-item', action: 'plugins', content: '<span class="nav-label">Plugins</span>' })}
+    ${button('Teamwork', { icon: 'users', className: 'nav-item teamwork-nav', action: 'teamwork', attrs: 'hidden', content: '<span class="nav-label">Teamwork</span>' })}
     ${button('Needs you', { icon: 'inbox', className: 'needs-nav', action: 'needs-you', attrs: 'hidden', content: '<span class="needs-nav-label">Needs you</span><span class="needs-count" hidden>0</span>' })}
-
     ${button('Issues', { icon: 'bug', className: 'issues-nav', action: 'issues', content: '<span class="issues-nav-label">Issues</span><span class="issues-count" hidden>0</span>' })}
+    </nav>
 
     <div class="session-section"><div class="section-label"><span id="sidebar-section-label">Threads</span></div><div class="sidebar-sessions">${sessions.map((s, i) => sessionRow(s, i, true)).join('')}</div></div>
 
-
-
+    <div class="sidebar-account"><button type="button" class="account-button" data-action="account-menu" aria-label="Account"><span class="account-avatar" aria-hidden="true"></span><span class="account-text"><span class="account-name">Account</span><span class="account-plan">Free</span></span>${icon('chevron')}</button>${button('Settings', { icon: 'gear', action: 'settings', className: 'settings-gear' })}</div>
 
   </aside>
 
@@ -285,6 +291,7 @@ document.addEventListener('click', (e) => {
     if (type === 'skills') document.dispatchEvent(new CustomEvent('suffice-open-settings', { detail: { section: 'skills' } }));
 
     if (type === 'settings') showSettings();
+    if (type === 'account') ({settings:()=>document.dispatchEvent(new CustomEvent('suffice-open-settings',{detail:{}})),usage:()=>document.dispatchEvent(new CustomEvent('suffice-open-settings',{detail:{section:'usage'}})),help:()=>document.dispatchEvent(new CustomEvent('suffice-open-settings',{detail:{section:'about'}})),whatsnew:()=>whatsNew.open(),logout:()=>document.dispatchEvent(new CustomEvent('suffice-open-settings',{detail:{section:'providers'}}))})[value]?.();
 
     if (type === 'search') showSearch();
 
@@ -366,6 +373,12 @@ document.addEventListener('click', (e) => {
     case 'search-sessions': case 'search-collapsed': showSearch(); break;
 
     case 'settings': showSettings(); break;
+
+    case 'projects': sidebarPreferences.choose('group=project'); document.querySelector('.sidebar-sessions')?.scrollTo({top:0}); break;
+    case 'scheduled': document.dispatchEvent(new CustomEvent('suffice-open-settings', { detail: { section: 'automations' } })); break;
+    case 'plugins': document.dispatchEvent(new CustomEvent('suffice-open-settings', { detail: { section: 'extensions' } })); break;
+    case 'teamwork': openCompare({api:window.sufficeDesktop,prompt,toast}); break;
+    case 'account-menu': menu(control, accountItems(), 'Account'); break;
 
     case 'more-sessions': { const expanded = control.dataset.expanded === 'true'; document.querySelector('.recent-list').innerHTML = sessions.slice(0, expanded ? 3 : 5).map((s, i) => sessionRow(s, i)).join(''); control.dataset.expanded = String(!expanded); control.textContent = expanded ? '2 more' : 'Show less'; break; }
 

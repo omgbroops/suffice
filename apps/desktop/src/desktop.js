@@ -1,3 +1,4 @@
+import {connectAccount} from './sidebar-account.js';
 import {fileLinkPath} from './file-links.js';
 import {connectQueuedMessages} from './queued-messages.js';
 import {connectChatChangesWidget} from './chat-changes-widget.js';
@@ -29,6 +30,7 @@ export function connectDesktop({prompt,send,toast,escapeHtml}) {
   chrome.addEventListener('click',event=>{const control=event.target.closest('[data-window]');if(control)void api.windowControl(control.dataset.window);});document.body.append(chrome);
   const drag=document.createElement('div');drag.className='window-drag-region';drag.setAttribute('aria-hidden','true');document.body.prepend(drag);
   connectThreads({api,prompt,send,toast});
+  connectAccount({api});
   connectAccessModePicker(prompt.form);
   connectEffortPicker(prompt.form);
   connectQueuedMessages(prompt.form,prompt,toast);

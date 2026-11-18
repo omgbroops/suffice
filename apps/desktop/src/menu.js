@@ -51,14 +51,14 @@ export function createMenu(element) {
     showPopover(node);
     if (focus) focusPanel(panel);
   }
-  function render(panel, items, heading, showHeading = true) {
+  function render(panel, items, heading, showHeading = heading !== 'Account') {
     const node = panel.element;
     node.setAttribute('role', 'menu'); node.setAttribute('aria-label', heading);
     node.dataset.menuLevel = String(panel.depth); node.dataset.keyboard = String(keyboard);
     node.innerHTML = (showHeading ? `<div class="popover-heading" aria-hidden="true">${escape(heading)}</div>` : '') + '<div class="menu-options">' + items.map((item, index) => {
-      const { label, detail, action, selected, separator, children } = item;
+      const { label, detail, action, selected, separator, children, key, danger } = item;
       const selectable = typeof selected === 'boolean';
-      return `${separator ? '<div class="menu-separator" role="separator"></div>' : ''}<button type="button" role="${selectable ? 'menuitemradio' : 'menuitem'}" ${selectable ? `aria-checked="${selected}"` : ''} aria-label="${escape(label)}" ${detail ? `title="${escape(detail)}" aria-description="${escape(detail)}"` : ''} ${children ? 'aria-haspopup="menu" aria-expanded="false"' : ''} tabindex="-1" ${item.disabled ? 'disabled aria-disabled="true"' : ''} class="menu-item" data-menu-index="${index}" ${children ? 'data-submenu-trigger' : `data-menu-action="${escape(action)}"`}><span class="menu-label">${escape(label)}</span>${selectable ? icon('tick', selected ? 'menu-check' : 'menu-check menu-check--empty') : ''}${children ? icon('chevron', 'menu-chevron') : ''}</button>`;
+      return `${separator ? '<div class="menu-separator" role="separator"></div>' : ''}<button type="button" role="${selectable ? 'menuitemradio' : 'menuitem'}" ${selectable ? `aria-checked="${selected}"` : ''} aria-label="${escape(label)}" ${detail ? `title="${escape(detail)}" aria-description="${escape(detail)}"` : ''} ${children ? 'aria-haspopup="menu" aria-expanded="false"' : ''} tabindex="-1" ${item.disabled ? 'disabled aria-disabled="true"' : ''} class="menu-item${danger?' menu-item--danger':''}" ${key?`aria-keyshortcuts="${escape(key)}"`:''} data-menu-index="${index}" ${children ? 'data-submenu-trigger' : `data-menu-action="${escape(action)}"`}><span class="menu-label">${escape(label)}</span>${key?`<kbd class="menu-key" aria-hidden="true">${escape(key)}</kbd>`:''}${selectable ? icon('tick', selected ? 'menu-check' : 'menu-check menu-check--empty') : ''}${children ? icon('chevron', 'menu-chevron') : ''}</button>`;
     }).join('')+'</div>';
     panel.disposeEdges=connectOverlayScrollbar(node.querySelector('.menu-options'),{variant:'menu'});
     node.addEventListener('pointerenter', cancelHover);

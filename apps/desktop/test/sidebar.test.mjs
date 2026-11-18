@@ -14,48 +14,53 @@ test('project icons use local assets, explicit overrides and stable monograms',a
  const override=await mkdtemp(resolve(tmpdir(),'suffice-icon-override-'));await writeFile(resolve(override,'t3.json'),JSON.stringify({projectIcon:{kind:'emoji',emoji:'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€¦Ã‚Â¡ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬'}}));assert.equal((await projectMetadata(override)).projectIcon.emoji,'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€¦Ã‚Â¡ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬');
  assert.deepEqual(projectIdentity('Suffice'),projectIdentity('Suffice'));assert.equal(projectIdentity('Pixel Design System').text,'PS');assert.equal(projectIdentity('T3 Code').text,'T3');
 });
-test('informational sidebar rows, hover detail and themed states',{timeout:60000},async()=>{
+test('github avatars: owner parsing, one fetch then disk cache, misses stay quiet',async()=>{
+ const {githubOwner,createAvatarStore}=await import('../electron/github-avatar.mjs');
+ assert.equal(githubOwner('git@github.com:A-G0D/suffice.git'),'A-G0D');assert.equal(githubOwner('https://github.com/vercel-labs/ui'),'vercel-labs');assert.equal(githubOwner('https://gitlab.com/a/b'),null);assert.equal(githubOwner('https://github.com/../x/y'),null);
+ const dir=await mkdtemp(resolve(tmpdir(),'sfx-avatar-'));let calls=0;const png=Buffer.from('89504e470d0a1a0a','hex');
+ const fetchImpl=async()=>{calls++;return {ok:true,headers:{get:()=>'image/png'},arrayBuffer:async()=>png};};
+ const a=createAvatarStore({dir,fetchImpl,git:async()=>'git@github.com:A-G0D/x.git'});
+ assert.match((await a.forProject('/p')).image,/^data:image\/png;base64,/);await a.forProject('/p');assert.equal(calls,1);
+ const b=createAvatarStore({dir,fetchImpl,git:async()=>'https://github.com/A-G0D/x'});await b.forProject('/q');assert.equal(calls,1,'second store reads the disk cache');
+ const miss=createAvatarStore({dir:resolve(dir,'m'),fetchImpl:async()=>({ok:false,headers:{get:()=>''}}),git:async()=>'git@github.com:nobody/x.git'});assert.equal((await miss.forProject('/r')).image,null);
+ const none=createAvatarStore({dir,fetchImpl,git:async()=>{throw new Error('no remote');}});assert.equal(await none.forProject('/s'),null);
+});
+test('date labels',async()=>{
+ const {dateLabel}=await import('../src/threads-ui.js').catch(()=>({}));if(!dateLabel)return;
+ const now=new Date(2026,10,18,15).getTime(),day=864e5;
+ assert.deepEqual([0,day,3*day,20*day,90*day].map(x=>dateLabel(now-x,now)),['Today','Yesterday','Last 7 days','Last 30 days','Older']);
+});
+test('sidebar: grouped rows, row menu with single-key shortcuts, no git filler, account row',{timeout:90000},async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-sidebar-')),env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
  const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
  try{const page=await app.firstWindow();await page.locator('.composer').waitFor();
- await app.evaluate(({ipcMain})=>{ipcMain.removeHandler('suffice:threads');ipcMain.handle('suffice:threads',()=>[
- {id:'approval',title:'Fix double charge on retried webhooks',project:'Halo Pay',projectDiff:{added:100,removed:40,scope:'branch'},cwd:'C:/Projects/halo',branch:'fix/webhook-idempotency-on-retries',provider:'openai',model:'gpt-6.1-sol',status:'approval',modified:Date.now()},
- {id:'done',title:'Audit color tokens for contrast',project:'Pixel Design System',branch:'chore/token-audit',provider:'openai',status:'done',worktree:true,pr:{number:3,state:'OPEN',checks:'passed',url:'https://github.com/example/example/pull/3'},modified:Date.now()-3600000},
- {id:'mobile',title:'Animate the onboarding carousel',project:'Orbit Mobile',branch:'feat/onboarding-motion',provider:'anthropic',status:'done',pr:{number:918,state:'MERGED',checks:'passed'},modified:Date.now()-7200000},
- {id:'none',title:"What's a good name for a coding agent?",project:null,provider:'anthropic',status:'done',modified:Date.now()-80000},
- {id:'working',title:'Rebuild pricing page with new tiers',project:'Northwind',branch:'feat/pricing-tiers',provider:'anthropic',status:'working',startedAt:Date.now()-720000,terminalCount:1,modified:Date.now()},
- {id:'failed',title:'Rate limit the public API',project:'Forge API',branch:'main',provider:'openai',status:'failed',error:'Task stopped by provider',projectImage:'data:image/png;base64,broken',diff:{added:77,removed:12,scope:'chat'},modified:Date.now()-300000}
- ]);});
- await page.evaluate(()=>{localStorage.setItem('suffice-sidebar-width','300');localStorage.setItem('suffice-thread-view-v1:done',JSON.stringify({draft:'Review these changes'}));});await page.reload();
- await page.locator('.thread-card').last().waitFor();assert.equal(await page.locator('.thread-card').count(),6);assert.equal(await page.locator('#sidebar-section-label').innerText(),'Threads');const menuAlignment=await page.evaluate(()=>{const a=document.querySelector('.sidebar-tools > button:last-child').getBoundingClientRect(),b=document.querySelector('.sidebar-options').getBoundingClientRect();return Math.abs(a.right-a.width/2-b.right+b.width/2);});assert.ok(menuAlignment<1);assert.equal(await page.locator('.done-button').count(),0);assert.equal(await page.locator('[data-thread="none"] .thread-no-branch').innerText(),'No Git');assert.equal((await page.locator('[data-thread="none"]').boundingBox()).height,(await page.locator('[data-thread="working"]').boundingBox()).height);
- assert.equal(await page.locator('[data-thread="done"] .thread-draft').count(),1);
- assert.equal(await page.locator('[data-thread="failed"] .thread-removed').textContent(),'\u221212');
- assert.equal(await page.locator('[data-thread="done"] .thread-draft').evaluate(el=>getComputedStyle(el).color),await page.locator('[data-thread="done"] .thread-age').evaluate(el=>getComputedStyle(el).color));
- await page.waitForFunction(()=>document.querySelector('[data-thread="failed"] .thread-project-icon').classList.contains('thread-monogram'));
- await page.waitForTimeout(500);await page.mouse.move(700,700);await page.locator('[data-thread="working"]').hover();await page.waitForFunction(()=>!document.querySelector('.thread-hover-card').hidden&&document.querySelector('.thread-hover-card').textContent.includes('Northwind'));assert.match(await page.locator('.thread-hover-card').innerText(),/Northwind/);assert.equal(await page.locator('[data-thread="working"] .thread-card-heading .thread-age').count(),1);assert.equal(await page.locator('[data-thread="working"] .thread-project-line .thread-age').count(),0);await page.locator('.thread-hover-card').screenshot({path:resolve('apps/desktop/sidebar-hover-refined.png')});
- await page.mouse.move(700,700);await page.screenshot({path:resolve('apps/desktop/sidebar-information-dark.png')});
- await page.evaluate(()=>document.documentElement.dataset.theme='light');await page.screenshot({path:resolve('apps/desktop/sidebar-information-light.png')});
- assert.match(await page.locator('[data-thread="working"] .thread-age').innerText(),/12m/);
- const originalWidth=(await page.locator('.thread-card').first().boundingBox()).width;
- await page.evaluate(()=>{document.documentElement.dataset.theme='dark';const list=document.querySelector('.sidebar-sessions'),row=list.firstElementChild;for(let i=0;i<18;i++){const copy=row.cloneNode(true);copy.dataset.thread='overflow-'+i;list.append(copy);}});
- const scrolling=await page.evaluate(()=>{const list=document.querySelector('.sidebar-sessions'),section=document.querySelector('.session-section');return {overflows:list.scrollHeight>list.clientHeight,sectionOverflows:section.scrollHeight>section.clientHeight+1,gap:list.getBoundingClientRect().right-list.firstElementChild.getBoundingClientRect().right};});assert.equal(scrolling.overflows,true);assert.equal(scrolling.sectionOverflows,false);assert.ok(scrolling.gap<1);assert.equal((await page.locator('.thread-card').first().boundingBox()).width,originalWidth);await page.waitForFunction(()=>!document.querySelector('.sidebar-scroll-rail').hidden);const rail=await page.locator('.sidebar-scroll-rail').boundingBox(),sidebar=await page.locator('.sidebar').boundingBox();assert.ok(Math.abs(rail.x+rail.width-sidebar.x-sidebar.width)<=3);
- assert.equal(await page.locator('.sidebar-sessions').getAttribute('data-fade-bottom'),'true');await page.locator('.sidebar-sessions').evaluate(el=>el.scrollTop=el.scrollHeight);await page.waitForFunction(()=>document.querySelector('.sidebar-sessions').dataset.fadeTop==='true'&&document.querySelector('.sidebar-sessions').dataset.fadeBottom==='false');await page.locator('.sidebar-sessions').evaluate(el=>el.scrollTop=0);await page.screenshot({path:resolve('apps/desktop/sidebar-scroll-spacing.png')});
-
- const choose=async(value)=>{await page.locator('[data-action="sidebar-menu"]').click();const labels={'group=project':['Group by','Project'],'filter=working':['Filter','Running']};if(labels[value]){await page.getByRole('menuitem',{name:labels[value][0],exact:true}).click();await page.getByRole('menuitemradio',{name:labels[value][1],exact:true}).click();}else await page.locator('[data-menu-action=\"sidebar:'+value+'\"]').click();};
- // Exercise the actual shared menu action, then the persisted layout choices.
- await page.locator('[data-action="sidebar-menu"]').click();await page.locator('[data-menu-action="sidebar:compact=toggle"]').click();assert.equal(await page.locator('.sidebar-sessions').getAttribute('data-compact'),'true');assert.equal(await page.locator('.thread-project-line').count(),0);assert.equal((await page.locator('.thread-card').first().boundingBox()).height,32);
- assert.equal(await page.locator('[data-thread="done"] .thread-state').isVisible(),false);assert.equal(await page.locator('[data-thread="working"] .thread-state').isVisible(),true);await page.getByRole('button',{name:'Sidebar options',exact:true}).click();await page.mouse.move(700,700);const compactChoice=page.getByRole('menuitemradio',{name:'Compact',exact:true});assert.equal(await compactChoice.getAttribute('aria-checked'),'true');await page.waitForFunction(()=>getComputedStyle(document.querySelector('[data-menu-action="sidebar:compact=toggle"]')).backgroundColor==='rgba(0, 0, 0, 0)');assert.match(await compactChoice.evaluate(el=>getComputedStyle(el,'::after').content),/✓/);await page.screenshot({path:resolve('apps/desktop/sidebar-menu-check-only.png')});await page.keyboard.press('Escape');await page.waitForTimeout(180);await page.screenshot({path:resolve('apps/desktop/sidebar-compact.png')});
- await choose('compact=toggle');await choose('group=project');assert.equal(await page.locator('.thread-project-group').count(),6);
- assert.equal(await page.locator('.thread-project-diff').textContent(),'+100\u221240');
- const inset=await page.locator('.thread-group-rows .thread-card').first().evaluate(el=>parseFloat(getComputedStyle(el).paddingLeft));assert.equal(inset,28);const rowLeft=(await page.locator('.thread-group-rows .thread-card').first().boundingBox()).x,groupLeft=(await page.locator('.thread-group-toggle').first().boundingBox()).x;assert.equal(rowLeft-groupLeft,0);assert.equal(await page.locator('.thread-project-line').count(),0);assert.equal(await page.locator('.thread-card').first().locator('.thread-branch-line .thread-state').count(),1);assert.ok((await page.locator('.thread-card').first().boundingBox()).height<55);
- await page.waitForTimeout(180);await page.screenshot({path:resolve('apps/desktop/sidebar-project-groups.png')});
- const firstRow=page.locator('.thread-card').first();await page.mouse.move(700,700);const titleColor=await firstRow.locator('.row-title').evaluate(el=>getComputedStyle(el).color);assert.equal(await page.locator('#sidebar-section-label').evaluate(el=>{const probe=document.createElement('span');probe.style.color='var(--text-faint)';document.body.append(probe);const faint=getComputedStyle(probe).color;probe.remove();return getComputedStyle(el).color===faint;}),true);await firstRow.hover();assert.equal(await firstRow.locator('.row-title').evaluate(el=>getComputedStyle(el).color),titleColor);
- const collapsedProject=await page.locator('.thread-group-name').first().textContent(),projectGroup=()=>page.locator('.thread-project-group').filter({has:page.locator('.thread-group-name',{hasText:collapsedProject})}),projectToggle=()=>projectGroup().locator('.thread-group-toggle');
- await projectToggle().click();await projectGroup().locator('.thread-group-rows').waitFor({state:'hidden'});assert.equal(await projectToggle().getAttribute('aria-expanded'),'false');await page.reload();await projectGroup().waitFor();assert.equal(await projectToggle().getAttribute('aria-expanded'),'false');
- const waitExpanded=()=>page.waitForFunction(name=>{const group=[...document.querySelectorAll('.thread-project-group')].find(group=>group.querySelector('.thread-group-name').textContent===name),body=group?.querySelector('.thread-group-rows');return body&&!body.hidden&&body.getAnimations().length===0;},collapsedProject);
- await projectToggle().click();await waitExpanded();assert.equal(await projectToggle().getAttribute('aria-expanded'),'true');await projectToggle().click();await projectToggle().click();await waitExpanded();
- await choose('compact=toggle');assert.equal(await page.locator('.thread-card .thread-project-icon').count(),0);assert.equal(await page.locator('.thread-group-toggle .thread-project-icon').count(),6);await choose('compact=toggle');
- await choose('filter=working');assert.equal(await page.locator('.thread-card').count(),1);assert.equal(await page.locator('.thread-card').getAttribute('data-thread'),'working');
- await choose('reset');assert.equal(await page.locator('.thread-card').count(),6);assert.equal(await page.locator('.thread-project-line').count(),6);
+ await app.evaluate(({ipcMain})=>{const now=Date.now();ipcMain.removeHandler('suffice:threads');ipcMain.handle('suffice:threads',()=>[
+  {id:'a',title:'Fix webhooks',project:'Halo Pay',cwd:'/x/halo',branch:'fix/x',provider:'openai',status:'approval',modified:now},
+  {id:'b',title:'Audit tokens',project:'Pixel',cwd:'/x/pixel',provider:'openai',status:'done',modified:now-3600000},
+  {id:'c',title:'Old thread',project:null,provider:'anthropic',status:'done',modified:now-90*864e5},
+  {id:'d',title:'Running one',project:'Northwind',cwd:'/x/nw',provider:'anthropic',status:'working',startedAt:now-720000,modified:now}]);
+  ipcMain.removeHandler('suffice:account');ipcMain.handle('suffice:account',()=>({login:'tester',avatar:null}));});
+ await page.evaluate(()=>{localStorage.removeItem('suffice-sidebar-preferences-v1');});await page.reload();await page.locator('.thread-card').last().waitFor();
+ assert.equal(await page.locator('.thread-card').count(),4);
+ assert.deepEqual(await page.locator('.thread-group-name').allTextContents(),['Today','Older']);
+ const text=await page.locator('.sidebar').innerText();assert.doesNotMatch(text,/No Git|Git not recorded|Claude Code|Artifacts/);
+ assert.deepEqual(await page.locator('.sidebar-nav > button:not([hidden]) .nav-label').allTextContents(),['New','Search','Projects','Scheduled','Plugins']);
+ assert.equal(await page.locator('.teamwork-nav').isVisible(),false);
+ assert.equal(await page.locator('.account-name').textContent(),'tester');
+ // no circles: every sidebar control and avatar is a rounded rectangle
+ const radii=await page.evaluate(()=>[...document.querySelectorAll('.sidebar button,.account-avatar,.thread-project-icon')].map(e=>{const r=e.getBoundingClientRect(),b=parseFloat(getComputedStyle(e).borderTopLeftRadius);return r.width>0&&b>=Math.min(r.width,r.height)/2-0.5&&Math.abs(r.width-r.height)<1.5;}).filter(Boolean).length);assert.equal(radii,0);
+ // sort and group menus tick exactly one entry
+ await page.locator('[data-action="sidebar-menu"]').click();await page.getByRole('menuitem',{name:'Group by',exact:true}).click();assert.equal(await page.locator('.popover--submenu [aria-checked="true"]').count(),1);await page.keyboard.press('Escape');
+ // hover "..." and its menu
+ await page.locator('[data-thread="b"]').hover();await page.locator('[data-thread="b"] .thread-more').click();await page.locator('.thread-context-menu:not([hidden])').waitFor();
+ const labels=await page.locator('.thread-context-menu > .menu-options > .menu-item .menu-label').allTextContents();for(const l of ['Pin','Mark as unread','Rename','Fork','Move to section','Move under','Archive','Delete'])assert.ok(labels.includes(l),l);
+ assert.equal(await page.locator('.thread-context-menu .menu-item--danger .menu-label').textContent(),'Delete');
+ await page.keyboard.press('p');await page.waitForFunction(()=>document.querySelector('.thread-group-name')&&[...document.querySelectorAll('.thread-group-name')].some(n=>n.textContent==='Pinned'));
+ // right-click opens the same menu; U toggles unread
+ await page.locator('[data-thread="a"]').click({button:'right'});await page.locator('.thread-context-menu:not([hidden])').waitFor();await page.keyboard.press('u');await page.waitForFunction(()=>document.querySelector('[data-thread="a"]').dataset.unread==='true');
+ // sections: new section from the menu moves the thread under a collapsible group
+ await page.locator('[data-thread="c"]').click({button:'right'});await page.getByRole('menuitem',{name:'Move to section',exact:true}).click();await page.getByRole('menuitem',{name:'New section',exact:true}).click();await page.locator('#thread-rename-input').fill('Launch');await page.keyboard.press('Enter');
+ await page.waitForFunction(()=>[...document.querySelectorAll('.thread-group-name')].some(n=>n.textContent==='Launch'));
+ const launch=page.locator('.thread-project-group',{has:page.locator('.thread-group-name',{hasText:'Launch'})});await launch.locator('.thread-group-toggle').click();await launch.locator('.thread-group-rows').waitFor({state:'hidden'});
  }finally{await app.close();}
 });

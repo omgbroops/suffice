@@ -132,7 +132,7 @@ export function createSettings(){
  }
  async function open(section){
   if(settingsSections.some(item=>item.id===section)){selected=section;search.value='';}if(active){render();return;}active=true;previousFocus=document.activeElement;wasCollapsed=document.body.classList.contains('sidebar-collapsed');void refreshProviders();
-  underlay=[...document.querySelectorAll('.new-session,.session-section,.home,.thread-transcript,.thread-header,.workspace-tools,.right-sidebar')].map(element=>({element,inert:element.inert}));for(const {element} of underlay)element.inert=true;
+  underlay=[...document.querySelectorAll('.sidebar-nav,.session-section,.home,.thread-transcript,.thread-header,.workspace-tools,.right-sidebar')].map(element=>({element,inert:element.inert}));for(const {element} of underlay)element.inert=true;
   if(!wasCollapsed)outgoing(document.querySelector('.session-section'),-9);
   document.body.classList.remove('sidebar-collapsed');document.documentElement.classList.add('settings-open');root.hidden=false;main.hidden=false;back.innerHTML=icon('home');back.setAttribute('aria-label','Back to chats');render();nav.querySelector('[aria-current=page]')?.focus({preventScroll:true});
   if(motion()){slide(root,9,0);fadeGlassContent(content);}

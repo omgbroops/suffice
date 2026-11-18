@@ -1,0 +1,93 @@
+/* Sidebar on the screen2 tokens: raised nav, roomy rows, rounded rectangles only. */
+.desktop-app .sidebar { display: flex; flex-direction: column; min-height: 0; }
+.sidebar-nav { display: flex; flex-direction: column; gap: var(--space-1); padding-block: var(--space-2) var(--space-1); }
+.desktop-app .sidebar-nav > .button { justify-content: flex-start; gap: var(--space-3); width: 100%; margin: 0; padding: 0 var(--space-3); min-height: calc(36px * var(--density)); border-radius: var(--radius-3); font-size: 14px; font-weight: var(--weight-medium); color: var(--text-muted); background: transparent; }
+.desktop-app .sidebar-nav > .button[hidden] { display: none; }
+.desktop-app .sidebar-nav > .button .icon { width: 18px; height: 18px; flex: 0 0 18px; }
+.desktop-app .sidebar-nav > .button:hover { background: var(--hover-fill); color: var(--text); }
+.desktop-app .sidebar-nav > .new-session { color: var(--text-strong); background: var(--surface-active); box-shadow: inset 0 1px 0 #ffffff12, 0 1px 2px #0000002e; }
+.desktop-app[data-theme='light'] .sidebar-nav > .new-session { box-shadow: inset 0 1px 0 #ffffffb0, 0 1px 2px #00000018; }
+.desktop-app .sidebar-nav > .new-session:hover { background: var(--surface-active); filter: brightness(1.08); }
+.nav-label,.needs-nav-label,.issues-nav-label { flex: 1; text-align: left; }
+
+.desktop-app .session-section { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; overflow: hidden; margin-top: var(--space-3); }
+.desktop-app .sidebar-sessions { flex: 1 1 0; min-height: 0; overflow-y: auto; gap: 0; }
+.desktop-app .section-label { padding: 0 var(--space-3); }
+
+/* Rows */
+.desktop-app .thread-row.thread-card { display: flex; align-items: center; min-height: calc(40px * var(--density)); padding: var(--space-2) var(--space-3); padding-left: calc(var(--space-3) + var(--depth, 0) * var(--space-4)); border-radius: var(--radius-3); }
+.desktop-app .thread-group-rows .thread-card { padding-left: calc(var(--space-3) + var(--depth, 0) * var(--space-4)); }
+.desktop-app .sidebar-sessions > .thread-card + .thread-card,.thread-group-rows { margin-top: 0; gap: var(--space-1); }
+.desktop-app .sidebar-sessions { gap: var(--space-1); }
+.desktop-app .thread-card-heading { flex: 1; gap: var(--space-2); }
+.desktop-app .thread-card .row-title { font-size: 14px; line-height: 20px; }
+.desktop-app .thread-card .thread-age { font-size: 12px; }
+.thread-project-icon { width: 18px; height: 18px; flex: 0 0 18px; border-radius: var(--radius-2); }
+.thread-fork-mark .icon { width: 13px; height: 13px; }
+.thread-state .icon { width: 14px; height: 14px; }
+.thread-state .dot { fill: currentColor; stroke: none; }
+:is(.thread-card,.thread-hover-card,.needs-row)[data-status='working'] .thread-state .dot { animation: thread-dot 1.2s ease-in-out infinite; }
+.thread-state .dot:nth-child(3n+2) { animation-delay: .15s !important; }
+.thread-state .dot:nth-child(3n) { animation-delay: .3s !important; }
+.thread-card:is([data-status='done'],[data-status='idle'],[data-status='waiting'],[data-status='starting']):not([data-unread='true']) .thread-state { display: none; }
+.thread-unread-dot { width: 8px; height: 8px; margin: 3px; border-radius: 2px; }
+.thread-card[data-status='ended'] .thread-state { color: var(--text-faint); }
+@media (prefers-reduced-motion: reduce) { :is(.thread-card,.thread-hover-card,.needs-row)[data-status='working'] .thread-state .dot { animation: none; } }
+
+/* "..." appears where the age sits, so nothing is covered */
+.thread-more { display: none; place-items: center; flex: 0 0 auto; width: calc(24px * var(--density)); height: calc(24px * var(--density)); margin-right: calc(var(--space-1) * -1); border-radius: var(--radius-2); color: var(--text-muted); cursor: pointer; }
+.thread-more .icon { width: 16px; height: 16px; }
+.thread-more:hover { background: var(--surface-active); color: var(--text-strong); }
+.thread-card:is(:hover,:focus-visible,:focus-within) .thread-more { display: grid; }
+.thread-card:is(:hover,:focus-visible,:focus-within) .thread-age { display: none; }
+.thread-card[data-menu-open='true'] .thread-more { display: grid; }
+
+/* Groups */
+.thread-project-group { gap: var(--space-1); }
+.thread-project-group + .thread-project-group,.thread-project-group + .thread-card { margin-top: var(--space-4); }
+.thread-group-toggle { min-height: calc(32px * var(--density)); padding: 0 var(--space-3); gap: var(--space-2); border-radius: var(--radius-3); color: var(--text-muted); font-size: 13px; font-weight: var(--weight-medium); }
+.thread-group-toggle > .icon { order: 2; margin-left: 0; opacity: .7; }
+.thread-group-toggle:is(:hover,:focus-visible) > .icon { opacity: 1; }
+.thread-group-toggle > .thread-project-icon { order: 0; }
+.thread-group-name { order: 1; }
+.thread-group-toggle > :is(.project-pin,.thread-project-diff) { order: 3; }
+.thread-group-count { order: 4; margin-left: auto; color: var(--text-faint); font-weight: 400; }
+.thread-project-diff + .thread-group-count { margin-left: auto; }
+.thread-group-toggle.drop-into { background: var(--hover-fill); outline: 1px solid var(--accent); outline-offset: -1px; }
+
+/* Drag to reorder */
+.thread-row[draggable='true'] { -webkit-user-drag: element; }
+.thread-row.dragging { opacity: .45; }
+.thread-row.drop-before { box-shadow: 0 -2px 0 0 var(--accent); }
+.thread-row.drop-after { box-shadow: 0 2px 0 0 var(--accent); }
+
+/* Account row */
+.sidebar-account { display: flex; align-items: center; gap: var(--space-1); padding-top: var(--space-2); margin-top: var(--space-2); border-top: .5px solid var(--border); }
+.account-button { flex: 1; min-width: 0; display: flex; align-items: center; gap: var(--space-3); padding: var(--space-2) var(--space-3) var(--space-2) var(--space-2); min-height: calc(44px * var(--density)); border: 0; border-radius: var(--radius-3); background: transparent; color: var(--text-strong); font: inherit; text-align: left; cursor: pointer; }
+.account-button:hover,.account-button[aria-expanded='true'] { background: var(--hover-fill); }
+.account-button > .icon { width: 14px; height: 14px; margin-left: auto; color: var(--text-faint); flex: 0 0 14px; }
+.account-avatar { display: grid; place-items: center; flex: 0 0 28px; width: 28px; height: 28px; border-radius: var(--radius-2); overflow: hidden; background: var(--surface-active); color: var(--text-muted); font-size: 11px; font-weight: 600; }
+.account-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.account-text { display: flex; align-items: baseline; gap: var(--space-2); min-width: 0; }
+.account-name { font-size: 14px; font-weight: var(--weight-medium); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.account-plan { font-size: 12px; color: var(--text-faint); white-space: nowrap; }
+.desktop-app .sidebar-account .settings-gear { flex: 0 0 auto; width: calc(32px * var(--density)); height: calc(32px * var(--density)); min-width: 0; padding: 7px; border-radius: var(--radius-3); }
+.desktop-app .sidebar-account .settings-gear .icon { width: 18px; height: 18px; }
+
+/* One opaque menu for thread and session rows */
+.desktop-app :is(.thread-context-menu,.popover--submenu) { background: var(--surface-menu); backdrop-filter: none; -webkit-backdrop-filter: none; min-width: 200px; }
+.thread-context-menu .menu-item { min-height: calc(34px * var(--density)); gap: var(--space-3); padding-inline: var(--space-3); }
+.menu-key { margin-left: auto; padding-left: var(--space-4); color: var(--text-faint); font: inherit; font-size: 13px; }
+.menu-item--danger,.menu-item--danger .icon { color: var(--red); }
+.menu-item--danger:is(:hover,:focus-visible) { background: color-mix(in srgb,var(--red) 14%,transparent); }
+.thread-context-menu .menu-item > .menu-chevron { margin-left: auto; }
+.thread-context-menu .menu-key + .menu-check { margin-left: var(--space-2); }
+
+/* Rows never exceed the list: no sideways scroll */
+.desktop-app .sidebar-sessions { overflow-x: hidden; }
+.desktop-app .thread-row.thread-card,.thread-group-toggle,.thread-project-group,.thread-group-rows { box-sizing: border-box; width: 100%; max-width: 100%; min-width: 0; }
+.desktop-app .thread-card .row-title { flex: 1 1 0; min-width: 0; }
+.desktop-app .thread-card-heading { min-width: 0; max-width: 100%; overflow: hidden; }
+.desktop-app .thread-card-heading > :not(.row-title) { flex-shrink: 0; }
+.thread-group-toggle { overflow: hidden; }
+.thread-group-toggle > .thread-group-name { flex: 0 1 auto; min-width: 0; }

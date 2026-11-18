@@ -76,6 +76,9 @@ const paths = {
   deep: '<path d="M12 3v18M3 12h18M6 6l12 12M6 18 18 6"/>',
   plan: '<path d="M9 5h11M9 12h11M9 19h11M3 5h1m-1 7h1m-1 7h1"/>',
   message: '<path d="M21 4H3v13h5l4 4v-4h9V4Z"/>',
+  users: '<path d="M16 20v-1a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v1M9.5 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM21 20v-1a4 4 0 0 0-3-3.9M15 4.2a3.5 3.5 0 0 1 0 6.6"/>',
+  logout: '<path d="M9 4H4v16h5M15 8l4 4-4 4M19 12H9"/>',
+  help: '<rect x="3" y="3" width="18" height="18" rx="5"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5m0 2.7h.01"/>',
 };
 export const icon = (name, cls = '') => `<svg class="icon ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || paths.plus}</svg>`;
 export function button(label, { icon: glyph, variant = 'ghost', className = '', action = '', content = '', attrs = '' } = {}) {

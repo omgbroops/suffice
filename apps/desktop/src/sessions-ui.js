@@ -61,12 +61,14 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   publish();
  }
  function statusOf(s){
+  if(s.alive===false||s.exited||s.dead)return 'ended';
   let state=states.get(s.id)||'starting';
+  if(state==='starting'&&!uiSeen.has(s.id)&&Date.now()-(activity.get(s.id)||Date.now())>120000)return 'idle'; // never reported anything: not running as far as we can tell
   if(state==='starting'&&busy.has(s.id))return busy.get(s.id)?'working':'idle'; // no state event yet: only the screen can say it works
   if(state==='needs_permission'&&prompts.get(s.id)===false)state='working';
   if(state==='waiting_input'&&busy.get(s.id)&&prompts.get(s.id)===false)state='working'; // badge follows the screen: no prompt on it, no "?"
   if(state==='waiting_input'&&prompts.get(s.id)===false&&!busy.get(s.id))return 'done'; // nothing on screen needs you: clear the badge
-  return STATUS[state]||'working';
+  return STATUS[state]||'idle'; // an unknown state never reads as running
  }
  function publish(){updateSessionDirectory([...rows.values()].map(r=>({id:'session-'+r._s.id,title:c.name(r._s),project:base(r._s.cwd),status:statusOf(r._s),modified:activity.get(r._s.id)||Date.now(),agent:labels.get(r._s.id),prompt:promptInfo.get(r._s.id)||null,answer:index=>sx.control(r._s.id,'answerPrompt',{index}),open:()=>open(r._s)})));}
  function paint(s){
@@ -81,7 +83,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  }
  // Same sort and filter choices as the thread list: last activity or name; Running and Needs attention filter by status.
  const KEEP={all:()=>true,working:st=>st==='working',attention:st=>['approval','input','failed'].includes(st),unread:()=>false,draft:()=>false,archived:()=>false};
- function sortRows(){const p=sidebarPreferences.get(),nm=r=>c.name(r._s).toLowerCase();const order=[...rows.entries()].sort((a,b)=>p.sort==='name'?nm(a[1]).localeCompare(nm(b[1])):(activity.get(b[0])||0)-(activity.get(a[0])||0)).map(e=>e[1]);if(order.some((r,i)=>side.children[i]!==r))side.append(...order);for(const r of rows.values())r.hidden=!(KEEP[p.filter]||KEEP.all)(r.dataset.status);}
+ function sortRows(){const p=sidebarPreferences.get(),nm=r=>c.name(r._s).toLowerCase();const order=[...rows.entries()].sort((a,b)=>Number(a[1].dataset.status==='ended')-Number(b[1].dataset.status==='ended')||(p.sort==='name'?nm(a[1]).localeCompare(nm(b[1])):(activity.get(b[0])||0)-(activity.get(a[0])||0))).map(e=>e[1]);if(order.some((r,i)=>side.children[i]!==r))side.append(...order);for(const r of rows.values())r.hidden=!(KEEP[p.filter]||KEEP.all)(r.dataset.status);}
  const unpress=()=>{for(const r of rows.values())r.setAttribute('aria-pressed','false');};
 
  function setMode(m){
