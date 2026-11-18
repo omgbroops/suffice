@@ -77,7 +77,14 @@
   --radius-menu: 14px;
   --menu-width: 208px;
   --menu-row-height: 30px;
-  --radius-composer: 20px;
+  /* Nested radius = parent radius - inset (padding + border), so the gap to the parent's curve is even. */
+  --border-popover: 1px;
+  --inset-menu: calc(var(--menu-inset) + var(--border-popover));
+  --radius-menu-item: calc(var(--radius-menu) - var(--inset-menu));
+  --radius-send: 16px;
+  --inset-composer-corner: 11px;
+  --radius-composer: calc(var(--radius-send) + var(--inset-composer-corner));
+  --radius-composer-inset: calc(var(--radius-composer) - var(--composer-padding) - 1px);
   --sidebar-width: 200px;
   --content-width: 944px;
   --composer-width: 720px;
