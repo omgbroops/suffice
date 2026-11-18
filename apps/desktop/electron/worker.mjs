@@ -116,7 +116,7 @@ async function receive(message) {
     agent.session.sessionManager?.appendCustomEntry?.('suffice:turn-start',{...turnPresentation,promptHash:createHash('sha256').update(payload.prompt).digest('hex'),displayPrompt:payload.displayPrompt??payload.prompt,attachments:payload.attachmentMetadata||[]});send({event:'turn_started',presentation:turnPresentation});
     await changeTracker?.beginTurn();
     const budget=dailyBudget(home,payload.desktopSettings),room=budget?.status()[0].remaining;if(room===0)throw new Error('Stopped: the daily token budget is used up. Raise it in Settings > Usage.');
-    capState={base:sessionUsage(agent.session),caps:runCaps(process.env,payload.desktopSettings),message:null,budget};if(room!=null)capState.caps.tokens=Math.min(capState.caps.tokens,room);
+    capState={base:sessionUsage(agent.session),caps:runCaps(process.env,payload.desktopSettings),message:null,budget};if(room!=null){capState.room=room;if(room<capState.caps.tokens){capState.caps.tokens=room;capState.caps.daily=true;}}
     if(sessionPath)await checkpoint(cwd,threadId(sessionPath),payload.displayPrompt??payload.prompt).catch(()=>{});// a checkpoint failure never blocks the turn
     const choices=payload.context,restoreContext=installContext(agent.session,choices);
     pendingTurn=()=>{turns.push({n:++turnCount,at:Date.now(),...sessionInventory(agent.session,agent.session.messages??[]),removed:choices?.exclude||[],summaries:!!choices?.summaries});if(turns.length>10)turns.shift();};

@@ -23,14 +23,18 @@ export function dailyBudget(home,settings={}){
   return createBudget({clock:{now:()=>Date.now()},store:createFileStore(resolve(home,'budget.json')),limits:[{name:'daily',tokens,period:'day',utcOffsetMinutes:-new Date().getTimezoneOffset()}]});
 }
 export function budgetStatus(home,settings={}){return dailyBudget(home,settings)?.status()[0]??null;}
-export function recordSpend(state,now){const n=(now?.totalTokens??0)-(state?.base?.totalTokens??0);if(state?.budget&&n>0)state.budget.record({inputTokens:n,outputTokens:0});}
+// Daily budget counts input+output (what the composer meter shows), not cache reads; falls back to totalTokens without the split.
+const spend=u=>u?.inputTokens!=null?u.inputTokens+(u.outputTokens??0):u?.totalTokens??0;
+// Never records past the room left when the run started: a message that overshoots does not push the day above its ceiling.
+export function recordSpend(state,now){const n=Math.min(spend(now)-spend(state?.base),state?.room??Infinity);if(state?.budget&&n>0)state.budget.record({inputTokens:n,outputTokens:0});}
 const compact=n=>n>=1e6?`${+(n/1e6).toFixed(1)}M`:n>=1e3?`${+(n/1e3).toFixed(1)}K`:String(n);
 // Returns the stop message when the run delta is strictly over a cap, else null. Unknown cost is checked by tokens alone.
 export function runCapExceeded(base,now,caps){
-  const tokens=(now?.totalTokens??0)-(base?.totalTokens??0),cost=(now?.cost??0)-(base?.cost??0);
+  const tokens=caps.daily?spend(now)-spend(base):(now?.totalTokens??0)-(base?.totalTokens??0),cost=(now?.cost??0)-(base?.cost??0);
   const overTokens=tokens>caps.tokens,overCost=now?.cost!=null&&cost>caps.usd;
   if(!overTokens&&!overCost)return null;
   const spent=`spent $${cost.toFixed(2)}, ${compact(tokens)} tokens`;
+  if(!overCost&&caps.daily)return `Stopped: the daily token budget is used up (${spent}). Raise it in Settings > Usage.`;
   return overCost?`Stopped: this run reached its $${caps.usd.toFixed(2)} cap (${spent}).`:`Stopped: this run reached its ${compact(caps.tokens)} token cap (${spent}).`;
 }
 

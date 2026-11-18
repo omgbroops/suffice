@@ -21,15 +21,15 @@ test('caps and daily budget come from Settings choices; env still wins',()=>{
 
 test('worker stops at the daily budget, records spend in the backend budget file, then refuses the next run',async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-budget-')),cwd=await mkdtemp(resolve(tmpdir(),'suffice-budget-cwd-'));
- const messages=[];let subscriber,usage={cost:0,totalTokens:0},aborts=0;
- const agent={session:{getSessionStats:()=>({cost:usage.cost,tokens:{total:usage.totalTokens}}),subscribe:fn=>{subscriber=fn;},setThinkingLevel:()=>{}},totals:{},sessionPath:()=>'/test/session',
-  run:async()=>{const seen=aborts;for(const total of [400000,900000,1100000,5000000]){usage={cost:0,totalTokens:total};subscriber({type:'message_end'});if(aborts>seen)break;}return '';},abort:()=>{aborts++;},dispose:async()=>{}};
+ const messages=[];let subscriber,usage={cost:0,totalTokens:0,cache:0},aborts=0;
+ const agent={session:{getSessionStats:()=>({cost:usage.cost,tokens:{total:usage.totalTokens,input:usage.totalTokens-usage.cache,output:0}}),subscribe:fn=>{subscriber=fn;},setThinkingLevel:()=>{}},totals:{},sessionPath:()=>'/test/session',
+  run:async()=>{const seen=aborts;for(const total of [400000,900000,1100000,5000000]){usage={cost:0,totalTokens:total,cache:total*0};subscriber({type:'message_end'});if(aborts>seen)break;}return '';},abort:()=>{aborts++;},dispose:async()=>{}};
  const host=createHarnessHost({home,send:m=>messages.push(m),createRuntime:async()=>({isUsingSubscription:()=>true}),createSession:async()=>agent});
  const desktopSettings={'budget-daily-tokens':'1M'};
  await host({id:1,action:'status'});await host({id:2,action:'run',payload:{prompt:'x',effort:'low',cwd,desktopSettings}});
- assert.equal(aborts,1);assert.match(messages.find(m=>m.id===2).error,/Stopped: this run reached its 1M token cap/);
- const saved=JSON.parse(await readFile(resolve(home,'budget.json'),'utf8'));assert.equal(Object.values(saved.windows)[0].used,1100000);
- assert.deepEqual([budgetStatus(home,desktopSettings).used,budgetStatus(home,desktopSettings).remaining],[1100000,0]);
+ assert.equal(aborts,1);assert.match(messages.find(m=>m.id===2).error,/Stopped: the daily token budget is used up/);
+ const saved=JSON.parse(await readFile(resolve(home,'budget.json'),'utf8'));assert.equal(Object.values(saved.windows)[0].used,1000000);
+ assert.deepEqual([budgetStatus(home,desktopSettings).used,budgetStatus(home,desktopSettings).remaining],[1000000,0]);
  await host({id:3,action:'run',payload:{prompt:'y',effort:'low',cwd,desktopSettings}});
  assert.match(messages.find(m=>m.id===3).error,/daily token budget is used up/);
 });
