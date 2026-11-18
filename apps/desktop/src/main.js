@@ -436,7 +436,7 @@ const whatsNew=createWhatsNew({mod,run:item=>{const t=item.try;
  else if(t.threadMenu){const row=document.querySelector('.thread-row');if(row){const r=row.getBoundingClientRect();row.dispatchEvent(new MouseEvent('contextmenu',{bubbles:true,cancelable:true,clientX:r.left+r.width/2,clientY:r.top+r.height/2}));}else document.querySelector('.new-session')?.click();}
  else if(t.composer)document.querySelector('.composer textarea, #prompt')?.focus();}});
 const spotlight=createSpotlight({commands:()=>[
- {id:'tasks',title:'Tasks: open the board',icon:'inbox',run:()=>taskBoard.open()},
+ {id:'tasks',title:'Tasks: open the board',icon:'plan',run:()=>taskBoard.open()},
  {id:'needs-you',title:'Needs you',icon:'inbox',run:()=>document.dispatchEvent(new Event('suffice-open-needs-you'))},
  {id:'issues',title:'Issues',icon:'bug',run:()=>document.dispatchEvent(new Event('suffice-open-issues'))},
  {id:'whats-new',title:'Help: What\'s new',icon:'agent',keywords:'help release notes updates',run:()=>whatsNew.open()},

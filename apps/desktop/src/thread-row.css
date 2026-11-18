@@ -194,3 +194,6 @@
 .thread-peek-line { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; line-height: 17px; color: var(--text-muted, var(--text-faint)); }
 .thread-peek-prompt { color: var(--text-strong); }
 .thread-peek-foot { font-size: 11px; color: var(--text-faint); font-variant-numeric: tabular-nums; }
+
+/* "No Git" never wraps; the project name truncates first. */
+.thread-no-branch { flex: 0 0 auto; white-space: nowrap; }

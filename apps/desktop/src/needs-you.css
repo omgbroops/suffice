@@ -35,8 +35,8 @@
 .needs-act:active { transform: translateY(.5px); }
 .needs-act:disabled { opacity: .5; pointer-events: none; }
 /* Accent = the one primary action per row (Approve, Open on a reply). */
-.needs-act--primary { background: var(--primary-bg); color: var(--primary-fg); box-shadow: none; }
-.needs-act--primary:hover { background: var(--primary-hover); color: var(--primary-fg); }
+.needs-act--primary { background: var(--chat-accent); color: var(--chat-accent-ink); box-shadow: inset 0 0 0 var(--chat-hairline) color-mix(in srgb, var(--chat-accent) 70%, #000); font-weight: var(--weight-semibold); }
+.needs-act--primary:hover { background: var(--chat-accent-hover); color: var(--chat-accent-ink); }
 .needs-act:focus-visible, .needs-nav:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
 .needs-empty { display: grid; place-items: center; min-height: 40vh; }
 .needs-empty-title { font-size: 14px; color: var(--text-muted); }
