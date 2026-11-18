@@ -78,8 +78,8 @@ test('15, 16, 21: menus tick only the active row, one control per row',async()=>
  await page.locator('[data-action="sidebar-menu"], .sidebar-heading [aria-haspopup="menu"]').first().click();
  const side=page.locator('#popover-menu:not([hidden]), .popover:not([hidden])').first();await page.getByRole('menuitem',{name:'Sort by'}).hover();
  const sub=page.locator('.popover--submenu');await sub.waitFor();
- const t=await sub.locator('[role=menuitemradio]').evaluateAll(r=>r.map(x=>({c:x.getAttribute('aria-checked'),v:[...x.children].filter(i=>i.classList.contains('menu-check')&&getComputedStyle(i).visibility!=='hidden').length})));
- assert.equal(t.filter(x=>x.v>0).length,1,JSON.stringify(t));assert.equal(t.find(x=>x.v>0).c,'true');
+ const t=await sub.locator('[role=menuitemradio]').evaluateAll(r=>r.map(x=>({c:x.getAttribute('aria-checked'),v:[...x.children].filter(i=>i.classList.contains('menu-check')&&getComputedStyle(i).visibility!=='hidden').length+(['none','normal'].includes(getComputedStyle(x,'::after').content)?0:1)})));
+ assert.equal(t.filter(x=>x.v>0).length,1,JSON.stringify(t));assert.ok(t.every(x=>x.v<=1),'one tick per row: '+JSON.stringify(t));assert.equal(t.find(x=>x.v>0).c,'true');
  await shot('21-sort-menu.png');await page.keyboard.press('Escape');await page.keyboard.press('Escape');
 });
 
@@ -110,6 +110,8 @@ test('41: sidebar lists only live sessions; ended ones leave or are marked',asyn
 
 test('17: Start session in background starts a real session without opening it',async()=>{
  await page.getByRole('button',{name:'New session',exact:true}).click();
+ // New session re-applies model defaults once the catalog loads (button enabled); an earlier override is overwritten
+ await page.waitForFunction(()=>document.querySelector('[aria-label="Choose model and effort"]')?.disabled===false);
  await page.evaluate(()=>{document.querySelector('.composer').modelSelection={provider:'cli',model:'fakeclaude'};});
  await page.locator('#prompt').fill('Index the repository');
  const before=tmux('list-sessions','-F','#{session_name}').split('\n').filter(Boolean).length;
@@ -129,13 +131,17 @@ test('17: Start session in background starts a real session without opening it',
 
 test('19: a pending first message is mounted once and never rebuilt',async()=>{
  await page.getByRole('button',{name:'New session',exact:true}).click();
+ // New session re-applies model defaults once the catalog loads (button enabled); an earlier override is overwritten
+ await page.waitForFunction(()=>document.querySelector('[aria-label="Choose model and effort"]')?.disabled===false);
  await page.evaluate(()=>{document.querySelector('.composer').modelSelection={provider:'cli',model:'fakeclaude'};window.__mounts=[];const seen=new WeakSet();new MutationObserver(ms=>{for(const m of ms)for(const n of m.addedNodes)if(n.nodeType===1){for(const u of [n,...n.querySelectorAll?.('.thread-user')||[]])if(u.matches?.('.thread-user')&&u.textContent.trim()==='Stable pending command'&&!seen.has(u)){seen.add(u);window.__mounts.push(u.className);}}}).observe(document.body,{childList:true,subtree:true});});
  await page.locator('#prompt').fill('Stable pending command');await page.locator('.send-button').click();
- await page.locator('.thread-header').waitFor();await page.waitForTimeout(2500);
+ await page.locator('.thread-header').waitFor();
+ await page.waitForTimeout(2500);
  const mounts=await page.evaluate(()=>window.__mounts);
  assert.ok(mounts.length>=1,'bubble rendered');
- // pending bubble, then the agent's own item replaces it once: at most two mounts, never a flash per redraw.
- assert.ok(mounts.length<=2,'re-mounted '+mounts.length+' times: '+JSON.stringify(mounts));
+ // plain pending bubble, items-view pending bubble, then the agent item: never one remount per state event.
+ assert.ok(mounts.filter(c=>c.includes('thread-pending')).length<=2,'pending bubble remounted: '+JSON.stringify(mounts));
+ assert.ok(mounts.length<=3,'re-mounted '+mounts.length+' times: '+JSON.stringify(mounts));
  await shot('19-pending-command.png');
 });
 

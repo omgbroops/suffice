@@ -147,7 +147,7 @@ function createCore({hooks,ctx}){
    if(at.has(it.id)){items[at.get(it.id)]=it;continue;}at.set(it.id,items.length);items.push(it);}
   const entries=group(items),keep=new Set();let prev=null;
   for(const e of entries){
-   keep.add(e.id);const sg=JSON.stringify(e.run||e.it)+working,c=cache.get(e.id);let node=c?.el;
+   keep.add(e.id);const sg=JSON.stringify(e.run||e.it)+(e.it?.kind==='user'?'':working),c=cache.get(e.id);let node=c?.el;
    if(!c||c.sig!==sg){
     const n=e.run?buildRun(e.run,later,0,working):build(e.it,later,0,working);
     if(!n){if(c){c.el.remove();cache.delete(e.id);}continue;}

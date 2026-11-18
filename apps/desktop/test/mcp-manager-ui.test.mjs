@@ -72,7 +72,7 @@ test('MCP manager: install, health, scoped switches and the composer chip, drive
   await chip.click();
   const tmenu=page.getByRole('menu',{name:'Tools for this thread'});await tmenu.waitFor();
   assert.equal(await tmenu.getByRole('menuitemradio',{name:'Files'}).getAttribute('aria-checked'),'true');
-  assert.equal(await tmenu.getByRole('menuitemradio',{name:'Files'}).locator('.tool-on').count(),1);
+  assert.equal(await tmenu.getByRole('menuitemradio',{name:'Files'}).locator('.tool-on').count(),0);assert.equal(await tmenu.getByRole('menuitemradio',{name:'Files'}).locator('.menu-check:not(.menu-check--empty)').count(),1);
   assert.deepEqual(errors,[]);assert.equal(stderr.join('').includes('[no-dialog]'),false,stderr.join(''));
  }finally{await app.close();}
 });
