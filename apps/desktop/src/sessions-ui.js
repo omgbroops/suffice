@@ -24,7 +24,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  if(!sx)return {leave(){},isActive:()=>false,stop:()=>false,send(){},start:async()=>{toast('Sessions are unavailable');return false;}};
  const side=el('div','sidebar-cli-sessions');
  document.querySelector('.sidebar-sessions').before(side);
- const busy=new Map(),rows=new Map(),states=new Map(),prompts=new Map(),subs=new Map(),labels=new Map(),titles=new Map(),firstText=new Map(),activity=new Map();
+ const busy=new Map(),rows=new Map(),states=new Map(),prompts=new Map(),subs=new Map(),labels=new Map(),titles=new Map(),firstText=new Map(),handBack=new Map(),activity=new Map();
  let import_=null,republished=false;
  const uiSeen=new Set();const bump=id=>{activity.set(id,Date.now());};
  const agentLabel=a=>({claude:'Claude Code',codex:'Codex'}[a]||(/claude/.test(a)?'Claude Code':/codex/.test(a)?'Codex':avail.agents.find(x=>x.id===a)?.label||a));
@@ -91,6 +91,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   uiUnsub=sx.onUi(s.id,u=>{c.ui=u;sh.usage(u?.meta);ctl.update();ctl.paintMeta();if(c.mode==='chat')drawChat();drawPrompt();ctl.syncDraft();c.syncRun();});
   c.cat=null;c.lastDraft='';c.cardsSig='';sx.catalog?.(s.id).then(k=>{if(c.active?.id===s.id)ctl.setCatalog(k);}).catch(()=>{});
   ctl.attach();
+  if(handBack.has(s.id)){const p=document.querySelector('#prompt');if(p&&!p.value)p.value=handBack.get(s.id);handBack.delete(s.id);}
   subs.clear();c.subLimit.clear();subUnsub=sx.onSubagents?.(s.id,l=>{subs.clear();for(const x of l||[])subs.set(x.callId,x);if(c.mode==='chat')drawChat();});
  }
  function leave(){
@@ -109,12 +110,18 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  }
  // The CLI drops keys until its input box is drawn (and Enter would accept a trust prompt): hold the first message, shown as pending, until the screen parses as ready. Never delivered (exit, error, 45 s with no prompt up): hand it back to the composer.
  function sendWhenReady(id,text){
-  let t=0,off=()=>{},offState=()=>{};const stop=()=>{clearTimeout(t);off();offState();};
-  const giveUp=why=>{stop();firstText.delete(id);const p=document.querySelector('#prompt');if(p&&!p.value)p.value=text;toast(why);if(c.active?.id===id&&c.mode==='chat')drawChat();};
+  let t=0,poll=0,gone=false,off=()=>{},offState=()=>{};const stop=()=>{gone=true;clearTimeout(t);clearInterval(poll);off();offState();};
+  const giveUp=why=>{if(gone)return;stop();firstText.delete(id);const here=c.active?.id===id,name=titles.get(id)||'session';
+   if(here){const p=document.querySelector('#prompt');if(p&&!p.value)p.value=text;}else handBack.set(id,text);
+   toast(here?why:`${why}: ${name}`);if(here&&c.mode==='chat')drawChat();};
   const arm=()=>{clearTimeout(t);t=setTimeout(()=>giveUp('Agent did not start, message not sent'),45000);};
   arm();
+  // The backend notices a dead CLI only when sessions.list runs, so list while the message is held.
+  poll=setInterval(()=>{sx.list().catch(()=>{});},1000);
   off=sx.onUi(id,u=>{if(!u)return;if(u.ready){stop();sx.send(id,text).catch(e=>giveUp(e.message));}else if(u.prompt){clearTimeout(t);t=0;}else if(!t)arm();});
+  if(gone)off();
   offState=sx.onState(id,v=>{if(v?.state==='exited'||v?.state==='error')giveUp('Agent exited, message not sent');});
+  if(gone)offState();
  }
 
  // Import: searchable history, read-only in the chat renderer, Resume starts a live session.

@@ -19,3 +19,5 @@
 .session-note.is-warn { color: var(--text); }
 .tool-widget .tool-cmd { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; white-space: pre-wrap; overflow-wrap: anywhere; }
 .tool-diff { margin-top: 6px; }
+.thread-user.thread-pending[aria-busy=true] { opacity: .6; transition: opacity .2s ease; }
+@media(prefers-reduced-motion:reduce) { .thread-user.thread-pending { transition: none; } }
