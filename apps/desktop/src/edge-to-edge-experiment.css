@@ -513,3 +513,10 @@
 /* Traffic lights keep identical screen coordinates across sidebar states. */
 .desktop-app[data-window-chrome='macos-preview'] body > .window-controls { top:calc(var(--chrome-center-y) - (var(--header-control-size) + 5px) / 2); left:calc(var(--chrome-center-y) - (var(--header-control-size) + 5px) / 2); right:auto; width:auto; height:30px; padding:2.5px 3.5px; border-radius:8px; background:transparent; }
 .desktop-app[data-window-chrome='macos-preview'] .mac-traffic-buttons .window-control { height:25px; min-height:25px; }
+.desktop-app .composer .tools-chip { gap:5px; padding:4px 7px; min-height:28px; border-radius:7px; color:var(--text-muted); font-size:12px; background:transparent; white-space:nowrap; }
+.desktop-app .composer .tools-chip:hover,.desktop-app .composer .tools-chip[aria-expanded='true'] { background:var(--hover-fill); color:var(--text); }
+.tools-chip .icon { width:14px; height:14px; }
+.desktop-app .composer[data-compact-access='true'] .tools-chip > span { display:none; }
+.popover.tools-menu[role=menu] { max-height:min(600px,calc(100dvh - 24px)); }
+.tools-menu .menu-options { padding-bottom:6px; }
+.tools-menu .tool-on { width:16px; height:16px; flex:0 0 16px; margin-top:2px; color:var(--text); }

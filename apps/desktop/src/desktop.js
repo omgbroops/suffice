@@ -6,6 +6,7 @@ import {connectAccessModePicker} from './access-mode-picker.js';
 import { connectThreads } from './threads-ui.js';
 import { connectProjects } from './projects-ui.js';
 import {connectModels} from './models-ui.js';
+import {connectToolsChip} from './mcp-chip.js';
 import {connectTooltips} from './tooltips.js';
 import {connectWorkspaceTools} from './workspace-tools.js';
 // Desktop-only behavior; the existing shell markup, tokens and controls stay.
@@ -32,6 +33,7 @@ export function connectDesktop({prompt,send,toast,escapeHtml}) {
   connectQueuedMessages(prompt.form,prompt,toast);
   connectProjects({api,toast});
   connectModels({api,toast});
+  connectToolsChip(prompt.form,api);
   connectComposerOverflow(prompt.form);
   connectWorkspaceTools(api);
   connectChatChangesWidget();
