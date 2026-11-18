@@ -40,7 +40,7 @@ test('Computer use: Settings toggle, session start, approval on risky actions, r
   await page.locator('[data-section=agent]').click();
   const sw=page.getByRole('switch',{name:'Computer use sessions'});
   assert.equal(await sw.getAttribute('aria-checked'),'false');
-  await sw.click();assert.equal(await sw.getAttribute('aria-checked'),'true');
+  await sw.click();await page.locator('[role=switch][aria-label="Computer use sessions"][aria-checked=true]').waitFor(); // aria-checked flips after the async save
   await page.locator('[data-action=settings]').first().click();
   await page.locator('.computer-nav').waitFor();
   await page.locator('.computer-nav').click();await page.locator('.computer-view:not([hidden])').waitFor();

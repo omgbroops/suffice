@@ -22,7 +22,7 @@ export function createComputer({dataDir, env = process.env, send}) {
  const poke = () => send({type: 'computer'});
  const journal = id => createJournal({dir, runId: id, clock});
  const events = id => { try { return fs.readFileSync(path.join(dir, id + '.jsonl'), 'utf8').split('\n').filter(Boolean).map(l => JSON.parse(l)); } catch { return []; } };
- const approve = runId => q => new Promise(res => { pending.set('ap' + (++n), {runId, q, res}); poke(); });
+ const approve = (runId, j) => q => new Promise(res => { pending.set('ap' + (++n), {runId, q, res, j}); j.append({type: 'computer.ask', data: {action: q.action}}).catch(() => {}).then(poke); });
  const drop = runId => { for (const [id, p] of pending) if (p.runId === runId) { pending.delete(id); p.res(false); } };
 
  const sum = id => {
@@ -30,8 +30,9 @@ export function createComputer({dataDir, env = process.env, send}) {
   if (!head) return null;
   const steps = ev.filter(e => e.type === 'computer.step').map(e => e.data);
   const ask = [...pending].find(([, p]) => p.runId === id);
-  const state = ask ? 'approval' : live.has(id) ? 'running' : end ? (end.data.cancelled ? 'cancelled' : end.data.ok ? 'done' : 'failed') : 'interrupted';
-  return {runId: id, goal: head.data.goal, start: head.data.start, state, steps, answer: end?.data.answer ?? null, stopReason: end?.data.stopReason ?? null, error: end?.data.error ?? null,
+  const awaiting = ev.at(-1)?.type === 'computer.ask',
+    state = ask ? 'approval' : live.has(id) ? 'running' : end ? (end.data.cancelled ? 'cancelled' : end.data.ok ? 'done' : 'failed') : 'interrupted';
+  return {runId: id, goal: head.data.goal, start: head.data.start, state, awaiting: state === 'interrupted' && awaiting, steps, answer: end?.data.answer ?? null, stopReason: end?.data.stopReason ?? null, error: end?.data.error ?? null,
    replayed: !!end?.data.replay?.hit, started: head.ts, last: ev.at(-1)?.ts ?? 0,
    approval: ask ? {id: ask[0], action: ask[1].q.action, target: ask[1].q.target?.name ?? '', tags: ask[1].q.riskTags ?? [], reason: ask[1].q.reason ?? null} : null};
  };
@@ -54,7 +55,7 @@ export function createComputer({dataDir, env = process.env, send}) {
    if (!backend) throw new Error('Backend is not ready');
    deps = {browser: createBrowser({exec, clock, policy: {allowedDomains: ['.' + url.hostname]}}), decide: backend.decide};
   }
-  const agent = createComputerAgent({...deps, journal: j, clock, approve: approve(id), replay});
+  const agent = createComputerAgent({...deps, journal: {...j, append: async e => { const r = await j.append(e); if (e?.type === 'computer.step') poke(); return r; }}, clock, approve: approve(id, j), replay});
   (async () => {
    let r;
    try { r = await agent.run({goal, surface: 'browser', start: url.href, agentId: id, signal: ac.signal}); } catch (e) { r = {ok: false, stopReason: 'error', error: String(e?.message || e)}; }
@@ -73,7 +74,7 @@ export function createComputer({dataDir, env = process.env, send}) {
    'computer-start': p => start(p),
    'computer-list': () => ({runs: ids().map(sum).filter(Boolean).sort((a, b) => b.last - a.last).map(({steps, ...r}) => ({...r, stepCount: steps.length}))}),
    'computer-detail': id => { const s = sum(runId(id)); if (!s) throw new Error('Unknown session'); return s; },
-   'computer-approve': p => { const e = pending.get(p?.id); if (!e) throw new Error('That approval was already answered'); pending.delete(p.id); e.res(!!p.approved); poke(); return true; },
+   'computer-approve': async p => { const e = pending.get(p?.id); if (!e) throw new Error('That approval was already answered'); pending.delete(p.id); await e.j.append({type: 'computer.answer', data: {approved: !!p.approved}}).catch(() => {}); e.res(!!p.approved); poke(); return true; },
    'computer-cancel': id => { runId(id); const ac = live.get(id); if (!ac) return false; ac.abort(); drop(id); poke(); return true; },
   },
  };

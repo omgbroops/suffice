@@ -65,7 +65,7 @@ export function connectComputer({api,toast}){
   const head=el('div','cu-head-row');head.append(main);
   if(LIVE.has(r.state)){const c=btn('issues-act','Cancel');c.dataset.act='cancel';c.setAttribute('aria-label','Cancel '+r.goal);c.addEventListener('click',()=>void guarded(bridge.cancel(r.runId)).then(load));head.append(c);}
   li.append(head);
-  const why=r.state==='failed'?(r.error||STOP[r.stopReason]||'The run failed'):r.state==='interrupted'?'The app closed while this was running':r.state==='cancelled'?null:null;
+  const why=r.state==='failed'?(r.error||STOP[r.stopReason]||'The run failed'):r.state==='interrupted'?(r.awaiting?'The app closed before you answered. The action was not taken.':'The app closed while this was running'):r.state==='cancelled'?null:null;
   if(why)li.append(el('div','cu-reason',why));
   if(openId===r.runId){
    const box=el('div','cu-detail');
@@ -104,6 +104,7 @@ export function connectComputer({api,toast}){
  }
  function open(){
   if(isOpen_){view.querySelector('.cu-row,.issues-act')?.focus();return;}
+  if(document.documentElement.classList.contains('settings-open'))document.querySelector('[data-action=settings]')?.click();
   for(const n of ['issues-open','needs-open','flows-open'])if(workspace.classList.contains(n))document.querySelector('.'+n.replace('-open','-nav'))?.click();
   isOpen_=true;
   underlay=[...workspace.querySelectorAll('.home,.thread-transcript,.thread-header')].map(element=>({element,inert:element.inert}));for(const {element} of underlay)element.inert=true;
