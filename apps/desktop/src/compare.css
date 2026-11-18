@@ -1,4 +1,4 @@
-/* Best-of-N compare. Radii nest: dialog 20 - padding 8 = card 12; card 12 - padding 6 = well 6. */
+/* Best-of-N compare. Radii nest: dialog 20 - padding 8 = card 12 (body padding 0, card inset 8); card 12 - padding 6 = well 6 (text children carry their own 6px side padding). */
 .compare-dialog { --compare-pad: 8px; width: min(1040px, calc(100vw - 48px)); max-height: calc(100vh - 48px); padding: var(--compare-pad); border: 1px solid var(--border-strong); border-radius: 20px; background: var(--surface-menu); color: var(--text); box-shadow: var(--shadow-dialog, var(--shadow-float)); overflow: hidden; }
 .compare-dialog[open] { display: flex; flex-direction: column; }
 .compare-dialog::backdrop { background: var(--dialog-overlay); backdrop-filter: blur(6px); }
@@ -7,7 +7,7 @@
 .compare-close { width: 28px; height: 28px; display: grid; place-items: center; border: 0; border-radius: 8px; background: transparent; color: var(--text-muted); cursor: pointer; }
 .compare-close:hover { background: var(--surface-hover-strong); color: var(--text-strong); }
 .compare-close svg { width: 14px; height: 14px; }
-.compare-body { display: flex; flex-direction: column; gap: 8px; min-height: 0; overflow: auto; padding: 0 var(--compare-pad) var(--compare-pad); }
+.compare-body { display: flex; flex-direction: column; gap: 8px; min-height: 0; overflow: auto; padding: 0; }
 .compare-note { margin: 0; padding: 24px 6px; font-size: 13px; line-height: 20px; color: var(--text-muted); }
 .compare-prompt { width: 100%; resize: vertical; padding: 10px 12px; border: 1px solid var(--border-strong); border-radius: 12px; background: var(--surface-field); box-shadow: inset 0 1px 3px #00000038; color: var(--text-strong); font: inherit; font-size: 13px; line-height: 20px; }
 .compare-prompt:focus-visible { outline: 1px solid var(--border-focus); }
@@ -21,7 +21,10 @@
 .compare-hint { font-size: 12px; line-height: 18px; color: var(--text-muted); }
 .compare-grid { display: grid; grid-template-columns: repeat(var(--compare-cols, 2), minmax(0, 1fr)); gap: 8px; }
 .compare-grid[data-count='3'] { --compare-cols: 3; }
-.compare-card { display: flex; flex-direction: column; gap: 10px; min-width: 0; padding: 12px; border: 1px solid var(--border-strong); border-radius: 12px; background: var(--surface-active); }
+.compare-card { display: flex; flex-direction: column; gap: 10px; min-width: 0; padding: 6px; border: 1px solid var(--border-strong); border-radius: 12px; background: var(--surface-active); }
+.compare-card > :not(.compare-answer) { padding-inline: 6px; }
+.compare-card > :first-child { padding-top: 6px; }
+.compare-card > :last-child:not(.compare-answer) { padding-bottom: 6px; }
 .compare-card[data-state='failed'] { border-color: color-mix(in srgb, var(--red) 40%, transparent); }
 .compare-card-title { margin: 0; font-size: 13px; line-height: 20px; font-weight: 500; color: var(--text-strong); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .compare-stats { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 12px; line-height: 18px; }
