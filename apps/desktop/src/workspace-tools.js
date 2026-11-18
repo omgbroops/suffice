@@ -13,11 +13,12 @@ export function connectWorkspaceTools(api){
   ring.innerHTML='<svg class="icon" width="15" height="15" viewBox="0 0 20 20" aria-hidden="true"><circle class="context-ring-track" cx="10" cy="10" r="7"/><circle class="context-ring-value" cx="10" cy="10" r="7" pathLength="100"/></svg>';
   const toggle=document.createElement('button');toggle.type='button';toggle.className='button button--ghost workspace-tool';toggle.setAttribute('aria-label','Toggle right panel');toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-controls','right-sidebar');
   toggle.innerHTML=icon('panel');
+  const sideBtn=document.createElement('button');sideBtn.type='button';sideBtn.className='button button--ghost workspace-tool side-chat-toggle';sideBtn.setAttribute('aria-label','Side chat');sideBtn.title='Side chat (Ctrl/Cmd+Shift+U)';sideBtn.setAttribute('aria-expanded','false');sideBtn.setAttribute('aria-controls','side-chat');sideBtn.innerHTML=icon('message');sideBtn.addEventListener('click',()=>document.dispatchEvent(new Event('suffice-side-chat-toggle')));
   const modeBtn=document.createElement('button');modeBtn.type='button';modeBtn.className='button button--ghost workspace-tool session-mode-toggle';modeBtn.hidden=true;
   const resumeBtn=document.createElement('button');resumeBtn.type='button';resumeBtn.className='button button--primary button--small workspace-tool session-resume';resumeBtn.textContent='Resume';resumeBtn.hidden=true;
   let cfg=null;
   modeBtn.addEventListener('click',()=>cfg?.onMode?.(cfg.mode==='terminal'?'chat':'terminal'));resumeBtn.addEventListener('click',()=>cfg?.onResume?.());
-  sessionTools=next=>{cfg=next;const chat=next?.kind==='chat',imp=next?.kind==='import';ring.hidden=imp;modeBtn.hidden=!chat;resumeBtn.hidden=!imp;
+  sessionTools=next=>{cfg=next;sideBtn.hidden=!!next;const chat=next?.kind==='chat',imp=next?.kind==='import';ring.hidden=imp;modeBtn.hidden=!chat;resumeBtn.hidden=!imp;
     if(chat){const term=next.mode==='terminal';modeBtn.innerHTML=icon(term?'message':'terminal');modeBtn.setAttribute('aria-pressed',String(term));modeBtn.setAttribute('aria-label',term?'Show chat':'Show terminal');}
     if(!next)update(null);};
   const sidebar=document.createElement('aside');sidebar.id='right-sidebar';sidebar.className='right-sidebar';sidebar.setAttribute('aria-label','Right panel');sidebar.inert=true;sidebar.setAttribute('aria-hidden','true');app.append(sidebar);
@@ -51,6 +52,6 @@ export function connectWorkspaceTools(api){
   api.onEvent(event=>{if(!inSession()&&event.event==='usage'&&(!event.threadId||event.threadId===viewState.id)){revision++;update(event.usage);}});
   document.addEventListener('suffice:usage-change',()=>void refresh());
   tools.hidden=!viewState.id;
-  viewState.subscribe(event=>{if(event.type==='select'||event.type==='adopt'){tools.hidden=!event.id;hide();if(!inSession())void refresh();}});
-  tools.append(ring,resumeBtn,modeBtn,toggle);document.body.append(tools,details);void refresh();
+  viewState.subscribe(event=>{if(event.type==='select'||event.type==='adopt'){tools.hidden=!event.id;sideBtn.hidden=String(event.id||'').startsWith('session-');hide();if(!inSession())void refresh();}});
+  tools.append(ring,resumeBtn,modeBtn,sideBtn,toggle);document.body.append(tools,details);void refresh();
 }

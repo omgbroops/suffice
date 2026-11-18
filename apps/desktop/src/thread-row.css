@@ -151,3 +151,11 @@
 .thread-provider .settings-provider-placeholder,.message-turn-model .settings-provider-placeholder { width:13px; height:13px; flex:0 0 13px; font-size:8px; line-height:13px; border-radius:3px; }
 
 .spotlight-result .settings-provider-placeholder { width:13px; height:13px; flex:0 0 13px; font-size:8px; line-height:13px; border-radius:3px; }
+
+.thread-fork { display: inline-flex; align-items: baseline; gap: 3px; min-width: 0; flex: 0 1 auto; border-radius: 3px; color: var(--text-muted); cursor: pointer; }
+.thread-fork-arrow { flex: none; }
+.thread-fork-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.thread-fork:hover .thread-fork-title { color: var(--text); text-decoration: underline; }
+.thread-fork:focus-visible { outline: 1px solid var(--focus); outline-offset: 1px; }
+.thread-fork-mark { display: inline-flex; flex: none; color: var(--text-faint); }
+.thread-fork-mark .icon { width: 12px; height: 12px; }

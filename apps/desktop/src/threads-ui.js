@@ -24,6 +24,7 @@ import {createToolWidget,toolOutput} from './tool-widget.js';
 import {nextTranscriptFollowing} from './transcript-scroll.js';
 import {connectSessions} from './sessions-ui.js';
 import {connectNeedsYou} from './needs-you.js';
+import {connectSideChat} from './side-chat.js';
 
 export function connectThreads({api,prompt,send,toast}){
  connectExtensionUI(api,toast);const approvals=connectApprovals(api,toast);
@@ -85,6 +86,7 @@ export function connectThreads({api,prompt,send,toast}){
   if(element.querySelector('pre code'))codeTimers.set(element,setTimeout(()=>{if(element.isConnected){void import('./mermaid-diagrams.js').then(({renderDiagrams})=>renderDiagrams(element));void import('./code-highlight.js').then(({colorCode})=>Promise.all([...element.querySelectorAll('pre code')].map(code=>colorCode(code,'snippet.'+(code.className.match(/language-([\w+-]+)/)?.[1]||'text'))))).catch(()=>{});}},120));
  }
  sessions=connectSessions({toast,form,workspace,header,hooks:{showHistory,threadView,markdown,bottom,clear}});
+ connectSideChat({api,form,toast,markdown});
  function plainReasoning(text){const node=document.createElement('div');markdown(node,text);return node.textContent.replace(/[*_`~]/g,'').replace(/^#{1,6}\s*/gm,'').split('\n').map(line=>line.trim()).filter(Boolean).at(-1)||'Working';}
  function message(role,text){const element=document.createElement('article');element.className=`thread-message thread-${role}`;if(role==='assistant')markdown(element,text);else element.textContent=text;history.append(element);bottom();return element;}
  function renderMessages(messages){
@@ -117,7 +119,7 @@ export function connectThreads({api,prompt,send,toast}){
     const label=part.type==='thinking'?'Reasoning':part.type==='toolCall'?`Ran ${part.name}`:entry.toolName?`${entry.toolName} result`:entry.role==='toolResult'?'Tool result':entry.role==='system'?'Session context':part.type;
     detail(label,part.text);
    }
-   if((text||entry.content.some(part=>part.type==='image'))&&['user','assistant'].includes(entry.role)){const element=message(entry.role,text);if(entry.role==='user')messageActions.user(element,{text,timestamp:entry.timestamp,attachments:entry.attachments,images:entry.content.filter(part=>part.type==='image')});else messageActions.assistant(element,renderedTurn,text);activity=null;}
+   if((text||entry.content.some(part=>part.type==='image'))&&['user','assistant'].includes(entry.role)){const element=message(entry.role,text);if(entry.role==='user')messageActions.user(element,{text,timestamp:entry.timestamp,attachments:entry.attachments,images:entry.content.filter(part=>part.type==='image'),entryId:entry.entryId});else messageActions.assistant(element,renderedTurn,text,entry.entryId);activity=null;}
   }
   for(const group of history.querySelectorAll('.thread-activity')){
    if(group.querySelector('summary').textContent!=='Reasoning')continue;
@@ -149,7 +151,7 @@ export function connectThreads({api,prompt,send,toast}){
  const projectManagement=connectProjectManagement(list,{api,toast,archiveProject:async folder=>{for(const thread of [...savedThreads,...optimisticThreads.values()])if(sameProject(thread.cwd,folder)&&!jobs.get(thread.id)?.running){updateMetadata(thread.id,{archived:true});if(activeId===thread.id)clear();}},removedProject:async folder=>{if(sameProject(savedThreads.find(t=>t.id===activeId)?.cwd,folder))clear();await refresh();},movedThread:async id=>{if(activeId===id)clear();jobs.delete(id);savedHistories.delete(id);await refresh();}});
  document.addEventListener('suffice-projects-updated',()=>void refresh().catch(error=>toast(error.message)));
  window.addEventListener('focus',markViewed);document.addEventListener('visibilitychange',markViewed);new MutationObserver(markViewed).observe(document.documentElement,{attributes:true,attributeFilter:['class']});
- connectThreadContextMenu(list,{projectManagement,isGrouped:()=>sidebarPreferences.get().group==='project',getThread:id=>{const thread=[...optimisticThreads.values(),...savedThreads].find(t=>t.id===id);return thread?{...thread,title:metadata(id).title||thread.title,running:!!jobs.get(id)?.running}:null;},metadata,update:updateMetadata,onArchive:id=>{if(activeId===id)clear();},onDelete:async id=>{await api.deleteThread(id);if(activeId===id)clear();savedThreads=savedThreads.filter(thread=>thread.id!==id);optimisticThreads.delete(id);savedHistories.delete(id);jobs.delete(id);viewState.remove(id);drawThreads();document.dispatchEvent(new Event('suffice-thread-deleted'));},toast});
+ connectThreadContextMenu(list,{projectManagement,isGrouped:()=>sidebarPreferences.get().group==='project',getThread:id=>{const thread=[...optimisticThreads.values(),...savedThreads].find(t=>t.id===id);return thread?{...thread,title:metadata(id).title||thread.title,running:!!jobs.get(id)?.running}:null;},metadata,update:updateMetadata,onArchive:id=>{if(activeId===id)clear();},onDelete:async id=>{await api.deleteThread(id);if(activeId===id)clear();savedThreads=savedThreads.filter(thread=>thread.id!==id);optimisticThreads.delete(id);savedHistories.delete(id);jobs.delete(id);viewState.remove(id);drawThreads();document.dispatchEvent(new CustomEvent('suffice-thread-deleted',{detail:{id}}));},toast});
  function addOptimistic(id,title,project=document.querySelector('.project-picker')?.textContent.trim()||'Project'){
   optimisticThreads.set(id,{id,title:title.slice(0,90),project,modified:Date.now()});drawThreads();
  }
@@ -159,7 +161,10 @@ export function connectThreads({api,prompt,send,toast}){
   const previous=new Map(savedThreads.map(t=>[t.id,t]));for(const thread of threads)if(thread.status==='done'&&previous.has(thread.id)&&thread.modified>previous.get(thread.id).modified&&!jobs.has(thread.id))updateMetadata(thread.id,{unread:!isViewing(thread.id)});
   savedThreads=threads;const selected=threads.find(thread=>thread.id===activeId);if(selected&&!header.hidden&&!inSession()&&document.activeElement!==header)header.textContent=metadata(selected.id).title||selected.title;for(const thread of threads)optimisticThreads.delete(thread.id);drawThreads();
  }
- connectThreadFork(list,{api,toast,onFork:async fork=>{await refresh();const thread=savedThreads.find(thread=>thread.id===fork.id);if(thread)await openSavedThread(thread);}});
+ connectThreadFork(list,{api,toast,getActive:()=>activeId,onFork:async(fork,detail)=>{await refresh();const thread=savedThreads.find(thread=>thread.id===fork.id);if(!thread)return;if(detail?.draft)viewState.updateFor(fork.id,{draft:detail.draft});await openSavedThread(thread);}});
+ document.addEventListener('suffice-open-thread',event=>{const thread=savedThreads.find(thread=>thread.id===event.detail?.id);if(thread)void openSavedThread(thread);});
+ // The fork's link back to the thread it came from, shown above the first message.
+ function forkOrigin(thread){const parent=thread.parent&&savedThreads.find(t=>t.id===thread.parent);if(!parent)return;const note=document.createElement('div');note.className='thread-fork-origin';const link=document.createElement('button');link.type='button';link.className='thread-fork-origin-link';link.innerHTML=icon('branch');const label=document.createElement('span');label.textContent='Forked from '+(metadata(parent.id).title||parent.title);link.append(label);link.addEventListener('click',()=>document.dispatchEvent(new CustomEvent('suffice-open-thread',{detail:{id:parent.id}})));note.append(link);history.prepend(note);}
  async function openSavedThread(thread){
   if(!thread)return;const version=++openRevision;saveView();sessionStorage.setItem('suffice-active-thread',thread.id);if(!jobs.has(thread.id))recovering.set(thread.id,[]);
   const entering=!workspace.classList.contains('thread-view');
@@ -176,7 +181,7 @@ export function connectThreads({api,prompt,send,toast}){
   try{
    const selected=await selection;if(version!==openRevision||activeId!==thread.id)return;
    document.dispatchEvent(new Event('suffice:usage-change'));
-   if(!reusable){saveView();renderMessages(selected.messages);savedHistories.delete(thread.id);if(JSON.stringify(selected.messages).length<4*1024*1024)savedHistories.set(thread.id,{modified:thread.modified,node:history});while(savedHistories.size>10)savedHistories.delete(savedHistories.keys().next().value);restoreView();}
+   if(!reusable){saveView();renderMessages(selected.messages);forkOrigin(thread);savedHistories.delete(thread.id);if(JSON.stringify(selected.messages).length<4*1024*1024)savedHistories.set(thread.id,{modified:thread.modified,node:history});while(savedHistories.size>10)savedHistories.delete(savedHistories.keys().next().value);restoreView();}
    if(selected.running&&!jobs.get(thread.id)?.running){
     const runtime=selected.runtime||{},restored=createJob(thread.id,selected.title,history);restored.startedAt=runtime.startedAt||Date.now();restored.provider=runtime.provider;restored.model=runtime.model;
     for(const event of runtime.events||[])restored.event(event);
@@ -214,7 +219,7 @@ export function connectThreads({api,prompt,send,toast}){
     }target=groups.get(key);
    }
    const row=document.createElement('button');row.type='button';row.className='thread-row session-row session-row--sidebar';row.dataset.thread=thread.id;row.dataset.project=thread.project;row.setAttribute('aria-pressed',String(thread.id===activeId));row.title=`${thread.title} · ${thread.project}`;
-   const job=jobs.get(thread.id);const details={...thread,...(job?{status:status(thread),error:job.failed?job.error:undefined,startedAt:job.startedAt,provider:job.provider||thread.provider,model:job.model||thread.model,terminalCount:job.terminalCount,...(job.diff?{diff:job.diff}:{})}: {})};populateThreadRow(row,details,{draft:!!viewState.read(thread.id).draft,unread:unread(thread),pinned:!!metadata(thread.id).pinned});
+   const job=jobs.get(thread.id);const origin=thread.parent&&all.find(t=>t.id===thread.parent);const details={...thread,...(origin?{forkOf:{id:origin.id,title:origin.title}}:{}),...(job?{status:status(thread),error:job.failed?job.error:undefined,startedAt:job.startedAt,provider:job.provider||thread.provider,model:job.model||thread.model,terminalCount:job.terminalCount,...(job.diff?{diff:job.diff}:{})}: {})};populateThreadRow(row,details,{draft:!!viewState.read(thread.id).draft,unread:unread(thread),pinned:!!metadata(thread.id).pinned});
    row.addEventListener('click',()=>void openSavedThread(thread));target.append(row);
   }
   if(!threads.length){const empty=document.createElement('div');empty.className='sidebar-empty';empty.textContent=all.length?'No matching threads':'No threads yet';list.append(empty);}
