@@ -49,7 +49,7 @@ function diffBody(file) {
       const start = Number(row.text.match(/\+(\d+)/)?.[1] || 1), gap = start - prevEnd - 1;
       if (gap <= 0 && !row.text.replace(/^@@.*?@@\s*/, '')) { continue; }
       const sep = el('div', 'diff-sep'); sep.insertAdjacentHTML('beforeend', icon('chevron', 'diff-sep-chevron'));
-      sep.append(el('span', '', gap > 0 ? `${gap} unmodified line${gap === 1 ? '' : 's'}` : row.text.replace(/^@@.*?@@\s*/, '')));
+      sep.append(el('span', 'diff-sep-line'), el('span', '', gap > 0 ? `${gap} unmodified line${gap === 1 ? '' : 's'}` : row.text.replace(/^@@.*?@@\s*/, '')), el('span', 'diff-sep-line'));
       body.append(sep); continue;
     }
     if (row.new) prevEnd = row.new;
@@ -80,10 +80,12 @@ function card(file, onReviewed) {
   const counts = el('span', 'diff-counts');
   if (file.added) counts.append(el('span', 'diff-added', '+' + file.added));
   if (file.removed) counts.append(el('span', 'diff-removed', '−' + file.removed));
+  const more = el('button', 'diff-more'); more.type = 'button'; more.setAttribute('aria-label', 'File options'); more.insertAdjacentHTML('beforeend', icon('more'));
   const label = el('label', 'diff-reviewed'), box = el('input'); box.type = 'checkbox';
   label.append(el('span', '', 'Reviewed'), box);
   box.addEventListener('change', () => { root.dataset.reviewed = String(box.checked); onReviewed?.(file.path, box.checked); });
-  head.append(toggle, counts, label);
+  box.addEventListener('change', () => root.dispatchEvent(new CustomEvent('reviewed', {bubbles: true})));
+  head.append(toggle, more, counts, label);
   const body = diffBody(file);
   toggle.addEventListener('click', () => { const open = toggle.getAttribute('aria-expanded') !== 'true'; toggle.setAttribute('aria-expanded', String(open)); body.hidden = !open; });
   root.append(head, body);
@@ -92,7 +94,7 @@ function card(file, onReviewed) {
 
 function tree(files, onPick) {
   const root = el('nav', 'diff-tree'); root.setAttribute('aria-label', 'Changed files');
-  const head = el('div', 'diff-tree-head'); head.append(el('span', '', 'Files'), el('span', 'diff-tree-count', String(files.length)));
+  const head = el('div', 'diff-tree-head'); const reviewed = el('span', 'diff-tree-reviewed', `0/${files.length} files reviewed`); head.append(el('span', '', 'Files'), el('span', 'diff-tree-count', String(files.length)), reviewed);
   const field = el('label', 'diff-filter'); field.insertAdjacentHTML('beforeend', icon('search'));
   const input = el('input'); input.type = 'search'; input.placeholder = 'Filter files'; input.setAttribute('aria-label', 'Filter files'); field.append(input);
   const list = el('div', 'diff-tree-list'); list.setAttribute('role', 'list');
@@ -128,6 +130,7 @@ export function renderDiffView(container, {files = [], onReviewed} = {}) {
   const cards = files.map(file => card(file, onReviewed));
   stack.append(...cards);
   root.append(tree(files, path => { const target = cards.find(c => c.dataset.path === path); target?.scrollIntoView({block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'}); }), stack);
+  root.addEventListener('reviewed', () => { root.querySelector('.diff-tree-reviewed').textContent = `${root.querySelectorAll('.diff-card[data-reviewed="true"]').length}/${files.length} files reviewed`; });
   container.append(root);
   return {root, destroy: () => root.remove()};
 }
