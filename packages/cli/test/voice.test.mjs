@@ -13,6 +13,10 @@ test('prompt assembly per effort: short rules always, drafting passes only at hi
  assert.equal(withEffortRules(voicePrompt('high'),'high'),voicePrompt('high'),'idempotent');
  assert.ok(VOICE_RULES.length<3000);
 });
+test('replies end when the answer ends: no trailing paste request in rules or examples',()=>{
+ assert.doesNotMatch(VOICE_RULES,/paste it/);assert.match(VOICE_RULES,/never a request to paste, send or share/);
+ assert.ok(slopHits('Run git pull --rebase. If the error says protected branch, paste the rejection message.')>0);
+});
 test('rules carry each requested ban',()=>{
  for(const re of [/Answer first/,/Never introduce yourself/,/environment: no working directory.*process tree/,/Do not ask the user to list/,/No closing offers/,/No em dashes/,/another Suffice product only when it directly solves.*at most once per thread/])assert.match(VOICE_RULES,re);
 });

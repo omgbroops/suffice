@@ -9,7 +9,7 @@ const PROMPTS=['hi','what are you','what can you do here','let vs const in js','
 const variants={old:SUFFICE_IDENTITY+'\n\n'+PROMPT,new:SUFFICE_IDENTITY+'\n\n'+VOICE_RULES+'\n\n'+PROMPT};
 const only=process.argv[2];const out={};
 const ENV=/\b(?:working directory|cwd|process tree|(?:isn't|is not|not) a (?:git )?(?:repo|repository)|no git|folder (?:is|contains)|bytes|environment|config|directory (?:is|contains)|I (?:see|can see|found)|pwd|ls\b)/gi;
-const CLOSER=/\b(?:want me to|let me know|feel free|would you like|should I|do you want|if you(?:'d| would) like)\b/gi;
+const CLOSER=/\b(?:paste (?:it|the)|send me|share the (?:error|output|log)|want me to|let me know|feel free|would you like|should I|do you want|if you(?:'d| would) like)\b/gi;
 for(const [name,sys] of Object.entries(variants)){
  if(only&&only!==name)continue;
  out[name]=PROMPTS.map(p=>{
