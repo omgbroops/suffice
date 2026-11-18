@@ -2,6 +2,7 @@ import {fileLinkPath} from './file-links.js';
 import {connectQueuedMessages} from './queued-messages.js';
 import {connectChatChangesWidget} from './chat-changes-widget.js';
 import {connectAccessModePicker} from './access-mode-picker.js';
+import {connectEffortPicker} from './effort-picker.js';
 import { connectThreads } from './threads-ui.js';
 import { connectProjects } from './projects-ui.js';
 import {connectModels} from './models-ui.js';
@@ -29,6 +30,7 @@ export function connectDesktop({prompt,send,toast,escapeHtml}) {
   const drag=document.createElement('div');drag.className='window-drag-region';drag.setAttribute('aria-hidden','true');document.body.prepend(drag);
   connectThreads({api,prompt,send,toast});
   connectAccessModePicker(prompt.form);
+  connectEffortPicker(prompt.form);
   connectQueuedMessages(prompt.form,prompt,toast);
   connectProjects({api,toast});
   connectModels({api,toast});

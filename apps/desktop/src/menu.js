@@ -91,7 +91,7 @@ export function createMenu(element) {
     render(panel, items, title || headings[owner] || 'Options');
     element.hidden = false;element.style.setProperty('--menu-max-height',`${Math.min(420,innerHeight-24)}px`);
     const rect = button.getBoundingClientRect();
-    const endAligned = ['model-menu', 'repo-menu', 'send-menu'].includes(owner);
+    const endAligned = ['model-menu', 'repo-menu', 'send-menu', 'access-mode-menu', 'effort-menu'].includes(owner);
     const left = Math.max(12, Math.min(endAligned ? rect.right - element.offsetWidth : rect.left, document.documentElement.clientWidth - element.offsetWidth - 12));
     const aboveRoom=Math.max(80,rect.top-20),belowRoom=Math.max(80,innerHeight-rect.bottom-20);const above=belowRoom<Math.min(element.scrollHeight,260)&&aboveRoom>belowRoom;element.style.setProperty('--menu-max-height',`${Math.min(420,above?aboveRoom:belowRoom)}px`);
     element.style.left = `${left}px`;

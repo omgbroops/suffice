@@ -54,16 +54,21 @@ export function connectStartLife({api}={}){
  head.append(mark,mk('h2','life-hello'),mk('div','life-sub'));
  const base=prompt.placeholder;let hints={failing:[],todos:[]},list=[],first=true,timer=0,typed=false,typer=0,ready=false;
  const home=()=>!workspace?.classList.contains('thread-view');
- const full=()=>list.length&&home()?`${list[0]}  \u00b7  Tab to use`:base;
- const setPh=()=>{if(typer||(!typed&&motionOk()&&home()))return;prompt.placeholder=full();};
+ const full=()=>list.length&&home()?list[0]:base;
+ // Keycap right after the suggestion text: click = accept. A placeholder cannot hold a button, so it floats over the row at the measured text end.
+ const cap=mk('button','suggest-key','Tab');cap.type='button';cap.tabIndex=-1;cap.hidden=true;cap.setAttribute('aria-label','Use suggestion');
+ const ctx=document.createElement('canvas').getContext('2d');
+ function key(){const row=prompt.parentElement;if(cap.parentElement!==row)row.append(cap);const on=!prompt.value&&list.length&&home()&&prompt.placeholder===list[0]&&!document.querySelector('.thread-followups');if(!on){cap.hidden=true;return;}const cs=getComputedStyle(prompt);ctx.font=`${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;const x=prompt.offsetLeft+parseFloat(cs.paddingLeft)+ctx.measureText(prompt.placeholder).width+8;cap.hidden=x>prompt.offsetLeft+prompt.offsetWidth-cap.offsetWidth-16;cap.style.left=x+'px';cap.style.top=prompt.offsetTop+parseFloat(cs.paddingTop)+(parseFloat(cs.lineHeight)-cap.offsetHeight)/2+'px';}
+ cap.addEventListener('click',()=>{if(list.length)fill(list[0]);});
+ const setPh=()=>{if(typer||(!typed&&motionOk()&&home()))return;prompt.placeholder=full();key();};
  // Typewriter: once, ~30 ms a character, in the placeholder's greyed colour. Focus, typing or reduced motion finishes it at once.
  function typeOnce(){
   if(typed||!ready)return;typed=true;
   const text=full();
-  if(!motionOk()||prompt.value||!home()){prompt.placeholder=text;return;}
+  if(!motionOk()||prompt.value||!home()){prompt.placeholder=text;key();return;}
   let i=0;prompt.placeholder='';
-  const stop=()=>{clearInterval(typer);typer=0;prompt.placeholder=full();prompt.removeEventListener('focus',stop);prompt.removeEventListener('input',stop);};
-  typer=setInterval(()=>{i++;prompt.placeholder=text.slice(0,i);if(i>=text.length)stop();},TYPE_MS);
+  const stop=()=>{clearInterval(typer);typer=0;prompt.placeholder=full();key();prompt.removeEventListener('focus',stop);prompt.removeEventListener('input',stop);};
+  typer=setInterval(()=>{i++;prompt.placeholder=text.slice(0,i);key();if(i>=text.length)stop();},TYPE_MS);
   prompt.addEventListener('focus',stop);prompt.addEventListener('input',stop);
  }
  if(motionOk()&&home())prompt.placeholder='';
@@ -71,7 +76,7 @@ export function connectStartLife({api}={}){
  const go=()=>{ready=true;typeOnce();};setTimeout(go,1500);
  const rows=()=>[...new Set(document.querySelectorAll('.sidebar .thread-row'))].filter(r=>r._threadDetails);
  // Tab on an empty box writes the suggestion in, ready to send with Enter.
- const fill=text=>{prompt.value=text;prompt.dispatchEvent(new Event('input',{bubbles:true}));prompt.focus();prompt.setSelectionRange(text.length,text.length);};
+ const fill=text=>{cap.hidden=true;prompt.value=text;prompt.dispatchEvent(new Event('input',{bubbles:true}));prompt.focus();prompt.setSelectionRange(text.length,text.length);};
  prompt.addEventListener('keydown',e=>{if(e.key==='Tab'&&!e.shiftKey&&!prompt.value&&list.length&&home()&&!document.querySelector('.thread-followups')){e.preventDefault();fill(list[0]);}});
  async function pull(){
   const [h,c]=await Promise.all([api?.startHints?.().catch(()=>null),api?.changes?.().catch(()=>null)]);
@@ -104,7 +109,7 @@ export function connectStartLife({api}={}){
  area.prepend(head);
  form.after(tail);area.dataset.life='on';
  if(workspace)new MutationObserver(()=>{if(!prompt.value)setPh();}).observe(workspace,{attributes:true,attributeFilter:['class']});
- pull();draw();
+ prompt.addEventListener('input',key);window.addEventListener('resize',key);pull();draw();
  new MutationObserver(draw).observe(q('.sidebar'),{childList:true,subtree:true});
  document.addEventListener('suffice-project-selected',()=>{pull();});
  window.addEventListener('focus',pull);

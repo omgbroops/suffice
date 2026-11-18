@@ -7,9 +7,9 @@
   --raised-shadow: inset 0 1px 0 #ffffff1f, inset 0 0 0 var(--hairline) #ffffff1a, 0 1px 2px #0000006b;
   --well-fill: color-mix(in srgb, #000 58%, transparent);
   --well-shadow: inset 0 2px 5px #000000a8, inset 0 0 0 1px #ffffff12, 0 1px 0 #ffffff12;
-  --composer-inset: 6px;
+  --composer-inset: var(--inset-composer);
   --composer-btn: var(--control-height);
-  --composer-radius: calc(var(--composer-btn) / 2 + var(--composer-inset));
+  --composer-radius: var(--radius-composer);
 }
 .desktop-app[data-theme='light'] {
   --on-accent: #ffffff;
@@ -37,7 +37,7 @@
 .desktop-app.desktop-app .workspace .composer { background: var(--well-fill); outline: 0; }
 .desktop-app.desktop-app .composer:focus-within { box-shadow: var(--well-shadow), inset 0 0 0 1px color-mix(in srgb, var(--blue) 55%, transparent); }
 .desktop-app.solid-surfaces .composer { -webkit-backdrop-filter: none; backdrop-filter: none; }
-.composer-row { display: flex; align-items: flex-end; gap: var(--space-1); min-width: 0; }
+.composer-row { position: relative; display: flex; align-items: flex-end; gap: var(--space-1); min-width: 0; }
 .desktop-app.desktop-app .composer .composer-row > textarea { flex: 1; min-width: 0; width: auto; margin: 0; padding: calc((var(--composer-btn) - 20px) / 2) var(--space-2); min-height: var(--composer-btn); max-height: min(280px, 38vh); font-size: var(--text-base); line-height: 20px; box-sizing: border-box; scrollbar-gutter: auto; }
 .desktop-app.desktop-app .composer textarea::placeholder { color: color-mix(in srgb, var(--text) 34%, transparent); opacity: 1; }
 .desktop-app.desktop-app .thread-view .composer textarea,
@@ -45,11 +45,11 @@
 .composer-actions { display: flex; align-items: center; gap: var(--space-1); flex: none; }
 .composer-actions .send-group { margin: 0; }
 
-/* Buttons in the box: raised circles, radius = box radius - inset. */
+/* Buttons in the box: raised rounded rectangles, radius = box radius - inset. */
 .desktop-app .composer-row :is([data-action='attach'], .dictate-button, .voice-start),
 .desktop-app .composer .composer-actions .send-group {
   width: var(--composer-btn); height: var(--composer-btn); min-width: var(--composer-btn); min-height: var(--composer-btn); padding: 0; flex: none;
-  display: inline-flex; align-items: center; justify-content: center; border-radius: calc(var(--composer-radius) - var(--composer-inset));
+  display: inline-flex; align-items: center; justify-content: center; border-radius: var(--radius-composer-inset);
   border: 0; color: var(--text); background: var(--raised-fill); box-shadow: var(--raised-shadow);
   -webkit-backdrop-filter: none; backdrop-filter: none;
 }
@@ -76,30 +76,51 @@
 .composer-meta { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-1) var(--space-2); margin-top: var(--space-2); min-width: 0; }
 .composer-meta-left, .composer-meta-right { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-1); min-width: 0; }
 .composer-meta .project-bar { display: flex; justify-content: flex-start; gap: var(--space-1); margin: 0; }
-.desktop-app.desktop-app .composer-meta :is(.project-picker, .git-pill, .worktree-toggle, .access-mode-picker, .model-button, .context-chip, .context-ring) {
+.desktop-app.desktop-app .composer-meta :is(.project-picker, .git-pill, .worktree-toggle, .access-mode-picker, .effort-picker, .model-button, .context-chip, .context-ring) {
   display: inline-flex; align-items: center; gap: var(--space-2); height: var(--control-height-sm); min-height: var(--control-height-sm); padding: 0 var(--space-3); margin: 0;
   border: 0; border-radius: var(--radius-3); font-size: var(--text-xs); line-height: 20px; font-weight: var(--weight-medium); color: var(--text-muted);
   background: var(--raised-fill); box-shadow: var(--raised-shadow); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); max-width: 240px;
 }
-.desktop-app.desktop-app .composer-meta :is(.project-picker, .git-pill, .worktree-toggle, .access-mode-picker, .model-button, .context-chip, .context-ring):hover:not(:disabled),
-.desktop-app.desktop-app .composer-meta :is(.project-picker, .git-pill, .access-mode-picker, .model-button, .context-ring)[aria-expanded='true'] { background: var(--raised-hover); color: var(--text); }
-.desktop-app .composer-meta :is(.project-picker, .git-pill, .worktree-toggle, .access-mode-picker, .model-button, .context-chip, .context-ring):active:not(:disabled) { transform: none; box-shadow: inset 0 1px 2px #00000040; }
+.desktop-app.desktop-app .composer-meta :is(.project-picker, .git-pill, .worktree-toggle, .access-mode-picker, .effort-picker, .model-button, .context-chip, .context-ring):hover:not(:disabled),
+.desktop-app.desktop-app .composer-meta :is(.project-picker, .git-pill, .access-mode-picker, .effort-picker, .model-button, .context-ring)[aria-expanded='true'] { background: var(--raised-hover); color: var(--text); }
+.desktop-app .composer-meta :is(.project-picker, .git-pill, .worktree-toggle, .access-mode-picker, .effort-picker, .model-button, .context-chip, .context-ring):active:not(:disabled) { transform: none; box-shadow: inset 0 1px 2px #00000040; }
 .desktop-app .composer-meta .project-picker { padding-left: calc(var(--space-3) - 3px); }
-.desktop-app .composer-meta .project-picker > .thread-project-icon { border-radius: calc(var(--radius-3) - 3px); }
+.desktop-app .composer-meta .project-picker > .thread-project-icon { border-radius: calc(var(--radius-3) - var(--space-1)); }
 .desktop-app .composer-meta .git-pill:disabled { opacity: 1; }
 .desktop-app .composer-meta .git-pill::before { display: none; }
 .desktop-app .composer-meta .model-button #model-label { color: var(--text); font-weight: var(--weight-medium); }
 .desktop-app .composer-meta .model-button .model-effort { color: var(--text-muted); }
-.desktop-app .composer-meta .access-mode-picker .icon, .desktop-app .composer-meta .project-picker > .icon, .desktop-app .composer-meta .git-pill .icon { width: var(--icon-size-sm); height: var(--icon-size-sm); }
+.desktop-app .composer-meta :is(.access-mode-picker, .effort-picker) .icon, .desktop-app .composer-meta .project-picker > .icon, .desktop-app .composer-meta .git-pill .icon { width: var(--icon-size-sm); height: var(--icon-size-sm); }
 .desktop-app .composer-meta .access-mode-picker { color: var(--text-muted); }
 .desktop-app .composer-meta .context-chip .icon { display: none; }
 .desktop-app .composer-meta .context-chip span::after { content: ' tokens'; }
-.desktop-app .composer-meta .context-ring { position: static; width: var(--control-height-sm); padding: 0; justify-content: center; }
-.desktop-app .composer-meta .context-ring svg { width: 15px; height: 15px; }
-.desktop-app .composer-meta .context-ring-value { stroke: var(--blue); }
+.desktop-app .composer-meta .model-button .model-effort { display: none; }
+/* Access and effort rest as an icon; hover, keyboard focus or an open menu grows the label in (width, --duration-grow). */
+.desktop-app.desktop-app .composer-meta :is(.access-mode-picker, .effort-picker) { --pad: calc((var(--control-height-sm) - var(--icon-size-sm)) / 2); gap: 0; padding: 0 var(--pad); }
+.desktop-app .composer-meta :is(.access-mode-picker, .effort-picker) > span:not(.icon) { display: inline-block; max-width: 0; margin-left: 0; opacity: 0; overflow: hidden; white-space: nowrap; transition: max-width var(--duration-grow) var(--ease-out), margin-left var(--duration-grow) var(--ease-out), opacity var(--duration-grow) var(--ease-out); }
+.desktop-app .composer-meta :is(.access-mode-picker, .effort-picker):is(:hover, :focus-visible, [aria-expanded='true']) > span:not(.icon) { max-width: 16ch; margin-left: var(--space-2); opacity: 1; }
+.desktop-app .composer-meta .effort-picker[hidden] { display: none; }
+/* Menu rows carry a label only; the detail sentences are cut. */
+.desktop-app .access-mode-menu .access-mode-detail { display: none; }
+/* Only the chosen row shows a tick. */
+.desktop-app .menu-item > .menu-check--empty { visibility: hidden; }
+/* Usage: a rounded-rectangle meter, not a ring. */
+.desktop-app .composer-meta .context-ring { position: relative; width: var(--control-height-sm); padding: 0; justify-content: center; }
+.desktop-app .composer-meta .context-ring svg { display: none; }
+.desktop-app .composer-meta .context-ring::before, .desktop-app .composer-meta .context-ring::after { content: ''; position: absolute; left: 50%; top: 50%; height: 8px; border-radius: var(--radius-xs); }
+.desktop-app .composer-meta .context-ring::before { width: 16px; transform: translate(-50%, -50%); background: color-mix(in srgb, var(--text) 30%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text) 25%, transparent); }
+.desktop-app .composer-meta .context-ring::after { width: calc(var(--context-percent, 0) * .16px); max-width: 16px; transform: translate(-8px, -50%); background: var(--blue); transition: width var(--duration-grow) var(--ease-out); }
+.desktop-app .composer-meta .context-ring[data-level='warning']::after { background: var(--purple); }
+.desktop-app .composer-meta .context-ring[data-level='critical']::after { background: var(--red); }
+/* Suggestion keycap: sits right after the placeholder text. */
+.suggest-key { position: absolute; z-index: 1; padding: 0 var(--space-2); height: var(--control-height-xs); border: 0; border-radius: var(--radius-2); font: inherit; font-size: var(--text-2xs); font-weight: var(--weight-medium); color: var(--text-muted); background: var(--raised-fill); box-shadow: var(--raised-shadow); cursor: pointer; }
+.suggest-key[hidden] { display: none; }
+.suggest-key:hover { background: var(--raised-hover); color: var(--text); }
+.suggest-key:active { box-shadow: inset 0 1px 2px #00000040; }
 /* Branch and worktree options live in the project menu. */
 .project-git-row { display: flex; flex-wrap: wrap; gap: var(--space-1); padding: var(--space-1) var(--space-2) var(--space-2); }
 .project-git-row > [hidden] { display: none; }
+.project-git-row:not(:has(> :not([hidden]))) { display: none; }
 .desktop-app.desktop-app .project-git-row :is(.git-pill, .worktree-toggle).button, .desktop-app.desktop-app .project-git-row :is(.git-pill, .worktree-toggle) { background: transparent; box-shadow: none; }
 .thread-view .composer-meta .project-bar { display: flex; }
 
@@ -115,4 +136,4 @@
 .desktop-app .start-card:active { transform: scale(.985); }
 .desktop-app .start-card:focus-visible { outline: 1px solid var(--blue); outline-offset: 2px; }
 
-@media (prefers-reduced-motion: reduce) { .desktop-app .start-card, .desktop-app .composer-row .button { transition: none; } .desktop-app .start-card:active, .desktop-app .composer-row .button:active { transform: none; } }
+@media (prefers-reduced-motion: reduce) { .desktop-app .composer-meta :is(.access-mode-picker, .effort-picker) > span:not(.icon), .desktop-app .composer-meta .context-ring::after { transition: none; } .desktop-app .start-card, .desktop-app .composer-row .button { transition: none; } .desktop-app .start-card:active, .desktop-app .composer-row .button:active { transform: none; } }
