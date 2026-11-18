@@ -31,7 +31,8 @@ export const settingsSections=[
  {id:'models',subtitle:'Pick which models appear and set the defaults.',title:'Models',icon:'deep',category:'Agent',groups:[
   group('Defaults',[select('default-model','Default model','Last used',['Last used']),select('default-effort','Reasoning effort','Medium',['Low','Medium','High','Extra high','Max'])]),
  ]},
- {id:'usage',subtitle:'When Suffice suggests cheaper settings.',title:'Usage',icon:'context',category:'Agent',groups:[
+ {id:'usage',subtitle:'Spend limits, and when Suffice suggests cheaper settings.',title:'Usage',icon:'context',category:'Agent',groups:[
+  group('Limits',[select('run-cap-usd','Cost cap per run','$5',['$1','$2','$5','$10','$25','No cap'],'A run stops when it spends more than this.'),select('run-cap-tokens','Token cap per run','2M',['500K','1M','2M','5M','No cap'],'A run stops when it uses more tokens than this.'),select('budget-daily-tokens','Daily token budget','Off',['Off','1M','5M','20M','50M'],'New runs are refused once the day total is reached. Resets at midnight.')]),
   group('Optimizer',[toggle('optimizer-hint','Suggest cheaper settings',true,'Shows a hint above the composer when a task looks simple.'),toggle('optimizer-auto','Apply suggestions automatically',false,'Off by default. When on, Suffice switches model or effort for you and offers Undo.')]),
  ]},
  {id:'automations',subtitle:'Tasks that run on a schedule.',title:'Automations',icon:'calendar',category:'Agent',groups:[{title:'Automations',rows:[],empty:'Loading…'}]},

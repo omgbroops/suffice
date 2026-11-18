@@ -26,6 +26,7 @@ import './right-panel.css';
 import './pr-review.css';
 import './composer-files.css';
 import './composer-quick.css';
+import './usage-meter.css';
 import './followups.css';
 import './thread-row.css';
 import './live-plan.css';

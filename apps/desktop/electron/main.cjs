@@ -90,6 +90,7 @@ if(primary)app.whenReady().then(async()=>{
   handle('issues-delete',id=>issues.remove(id));
   handle('usage-report',async()=>(await import('./usage-report.mjs')).readUsageReport(settingsHome));
   handle('usage',threadId=>request('usage',{threadId}));
+  handle('budget',async()=>(await import('./usage.mjs')).budgetStatus(settingsHome,await settings.get()));
   handle('context',threadId=>request('context',{threadId}));
   handle('files',async directory=>{const result=await workspaceFiles.list(project,directory),prefs=await settings.get();let entries=result.entries;if(!prefs['hidden-files'])entries=entries.filter(item=>!item.name.startsWith('.'));if(!prefs.gitignored)entries=await workspaceFiles.filterIgnored(project,entries);if(prefs['file-sort']==='Type')entries.sort((a,b)=>a.kind.localeCompare(b.kind)||path.extname(a.name).localeCompare(path.extname(b.name))||a.name.localeCompare(b.name));if(prefs['file-sort']==='Modified'){const fs=require('node:fs/promises');entries=await Promise.all(entries.map(async item=>({...item,modified:(await fs.stat(path.join(project,item.path)).catch(()=>({mtimeMs:0}))).mtimeMs})));entries.sort((a,b)=>b.modified-a.modified);}return {...result,entries};});
   handle('file-index',()=>workspaceFiles.index(project));
