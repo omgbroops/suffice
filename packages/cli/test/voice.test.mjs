@@ -11,10 +11,14 @@ test('prompt assembly per effort: short rules always, drafting passes only at hi
  for(const e of ['off','minimal','low','medium'])assert.equal(voicePrompt(e),VOICE_RULES,e);
  for(const e of ['high','xhigh','max']){const p=voicePrompt(e);assert.ok(p.startsWith(VOICE_RULES));assert.match(p,/draft the reply in your reasoning/);assert.match(p,/two passes/);assert.match(p,/cut every sentence/);}
  assert.equal(withEffortRules(voicePrompt('high'),'high'),voicePrompt('high'),'idempotent');
- assert.ok(VOICE_RULES.length<2000);
+ assert.ok(VOICE_RULES.length<3000);
+});
+test('replies end when the answer ends: no trailing paste request in rules or examples',()=>{
+ assert.doesNotMatch(VOICE_RULES,/paste it|say which output/);assert.match(VOICE_RULES,/never ask the user for output/);assert.match(VOICE_RULES,/never a request to paste, send or share/);
+ assert.ok(slopHits('Run git pull --rebase. If the error says protected branch, paste the rejection message.')>0);
 });
 test('rules carry each requested ban',()=>{
- for(const re of [/Answer first/,/Never introduce yourself/,/environment, working directory, process tree/,/Do not ask the user to list/,/No closing offers/,/No em dashes/,/another Suffice product only when it directly solves.*at most once per thread/])assert.match(VOICE_RULES,re);
+ for(const re of [/Answer first/,/Never introduce yourself/,/environment: no working directory.*process tree/,/Do not ask the user to list/,/No closing offers/,/No em dashes/,/another Suffice product only when it directly solves.*at most once per thread/])assert.match(VOICE_RULES,re);
 });
 test('session prompt has the voice rules and the drafting rules follow the effort in use now',async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-voice-')),runtime=await ModelRuntime.create({authPath:resolve(home,'auth.json'),refreshOnCreate:false,allowModelNetwork:false});
@@ -31,4 +35,11 @@ test('session prompt has the voice rules and the drafting rules follow the effor
 test('slopHits counts the old tells and passes a plain reply',()=>{
  assert.ok(slopHits("Hi! I'm Suffice, ready to help — want me to start?")>=4);
  assert.equal(slopHits('Hello. What are you working on?'),0);
+});
+
+test('slopHits catches the raw closers and process narration seen in measurement',()=>{
+ assert.ok(slopHits("Tell me the change you want and I'll make it and check it.")>0);
+ assert.ok(slopHits('Fixed the typo. I re-read the file afterward and the line now reads fine.')>0);
+ assert.ok(/single most likely cause/.test(VOICE_RULES)&&/re-read, re-checked/.test(VOICE_RULES));
+ assert.equal(slopHits('Fixed "shoud" to "should" in notes.txt.'),0);
 });
