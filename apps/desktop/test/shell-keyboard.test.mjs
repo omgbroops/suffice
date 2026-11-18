@@ -30,7 +30,7 @@ test('shell keyboard: sidebar toggle, new session, thread menu, spotlight, label
   // thread row aria-label spans carry a role
   eq(await page.evaluate(()=>[...document.querySelectorAll('.thread-state[aria-label],.thread-provider[aria-label]')].filter(e=>!e.getAttribute('role')).length),0,'labelled spans have roles');
   // spotlight scope announced
-  await page.keyboard.press('Control+k');const input=page.getByRole('combobox',{name:'Search threads and commands'});await input.press('Tab');
+  await page.keyboard.press('Control+k');const input=page.getByRole('combobox',{name:'Search threads and commands'});await input.press('Control+Tab');
   mt(await page.evaluate(()=>document.querySelector('.spotlight [aria-live]')?.textContent||''),/Threads/,'scope change announced');
   await page.keyboard.press('Escape');
   // detail dialog has a name once open
