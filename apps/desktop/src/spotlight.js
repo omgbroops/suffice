@@ -6,8 +6,8 @@ import './spotlight.css';
 // A floating command surface, independent of the sidebar's visible/filter state.
 export function createSpotlight({commands}){
  const dialog=document.createElement('dialog');dialog.className='spotlight';dialog.setAttribute('aria-label','Search Suffice');
- dialog.innerHTML=`<div class="spotlight-search">${icon('search')}<input id="spotlight-query" type="search" placeholder="Search threads and commands…" aria-label="Search threads and commands" role="combobox" aria-expanded="true" aria-controls="spotlight-results" aria-autocomplete="list" autocomplete="off" spellcheck="false"><button class="spotlight-close" aria-label="Close search">${icon('close')}</button></div><div class="spotlight-scopes" role="tablist" aria-label="Search scope"></div><div id="spotlight-results" class="spotlight-results" role="listbox" aria-label="Search results"></div><div class="sr-only" role="status" aria-live="polite"></div><footer class="spotlight-footer"><span><kbd>Enter</kbd> Open</span><span><kbd>↑</kbd><kbd>↓</kbd> Navigate <kbd>Ctrl</kbd><kbd>Tab</kbd> Scope <kbd>Esc</kbd> Close</span></footer>`;
- document.body.append(dialog);const input=dialog.querySelector('input'),list=dialog.querySelector('.spotlight-results'),scopes=dialog.querySelector('.spotlight-scopes');
+ dialog.innerHTML=`<div class="spotlight-search">${icon('search')}<input id="spotlight-query" type="search" placeholder="Search threads and commands…" aria-label="Search threads and commands" role="combobox" aria-expanded="true" aria-controls="spotlight-results" aria-autocomplete="list" autocomplete="off" spellcheck="false"><button class="spotlight-close" aria-label="Close search">${icon('close')}</button></div><div class="spotlight-scopes" role="tablist" aria-label="Search scope"></div><div id="spotlight-results" class="spotlight-results" role="listbox" aria-label="Search results"></div><div class="sr-only" role="status" aria-live="polite"></div><footer class="spotlight-footer"><span class="spotlight-open-hint"><kbd>Enter</kbd> Open</span><span><kbd>↑</kbd><kbd>↓</kbd> Navigate <kbd>Ctrl</kbd><kbd>Tab</kbd> Scope <kbd>Esc</kbd> Close</span></footer>`;
+ document.body.append(dialog);const input=dialog.querySelector('input'),list=dialog.querySelector('.spotlight-results'),scopes=dialog.querySelector('.spotlight-scopes'),openHint=dialog.querySelector('.spotlight-open-hint');
  // Native modal backdrops form a separate compositing layer. Blur that layer,
  // clipped to the search surface, so the dialog samples the actual wallpaper.
  const glassStyle=document.createElement('style');document.head.append(glassStyle);
@@ -34,7 +34,7 @@ export function createSpotlight({commands}){
    if(item.thread){const age=span('spotlight-age thread-age','');age.dataset.started=item.thread.status==='working'?String(item.thread.startedAt||item.thread.modified):'';age.dataset.modified=String(item.thread.modified);row.append(age);}
    row.addEventListener('pointermove',()=>highlight(index));row.addEventListener('click',()=>run(index));list.append(row);
   }
-  items=items.slice(0,100);input.setAttribute('aria-expanded',String(items.length>0));
+  items=items.slice(0,100);input.setAttribute('aria-expanded',String(items.length>0));openHint.style.display=items.length?'':'none';
   if(!items.length){const empty=span('spotlight-empty','No results');empty.role='status';list.append(empty);}
   tickThreadTimes(list);highlight(selected);list.scrollTop=0;updateFade();
   if(animate&&!document.documentElement.classList.contains('reduce-motion')&&!matchMedia('(prefers-reduced-motion: reduce)').matches)list.animate([{opacity:.65},{opacity:1}],{duration:100,easing:'ease-out'});

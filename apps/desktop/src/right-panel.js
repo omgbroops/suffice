@@ -100,7 +100,7 @@ export function connectRightPanel({sidebar,resize,toggle,api}){
   finally{if(valid())body.setAttribute('aria-busy','false');}
  }
  function sync(event){
-  const visible=!!store.id&&store.state.panelOpen;if(event?.changed?.includes('terminals'))drawTabs();
+  const visible=!!store.id&&store.state.panelOpen;toggle.style.display=store.id?'':'none';if(event?.changed?.includes('terminals'))drawTabs();
   document.body.classList.toggle('right-panel-open',visible);sidebar.inert=!visible;sidebar.setAttribute('aria-hidden',String(!visible));toggle.setAttribute('aria-expanded',String(visible));
   if(event?.type==='select'||event?.type==='adopt'){
    const width=store.state.panelWidth;if(Number.isFinite(width))document.documentElement.style.setProperty('--right-panel-width',`${Math.max(260,Math.min(960,innerWidth-document.querySelector('.sidebar').getBoundingClientRect().width-376,Math.max(360,width)))}px`);else document.documentElement.style.removeProperty('--right-panel-width');
