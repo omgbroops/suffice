@@ -23,6 +23,7 @@ import './tactile.css';
 import './right-panel.css';
 import './composer-files.css';
 import './composer-quick.css';
+import './followups.css';
 import './thread-row.css';
 import './window-chrome.css';
 import {sessionMenuItems} from './sessions-ui.js';

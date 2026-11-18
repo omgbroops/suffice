@@ -1,0 +1,5 @@
+.thread-followups { display:flex; flex-wrap:wrap; gap:6px; margin:4px 0 2px; animation:motion-rise var(--duration,160ms) var(--ease-out,ease-out); }
+.followup-chip { display:inline-flex; align-items:center; gap:8px; height:28px; padding:0 12px; border-radius:10px; border:1px solid var(--border,rgba(128,128,128,.28)); background:var(--surface-inset,transparent); color:var(--text-muted); font:12.5px/18px var(--font-sans); cursor:pointer; transition:color .12s,border-color .12s,background .12s; }
+.followup-chip:hover,.followup-chip:focus-visible { color:var(--text); border-color:var(--text-muted); background:color-mix(in srgb,var(--text) 6%,transparent); }
+.followup-chip kbd { font:10.5px/14px var(--font-mono,monospace); padding:0 5px; border-radius:5px; border:1px solid var(--border,rgba(128,128,128,.28)); color:var(--text-muted); }
+@media (prefers-reduced-motion:reduce) { .thread-followups { animation:none; } }
