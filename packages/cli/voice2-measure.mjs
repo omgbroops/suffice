@@ -17,8 +17,9 @@ for(const [name,sys] of Object.entries(variants)){
   for(const f of ['report.pdf','invoice.pdf','scan.png','photo.jpg'])writeFileSync(join(d,f),'x');
   writeFileSync(join(d,'notes.txt'),'Meeting notes\nWe shoud ship on friday.\n');
   let r='';
-  try{r=execFileSync('claude',['-p',p,'--model','haiku','--system-prompt',sys,'--setting-sources','','--dangerously-skip-permissions','--disable-slash-commands'],{cwd:d,encoding:'utf8',timeout:120000});}catch(e){r='ERROR '+e.message.slice(0,100);}
+  try{r=execFileSync('claude',['-p',p,'--model','haiku','--system-prompt',sys,'--setting-sources','','--dangerously-skip-permissions','--disable-slash-commands'],{cwd:d,encoding:'utf8',timeout:120000,killSignal:'SIGKILL',stdio:['ignore','pipe','pipe']});}catch(e){r='ERROR '+e.message.slice(0,100);}
   const m=(r.match(/\S+/g)||[]).length;
+  if(r.startsWith('ERROR'))process.exitCode=1;// an error is never an answer
   return {p,words:m,slop:slopHits(r),env:(r.match(ENV)||[]).length,closer:(r.match(CLOSER)||[]).length,reply:r.trim()};
  });
 }

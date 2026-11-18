@@ -14,7 +14,7 @@ test('prompt assembly per effort: short rules always, drafting passes only at hi
  assert.ok(VOICE_RULES.length<3000);
 });
 test('replies end when the answer ends: no trailing paste request in rules or examples',()=>{
- assert.doesNotMatch(VOICE_RULES,/paste it/);assert.match(VOICE_RULES,/never a request to paste, send or share/);
+ assert.doesNotMatch(VOICE_RULES,/paste it|say which output/);assert.match(VOICE_RULES,/never ask the user for output/);assert.match(VOICE_RULES,/never a request to paste, send or share/);
  assert.ok(slopHits('Run git pull --rebase. If the error says protected branch, paste the rejection message.')>0);
 });
 test('rules carry each requested ban',()=>{
