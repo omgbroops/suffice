@@ -19,6 +19,14 @@ test('theme gallery applies instantly, previews use real tokens, choice persists
   const bg=await page.evaluate(()=>Object.fromEntries([...document.querySelectorAll('.theme-preview')].map(p=>[p.dataset.palette+'-'+p.dataset.theme,getComputedStyle(p).getPropertyValue('--surface-thread').trim()])));
   assert.equal(bg['oled-dark'],'#000');assert.equal(bg['oled-light'],'#fff');assert.notEqual(bg['paper-light'],bg['graphite-light']);assert.notEqual(bg['default-dark'],bg['default-light']);
   assert.equal(await page.locator('[data-theme-card][aria-pressed=true]').count(),1);
+  // the shell that actually paints the window (sidebar sheet + wallpaper veil) must differ per palette, not only --surface-thread
+  const shell={};
+  for(const id of ['default','paper','graphite']){
+   await page.locator(`[data-theme-card="${id}-light"]`).click();await page.locator(`[data-theme-card="${id}-light"][aria-pressed=true]`).waitFor();await page.waitForTimeout(150);
+   shell[id]=await page.evaluate(()=>{const g=(e,p)=>getComputedStyle(e,p);const w=document.querySelector('.app-wallpaper');return [g(document.body,'::before').backgroundColor,w?g(w,'::after').backgroundColor:'',g(document.querySelector('.settings-card')).backgroundColor].join('|')});
+  }
+  assert.notEqual(shell.paper,shell.default);assert.notEqual(shell.graphite,shell.default);assert.notEqual(shell.paper,shell.graphite);
+  for(const k of [0,1,2])for(const [x,y] of [['paper','default'],['graphite','default'],['paper','graphite']])assert.notEqual(shell[x].split('|')[k],shell[y].split('|')[k],`${x} vs ${y} shell part ${k}`);
   for(const [id,mode] of [['oled','dark'],['paper','light'],['graphite','dark'],['default','light']]){
    await page.locator(`[data-theme-card="${id}-${mode}"]`).click();
    await page.locator(`[data-theme-card="${id}-${mode}"][aria-pressed=true]`).waitFor();

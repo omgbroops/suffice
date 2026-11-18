@@ -171,23 +171,34 @@
   --surface-thread-bubble: #f1f1f1; --surface-thread-composer: #ffffffe6; --surface-composer: #ffffffe6;
   --surface-menu: #fffffff5; --surface-glass: #ffffffe0; --help-bg: #f1f1f1;
 }
+/* shell-tint feeds the translucent shell (sidebar sheet, cards, menus); veil-* recolours the wallpaper dim layer. */
+[data-palette='oled'][data-theme='dark'] { --shell-tint: #000000; }
+[data-palette='oled'][data-theme='light'] { --shell-tint: #ffffff; }
 [data-palette='paper'][data-theme='dark'] {
-  --surface-base: #151412; --surface-field: #121110; --surface-sidebar: #1a1917; --surface-thread: #171614;
-  --surface-thread-bubble: #24221f; --surface-thread-composer: #1a1917c2; --surface-composer: #1a1917c2;
-  --surface-menu: #1d1b19eb; --surface-glass: #1a1917b8; --help-bg: #1d1b19;
+  --surface-base: #1c1611; --surface-field: #17120e; --surface-sidebar: #251d16; --surface-thread: #201912;
+  --surface-thread-bubble: #31271d; --surface-thread-composer: #251d16c2; --surface-composer: #251d16c2;
+  --surface-menu: #2a2118eb; --surface-glass: #251d16b8; --help-bg: #2a2118;
+  --border: #f5d9b50d; --border-strong: #f5d9b516; --sidebar-border: #f5d9b50f;
+  --shell-tint: #2a2118; --veil: #17110b; --veil-k: 2.4;
 }
 [data-palette='paper'][data-theme='light'] {
-  --surface-base: #f1eee8; --surface-field: #faf8f4; --surface-sidebar: #f5f2ec; --surface-thread: #fbf9f5;
-  --surface-thread-bubble: #ece8e0; --surface-thread-composer: #f5f2ece6; --surface-composer: #f5f2ece6;
-  --surface-menu: #fdfbf8f0; --surface-glass: #fdfbf8d6; --help-bg: #e7e3da;
+  --surface-base: #efe9dd; --surface-field: #faf6ee; --surface-sidebar: #f3ede1; --surface-thread: #fbf7ef;
+  --surface-thread-bubble: #e9e1d1; --surface-thread-composer: #f3ede1e6; --surface-composer: #f3ede1e6;
+  --surface-menu: #fdfaf3f0; --surface-glass: #fdfaf3d6; --help-bg: #e5dccb;
+  --border: #4a361c10; --border-strong: #4a361c1a; --sidebar-border: #4a361c12;
+  --shell-tint: #ede5d4; --veil: #f6f0e3; --veil-k: 2.4;
 }
 [data-palette='graphite'][data-theme='dark'] {
-  --surface-base: #17191c; --surface-field: #131518; --surface-sidebar: #1c1e22; --surface-thread: #191b1f;
-  --surface-thread-bubble: #272a2f; --surface-thread-composer: #1c1e22c2; --surface-composer: #1c1e22c2;
-  --surface-menu: #202327eb; --surface-glass: #1c1e22b8; --help-bg: #202327;
+  --surface-base: #12171e; --surface-field: #0e1319; --surface-sidebar: #19212b; --surface-thread: #151b23;
+  --surface-thread-bubble: #243040; --surface-thread-composer: #19212bc2; --surface-composer: #19212bc2;
+  --surface-menu: #1d2631eb; --surface-glass: #19212bb8; --help-bg: #1d2631;
+  --border: #b4cdf00d; --border-strong: #b4cdf018; --sidebar-border: #b4cdf010;
+  --shell-tint: #1d2631; --veil: #0b1017; --veil-k: 2.4;
 }
 [data-palette='graphite'][data-theme='light'] {
-  --surface-base: #e6e8eb; --surface-field: #f1f2f4; --surface-sidebar: #eceef1; --surface-thread: #f4f5f7;
-  --surface-thread-bubble: #dfe2e6; --surface-thread-composer: #eceef1e6; --surface-composer: #eceef1e6;
-  --surface-menu: #f6f7f8f0; --surface-glass: #f6f7f8d6; --help-bg: #dcdfe3;
+  --surface-base: #e3e7ec; --surface-field: #eef1f4; --surface-sidebar: #e8ecf0; --surface-thread: #f1f3f6;
+  --surface-thread-bubble: #d9dfe6; --surface-thread-composer: #e8ecf0e6; --surface-composer: #e8ecf0e6;
+  --surface-menu: #f4f6f8f0; --surface-glass: #f4f6f8d6; --help-bg: #d8dee5;
+  --border: #1a2a3c10; --border-strong: #1a2a3c1a; --sidebar-border: #1a2a3c12;
+  --shell-tint: #dde3ea; --veil: #eef1f5; --veil-k: 2.4;
 }

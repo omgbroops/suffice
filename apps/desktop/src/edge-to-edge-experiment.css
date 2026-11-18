@@ -513,3 +513,7 @@
 /* Traffic lights keep identical screen coordinates across sidebar states. */
 .desktop-app[data-window-chrome='macos-preview'] body > .window-controls { top:calc(var(--chrome-center-y) - (var(--header-control-size) + 5px) / 2); left:calc(var(--chrome-center-y) - (var(--header-control-size) + 5px) / 2); right:auto; width:auto; height:30px; padding:2.5px 3.5px; border-radius:8px; background:transparent; }
 .desktop-app[data-window-chrome='macos-preview'] .mac-traffic-buttons .window-control { height:25px; min-height:25px; }
+
+/* Theme gallery palettes repaint the shell: tint the translucent surfaces and recolour/strengthen the wallpaper veil. */
+.desktop-app[data-palette]:not([data-palette='default'])[data-theme] { --conversation-tint:var(--shell-tint); }
+.desktop-app[data-palette='paper'][data-theme] .app-wallpaper::after,.desktop-app[data-palette='graphite'][data-theme] .app-wallpaper::after { background:var(--veil); opacity:min(.92,calc(var(--shared-wallpaper-dim,0) * var(--veil-k,1))); }
