@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { createBudget, createFileStore, ceilingAt, windowStart } from '../src/budget/index.mjs';
 
 const memStore = () => { let s = null; return { load: () => s && structuredClone(s), save: (x) => { s = structuredClone(x); } }; };
@@ -225,4 +226,20 @@ test('windowStart floors correctly for instants before the epoch (negative modul
   // before this week's start hour: falls back one week
   const thu = Date.parse('2026-11-19T10:00:00Z');
   assert.equal(windowStart({ period: 'week', weekStart: { weekday: 4, hour: 12 } }, thu), Date.parse('2026-11-12T12:00:00Z'));
+});
+
+test('two processes sharing one budget file cannot both reserve the same room; settle frees the unspent part', async (t) => {
+  const { spawn } = await import('node:child_process');
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'budget-'));
+  t.after(() => fs.rm(dir, { recursive: true, force: true }));
+  const file = path.join(dir, 'budget.json');
+  const src = fileURLToPath(new URL('../src/budget/index.mjs', import.meta.url));
+  const child = `import {createBudget,createFileStore} from ${JSON.stringify(src)};
+    const b=createBudget({clock:{now:()=>Date.now()},store:createFileStore(${JSON.stringify(file)}),limits:[{name:'d',tokens:100,period:'day'}]});
+    const r=b.reserve(80);console.log(r.allow);setTimeout(()=>{r.settle({inputTokens:10,outputTokens:0})},700);setTimeout(()=>{},800);`;
+  const run = () => new Promise((res) => { let out = ''; const p = spawn(process.execPath, ['--input-type=module', '-e', child]); p.stdout.on('data', (d) => { out += d; }); p.on('close', () => res(out.trim())); });
+  const results = await Promise.all([run(), run(), run(), run()]);
+  assert.deepEqual(results.sort(), ['false', 'false', 'false', 'true']);
+  const after = createBudget({ clock: { now: () => Date.now() }, store: createFileStore(file), limits: [{ name: 'd', tokens: 100, period: 'day' }] });
+  assert.equal(after.check(1).remaining, 90); // 10 used, hold gone
 });

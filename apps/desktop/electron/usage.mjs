@@ -25,8 +25,16 @@ export function dailyBudget(home,settings={}){
 export function budgetStatus(home,settings={}){return dailyBudget(home,settings)?.status()[0]??null;}
 // Daily budget counts input+output (what the composer meter shows), not cache reads; falls back to totalTokens without the split.
 const spend=u=>u?.inputTokens!=null?u.inputTokens+(u.outputTokens??0):u?.totalTokens??0;
-// Never records past the room left when the run started: a message that overshoots does not push the day above its ceiling.
-export function recordSpend(state,now){const n=Math.min(spend(now)-spend(state?.base),state?.room??Infinity);if(state?.budget&&n>0)state.budget.record({inputTokens:n,outputTokens:0});}
+// Reserves the run's share of the day before it starts (shared file, locked), so concurrent instances cannot all pass the same ceiling.
+// Returns {hold, room} (room null when no ceiling) or {full:true} when nothing is left.
+export function reserveRoom(budget,caps){
+  if(!budget)return {hold:null,room:null};
+  const left=budget.check(0).remaining;if(left<=0)return {full:true};
+  const room=Math.min(left,caps.tokens),hold=budget.reserve(room);
+  return hold.allow?{hold,room}:{full:true};
+}
+// Settles the hold with what the run spent, never past the room reserved: a message that overshoots does not push the day above its ceiling.
+export function recordSpend(state,now){const n=Math.min(spend(now)-spend(state?.base),state?.room??Infinity);state?.hold?.settle({inputTokens:Math.max(0,n),outputTokens:0});}
 const compact=n=>n>=1e6?`${+(n/1e6).toFixed(1)}M`:n>=1e3?`${+(n/1e3).toFixed(1)}K`:String(n);
 // Returns the stop message when the run delta is strictly over a cap, else null. Unknown cost is checked by tokens alone.
 export function runCapExceeded(base,now,caps){

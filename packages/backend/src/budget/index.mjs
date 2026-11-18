@@ -59,8 +59,20 @@ export function createBudget({ clock, store, limits }) {
   assertShape('clock', clock, ['now']);
   assertShape('store', store, ['load', 'save']);
   let lim = validate(limits);
-  const saved = store.load();
-  let used = { ...(saved?.windows ?? {}) }; // name -> {start, used}
+  let used = {}; // name -> {start, used}
+  const mine = []; // this instance's holds
+  let holds = []; // in-flight reservations {id, pid, n, tags}, shared through the store so other processes see them
+  const alive = (pid) => { try { process.kill(pid, 0); return true; } catch (e) { return e.code === 'EPERM'; } };
+  // Reload shared state; holds of dead processes are dropped so a crash never pins room.
+  const sync = () => {
+    const s = store.load();
+    if (s) used = { ...(s.windows ?? {}) }; // a store with nothing saved (or that never saves) leaves in-memory usage alone
+    // own holds stay in memory (a store that does not persist must still see them); others come from the file
+    holds = [...mine, ...(s?.holds ?? []).filter((h) => !mine.some((m) => m.id === h.id) && (h.pid === process.pid || alive(h.pid)))];
+  };
+  // load-modify-save under the store's lock when it has one (file stores shared by several processes)
+  const txn = (fn) => (store.withLock ?? ((f) => f()))(() => { sync(); const r = fn(); store.save({ windows: used, holds }); return r; });
+  sync();
 
   // A window whose start moved since last seen starts again at zero; 'run' windows are one slot per runId.
   const slot = (l, tags) => (l.period === 'run' ? `${l.name}\0${tags?.runId ?? ''}` : l.name);
@@ -69,15 +81,13 @@ export function createBudget({ clock, store, limits }) {
     return { start, used: w && w.start === start ? w.used : 0 };
   };
   const applies = (l, tags) => !l.tag || tags?.[l.tag.key] === l.tag.value;
-  const persist = () => store.save({ windows: used });
-  const holds = new Set(); // in-flight reservations: {n, tags}
   const held = (l, tags) => {
     let n = 0;
     for (const h of holds) if (applies(l, h.tags) && (l.period !== 'run' || (h.tags?.runId ?? '') === (tags?.runId ?? ''))) n += h.n;
     return n;
   };
 
-  function check(estimate, tags) {
+  function peek(estimate, tags) {
     count(estimate, 'estimate');
     const now = clock.now();
     let tight = null;
@@ -91,25 +101,33 @@ export function createBudget({ clock, store, limits }) {
     if (estimate <= remaining) return { allow: true, remaining };
     return { allow: false, remaining, reason: `Window "${tight.l.name}" (${tight.l.period}) has ${remaining} tokens left and this needs ${estimate}.` };
   }
-  function record(usage, tags) {
+  function add(usage, tags) {
     if (!usage || typeof usage !== 'object') fail('usage must be an object');
     const n = count(usage.inputTokens, 'inputTokens') + count(usage.outputTokens, 'outputTokens');
     const now = clock.now();
     for (const l of lim) if (applies(l, tags)) { const v = view(l, now, tags); used[slot(l, tags)] = { start: v.start, used: v.used + n }; }
-    persist();
   }
-  // check + hold in one synchronous step, so parallel callers cannot all pass the same peek
+  const check = (estimate, tags) => { sync(); return peek(estimate, tags); };
+  const record = (usage, tags) => txn(() => add(usage, tags));
+  // check + hold in one locked step, so parallel callers (threads or processes) cannot all pass the same peek
   function reserve(estimate, tags) {
-    const d = check(estimate, tags);
+    const h = { id: `${process.pid}-${Math.random().toString(36).slice(2)}`, pid: process.pid, n: estimate, tags };
+    const d = txn(() => { const r = peek(estimate, tags); if (r.allow) { mine.push(h); holds.push(h); } return r; });
     if (!d.allow) return { ...d, release() {}, settle() {} };
-    const h = { n: estimate, tags };
-    holds.add(h);
-    return { ...d, release: () => { holds.delete(h); }, settle(usage) { if (holds.delete(h)) record(usage, tags); } };
+    const drop = (usage) => txn(() => {
+      const i = holds.findIndex((x) => x.id === h.id);
+      if (i < 0) return;
+      holds.splice(i, 1);
+      mine.splice(mine.findIndex((x) => x.id === h.id), 1);
+      if (usage) add(usage, tags);
+    });
+    return { ...d, release: () => drop(), settle: (usage) => drop(usage) };
   }
 
   return {
     check, record, reserve,
     status() {
+      sync();
       const now = clock.now();
       return lim.map((l) => {
         const ceiling = ceilingAt(l, now), u = view(l, now).used;
@@ -118,13 +136,13 @@ export function createBudget({ clock, store, limits }) {
     },
     setLimits(next) { // keeps usage of windows whose name survives
       lim = validate(next);
-      used = Object.fromEntries(Object.entries(used).filter(([k]) => lim.some((l) => k === l.name || k.startsWith(`${l.name}\0`))));
-      persist();
+      txn(() => { used = Object.fromEntries(Object.entries(used).filter(([k]) => lim.some((l) => k === l.name || k.startsWith(`${l.name}\0`)))); });
     },
   };
 }
 
 export function createFileStore(path) {
+  const lockDir = `${path}.lock`, nap = new Int32Array(new SharedArrayBuffer(4));
   return {
     load() {
       try { return JSON.parse(fs.readFileSync(path, 'utf8')); } catch (e) { if (e.code === 'ENOENT') return null; throw e; }
@@ -133,6 +151,18 @@ export function createFileStore(path) {
       const tmp = `${path}.${process.pid}.tmp`;
       fs.writeFileSync(tmp, JSON.stringify(state));
       fs.renameSync(tmp, path);
+    },
+    // Cross-process mutex: mkdir is atomic. A lock older than 10 s belongs to a dead holder and is broken.
+    withLock(fn) {
+      for (let tries = 0; ; tries++) {
+        try { fs.mkdirSync(lockDir); break; } catch (e) {
+          if (e.code !== 'EEXIST') throw e;
+          try { if (Date.now() - fs.statSync(lockDir).mtimeMs > 10000) fs.rmdirSync(lockDir); } catch {}
+          if (tries > 2000) throw new Error('budget: lock busy');
+          Atomics.wait(nap, 0, 0, 5);
+        }
+      }
+      try { return fn(); } finally { try { fs.rmdirSync(lockDir); } catch {} }
     },
   };
 }

@@ -6,7 +6,7 @@ import {invalidateProjectMetadata} from './sidebar-metadata.mjs';
 import {createChatChangeTracker} from './chat-changes.mjs';
 import {createChatGitTracker} from './chat-git.mjs';
 import {createThreadRouter} from './thread-router.mjs';
-import {sessionUsage,runCaps,runCapExceeded,dailyBudget,recordSpend} from './usage.mjs';
+import {sessionUsage,runCaps,runCapExceeded,dailyBudget,reserveRoom,recordSpend} from './usage.mjs';
 import {installContext,sessionInventory} from '../shared/context-items.mjs';
 import {randomUUID,createHash} from 'node:crypto';
 import {mkdir,realpath,stat} from 'node:fs/promises';
@@ -115,15 +115,15 @@ async function receive(message) {
     turnPresentation={id:randomUUID(),startedAt:payload.turnStartedAt||Date.now(),provider:agent.session.model?.provider||payload.provider,model:agent.session.model?.id||payload.model,modelName:agent.session.model?.name,effort:agent.session.thinkingLevel||payload.effort};
     agent.session.sessionManager?.appendCustomEntry?.('suffice:turn-start',{...turnPresentation,promptHash:createHash('sha256').update(payload.prompt).digest('hex'),displayPrompt:payload.displayPrompt??payload.prompt,attachments:payload.attachmentMetadata||[]});send({event:'turn_started',presentation:turnPresentation});
     await changeTracker?.beginTurn();
-    const budget=dailyBudget(home,payload.desktopSettings),room=budget?.status()[0].remaining;if(room===0)throw new Error('Stopped: the daily token budget is used up. Raise it in Settings > Usage.');
-    capState={base:sessionUsage(agent.session),caps:runCaps(process.env,payload.desktopSettings),message:null,budget};if(room!=null){capState.room=room;if(room<capState.caps.tokens){capState.caps.tokens=room;capState.caps.daily=true;}}
+    const caps=runCaps(process.env,payload.desktopSettings),got=reserveRoom(dailyBudget(home,payload.desktopSettings),caps);if(got.full)throw new Error('Stopped: the daily token budget is used up. Raise it in Settings > Usage.');
+    capState={base:sessionUsage(agent.session),caps,message:null,hold:got.hold};if(got.room!=null){capState.room=got.room;if(got.room<caps.tokens){caps.tokens=got.room;caps.daily=true;}}
     if(sessionPath)await checkpoint(cwd,threadId(sessionPath),payload.displayPrompt??payload.prompt).catch(()=>{});// a checkpoint failure never blocks the turn
     const choices=payload.context,restoreContext=installContext(agent.session,choices);
     pendingTurn=()=>{turns.push({n:++turnCount,at:Date.now(),...sessionInventory(agent.session,agent.session.messages??[]),removed:choices?.exclude||[],summaries:!!choices?.summaries});if(turns.length>10)turns.shift();};
     let text;try{text=await agent.run(payload.prompt,{images:payload.images});}finally{restoreContext();pendingTurn=null;try{recordSpend(capState,sessionUsage(agent.session));}catch{}}if(capState.message)throw new Error(capState.message);finishPresentation('completed');
     await changeTracker?.flush().catch(()=>{});if(payload.desktopSettings?.['remember-context'])await rememberProject(home,cwd,text);
     send({id,ok:true,result:{text,presentation:turnPresentation,sessionPath:agent.sessionPath(),threadId:agent.sessionPath()?threadId(agent.sessionPath()):null,usage:agent.totals}});
-  } catch(error){finishPresentation(abortRequested?'interrupted':'failed');if(ownsRun)await changeTracker?.flush().catch(()=>{});if(ownsRun&&abortRequested){agent?.session.sessionManager?.appendCustomEntry('suffice:interrupted');send({id,ok:true,result:{interrupted:true,presentation:turnPresentation,threadId:agent?.sessionPath()?threadId(agent.sessionPath()):null}});}else send({id,ok:false,error:capState?.message||error.message});}
+  } catch(error){finishPresentation(abortRequested?'interrupted':'failed');try{capState?.hold?.release();}catch{}if(ownsRun)await changeTracker?.flush().catch(()=>{});if(ownsRun&&abortRequested){agent?.session.sessionManager?.appendCustomEntry('suffice:interrupted');send({id,ok:true,result:{interrupted:true,presentation:turnPresentation,threadId:agent?.sessionPath()?threadId(agent.sessionPath()):null}});}else send({id,ok:false,error:capState?.message||error.message});}
   finally {if(ownsRun){busy=false;capState=null;}}
 }
 return receive;
