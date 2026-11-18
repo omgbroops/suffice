@@ -13,7 +13,7 @@ export function connectThreadWorktree({api,workspace,toast}){
  const dialog=document.createElement('div');dialog.className='popover worktree-diff';dialog.hidden=true;dialog.setAttribute('role','dialog');dialog.setAttribute('aria-label','Worktree diff');
  const dialogTitle=document.createElement('div');dialogTitle.className='worktree-diff-title';const patch=document.createElement('pre');
  const close=document.createElement('button');close.type='button';close.className='button';close.textContent='Close';close.addEventListener('click',()=>{dialog.hidden=true;});
- dialog.append(dialogTitle,patch,close);document.body.append(dialog);
+ dialog.append(dialogTitle,patch,close);workspace.append(dialog);
  dialog.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();dialog.hidden=true;}});
  let id=null,armed=false,token=0,busy=false;
  const buttonFor={};
@@ -33,7 +33,7 @@ export function connectThreadWorktree({api,workspace,toast}){
  }
  async function act(action){
   if(busy||!id)return;
-  if(action==='discard'&&!armed){armed=true;buttonFor.discard.textContent='Confirm discard';say('Removes the worktree and its branch');return;}
+  if(action==='discard'&&!armed){armed=true;buttonFor.discard.textContent='Confirm discard';say('Removes the worktree');return;}
   armed=false;buttonFor.discard.textContent='Discard';setBusy(true);const mine=token;
   try{
    const result=await api.threadWorktreeAction({id,action});
