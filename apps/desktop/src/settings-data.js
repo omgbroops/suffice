@@ -32,6 +32,7 @@ export const settingsSections=[
  {id:'usage',title:'Usage',icon:'context',category:'Agent',groups:[
   group('Optimizer',[toggle('optimizer-hint','Suggest cheaper settings',true,'Shows a hint above the composer when a task looks simple.'),toggle('optimizer-auto','Apply suggestions automatically',false,'Off by default. When on, Suffice switches model or effort for you and offers Undo.')]),
  ]},
+ {id:'automations',title:'Automations',icon:'calendar',category:'Agent',groups:[{title:'Automations',rows:[],empty:'Loading…'}]},
  {id:'providers',title:'Providers',icon:'agent',category:'Agent',groups:[group('Connected',[]),group('Available',[])]},
  ...[['mcps','MCPs','plug'],['skills','Skills','deep'],['extensions','Extensions','puzzle'],['templates','Prompt templates','files']].map(([id,title,icon])=>({id,title,icon,category:'Agent',groups:[{title:'Resources',rows:[],empty:'Loading…'}]})),
  {id:'agent',title:'Agent behavior',icon:'bolt',category:'Agent',groups:[
