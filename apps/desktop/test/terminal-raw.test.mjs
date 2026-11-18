@@ -76,13 +76,12 @@ test('rendered terminal is raw: platform mono, standard palette, grapheme widths
   const before=await page.evaluate(()=>window.__raw.view.term.buffer.active.viewportY);await page.mouse.wheel(0,-600);await page.waitForTimeout(300);
   assert.ok(await page.evaluate(()=>window.__raw.view.term.buffer.active.viewportY)<before,'wheel scrolled the scrollback');
   await page.screenshot({path:shot+'/raw-terminal.png'});
-  // Ctrl-C after a 1.1 MB paste returns promptly.
-  await send('sleep 60\r');await page.waitForTimeout(300);
+  // Ctrl-C after a 1.1 MB paste returns promptly. The paste goes to the bash readline prompt (a program that reads it; a canonical-mode `sleep` drops input and would pass on the base too).
+  await send("PS1='RDY> '\r");await page.waitForTimeout(300);
   await page.evaluate(()=>{window.__raw.view.term.focus();window.__raw.view.term.paste('y'.repeat(1100000));});
-  const t0=Date.now();await page.evaluate(()=>window.__raw.view.term.input('\x03'));
-  await page.waitForFunction(()=>/\^C/.test(Array.from({length:window.__raw.view.term.buffer.active.length},(_,i)=>window.__raw.view.term.buffer.active.getLine(i).translateToString(true)).join('\n')),null,{timeout:4000});
+  const t0=Date.now();await page.evaluate(()=>{window.__raw.view.term.input('\x03');window.__raw.view.term.input('echo AFTER_INT\r');});
+  await page.waitForFunction(()=>Array.from({length:window.__raw.view.term.buffer.active.length},(_,i)=>window.__raw.view.term.buffer.active.getLine(i).translateToString(true)).some(l=>l==='AFTER_INT'),null,{timeout:8000});
   assert.ok(Date.now()-t0<3000,'Ctrl-C lag '+(Date.now()-t0));
-  await page.evaluate(()=>{window.__raw.view.term.input('\x03');});await page.waitForTimeout(300);
   // Closing the tab with a paste queued must not make node-pty log an async EBADF/EIO from its write stream (real pty, real main process).
   await page.evaluate(()=>{const {threadId,id}=window.__raw;for(let i=0;i<4;i++)window.sufficeDesktop.terminalWrite({threadId,id,data:'y'.repeat(900000)}).catch(()=>{});});await page.waitForTimeout(100);
   await page.evaluate(()=>{const {views,id,threadId}=window.__raw;views.close(threadId,id);});await page.waitForTimeout(1500);
