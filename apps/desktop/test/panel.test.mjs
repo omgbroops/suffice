@@ -30,7 +30,8 @@ test('thread panels, file views, tabs and drafts restore independently, includin
   const open=async id=>{await page.locator('.thread-row').filter({hasText:'Thread '+id}).click();await page.locator('.thread-header').filter({hasText:'Thread '+id}).waitFor();};
   await open('one');
   assert.equal(await page.locator('.help-button').count(),0);
-  assert.equal(await page.locator('.thread-user').evaluate(el=>getComputedStyle(el).backgroundColor),await page.locator('.composer').evaluate(el=>getComputedStyle(el).backgroundColor));
+  // Capy: the user bubble is a flat selected-fill, distinct from the composer surface.
+  assert.equal(await page.locator('.thread-user').evaluate(el=>getComputedStyle(el).backgroundColor),await page.evaluate(()=>{const p=document.createElement('i');p.style.background='var(--selected-fill)';document.body.append(p);const c=getComputedStyle(p).backgroundColor;p.remove();return c;}));
   assert.match(await page.locator('.thread-user').evaluate(el=>getComputedStyle(el).backdropFilter),/blur\(24px\)/);
   const size=selector=>page.locator(selector).evaluate(el=>{const r=el.getBoundingClientRect(),s=getComputedStyle(el);return [r.width,r.height,s.padding,s.borderRadius];});
   assert.deepEqual(await size('.workspace-tools > button:last-child'),await size('.sidebar .sidebar-tools > button:last-child'));
