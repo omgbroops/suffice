@@ -5,7 +5,7 @@ function normalize(value){
  const defaults=empty(),state={...defaults,...value};
  state.files={...defaults.files,...value?.files};state.changes={...defaults.changes,...value?.changes};
  state.draft=typeof state.draft==='string'?state.draft:'';
- state.tabs=[...new Set(Array.isArray(state.tabs)?state.tabs.filter(tab=>typeof tab==='string'&&(['files','changes','rewind'].includes(tab)||/^terminal:[a-f0-9-]{36}$/i.test(tab))):[])];
+ state.tabs=[...new Set(Array.isArray(state.tabs)?state.tabs.filter(tab=>typeof tab==='string'&&(['files','changes','rewind','pr'].includes(tab)||/^terminal:[a-f0-9-]{36}$/i.test(tab))):[])];
  state.terminals=value?.terminals&&typeof value.terminals==='object'&&!Array.isArray(value.terminals)?value.terminals:{};
  state.activeTab=state.tabs.includes(state.activeTab)?state.activeTab:state.tabs[0]??null;
  return state;
