@@ -5,7 +5,7 @@ import {mkdtemp,mkdir,writeFile,rm,realpath} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import {_electron} from 'playwright-core';
-import {guard} from './electron-guard.mjs';
+import {guard,killTmux} from './electron-guard.mjs';
 // 2280 messages (1140 pairs) in both transcript views: standard chat and CLI-session. Measures nodes, wheel frame p95/max over 120 wheel events and open time.
 // PERF_VIEWS=chat,session limits views; PERF_JSON=<file> appends one JSON line per run; PERF_NOASSERT=1 measures without asserting.
 // Asserts: wheel p95 <60 ms, settled DOM <12000 nodes, then reopen restores position, find reaches a top message, jump lands on the last message.
@@ -13,9 +13,10 @@ const PAIRS=1140,SESSION_PAIRS=1015,SHOTS=process.env.SHOTS;
 const views=(process.env.PERF_VIEWS||'chat,session').split(',');
 const ROWS_BY={chat:'.thread-row',session:'.sidebar-cli-sessions .thread-row'};let ROWS;
 async function boot(view){
+ const SOCKET='sfx-forge-r2-perf-'+view+'-'+process.pid;
  const home=await realpath(await mkdtemp(resolve(tmpdir(),'sfx-tperf2-'))),cwd=resolve(home,'proj'),data=resolve(home,'data'),suffice=resolve(home,'suffice');
  for(const d of [cwd,data,suffice,resolve(home,'history')])await mkdir(d,{recursive:true});
- const env={...process.env,PI_OFFLINE:'1',SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_HOME:view==='chat'?home:suffice,SUFFICE_HISTORY_HOME:resolve(home,'history'),SUFFICE_SESSIONS_SOCKET:'sfx-forge-r2-perf-'+view+'-'+process.pid};delete env.ELECTRON_RUN_AS_NODE;
+ const env={...process.env,PI_OFFLINE:'1',SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_HOME:view==='chat'?home:suffice,SUFFICE_HISTORY_HOME:resolve(home,'history'),SUFFICE_SESSIONS_SOCKET:SOCKET};delete env.ELECTRON_RUN_AS_NODE;
  const small=resolve(view==='chat'?home:suffice,'sessions','small');await mkdir(small,{recursive:true});
   await writeFile(resolve(small,'thread.jsonl'),[{type:'session',version:3,id:'small',timestamp:'2020-01-01T00:00:00.000Z',cwd},{type:'message',id:'s1',parentId:null,timestamp:'2020-01-01T00:00:00.000Z',message:{role:'user',content:[{type:'text',text:'Tiny thread'}],timestamp:5}},{type:'message',id:'s2',parentId:'s1',timestamp:'2020-01-01T00:00:00.000Z',message:{role:'assistant',provider:'opencode-go',model:'fixture',content:[{type:'text',text:'ok'}]}}].map(x=>JSON.stringify(x)).join('\n')+'\n');
  if(view==='chat'){
@@ -26,12 +27,12 @@ async function boot(view){
   await writeFile(resolve(dir,'thread.jsonl'),e.map(x=>JSON.stringify(x)).join('\n')+'\n');
  }else Object.assign(env,{SUFFICE_START_PROJECT:cwd,SUFFICE_TEST_AGENT:resolve('packages/backend/test/fixtures/sessions/fake-agent.mjs'),SUFFICE_TEST_NODE:process.execPath,SUFFICE_TEST_CLAUDE_AGENT:resolve('apps/desktop/test/fake-claude-bulk.mjs'),FAKE_BULK_PAIRS:String(SESSION_PAIRS),NODE_PATH:process.env.NODE_PATH||'/Users/abhayg/suffice-desktop-wt/voice/node_modules'});
  const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+data],env});
- return {app,home,cwd};
+ return {app,home,cwd,SOCKET};
 }
 async function run(view){
  ROWS=ROWS_BY[view];
  const pairs=view==='chat'?PAIRS:SESSION_PAIRS;
- const {app,home,cwd}=await boot(view);
+ const {app,home,cwd,SOCKET}=await boot(view);
  try{const page=await app.firstWindow();page.setDefaultTimeout(60000);
   await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].setContentSize(1440,900));
   await page.waitForFunction(()=>innerWidth===1440&&innerHeight===900);
@@ -52,11 +53,11 @@ async function run(view){
   const r={view,peak,nodes:m.nodes,nodesAfterScroll:nodesAfter,children:m.children,p95:+f[Math.floor(f.length*.95)].toFixed(1),max:+f.at(-1).toFixed(1),open};
   if(process.env.PERF_JSON)await writeFile(process.env.PERF_JSON,JSON.stringify(r)+'\n',{flag:'a'});
   console.log('PERF '+JSON.stringify(r));
-  return {r,app,page,rows:ROWS,pairs};
- }catch(err){await app.close();await rm(home,{recursive:true,force:true});throw err;}
+  return {r,app,page,rows:ROWS,pairs,SOCKET};
+ }catch(err){await app.close();killTmux(SOCKET);await rm(home,{recursive:true,force:true});throw err;}
 }
 for(const view of views)test(`${view}: 2280 messages stay light`,{timeout:300000},async()=>{
- const {r,app,page,rows,pairs}=await run(view);
+ const {r,app,page,rows,pairs,SOCKET}=await run(view);
  try{if(process.env.PERF_NOASSERT)return;
   assert.ok(r.p95<60&&Math.max(r.nodes,r.nodesAfterScroll)<12000,'perf: '+JSON.stringify(r));
   const sc=()=>page.evaluate(()=>{const t=document.querySelector('.thread-messages').parentElement,tr=t.getBoundingClientRect(),vis=[...t.querySelectorAll('.thread-user')].filter(u=>{const b=u.getBoundingClientRect();return b.bottom>tr.top&&b.top<tr.bottom;}).map(u=>u.textContent.trim());return {vis,gap:t.scrollHeight-t.clientHeight-t.scrollTop,top:t.scrollTop,sh:t.scrollHeight};});
@@ -75,5 +76,5 @@ for(const view of views)test(`${view}: 2280 messages stay light`,{timeout:300000
   await page.evaluate(()=>{const t=document.querySelector('.thread-messages').parentElement;t.scrollTop=t.scrollHeight;});await page.waitForTimeout(2500);
   const end=await page.evaluate(()=>{const t=document.querySelector('.thread-messages').parentElement,tr=t.getBoundingClientRect(),k=[...t.querySelector('.thread-messages').children].at(-1).getBoundingClientRect();return {lastBottom:k.bottom,lastTop:k.top,viewBottom:tr.bottom,viewTop:tr.top,gap:t.scrollHeight-t.clientHeight-t.scrollTop};});
   assert.ok(end.lastBottom<=end.viewBottom+1&&end.lastTop>=end.viewTop&&end.gap<250,'jump to bottom shows the last message: '+JSON.stringify(end));
- }finally{await app.close();}
+ }finally{await app.close();killTmux(SOCKET);}
 });

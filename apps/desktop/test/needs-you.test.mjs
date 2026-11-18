@@ -7,7 +7,7 @@ import {_electron} from 'playwright-core';
 import {resolve} from 'node:path';
 import {mkdir,mkdtemp,writeFile,realpath} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
-import {guard} from './electron-guard.mjs';
+import {guard,killTmux} from './electron-guard.mjs';
 import {collectNeeds} from '../src/needs-collect.js';
 
 test('collectNeeds: groups, ordering, archive and dismissal rules',()=>{
@@ -120,5 +120,5 @@ test('needs you digest: count, live updates, row actions, sessions, states',{tim
   assert.equal(await page.locator('.needs-empty-title').innerText(),'Nothing needs you');
   await both('empty');
   assert.deepEqual(errors,[]);
- }finally{await app.close();}
+ }finally{await app.close();killTmux(SOCKET);}
 });
