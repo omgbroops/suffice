@@ -1,5 +1,5 @@
 const {externalLink}=require('./external-links.cjs');
-const {app,BrowserWindow,ipcMain,dialog,utilityProcess,clipboard,shell,Notification,nativeImage,systemPreferences,screen}=require('electron');
+const {app,BrowserWindow,ipcMain,dialog,utilityProcess,clipboard,shell,Notification,nativeImage,systemPreferences,screen,nativeTheme}=require('electron');
 const path=require('node:path');
 const packaged=require('./launch-mode.cjs').isInstalledApp(app);
 require('./desktop-profile.cjs').configureDesktopProfile(app,{packaged});
@@ -48,6 +48,8 @@ if(primary)app.whenReady().then(async()=>{
   function handle(name,handler,opts={}){ipcMain.handle(`suffice:${name}`,(event,...args)=>{const who=voiceHub.senderOf(event,opts);if(!who)throw new Error('Untrusted frame');if(branchBusy&&['select-project','thread','project','reset'].includes(name))throw new Error('Wait for the branch change to finish');return opts.sender?handler(who,...args):handler(...args);});}
   const views=require('./view-state-store.cjs').createViewStateStore(path.join(app.getPath('userData'),'thread-views'));
   handle('view-states',()=>views.load());
+  handle('os-dark',()=>nativeTheme.shouldUseDarkColors);
+  nativeTheme.on('updated',()=>{if(win&&!win.isDestroyed())win.webContents.send('suffice:os-theme',nativeTheme.shouldUseDarkColors);});
   handle('save-view-state',payload=>views.save(payload));
   const {createProviderSettings,providerLoginErrorMessage}=await import('./provider-settings.mjs');
   const providerSettings=createProviderSettings({getPreferences:()=>settings.get(),onCatalog:catalog=>{if(!win.isDestroyed())win.webContents.send('suffice:event',{event:'models_changed',catalog});},emit:event=>{if(!win.isDestroyed())win.webContents.send('suffice:provider-auth',event);},openBrowser:url=>shell.openExternal(url)});

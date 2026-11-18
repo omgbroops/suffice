@@ -1,6 +1,8 @@
 const {contextBridge,ipcRenderer}=require('electron');
 contextBridge.exposeInMainWorld('sufficeDesktop',{
   platform:process.platform,
+  osDark:()=>ipcRenderer.invoke('suffice:os-dark'),
+  onOsTheme:cb=>ipcRenderer.on('suffice:os-theme',(_e,dark)=>cb(!!dark)),
   windowChrome:process.argv.find(arg=>/^--suffice-window-chrome=(windows|macos-native|macos-preview)$/.test(arg))?.split('=')[1]||'windows',
   deleteThread:id=>ipcRenderer.invoke('suffice:delete-thread',id),
   updateProject:payload=>ipcRenderer.invoke('suffice:update-project',payload),
