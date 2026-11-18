@@ -35,7 +35,7 @@ export function createTaskBoardView({api=window.sufficeDesktop,board,host=docume
   by.done.reverse();
   for(const [key,,empty] of COLUMNS){const col=$(`[data-col="${key}"]`),ul=col.querySelector('.tb-list');col.querySelector('.tb-count').textContent=by[key].length||'';ul.replaceChildren(...(by[key].length?by[key].map(card):[Object.assign(document.createElement('li'),{className:'tb-empty',textContent:empty})]));}
   const active=by.queued.length+by.running.length+by.needs.length;
-  $('.tb-summary').textContent=list.length?[by.running.length&&`${by.running.length} running`,by.queued.length&&`${by.queued.length} queued`,by.needs.length&&`${by.needs.length} need you`,by.done.length&&`${by.done.length} done`].filter(Boolean).join(' · '):'Queue as many tasks as you like. They run as threads.';
+  $('.tb-summary').textContent=list.length?[by.running.length&&`${by.running.length} running`,by.queued.length&&`${by.queued.length} queued`,by.needs.length&&`${by.needs.length} need you`,by.done.length&&`${by.done.length} done`].filter(Boolean).join(' · '):'';
   $('.tb-limit output').textContent=board.limit();
   const b=badge.querySelector('.tb-badge');b.hidden=!active;b.textContent=active||'';badge.dataset.active=active?'true':'false';
  }
