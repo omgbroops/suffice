@@ -42,19 +42,20 @@
 /* long threads: skip layout/paint of off-screen blocks; auto remembers real height once rendered */
 .thread-messages > :not(:last-child) { content-visibility: auto; contain-intrinsic-size: auto 120px; }
 .thread-messages { width: min(var(--composer-width),calc(100% - 64px)); margin: 0 auto; padding: 16px 0; font-size: 14px; line-height: 22px; letter-spacing: -.01em; }
-.thread-message { margin: 0 0 24px; overflow-wrap: anywhere; font-size: inherit; line-height: inherit; font-weight: 400; }
-.thread-user { width: fit-content; white-space: pre-wrap; margin-left: auto; max-width: 82%; padding: 8px 14px; border-radius: 16px; background: var(--surface-thread-bubble); color: var(--text-strong); }
+.thread-message { margin: 0 0 16px; overflow-wrap: anywhere; font-size: inherit; line-height: inherit; font-weight: 400; }
+.thread-user { width: fit-content; white-space: pre-wrap; margin-left: auto; max-width: 77%; padding: var(--space-2) var(--space-3); border-radius: var(--radius-card); background: var(--surface-thread-bubble); color: var(--text-strong); }
 .thread-assistant { color: var(--text); }
-.thread-assistant p,.thread-assistant ul,.thread-assistant ol { margin: 0 0 12px; }
-.thread-assistant ul,.thread-assistant ol { padding-left: 22px; }
+.thread-assistant p,.thread-assistant ul,.thread-assistant ol { margin: 0 0 9.75px; }
+.thread-assistant ul,.thread-assistant ol { padding-left: 19.5px; }
 .thread-assistant h1,.thread-assistant h2,.thread-assistant h3,.thread-assistant h4 { margin: 20px 0 8px; font-size: 15px; line-height: 24px; font-weight: 600; color: var(--text-strong); }
 .thread-assistant > :first-child { margin-top: 0; }
 .thread-assistant > :last-child { margin-bottom: 0; }
 .thread-assistant blockquote { margin: 12px 0; padding-left: 14px; border-left: 2px solid var(--border-strong); color: var(--text-muted); }
 .thread-assistant pre,.thread-detail pre { margin: 8px 0 12px; padding: 12px; overflow-x: auto; background: var(--surface-base); border-radius: 8px; font: 12px/1.6 ui-monospace,monospace; white-space: pre-wrap; }
-.thread-assistant code { font-size: .9em; background: var(--surface-active); border-radius: 4px; padding: 2px 4px; }
+.thread-assistant code { font-size: .9em; background: var(--surface-active); border-radius: 3px; padding: .5px 4px; }
 .thread-assistant pre code { background: none; padding: 0; }
-.thread-assistant a { color: var(--blue); }
+.thread-assistant a { color: var(--blue); text-decoration: none; }
+.thread-assistant a:hover { text-decoration: underline; text-underline-offset: 2px; }
 .thread-assistant table { border-collapse: collapse; width: 100%; font-size: 13px; }
 .thread-assistant td,.thread-assistant th { padding: 8px; border-bottom: 1px solid var(--border); text-align: left; }
 .thread-activity { color: var(--text-muted); margin: 0 0 20px; font-size: 13px; line-height: 20px; }
@@ -121,11 +122,12 @@
 .thread-detail[data-status="error"] > summary { color: var(--red); }
 .action-input { margin: 8px 0; }
 .thread-activity summary::before { transition: transform 160ms var(--ease-out); }
-.thread-status,.thread-reasoning-line { color: var(--text-muted); font-size: 13px; line-height: 22px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; margin: 0 0 20px; }
-.thread-run-error { display: flex; gap: 12px; align-items: baseline; margin: 0 0 20px; color: var(--red); font-size: 13px; line-height: 22px; }
+.thread-status,.thread-reasoning-line { color: var(--text-muted); font-size: 12px; line-height: 22px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; margin: 0 0 20px; }
+.thread-run-error { display: flex; gap: 12px; align-items: baseline; margin: 0 0 20px; color: var(--text); font-size: 13px; line-height: 16px; font-weight: 500; }
+.thread-run-error::before { content: ''; flex: none; align-self: center; width: 12px; height: 12px; background: var(--red); -webkit-mask: var(--x-mask) center/contain no-repeat; mask: var(--x-mask) center/contain no-repeat; }
 .thread-run-error .text-button { flex: none; color: var(--text-muted); text-decoration: underline; text-underline-offset: 3px; }
 .thread-run-error .text-button:hover { color: var(--text-strong); }
-.thread-status { background: linear-gradient(100deg,var(--text-muted) 35%,var(--text) 48%,var(--text-muted) 61%); background-size: 240% 100%; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: status-shimmer 2.2s linear infinite; }
+.thread-status { background: linear-gradient(90deg,var(--text-muted) 25%,var(--text) 50%,var(--text-muted) 75%); background-size: 200% 100%; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: status-shimmer 2s linear infinite; text-align: center; }
 @keyframes status-shimmer { from { background-position: 140% 0; } to { background-position: -100% 0; } }
 .tool-widget { padding: 0; margin-bottom: 10px; background: transparent; border: 0; }
 .tool-widget-body { margin-top: 8px; padding: 2px 12px; border-radius: var(--radius-panel); background: var(--surface-composer); border: 1px solid var(--border); -webkit-backdrop-filter: var(--glass-filter); backdrop-filter: var(--glass-filter); }
@@ -216,10 +218,10 @@
 .thread-diagram .diagram-link { cursor:pointer; }
 .thread-diagram .diagram-link:hover { opacity:.8; }
 
-/* Quiet transcript checkpoints with edges that dissolve into the chat. */
-.thread-divider { display:flex; align-items:center; justify-content:center; gap:8px; margin:18px 0 22px; color:var(--text-muted); font-size:12px; line-height:18px; }
-.thread-divider::before,.thread-divider::after { content:''; flex:1; min-width:12px; height:1px; background:linear-gradient(to right,transparent,color-mix(in srgb,var(--text-muted) 26%,transparent)); }
-.thread-divider::after { transform:scaleX(-1); }
+/* Transcript checkpoints: solid hairlines in the accent role (mono until the user picks an accent). */
+.desktop-app { --divider-line: color-mix(in srgb,var(--accent,var(--text)) 45%,transparent); --divider-ink: color-mix(in srgb,var(--accent,var(--text)) 75%,var(--text-muted)); --x-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' fill-rule='evenodd' d='M12 1a11 11 0 1 0 0 22 11 11 0 1 0 0-22zM8.2 7 12 10.8 15.8 7 17 8.2 13.2 12 17 15.8 15.8 17 12 13.2 8.2 17 7 15.8 10.8 12 7 8.2z'/%3E%3C/svg%3E"); }
+.thread-divider { display:flex; align-items:center; justify-content:center; gap:12px; margin:34px 0 44px; color:var(--divider-ink); font-size:12px; font-weight:500; line-height:18px; }
+.thread-divider::before,.thread-divider::after { content:''; flex:1; min-width:12px; height:var(--hairline,.5px); background:var(--divider-line); }
 .thread-divider .icon { width:13px; height:13px; flex:none; }
 .thread-divider span { flex:0 1 auto; text-align:center; }
 .thread-divider[aria-busy=true] .icon { animation:compaction-pulse 1.4s ease-in-out infinite; }

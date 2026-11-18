@@ -36,8 +36,8 @@ test('live transcript checkpoints update in place and stopping preserves partial
  });await page.reload();await page.locator('#prompt').fill('Checkpoint fixture');await page.locator('.composer').evaluate(el=>el.requestSubmit());await page.getByRole('button',{name:'Stop task',exact:true}).waitFor();
  const emit=event=>app.evaluate(({BrowserWindow},event)=>BrowserWindow.getAllWindows()[0].webContents.send('suffice:event',{threadId:'fixture',...event}),event);
  await emit({event:'text',text:'Partial response survives.'});await emit({event:'compaction_start',reason:'threshold'});await page.locator('.thread-divider').filter({hasText:'Compacting context'}).waitFor();
- await emit({event:'compaction_end',reason:'threshold',completed:true});await page.locator('.thread-divider').filter({hasText:'Context automatically compacted'}).waitFor();assert.equal(await page.locator('.thread-divider').count(),1);
- await emit({event:'compaction_start',reason:'manual'});await emit({event:'compaction_end',reason:'manual',completed:true});await page.locator('.thread-divider').filter({hasText:/^Context compacted$/}).waitFor();
+ await emit({event:'compaction_end',reason:'threshold',completed:true});await page.locator('.thread-divider').filter({hasText:'Automatically compacted the conversation'}).waitFor();assert.equal(await page.locator('.thread-divider').count(),1);
+ await emit({event:'compaction_start',reason:'manual'});await emit({event:'compaction_end',reason:'manual',completed:true});await page.locator('.thread-divider').filter({hasText:/^Compacted the conversation$/}).waitFor();
  await page.getByRole('button',{name:'Stop task',exact:true}).click();await page.locator('.thread-divider').filter({hasText:'Interrupted'}).waitFor();assert.match(await page.locator('.thread-messages').innerText(),/Partial response survives/);assert.doesNotMatch(await page.locator('.thread-messages').innerText(),/Error invoking|Task stopped/);
  for(const theme of ['light','dark']){await page.locator('html').evaluate((el,theme)=>el.dataset.theme=theme,theme);await page.screenshot({path:resolve(home,'checkpoints-'+theme+'.png')});}
  console.log('Checkpoint screenshots: '+home);
