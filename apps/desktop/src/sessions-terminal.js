@@ -1,4 +1,5 @@
 import {el} from './sessions-util.js';
+import {paintTerminalTab} from './session-state-chip.js';
 import './sessions-terminal.css';
 
 // Terminal view of a session: one xterm per session on the shared glass. Switching is instant, no animation.
@@ -16,7 +17,8 @@ export function createTerminal(c){
   if(!termIds.has(id))termIds.set(id,'terminal:'+crypto.randomUUID());
   let slot=termEl.querySelector(`[data-sid="${id}"]`);
   if(!slot){slot=el('div','session-terminal-slot');slot.dataset.sid=id;termEl.append(slot);}
-  for(const o of termEl.children)o.hidden=o!==slot;
+  for(const o of termEl.querySelectorAll('.session-terminal-slot'))o.hidden=o!==slot;
+  paintTerminalTab(termEl,'Terminal',c.statusOf(c.active.s));
   await frame(); // the slot has a real size before xterm measures it
   if(c.active?.id!==id||c.mode!=='terminal')return;
   const view=await v.mount(slot,'session-'+id,termIds.get(id),1,{sessionId:id});

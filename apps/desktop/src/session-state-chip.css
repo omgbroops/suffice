@@ -1,0 +1,19 @@
+/* Rounded-rectangle state marker (never a dot) for session rows and the terminal tab. Colour tokens only. */
+.session-state-chip { display: inline-flex; align-items: center; gap: 6px; height: 18px; padding: 0 7px 0 5px; border-radius: 6px; font-size: 11px; line-height: 18px; font-weight: 500; white-space: nowrap; flex-shrink: 0; color: var(--text-faint); background: color-mix(in srgb, currentColor 12%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, currentColor 22%, transparent); }
+.session-state-mark { display: block; width: 8px; height: 8px; border-radius: 2px; background: currentColor; }
+.session-state-chip[data-state='working'] { color: var(--blue); }
+.session-state-chip[data-state='working'] .session-state-mark { animation: session-state-pulse 1.2s ease-in-out infinite; }
+.session-state-chip[data-state='waiting'] { color: var(--warning-ink); }
+.session-state-chip[data-state='blocked'] { color: var(--red); }
+.session-state-chip[data-state='blocked'] .session-state-mark { border-radius: 2px 2px 2px 0; }
+.session-state-chip[data-state='idle'] .session-state-mark { background: transparent; box-shadow: inset 0 0 0 1.5px currentColor; }
+@keyframes session-state-pulse { 50% { opacity: .35; transform: scale(.8); } }
+@media (prefers-reduced-motion: reduce) { .session-state-chip[data-state='working'] .session-state-mark { animation: none; } }
+/* One indicator per session row: the chip replaces the icon. */
+.session-row .thread-state { display: none; }
+.session-row .thread-card-heading .session-state-chip { margin-left: auto; margin-right: 6px; }
+.session-row .thread-card-heading .thread-age { margin-left: 0; }
+.session-term-tabs { position: absolute; top: 50px; left: 32px; right: 32px; display: flex; gap: 6px; pointer-events: auto; }
+.session-term-tab { display: inline-flex; align-items: center; gap: 10px; height: 30px; padding: 0 10px; border: 0; border-radius: 8px; color: var(--text); font: inherit; font-size: 12.5px; background: var(--surface-hover); cursor: default; }
+.session-term-tab:focus-visible { outline: 2px solid var(--accent, var(--blue)); outline-offset: 1px; }
+.session-terminal:has(.session-term-tabs) .session-terminal-slot { top: 90px; }

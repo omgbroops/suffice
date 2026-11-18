@@ -10,6 +10,7 @@ import {connectSessionHeader,viewId,storedTitle} from './sessions-header.js';
 import {createTerminal} from './sessions-terminal.js';
 import {createApproval,describePrompt} from './sessions-approval.js';
 import {updateSessionDirectory} from './thread-directory.js';
+import {paintStateChip,paintTerminalTab} from './session-state-chip.js';
 import './sessions.css';
 
 const sx=window.sufficeDesktop?.sessions;
@@ -74,6 +75,8 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   const status=statusOf(s);
   const label=labels.get(s.id);
   populateThreadRow(row,{id:'session-'+s.id,title:c.name(s),project:base(s.cwd),status,modified:activity.get(s.id)||Date.now(),agent:label,provider:providerOf(s.agent),model:label});
+  {const h=row.querySelector('.thread-card-heading')||row,ch=paintStateChip(h,status);const age=h.querySelector('.thread-age');if(age&&ch.nextElementSibling!==age)h.insertBefore(ch,age);}
+  if(c.termEl&&c.active?.id===s.id)paintTerminalTab(c.termEl,'Terminal',status);
   row.setAttribute('aria-pressed',String(c.active?.id===s.id));row.title=`${c.name(s)} · ${base(s.cwd)}`;
   tickThreadTimes(row);sortRows();publish();
  }
