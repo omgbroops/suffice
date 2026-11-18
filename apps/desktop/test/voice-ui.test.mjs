@@ -12,7 +12,7 @@ test('voice: strip, full view, floating orb window, transcript rules, geometry a
  const root=await realpath(await mkdtemp(resolve(tmpdir(),'suffice-voice-')));
  const home=resolve(root,'suffice-home'),fakeHome=resolve(root,'home'),project=resolve(root,'project');
  for(const dir of [home,fakeHome,project])await mkdir(dir);
- const env={PATH:process.env.PATH,HOME:fakeHome,TMPDIR:process.env.TMPDIR,LANG:process.env.LANG,PI_OFFLINE:'1',SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_HOME:home,SUFFICE_START_PROJECT:project};
+ const env={PATH:process.env.PATH,HOME:fakeHome,TMPDIR:process.env.TMPDIR,LANG:process.env.LANG,PI_OFFLINE:'1',SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_HOME:home,SUFFICE_START_PROJECT:project,SUFFICE_SESSIONS_SOCKET:'sfx-r2-voice',SUFFICE_HISTORY_HOME:resolve(root,'history')};
  const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop/test/voice-hidden-main.cjs'),'--user-data-dir='+resolve(root,'electron'),'--use-fake-device-for-media-stream','--use-fake-ui-for-media-stream','--mute-audio'],env});
  const errors=[];
  try{
@@ -261,6 +261,54 @@ test('voice: strip, full view, floating orb window, transcript rules, geometry a
    await page.locator('.voice-full-end').click();await page.waitForFunction(()=>!document.querySelector('form.composer').dataset.voice);
   });
 
+  await t.test('full view traps focus, outside click dismisses, rapid toggles leave the strip hidden, models disabled',async()=>{
+   await start();await emit({type:'state',state:'listening'});
+   await page.locator('.voice-expand').click();await full.waitFor();
+   const inside=()=>page.evaluate(()=>!!document.activeElement.closest('.voice-full'));
+   for(let i=0;i<8;i++){await page.keyboard.press('Tab');assert.equal(await inside(),true,'Tab '+i);}
+   for(let i=0;i<4;i++){await page.keyboard.press('Shift+Tab');assert.equal(await inside(),true,'Shift+Tab '+i);}
+   await page.locator('.sidebar').first().click({position:{x:4,y:4},force:true});
+   assert.equal(await full.isVisible(),false,'outside click returns to the strip');assert.equal(await on(),true,'the call continues');
+   // Count orb-window calls in the main process: window.sufficeDesktop is a frozen bridge object, so the page cannot spy on it.
+   await app.evaluate(({ipcMain})=>{globalThis.orbCalls=[];ipcMain.removeHandler('suffice:voice-window');ipcMain.handle('suffice:voice-window',(_e,action)=>{globalThis.orbCalls.push(action);return true;});});
+   for(let i=0;i<5;i++){await page.locator('.voice-expand').click();await full.waitFor();await page.keyboard.press('Escape');await full.waitFor({state:'hidden'});}
+   assert.deepEqual(await app.evaluate(()=>globalThis.orbCalls),[],'Escape repeats do not hit the orb window');
+   // A toast over the open full view is not an outside click.
+   await page.locator('.voice-expand').click();await full.waitFor();
+   await page.evaluate(()=>document.dispatchEvent(new CustomEvent('suffice-toast',{detail:'Test toast'})));
+   await page.locator('.toast-dismiss').waitFor();let reached=false;const seq=[];for(let i=0;i<6&&!reached;i++){await page.keyboard.press('Tab');reached=await page.evaluate(()=>!!document.activeElement.closest('.toast-dismiss'));seq.push(await page.evaluate(()=>document.activeElement.className||document.activeElement.tagName));}
+   assert.equal(reached,true,'Tab reaches the toast Okay while the call view is open: '+seq);
+   if(process.env.VOICE_SHOT_DIR)await page.screenshot({path:process.env.VOICE_SHOT_DIR+'/toast-okay-focused.png'});
+   await page.keyboard.press('Enter');
+   assert.equal(await full.isVisible(),true,'toast Okay leaves the call view open');
+   // A mouse click on a toast must not count as an outside click (pointerdown exclusion).
+   await page.evaluate(()=>document.dispatchEvent(new CustomEvent('suffice-toast',{detail:'Click toast'})));
+   await page.locator('.toast-dismiss').click();
+   assert.equal(await full.isVisible(),true,'clicking the toast leaves the call view open');
+   // Tab pressed while focus sits outside the open view is pulled back inside (document capture keydown).
+   await page.evaluate(()=>document.querySelector('.sidebar button').focus());
+   assert.equal(await page.evaluate(()=>!!document.activeElement.closest('.voice-full')),false,'focus starts outside');
+   await page.keyboard.press('Tab');
+   assert.equal(await page.evaluate(()=>!!document.activeElement.closest('.voice-full')),true,'Tab from outside returns focus into the call view');
+   // Full -> mini -> full still opens then closes the orb window.
+   await page.locator('.voice-full-mini').click();await page.waitForFunction(()=>document.querySelector('form.composer').dataset.voice==='mini');
+   await page.keyboard.press('Control+k');
+   const palette=page.getByRole('combobox',{name:'Search threads and commands'});await palette.waitFor();await palette.fill('voice');
+   await page.getByRole('option').filter({hasText:'Voice: full view'}).click();await full.waitFor();
+   assert.deepEqual(await app.evaluate(()=>globalThis.orbCalls),['open','close'],'round trip opens then closes the orb window');
+   await page.keyboard.press('Escape');
+   // Delegation with models disabled (the modelsDisabled state only; a fresh profile with an empty catalog is not covered here): nothing is submitted, the reason lands in the thread.
+   const runs=await app.evaluate(()=>globalThis.voiceRuns.length);
+   await page.evaluate(()=>{document.querySelector('form.composer').modelsDisabled=true;});
+   await emit({type:'tool_call',id:'call_none',name:'background_agent',args:{prompt:'Do the thing.'}},400);
+   assert.equal(await app.evaluate(()=>globalThis.voiceRuns.length),runs);
+   if(await inThread())assert.equal(await page.locator('.thread-assistant[data-voice]').filter({hasText:'Enable a model'}).count(),1);
+   await page.evaluate(()=>{document.querySelector('form.composer').modelsDisabled=false;});
+   await end();
+   for(let i=0;i<6;i++){await startButton.click();await startButton.click();}
+   await page.waitForFunction(()=>!document.querySelector('form.composer').dataset.voice,null,{timeout:5000});
+   assert.equal(await strip.isVisible(),false);assert.equal(await page.locator('.voice-stop').isVisible(),false);
+  });
   await t.test('spotlight lists the voice commands and opens the full view',async()=>{
    await page.keyboard.press('Control+k');
    const input=page.getByRole('combobox',{name:'Search threads and commands'});await input.waitFor();await input.fill('voice');
