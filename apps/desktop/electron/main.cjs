@@ -1,5 +1,5 @@
 const {externalLink}=require('./external-links.cjs');
-const {app,BrowserWindow,ipcMain,dialog,utilityProcess,clipboard,shell,Notification,nativeImage,systemPreferences,screen}=require('electron');
+const {app,BrowserWindow,ipcMain,dialog,utilityProcess,clipboard,shell,Notification,nativeImage,systemPreferences,screen,globalShortcut,desktopCapturer}=require('electron');
 const path=require('node:path');
 const packaged=require('./launch-mode.cjs').isInstalledApp(app);
 require('./desktop-profile.cjs').configureDesktopProfile(app,{packaged});
@@ -9,9 +9,10 @@ const {pathToFileURL}=require('node:url');
 const {randomUUID,createHash}=require('node:crypto');
 const workspaceFiles=require('./workspace-files.cjs');
 const {prepareAttachments,clipboardFiles,removeAttachmentCopy}=require('./attachments.cjs');
-let background,terminals,sessionsIpc;
-let win,project=null,selectedProject=null,running=0,preparing=0,branchBusy=false;
+let background,terminals,sessionsIpc,askBar;
+let win,project=null,selectedProject=null,running=0,preparing=0,branchBusy=false,askThread=null,askClient=null;
 const attachmentGroups=new Map();
+const MAX_ASK_IMAGE=12*1024*1024;
 const deletingThreads=new Set();
 const threadRuns=new Map();
 const projectKey=value=>process.platform==='win32'?path.resolve(value).toLowerCase():path.resolve(value);
@@ -27,7 +28,7 @@ if(primary)app.whenReady().then(async()=>{
   const {parseOptions}=await import('@suffice/harness');
   const settingsHome=parseOptions([]).home;
   const settings=(await import('./settings-store.mjs')).createSettingsStore(settingsHome);
-  function onHarnessEvent(message){if(message.event==='thread_started'&&attachmentGroups.has(message.clientId))attachmentGroups.set(message.id,attachmentGroups.get(message.clientId));if(message.event==='approval')void notify('approval','Agent needs approval');if(message.event==='thread_started'&&threadLocations.has(message.clientId))threadLocations.set(message.id,threadLocations.get(message.clientId));if(win&&!win.isDestroyed())win.webContents.send('suffice:event',message);return;}
+  function onHarnessEvent(message){if(message.event==='thread_started'&&askClient&&message.clientId===askClient)askThread=message.id;if(message.event==='text'&&askClient&&message.clientId===askClient)askBar?.window()?.webContents.send('suffice:ask-bar-text',message.text);if(message.event==='thread_started'&&attachmentGroups.has(message.clientId))attachmentGroups.set(message.id,attachmentGroups.get(message.clientId));if(message.event==='approval')void notify('approval','Agent needs approval');if(message.event==='thread_started'&&threadLocations.has(message.clientId))threadLocations.set(message.id,threadLocations.get(message.clientId));if(win&&!win.isDestroyed())win.webContents.send('suffice:event',message);return;}
   background=require('./background-tasks.cjs').createBackgroundTasks({fork:(...args)=>utilityProcess.fork(...args),entry:path.join(__dirname,'worker-entry.mjs'),emit:onHarnessEvent});
   const {projectIdentityMetadata}=await import('./sidebar-metadata.mjs');
   const projects=require('./projects.cjs').createProjectStore(app.getPath('userData'));if(process.env.SUFFICE_START_PROJECT){const start=await require('node:fs/promises').realpath(process.env.SUFFICE_START_PROJECT);await projects.add(start);project=selectedProject=start;}function openProjectWindow(folder){const profileRoot=process.env.SUFFICE_PROFILE_ROOT||app.getPath('userData');const profile=path.join(profileRoot,'project-windows',createHash('sha256').update(folder).digest('hex').slice(0,16));const child=require('node:child_process').spawn(process.execPath,[...(packaged?[]:[app.getAppPath()]),'--user-data-dir='+profile],{detached:true,stdio:'ignore',windowsHide:true,env:{...process.env,SUFFICE_START_PROJECT:folder,SUFFICE_PROFILE_ROOT:profileRoot,ELECTRON_RUN_AS_NODE:undefined}});child.unref();}
@@ -45,6 +46,8 @@ if(primary)app.whenReady().then(async()=>{
   win.webContents.on('will-navigate',(event,url)=>{if(url!==entry){event.preventDefault();const link=externalLink(url);if(link)void shell.openExternal(link).catch(()=>{});}});
   const voiceWindow=require('./voice-window.cjs').createVoiceWindow({BrowserWindow,screen,preloadPath:path.join(__dirname,'preload.cjs'),entryPath:path.join(process.env.SUFFICE_TEST_DIST||path.join(__dirname,'../dist'),'index.html'),hidden:process.env.SUFFICE_TEST_HIDE_WINDOW==='1',getMainWindow:()=>win});
   const voiceHub=require('./voice-window.cjs').createVoiceHub({getMainWindow:()=>win,voiceWindow});
+  const entryPath=path.join(process.env.SUFFICE_TEST_DIST||path.join(__dirname,'../dist'),'index.html');
+  askBar=require('./ask-bar.cjs').createAskBar({BrowserWindow,screen,globalShortcut,desktopCapturer,systemPreferences,shell,preloadPath:path.join(__dirname,'preload.cjs'),entryPath,hidden:process.env.SUFFICE_TEST_HIDE_WINDOW==='1'});
   function handle(name,handler,opts={}){ipcMain.handle(`suffice:${name}`,(event,...args)=>{const who=voiceHub.senderOf(event,opts);if(!who)throw new Error('Untrusted frame');if(branchBusy&&['select-project','thread','project','reset'].includes(name))throw new Error('Wait for the branch change to finish');return opts.sender?handler(who,...args):handler(...args);});}
   const views=require('./view-state-store.cjs').createViewStateStore(path.join(app.getPath('userData'),'thread-views'));
   handle('view-states',()=>views.load());
@@ -71,7 +74,7 @@ if(primary)app.whenReady().then(async()=>{
   handle('provider-logout',id=>providerSettings.logout(id));
   app.on('will-quit',()=>providerSettings.cancel());
   handle('preferences',()=>settings.stored());
-  handle('desktop-preference',async payload=>{if(payload?.id==='startup'&&typeof payload.value==='boolean'){app.setLoginItemSettings({openAtLogin:payload.value,path:process.execPath,args:packaged?[]:[app.getAppPath()]});}if(payload?.id==='history-retention'&&!['Until deleted','30 days','90 days'].includes(payload.value))throw new Error('Invalid retention');if(payload?.id==='history-retention'&&payload.value!=='Until deleted'){if(running)throw new Error('Finish active agents before changing history retention');const answer=await dialog.showMessageBox(win,{type:'question',message:'Apply history retention?',detail:'Chats older than '+payload.value+' will be moved to the Recycle Bin automatically. The currently viewed chat is kept.',buttons:['Cancel','Apply'],defaultId:0,cancelId:0});if(answer.response!==1)throw new Error('Retention change cancelled');await enforceRetention(parseInt(payload.value));}return settings.set(payload?.id,payload?.value);});
+  handle('desktop-preference',async payload=>{if(payload?.id==='startup'&&typeof payload.value==='boolean'){app.setLoginItemSettings({openAtLogin:payload.value,path:process.execPath,args:packaged?[]:[app.getAppPath()]});}if(payload?.id==='history-retention'&&!['Until deleted','30 days','90 days'].includes(payload.value))throw new Error('Invalid retention');if(payload?.id==='history-retention'&&payload.value!=='Until deleted'){if(running)throw new Error('Finish active agents before changing history retention');const answer=await dialog.showMessageBox(win,{type:'question',message:'Apply history retention?',detail:'Chats older than '+payload.value+' will be moved to the Recycle Bin automatically. The currently viewed chat is kept.',buttons:['Cancel','Apply'],defaultId:0,cancelId:0});if(answer.response!==1)throw new Error('Retention change cancelled');await enforceRetention(parseInt(payload.value));}const saved=await settings.set(payload?.id,payload?.value);if(payload?.id==='local-agent')askBar.setEnabled(payload.value===true);return saved;});
   handle('open-external',url=>{const link=externalLink(url);if(!link)throw new Error('Unsupported link');return shell.openExternal(link);});
   handle('status',()=>request('status'));
   handle('models',options=>request('models',{all:options?.all===true}));
@@ -95,7 +98,7 @@ if(primary)app.whenReady().then(async()=>{
   handle('terminal-resize',payload=>terminals.resize(payload));
   handle('terminal-close',payload=>terminals.close(payload));
   handle('fork-thread',async id=>{if(typeof id!=='string'||!/^[a-f0-9]{32}$/.test(id))throw new Error('Invalid thread');if(background?.has?.(id))throw new Error('Stop this thread before forking it');const source=await request('thread',{id});if(source.running)throw new Error('Stop this thread before forking it');let cwd=source.cwd;const exists=await require('node:fs/promises').stat(cwd).then(info=>info.isDirectory()).catch(()=>false);if(!exists){const chosen=await dialog.showOpenDialog(win,{title:'Choose a project for the fork',properties:['openDirectory']});if(chosen.canceled)return null;cwd=chosen.filePaths[0];}const fork=await (await import('./fork-thread.mjs')).forkSavedThread({sourcePath:await request('thread-location',{id}),cwd,home:settingsHome,title:source.title});threadLocations.set(fork.id,fork.cwd);const {path,...view}=fork;return view;});
-  handle('threads',async()=>{const threads=await request('threads'),items=await projects.list(),hidden=new Set((await projects.hidden()).map(projectKey));for(const thread of threads)threadLocations.set(thread.id,thread.cwd);return threads.filter(t=>!t.cwd||!hidden.has(projectKey(t.cwd))).map(t=>{const item=t.cwd?items.find(p=>projectKey(p.path)===projectKey(t.cwd)):null;if(!item)return t;return {...t,project:item.name,projectPinned:!!item.pinned,...('projectIcon' in item?{projectIcon:item.projectIcon}:{}),...('projectImage' in item?{projectImage:item.projectImage}:{})};});});
+  handle('threads',async()=>{const threads=await request('threads'),items=await projects.list(),hidden=new Set((await projects.hidden()).map(projectKey));for(const thread of threads)threadLocations.set(thread.id,thread.cwd);return threads.filter(t=>t.id!==askThread&&(!t.cwd||!hidden.has(projectKey(t.cwd)))).map(t=>{const item=t.cwd?items.find(p=>projectKey(p.path)===projectKey(t.cwd)):null;if(!item)return t;return {...t,project:item.name,projectPinned:!!item.pinned,...('projectIcon' in item?{projectIcon:item.projectIcon}:{}),...('projectImage' in item?{projectImage:item.projectImage}:{})};});});
   handle('delete-thread',async id=>{if(typeof id!=='string'||!/^[a-f0-9]{32}$/.test(id))throw new Error('Invalid thread');if(threadRuns.has(id)||background?.has(id))throw new Error('Stop this thread before deleting it');if(deletingThreads.has(id))throw new Error('Thread deletion is already in progress');deletingThreads.add(id);try{const file=await request('delete-thread',{id});await shell.trashItem(file);threadLocations.delete(id);return true;}finally{deletingThreads.delete(id);}});
   async function knownProject(folder){if(typeof folder!=='string')throw new Error('Invalid project');const known=(await projects.list()).some(p=>projectKey(p.path)===projectKey(folder))||[...threadLocations.values()].some(p=>p&&projectKey(p)===projectKey(folder));if(!known)throw new Error('Project not found');return folder;}
   handle('update-project',async payload=>{const folder=await knownProject(payload?.path);await projects.add(folder);return projects.update(folder,payload.patch);});
@@ -127,9 +130,9 @@ if(primary)app.whenReady().then(async()=>{
   async function runTask(payload,inBackground=false){
     if(deletingThreads.has(payload?.threadId))throw new Error('This thread is being deleted');
     if(branchBusy)throw new Error('Wait for the branch change to finish');preparing++;const runId=payload?.threadId;if(runId)threadRuns.set(runId,(threadRuns.get(runId)||0)+1);try{
-    if(!project)throw new Error('Choose a project above the composer first');
+    if(!project&&!payload?.askBar)throw new Error('Choose a project above the composer first');
     if(!payload||typeof payload.prompt!=='string'||payload.prompt.length>1000000||!['off','minimal','low','medium','high','xhigh','max'].includes(payload.effort)||(payload.model!==undefined&&(typeof payload.model!=='string'||typeof payload.provider!=='string')))throw new Error('Invalid task');
-    const prefs={...await settings.get()};if(payload.approvalMode!==undefined){if(!['Ask before every action','Ask when needed','Never ask'].includes(payload.approvalMode))throw new Error('Invalid approval mode');prefs['approval-mode']=payload.approvalMode;}if((inBackground||running>0)&&!prefs['background-agents'])throw new Error('Background agents are disabled in settings');let cwd=threadLocations.get(payload.threadId)||project;
+    const prefs={...await settings.get()};if(payload.approvalMode!==undefined){if(!['Ask before every action','Ask when needed','Never ask'].includes(payload.approvalMode))throw new Error('Invalid approval mode');prefs['approval-mode']=payload.approvalMode;}if((inBackground||running>0)&&!prefs['background-agents'])throw new Error('Background agents are disabled in settings');let cwd=threadLocations.get(payload.threadId)||project||require('node:os').homedir();
     if(typeof payload.clientId==='string')threadLocations.set(payload.clientId,cwd);
     running++;const attachmentGroup=[];attachmentGroups.set(payload.threadId||payload.clientId,attachmentGroup);
     try{const attached=await prepareAttachments(app.getPath('userData'),payload.attachments);if(attached.directory)attachmentGroup.push(attached.directory);const task={prompt:payload.prompt+attached.context,displayPrompt:payload.prompt,attachmentMetadata:attached.metadata,images:attached.images,clientId:typeof payload.clientId==='string'?payload.clientId.slice(0,128):null,effort:payload.effort,model:payload.model,provider:payload.provider,threadId:payload.threadId,cwd,desktopSettings:prefs};try{const result=await request('run',task);await notify('finished','Agent finished');return result;}catch(error){await notify('failed','Agent encountered an error');if(prefs.diagnostics){await require('node:fs/promises').appendFile(path.join(settingsHome,'desktop-diagnostics.jsonl'),JSON.stringify({at:new Date().toISOString(),type:'task_error',name:error.name})+'\n',{mode:0o600});}throw error;}}finally{running--;for(const [key,group] of attachmentGroups)if(group===attachmentGroup)attachmentGroups.delete(key);if(!prefs['save-attachments'])for(const directory of attachmentGroup)await removeAttachmentCopy(app.getPath('userData'),directory).catch(()=>{});}
@@ -139,6 +142,27 @@ if(primary)app.whenReady().then(async()=>{
   handle('settings-action',async action=>{if(action==='export'){const chosen=await dialog.showOpenDialog(win,{properties:['openDirectory','createDirectory'],title:'Export conversations'});if(chosen.canceled)return null;return (await import('./settings-data-actions.mjs')).exportSessions(settingsHome,chosen.filePaths[0]);}if(action==='clear-cache'){await win.webContents.session.clearCache();win.webContents.send('suffice:clear-cache');return true;}if(action==='worktree-location'){const chosen=await dialog.showOpenDialog(win,{properties:['openDirectory','createDirectory'],title:'Worktree location'});if(chosen.canceled)return null;await settings.set('worktree-path',chosen.filePaths[0]);return chosen.filePaths[0];}throw new Error('Unknown settings action');});
   handle('run',payload=>runTask(payload));
   handle('run-background',payload=>runTask(payload,true));
+  // Ask bar: its own window talks through these channels only; the main window may open it and receives the answer thread.
+  const askHandle=(name,fn)=>ipcMain.handle(`suffice:ask-bar-${name}`,(event,...args)=>{const w=askBar.window();if(!w||event.senderFrame!==w.webContents.mainFrame)throw new Error('Untrusted frame');return fn(...args);});
+  async function askDrop(){const id=askThread;askThread=null;if(!id)return;try{const file=await request('delete-thread',{id});await shell.trashItem(file);threadLocations.delete(id);}catch{}}
+  const askClose=askBar.close;askBar.close=()=>{askClose();if(askClient)void request('abort',{threadId:askClient}).catch(()=>{});else void askDrop();};
+  handle('ask-bar-open',async()=>{if(!(await settings.get())['local-agent'])throw new Error('The ask bar is off. Turn it on in Settings.');askBar.open();return true;});
+  askHandle('capture',request=>askBar.capture(request===true));
+  askHandle('resize',height=>askBar.resize(height));
+  askHandle('close',()=>askBar.close());
+  askHandle('abort',()=>askClient?request('abort',{threadId:askClient}):false);
+  askHandle('ask',async payload=>{
+    if(!payload||typeof payload.question!=='string'||!payload.question.trim()||payload.question.length>20000)throw new Error('Invalid question');
+    if(payload.image!==undefined&&(typeof payload.image!=='string'||payload.image.length>MAX_ASK_IMAGE||!/^[A-Za-z0-9+/]*={0,2}$/.test(payload.image)))throw new Error('Invalid screenshot');
+    if(askClient)throw new Error('Still answering the last question');
+    await askDrop();const sel=payload.selection,clientId='askbar:'+randomUUID();askClient=clientId;
+    try{
+      const result=await (process.env.SUFFICE_TEST_ASK_RUNNER?require(process.env.SUFFICE_TEST_ASK_RUNNER)(onHarnessEvent):runTask)({prompt:payload.question.trim(),effort:['off','minimal','low','medium','high','xhigh','max'].includes(sel?.effort)?sel.effort:'low',...(typeof sel?.model==='string'&&typeof sel?.provider==='string'&&sel.provider!=='cli'?{model:sel.model,provider:sel.provider}:{}),clientId,askBar:true,attachments:payload.image?[{name:'screen.png',type:'image/png',size:Math.floor(payload.image.length*3/4),data:payload.image}]:undefined});
+      if(result?.threadId){askThread=result.threadId;if(!askBar.isOpen())void askDrop();}
+      return {text:result?.text||'',threadId:result?.threadId||null};
+    }finally{askClient=null;}
+  });
+  askHandle('send',async id=>{if(typeof id!=='string'||id!==askThread)throw new Error('Nothing to send');askThread=null;if(!win.isDestroyed()){win.webContents.send('suffice:ask-bar-thread',id);win.show();win.focus();}askBar.close();return true;});
   handle('abort',threadId=>request('abort',{threadId}));
   handle('steer',async payload=>{if(!payload||typeof payload.prompt!=='string'||!payload.prompt.trim()||payload.prompt.length>1000000)throw new Error('Invalid steering message');const attached=await prepareAttachments(app.getPath('userData'),payload.attachments);if(attached.directory)attachmentGroups.get(payload.threadId)?.push(attached.directory);return request('steer',{threadId:payload.threadId,prompt:payload.prompt+attached.context,displayPrompt:payload.prompt,attachmentMetadata:attached.metadata,images:attached.images});});
   handle('reset',async()=>{viewedThreadId=null;const revision=++viewedThreadRevision;await request('reset');if(revision===viewedThreadRevision)project=selectedProject;});
@@ -150,7 +174,7 @@ if(primary)app.whenReady().then(async()=>{
   });
   async function enforceRetention(days){if(running||![30,90].includes(days))return;const actions=await import('./settings-data-actions.mjs'),files=await actions.sessionFiles(settingsHome),active=new Set(files.filter(file=>createHash('sha256').update(process.platform==='win32'?path.resolve(file.path).toLowerCase():path.resolve(file.path)).digest('hex').slice(0,32)===viewedThreadId).map(file=>file.path));const count=await actions.expireSessions(settingsHome,days,{trash:file=>shell.trashItem(file),active});if(count&&!win.isDestroyed())win.webContents.send('suffice:event',{event:'history_changed'});}
   const retentionTimer=setInterval(()=>void settings.get().then(prefs=>enforceRetention(parseInt(prefs['history-retention']))).catch(()=>{}),3600000);retentionTimer.unref();
-  await win.loadFile(path.join(process.env.SUFFICE_TEST_DIST||path.join(__dirname,'../dist'),'index.html'));void settings.get().then(prefs=>enforceRetention(parseInt(prefs['history-retention']))).catch(()=>{});
+  await win.loadFile(path.join(process.env.SUFFICE_TEST_DIST||path.join(__dirname,'../dist'),'index.html'));void settings.get().then(prefs=>askBar.setEnabled(prefs['local-agent']===true)).catch(()=>{});void settings.get().then(prefs=>enforceRetention(parseInt(prefs['history-retention']))).catch(()=>{});
   let closing=false,flushed=false;app.on('before-quit',event=>{closing=true;if(flushed)return;event.preventDefault();void views.flush().catch(()=>{}).finally(()=>{flushed=true;app.quit();});});
   win.on('close',event=>{
     if(closing)return;event.preventDefault();void settings.get().then(prefs=>{if(prefs.tray){win.hide();return;}closing=true;shutdownWindow();});
@@ -167,4 +191,4 @@ if(primary)app.whenReady().then(async()=>{
   }
 });
 app.on('window-all-closed',()=>app.quit());
-app.on('will-quit',()=>{terminals?.dispose();sessionsIpc?.dispose();background?.stop();harness?.stop();});
+app.on('will-quit',()=>{globalShortcut.unregisterAll();terminals?.dispose();sessionsIpc?.dispose();background?.stop();harness?.stop();});

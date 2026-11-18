@@ -411,6 +411,7 @@ const spotlight=createSpotlight({commands:()=>[
  {id:'project',title:'Choose project',icon:'folder',run:()=>document.querySelector('.project-picker')?.click()},
  {id:'theme',title:getTheme()==='dark'?'Use light theme':'Use dark theme',icon:'agent',run:()=>setTheme(getTheme()==='dark'?'light':'dark')},
  {id:'settings',title:'Workspace settings',icon:'agent',run:showSettings},
+ {id:'ask-screen',title:'Ask about my screen',icon:'monitor',run:()=>{if(!preference('local-agent',false)){toast('Turn on the screen-aware ask bar in Settings first.');showSettings();return;}window.sufficeDesktop?.askBar?.open().catch(error=>toast(error.message));}},
  {id:'voice',title:voice?.active?'End voice':'Start voice',icon:'message',run:()=>voice?.toggle()},
  {id:'voice-full',title:'Voice: full view',icon:'message',run:()=>voice?.full()},
  {id:'voice-mini',title:'Voice: floating orb',icon:'message',run:()=>voice?.minimize()}

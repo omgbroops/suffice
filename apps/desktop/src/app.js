@@ -2,6 +2,8 @@ const path = location.pathname.replace(/\/+$/, '') || '/';
 if (location.hash === '#voice-orb') {
   // The floating voice orb window loads the same bundle and mounts only the orb.
   (await import('./voice/orb-window.js')).mountOrbWindow();
+} else if (location.hash === '#ask-bar') {
+  (await import('./ask-bar.js')).mountAskBar();
 } else if (location.protocol === 'file:' || path === '/') {
   await import('./main.js');
 } else {
