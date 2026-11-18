@@ -432,6 +432,7 @@ document.addEventListener('keydown', (e) => {
 });
 
 import { setupSidebarResize } from './sidebar-resize.js';
+import { getThreadDirectory } from './thread-directory.js';
 setupSidebarResize();
 
 connectSendControls(document.querySelector('.composer'),prompt,send);
@@ -447,6 +448,7 @@ document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!event.defa
 
 document.addEventListener('keydown',event=>{if(!(event.ctrlKey||event.metaKey))return;if(event.key.toLowerCase()==='n'){event.preventDefault();Promise.resolve(settingsPage?.close()).then(()=>{document.querySelector('.new-session').click();prompt.focus();});}if(event.key.toLowerCase()==='b'){event.preventDefault();document.querySelector('[data-action=toggle-sidebar]').click();}});
 
+window.sufficeDesktop?.onOpenThread?.(id=>{if(getThreadDirectory().threads.some(thread=>thread.id===id))getThreadDirectory().open(id);});
 window.sufficeDesktop?.onNotification?.(event=>{if(!event.play)return;const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;const audio=new Audio(),oscillator=audio.createOscillator(),gain=audio.createGain(),duration=event.sound==='Click'?.05:event.sound==='Chime'?.3:.16;oscillator.frequency.value=event.sound==='Click'?180:event.sound==='Chime'?740:440;gain.gain.setValueAtTime(.06,audio.currentTime);gain.gain.exponentialRampToValueAtTime(.001,audio.currentTime+duration);oscillator.connect(gain);gain.connect(audio.destination);oscillator.start();oscillator.stop(audio.currentTime+duration);oscillator.onended=()=>audio.close();});
 
 connectSettingsPrivacy();
