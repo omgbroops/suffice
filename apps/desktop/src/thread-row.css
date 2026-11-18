@@ -199,3 +199,7 @@
 
 .thread-row[hidden] { display:none!important; }
 .thread-card[data-status='ended'] { opacity:.55; }
+
+/* provider logos in rows and the peek card: settings.css gives the img a 32px padded tile that leaves a blank 13px square */
+.thread-provider img,.thread-hover-icon img { padding:0; background:none; border-radius:0; }
+.thread-hover-icon .settings-provider-placeholder { display:none; }

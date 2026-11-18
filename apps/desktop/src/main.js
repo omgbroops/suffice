@@ -227,6 +227,8 @@ function toast(message) {
  el.style.backdropFilter='var(--shared-chrome-filter)';
  el.setAttribute('popover','manual');el.innerHTML=`<div class="toast-content">${icon(/error|failed|unsuccessful|unavailable|could not|unknown/i.test(String(message))?'warning':'info')}<span class="toast-message"></span><button type="button" class="toast-dismiss" aria-label="Dismiss">${icon('close')}</button></div>`;el.querySelector('.toast-message').textContent=String(message);
  el.hidden=false;if(!el.matches(':popover-open'))el.showPopover();
+ // Stack above the composer (and its chips) so a toast never covers the input.
+ {const c=document.querySelector('.composer'),r=c?.getBoundingClientRect();const top=r&&r.width?Math.min(r.top,document.querySelector('.thread-followups')?.getBoundingClientRect().top??r.top):0;el.style.insetBlockEnd=top?`${Math.ceil(innerHeight-top+12)}px`:'';if(r?.width){el.style.insetInline=`${Math.round(r.left)}px ${Math.round(innerWidth-r.right)}px`;el.style.width='fit-content';el.style.marginInline='auto';}}
  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
  const close=()=>{clearTimeout(toastTimeout);toastMotion.forEach(animation=>animation.cancel());if(reduced){el.hidePopover();el.hidden=true;return;}const motion=el.animate([{transform:'translateY(0)'},{transform:'translateY(10px)'}],{duration:130,easing:'ease-in',fill:'forwards'});toastMotion=[motion,el.firstElementChild.animate([{opacity:1},{opacity:0}],{duration:120,fill:'forwards'})];motion.onfinish=()=>{el.hidePopover();el.hidden=true;};};
  el.querySelector('.toast-dismiss').onclick=close;

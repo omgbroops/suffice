@@ -46,3 +46,23 @@
 .desktop-app .thread-fork-origin-link { height: var(--control-height-sm); border-radius: var(--radius-control); background: color-mix(in srgb, var(--text) 5%, transparent); box-shadow: inset 0 0 0 var(--chat-hairline) var(--border-strong); }
 
 /* MCP tools chip + menu: neutral; open state matches the other composer chips. */
+
+/* Chat thread: action bar fixed in flow under each agent message, rounded-rectangle controls, live tool cards. */
+.desktop-app .workspace .message-actions-slot .message-toolbar { padding: 2px 0; gap: var(--space-3); background: transparent !important; backdrop-filter: none; box-shadow: none !important; border-color: transparent !important; outline: 0 !important; animation: none; }
+.desktop-app .message-copy, .desktop-app .message-action { border-radius: var(--radius-control); }
+.thread-live { display: flex; align-items: center; gap: var(--space-3); max-width: 100%; margin: var(--space-2) 0; padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3); border-radius: var(--radius-card); background: var(--surface-inset, color-mix(in srgb, var(--text) 5%, transparent)); box-shadow: inset 0 0 0 var(--chat-hairline) var(--border-strong); font: 12px/20px var(--font-sans); color: var(--text-muted); }
+.thread-live[hidden] { display: none; }
+.thread-live-name { color: var(--text); font-weight: var(--weight-medium); text-transform: capitalize; flex: none; }
+.thread-live-step { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-mono, ui-monospace, monospace); }
+.thread-live-time { flex: none; font-variant-numeric: tabular-nums; }
+.thread-live-stop { flex: none; height: var(--control-height-xs); padding: 0 var(--space-3); border: 0; border-radius: var(--radius-control); background: var(--hover-fill); color: var(--text-strong); font: inherit; cursor: pointer; }
+.thread-live-stop:hover { background: var(--selected-fill); }
+.thread-live:not([hidden]) ~ .thread-status { display: none; }
+@media (prefers-reduced-motion: no-preference) { .thread-live { animation: motion-rise 160ms var(--ease-out, ease-out); } }
+
+/* One left-aligned message column; fork icon is a rounded rectangle; toast is not a pill. */
+.desktop-app .workspace .thread-messages .thread-user { margin-left: 0; max-width: 100%; }
+.desktop-app .message-fork { border-radius: var(--radius-control); }
+.message-fork:disabled { opacity: .4; pointer-events: none; }
+.desktop-app .toast[popover] { border-radius: var(--radius-card); }
+.desktop-app .message-actions-slot[data-role='user'] { justify-content: flex-start; }

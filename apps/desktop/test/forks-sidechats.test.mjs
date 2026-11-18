@@ -53,9 +53,9 @@ test('fork at a message, lineage on rows and transcript, side chat drawer that n
 
   // fork at an assistant message through the message toolbar
   await page.locator('.thread-message.thread-assistant').first().hover();
-  await page.locator('.message-toolbar:not([hidden]) .message-fork').waitFor();
+  await page.locator('.message-actions-slot[data-role=assistant] .message-fork').first().waitFor();
   await both('fork-button',true);
-  await page.locator('.message-toolbar .message-fork').click();
+  await page.locator('.message-actions-slot[data-role=assistant] .message-fork').first().click();
   await page.locator('.thread-fork-origin').waitFor();
   assert.deepEqual(await app.evaluate(()=>globalThis.forks),[{id:A,at:{entryId:'a1',before:false}}]);
   assert.match(await page.locator('.thread-fork-origin').innerText(),/Forked from Plan the Postgres migration/);
@@ -73,7 +73,7 @@ test('fork at a message, lineage on rows and transcript, side chat drawer that n
   // fork before a user message puts that message back in the composer
   await source().click();await page.locator('.thread-message').nth(3).waitFor();
   await page.locator('.thread-message.thread-user').nth(1).hover();
-  await page.locator('.message-toolbar:not([hidden]) .message-fork').click();
+  await page.getByRole('button',{name:'Fork before this message and edit it'}).last().click();
   await page.waitForFunction(()=>document.querySelector('#prompt').value==='What should the rollback plan look like?');
   assert.deepEqual((await app.evaluate(()=>globalThis.forks)).at(-1),{id:A,at:{entryId:'u2',before:true}});
   await page.evaluate(()=>{const p=document.querySelector('#prompt');p.value='';p.dispatchEvent(new Event('input'));});
@@ -116,7 +116,7 @@ test('fork at a message, lineage on rows and transcript, side chat drawer that n
   await page.locator('.thread-message.thread-assistant').filter({hasText:'Ship it behind a flag.'}).waitFor();
   await page.waitForFunction(()=>!document.querySelector('.thread-status'));
   await page.locator('.thread-message.thread-assistant').last().hover();
-  await page.locator('.message-toolbar:not([hidden]) .message-fork').click();
+  await page.locator('.message-toolbar:not([hidden]) .message-fork').last().click();
   await page.waitForFunction(()=>document.querySelector('.thread-fork-origin'));
   assert.deepEqual((await app.evaluate(()=>globalThis.forks)).at(-1),{id:A,at:{entryId:'a3',before:false}});
 
