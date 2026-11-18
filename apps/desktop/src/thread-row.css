@@ -3,7 +3,7 @@
 .desktop-app :is(.thread-card[aria-pressed='true'],.new-session[aria-current='page']) { background: var(--hover-fill); }
 .desktop-app :is(.thread-card,.new-session):hover { background: var(--hover-fill); }
 .thread-card-heading,.thread-project-line,.thread-branch-line { display: flex; align-items: center; min-width: 0; gap: 6px; }
-.desktop-app .thread-card .row-title { flex: 1; min-width: 0; font-size: 13px; line-height: 20px; font-weight: 450; overflow: hidden; text-overflow: clip; white-space: nowrap; mask-image: linear-gradient(to right,#000 calc(100% - 16px),transparent); }
+.desktop-app .thread-card .row-title { flex: 1; min-width: 0; font-size: 13px; line-height: 20px; font-weight: 450; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .thread-card[data-unread='true'] .row-title { color: var(--text-strong); font-weight: var(--weight-semibold); }
 .thread-project-line { color: var(--text-faint); font-size: 12px; line-height: 16px; }
 .thread-project-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
