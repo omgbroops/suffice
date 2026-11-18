@@ -50,7 +50,7 @@ export function connectStartLife({api}={}){
  const rows=()=>[...new Set(document.querySelectorAll('.sidebar .thread-row'))].filter(r=>r._threadDetails);
  const setPh=()=>{prompt.placeholder=list.length?`Try: ${list[idx%list.length]}  ·  Tab to use`:base;};
  // Tab on an empty box writes the suggestion in, ready to send with Enter.
- prompt.addEventListener('keydown',e=>{if(e.key==='Tab'&&!e.shiftKey&&!prompt.value&&list.length){e.preventDefault();prompt.value=list[idx%list.length];prompt.dispatchEvent(new Event('input',{bubbles:true}));prompt.setSelectionRange(prompt.value.length,prompt.value.length);}});
+ prompt.addEventListener('keydown',e=>{if(e.key==='Tab'&&!e.shiftKey&&!prompt.value&&list.length&&!document.querySelector('.thread-followups')){e.preventDefault();prompt.value=list[idx%list.length];prompt.dispatchEvent(new Event('input',{bubbles:true}));prompt.setSelectionRange(prompt.value.length,prompt.value.length);}});
  async function pull(){
   const [h,c]=await Promise.all([api?.startHints?.().catch(()=>null),api?.changes?.().catch(()=>null)]);
   hints=h||{failing:[],todos:[]};hints.changes=(c?.entries||[]).map(e=>e.path);draw();
