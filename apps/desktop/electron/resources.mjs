@@ -1,6 +1,6 @@
 import {filterSufficeResources,isolateSufficeResourceLoader} from '../../../packages/cli/src/resource-scope.mjs';
 import {mkdir,readFile,writeFile,rename,realpath} from 'node:fs/promises';
-import {resolve,join,relative} from 'node:path';
+import {resolve,join,relative,basename} from 'node:path';
 import {randomUUID} from 'node:crypto';
 import {spawn} from 'node:child_process';
 import {TOOLKITS,scopeLookup,projectKey} from '../../../packages/cli/src/mcp-scope.mjs';
@@ -28,8 +28,9 @@ export function createResourceService(home,{choosePath}={}){
   const level=['global','project','thread'].includes(p.level)?p.level:'global';
   const scope=await json('mcp-scope.json'),health=await json('mcp-health.json'),servers=(await json('mcp.json')).mcpServers||{},known=await toolkitSchemas();
   const look=scopeLookup(scope,{project:typeof p.project==='string'&&p.project?projectKey(p.project):null,thread:typeof p.thread==='string'?p.thread:null,level});
+  const short=t=>t.length>48?t.slice(0,47)+'…':t;
   const toolkits=Object.entries(TOOLKITS).map(([id,t])=>{const o=look('toolkit:'+id),found=t.tools.filter(n=>known.has(n));return {id,kind:'toolkit',name:t.title,detail:t.detail,tools:t.tools,tokens:found.length?estimateTokens(found.map(n=>known.get(n))):0,enabled:o?.enabled??true,source:o?.source||'default'};});
-  const items=Object.entries(servers).map(([name,c])=>{const o=look(name),h=health[name];return {id:name,kind:'server',name,detail:c.url||[c.command,...(c.args||[])].join(' '),remote:!!c.url,enabled:o?.enabled??c.enabled!==false,source:o?.source||'default',health:h?{ok:h.ok,error:h.error,tools:h.tools,tokens:h.tokens,at:h.at}:null};});
+  const items=Object.entries(servers).map(([name,c])=>{const o=look(name),h=health[name];return {id:name,kind:'server',name,detail:c.url||short([c.command,...(c.args||[])].map((a,i)=>i&&!String(a).startsWith('/')?a:basename(String(a))).join(' ')),remote:!!c.url,enabled:o?.enabled??c.enabled!==false,source:o?.source||'default',health:h?{ok:h.ok,error:h.error,tools:h.tools,tokens:h.tokens,at:h.at}:null};});
   const tokens=[...toolkits,...items].reduce((n,x)=>n+(x.enabled?(x.tokens??x.health?.tokens??0):0),0);
   return {level,toolkits,servers:items,tokens,activeCount:[...toolkits,...items].filter(x=>x.enabled).length};
  }

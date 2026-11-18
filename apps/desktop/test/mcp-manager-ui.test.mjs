@@ -21,7 +21,7 @@ test('MCP manager: install, health, scoped switches and the composer chip, drive
   const shot=async name=>{if(!shots)return;for(const theme of ['dark','light']){await page.evaluate(t=>document.documentElement.dataset.theme=t,theme);await page.waitForTimeout(250);await page.screenshot({path:resolve(shots,`${name}-${theme}.png`)});}};
   const chip=page.getByRole('button',{name:'Tools',exact:true});
   await page.waitForFunction(()=>document.querySelector('.tools-chip')?.dataset.count==='4');
-  assert.equal((await chip.textContent()).trim(),'Tools 4');
+  assert.equal((await chip.textContent()).trim(),'Tools 4/4');
   await shot('01-composer-chip');
   await page.getByRole('button',{name:'Settings',exact:true}).click();await page.getByRole('button',{name:'MCPs',exact:true}).click();
   await page.getByRole('button',{name:'Install from snippet'}).click();
@@ -59,6 +59,20 @@ test('MCP manager: install, health, scoped switches and the composer chip, drive
   await menu.getByRole('menuitemradio',{name:'Shell'}).click();
   await page.waitForFunction(()=>document.querySelector('.tools-chip')?.dataset.count==='5');
   assert.equal(Object.values((await scopeFile()).projects)[0]['toolkit:shell'],true);
+  // This thread: stub the run so a thread exists, then switch Files on for it alone.
+  await app.evaluate(({ipcMain,BrowserWindow})=>{for(const a of ['run','thread','threads'])ipcMain.removeHandler('suffice:'+a);ipcMain.handle('suffice:threads',()=>[]);ipcMain.handle('suffice:thread',(_e,id)=>({id,title:id,cwd:process.cwd(),messages:[]}));ipcMain.handle('suffice:run',(_e,p)=>new Promise(()=>{BrowserWindow.getAllWindows()[0].webContents.send('suffice:event',{event:'thread_started',id:p.prompt,threadId:p.prompt,clientId:p.clientId});}));});
+  await page.reload();await page.locator('#prompt').fill('one');await page.locator('.composer').evaluate(el=>el.requestSubmit());
+  await page.locator('.thread-row').filter({hasText:'one'}).waitFor();
+  await page.getByRole('button',{name:'Settings',exact:true}).click();await page.getByRole('button',{name:'MCPs',exact:true}).click();
+  await page.getByRole('button',{name:'This thread'}).click();
+  await page.getByRole('switch',{name:'Files toolkit'}).click();
+  await page.waitForFunction(()=>document.querySelector('[aria-label="Files toolkit"]')?.getAttribute('aria-checked')==='true');
+  assert.deepEqual(Object.values((await scopeFile()).threads),[{'toolkit:files':true}]);
+  await page.keyboard.press('Escape');await page.locator('.settings-main').waitFor({state:'hidden'});
+  await chip.click();
+  const tmenu=page.getByRole('menu',{name:'Tools for this thread'});await tmenu.waitFor();
+  assert.equal(await tmenu.getByRole('menuitemradio',{name:'Files'}).getAttribute('aria-checked'),'true');
+  assert.equal(await tmenu.getByRole('menuitemradio',{name:'Files'}).locator('.tool-on').count(),1);
   assert.deepEqual(errors,[]);assert.equal(stderr.join('').includes('[no-dialog]'),false,stderr.join(''));
  }finally{await app.close();}
 });
