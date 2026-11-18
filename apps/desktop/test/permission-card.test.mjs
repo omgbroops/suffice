@@ -47,6 +47,7 @@ test('standard chat permission card: Later, Deny, Always allow, Allow, key hints
   assert.deepEqual(await card.locator('.approval-controls button').allTextContents(),['Later','Deny','Always allow','Allow']);
   assert.equal(await card.getByRole('button',{name:'Allow',exact:true}).getAttribute('data-key'),'Ctrl ↵');
   assert.equal(await card.getByRole('button',{name:'Later',exact:true}).getAttribute('data-key'),'Esc');
+  assert.equal(await card.locator('.approval-action span').textContent(),'Bash'); // pending: no past tense
   assert.match(await card.locator('.approval-preview').evaluate(e=>getComputedStyle(e).boxShadow),/inset/);
   await L.themed('standard-bash');
   // Esc = Later: composer returns, a chip brings the card back, nothing was answered
