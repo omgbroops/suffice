@@ -3,7 +3,7 @@
 .desktop-app .sidebar { min-width:224px; }
 
 .desktop-app[data-window-chrome^='macos'] { --window-controls-width:0px; }
-.desktop-app[data-window-chrome^='macos'] .sidebar-heading { padding-left:68px; }
+.desktop-app[data-window-chrome^='macos'] .sidebar-heading { padding-left: 76px; }
 .desktop-app[data-window-chrome^='macos'] .sidebar-heading > .brand-wordmark { flex-shrink:0; }
 .desktop-app[data-window-chrome^='macos'] .sidebar-tools { flex-shrink:0; }
 .desktop-app[data-window-chrome^='macos'] .window-controls {
@@ -60,7 +60,7 @@ html.desktop-app {
 html.desktop-app .sidebar { background: transparent; border: 0; padding: 0 var(--panel-margin) 16px; min-width: 0; }
 html.desktop-app[data-window-chrome^='macos'] .sidebar-heading { padding-top: 3px; }
 html.desktop-app .sidebar-heading { height: var(--header-height-pane); padding: 0 2px 0 var(--panel-margin); }
-html.desktop-app[data-window-chrome^='macos'] .sidebar-heading { padding-left: 68px; }
+html.desktop-app[data-window-chrome^='macos'] .sidebar-heading { padding-left: 76px; }
 html.desktop-app .sidebar-heading > .brand-wordmark { font-size: 13px; line-height: 20px; height: var(--control-height-sm); padding: 0 6px; border-radius: var(--radius-control); }
 html.desktop-app .sidebar-tools { gap: 0; }
 html.desktop-app[data-window-chrome^='macos'] .sidebar-heading > .brand-wordmark { padding: 0; }
@@ -82,11 +82,14 @@ html.desktop-app .sidebar-reopen > .icon { width: var(--icon-size-sm); height: v
 /* Collapsed navigation sits in the sidebar header row, bare. */
 html.desktop-app .sidebar-collapsed .sidebar-collapsed-tools { top: calc(var(--header-height-pane) / 2 - var(--control-height-sm) / 2); left: var(--panel-margin); padding: 0; gap: 0; border-radius: 0; background: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; }
 html.desktop-app[data-window-chrome^='macos'] .sidebar-collapsed .sidebar-collapsed-tools,
-html.desktop-app[data-window-chrome='macos-native'] body.sidebar-collapsed .sidebar-collapsed-tools { padding-left: 68px; top: calc(3px + var(--header-height-pane) / 2 - var(--control-height-sm) / 2); }
+html.desktop-app[data-window-chrome='macos-native'] body.sidebar-collapsed .sidebar-collapsed-tools { padding-left: 76px; top: calc(3px + var(--header-height-pane) / 2 - var(--control-height-sm) / 2); }
 html.desktop-app .sidebar-collapsed .sidebar-collapsed-tools .button { width: var(--control-height-sm); height: var(--control-height-sm); min-width: var(--control-height-sm); min-height: var(--control-height-sm); padding: 0; }
 
 /* Sidebar collapse: slide + fade over 200ms instead of display:none. */
 html.desktop-app .sidebar { transition: transform var(--duration-layout) var(--ease-out), opacity var(--duration-layout) var(--ease-out), visibility var(--duration-layout); }
+html.desktop-app[data-motion-ready] .sidebar { transition: transform var(--duration-layout) var(--ease-out), opacity var(--duration-layout) var(--ease-out), visibility 0s; }
+/* expanding shows at once so focus can land; collapsing hides after the slide */
+html.desktop-app[data-motion-ready] .sidebar-collapsed .sidebar { transition: transform var(--duration-layout) var(--ease-out), opacity var(--duration-layout) var(--ease-out), visibility 0s linear var(--duration-layout); }
 html.desktop-app .sidebar-collapsed .sidebar { display: flex; transform: translateX(-100%); opacity: 0; visibility: hidden; pointer-events: none; }
 html.desktop-app .right-sidebar,html.desktop-app .right-panel-open .right-sidebar { transition: transform 220ms var(--ease-out), visibility 220ms; }
 
@@ -123,9 +126,10 @@ html.desktop-app .panel-tab:hover { background: var(--surface-hover); }
 html.desktop-app .right-panel-tabs .panel-tab-select { height: var(--control-height-sm); padding: 0 var(--space-2); gap: 6px; font-weight: var(--weight-medium); }
 html.desktop-app .panel-tab-icon,html.desktop-app .panel-tab .icon { width: var(--icon-size-sm); height: var(--icon-size-sm); flex-basis: var(--icon-size-sm); }
 /* Close: concentric (tab radius 6 - inset 4 = 2); always on the selected tab. */
-html.desktop-app .right-panel-tabs .panel-tab .panel-tab-close { border-radius: calc(var(--radius-control) - 4px); left: 4px; top: 4px; width: 20px; height: 20px; min-height: 20px; padding: 3px; }
+html.desktop-app .right-panel-tabs .panel-tab .panel-tab-close { border-radius: calc(var(--radius-control) - 4px); left: 4px; top: 4px; width: 20px; min-width: 20px; height: 20px; min-height: 20px; padding: 3px; }
 html.desktop-app .right-panel-tabs .panel-tab .panel-tab-close .icon { width: var(--icon-size-sm); height: var(--icon-size-sm); }
 html.desktop-app .right-panel-tabs .panel-tab[data-active='true'] .panel-tab-select { padding-right: 28px; }
 html.desktop-app .right-panel-tabs .panel-tab[data-active='true'] .panel-tab-close { left: auto; right: 4px; opacity: 1; pointer-events: auto; }
 
 html.desktop-app[data-window-chrome^='macos'] .window-controls { top: 0; width: 76px; height: var(--header-height-pane); padding: 0 8px; align-items: center; background: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: none; }
+html.desktop-app .sidebar-reopen, html.desktop-app .sidebar-collapsed .sidebar-collapsed-tools .button { border-radius: var(--radius-control); }
