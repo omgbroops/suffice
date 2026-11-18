@@ -1,5 +1,6 @@
 import {icon} from './ui.js';
 import {connectOverlayScrollbar} from './overlay-scrollbar.js';
+import {leadLine,hint,createLater} from './permission-card.js';
 
 // CLI-session prompts reuse the composer-approval markup and classes from approvals.js; styles live in desktop.css.
 const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
@@ -31,29 +32,35 @@ export function describePrompt(p,items=[]){
  return body?{icon:'file',label:'Request',text:body}:null;
 }
 
-export function createApproval({form,markdown,answer}){
- let card=null,sig='',off=()=>{},stopSb=()=>{};
- function clear(){off();off=()=>{};stopSb();stopSb=()=>{};if(!card)return;const had=card.contains(document.activeElement);card.remove();card=null;sig='';delete form.dataset.approval;for(const c of form.children)c.inert=false;form.resizePrompt?.();if(had)form.querySelector('textarea')?.focus({preventScroll:true});}
+export function createApproval({form,markdown,answer,agent=()=>''}){
+ let card=null,sig='',off=()=>{},stopSb=()=>{},later=null;
+ function clear(){off();off=()=>{};stopSb();stopSb=()=>{};later?.drop();later=null;if(!card)return;const had=card.contains(document.activeElement);card.remove();card=null;sig='';delete form.dataset.approval;for(const c of form.children)c.inert=false;form.resizePrompt?.();if(had)form.querySelector('textarea')?.focus({preventScroll:true});}
  function draw(p,items){
   const s=p?JSON.stringify([p,items?.at(-1)?.id,items?.at(-1)?.status]):'';
   if(s===sig)return;
   const hadFocus=!card||card.contains(document.activeElement)||form.contains(document.activeElement)||document.activeElement===document.body;
   clear();sig=s;if(!p)return;
   card=el('section','composer-approval');card.setAttribute('aria-label','Agent approval');
-  card.append(el('h3','',p.title||'Agent needs input'));
   const d=describePrompt(p,items);let pending=null;
+  card.append(leadLine(agent(),d?.label||'Request'));
   if(d){const a=el('div','approval-action');a.innerHTML=icon(d.icon);a.append(el('span','',d.label));
    const host=el('div','approval-preview-host');
    if(d.markdown&&markdown){const md=el('div','approval-preview approval-plan');md.tabIndex=0;md.setAttribute('aria-label','Plan');markdown(md,d.markdown);host.append(md);}
    else if(d.text||d.markdown){const pre=el('pre','approval-preview'),code=el('code','',d.text||d.markdown);pre.tabIndex=0;pre.setAttribute('aria-label','Requested action');pre.append(code);host.append(pre);pending=[pre,code,d.icon==='terminal'?'input.sh':''];}
    card.append(a);if(host.childNodes.length)card.append(host);}
-  const ctl=el('div','approval-controls'),buttons=[];
-  for(const o of p.options||[]){const b=el('button',`provider-dialog-button${o.index===p.selected?' provider-dialog-primary':''}`,o.label);b.type='button';
+  card.append(el('h3','',p.title||'Agent needs input'));
+  later=createLater(form,card);delete later.button.dataset.key;later.button.removeAttribute('aria-keyshortcuts'); // Esc denies in sessions
+  const ctl=el('div','approval-controls',''),buttons=[],opts=p.options||[],yes=opts.find(o=>o.index===p.selected)||opts[0],no=opts.find(o=>DENY.test(o.label));
+  ctl.append(later.button);
+  for(const [n,o] of opts.entries()){const b=el('button',`provider-dialog-button${o.index===p.selected?' provider-dialog-primary':''}`,o.label);b.type='button';
+   hint(b,o===yes?'Ctrl ↵':o===no?'Esc':String(n+1));
    b.addEventListener('click',()=>answer(o.index));ctl.append(b);buttons.push([o,b]);}
   card.append(ctl);form.append(card);form.dataset.approval='true';
   if(pending){const [pre,code,lang]=pending;stopSb=connectOverlayScrollbar(pre,{inset:6});if(lang)import('./code-highlight.js').then(({colorCode})=>colorCode(code,lang)).catch(()=>{});}
   for(const c of form.children)c.inert=c!==card;form.resizePrompt?.();
   const key=e=>{
+   if(card.hidden)return;
+   if(!e.defaultPrevented&&e.key==='Enter'&&(e.ctrlKey||e.metaKey)&&yes){e.preventDefault();e.stopPropagation();answer(yes.index);return;}
    if(e.defaultPrevented||e.ctrlKey||e.metaKey||e.altKey)return;
    if(!card.contains(e.target)&&e.target.closest?.('input,textarea,select,[contenteditable]:not([contenteditable="false"])'))return;
    const n=/^[1-9]$/.test(e.key)?Number(e.key)-1:-1,hit=n>=0?p.options?.[n]:e.key==='Escape'?p.options?.find(o=>DENY.test(o.label)):null;
