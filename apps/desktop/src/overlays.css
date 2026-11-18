@@ -30,9 +30,9 @@
   font-size: 13px; line-height: 16.25px; font-weight: 450; transition: background-color var(--duration-hover) ease, color var(--duration-hover) ease;
 }
 .desktop-app .popover .menu-item + .menu-item { margin-top: 0; }
-.desktop-app .popover .menu-item:active:not(:disabled) { transform: none; }
 .desktop-app .popover .menu-item:is(:hover,:focus-visible,[aria-expanded='true'],[data-active]) { background: var(--hover-menu); box-shadow: none; }
 .desktop-app .popover .menu-item:focus-visible { outline: none; box-shadow: none; }
+.desktop-app .popover .menu-item:hover:not([aria-pressed='true']):not([aria-checked='true']) { background: var(--hover-menu); } /* beats tactile.css hover (0,5,0) */
 .desktop-app .popover .menu-item > .icon:not(.menu-check,.menu-chevron) { width: 14px; height: 14px; flex: 0 0 14px; color: var(--text-muted); }
 .desktop-app .menu-label { font-weight: 450; min-width: 0; text-overflow: clip; mask-image: linear-gradient(to right, #000 calc(100% - 12px), transparent); }
 .desktop-app .menu-item > .menu-check { display: block; width: 14px; height: 14px; flex: 0 0 14px; margin-left: auto; color: var(--text-muted); }
