@@ -299,3 +299,18 @@ test('find: index hit and body-only hit carry snippets; non-matches stay out', a
   assert.deepEqual(await h.find('zzz-nothing'), []);
   assert.equal((await h.find('reply one', { deep: 1 })).length, 1);
 });
+
+test('save: instances sharing one index file write distinct tmp files', async () => {
+  const home = mk();
+  claudeFile(home, 'p1', 's1', '/proj/a', 'hello', 1_700_000_100);
+  const opened = [];
+  const fs = { ...nodeFs, openSync: (f, ...a) => { opened.push(f); return nodeFs.openSync(f, ...a); } };
+  const indexPath = path.join(home, 'shared-index.json');
+  try {
+    await createHistory({ home, clock, fs, indexPath }).scan();
+    await createHistory({ home, clock, fs, indexPath }).scan();
+    const tmps = opened.filter((f) => f.endsWith('.tmp'));
+    assert.ok(tmps.length >= 2);
+    assert.equal(new Set(tmps).size, tmps.length);
+  } finally { nodeFs.rmSync(home, { recursive: true, force: true }); }
+});

@@ -55,6 +55,8 @@ test('Cmd+K history scope: full-text snippet, open reads the session',{timeout:1
    await shot(`history-search-${t}.png`);
    await page.locator('#spotlight-query').fill('zzzqqq');
    await page.waitForFunction(()=>document.querySelector('.spotlight-empty')?.textContent==='No past sessions found');
+   await page.locator('#spotlight-query').fill('a'.repeat(5000)); // over the 4096 string cap: must search, not show the unfiltered list
+   await page.waitForFunction(()=>document.querySelector('.spotlight-empty')?.textContent==='No past sessions found');
    await page.locator('#spotlight-query').fill('token bucket');
    await page.waitForFunction(()=>document.querySelectorAll('.spotlight-history').length===1);
    await page.keyboard.press('Enter');

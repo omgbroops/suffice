@@ -12,6 +12,7 @@ import {createUsageMeter,format as formatUsage} from '../../../packages/backend/
 
 const LABELS={claude:'Claude Code',codex:'Codex',fake:'Fake agent',fakeclaude:'Fake Claude',simclaude:'Sim Claude'};
 const AGENT_BY_SOURCE={'claude-code':'claude',codex:'codex'};
+const q=v=>typeof v==='string'?v.slice(0,200):''; // search text is clamped, not rejected: a huge paste must search, not fall back to the unfiltered list
 const str=v=>typeof v==='string'&&v.length>0&&v.length<4096;
 const onPath=bin=>(process.env.PATH||'').split(path.delimiter).some(dir=>{try{fs.accessSync(path.join(dir,bin),fs.constants.X_OK);return true;}catch{return false;}});
 
@@ -167,8 +168,8 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
    'sessions-stop':p=>{untrack(id(p));return call({type:'sessions.stop',id:id(p)});},
    'sessions-send':p=>call({type:'sessions.send',id:id(p?.id),text:typeof p?.text==='string'?p.text:''}).catch(ended),
    'sessions-attach-command':p=>call({type:'sessions.attachCommand',id:id(p)}),
-   'history-list':async p=>{await call({type:'history.scan'});return call({type:'history.list',opts:{limit:200,...(str(p?.query)&&{query:p.query})}});},
-   'history-search':async p=>{if(Date.now()-lastScan>30000){lastScan=Date.now();await call({type:'history.scan'});}return call({type:'history.find',query:str(p?.query)?p.query:'',opts:{limit:50}});},
+   'history-list':async p=>{await call({type:'history.scan'});return call({type:'history.list',opts:{limit:200,...(q(p?.query)&&{query:q(p.query)})}});},
+   'history-search':async p=>{if(Date.now()-lastScan>30000){lastScan=Date.now();await call({type:'history.scan'});}return call({type:'history.find',query:q(p?.query),opts:{limit:50}});},
    'history-read':p=>call({type:'history.read',entry:{source:String(p?.source),path:String(p?.path)}}),
    'sessions-resume':async p=>{const agent=AGENT_BY_SOURCE[p?.source];if(!agent||!str(p?.sessionId)||!str(p?.cwd))throw new Error('Cannot resume this chat');await ready;const r=await call({type:'sessions.resume',agent,cwd:folder(p.cwd),sessionId:p.sessionId});track(r);attachSubs(r);return r;},
   },

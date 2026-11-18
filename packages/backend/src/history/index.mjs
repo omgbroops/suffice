@@ -16,6 +16,7 @@ const pub = ({ sig, firstUser, ...e }) => e;
 export const KINDS = ['interactive', 'headless', 'subagent', 'unknown'];
 export const DEFAULT_KINDS = ['interactive', 'unknown'];
 
+let saveSeq = 0; // module-wide so two instances in one process never share a tmp name
 export function createHistory({ fs = nodeFs, home, clock, slots, sources = defaultSources, indexPath } = {}) {
   if (typeof home !== 'string' || !home) throw new TypeError('history: home is required');
   assertShape('clock', clock, ['now']);
@@ -39,14 +40,15 @@ export function createHistory({ fs = nodeFs, home, clock, slots, sources = defau
   };
   const save = () => {
     fs.mkdirSync(path.dirname(file), { recursive: true });
-    const fd = fs.openSync(`${file}.tmp`, 'w');
+    const tmp = `${file}.${process.pid}.${++saveSeq}.tmp`; // unique per writer: instances sharing one home must not interleave in one tmp file
+    const fd = fs.openSync(tmp, 'w');
     try {
       fs.writeSync(fd, `${JSON.stringify({ v: 2, savedAt: clock.now() })}\n`);
       let buf = [];
       for (const p in index) { buf.push(JSON.stringify(index[p])); if (buf.length >= 500) { fs.writeSync(fd, `${buf.join('\n')}\n`); buf = []; } }
       if (buf.length) fs.writeSync(fd, `${buf.join('\n')}\n`);
     } finally { fs.closeSync(fd); }
-    fs.renameSync(`${file}.tmp`, file);
+    fs.renameSync(tmp, file);
   };
 
   const listSlot = slots?.define({ id: 'history:list', title: 'Chat history', schema: { type: 'array', items: entryDef } }, []);
