@@ -28,13 +28,14 @@ export function createThreadRouter({send,createHost,createRuntime}) {
   try{
    let result;
    if(action==='shutdown'){await Promise.all([...records].map(record=>record.request('shutdown')));result=null;}
-   else if(['status','models','threads'].includes(action)){await catalog.ready;result=await catalog.request(action,payload);if(action==='threads')result=result.map(thread=>{const run=byThread.get(thread.id);return run?{...thread,status:run.busy?(run.approvals.size?'approval':'working'):run.failed?'failed':thread.status,startedAt:run.startedAt,provider:run.provider??thread.provider,model:run.model??thread.model}:thread;});}
+   else if(['status','models','threads','review'].includes(action)){await catalog.ready;result=await catalog.request(action,payload);if(action==='threads')result=result.map(thread=>{const run=byThread.get(thread.id);return run?{...thread,status:run.busy?(run.approvals.size?'approval':'working'):run.failed?'failed':thread.status,startedAt:run.startedAt,provider:run.provider??thread.provider,model:run.model??thread.model}:thread;});}
    else if(['delete-thread','release-thread'].includes(action)){
     const target=byThread.get(payload.id);if(target?.busy)throw new Error('Stop this thread before deleting it');
     await catalog.ready;result=await catalog.request('thread-location',payload);
     if(target){await target.request('reset');for(const [key,value] of byThread)if(value===target)byThread.delete(key);records.delete(target);if(selected===target)selected=null;}
     if(viewedThread===payload.id){selectionRevision++;viewedThread=null;await catalog.request('reset');}
    }
+   else if(action==='side-release'){const target=byThread.get(payload.threadId);if(target?.busy)throw new Error('Stop the side chat before ending it');if(target){await target.request('reset');for(const [key,value] of byThread)if(value===target)byThread.delete(key);records.delete(target);if(selected===target)selected=null;}result=null;}
    else if(action==='thread-location'){await catalog.ready;result=await catalog.request(action,payload);}
    else if(action==='thread'){
     const revision=++selectionRevision,live=byThread.get(payload.id);
@@ -45,11 +46,12 @@ export function createThreadRouter({send,createHost,createRuntime}) {
     result={...result,running:false};
    }else if(action==='reset'){selectionRevision++;selected=null;viewedThread=null;result=null;}
    else {
-    const record=payload.threadId?byThread.get(payload.threadId):payload.clientId?null:selected;
+    let record=payload.threadId?byThread.get(payload.threadId):payload.clientId?null:selected;
+    if(action==='run'&&payload.side&&!record){const side=create();await side.ready;await side.request('attach',{path:payload.sidePath,cwd:payload.cwd});byThread.set(payload.threadId,side);record=side;}
     if(action==='run'){
      if(record?.busy)throw new Error('A task is already running in this thread');
      const target=record??create();selected=target;target.busy=true;target.events=[];target.approvals.clear();target.prompt=payload.displayPrompt??payload.prompt;target.attachments=payload.attachmentMetadata||[];target.images=payload.images||[];let snapshotReady;target.snapshotReady=new Promise(resolve=>snapshotReady=resolve);target.clientId=payload.clientId;target.startedAt=Date.now();target.provider=payload.provider;target.model=payload.model;target.failed=false;target.cwd=payload.cwd;target.title=payload.prompt.slice(0,90);if(payload.clientId)byThread.set(payload.clientId,target);
-     try{await target.ready;const resumeId=payload.threadId||(!payload.clientId?viewedThread:null);target.baseMessages=[];if(resumeId){const view=await (record?catalog:target).request('thread',{id:resumeId});target.baseMessages=view.messages||[];target.title=view.title||target.title;if(!record){target.threadId=resumeId;byThread.set(resumeId,target);}}snapshotReady();result=await target.request('run',{...payload,turnStartedAt:target.startedAt});target.busy=false;target.emit({event:'run_completed',result});}catch(error){target.failed=true;target.busy=false;target.emit({event:'run_completed',error:error.message});throw error;}finally{snapshotReady();target.busy=false;target.events=[];target.approvals.clear();}
+     try{await target.ready;const resumeId=payload.threadId||(!payload.clientId?viewedThread:null);target.baseMessages=[];if(resumeId&&!payload.side){const view=await (record?catalog:target).request('thread',{id:resumeId});target.baseMessages=view.messages||[];target.title=view.title||target.title;if(!record){target.threadId=resumeId;byThread.set(resumeId,target);}}snapshotReady();result=await target.request('run',{...payload,turnStartedAt:target.startedAt});target.busy=false;target.emit({event:'run_completed',result});}catch(error){target.failed=true;target.busy=false;target.emit({event:'run_completed',error:error.message});throw error;}finally{snapshotReady();target.busy=false;target.events=[];target.approvals.clear();}
     }else if(action==='usage'){result=record?await record.request('usage'):viewedThread?await catalog.request('usage'):null;}
     else if(['abort','steer','approval-answer','extension-answer'].includes(action)){if(!record)throw new Error('No active thread');result=await record.request(action,payload);if(action==='steer')record.events.push({event:'steering',text:payload.displayPrompt??payload.prompt,attachments:payload.attachmentMetadata,images:payload.images,timestamp:Date.now(),sequence:++record.eventSequence});}
     else throw new Error('Unknown harness action');

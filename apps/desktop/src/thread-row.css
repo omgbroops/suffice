@@ -18,15 +18,15 @@
 .thread-state { display: inline-flex; color: var(--text-faint); flex-shrink: 0; }
 .thread-state circle.dot { fill: currentColor; stroke: none; }
 .thread-state .icon { width: 14px; height: 14px; }
-:is(.thread-card,.thread-hover-card)[data-status='working'] .thread-state { color: var(--text); }
-:is(.thread-card,.thread-hover-card)[data-status='working'] .thread-state circle.dot { animation: thread-dot 1.2s ease-in-out infinite; }
+:is(.thread-card,.thread-hover-card,.needs-row)[data-status='working'] .thread-state { color: var(--text); }
+:is(.thread-card,.thread-hover-card,.needs-row)[data-status='working'] .thread-state circle.dot { animation: thread-dot 1.2s ease-in-out infinite; }
 .thread-state circle.dot:nth-child(3n+2) { animation-delay: .15s !important; }
 .thread-state circle.dot:nth-child(3n) { animation-delay: .3s !important; }
 .thread-state circle.dot:nth-child(n+4):nth-child(-n+6) { animation-delay: .1s; }
 .thread-state circle.dot:nth-child(n+7) { animation-delay: .2s; }
-:is(.thread-card,.thread-hover-card)[data-status='failed'] .thread-state { color: var(--red); }
-:is(.thread-card,.thread-hover-card):is([data-status='approval'],[data-status='input']) .thread-state { color: var(--warning-ink); }
-:is(.thread-card,.thread-hover-card):is([data-status='idle'],[data-status='waiting']) .thread-state { color: var(--text-faint); }
+:is(.thread-card,.thread-hover-card,.needs-row)[data-status='failed'] .thread-state { color: var(--red); }
+:is(.thread-card,.thread-hover-card,.needs-row):is([data-status='approval'],[data-status='input']) .thread-state { color: var(--warning-ink); }
+:is(.thread-card,.thread-hover-card,.needs-row):is([data-status='idle'],[data-status='waiting']) .thread-state { color: var(--text-faint); }
 .desktop-app .thread-card .thread-age { font-size: 12px; line-height: 20px; font-variant-numeric: tabular-nums; color: var(--text-faint); }
 .thread-card[data-unread='true'] .thread-age { color: var(--text-strong); }
 .thread-card[data-status='working'] .thread-age { color: var(--text); }
@@ -181,3 +181,10 @@
 .thread-project-line > .thread-project-name { flex: 0 1 auto; max-width: 9em; }
 
 .desktop-app .button.new-session { font-weight: var(--weight-medium); }
+.thread-fork { display: inline-flex; align-items: baseline; gap: 3px; min-width: 0; flex: 0 1 auto; border-radius: 3px; color: var(--text-muted); cursor: pointer; }
+.thread-fork-arrow { flex: none; }
+.thread-fork-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.thread-fork:hover .thread-fork-title { color: var(--text); text-decoration: underline; }
+.thread-fork:focus-visible { outline: 1px solid var(--focus); outline-offset: 1px; }
+.thread-fork-mark { display: inline-flex; flex: none; color: var(--text-faint); }
+.thread-fork-mark .icon { width: 12px; height: 12px; }

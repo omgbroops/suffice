@@ -4,9 +4,11 @@ import {createCollectionNavigation} from './components/ui/collection-navigation.
 import {createPanelEditor} from './panel-editor.js';
 import {showPopover,hidePopover,keyboardInteraction} from './popover-motion.js';
 import {threadViewState as store} from './thread-view-state.js';
+import {mountRewind} from './rewind-view.js';
+import {reviewFor,findingsFor,reviewButton,decorateRows} from './review.js';
 import {renderFileTree,renderChanges,renderCode,textElement} from './panel-content.js';
 
-const options={files:{label:'Files',icon:'files'},changes:{label:'Changes',icon:'changes'},terminal:{label:'Terminal',icon:'terminal'}};
+const options={files:{label:'Files',icon:'files'},changes:{label:'Changes',icon:'changes'},rewind:{label:'Rewind',icon:'rewind'},terminal:{label:'Terminal',icon:'terminal'}};
 export function panelIconButton(label,glyph){const button=document.createElement('button');button.type='button';button.className='button button--ghost';button.setAttribute('aria-label',label);button.title=label;button.innerHTML=icon(glyph);return button;}
 const textNode=textElement;
 export function connectRightPanel({sidebar,resize,toggle,api}){
@@ -32,7 +34,9 @@ export function connectRightPanel({sidebar,resize,toggle,api}){
  const optionFor=type=>terminalTab(type)?{label:store.state.terminals[type]?.label||'Terminal',icon:'terminal'}:options[type];
  api.onClearCache?.(()=>{directories.clear();mounted=null;if(store.state.panelOpen)void load();});
  document.addEventListener('suffice-preference',event=>{if(['hidden-files','gitignored','file-sort'].includes(event.detail.id)){directories.clear();mounted=null;if(store.state.panelOpen)void load();}});
+ document.addEventListener('suffice-rewind-restored',()=>{directories.clear();mounted=null;});
  const refreshPanel=()=>{directories.clear();mounted=null;void load();};
+ document.addEventListener('suffice-review-updated',()=>{mounted=null;if(store.state.panelOpen)void load();});
  function closeMenu(){menuNavigation.reset();hidePopover(menu);add.setAttribute('aria-expanded','false');}
  function activate(type){const current=store.state;if(type==='terminal'){const ordinal=Math.max(Number(current.terminalSequence)||0,...Object.values(current.terminals).map(value=>Number(value.ordinal)||0))+1;type='terminal:'+crypto.randomUUID();store.update({terminalSequence:ordinal,terminals:{...current.terminals,[type]:{ordinal,label:ordinal===1?'Terminal':'Terminal '+ordinal}},tabs:[...current.tabs,type],activeTab:type});closeMenu();return;}store.update({tabs:current.tabs.includes(type)?current.tabs:[...current.tabs,type],activeTab:type});closeMenu();}
  function close(type){const current=store.state,remaining=current.tabs.filter(tab=>tab!==type),metadata={...current.terminals};if(terminalTab(type)){const threadId=store.id;delete metadata[type];if(terminalsPromise)void terminalsPromise.then(terminals=>terminals.close(threadId,type));else void api.terminalClose({threadId,id:type}).catch(()=>{});}store.update({...(remaining.length===0&&preference('close-panel',false)?{panelOpen:false}:{}),terminals:metadata,tabs:remaining,activeTab:current.activeTab===type?remaining[Math.max(0,current.tabs.indexOf(type)-1)]??null:current.activeTab});}
@@ -69,7 +73,7 @@ export function connectRightPanel({sidebar,resize,toggle,api}){
    if(!result){scroller.append(textNode('p','panel-inline-note','Loading…'));scroller.setAttribute('aria-busy','true');result=type==='files'?api.file(view.file):api.diff(view.file);record.cache.set(view.file,result);}
    result=await result;if(!valid())return;record.cache.set(view.file,result);scroller.replaceChildren();
    if(entry)editor.bar.querySelector('.panel-path').dataset.kind=entry.status==='??'||entry.status.includes('A')?'added':entry.status.includes('D')?'deleted':'modified';
-   renderCode(scroller,{...result,...(entry?{added:entry.added,removed:entry.removed,binary:entry.binary||result.binary}:{})},type==='changes',view);record.previewKey=key;scroller.scrollTop=view.scroll||0;
+   renderCode(scroller,{...result,...(entry?{added:entry.added,removed:entry.removed,binary:entry.binary||result.binary}:{})},type==='changes',{...view,annotations:type==='changes'?findingsFor(id,view.file):[]});record.previewKey=key;scroller.scrollTop=view.scroll||0;
   }catch(error){record.cache.delete(view.file);if(!valid())return;scroller.replaceChildren();if(type==='changes'&&/no longer has changes|ENOENT|no such file|does not exist|not a file/i.test(error.message))patchView(type,{file:null,scroll:0});else scroller.append(textNode('p','panel-inline-note',error.message));}
   finally{if(valid())scroller.setAttribute('aria-busy','false');}
  }
@@ -80,6 +84,7 @@ export function connectRightPanel({sidebar,resize,toggle,api}){
   if(!type){body.removeAttribute('role');body.removeAttribute('aria-labelledby');body.removeAttribute('aria-busy');body.replaceChildren();const launcher=document.createElement('div');launcher.className='panel-launcher';choices(launcher);body.append(launcher);return;}
   body.setAttribute('role','tabpanel');body.setAttribute('aria-labelledby','panel-tab-'+type);body.setAttribute('aria-busy','true');
   if(terminalTab(type)){try{const terminals=await terminalViews();if(request!==version||id!==store.id||!store.state.panelOpen)return;await terminals.mount(body,id,type,state.terminals[type]?.ordinal);}catch(error){if(request===version&&id===store.id)message('Could not open terminal',error.message,true);}finally{if(request===version)body.setAttribute('aria-busy','false');}return;}
+  if(type==='rewind'){mounted=null;await mountRewind(body,{api,id,valid:()=>request===version&&id===store.id&&store.state.panelOpen});if(request===version)body.setAttribute('aria-busy','false');return;}
   const focusedPath=body.contains(document.activeElement)?document.activeElement.dataset.path:null;
   const view=state[type],layoutKey=JSON.stringify([id,type,view.directory,view.filterOpen,view.explorerOpen,view.expanded]);
   if(mounted?.layoutKey===layoutKey&&mounted.editor.shell.isConnected){await loadPreview(mounted,view,request);if(request===version)body.setAttribute('aria-busy','false');return;}
@@ -93,11 +98,12 @@ export function connectRightPanel({sidebar,resize,toggle,api}){
    if(type==='files')await Promise.all(expanded.filter(path=>!directories.has(path)).map(async path=>{try{const value=await api.files(path);if(valid())directories.set(path,value);}catch{}}));
    if(!valid())return;
    const openFile=path=>patchView(type,{file:path,scroll:0,recent:[path,...(store.state[type].recent||[]).filter(value=>value!==path)].slice(0,8)});
-   const editor=createPanelEditor({body,type,view,project:root.project,onPatch:patch=>patchView(type,patch),onTab:activate,onRefresh:refreshPanel,onOpen:openFile});
+   const editor=createPanelEditor({body,type,view,project:root.project,onPatch:patch=>patchView(type,patch),onTab:activate,onRefresh:refreshPanel,onOpen:openFile,review:type==='changes'?reviewButton(id,api):null});
    const {scroller,list}=editor;mounted={id,type,editor,changed,layoutKey,cache:new Map(),previewKey:null};
    if(type==='files'){
     editor.filter(renderFileTree(list,{directories,expanded,onFolder:path=>patchView(type,{expanded:expanded.includes(path)?expanded.filter(value=>value!==path):[...expanded,path]}),onFile:openFile}));if(!root.entries.length)list.append(textNode('p','panel-inline-note','Empty folder'));
    }else editor.filter(renderChanges(list,{entries:changed.entries,collapsed:view.collapsed??[],onGroup:folder=>{const collapsed=store.state.changes.collapsed??[];patchView(type,{collapsed:collapsed.includes(folder)?collapsed.filter(value=>value!==folder):[...collapsed,folder]});},onFile:openFile}));
+   if(type==='changes')decorateRows(list,id);
    editor.select(view.file);
    scroller.addEventListener('scroll',()=>{clearTimeout(scrollTimer);scrollTimer=setTimeout(()=>{if(mounted?.editor===editor&&store.id===id)patchView(type,{scroll:scroller.scrollTop});},120);},{passive:true});
    list.scrollTop=view.treeScroll||0;list.addEventListener('scroll',()=>{if(mounted?.editor===editor&&store.id===id)patchView(type,{treeScroll:list.scrollTop});},{passive:true});
@@ -120,7 +126,7 @@ export function connectRightPanel({sidebar,resize,toggle,api}){
  store.subscribe(event=>{const changedView=['files','changes'].some(type=>event.changed?.includes(type)&&(event.state[type].file!==previous[type].file||event.state[type].directory!==previous[type].directory||event.state[type].filterOpen!==previous[type].filterOpen||event.state[type].explorerOpen!==previous[type].explorerOpen||JSON.stringify(event.state[type].expanded)!==JSON.stringify(previous[type].expanded)||event.state[type].wrap!==previous[type].wrap||event.state[type].diffLayout!==previous[type].diffLayout));previous=event.state;event.changedView=changedView;sync(event);});
  toggle.addEventListener('click',()=>{if(store.id)store.update({panelOpen:!store.state.panelOpen});});
  const saveWidth=()=>{if(store.id)store.update({panelWidth:Math.round(sidebar.getBoundingClientRect().width)});};resize.addEventListener('lostpointercapture',saveWidth);resize.addEventListener('keydown',saveWidth);resize.addEventListener('dblclick',saveWidth);
- api.onEvent(event=>{if(event.event==='tool_end'&&store.state.panelOpen){clearTimeout(refreshTimer);refreshTimer=setTimeout(refreshPanel,300);}});document.addEventListener('suffice:thread-updated',refreshPanel);
+ api.onEvent(event=>{if(event.event==='tool_end'&&store.state.panelOpen&&store.state.activeTab!=='rewind'){clearTimeout(refreshTimer);refreshTimer=setTimeout(refreshPanel,300);}});document.addEventListener('suffice:thread-updated',refreshPanel);
  document.addEventListener('keydown',event=>{if(!store.id||!store.state.panelOpen||!store.state.activeTab||terminalTab(store.state.activeTab)||!(event.ctrlKey||event.metaKey))return;const type=store.state.activeTab;if(event.key.toLowerCase()==='p'){event.preventDefault();focusFilter=true;patchView(type,{explorerOpen:true,filterOpen:true});body.querySelector('.panel-filter')?.focus();}if(event.key==='\\'){event.preventDefault();patchView(type,{explorerOpen:store.state[type].explorerOpen===false});}});
  sync();
 }

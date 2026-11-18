@@ -1,6 +1,6 @@
 import {setTheme} from './theme.js';
 import {settingsSections} from './settings-data.js';
-export const supportedSettings=new Set(settingsSections.flatMap(section=>section.groups.flatMap(group=>group.rows)).filter(row=>row.id&&['toggle','select','segment','themes','palette','action','range'].includes(row.type)).map(row=>row.id));
+export const supportedSettings=new Set(settingsSections.flatMap(section=>section.groups.flatMap(group=>group.rows)).filter(row=>row.id&&['toggle','select','segment','themes','gallery','palette','action','range'].includes(row.type)).map(row=>row.id));
 supportedSettings.add('sidebar-collapsed');supportedSettings.add('file-open-app');supportedSettings.add('disabled-models');supportedSettings.add('approval-mode');
 let saved={};try{saved=JSON.parse(localStorage.getItem('suffice-settings-v1'))||{};}catch{}
 export function preference(id,fallback){return saved[id]??fallback;}
@@ -18,6 +18,7 @@ export function applyPreferences(){
  if(typeof document==='undefined')return;
  previewBackgroundDimming(preference('background-dimming',35));previewSurfaceOpacity(preference('surface-opacity',72));
  const root=document.documentElement;if(Object.hasOwn(saved,'sidebar-collapsed')&&!root.classList.contains('settings-open'))document.body.classList.toggle('sidebar-collapsed',saved['sidebar-collapsed']);root.lang=preference('language','System')==='English'?'en':(navigator.language.startsWith('en')?navigator.language:'en');
+ root.dataset.palette=saved.palette||'default';
  if(saved.mode)setTheme(saved.mode==='System'?((osDark===null?system.matches:!osDark)?'light':'dark'):saved.mode.toLowerCase());
  if(saved.background)localStorage.setItem('suffice-background',saved.background);
  if(saved.accent)root.style.setProperty('--blue',saved.accent);

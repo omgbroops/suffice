@@ -1,6 +1,7 @@
 import {createDesktopExtensionUI} from './extension-ui.mjs';
 import {createSufficeModelRuntime,modelRuntimeOptions} from '../../../packages/cli/src/model-runtime.mjs';
 import {projectContext,rememberProject,threadTitle} from './engine-settings.mjs';
+import {createReducerExtension} from '../../../packages/backend/src/tokens/index.mjs';
 import {invalidateProjectMetadata} from './sidebar-metadata.mjs';
 import {createChatChangeTracker} from './chat-changes.mjs';
 import {createChatGitTracker} from './chat-git.mjs';
@@ -8,9 +9,11 @@ import {createThreadRouter} from './thread-router.mjs';
 import {sessionUsage,runCaps,runCapExceeded} from './usage.mjs';
 import {randomUUID,createHash} from 'node:crypto';
 import {mkdir,realpath,stat} from 'node:fs/promises';
-import {resolve,dirname} from 'node:path';
+import {resolve,dirname,sep} from 'node:path';
 import {SessionManager} from '@earendil-works/pi-coding-agent';
 import {createThreadStore,threadId} from './threads.mjs';
+import {checkpoint} from './rewind.mjs';
+import {parseFindings} from './review.mjs';
 import {createSufficeSession,parseOptions} from '@suffice/harness';
 import {getSupportedThinkingLevels} from '@earendil-works/pi-ai/compat';
 
@@ -37,12 +40,19 @@ async function receive(message) {
     if(action==='threads'){send({id,ok:true,result:await threads.list()});return;}
     if(action==='thread-location'){send({id,ok:true,result:await threads.location(payload.id)});return;}
     if(busy)throw new Error('A task is already running. Stop it before changing sessions.');
+    if(action==='attach'){const base=await realpath(resolve(home,'side-chats')),file=await realpath(payload.path);if(!file.startsWith(base+sep))throw new Error('Side chat path is outside its directory');resumePath=file;workspace=await realpath(payload.cwd);send({id,ok:true});return;}
     if(action==='reset'){viewRevision++;await agent?.dispose();agent=null;resumePath=null;viewedUsage=null;send({event:'usage',usage:null});send({id,ok:true});return;}
     if(action==='models'){
       if(!runtime)throw new Error('Harness is not ready');
       await runtime.refresh?.({allowNetwork:false});
       const available=await runtime.getAvailable();const models=payload.all?runtime.getModels():available;
       send({id,ok:true,result:models.map(model=>({id:model.id,name:model.name,provider:model.provider,available:available.some(item=>item.id===model.id&&item.provider===model.provider),efforts:model.reasoning?getSupportedThinkingLevels(model):[]}))});return;
+    }
+    if(action==='review'){
+      if(!runtime)throw new Error('Harness is not ready');
+      const selected=(await runtime.getAvailable()).find(model=>model.id===payload.model&&model.provider===payload.provider);if(!selected)throw new Error('Model unavailable. Connect this provider in Settings.');
+      const cwd=await realpath(payload.cwd),options=parseOptions(['--cwd',cwd]);Object.assign(options,{home,access:'read',browser:false,desktop:false,effort:['off','minimal','low','medium','high','xhigh','max'].includes(payload.effort)?payload.effort:'low',model:selected.id,modelObject:selected,sessionManager:SessionManager.inMemory(cwd),desktopSettings:{}});
+      busy=true;let reviewer;try{reviewer=await createSession(options,runtime,{});send({id,ok:true,result:{findings:parseFindings(await reviewer.run(payload.prompt),payload.paths)}});}finally{busy=false;await reviewer?.dispose();}return;
     }
     if(action==='thread'){
       const revision=++viewRevision,thread=await threads.open(payload.id,(provider,model)=>runtime?.getModel?.(provider,model));
@@ -65,13 +75,14 @@ async function receive(message) {
     if(payload.model){selected=(await runtime.getAvailable()).find(model=>model.id===payload.model&&model.provider===payload.provider);if(!selected)throw new Error('Model unavailable. Connect this provider in Settings.');if(!(selected.reasoning?getSupportedThinkingLevels(selected):['off']).includes(payload.effort))throw new Error('Unsupported effort for this model');}
     const cwd=await realpath(payload.cwd);
     if(!(await stat(cwd)).isDirectory())throw new Error('Choose a project directory');
-    busy=true;ownsRun=true;abortRequested=false;const nextPreferences=JSON.stringify(payload.desktopSettings||{});if(agent&&preferencesKey!==nextPreferences){resumePath=agent.sessionPath();await agent.dispose();agent=null;}preferencesKey=nextPreferences;
+    busy=true;ownsRun=true;abortRequested=false;const nextPreferences=JSON.stringify([payload.desktopSettings||{},payload.skillContext||'']);if(agent&&preferencesKey!==nextPreferences){resumePath=agent.sessionPath();await agent.dispose();agent=null;}preferencesKey=nextPreferences;
     if(agent&&workspace!==cwd){await agent.dispose();agent=null;}
     if(!agent){
       workspace=cwd;
       const options=parseOptions(['--cwd',cwd]);
-      options.effort=payload.effort;
-      options.home=home;options.additionalContext=await projectContext(home,cwd,payload.desktopSettings||{});const newlyCreated=!resumePath;options.desktopSettings=payload.desktopSettings||{};options.onTitleChanged=()=>send({event:'history_changed'});if(options.desktopSettings['allow-network']===false){options.browser=false;options.desktop=false;}
+      options.effort=payload.effort;if(payload.side)options.access='read';
+      options.home=home;options.additionalContext=(await projectContext(home,cwd,payload.desktopSettings||{}))+(payload.skillContext||'');const newlyCreated=!resumePath;options.desktopSettings=payload.desktopSettings||{};options.extensions=[createReducerExtension({dir:resolve(home,'tool-outputs'),settings:options.desktopSettings})];options.onTitleChanged=()=>send({event:'history_changed'});if(options.desktopSettings['allow-network']===false){options.browser=false;options.desktop=false;}
+
       if(selected){options.model=selected.id;options.modelObject=selected;}
       if(resumePath)options.sessionManager=SessionManager.open(resumePath,dirname(resumePath));
       changeTracker=createChatChangeTracker({cwd,home,getId:()=>agent?.sessionPath()?threadId(agent.sessionPath()):null,onChange:(diff,turnDiff)=>{invalidateProjectMetadata(cwd);send({event:'changes',diff,turnDiff});}});
@@ -102,6 +113,7 @@ async function receive(message) {
     agent.session.sessionManager?.appendCustomEntry?.('suffice:turn-start',{...turnPresentation,promptHash:createHash('sha256').update(payload.prompt).digest('hex'),displayPrompt:payload.displayPrompt??payload.prompt,attachments:payload.attachmentMetadata||[]});send({event:'turn_started',presentation:turnPresentation});
     await changeTracker?.beginTurn();
     capState={base:sessionUsage(agent.session),caps:runCaps(),message:null};
+    if(sessionPath)await checkpoint(cwd,threadId(sessionPath),payload.displayPrompt??payload.prompt).catch(()=>{});// a checkpoint failure never blocks the turn
     const text=await agent.run(payload.prompt,{images:payload.images});if(capState.message)throw new Error(capState.message);finishPresentation('completed');
     await changeTracker?.flush().catch(()=>{});if(payload.desktopSettings?.['remember-context'])await rememberProject(home,cwd,text);
     send({id,ok:true,result:{text,presentation:turnPresentation,sessionPath:agent.sessionPath(),threadId:agent.sessionPath()?threadId(agent.sessionPath()):null,usage:agent.totals}});

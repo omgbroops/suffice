@@ -52,17 +52,36 @@
 .desktop-app .workspace:not(.thread-view) .project-bar :is(.project-picker, .git-pill):not(:disabled):is(:hover, [aria-expanded='true']) { background: var(--start-fill); color: var(--text); }
 .desktop-app .workspace:not(.thread-view) .project-bar :is(.project-picker, .git-pill):not(:disabled):active { filter: brightness(.97); transform: none; }
 
-/* Life: one real status line and recents, quiet and muted. */
-.start-life { margin-top: var(--space-5); }
-.thread-view .start-life { display: none; }
-.start-status { margin: 0 0 var(--space-5); padding: 0 1px; color: var(--text-faint); font-size: var(--text-xs); line-height: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.start-label { margin: 0 0 var(--space-1); padding: 0 1px; color: var(--text-faint); font-size: var(--text-xs); line-height: 18px; font-weight: var(--weight-medium); }
-.start-recent-list { display: grid; gap: 2px; }
-.start-recent { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); min-height: var(--control-height-sm); margin-inline: -6px; padding: 3px 6px; border: 0; border-radius: var(--radius-control); background: transparent; color: var(--text-muted); font: inherit; font-size: var(--text-sm); text-align: left; cursor: pointer; transition: background-color 100ms var(--start-ease), color 100ms var(--start-ease); }
-.start-recent:hover { background: var(--start-fill); color: var(--text); }
-.start-recent:active { filter: brightness(.97); }
-.start-recent-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.start-recent-age { flex: none; color: var(--text-faint); font-size: var(--text-xs); }
+/* Start screen. Opacity and transform only; tokens from tokens.css. Greeting and strip hide inside a thread. */
+.workspace.thread-view .life{display:none}
+.life-in{animation:life-in 200ms var(--ease-out) backwards;animation-delay:calc(var(--i,0)*36ms)}
+@keyframes life-in{from{opacity:0;transform:translateY(6px)}}
+.life-head{margin:0 0 var(--space-5);text-align:center}
+.life-hello{margin:0;font-size:28px;line-height:34px;font-weight:500;letter-spacing:-.02em;color:var(--text-strong)}
+.life-sub{display:flex;align-items:center;justify-content:center;gap:var(--space-2);margin:var(--space-1) 0 0;font-size:14px;line-height:24px;color:var(--text-muted)}
+.life-dot{color:var(--text-faint)}
+.life-needs{padding:0 var(--space-2);height:24px;border-radius:999px;background:var(--surface-hover);font-size:12px;color:var(--text-muted);transition:background var(--duration) var(--ease-out)}
+.life-needs[data-count]:not([data-count='0']){color:var(--text-strong);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--blue) 40%,transparent)}
+.life-needs:not(:disabled):hover{background:var(--surface-hover-strong)}
+.life-needs:disabled{cursor:default}
+.life-tail{margin-top:var(--space-4)}
+.life-label{margin:0 0 var(--space-2) 4px;font-size:12px;line-height:18px;color:var(--text-muted)}
+.life-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-2)}
+.life-card{display:flex;flex-direction:column;gap:2px;min-width:0;padding:var(--space-3);border:var(--hairline) solid var(--border-strong);border-radius:var(--radius-card);background:var(--surface-card);text-align:left;color:var(--text);cursor:pointer;transition:background var(--duration) var(--ease-out),transform var(--duration) var(--ease-out)}
+.life-card:hover{background:var(--surface-hover-strong)}
+.life-card:active{transform:scale(.985)}
+.life-card:focus-visible{outline:1px solid var(--focus);outline-offset:1px}
+.life-card-head{display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);margin-bottom:var(--space-1)}
+.life-card-time{font-size:12px;line-height:16px;color:var(--text-faint)}
+.life-card-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;line-height:20px;color:var(--text-strong)}
+.life-card-meta{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;line-height:16px;color:var(--text-muted)}
+.life-card[data-status='working']{border-color:color-mix(in srgb,var(--blue) 28%,var(--border-strong))}
+.composer textarea.life-ph-out::placeholder{opacity:0}
+.composer textarea::placeholder{transition:opacity 160ms var(--ease-out)}
+.life-quiet .life-card .thread-state svg{animation:none}
+@media (prefers-reduced-motion:reduce){.life *,.life{animation:none!important;transition:none!important}.composer textarea::placeholder{transition:none}}
+/* Greeting sits above the selectors; lift the block so the composer stays at 47%. */
+.desktop-app .workspace:not(.thread-view) .agent-area[data-life='on'] { top: calc(47% - 102.5px - 82px); }
 
 /* New session, selected: 28 high, radius 6, 5% black / 8% white fill, 100ms. */
 .desktop-app .new-session[aria-current='page'] { min-height: var(--control-height-sm); height: var(--control-height-sm); border-radius: var(--radius-control); }

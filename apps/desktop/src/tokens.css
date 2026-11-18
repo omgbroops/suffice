@@ -1,5 +1,6 @@
 /* Suffice foundations. Brand geometry and Inter come from suffice-platform. */
-:root {
+:root,
+.theme-preview[data-theme='dark'] {
   color-scheme: dark;
   --menu-inset: 4px;
   --font-sans: 'Inter Variable', sans-serif;
@@ -134,7 +135,8 @@
   --ease-in-out: cubic-bezier(.77, 0, .175, 1);
 }
 
-:root[data-theme='light'] {
+:root[data-theme='light'],
+.theme-preview[data-theme='light'] {
   color-scheme: light;
   --text: #1e1e20;
   --text-strong: #000000;
@@ -198,4 +200,48 @@
   --diff-add: #338a31;
   --diff-del: #b9463f;
   --shadow-panel: 0 1px 3px #00000004, 0 6px 24px #00000004;
+}
+
+/* Theme gallery palettes. Neutral surface ramps only; text, accents and geometry stay shared.
+   Selectors also match .theme-preview so gallery cards render from these exact tokens. */
+[data-palette='oled'][data-theme='dark'] {
+  --surface-base: #000000; --surface-field: #000000; --surface-sidebar: #000000; --surface-thread: #000000;
+  --surface-thread-bubble: #141414; --surface-thread-composer: #050505c2; --surface-composer: #050505c2;
+  --surface-menu: #0a0a0aeb; --surface-glass: #050505b8; --help-bg: #0a0a0a;
+}
+[data-palette='oled'][data-theme='light'] {
+  --surface-base: #ffffff; --surface-field: #ffffff; --surface-sidebar: #ffffff; --surface-thread: #ffffff;
+  --surface-thread-bubble: #f1f1f1; --surface-thread-composer: #ffffffe6; --surface-composer: #ffffffe6;
+  --surface-menu: #fffffff5; --surface-glass: #ffffffe0; --help-bg: #f1f1f1;
+}
+/* shell-tint feeds the translucent shell (sidebar sheet, cards, menus); veil-* recolours the wallpaper dim layer. */
+[data-palette='oled'][data-theme='dark'] { --shell-tint: #000000; }
+[data-palette='oled'][data-theme='light'] { --shell-tint: #ffffff; }
+[data-palette='paper'][data-theme='dark'] {
+  --surface-base: #1c1611; --surface-field: #17120e; --surface-sidebar: #251d16; --surface-thread: #201912;
+  --surface-thread-bubble: #31271d; --surface-thread-composer: #251d16c2; --surface-composer: #251d16c2;
+  --surface-menu: #2a2118eb; --surface-glass: #251d16b8; --help-bg: #2a2118;
+  --border: #f5d9b50d; --border-strong: #f5d9b516; --sidebar-border: #f5d9b50f;
+  --shell-tint: #2a2118; --veil: #17110b; --veil-k: 2.4;
+}
+[data-palette='paper'][data-theme='light'] {
+  --surface-base: #efe9dd; --surface-field: #faf6ee; --surface-sidebar: #f3ede1; --surface-thread: #fbf7ef;
+  --surface-thread-bubble: #e9e1d1; --surface-thread-composer: #f3ede1e6; --surface-composer: #f3ede1e6;
+  --surface-menu: #fdfaf3f0; --surface-glass: #fdfaf3d6; --help-bg: #e5dccb;
+  --border: #4a361c10; --border-strong: #4a361c1a; --sidebar-border: #4a361c12;
+  --shell-tint: #ede5d4; --veil: #f6f0e3; --veil-k: 2.4;
+}
+[data-palette='graphite'][data-theme='dark'] {
+  --surface-base: #12171e; --surface-field: #0e1319; --surface-sidebar: #19212b; --surface-thread: #151b23;
+  --surface-thread-bubble: #243040; --surface-thread-composer: #19212bc2; --surface-composer: #19212bc2;
+  --surface-menu: #1d2631eb; --surface-glass: #19212bb8; --help-bg: #1d2631;
+  --border: #b4cdf00d; --border-strong: #b4cdf018; --sidebar-border: #b4cdf010;
+  --shell-tint: #1d2631; --veil: #0b1017; --veil-k: 2.4;
+}
+[data-palette='graphite'][data-theme='light'] {
+  --surface-base: #e3e7ec; --surface-field: #eef1f4; --surface-sidebar: #e8ecf0; --surface-thread: #f1f3f6;
+  --surface-thread-bubble: #d9dfe6; --surface-thread-composer: #e8ecf0e6; --surface-composer: #e8ecf0e6;
+  --surface-menu: #f4f6f8f0; --surface-glass: #f4f6f8d6; --help-bg: #d8dee5;
+  --border: #1a2a3c10; --border-strong: #1a2a3c1a; --sidebar-border: #1a2a3c12;
+  --shell-tint: #dde3ea; --veil: #eef1f5; --veil-k: 2.4;
 }

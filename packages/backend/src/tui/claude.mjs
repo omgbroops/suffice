@@ -503,6 +503,14 @@ const controls = {
     const d = index - prompt.selected;
     return enc((d > 0 ? '\x1b[B' : '\x1b[A').repeat(Math.abs(d)) + '\r');
   },
+  // Multi-select: Space toggles the row under the cursor (recorded: variants/session ask--04..06), then Right moves to the Submit tab and Enter on "Submit answers".
+  // ASSUMED (not recorded): the Right + Enter submit path of a single multi-select question; the "Type something" row is never toggled.
+  answerMulti(prompt, indices) {
+    if (!prompt.multiSelect) throw new RangeError('not a multi-select prompt');
+    let at = prompt.selected, out = '';
+    for (const o of prompt.options) if (!o.other && indices.includes(o.index) !== !!o.checked) { out += (o.index > at ? '\x1b[B' : '\x1b[A').repeat(Math.abs(o.index - at)) + ' '; at = o.index; }
+    return enc(out + '\x1b[C\r');
+  },
   // Shift+Tab cycles modes: interactive-mode.md:39, permission-modes.md:172-184. In the plan-approval dialog Shift+Tab approves the plan (permission-modes.md ~307): leave the dialog first.
   setMode(current, target, opts = {}) {
     const cyc = CYCLE(opts);
@@ -552,6 +560,7 @@ const coverage = [
   r('Permission dialog', 'chat', 'yes', 'parsePrompt + answerPrompt', 'prompt:permission control:answerPrompt'),
   r('Trust dialog', 'chat', 'yes', 'parsePrompt + answerPrompt (arrows + Enter)', 'prompt:trust'),
   r('Plan approval and AskUserQuestion dialogs', 'chat', 'yes', 'parsePrompt + answerPrompt', 'prompt:choice'),
+  r('Multi-select question', 'chat', 'yes', 'controls.answerMulti: Space per changed box, Right, Enter', 'control:answerMulti'),
   r('Interrupt (Esc)', 'chat', 'yes', 'controls.interrupt', 'control:interrupt'),
   r('Permission mode (Shift+Tab)', 'chat', 'yes', 'controls.setMode counts presses over the cycle', 'control:setMode'),
   r('Model switch', 'chat', 'yes', 'controls.setModel types /model <name>', 'control:setModel'),

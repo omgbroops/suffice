@@ -1,6 +1,7 @@
 import {icon} from './ui.js';
 import {providerMark} from './provider-icons.js';
 import {sentAttachmentGrid} from './attachment-view.js';
+import {messageAsMarkdown} from './message-export.js';
 const duration=ms=>ms<1000?'<1s':ms<60000?`${Math.floor(ms/1000)}s`:`${Math.floor(ms/60000)}m ${Math.floor(ms/1000)%60}s`;
 // Long prompts collapse to 288px with a bottom fade; click or Enter/Space expands.
 export function clampLong(element,text=element.textContent){
@@ -22,8 +23,13 @@ export function connectMessageActions(workspace,transcript){
    if(meta.model){const model=document.createElement('span');model.className='message-turn-model';if(meta.provider)model.append(providerMark(meta.provider));const label=document.createElement('span');label.textContent=meta.modelName||meta.model;model.append(label);model.title=[meta.provider,meta.model].filter(Boolean).join(' · ');bar.append(model);}
    if(meta.effort){const effort=document.createElement('span');effort.className='message-turn-effort';effort.textContent=meta.effort==='off'?'No reasoning':meta.effort[0].toUpperCase()+meta.effort.slice(1);bar.append(effort);}
   }
+  let fork;if(info.entryId){fork=document.createElement('button');fork.type='button';fork.className='message-fork';const before=info.role==='user';fork.title=before?'Fork before this message and edit it':'Fork from here';fork.setAttribute('aria-label',fork.title);fork.innerHTML=icon('branch');fork.onclick=()=>{hide();document.dispatchEvent(new CustomEvent('suffice-fork-thread',{detail:{entryId:info.entryId,before,text:before?info.text:undefined}}));};}
   const copyText=info.role==='user'?info.text:[...info.texts.values()].filter(Boolean).join('\n\n');
-  const copy=document.createElement('button');copy.disabled=!copyText?.trim();copy.title=copy.disabled?'No response text to copy':'Copy';copy.type='button';copy.className='message-copy';copy.setAttribute('aria-label',info.role==='user'?'Copy message':'Copy full response');copy.innerHTML=icon('copy');copy.onclick=async()=>{try{await navigator.clipboard.writeText(copyText);copy.innerHTML=icon('tick');copy.setAttribute('aria-label','Copied');}catch{copy.innerHTML=icon('warning');copy.setAttribute('aria-label','Copy failed');}};if(info.role==='assistant')bar.prepend(copy);else bar.append(copy);bar.hidden=false;position();
+  const copy=document.createElement('button');copy.disabled=!copyText?.trim();copy.title=copy.disabled?'No response text to copy':'Copy';copy.type='button';copy.className='message-copy';copy.setAttribute('aria-label',info.role==='user'?'Copy message':'Copy full response');copy.innerHTML=icon('copy');copy.onclick=async()=>{try{await navigator.clipboard.writeText(copyText);copy.innerHTML=icon('tick');copy.setAttribute('aria-label','Copied');}catch{copy.innerHTML=icon('warning');copy.setAttribute('aria-label','Copy failed');}};const markdown=document.createElement('button');markdown.type='button';markdown.className='message-action message-copy-markdown';markdown.disabled=copy.disabled;markdown.title=markdown.disabled?'Nothing to copy':'Copy as Markdown';markdown.setAttribute('aria-label','Copy as Markdown');markdown.innerHTML=icon('code');markdown.onclick=async()=>{try{await navigator.clipboard.writeText(messageAsMarkdown(info.role,copyText,info.attachments));markdown.innerHTML=icon('tick');markdown.setAttribute('aria-label','Copied as Markdown');}catch{markdown.innerHTML=icon('warning');markdown.setAttribute('aria-label','Copy failed');}};
+  const tools=[copy,markdown];
+  // Edit-and-resend applies to the newest user message only, and only while the chat is idle.
+  if(info.role==='user'&&[...transcript.querySelectorAll('.thread-user')].at(-1)===info.anchor&&workspace.querySelector('.composer')?.dataset.running!=='true'){const edit=document.createElement('button');edit.type='button';edit.className='message-action message-edit';edit.title='Edit and resend';edit.setAttribute('aria-label','Edit and resend');edit.innerHTML=icon('pencil');edit.onclick=()=>{hide();document.dispatchEvent(new CustomEvent('suffice-edit-last',{detail:{text:copyText}}));};tools.unshift(edit);}
+  if(info.role==='assistant')bar.prepend(...tools);else bar.append(...tools);if(fork)copy.after(fork);bar.hidden=false;position();
  }
  function register(element,info){owners.set(element,info);if(element.matches('.thread-message'))element.tabIndex=0;}
  workspace.addEventListener('pointerover',event=>{if(bar.contains(event.target))return;const info=owner(event.target);hovered=info;if(info)show(info);});
@@ -37,9 +43,11 @@ export function connectMessageActions(workspace,transcript){
  return {
   hide,
   reposition(){if(shown)position();},
-  user(element,{timestamp,text,attachments=[],images=[]}={}){const info={role:'user',anchor:element,timestamp,text:text??element.textContent};register(element,info);clampLong(element,info.text);const grid=sentAttachmentGrid(attachments,images);if(grid){element.before(grid);register(grid,info);}return info;},
+  user(element,{timestamp,text,attachments=[],images=[],entryId}={}){const info={role:'user',anchor:element,timestamp,text:text??element.textContent,attachments,entryId};register(element,info);clampLong(element,info.text);const grid=sentAttachmentGrid(attachments,images);if(grid){element.before(grid);register(grid,info);}return info;},
   turn(meta={},active=false){return {role:'assistant',meta:{...meta},active,anchor:null,texts:new Map()};},
-  assistant(element,turn,text){turn.anchor=element;turn.texts.set(element,text);register(element,turn);},
+  assistant(element,turn,text,entryId){if(entryId)turn.entryId=entryId;turn.anchor=element;turn.texts.set(element,text);register(element,turn);},
+  // Live messages get their transcript entry id after the turn is saved, which turns on their fork button.
+  resolve(element,entryId){const info=owners.get(element);if(!info||!entryId)return;info.entryId=entryId;if(shown===info&&!bar.hidden){const at=bar.scrollTop;shown=null;show(info);bar.scrollTop=at;}},
   work(element,turn){turn.anchor=element;register(element,turn);},
   complete(turn,meta={}){Object.assign(turn.meta,meta);turn.active=false;if(hovered===turn){hide();show(turn);}}
  };

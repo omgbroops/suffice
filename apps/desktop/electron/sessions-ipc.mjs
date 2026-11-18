@@ -130,6 +130,7 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
   const run=out=>(out instanceof Uint8Array?backend.sessions.sendBytes(sid,out):backend.sessions.send(sid,String(out),{enter:false})).catch(ended);
   if(action==='answerPrompt'){if(!t.prompt)throw new Error('No prompt open');const i=Number(args.index);
    return run(t.kind==='codex'?codexControls.answerPrompt(i):(t.mapper.controls.answerPrompt(t.prompt,i).bytes));}
+  if(action==='answerMulti'){if(!t.prompt?.multiSelect||t.kind==='codex')throw new Error('No multi-select open');return run(t.mapper.controls.answerMulti(t.prompt,(Array.isArray(args.indices)?args.indices:[]).map(Number)).bytes);}
   if(action==='interrupt')return run(t.kind==='codex'?codexControls.interrupt():t.mapper.controls.interrupt().bytes);
   if(action==='slash'&&typeof args.command==='string')return run(t.kind==='codex'?codexControls.slash(args.command):t.mapper.controls.slash(args.command).bytes);
   const agent=t.kind;

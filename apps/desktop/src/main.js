@@ -3,9 +3,12 @@ import {threadViewState,restoreThreadViews} from './thread-view-state.js';
 import {preference,savePreference,initializePreferences} from './settings-preferences.js';
 import {createSettings} from './settings.js';
 import {createSpotlight} from './spotlight.js';
+import {createTaskBoardView} from './task-board.js';
 import {sidebarPreferences} from './sidebar-preferences.js';
 import {connectComposerSize} from './composer-size.js';
 import {connectAttachments} from './attachments.js';
+import {connectComposerQuick} from './composer-quick.js';
+import {connectSkills} from './skills-ui.js';
 import {connectSendControls} from './send-controls.js';
 import { connectDesktop } from './desktop.js';
 import './desktop.css';
@@ -19,12 +22,12 @@ import './styles.css';
 import './tactile.css';
 import './right-panel.css';
 import './composer-files.css';
+import './composer-quick.css';
 import './thread-row.css';
 import './window-chrome.css';
 import {sessionMenuItems} from './sessions-ui.js';
+import {compareMenuItems,openCompare} from './compare-ui.js';
 import './edge-to-edge-experiment.css';
-import './start-life.css';
-import {connectStartLife} from './start-life.js';
 import './motion.css';
 import './overlays.css';
 import {connectMotion} from './motion.js';
@@ -101,6 +104,10 @@ document.querySelector('#app').innerHTML = `
     <div class="sidebar-heading"><button type="button" class="brand-wordmark brand-home" data-action="brand-home" aria-label="Suffice home">[suffice]</button><div class="sidebar-tools">${button('Settings', { icon: 'gear', action: 'settings' })}${button('Search sessions', { icon: 'search', action: 'search-sessions' })}${button('Collapse sidebar', { icon: 'panel', action: 'toggle-sidebar' })}</div></div>
 
     ${button('New session', { icon: 'plus', variant: 'subtle', className: 'new-session', action: 'new', content: 'New session' })}
+
+    ${button('Needs you', { icon: 'inbox', className: 'needs-nav', action: 'needs-you', attrs: 'hidden', content: '<span class="needs-nav-label">Needs you</span><span class="needs-count" hidden>0</span>' })}
+
+    ${button('Issues', { icon: 'bug', className: 'issues-nav', action: 'issues', content: '<span class="issues-nav-label">Issues</span><span class="issues-count" hidden>0</span>' })}
 
     <div class="session-section"><div class="section-label"><span id="sidebar-section-label">Threads</span></div><div class="sidebar-sessions">${sessions.map((s, i) => sessionRow(s, i, true)).join('')}</div></div>
 
@@ -191,6 +198,7 @@ const send = document.querySelector('.send-button');
 const popover = document.querySelector('#popover');
 
 const { open: menu, close: closeMenu } = createMenu(popover);
+let skillItems = [];
 
 const dialog = document.querySelector('dialog');
 
@@ -256,6 +264,8 @@ document.addEventListener('click', (e) => {
 
     if (type === 'background-send') { document.querySelector('.composer').backgroundSubmit=true;document.querySelector('.composer').requestSubmit(); }
 
+    if (type === 'compare') openCompare({api:window.sufficeDesktop,prompt,toast});
+
     if (type === 'sidebar') sidebarPreferences.choose(value);
 
     if (type === 'model') document.querySelector('#model-label').textContent = value;
@@ -265,6 +275,8 @@ document.addEventListener('click', (e) => {
     if (type === 'shortcut') { prompt.value = value + ' '; prompt.dispatchEvent(new Event('input')); prompt.focus(); }
 
     if (type === 'attach') document.querySelector('#file-input').click();
+    if (type === 'skill') document.querySelector('.composer').skills.toggle(value);
+    if (type === 'skills') document.dispatchEvent(new CustomEvent('suffice-open-settings', { detail: { section: 'skills' } }));
 
     if (type === 'settings') showSettings();
 
@@ -336,9 +348,9 @@ document.addEventListener('click', (e) => {
     case 'repo-menu': menu(control, ['suffice-cloud', 'suffice', 'suffice-platform'].map(label => ({ label, action: `repo:${label}` }))); break;
 
 
-    case 'attach': document.querySelector('#file-input').click(); break;
+    case 'attach': void document.querySelector('.composer').skills.items().then(items => { skillItems = items; menu(control, [{ label: 'Add files', icon: 'attach', action: 'attach:files' }, { label: 'Skills', icon: 'bolt', children: () => skillItems }]); }); break;
 
-    case 'send-menu': menu(control, [{ label: 'Start session in background', action: 'background-send:start' }, ...sessionMenuItems()]); break;
+    case 'send-menu': menu(control, [{ label: 'Start session in background', action: 'background-send:start' }, ...compareMenuItems(), ...sessionMenuItems()]); break;
 
     case 'sidebar-menu': menu(control, sidebarPreferences.items(), 'Sidebar'); break;
 
@@ -405,12 +417,17 @@ let settingsPage;
 document.addEventListener('suffice-open-settings',event=>{closeMenu();(settingsPage??=createSettings()).open(event.detail?.section);});
 function showSettings() { closeMenu(); if(settingsPage?.isOpen)settingsPage.close();else (settingsPage??=createSettings()).open(); }
 
+const taskBoard=createTaskBoardView();
 const spotlight=createSpotlight({commands:()=>[
+ {id:'tasks',title:'Tasks: open the board',icon:'inbox',run:()=>taskBoard.open()},
  {id:'new',title:'New session',icon:'plus',run:()=>document.querySelector('.new-session').click()},
+ {id:'needs-you',title:'Needs you',icon:'inbox',run:()=>document.dispatchEvent(new Event('suffice-open-needs-you'))},
+ {id:'issues',title:'Issues',icon:'bug',run:()=>document.dispatchEvent(new Event('suffice-open-issues'))},
  {id:'sidebar',title:'Toggle sidebar',icon:'panel',run:()=>document.querySelector('[data-action="toggle-sidebar"]').click()},
  {id:'project',title:'Choose project',icon:'folder',run:()=>document.querySelector('.project-picker')?.click()},
  {id:'theme',title:getTheme()==='dark'?'Use light theme':'Use dark theme',icon:'agent',run:()=>setTheme(getTheme()==='dark'?'light':'dark')},
  {id:'settings',title:'Workspace settings',icon:'agent',run:showSettings},
+ {id:'ask-screen',title:'Ask about my screen',icon:'monitor',run:()=>{if(!preference('local-agent',false)){toast('Turn on the screen-aware ask bar in Settings first.');showSettings();return;}window.sufficeDesktop?.askBar?.open().catch(error=>toast(error.message));}},
  {id:'voice',title:voice?.active?'End voice':'Start voice',icon:'message',run:()=>voice?.toggle()},
  {id:'voice-full',title:'Voice: full view',icon:'message',run:()=>voice?.full()},
  {id:'voice-mini',title:'Voice: floating orb',icon:'message',run:()=>voice?.minimize()}
@@ -428,12 +445,15 @@ document.addEventListener('keydown', (e) => {
 });
 
 import { setupSidebarResize } from './sidebar-resize.js';
+import { getThreadDirectory } from './thread-directory.js';
 setupSidebarResize();
 
 connectSendControls(document.querySelector('.composer'),prompt,send);
 connectComposerSize(document.querySelector('.composer'),prompt);
 connectAttachments({form:document.querySelector('.composer'),prompt,send,input:document.querySelector('#file-input'),toast});
+connectSkills({form:document.querySelector('.composer'),toast});
 connectDesktop({prompt,send,toast,escapeHtml});
+if(window.sufficeDesktop)connectComposerQuick({form:document.querySelector('.composer'),prompt,api:window.sufficeDesktop,toast});
 import { connectVoice } from './voice/voice-ui.js';
 const voice=window.sufficeDesktop?connectVoice({form:document.querySelector('.composer'),prompt,toast}):null;
 
@@ -443,8 +463,8 @@ document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!event.defa
 
 document.addEventListener('keydown',event=>{if(!(event.ctrlKey||event.metaKey))return;if(event.key.toLowerCase()==='n'){event.preventDefault();Promise.resolve(settingsPage?.close()).then(()=>{document.querySelector('.new-session').click();prompt.focus();});}if(event.key.toLowerCase()==='b'){event.preventDefault();document.querySelector('[data-action=toggle-sidebar]').click();}});
 
+window.sufficeDesktop?.onOpenThread?.(id=>{if(getThreadDirectory().threads.some(thread=>thread.id===id))getThreadDirectory().open(id);});
 window.sufficeDesktop?.onNotification?.(event=>{if(!event.play)return;const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;const audio=new Audio(),oscillator=audio.createOscillator(),gain=audio.createGain(),duration=event.sound==='Click'?.05:event.sound==='Chime'?.3:.16;oscillator.frequency.value=event.sound==='Click'?180:event.sound==='Chime'?740:440;gain.gain.setValueAtTime(.06,audio.currentTime);gain.gain.exponentialRampToValueAtTime(.001,audio.currentTime+duration);oscillator.connect(gain);gain.connect(audio.destination);oscillator.start();oscillator.stop(audio.currentTime+duration);oscillator.onended=()=>audio.close();});
 
 connectSettingsPrivacy();
 import './focus-modality.js';
-connectStartLife();

@@ -234,7 +234,7 @@ test('coverage rows are complete and map every model entry', () => {
 });
 test('coverage totals', () => {
   const chat = cov.filter((r) => r.shown === 'chat'), term = cov.filter((r) => r.shown === 'terminal-only');
-  assert.deepEqual([cov.length, chat.length, term.length, cov.filter((r) => r.driven === 'yes').length], [49, 39, 10, 10]);
+  assert.deepEqual([cov.length, chat.length, term.length, cov.filter((r) => r.driven === 'yes').length], [50, 40, 10, 11]);
   assert.ok(term.every((r) => r.driven === 'no'));
 });
 
@@ -445,4 +445,13 @@ test('model change notice uses friendly names and an arrow', () => {
   const a = (t, m, u) => ({ type: 'assistant', uuid: u, timestamp: ts(t), message: { role: 'assistant', model: m, content: [{ type: 'text', text: 'x' }] } });
   const n = runLines([a(0, 'claude-sonnet-5-5', 'a'), a(1, 'claude-haiku-5-5', 'b')]).items.find((i) => i.code === 'model_changed');
   assert.equal(n.text, 'Model  Sonnet 5.5 → Haiku 5.5');
+});
+
+test('answerMulti: Space toggles changed boxes by arrow distance, then Right + Enter; Other row skipped', () => {
+  const m = createClaudeMapper(), b = (r) => new TextDecoder().decode(r.bytes);
+  const opt = (index, checked, extra = {}) => ({ index, label: 'o' + index, checked, ...extra });
+  const prompt = { multiSelect: true, selected: 1, options: [opt(0, false), opt(1, true), opt(2, false), opt(3, false, { other: true })] };
+  assert.equal(b(m.controls.answerMulti(prompt, [0, 2, 3])), '\x1b[A \x1b[B \x1b[B \x1b[C\r'); // box 0 on, box 1 off, box 2 on; box 3 is Other and ignored
+  assert.equal(b(m.controls.answerMulti(prompt, [1])), '\x1b[C\r');
+  assert.throws(() => m.controls.answerMulti({ options: [] }, []), RangeError);
 });

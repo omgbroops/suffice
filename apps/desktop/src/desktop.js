@@ -6,8 +6,11 @@ import {connectAccessModePicker} from './access-mode-picker.js';
 import { connectThreads } from './threads-ui.js';
 import { connectProjects } from './projects-ui.js';
 import {connectModels} from './models-ui.js';
+import {connectUsageHint} from './usage-hint.js';
+import {connectToolsChip} from './mcp-chip.js';
 import {connectTooltips} from './tooltips.js';
 import {connectWorkspaceTools} from './workspace-tools.js';
+import {connectStartLife} from './start-life.js';
 // Desktop-only behavior; the existing shell markup, tokens and controls stay.
 export function connectDesktop({prompt,send,toast,escapeHtml}) {
   const api=window.sufficeDesktop;
@@ -32,9 +35,12 @@ export function connectDesktop({prompt,send,toast,escapeHtml}) {
   connectQueuedMessages(prompt.form,prompt,toast);
   connectProjects({api,toast});
   connectModels({api,toast});
+  connectUsageHint({form:prompt.form,prompt});
+  connectToolsChip(prompt.form,api);
   connectComposerOverflow(prompt.form);
   connectWorkspaceTools(api);
   connectChatChangesWidget();
+  connectStartLife({api});
   {
     const title=document.querySelector('.thread-header'),tools=document.querySelector('.workspace-tools');
     const chatTools=document.createElement('div');chatTools.className='caption-chat-tools'+(mac?' caption-chat-tools-macos':'');chatTools.append(title,tools);

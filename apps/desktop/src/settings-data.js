@@ -9,9 +9,11 @@ export const settingsSections=[
  {id:'general',subtitle:'Language, sending and how conversations behave.',title:'General',icon:'settings',category:'Personal',groups:[
   group('Application',[select('language','Language','System',['System','English']),select('send','Send messages with','Enter',['Enter','Ctrl + Enter'],'Shift + Enter always starts a new line.'),toggle('startup','Launch at startup'),toggle('tray','Keep running in the background',false,'Closing the window keeps active agents running.')]),
   group('Conversations',[select('working-send','While agent is working','Steer',['Queue','Steer'],'Ctrl + Enter uses the other mode.'),toggle('escape','Stop agent with Escape',false,'When no menu or dialog is open.'),toggle('close-panel','Close right panel with its last tab'),select('naming','Thread naming','Automatic',['Automatic','First message','Untitled']),select('new-project','New threads use','Last used project',['Last used project','Ask each time'])]),
+  group('Ask bar',[toggle('local-agent','Screen-aware ask bar',false,'Press Ctrl + Alt + Space anywhere to ask your current model about your screen. Screen Recording access is requested only when you attach a screenshot.')]),
   group('Privacy',[toggle('private-labels','Hide sensitive details',false,'Conceal paths and account details while sharing your screen.')]),
  ]},
  {id:'appearance',subtitle:'Theme, accent color and typography.',title:'Appearance',icon:'agent',category:'Personal',groups:[
+  group('Themes',[{id:'palette',label:'Theme gallery',type:'gallery',value:'default',options:['default','oled','paper','graphite']}]),
   group('Theme',[{id:'mode',label:'Mode',detail:'Pick how the interface looks. The terminal keeps its own colors.',value:'Dark',options:['System','Light','Dark'],type:'themes'},select('background','Background','Pixel horizon',['Moonlit lake','ASCII gradient','Pixel horizon','Orbital','Oceanic Shimmer','None']),{id:'accent',label:'Accent color',value:'#7b9ed5',type:'palette'},toggle('glass','Translucent surfaces',true),{id:'surface-opacity',label:'Surface opacity',detail:'Opacity of translucent surfaces.',type:'range',value:72,min:0,max:100,whenGlass:true}]),
   group('Background visibility',[toggle('chat-background','Show background in chat',true),toggle('settings-background','Show background in settings',true),{id:'background-dimming',label:'Background dimming',detail:'Dim the wallpaper in chats and settings.',type:'range',value:35}]),
   group('Motion',[toggle('background-motion','Animate background',true),toggle('reduced-motion','Reduce motion')]),
@@ -29,6 +31,10 @@ export const settingsSections=[
  {id:'models',subtitle:'Pick which models appear and set the defaults.',title:'Models',icon:'deep',category:'Agent',groups:[
   group('Defaults',[select('default-model','Default model','Last used',['Last used']),select('default-effort','Reasoning effort','Medium',['Low','Medium','High','Extra high','Max'])]),
  ]},
+ {id:'usage',subtitle:'When Suffice suggests cheaper settings.',title:'Usage',icon:'context',category:'Agent',groups:[
+  group('Optimizer',[toggle('optimizer-hint','Suggest cheaper settings',true,'Shows a hint above the composer when a task looks simple.'),toggle('optimizer-auto','Apply suggestions automatically',false,'Off by default. When on, Suffice switches model or effort for you and offers Undo.')]),
+ ]},
+ {id:'automations',subtitle:'Tasks that run on a schedule.',title:'Automations',icon:'calendar',category:'Agent',groups:[{title:'Automations',rows:[],empty:'Loading…'}]},
  {id:'providers',subtitle:'Connect the services that run your agents.',title:'Providers',icon:'agent',category:'Agent',groups:[group('Connected',[]),group('Available',[])]},
  ...[['mcps','MCPs','plug'],['skills','Skills','deep'],['extensions','Extensions','puzzle'],['templates','Prompt templates','files']].map(([id,title,icon])=>({id,subtitle:SUBTITLES[id],title,icon,category:'Agent',groups:[{title:'Resources',rows:[],empty:'Loading…'}]})),
  {id:'agent',subtitle:'How agents run commands and show their work.',title:'Agent behavior',icon:'bolt',category:'Agent',groups:[
@@ -37,6 +43,7 @@ export const settingsSections=[
  ]},
  {id:'context',subtitle:'What agents remember and when they compact.',title:'Context & memory',icon:'context',category:'Agent',groups:[
   group('Context window',[toggle('auto-compact','Automatic compaction',true),select('compact-at','Compact at','80%',['70%','80%','90%']),toggle('context-ring','Show context usage',true)]),
+  group('Token savings',[toggle('defer-mcp-schemas','Load MCP tool details on demand',true,'Sends tool names and one-line descriptions; full schemas load on first use.'),toggle('compact-tool-results','Shorten large tool results',true,'The full text stays on this device and the agent can retrieve it by id.'),select('compact-limit','Shorten results over','2,000 tokens',['1,000 tokens','2,000 tokens','4,000 tokens','8,000 tokens'])]),
   group('Repository context',[toggle('project-instructions','Read project instructions',true),toggle('git-context','Include Git context',true),toggle('remember-context','Remember project context',false,'Reuse the last response in new sessions for this project.')]),
  ]},
  {id:'projects',subtitle:'How projects open and how Git is handled.',title:'Projects & Git',icon:'branch',category:'Workspace',groups:[

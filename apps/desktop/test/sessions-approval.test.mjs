@@ -36,6 +36,7 @@ test('session approval cards',{timeout:240000},async()=>{
   await page.reload();await page.locator('[data-action="send-menu"]').waitFor();
   await page.locator('.sidebar-cli-sessions .thread-row').first().click();
   await page.locator('.thread-header').waitFor();
+  if(process.env.THEME)await page.locator('html').evaluate((el,t)=>{el.dataset.theme=t;},process.env.THEME); // SHOT_DIR runs per theme
   const sid=await page.evaluate(async()=>(await sufficeDesktop.sessions.list()).at(-1).id);
   const type=t=>page.evaluate(([i,t])=>sufficeDesktop.sessions.send(i,t),[sid,t]);
   const card=page.locator('.composer-approval:not([hidden])');
@@ -114,6 +115,26 @@ test('session approval cards',{timeout:240000},async()=>{
    assert.ok(await card.count(),'Escape does nothing when the CLI has no deny option');
   }
   await type('1');await gone().catch(()=>{});
+
+  // multi-select question: arrows move, Space toggles, Submit sends Space-toggles + Right + Enter
+  await open('/multi','Pick fruits');
+  await shot('multi-answer.png');
+  if(!BEFORE){
+   const opt=card.locator('.approval-option');
+   assert.deepEqual(await opt.locator('.approval-option-label').allTextContents(),['apple','pear','plum'],'Type something and Chat rows are not checkboxes');
+   assert.equal(await card.locator('.approval-options').getAttribute('role'),'group');
+   assert.ok(await opt.first().evaluate(e=>e===document.activeElement),'first box has focus');
+   await page.keyboard.press('ArrowDown');await page.keyboard.press('Space'); // pear
+   await page.keyboard.press('3'); // digit toggles plum
+   await page.keyboard.press('ArrowUp');await page.keyboard.press('ArrowUp');await page.keyboard.press('Enter'); // apple
+   await page.keyboard.press('3'); // plum back off
+   assert.deepEqual(await opt.evaluateAll(es=>es.map(e=>e.getAttribute('aria-checked'))),['true','true','false']);
+   await shot('multi-answer-checked.png');
+   const before=(await keys()).length;
+   await page.keyboard.press('Control+Enter');await gone();
+   // apple at cursor 0 (no move), pear: Down + Space; then Right, Enter
+   assert.deepEqual((await keys()).slice(before).map(String).join(''),' \u001b[B \u001b[C\r','bytes: toggle apple, Down + toggle pear, Right, Enter');
+  }else{await type('1');await gone().catch(()=>{});}
 
   // folder trust
   await open('/trust','Is this a project');

@@ -68,4 +68,12 @@ async function diff(root,name){
  let text;try{text=await git(root,[...args,'HEAD','--',...paths]);}catch{if(entry.status.includes('A'))return {...await read(root,name),untracked:true};const unstaged=await git(root,[...args,'--',...paths]),staged=await git(root,[...args,'--cached','--',...paths]);text=[staged,unstaged].filter(Boolean).join('\n');}
  return {path:name,text:text.slice(0,limit),truncated:text.length>limit};
 }
-module.exports={list,read,changes,diff,parseNumstat,filterIgnored};
+// Flat file list for @-mentions: git's view (tracked + untracked, minus ignored), else a bounded walk. Ranking happens in the renderer.
+async function index(root,max=10000){
+ if(!root)throw new Error('No project selected');
+ try{return (await exec('git',['--no-optional-locks','-C',root,'ls-files','-z','--cached','--others','--exclude-standard'],{windowsHide:true,timeout:8000,maxBuffer:16*1024*1024})).stdout.split('\0').filter(Boolean).slice(0,max);}catch{}
+ const found=[],queue=[''];// shortcut: non-git folders skip dot and dependency dirs, upgrade when someone needs them
+ while(queue.length&&found.length<max){const dir=queue.shift();let entries;try{entries=await fs.readdir(path.join(root,dir),{withFileTypes:true});}catch{continue;}for(const entry of entries){if(entry.name.startsWith('.')||entry.name==='node_modules')continue;const rel=dir?dir+'/'+entry.name:entry.name;if(entry.isDirectory())queue.push(rel);else if(entry.isFile())found.push(rel);}}
+ return found;
+}
+module.exports={index,list,read,changes,diff,parseNumstat,filterIgnored};
