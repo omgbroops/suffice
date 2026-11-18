@@ -41,7 +41,7 @@ export function connectNeedsYou({api,approvals,toast,retry,markRead}){
   const {record}=item,list=[];
   if(item.group==='wait'&&(item.kind==='thread'?record.status==='approval'&&requestsFor(record.id).length:choice(record)))list.push(['approve','Approve',true],['deny','Deny']);
   if(item.group==='failed'&&record.canRetry)list.push(['retry','Retry',true]);
-  list.push(['open','Open',!list.length]);
+  list.push(['open','Open',!list.length&&item.group==='wait']);
   if(item.group!=='wait')list.push(['dismiss','Dismiss']);
   return list;
  }
