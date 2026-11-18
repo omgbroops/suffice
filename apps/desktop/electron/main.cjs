@@ -87,6 +87,13 @@ if(primary)app.whenReady().then(async()=>{
   handle('diff',name=>workspaceFiles.diff(project,name));
   handle('clipboard-files',()=>clipboardFiles(clipboard));
   const threadLocations=new Map();
+  const automations=(await import('./automations.mjs')).createAutomations({home:settingsHome,projectPaths:async()=>(await projects.list()).map(item=>item.path),onChange:()=>{if(win&&!win.isDestroyed())win.webContents.send('suffice:event',{event:'automations_changed'});},run:async item=>{const prefs={...await settings.get()},result=await background.run({prompt:item.prompt,displayPrompt:item.prompt,attachmentMetadata:[],images:[],clientId:'automation-'+item.id+'-'+Date.now(),effort:item.effort,model:item.model,provider:item.provider,cwd:item.project,desktopSettings:prefs});if(result?.threadId)threadLocations.set(result.threadId,item.project);if(win&&!win.isDestroyed())win.webContents.send('suffice:event',{event:'history_changed'});return result;}});
+  handle('automations',()=>automations.list());
+  handle('automation-save',payload=>payload?.id?automations.update(payload.id,payload):automations.create(payload));
+  handle('automation-toggle',payload=>automations.toggle(payload?.id,payload?.enabled));
+  handle('automation-remove',id=>automations.remove(id));
+  handle('automation-run',id=>automations.runNow(id));
+  app.on('will-quit',()=>automations.stop());
   terminals=require('./terminals.cjs').createTerminalManager({resolveCwd:async id=>(await settings.get())['working-directory']==='Home directory'?require('node:os').homedir():threadLocations.get(id),resolveShell:async()=>{const prefs=await settings.get();if(process.platform==='win32'&&prefs['terminal-shell']==='PowerShell')return path.join(process.env.SystemRoot,'System32/WindowsPowerShell/v1.0/powershell.exe');if(prefs['terminal-shell']==='System default')return process.platform==='win32'?process.env.ComSpec:process.env.SHELL||'/bin/bash';return (await import('../../../packages/cli/src/shell.mjs')).nativeShellPath()||process.env.SHELL||'/bin/bash';},emit:event=>{if(win&&!win.isDestroyed())win.webContents.send('suffice:terminal-event',event);}});
   const sx=await (await import('./sessions-ipc.mjs')).createSessionsIpc({dataDir:path.join(app.getPath('userData'),'sessions'),env:process.env,send:m=>{if(win&&!win.isDestroyed())win.webContents.send('suffice:sessions-event',m);}});sessionsIpc=sx;
   for(const [name,fn] of Object.entries(sx.handlers))handle(name,name==='sessions-catalog'?p=>{try{return fn(p);}catch(e){if(e?.message!=='Unknown session')throw e;return null;}}:fn); // stale ids during thread switches
@@ -150,7 +157,7 @@ if(primary)app.whenReady().then(async()=>{
   });
   async function enforceRetention(days){if(running||![30,90].includes(days))return;const actions=await import('./settings-data-actions.mjs'),files=await actions.sessionFiles(settingsHome),active=new Set(files.filter(file=>createHash('sha256').update(process.platform==='win32'?path.resolve(file.path).toLowerCase():path.resolve(file.path)).digest('hex').slice(0,32)===viewedThreadId).map(file=>file.path));const count=await actions.expireSessions(settingsHome,days,{trash:file=>shell.trashItem(file),active});if(count&&!win.isDestroyed())win.webContents.send('suffice:event',{event:'history_changed'});}
   const retentionTimer=setInterval(()=>void settings.get().then(prefs=>enforceRetention(parseInt(prefs['history-retention']))).catch(()=>{}),3600000);retentionTimer.unref();
-  await win.loadFile(path.join(process.env.SUFFICE_TEST_DIST||path.join(__dirname,'../dist'),'index.html'));void settings.get().then(prefs=>enforceRetention(parseInt(prefs['history-retention']))).catch(()=>{});
+  await win.loadFile(path.join(process.env.SUFFICE_TEST_DIST||path.join(__dirname,'../dist'),'index.html'));if(process.env.SUFFICE_TEST_NO_SCHEDULER!=='1')automations.start();void settings.get().then(prefs=>enforceRetention(parseInt(prefs['history-retention']))).catch(()=>{});
   let closing=false,flushed=false;app.on('before-quit',event=>{closing=true;if(flushed)return;event.preventDefault();void views.flush().catch(()=>{}).finally(()=>{flushed=true;app.quit();});});
   win.on('close',event=>{
     if(closing)return;event.preventDefault();void settings.get().then(prefs=>{if(prefs.tray){win.hide();return;}closing=true;shutdownWindow();});
