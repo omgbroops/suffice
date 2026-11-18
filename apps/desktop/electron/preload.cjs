@@ -43,6 +43,7 @@ contextBridge.exposeInMainWorld('sufficeDesktop',{
   onTerminalEvent:callback=>{const listener=(_event,value)=>callback(value);ipcRenderer.on('suffice:terminal-event',listener);return()=>ipcRenderer.removeListener('suffice:terminal-event',listener);},
   openExternal:url=>ipcRenderer.invoke('suffice:open-external',url),
   windowControl:action=>ipcRenderer.invoke('suffice:window',action),
+  issues:{list:projectId=>ipcRenderer.invoke('suffice:issues-list',projectId),create:payload=>ipcRenderer.invoke('suffice:issues-create',payload),update:payload=>ipcRenderer.invoke('suffice:issues-update',payload),remove:id=>ipcRenderer.invoke('suffice:issues-delete',id)},
   usageReport:()=>ipcRenderer.invoke('suffice:usage-report'),
   automations:()=>ipcRenderer.invoke('suffice:automations'),
   saveAutomation:payload=>ipcRenderer.invoke('suffice:automation-save',payload),

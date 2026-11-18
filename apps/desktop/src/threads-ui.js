@@ -25,6 +25,7 @@ import {nextTranscriptFollowing} from './transcript-scroll.js';
 import {connectSessions} from './sessions-ui.js';
 import {connectNeedsYou} from './needs-you.js';
 import {connectSideChat} from './side-chat.js';
+import {connectIssues} from './issues.js';
 
 export function connectThreads({api,prompt,send,toast}){
  connectExtensionUI(api,toast);const approvals=connectApprovals(api,toast);
@@ -271,9 +272,10 @@ export function connectThreads({api,prompt,send,toast}){
  }
  form.steerQueuedMessage=async(item,id)=>{const target=jobs.get(id);if(!target?.running)throw new Error('This chat is no longer running');await api.steer({threadId:id,prompt:item.prompt,attachments:item.attachments});target.addSteering(item.prompt,item.attachments);if(activeId===id)bottom(true);};
  form.runQueuedMessage=(item,id)=>{const previous=jobs.get(id);if(!previous||previous.running)throw new Error('Chat is not ready for a queued message');const node=previous.history;node.querySelectorAll('.thread-run-error').forEach(e=>e.remove());const user=document.createElement('article');user.className='thread-message thread-user';user.textContent=item.prompt;node.append(user);messageActions.user(user,{text:item.prompt,timestamp:Date.now(),attachments:item.attachments});const job=createJob(id,previous.title,node);job.provider=item.selection?.provider;job.model=item.selection?.model;job.turn=messageActions.turn({...item.selection,startedAt:job.startedAt},true);if(activeId===id){syncRunning();bottom(true);}drawThreads();void api.run({prompt:item.prompt,...item.selection,effort:item.selection?.effort||'low',approvalMode:item.approvalMode,attachments:item.attachments,threadId:id,clientId:id}).then(result=>{adoptJob(job,result.threadId);job.finish(result);}).catch(error=>job.finish(null,error));};
- function adoptJob(job,id){if(!id||id===job.id)return;const previous=job.id;jobs.delete(previous);jobs.set(id,job);job.id=id;adoptOptimistic(previous,id);if(activeId!==previous&&viewState.read(previous).approvalMode)viewState.updateFor(id,{approvalMode:viewState.read(previous).approvalMode});if(activeId===previous){activeId=id;viewState.adopt(id);sessionStorage.setItem('suffice-active-thread',id);}drawThreads();}
+ function adoptJob(job,id){if(!id||id===job.id)return;const previous=job.id;if(job.issue){document.dispatchEvent(new CustomEvent('suffice-thread-started',{detail:{issue:job.issue,threadId:id}}));job.issue=null;}jobs.delete(previous);jobs.set(id,job);job.id=id;adoptOptimistic(previous,id);if(activeId!==previous&&viewState.read(previous).approvalMode)viewState.updateFor(id,{approvalMode:viewState.read(previous).approvalMode});if(activeId===previous){activeId=id;viewState.adopt(id);sessionStorage.setItem('suffice-active-thread',id);}drawThreads();}
  async function retryThread(id){const thread=savedThreads.find(t=>t.id===id),job=jobs.get(id);if(!thread||!job?.text||job.running)return false;await openSavedThread(thread);const draft=prompt.value.trim();if(busy||(draft&&draft!==job.text.trim()))return false;prompt.value=job.text;prompt.dispatchEvent(new Event('input'));form.requestSubmit();return true;}
  connectNeedsYou({api,approvals,toast,retry:retryThread,markRead:id=>updateMetadata(id,{unread:false})});
+ connectIssues({api,toast});
  api.onClearCache?.(()=>{savedHistories.clear();});
  document.addEventListener('suffice-preference',event=>{if(event.detail.id==='collapse-work')document.querySelectorAll('.thread-activity').forEach(group=>group.open=!event.detail.value);if(event.detail.id==='new-project'&&!activeId)form.dataset.requireProject=String(event.detail.value==='Ask each time');});
  document.addEventListener('suffice-project-selected',()=>{delete form.dataset.requireProject;});
@@ -321,7 +323,7 @@ export function connectThreads({api,prompt,send,toast}){
   const selection=form.modelSelection||{effort:'low'};saveView();viewState.updateFor(id,{approvalMode});
   const node=inBackground?document.createElement('div'):history;node.className='thread-messages';node.querySelectorAll('.thread-run-error').forEach(e=>e.remove());
   const user=document.createElement('article');user.className='thread-message thread-user';user.textContent=text;node.append(user);messageActions.user(user,{text,timestamp:Date.now(),attachments});
-  const job=createJob(id,header.hidden?text.slice(0,90):header.textContent,node);job.text=text;dismissStaleToast();
+  const job=createJob(id,header.hidden?text.slice(0,90):header.textContent,node);job.text=text;job.issue=form.dataset.issue;delete form.dataset.issue;dismissStaleToast();
   if(entering||inBackground)addOptimistic(id,text);if(entering)viewState.updateFor(origin,{draft:''});
   if(!inBackground){if(entering){transition.cancel();viewState.select(id);viewState.update({model:selection});activeId=id;}threadView(job.title,entering);transition.reveal(user,'user',entering?undefined:0);}
   prompt.value='';form.attachments?.clear();viewState.update({draft:''});form.resizePrompt?.();syncRunning();bottom(true);
