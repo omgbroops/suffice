@@ -1,7 +1,7 @@
 const {mkdir,readdir,readFile,open,rename,unlink,stat}=require('node:fs/promises');
 const {join}=require('node:path');
 const {createHash,randomUUID}=require('node:crypto');
-const valid=key=>typeof key==='string'&&/^suffice-thread-view-v1:(new|[a-f0-9]{32}|pending:[a-f0-9-]{36})$/.test(key);
+const valid=key=>typeof key==='string'&&key.length<=200&&/^suffice-thread-view-v1:(new|[a-f0-9]{32}|pending:[a-f0-9-]{36}|session-[A-Za-z0-9_-]{1,64})$/.test(key);
 const limit=2*1024*1024;
 exports.createViewStateStore=(directory,{delayMs=250}={})=>{
  let tail=Promise.resolve(),timer;const queued=new Map();
