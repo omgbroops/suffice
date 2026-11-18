@@ -4,6 +4,7 @@ import {preference,savePreference,initializePreferences} from './settings-prefer
 import {createSettings} from './settings.js';
 import {createSpotlight} from './spotlight.js';
 import {createTaskBoardView} from './task-board.js';
+import {settingsSections} from './settings-data.js';
 import {sidebarPreferences} from './sidebar-preferences.js';
 import {connectComposerSize} from './composer-size.js';
 import {connectAttachments} from './attachments.js';
@@ -417,19 +418,32 @@ document.addEventListener('suffice-open-settings',event=>{closeMenu();(settingsP
 function showSettings() { closeMenu(); if(settingsPage?.isOpen)settingsPage.close();else (settingsPage??=createSettings()).open(); }
 
 const taskBoard=createTaskBoardView();
+// Every menu action runs through the same delegated [data-menu-action] handler the menus use,
+// so a command and its menu item cannot drift apart.
+const act=action=>{const el=document.createElement('button');el.dataset.menuAction=action;document.body.append(el);el.click();el.remove();};
+const mod=/Mac|iPhone|iPad/.test(navigator.platform)?'⌘':'Ctrl';
+const flatten=(items,prefix,parent='')=>items.flatMap(item=>item.children?flatten(item.children(),prefix,item.label):item.action?[{id:item.action,title:`${prefix}: ${parent?parent+' · ':''}${item.label}`,action:item.action}]:[]);
 const spotlight=createSpotlight({commands:()=>[
  {id:'tasks',title:'Tasks: open the board',icon:'inbox',run:()=>taskBoard.open()},
- {id:'new',title:'New session',icon:'plus',run:()=>document.querySelector('.new-session').click()},
  {id:'needs-you',title:'Needs you',icon:'inbox',run:()=>document.dispatchEvent(new Event('suffice-open-needs-you'))},
  {id:'issues',title:'Issues',icon:'bug',run:()=>document.dispatchEvent(new Event('suffice-open-issues'))},
- {id:'sidebar',title:'Toggle sidebar',icon:'panel',run:()=>document.querySelector('[data-action="toggle-sidebar"]').click()},
+ {id:'new',title:'New session',icon:'plus',keys:[mod,'N'],run:()=>document.querySelector('.new-session').click()},
+ {id:'sidebar',title:'Toggle sidebar',icon:'panel',keys:[mod,'B'],run:()=>document.querySelector('[data-action="toggle-sidebar"]').click()},
  {id:'project',title:'Choose project',icon:'folder',run:()=>document.querySelector('.project-picker')?.click()},
+ {id:'attach',title:'Attach files',icon:'attach',run:()=>act('attach:')},
+ {id:'background-send',title:'Start session in background',icon:'play',run:()=>act('background-send:start')},
+ {id:'home',title:'Go home',icon:'home',run:()=>document.querySelector('[data-action="brand-home"]')?.click()},
  {id:'theme',title:getTheme()==='dark'?'Use light theme':'Use dark theme',icon:'agent',run:()=>setTheme(getTheme()==='dark'?'light':'dark')},
- {id:'settings',title:'Workspace settings',icon:'agent',run:showSettings},
  {id:'ask-screen',title:'Ask about my screen',icon:'monitor',run:()=>{if(!preference('local-agent',false)){toast('Turn on the screen-aware ask bar in Settings first.');showSettings();return;}window.sufficeDesktop?.askBar?.open().catch(error=>toast(error.message));}},
+ ...Object.keys(backgroundPresets).map(key=>({id:'background:'+key,title:'Background: '+backgroundPresets[key].label,icon:'monitor',run:()=>act('background:'+key)})),
+ {id:'motion',title:'Pause or resume background animation',icon:'pause',run:()=>act('motion:toggle')},
+ ...['Normal Fast','Normal','Deep'].map(label=>({id:'model:'+label,title:'Model speed: '+label,icon:'bolt',run:()=>act('model:'+label)})),
+ ...flatten(sidebarPreferences.items(),'Sidebar').map(c=>({id:c.id,title:c.title,icon:'panel',run:()=>act(c.action)})),
  {id:'voice',title:voice?.active?'End voice':'Start voice',icon:'message',run:()=>voice?.toggle()},
  {id:'voice-full',title:'Voice: full view',icon:'message',run:()=>voice?.full()},
- {id:'voice-mini',title:'Voice: floating orb',icon:'message',run:()=>voice?.minimize()}
+ {id:'voice-mini',title:'Voice: floating orb',icon:'message',run:()=>voice?.minimize()},
+ {id:'settings',title:'Workspace settings',icon:'settings',scope:'settings',keys:[mod,','],run:showSettings},
+ ...settingsSections.map(section=>({id:'settings:'+section.id,title:section.title,detail:section.category,icon:section.icon,scope:'settings',run:()=>document.dispatchEvent(new CustomEvent('suffice-open-settings',{detail:{section:section.id}}))}))
 ]});
 function showSearch(keyboard=false){spotlight.open({keyboard});}
 
