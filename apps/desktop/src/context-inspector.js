@@ -93,6 +93,7 @@ export function connectContextInspector({api,form,toast}){
  }
 
  document.addEventListener('suffice:usage-change',()=>void load());
+ viewState.subscribe(e=>{if(e.type==='select')void load();});
  paintChip();
  return {
   // The choices for a send: removals last one message, the summaries switch stays until turned off.

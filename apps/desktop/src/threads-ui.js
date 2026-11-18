@@ -199,7 +199,7 @@ export function connectThreads({api,prompt,send,toast}){
   const entering=!workspace.classList.contains('thread-view');
   const selection=api.openThread(thread.id);selectionReady=selection;selection.catch(()=>{});
   transition.cancel();
-  activeId=thread.id;threadActive(thread.id);viewState.select(thread.id);following=false;
+  activeId=thread.id;threadActive(thread.id);viewState.select(thread.id);document.dispatchEvent(new CustomEvent('suffice-thread-project',{detail:thread.cwd}));following=false;
   const job=jobs.get(thread.id),cached=savedHistories.get(thread.id);
   const reusable=job?.history||(cached?.modified===thread.modified?cached.node:null);
   showHistory(reusable||document.createElement('div'));history.className='thread-messages';
