@@ -1,5 +1,4 @@
 import {icon} from './ui.js';
-import {providerMark,providerIcon} from './provider-icons.js';
 import {sentAttachmentGrid} from './attachment-view.js';
 import {messageAsMarkdown} from './message-export.js';
 const duration=ms=>ms<1000?'<1s':ms<60000?`${Math.floor(ms/1000)}s`:`${Math.floor(ms/60000)}m ${Math.floor(ms/1000)%60}s`;
@@ -17,14 +16,14 @@ export function connectMessageActions(workspace,transcript){
  // The bar sits in normal flow: a reserved slot right after the message holds it, so it never covers the next message.
  const slotAfter=anchor=>anchor?.nextElementSibling?.classList.contains('message-actions-slot')?anchor.nextElementSibling:null;
  function ensureSlot(anchor,role){if(!anchor?.parentNode)return null;let slot=slotAfter(anchor);if(!slot){slot=document.createElement('div');slot.className='message-actions-slot';anchor.after(slot);}slot.dataset.role=role;return slot;}
- function place(turn){if(turn.active||!turn.anchor?.parentNode)return;const slot=ensureSlot(turn.anchor,'assistant');if(turn.slotEl&&turn.slotEl!==slot)turn.slotEl.remove();turn.slotEl=slot;}
+ function place(turn){if(turn.active||!turn.anchor?.parentNode)return;const slot=ensureSlot(turn.anchor,'assistant');if(turn.slotEl&&turn.slotEl!==slot)turn.slotEl.remove();turn.slotEl=slot;if(!turn.bar){turn.bar=document.createElement('div');turn.bar.className='message-toolbar';turn.bar.setAttribute('role','toolbar');}fill(turn.bar,turn);if(turn.bar.parentNode!==slot)slot.append(turn.bar);}
  function position(){if(!shown?.anchor?.isConnected||shown.active){hide();return;}const slot=ensureSlot(shown.anchor,shown.role);if(slot&&bar.parentNode!==slot)slot.append(bar);}
- function show(info){
-  clearTimeout(timer);if(info.active||!info.anchor?.isConnected){hide();return;}if(shown===info&&!bar.hidden){position();return;}shown=info;bar.replaceChildren();bar.dataset.role=info.role;bar.setAttribute('aria-label',info.role==='user'?'User message actions':'Agent turn actions');
+ function fill(bar,info){
+  bar.replaceChildren();bar.dataset.role=info.role;bar.setAttribute('aria-label',info.role==='user'?'User message actions':'Agent turn actions');
   if(info.role==='user'&&Number.isFinite(info.timestamp)){const time=document.createElement('time'),date=new Date(info.timestamp);time.dateTime=date.toISOString();time.textContent=new Intl.DateTimeFormat(undefined,{dateStyle:'medium',timeStyle:'short'}).format(date);bar.append(time);}
   if(info.role==='assistant'){
    const meta=info.meta;if(Number.isFinite(meta.startedAt)&&Number.isFinite(meta.endedAt)){const elapsed=document.createElement('span');elapsed.className='message-turn-duration';elapsed.title='Full turn duration, including tools and approval waits';elapsed.textContent=duration(Math.max(0,meta.endedAt-meta.startedAt));bar.append(elapsed);}
-   if(meta.model){const model=document.createElement('span');model.className='message-turn-model';if(providerIcon(meta.provider))model.append(providerMark(meta.provider));const label=document.createElement('span');label.textContent=meta.modelName||meta.model;model.append(label);model.title=[meta.provider,meta.model].filter(Boolean).join(' · ');bar.append(model);}
+   if(meta.model){const model=document.createElement('span');model.className='message-turn-model';const label=document.createElement('span');label.textContent=meta.modelName||meta.model;model.append(label);model.title=[meta.provider,meta.model].filter(Boolean).join(' · ');bar.append(model);}
    if(meta.effort){const effort=document.createElement('span');effort.className='message-turn-effort';effort.textContent=meta.effort==='off'?'No reasoning':meta.effort[0].toUpperCase()+meta.effort.slice(1);bar.append(effort);}
   }
   let fork;if(info.entryId){fork=document.createElement('button');fork.type='button';fork.className='message-fork';const before=info.role==='user';fork.title=before?'Fork before this message and edit it':'Fork from here';fork.setAttribute('aria-label',fork.title);fork.innerHTML=icon('branch');fork.onclick=()=>{hide();document.dispatchEvent(new CustomEvent('suffice-fork-thread',{detail:{entryId:info.entryId,before,text:before?info.text:undefined}}));};}
@@ -33,7 +32,11 @@ export function connectMessageActions(workspace,transcript){
   const tools=[copy,markdown];
   // Edit-and-resend applies to the newest user message only, and only while the chat is idle.
   if(info.role==='user'&&[...transcript.querySelectorAll('.thread-user')].at(-1)===info.anchor&&workspace.querySelector('.composer')?.dataset.running!=='true'){const edit=document.createElement('button');edit.type='button';edit.className='message-action message-edit';edit.title='Edit and resend';edit.setAttribute('aria-label','Edit and resend');edit.innerHTML=icon('pencil');edit.onclick=()=>{hide();document.dispatchEvent(new CustomEvent('suffice-edit-last',{detail:{text:copyText}}));};tools.unshift(edit);}
-  if(info.role==='assistant')bar.prepend(...tools);else bar.append(...tools);if(fork)copy.after(fork);bar.hidden=false;position();
+  if(info.role==='assistant')bar.prepend(...tools);else bar.append(...tools);if(fork)copy.after(fork);bar.hidden=false;
+ }
+ // Agent turns keep their own bar in the slot, always visible; only user messages share the hover bar.
+ function show(info){
+  clearTimeout(timer);if(info.role==='assistant'||info.active||!info.anchor?.isConnected){hide();return;}if(shown===info&&!bar.hidden){position();return;}shown=info;fill(bar,info);position();
  }
  function register(element,info){owners.set(element,info);if(element.matches('.thread-message'))element.tabIndex=0;}
  workspace.addEventListener('pointerover',event=>{if(bar.contains(event.target))return;const info=owner(event.target);hovered=info;if(info)show(info);});
@@ -51,8 +54,8 @@ export function connectMessageActions(workspace,transcript){
   turn(meta={},active=false){return {role:'assistant',meta:{...meta},active,anchor:null,texts:new Map()};},
   assistant(element,turn,text,entryId){if(entryId)turn.entryId=entryId;turn.anchor=element;turn.texts.set(element,text);register(element,turn);place(turn);},
   // Live messages get their transcript entry id after the turn is saved, which turns on their fork button.
-  resolve(element,entryId){const info=owners.get(element);if(!info||!entryId)return;info.entryId=entryId;if(shown===info&&!bar.hidden){const at=bar.scrollTop;shown=null;show(info);bar.scrollTop=at;}},
+  resolve(element,entryId){const info=owners.get(element);if(!info||!entryId)return;info.entryId=entryId;if(info.bar)fill(info.bar,info);else if(shown===info&&!bar.hidden){const at=bar.scrollTop;shown=null;show(info);bar.scrollTop=at;}},
   work(element,turn){turn.anchor=element;register(element,turn);place(turn);},
-  complete(turn,meta={}){Object.assign(turn.meta,meta);turn.active=false;place(turn);if(hovered===turn){hide();show(turn);}}
+  complete(turn,meta={}){Object.assign(turn.meta,meta);turn.active=false;place(turn);}
  };
 }
