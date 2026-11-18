@@ -47,7 +47,6 @@ export const settingsSections=[
  ]},
  {id:'terminal',title:'Terminal',icon:'terminal',category:'Workspace',groups:[
   group('Shell',[select('terminal-shell','Default shell','Native Bash',['Native Bash','PowerShell','System default']),select('working-directory','Working directory','Thread project',['Thread project','Home directory']),toggle('restore-terminal','Restore terminal tabs',true)]),
-  group('Appearance',[select('terminal-font','Font','JetBrains Mono',['JetBrains Mono','Geist Mono','System mono']),select('terminal-size','Font size','12 px',['11 px','12 px','13 px','14 px']),select('cursor','Cursor','Bar',['Bar','Block','Underline']),toggle('cursor-blink','Blink cursor',true)]),
   group('History',[select('scrollback','Scrollback','5,000 lines',['1,000 lines','5,000 lines','10,000 lines'])]),
  ]},
  {id:'archived',title:'Archived',icon:'archive',category:'Application',groups:[]},
