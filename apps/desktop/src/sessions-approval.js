@@ -4,6 +4,7 @@ import {connectOverlayScrollbar} from './overlay-scrollbar.js';
 // CLI-session prompts reuse the composer-approval markup and classes from approvals.js; styles live in desktop.css.
 const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
 const base=p=>String(p||'').split('/').filter(Boolean).pop()||'';
+const ALWAYS=/^yes,? .*(allow|don.t ask).*(session|again|always|all)/i;
 const DENY=/^(no\b|deny|reject|cancel|keep planning|tell claude what to change)/i;
 const EDIT=/^(Edit|Write|MultiEdit|NotebookEdit)$/;
 const HEAD=/^(Claude Code v|claude-\S+ with \w+ effort)/;
@@ -40,7 +41,7 @@ export function createApproval({form,markdown,answer}){
   const hadFocus=!card||card.contains(document.activeElement)||form.contains(document.activeElement)||document.activeElement===document.body;
   clear();sig=s;if(!p)return;
   card=el('section','composer-approval');card.setAttribute('aria-label','Agent approval');
-  card.append(el('h3','',p.title||'Agent needs input'));
+  card.append(el('div','approval-label','Permission request'),el('h3','',p.title||'Agent needs input'));
   const d=describePrompt(p,items);let pending=null;
   if(d){const a=el('div','approval-action');a.innerHTML=icon(d.icon);a.append(el('span','',d.label));
    const host=el('div','approval-preview-host');
@@ -48,12 +49,16 @@ export function createApproval({form,markdown,answer}){
    else if(d.text||d.markdown){const pre=el('pre','approval-preview'),code=el('code','',d.text||d.markdown);pre.tabIndex=0;pre.setAttribute('aria-label','Requested action');pre.append(code);host.append(pre);pending=[pre,code,d.icon==='terminal'?'input.sh':''];}
    card.append(a);if(host.childNodes.length)card.append(host);}
   const ctl=el('div','approval-controls'),buttons=[];
-  for(const o of p.options||[]){const b=el('button',`provider-dialog-button${o.index===p.selected?' provider-dialog-primary':''}`,o.label);b.type='button';
+  // Allow sits last (rightmost); the CLI's own label stays the accessible name, the visible one is short.
+  for(const o of [...(p.options||[])].reverse()){const yes=o.index===p.selected,always=!yes&&ALWAYS.test(o.label);
+   const b=el('button',`provider-dialog-button${yes?' provider-dialog-primary':''}${always?' approval-always':''}`,always?'Always allow':o.label);b.type='button';b.setAttribute('aria-label',o.label);
+   if(yes){b.append(' ',el('span','approval-kbd','Ctrl+\u21b5'));}
    b.addEventListener('click',()=>answer(o.index));ctl.append(b);buttons.push([o,b]);}
   card.append(ctl);form.append(card);form.dataset.approval='true';
   if(pending){const [pre,code,lang]=pending;stopSb=connectOverlayScrollbar(pre,{inset:6});if(lang)import('./code-highlight.js').then(({colorCode})=>colorCode(code,lang)).catch(()=>{});}
   for(const c of form.children)c.inert=c!==card;form.resizePrompt?.();
   const key=e=>{
+   if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)&&!e.defaultPrevented){const yes=p.options?.find(o=>o.index===p.selected);if(yes){e.preventDefault();e.stopPropagation();answer(yes.index);}return;}
    if(e.defaultPrevented||e.ctrlKey||e.metaKey||e.altKey)return;
    if(!card.contains(e.target)&&e.target.closest?.('input,textarea,select,[contenteditable]:not([contenteditable="false"])'))return;
    const n=/^[1-9]$/.test(e.key)?Number(e.key)-1:-1,hit=n>=0?p.options?.[n]:e.key==='Escape'?p.options?.find(o=>DENY.test(o.label)):null;
