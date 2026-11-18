@@ -22,6 +22,7 @@ test('model picker keeps focus, groups providers once, labels single-effort mode
   await page.locator('.model-stage-button').click();
   const titles=await page.locator('.model-provider-title').allInnerTexts();assert.deepEqual(titles,['openai','anthropic','Agent CLIs']);
   assert.equal(await page.locator('.model-option').count(),3);assert.equal(await page.locator('.agent-option').count(),1);
+  await page.locator('.model-search').fill('claude');assert.equal(await page.locator('.agent-option').count(),1);assert.equal(await page.locator('.model-empty').count(),0,'no empty message while an agent row matches');await page.locator('.model-search').fill('');
   await page.locator('.model-option',{hasText:'Beta'}).click();
   assert.equal(await page.evaluate(()=>document.activeElement?.type),'range','focus returns to the slider after choosing a model');
   await page.locator('.model-stage-button').click();
