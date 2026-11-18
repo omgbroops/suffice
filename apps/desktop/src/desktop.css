@@ -98,9 +98,10 @@
 .model-search { width: 100%; padding: 10px 9px; border: 0; background: transparent; color: var(--text); font-size: 13px; }
 .model-picker .model-search:focus-visible { outline: none; }
 .model-options { max-height: 284px; overflow-y: auto; }
+.effort-single { margin: 2px 9px 8px; color: var(--text-muted); font-size: 12px; }
 .model-provider-title { padding: 6px 9px 3px; color: var(--text-muted); font-size: 11px; }
-.menu-item.model-option { justify-content: flex-start; gap: 9px; }
-.model-option > span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.menu-item.model-option, .menu-item.agent-option { justify-content: flex-start; gap: 9px; }
+.model-option > span, .agent-option > span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .model-option[aria-pressed='true'] { background: var(--surface-active); }
 .model-empty { padding: 12px 9px; font-size: 13px; color: var(--text-muted); }
 .custom-tooltip { position: fixed; z-index: 150; max-width: min(300px,calc(100vw - 12px)); padding: 5px 9px; border-radius: 7px; background: var(--surface-menu); color: var(--text); -webkit-backdrop-filter: var(--glass-filter); backdrop-filter: var(--glass-filter); box-shadow: var(--shadow-float); font-size: 12px; line-height: 18px; overflow-wrap: anywhere; pointer-events: none; }
