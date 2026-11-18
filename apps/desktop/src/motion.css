@@ -1,0 +1,29 @@
+/* Shared motion: transform + opacity only, --ease-out, 150-200 ms, honours reduced motion (styles.css kills all motion under the media query). */
+@keyframes motion-rise { from { opacity: 0; transform: translateY(6px); } }
+@keyframes motion-fade { from { opacity: 0; } }
+@media (prefers-reduced-motion: no-preference) {
+  /* Approval card replaces the composer controls; they fade back when it resolves. */
+  .composer-approval:not([hidden]) { animation: motion-rise var(--duration) var(--ease-out); }
+  .composer[data-returning] > :not(.composer-approval) { animation: motion-fade var(--duration) var(--ease-out); }
+  /* Queued rows and disclosure bodies (class set by motion.js on a user click, so redraws never replay it). */
+  .queued-messages:not([hidden]):not(.session-shelf) { animation: motion-rise var(--duration) var(--ease-out); }
+  .thread-activity[data-reveal] > .thread-activity-log { animation: motion-rise var(--duration) var(--ease-out); }
+}
+@media (prefers-reduced-motion: no-preference) and (min-width: 700px) {
+  /* Right panel: motion.js animates its transform, the workspace margin and the fixed header offsets on one timeline; CSS only holds visibility until the exit ends. */
+  .desktop-app .right-sidebar,.desktop-app .right-panel-open .right-sidebar { transition: visibility var(--duration-move); }
+  /* While the workspace slides across the sidebar it covers it (sidebar content never paints over the chat). */
+  .desktop-app[data-sliding] .sidebar { z-index: 1; }
+  /* Sidebar collapse: display is a discrete transition so the exit plays before it is removed. Ready flag keeps first paint still. Opacity only, same duration as the workspace slide. */
+  .desktop-app[data-motion-ready] .sidebar { transition: opacity var(--duration-move) var(--ease-out),display var(--duration-move) allow-discrete; }
+  .desktop-app[data-motion-ready] .sidebar-collapsed .sidebar,.desktop-app[data-motion-ready] .sidebar-collapsed.sidebar { opacity: 0; }
+  @starting-style { .desktop-app[data-motion-ready] .sidebar { opacity: 0; } }
+  /* Window-controls backdrop fades with the sidebar instead of snapping in. */
+  .desktop-app[data-motion-ready] .window-controls { transition: background-color var(--duration-move) var(--ease-out); }
+  /* Collapsed tools fade in after the sidebar exit; on reopen they leave at once (no display transition: they must not stay laid out without their collapsed positioning). */
+  .desktop-app[data-motion-ready] .sidebar-collapsed-tools { opacity: 0; transition: opacity var(--duration) var(--ease-out); }
+  .desktop-app[data-motion-ready] .sidebar-collapsed .sidebar-collapsed-tools { opacity: 1; transition-delay: calc(var(--duration-move) * .6); }
+  @starting-style { .desktop-app[data-motion-ready] .sidebar-collapsed .sidebar-collapsed-tools { opacity: 0; } }
+  .desktop-app[data-keyboard='true'] .sidebar-collapsed-tools,.desktop-app[data-keyboard='true'] .window-controls,
+  .desktop-app[data-keyboard='true'] .sidebar,.desktop-app[data-keyboard='true'] .right-sidebar { transition: none; }
+}
