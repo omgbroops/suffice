@@ -45,6 +45,8 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
  bridge.subscribe(send);
  const call=async message=>{const r=await bridge.handle(message);if(!r.ok)throw new Error(r.error);return r.result;};
  const ready=call({type:'slots.subscribe',selector:'session:'}).catch(()=>{});
+ // A dead pane (stopped or exited session) reads as one plain message, not tmux text; other errors pass through.
+ const ended=e=>{throw /can't find pane|can't find session|no server running/.test(e?.message||'')?new Error('Session ended'):e;};
  const agentName=v=>{if(!str(v)||!/^[a-z]+$/.test(v))throw new Error('Invalid agent');return v;};
  const folder=v=>{if(!str(v)||!path.isAbsolute(v))throw new Error('Invalid folder');return v;};
  const id=v=>{if(!str(v)||!/^[A-Za-z0-9._-]+$/.test(v))throw new Error('Invalid session');return v;};
@@ -125,7 +127,7 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
  };
  const control=async(sid,action,args={})=>{
   const t=tracked.get(sid);if(!t)throw new Error('Unknown session');
-  const run=async out=>{if(out instanceof Uint8Array)await backend.sessions.sendBytes(sid,out);else await backend.sessions.send(sid,String(out),{enter:false});};
+  const run=out=>(out instanceof Uint8Array?backend.sessions.sendBytes(sid,out):backend.sessions.send(sid,String(out),{enter:false})).catch(ended);
   if(action==='answerPrompt'){if(!t.prompt)throw new Error('No prompt open');const i=Number(args.index);
    return run(t.kind==='codex'?codexControls.answerPrompt(i):(t.mapper.controls.answerPrompt(t.prompt,i).bytes));}
   if(action==='interrupt')return run(t.kind==='codex'?codexControls.interrupt():t.mapper.controls.interrupt().bytes);
@@ -161,7 +163,7 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
    'sessions-list':async p=>{await ready;const rows=trackAll(await call({type:'sessions.list'}));if(p?.republish)for(const r of rows||[])tracked.get(r.id)?.soon?.();return rows;}, // a reloaded renderer has no cached slots; republish once so titles seed
    'sessions-control':p=>control(id(p?.id),String(p?.action),p?.args),
    'sessions-stop':p=>{untrack(id(p));return call({type:'sessions.stop',id:id(p)});},
-   'sessions-send':p=>call({type:'sessions.send',id:id(p?.id),text:typeof p?.text==='string'?p.text:''}),
+   'sessions-send':p=>call({type:'sessions.send',id:id(p?.id),text:typeof p?.text==='string'?p.text:''}).catch(ended),
    'sessions-attach-command':p=>call({type:'sessions.attachCommand',id:id(p)}),
    'history-list':async p=>{await call({type:'history.scan'});return call({type:'history.list',opts:{limit:200,...(str(p?.query)&&{query:p.query})}});},
    'history-read':p=>call({type:'history.read',entry:{source:String(p?.source),path:String(p?.path)}}),

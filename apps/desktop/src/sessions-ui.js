@@ -24,7 +24,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  if(!sx)return {leave(){},isActive:()=>false,stop:()=>false,send(){},start:async()=>{toast('Sessions are unavailable');return false;}};
  const side=el('div','sidebar-cli-sessions');
  document.querySelector('.sidebar-sessions').before(side);
- const busy=new Map(),rows=new Map(),states=new Map(),prompts=new Map(),subs=new Map(),labels=new Map(),titles=new Map(),firstText=new Map(),handBack=new Map(),activity=new Map();
+ const busy=new Map(),rows=new Map(),states=new Map(),prompts=new Map(),subs=new Map(),labels=new Map(),titles=new Map(),firstText=new Map(),holds=new Map(),handBack=new Map(),activity=new Map();
  let import_=null,republished=false;
  const uiSeen=new Set();const bump=id=>{activity.set(id,Date.now());};
  const agentLabel=a=>({claude:'Claude Code',codex:'Codex'}[a]||(/claude/.test(a)?'Claude Code':/codex/.test(a)?'Codex':avail.agents.find(x=>x.id===a)?.label||a));
@@ -112,12 +112,12 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  // Put a held message back without losing what the user typed since: it goes first, blank line between.
  function restore(text){const p=document.querySelector('#prompt');if(p)p.value=p.value?`${text}\n\n${p.value}`:text;}
  function sendWhenReady(id,text){
-  let t=0,poll=0,gone=false,off=()=>{},offState=()=>{};const stop=()=>{gone=true;clearTimeout(t);clearInterval(poll);off();offState();};
+  let t=0,poll=0,gone=false,off=()=>{},offState=()=>{};const stop=()=>{holds.delete(id);gone=true;clearTimeout(t);clearInterval(poll);off();offState();};
   const giveUp=why=>{if(gone)return;stop();firstText.delete(id);const here=c.active?.id===id,name=titles.get(id)||'session';
    if(here)restore(text);else handBack.set(id,text);
    toast(here?why:`${why}: ${name}`);if(here&&c.mode==='chat')drawChat();};
   const arm=()=>{clearTimeout(t);t=setTimeout(()=>giveUp('Agent did not start, message not sent'),45000);};
-  arm();
+  arm();holds.set(id,stop);
   // The backend notices a dead CLI only when sessions.list runs, so list while the message is held.
   poll=setInterval(()=>{sx.list().catch(()=>{});},1000);
   off=sx.onUi(id,u=>{if(!u)return;if(u.ready){stop();sx.send(id,text).catch(e=>giveUp(e.message));}else if(u.prompt){clearTimeout(t);t=0;}else if(!t)arm();});
@@ -165,7 +165,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
 
  document.addEventListener('click',e=>{if(e.target.closest?.('[data-menu-action^="import-chat:"]'))openImport();});
  connectThreadHover(side);
- connectSessionContextMenu(side,{toast,getSession:row=>{const s=row._s;return s&&{id:s.id,title:c.name(s),attach:()=>sx.attachCommand(s.id),show:()=>{if(c.active?.id!==s.id)open(s);setMode('terminal');},stop:async()=>{await sx.stop(s.id);if(c.active?.id===s.id)hooks.clear?.();await refresh();}};}});
+ connectSessionContextMenu(side,{toast,getSession:row=>{const s=row._s;return s&&{id:s.id,title:c.name(s),attach:()=>sx.attachCommand(s.id),show:()=>{if(c.active?.id!==s.id)open(s);setMode('terminal');},stop:async()=>{await sx.stop(s.id);holds.get(s.id)?.();if(c.active?.id===s.id){leave();hooks.clear?.();}await refresh();}};}});
  threadViewState.subscribe(ev=>{if(ev.type==='update'&&ev.changed?.includes('sidebar')){for(const r of rows.values())paint(r._s);if(c.active)c.paintHeader();}});
  void refresh();
  setInterval(()=>tickThreadTimes(side),30000);
