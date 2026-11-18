@@ -17,10 +17,12 @@ const SC={
 console.log('Claude Code v2.1.0\nclaude-haiku-4-5 with high effort\n');
 line({type:'user',message:{content:'Run the build.'}});
 if(process.stdin.isTTY)process.stdin.setRawMode(true);
-let buf='';
+let buf='',cur='';
 process.stdin.on('data',d=>{for(const k of String(d)){
  if(log)fs.appendFileSync(log,JSON.stringify(k)+'\n');
- if((k==='\r'||k==='\n')&&buf){const c=buf.replace(/^\//,'').trim();buf='';if(SC[c])console.log(SC[c]());continue;}
+ if((k==='\r'||k==='\n')&&buf){const c=buf.replace(/^\//,'').trim();buf='';if(SC[c]){cur=c;console.log(SC[c]());}continue;}
+ // /bash decline (option 3 or Esc) leaves the dialog in the pane and prints below it, so only a stale-dialog check can clear the card
+ if(cur==='bash'&&(k==='3'||k==='\x1b')){cur='';console.log('\n(declined)\n\n> ');continue;}
  if(k>=' '&&k!=='\x7f'&&!/^[1-4]$/.test(k)){buf+=k;continue;}
  if(/^[1-4]$/.test(k))console.log(`${R}(answered ${k})\n${solid}\n❯ \n${solid}\n\n  ⏸ manual mode on`);}});
 setInterval(()=>{},1e6);

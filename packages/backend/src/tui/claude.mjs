@@ -318,9 +318,17 @@ function run(obj, state, out, opts) {
 }
 
 // ---- screen -> Prompt ----
+// A live dialog ends at its footer hint. Output at column 0 after the last option (a decline echo, a bare prompt) means the dialog was answered and is only left in the pane.
+function staleDialog(screen) {
+  const rows = stripAnsi(screen).split('\n').map((l) => l.replace(/\s+$/, '')).filter((l) => l.trim());
+  const last = rows.findLastIndex((l) => /^\s*(?:[❯›]\s*)?\d+\.\s/.test(l));
+  return last >= 0 && rows.slice(last + 1).some((l) => /^\S/.test(l) && !/^[─━╌╍┄╭╰│▔-]/.test(l) && !/\b(?:esc|enter|tab|ctrl\+\w|shift\+tab|space)\b.{0,40}\bto\b/i.test(l));
+}
+
 function parsePrompt(screen) { // only a classified permission / question / plan / trust dialog yields options; every other screen is null
   const c = classifyScreen(str(screen));
   const p = c.prompt && ['permission', 'question', 'plan', 'trust'].includes(c.kind) ? c.prompt : null;
+  if (p && staleDialog(str(screen))) return null;
   if (!p || !(p.type === 'permission' || /Would you like to proceed/.test(p.title))) return p;
   const full = stripAnsi(str(screen)).split('\n').map((l) => l.replace(/\s+$/, '')).filter((l) => l.trim());
   return { ...p, ...promptTool(full, full.findLastIndex((l) => l.trim() === p.title), p.title, p.options) }; // tool, target, diff, alwaysAllow
