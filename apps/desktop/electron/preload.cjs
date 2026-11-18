@@ -56,6 +56,7 @@ contextBridge.exposeInMainWorld('sufficeDesktop',{
   removeAutomation:id=>ipcRenderer.invoke('suffice:automation-remove',id),
   runAutomation:id=>ipcRenderer.invoke('suffice:automation-run',id),
   usage:threadId=>ipcRenderer.invoke('suffice:usage',threadId),
+  context:threadId=>ipcRenderer.invoke('suffice:context',threadId),
   files:directory=>ipcRenderer.invoke('suffice:files',directory),
   file:name=>ipcRenderer.invoke('suffice:file',name),
   changes:()=>ipcRenderer.invoke('suffice:changes'),
