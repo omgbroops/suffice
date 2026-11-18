@@ -52,11 +52,14 @@ export function connectThreads({api,prompt,send,toast}){
  transcript.addEventListener('click',event=>{if(event.target.closest('summary'))following=false;});
  transcript.addEventListener('keydown',event=>{if(['PageUp','Home','ArrowUp'].includes(event.key))following=false;});
  let draftTimer,viewScrollTimer;
- function saveView(){clearTimeout(draftTimer);clearTimeout(viewScrollTimer);viewState.update({...(prompt.value!==viewState.state.draft?{draft:prompt.value}:{}),scrollTop:transcript.scrollTop,following,...(form.modelSelection?{model:form.modelSelection}:{})});}
- function restoreView(){const state=viewState.state;prompt.value=state.draft;send.disabled=!prompt.value.trim();following=state.following;requestAnimationFrame(()=>{if(following)bottom(true);else{transcript.scrollTop=state.scrollTop;lastScrollTop=transcript.scrollTop;}});}
+ // Reading position is saved as (message index, offset): scrollTop alone is wrong once lazy blocks change height.
+ function readAnchor(){const r=transcript.getBoundingClientRect(),i=[...history.children].findIndex(c=>c.getBoundingClientRect().bottom>r.top+r.height/2);return i<0?null:{i,y:history.children[i].getBoundingClientRect().top-r.top};}
+ let inputs=0;for(const type of ['wheel','keydown','pointerdown'])transcript.addEventListener(type,()=>{inputs++;},{passive:true,capture:true});
+ function saveView(){clearTimeout(draftTimer);clearTimeout(viewScrollTimer);viewState.update({anchor:readAnchor(),...(prompt.value!==viewState.state.draft?{draft:prompt.value}:{}),scrollTop:transcript.scrollTop,following,...(form.modelSelection?{model:form.modelSelection}:{})});}
+ function restoreView(){const state=viewState.state;prompt.value=state.draft;send.disabled=!prompt.value.trim();following=state.following;requestAnimationFrame(()=>{if(following)bottom(true);else{const id=viewState.id,seen=inputs,pin=()=>{const a=state.anchor,c=a&&history.children[a.i];transcript.scrollTop=c?transcript.scrollTop+c.getBoundingClientRect().top-transcript.getBoundingClientRect().top-a.y:state.scrollTop;lastScrollTop=transcript.scrollTop;};pin();for(const ms of [100,300,700,1500])setTimeout(()=>{if(!following&&id===viewState.id&&seen===inputs)pin();},ms);}});}
  prompt.value=viewState.state.draft;send.disabled=!prompt.value.trim();
  prompt.addEventListener('input',()=>{clearTimeout(draftTimer);draftTimer=setTimeout(saveView,180);});
- transcript.addEventListener('scroll',()=>{clearTimeout(viewScrollTimer);const id=viewState.id;viewScrollTimer=setTimeout(()=>{if(id===viewState.id&&id)viewState.update({scrollTop:transcript.scrollTop,following});},150);},{passive:true});
+ transcript.addEventListener('scroll',()=>{clearTimeout(viewScrollTimer);const id=viewState.id;viewScrollTimer=setTimeout(()=>{if(id===viewState.id&&id)viewState.update({scrollTop:transcript.scrollTop,anchor:readAnchor(),following});},150);},{passive:true});
  window.addEventListener('beforeunload',saveView);
  historyObserver.observe(history);
  new ResizeObserver(()=>{transcript.style.setProperty('--transcript-bottom-space',`${form.getBoundingClientRect().height+48}px`);bottom();}).observe(form);
