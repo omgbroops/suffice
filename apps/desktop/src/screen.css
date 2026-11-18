@@ -107,8 +107,8 @@
 /* Usage: a rounded-rectangle meter, not a ring. */
 .desktop-app .composer-meta .context-ring { position: relative; width: var(--control-height-sm); padding: 0; justify-content: center; }
 .desktop-app .composer-meta .context-ring svg { display: none; }
-.desktop-app .composer-meta .context-ring::before, .desktop-app .composer-meta .context-ring::after { content: ''; position: absolute; left: 50%; top: 50%; height: 6px; border-radius: var(--radius-1); }
-.desktop-app .composer-meta .context-ring::before { width: 16px; transform: translate(-50%, -50%); background: color-mix(in srgb, var(--text) 18%, transparent); }
+.desktop-app .composer-meta .context-ring::before, .desktop-app .composer-meta .context-ring::after { content: ''; position: absolute; left: 50%; top: 50%; height: 8px; border-radius: var(--radius-xs); }
+.desktop-app .composer-meta .context-ring::before { width: 16px; transform: translate(-50%, -50%); background: color-mix(in srgb, var(--text) 30%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text) 25%, transparent); }
 .desktop-app .composer-meta .context-ring::after { width: calc(var(--context-percent, 0) * .16px); max-width: 16px; transform: translate(-8px, -50%); background: var(--blue); transition: width var(--duration-grow) var(--ease-out); }
 .desktop-app .composer-meta .context-ring[data-level='warning']::after { background: var(--purple); }
 .desktop-app .composer-meta .context-ring[data-level='critical']::after { background: var(--red); }
