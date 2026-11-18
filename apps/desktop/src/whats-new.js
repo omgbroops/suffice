@@ -26,6 +26,6 @@ export function createWhatsNew({run,mod}){
  dialog.addEventListener('click',event=>{if(event.target!==dialog)return;const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)close();});
  function open(){if(dialog.open)return;previous=document.activeElement;dialog.showModal();dialog.querySelector('.whats-new-try').focus();}
  // A hidden window (tests, background launch) never auto-opens; the sheet waits for a visible one.
- function maybeShow(){if(seen()===RELEASE||document.visibilityState!=='visible')return false;open();return true;}
+ function maybeShow(){if(seen()===RELEASE||document.visibilityState!=='visible'||window.sufficeDesktop?.testHidden)return false;open();return true;}
  return {open,close,maybeShow};
 }

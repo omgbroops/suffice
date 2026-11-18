@@ -38,7 +38,7 @@ if(primary)app.whenReady().then(async()=>{
    onStderr:data=>process.stderr.write(data)
   });
   const chrome=require('./window-chrome.cjs').windowChrome({preview:process.env.SUFFICE_WINDOW_CHROME,packaged});
-  win=new BrowserWindow({icon:appIcon,show:false,width:1440,height:900,minWidth:720,minHeight:540,...chrome.options,backgroundColor:'#0e0e0e',title:'Suffice',autoHideMenuBar:true,webPreferences:{additionalArguments:['--suffice-window-chrome='+chrome.mode],preload:path.join(__dirname,'preload.cjs'),contextIsolation:true,nodeIntegration:false,sandbox:true}});
+  win=new BrowserWindow({icon:appIcon,show:false,width:1440,height:900,minWidth:720,minHeight:540,...chrome.options,backgroundColor:'#0e0e0e',title:'Suffice',autoHideMenuBar:true,webPreferences:{additionalArguments:['--suffice-window-chrome='+chrome.mode,...(process.env.SUFFICE_TEST_HIDE_WINDOW==='1'?['--suffice-test-hidden']:[])],preload:path.join(__dirname,'preload.cjs'),contextIsolation:true,nodeIntegration:false,sandbox:true}});
   if(process.platform==='win32')require('./windows-app-details.cjs').applyWindowsAppDetails({app,win,shell,iconPath:path.join(__dirname,'../assets/suffice-logo.ico')});
   if(process.env.SUFFICE_TEST_HIDE_WINDOW!=='1')win.show();else app.dock?.hide();
   const entry=pathToFileURL(path.join(process.env.SUFFICE_TEST_DIST||path.join(__dirname,'../dist'),'index.html')).href;

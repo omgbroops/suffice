@@ -1,6 +1,7 @@
 const {contextBridge,ipcRenderer}=require('electron');
 contextBridge.exposeInMainWorld('sufficeDesktop',{
   platform:process.platform,
+  testHidden:process.argv.includes('--suffice-test-hidden'),
   osDark:()=>ipcRenderer.invoke('suffice:os-dark'),
   onOsTheme:cb=>ipcRenderer.on('suffice:os-theme',(_e,dark)=>cb(!!dark)),
   windowChrome:process.argv.find(arg=>/^--suffice-window-chrome=(windows|macos-native|macos-preview)$/.test(arg))?.split('=')[1]||'windows',
