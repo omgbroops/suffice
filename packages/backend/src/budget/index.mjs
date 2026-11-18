@@ -143,7 +143,7 @@ export function createBudget({ clock, store, limits }) {
   };
 }
 
-export function createFileStore(path, { tries = 2000 } = {}) {
+export function createFileStore(path, { waitMs = 60000 } = {}) {
   const lockDir = `${path}.lock`, nap = new Int32Array(new SharedArrayBuffer(4));
   const alive = (pid) => { try { process.kill(pid, 0); return true; } catch (e) { return e.code === 'EPERM'; } };
   const owner = (dir) => { try { return fs.readFileSync(`${dir}/owner`, 'utf8'); } catch { return null; } };
@@ -183,10 +183,12 @@ export function createFileStore(path, { tries = 2000 } = {}) {
     },
     withLock(fn) {
       const token = `${process.pid}-${Math.random().toString(36).slice(2)}`;
-      for (let n = 0; !take(lockDir, token); n++) {
+      // a live holder may be paused (thermal guard): wait with backoff up to waitMs, then say so
+      const end = Date.now() + waitMs;
+      for (let ms = 5; !take(lockDir, token); ms = Math.min(ms * 2, 250)) {
         try { if (stale(lockDir)) breakStale(token); } catch {}
-        if (n > tries) throw new Error('budget: lock busy');
-        Atomics.wait(nap, 0, 0, 5);
+        if (Date.now() > end) throw new Error(`budget: lock busy (held by a live process for over ${Math.round(waitMs / 1000)}s)`);
+        Atomics.wait(nap, 0, 0, ms);
       }
       try { return fn(); } finally { try { drop(lockDir, token); } catch {} }
     },

@@ -263,7 +263,7 @@ test('a holder paused past the stale age keeps its lock and is never broken', as
   const old = new Date(Date.now() - 600000); await fs.utimes(`${file}.lock`, old, old); // lock looks ten minutes old
   child.kill('SIGSTOP');
   let ran = false;
-  assert.throws(() => createFileStore(file, { tries: 20 }).withLock(() => { ran = true; }), /lock busy/);
+  assert.throws(() => createFileStore(file, { waitMs: 100 }).withLock(() => { ran = true; }), /lock busy/);
   assert.equal(ran, false);
   assert.ok((await fs.readdir(dir)).includes('b.json.lock'), 'holder lock still in place');
   child.kill('SIGCONT'); child.kill('SIGKILL'); await exited(child);
@@ -296,4 +296,16 @@ test('status().remaining excludes holds and extend grows a hold only while the w
   assert.equal(h.extend(20000), false); assert.equal(h.held, 50000);
   assert.equal(h.extend(10000), true); assert.equal(h.held, 60000);
   assert.equal(b.status()[0].remaining, 0);
+});
+
+test('a live holder paused briefly makes a waiter wait, not throw', async (t) => {
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'bud-lock-')); t.after(() => fs.rm(dir, { recursive: true, force: true }));
+  const file = path.join(dir, 'b.json'), child = await holder(t, file, 'Atomics.wait(new Int32Array(new SharedArrayBuffer(4)),0,0,1500)');
+  child.kill('SIGSTOP');
+  const { spawn } = await import('node:child_process');
+  spawn('sh', ['-c', `sleep 1.2; kill -CONT ${child.pid}`], { stdio: 'ignore' }).unref(); // paused ~1.2 s, then finishes and releases
+  let ran = false;
+  createFileStore(file, { waitMs: 20000 }).withLock(() => { ran = true; });
+  assert.equal(ran, true);
+  child.kill('SIGKILL'); await exited(child);
 });
