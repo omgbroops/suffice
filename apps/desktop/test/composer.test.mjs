@@ -39,7 +39,7 @@ test('composer attachments, preview menus, persisted defaults and background sen
   await page.waitForFunction(()=>document.querySelector('#prompt').value==='');assert.equal(await page.locator('.workspace').evaluate(el=>el.classList.contains('thread-view')),false);
   const sent=await app.evaluate(()=>globalThis.sentBackground);assert.equal(sent.prompt,'Background fixture');assert.equal(sent.attachments.length,2);assert.equal(sent.attachments[0].type,'image/png');
   await app.evaluate(()=>globalThis.finishBackground({threadId:'fixture'}));
-  await prompt.fill('Menu fixture');await page.getByRole('button',{name:'Session options'}).click();assert.equal(await page.locator('#popover [role="menuitem"]').count(),1);await page.getByRole('menuitem',{name:'Start session in background',exact:true}).click();await page.waitForFunction(()=>document.querySelector('#prompt').value==='');assert.equal((await app.evaluate(()=>globalThis.sentBackground)).prompt,'Menu fixture');await app.evaluate(()=>globalThis.finishBackground({threadId:'fixture'}));
+  await prompt.fill('Menu fixture');await page.getByRole('button',{name:'Session options'}).click();assert.deepEqual(await page.locator('#popover [role="menuitem"]').allTextContents(),['Start session in background','Compare models','Import chat']);await page.getByRole('menuitem',{name:'Start session in background',exact:true}).click();await page.waitForFunction(()=>document.querySelector('#prompt').value==='');assert.equal((await app.evaluate(()=>globalThis.sentBackground)).prompt,'Menu fixture');await app.evaluate(()=>globalThis.finishBackground({threadId:'fixture'}));
   await page.screenshot({path:resolve('apps/desktop/desktop-composer-refined.png')});assert.deepEqual(errors,[]);
  }finally{await app.close();}
 });
