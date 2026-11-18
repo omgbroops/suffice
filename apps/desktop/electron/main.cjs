@@ -82,6 +82,7 @@ if(primary)app.whenReady().then(async()=>{
   handle('file-open-options',payload=>fileOpeners.options(threadLocations.get(payload?.threadId)||project,payload?.path));
   handle('file-open-in',payload=>fileOpeners.open(threadLocations.get(payload?.threadId)||project,payload?.path,payload?.application));
   handle('changes',()=>workspaceFiles.changes(project));
+  handle('start-hints',()=>require('./repo-hints.cjs').hints(project));
   handle('diff',name=>workspaceFiles.diff(project,name));
   handle('clipboard-files',()=>clipboardFiles(clipboard));
   const threadLocations=new Map();
