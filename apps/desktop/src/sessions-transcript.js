@@ -10,6 +10,7 @@ import {summarizeTools} from '../../../packages/backend/src/tui/summary.mjs';
 import './sessions-transcript.css';
 
 import {el} from './sessions-util.js';
+import {threadViewState as viewState} from './thread-view-state.js';
 const base=p=>String(p||'').split('/').filter(Boolean).pop()||'';
 const dur=n=>n<60?n+'s':Math.floor(n/60)+'m '+String(n%60).padStart(2,'0')+'s';
 const kfmt=n=>n>=1000?(n/1000).toFixed(1).replace(/\.0$/,'')+'k':String(n);
@@ -198,14 +199,23 @@ export function createTranscript(c){
   const b=el('button','button button--subtle','Open terminal');b.type='button';b.addEventListener('click',()=>c.setMode('terminal'));n.append(b);
   box.append(n);
  };
+ // Reopening a session puts the reader back at the saved message (index + offset, as threads-ui saves it) once the first item render exists.
+ let saved=null;
+ function restoreScroll(box,st){
+  const root=box.parentElement;if(!root||st.following!==false||!st.anchor)return;
+  let inputs=0;const seen=()=>{inputs++;};for(const t of ['wheel','keydown','pointerdown'])root.addEventListener(t,seen,{passive:true,capture:true,once:true});
+  const pin=()=>{const n=box.children[st.anchor.i];if(n)root.scrollTop+=n.getBoundingClientRect().top-root.getBoundingClientRect().top-st.anchor.y;};
+  pin();for(const ms of [100,300,700,1500])setTimeout(()=>{if(c.box===box&&!inputs)pin();},ms);
+ }
  function drawChat(){
   if(!c.box||!c.active)return;
   const items=!!c.ui?.items?.length;
   if(items!==c.useItems){c.useItems=items;c.box.replaceChildren();tr.reset();}
   if(items)tr.draw();else{renderChat(c.box,c.lastMsgs);const first=c.firstText.get(c.active.id);if(first&&!c.lastMsgs.some(m=>m.role==='user'))c.box.prepend(Object.assign(el('article','thread-message thread-user thread-pending',first),{ariaBusy:'true'}));if(states.get(c.active.id)==='needs_permission'&&!c.ui?.prompt)notice(c.box,c.active.s);tr.paintStatus();}
+  if(items&&saved){const st=saved;saved=null;restoreScroll(c.box,st);}
  }
  function showChat(){
-  c.box=el('div','thread-messages session-transcript');hooks.showHistory(c.box);tr.reset();c.useItems=false;
+  c.box=el('div','thread-messages session-transcript');hooks.showHistory(c.box);tr.reset();c.useItems=false;saved={...viewState.state};
   const s=c.active.s;
   c.unsubs.forEach(f=>f());c.unsubs=[];
   const msgs=m=>Array.isArray(m)?m:m?.messages||[];
