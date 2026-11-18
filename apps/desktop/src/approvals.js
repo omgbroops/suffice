@@ -9,6 +9,7 @@ export function connectApprovals(api,toast){
  const key=event=>`${event.threadId||event.clientId}:${event.requestId}`;
  const belongs=event=>[event.threadId,event.clientId].filter(Boolean).includes(threadViewState.id);
  function draw(){
+  document.dispatchEvent(new Event('suffice-approvals'));
   const next=[...requests.entries()].find(([,event])=>belongs(event));
   if(!next){disconnectPreview();disconnectPreview=()=>{};const hadFocus=!!panel?.contains(document.activeElement);shown=null;panel?.remove();panel=null;delete form.dataset.approval;for(const child of form.children)if(child!==panel)child.inert=false;form.resizePrompt?.();if(hadFocus)prompt.focus({preventScroll:true});return;}
   if(shown===next[0])return;disconnectPreview();shown=next[0];const event=next[1];panel?.remove();panel=document.createElement('section');panel.className='composer-approval';panel.setAttribute('aria-label','Agent approval');form.append(panel);form.dataset.approval='true';for(const child of form.children)if(child!==panel)child.inert=true;
@@ -30,5 +31,5 @@ export function connectApprovals(api,toast){
   if(event.event==='approval_resolved'){requests.delete(key(event));shown=null;draw();}
   if(event.event==='background_completed'){for(const [id,pending] of requests)if([pending.threadId,pending.clientId].includes(event.threadId))requests.delete(id);shown=null;draw();}
  };api.onEvent(receive);
- return {receive,restore:(threadId,pending)=>{for(const [id,event] of requests)if([event.threadId,event.clientId].includes(threadId))requests.delete(id);for(const event of pending)requests.set(key(event),event);shown=null;draw();},clear:threadId=>{for(const [id,event] of requests)if([event.threadId,event.clientId].includes(threadId))requests.delete(id);shown=null;draw();}};
+ return {pending:()=>[...requests.values()],receive,restore:(threadId,pending)=>{for(const [id,event] of requests)if([event.threadId,event.clientId].includes(threadId))requests.delete(id);for(const event of pending)requests.set(key(event),event);shown=null;draw();},clear:threadId=>{for(const [id,event] of requests)if([event.threadId,event.clientId].includes(threadId))requests.delete(id);shown=null;draw();}};
 }

@@ -8,6 +8,7 @@ import {createControls} from './sessions-controls.js';
 import {connectSessionHeader,viewId,storedTitle} from './sessions-header.js';
 import {createTerminal} from './sessions-terminal.js';
 import {createApproval} from './sessions-approval.js';
+import {updateSessionDirectory} from './thread-directory.js';
 import './sessions.css';
 
 const sx=window.sufficeDesktop?.sessions;
@@ -55,6 +56,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
    paint(s);
   }
   for(const [id,row] of rows)if(!seen.has(id)){row.remove();rows.delete(id);}
+  publish();
  }
  function statusOf(s){
   let state=states.get(s.id)||'starting';
@@ -63,6 +65,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   if(state==='waiting_input'&&prompts.get(s.id)===false&&!busy.get(s.id))return 'done'; // nothing on screen needs you: clear the badge
   return STATUS[state]||'working';
  }
+ function publish(){updateSessionDirectory([...rows.values()].map(r=>({id:'session-'+r._s.id,title:c.name(r._s),project:base(r._s.cwd),status:statusOf(r._s),modified:activity.get(r._s.id)||Date.now(),agent:labels.get(r._s.id),open:()=>open(r._s)})));}
  function paint(s){
   let row=rows.get(s.id);
   if(!row){row=el('button','thread-row session-row session-row--sidebar');row.type='button';row.addEventListener('click',()=>open(row._s));rows.set(s.id,row);side.append(row);}
@@ -71,7 +74,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
   const label=labels.get(s.id);
   populateThreadRow(row,{id:'session-'+s.id,title:c.name(s),project:base(s.cwd),status,modified:activity.get(s.id)||Date.now(),agent:label,provider:providerOf(s.agent),model:label});
   row.setAttribute('aria-pressed',String(c.active?.id===s.id));row.title=`${c.name(s)} · ${base(s.cwd)}`;
-  tickThreadTimes(row);sortRows();
+  tickThreadTimes(row);sortRows();publish();
  }
  // Newest activity first, like the thread list.
  function sortRows(){const order=[...rows.entries()].sort((a,b)=>(activity.get(b[0])||0)-(activity.get(a[0])||0)).map(e=>e[1]);if(order.some((r,i)=>side.children[i]!==r))side.append(...order);}
