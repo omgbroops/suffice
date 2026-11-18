@@ -8,10 +8,10 @@ export function sessionUsage(session){
   return {cost:number(stats.cost),totalTokens:number(stats.tokens?.total),windowTokens:number(context?.tokens),windowPercent:number(context?.percent)};
 }
 
-// Per-run spend cap. Defaults are a logged guess; env overrides exist for tests.
-export function runCaps(env=process.env,fileTokens=0){
+// Per-run spend cap. fileTokens: undefined = nothing saved (default 2M), 0 = saved as no cap. Defaults are a logged guess; env overrides exist for tests.
+export function runCaps(env=process.env,fileTokens){
   const pick=(raw,fallback)=>{const value=Number(raw);return raw!==undefined&&raw!==''&&Number.isFinite(value)&&value>=0?value:fallback;};
-  return {usd:pick(env.SUFFICE_RUN_CAP_USD,5),tokens:pick(env.SUFFICE_RUN_CAP_TOKENS,fileTokens||2000000)};
+  return {usd:pick(env.SUFFICE_RUN_CAP_USD,5),tokens:pick(env.SUFFICE_RUN_CAP_TOKENS,fileTokens===undefined?2000000:fileTokens||Infinity)};
 }
 const compact=n=>n>=1e6?`${+(n/1e6).toFixed(1)}M`:n>=1e3?`${+(n/1e3).toFixed(1)}K`:String(n);
 // Returns the stop message when the run delta is strictly over a cap, else null. Unknown cost is checked by tokens alone.

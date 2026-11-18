@@ -1,5 +1,5 @@
 import {compact} from './usage-settings.js';
-const field=(name,label,note,value)=>`<div class="settings-option"><div class="settings-option-copy"><div><label class="settings-option-label" for="budget-${name}">${label}</label><p>${note}</p></div></div><input id="budget-${name}" name="${name}" class="budget-input" type="number" min="0" step="1000" inputmode="numeric" placeholder="No cap" value="${value||''}"></div>`;
+const field=(name,label,note,value)=>`<div class="settings-option"><div class="settings-option-copy"><div><label class="settings-option-label" for="budget-${name}">${label}</label><p>${note}</p></div></div><input id="budget-${name}" name="${name}" class="budget-input" type="number" min="0" step="1" inputmode="numeric" placeholder="No cap" value="${value||''}"></div>`;
 // Settings > Usage: weekly and per-run token caps, enforced by the backend budget in the worker.
 export function mountBudgetSettings(host,api){
  const draw=async state=>{

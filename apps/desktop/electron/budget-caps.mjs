@@ -1,4 +1,4 @@
-import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+import {readFileSync,writeFileSync,mkdirSync,existsSync} from 'node:fs';
 import {resolve} from 'node:path';
 import {createBudget,createFileStore} from '../../../packages/backend/src/budget/index.mjs';
 
@@ -9,6 +9,8 @@ export function readCaps(home){
   const n=v=>Number.isFinite(v)&&v>0?Math.floor(v):0;
   return {weeklyTokens:n(raw.weeklyTokens),runTokens:n(raw.runTokens)};
 }
+// undefined until the user saves caps; a saved 0 means no per-run cap.
+export const savedRunTokens=home=>existsSync(file(home))?readCaps(home).runTokens:undefined;
 export function writeCaps(home,input){
   for(const k of ['weeklyTokens','runTokens'])if(!Number.isFinite(input?.[k])||input[k]<0)throw new Error(`${k} must be a number >= 0`);
   mkdirSync(home,{recursive:true});const caps={weeklyTokens:Math.floor(input.weeklyTokens),runTokens:Math.floor(input.runTokens)};

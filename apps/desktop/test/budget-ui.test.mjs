@@ -23,15 +23,15 @@ test('Settings > Usage caps save through the real backend budget and gate turns'
   const weekly=page.getByLabel('Weekly cap'),run=page.getByLabel('Per-run cap'),status=page.locator('.budget-status');
   await weekly.waitFor();assert.equal(await weekly.inputValue(),'');assert.match(await status.innerText(),/No weekly cap set/);
   await shot('caps-empty');
-  await weekly.fill('500000');await run.fill('120000');await page.getByRole('button',{name:'Save caps'}).click();
+  await weekly.fill('500000');await run.fill('120');await page.getByRole('button',{name:'Save caps'}).click();
   await page.getByText('0 of 500K used this week').waitFor();assert.match(await status.innerText(),/Saved/);
-  assert.deepEqual(JSON.parse(await readFile(resolve(home,'budget-caps.json'),'utf8')),{weeklyTokens:500000,runTokens:120000});
+  assert.deepEqual(JSON.parse(await readFile(resolve(home,'budget-caps.json'),'utf8')),{weeklyTokens:500000,runTokens:120});
   await shot('caps-saved');
   // Reopen: values persist from the file.
   await page.reload();await openUsage();
-  await page.getByLabel('Weekly cap').waitFor();assert.equal(await page.getByLabel('Per-run cap').inputValue(),'120000');
+  await page.getByLabel('Weekly cap').waitFor();assert.equal(await page.getByLabel('Per-run cap').inputValue(),'120');
   // Backend gate: a spent window refuses the next turn; the backend file store holds the spend.
-  assert.deepEqual(readCaps(home),{weeklyTokens:500000,runTokens:120000});
+  assert.deepEqual(readCaps(home),{weeklyTokens:500000,runTokens:120});
   gateTurn(home)(500000);assert.throws(()=>gateTurn(home),/weekly cap reached/);
   await page.reload();await openUsage();
   await page.getByText('500K of 500K used this week').waitFor();await shot('caps-spent');

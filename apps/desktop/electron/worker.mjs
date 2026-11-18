@@ -7,7 +7,7 @@ import {createChatChangeTracker} from './chat-changes.mjs';
 import {createChatGitTracker} from './chat-git.mjs';
 import {createThreadRouter} from './thread-router.mjs';
 import {sessionUsage,runCaps,runCapExceeded} from './usage.mjs';
-import {readCaps,gateTurn} from './budget-caps.mjs';
+import {savedRunTokens,gateTurn} from './budget-caps.mjs';
 import {installContext,sessionInventory} from '../shared/context-items.mjs';
 import {randomUUID,createHash} from 'node:crypto';
 import {mkdir,realpath,stat} from 'node:fs/promises';
@@ -116,7 +116,7 @@ async function receive(message) {
     turnPresentation={id:randomUUID(),startedAt:payload.turnStartedAt||Date.now(),provider:agent.session.model?.provider||payload.provider,model:agent.session.model?.id||payload.model,modelName:agent.session.model?.name,effort:agent.session.thinkingLevel||payload.effort};
     agent.session.sessionManager?.appendCustomEntry?.('suffice:turn-start',{...turnPresentation,promptHash:createHash('sha256').update(payload.prompt).digest('hex'),displayPrompt:payload.displayPrompt??payload.prompt,attachments:payload.attachmentMetadata||[]});send({event:'turn_started',presentation:turnPresentation});
     await changeTracker?.beginTurn();
-    const recordWeekly=gateTurn(home),fileCaps=readCaps(home);capState={base:sessionUsage(agent.session),caps:runCaps(process.env,fileCaps.runTokens),message:null,recordWeekly};
+    const recordWeekly=gateTurn(home),fileTokens=savedRunTokens(home);capState={base:sessionUsage(agent.session),caps:runCaps(process.env,fileTokens),message:null,recordWeekly};
     if(sessionPath)await checkpoint(cwd,threadId(sessionPath),payload.displayPrompt??payload.prompt).catch(()=>{});// a checkpoint failure never blocks the turn
     const choices=payload.context,restoreContext=installContext(agent.session,choices);
     pendingTurn=()=>{turns.push({n:++turnCount,at:Date.now(),...sessionInventory(agent.session,agent.session.messages??[]),removed:choices?.exclude||[],summaries:!!choices?.summaries});if(turns.length>10)turns.shift();};
