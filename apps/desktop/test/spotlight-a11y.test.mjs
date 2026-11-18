@@ -23,8 +23,8 @@ test('Spotlight reopen during close fade, Tab focus loop, scope keys, ARIA state
   for(let i=0;i<8;i++){await page.keyboard.press('Tab');seen.add(await page.evaluate(()=>{const a=document.activeElement;return document.querySelector('.spotlight').contains(a)?(a.getAttribute('aria-label')||a.getAttribute('role')||a.tagName):'OUTSIDE';}));}
   assert.ok(!seen.has('OUTSIDE'),'focus left dialog');assert.ok(seen.has('Close search')&&seen.has('tab'),[...seen].join());
   await input.focus();await page.keyboard.press('Control+Tab');assert.equal(await page.getByRole('tab',{name:/Threads/}).getAttribute('aria-selected'),'true');
-  await page.getByRole('tab',{name:/Threads/}).focus();await page.keyboard.press('ArrowRight');assert.equal(await page.getByRole('tab',{name:/Commands/}).getAttribute('aria-selected'),'true');
-  await page.getByRole('tab',{name:/Commands/}).focus();await page.keyboard.press('ArrowLeft');assert.equal(await page.getByRole('tab',{name:/Threads/}).getAttribute('aria-selected'),'true');
+  await page.getByRole('tab',{name:/Threads/}).focus();await page.keyboard.press('ArrowRight');assert.equal(await page.getByRole('tab',{name:/Sessions/}).getAttribute('aria-selected'),'true');
+  await page.getByRole('tab',{name:/Sessions/}).focus();await page.keyboard.press('ArrowLeft');assert.equal(await page.getByRole('tab',{name:/Threads/}).getAttribute('aria-selected'),'true');
   await page.getByRole('tab',{name:/All/}).click();
   await input.fill('zzqxq');await page.waitForTimeout(500);
   assert.equal(await input.getAttribute('aria-expanded'),'false');assert.match(await page.locator('.spotlight [aria-live]').textContent(),/0 results/);
