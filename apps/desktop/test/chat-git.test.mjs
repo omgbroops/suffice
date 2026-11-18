@@ -13,3 +13,13 @@ test('chat Git receipts isolate branches and explicit PR creation from shared re
  await call('git switch safe',{content:[]});assert.equal((await readChatGit(home,id)).branch,'safe');
  const resumed=createChatGitTracker({cwd,home,getId:()=>'c'.repeat(32)});await resumed.initialize(false);assert.equal(await readChatGit(home,'c'.repeat(32)),null);
 });
+test('chat-git snapshot runs hardened git: parent GIT_DIR is ignored',async()=>{
+ const {cwd}=await branchFixture(),other=await branchFixture();await other.git('checkout','-b','decoy');
+ const home=await mkdtemp(resolve(tmpdir(),'suffice-chat-git-')),id='d'.repeat(32),saved={...process.env};
+ try{
+  Object.assign(process.env,{GIT_DIR:resolve(other.cwd,'.git'),GIT_WORK_TREE:other.cwd});
+  const tracker=createChatGitTracker({cwd,home,getId:()=>id});await tracker.initialize(true);
+  await tracker.after(null,{name:'bash',args:{command:'git switch safe'},result:{content:[]}});
+  assert.notEqual((await readChatGit(home,id)).branch,'decoy');
+ }finally{for(const k of Object.keys(process.env))if(!(k in saved))delete process.env[k];Object.assign(process.env,saved);}
+});
