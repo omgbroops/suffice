@@ -43,7 +43,8 @@ test('Start screen: greeting, Needs-you, real-state Try placeholder, 3 recent ca
   await page.evaluate(()=>{const r=document.querySelector('.sidebar .thread-row');r.dataset.status='approval';r.append(document.createElement('i'));});
   await page.waitForFunction(()=>document.querySelector('.life-needs').dataset.count==='1');
   assert.equal(await page.locator('.life-needs').textContent(),'1 needs you');
-  if(SHOTS)for(const th of ['dark','light']){await page.evaluate(t=>document.documentElement.setAttribute('data-theme',t),th);await page.waitForTimeout(300);await shot(resolve(SHOTS,'needs-'+th+'.png'));}
+  const raise=async()=>{await page.evaluate(()=>{const r=document.querySelector('.sidebar .thread-row');r.dataset.status='approval';r.append(document.createElement('i'));});await page.waitForFunction(()=>document.querySelector('.life-needs').dataset.count==='1');};
+  if(SHOTS)for(const th of ['dark','light']){await page.evaluate(t=>{localStorage.setItem('suffice-theme',t);},th);await page.reload();await page.locator('.life-card').first().waitFor();await raise();assert.equal(await page.evaluate(()=>document.documentElement.getAttribute('data-theme')),th);await page.waitForTimeout(900);await shot(resolve(SHOTS,'needs-'+th+'.png'));}
   await page.evaluate(()=>{const r=document.querySelector('.sidebar .thread-row');r.dataset.status='done';r.append(document.createElement('i'));});
   await page.waitForFunction(()=>document.querySelector('.life-needs').dataset.count==='0');
   // Idle motion stops on typing: the quiet flag is set and the placeholder stops rotating.
@@ -51,7 +52,7 @@ test('Start screen: greeting, Needs-you, real-state Try placeholder, 3 recent ca
   await page.keyboard.press('Tab');
   assert.match(await prompt.inputValue(),/^Fix the failing test “retries after a timeout”$/);
   assert.equal(await page.locator('.agent-area.life-quiet').count(),1);
-  if(SHOTS)await shot(resolve(SHOTS,'typed-dark.png'));
+  if(SHOTS){await page.evaluate(()=>document.documentElement.setAttribute('data-theme','dark'));await page.waitForTimeout(300);await shot(resolve(SHOTS,'typed-dark.png'));}
   // Clicking a card opens that thread, which hides the start screen.
   await prompt.fill('');await page.locator('.life-card').first().click();await page.locator('.workspace.thread-view').waitFor();assert.equal(await page.locator('.life-head').isVisible(),false);
  }finally{await app.close();}
