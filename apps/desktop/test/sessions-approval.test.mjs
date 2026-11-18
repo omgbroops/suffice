@@ -62,6 +62,21 @@ test('session approval cards',{timeout:240000},async()=>{
    assert.equal((await keys()).at(-1),'1','pressing 1 answers option index 0');
   }else{await type('1');await gone().catch(()=>{});}
 
+  // decline: click "No, and tell Claude..." and Escape both hand the composer back, and the next message reaches the agent
+  for(const via of ['click','escape']){
+   await open('/bash','Do you want to proceed?');
+   if(!BEFORE){
+    if(via==='click')await card.locator('.approval-controls .provider-dialog-button',{hasText:'No, and tell Claude'}).click();else{await card.hover();await page.keyboard.press('Escape');}
+    await page.waitForFunction(()=>{const c=document.querySelector('.composer');return c&&!('approval' in c.dataset)&&!document.querySelector('.composer-approval:not([hidden])');},null,{timeout:3000}).catch(async e=>{throw new Error(via+': '+e.message+' | log='+(await readFile(simLog,'utf8')).replace(/\n/g,'')+' | ui='+JSON.stringify(await page.evaluate(i=>sufficeDesktop.sessions.ui(i)?.prompt,sid)));});
+    assert.equal((await keys()).at(-1),'3',via+' sends the deny option');
+    assert.ok(await page.evaluate(()=>document.activeElement?.matches('.composer textarea')),via+': textarea focused');
+    const msg='after-'+via;await page.keyboard.type(msg);await page.keyboard.press('Enter');
+    await page.waitForTimeout(800);
+    assert.ok((await keys()).join('').includes(msg),via+': follow-up reached the fake agent');
+    await shot('decline-'+via+'.png');
+   }else{await type('3');await gone().catch(()=>{});}
+  }
+
   // long command, preview scrolled
   await open('/long','Do you want to proceed?');
   await page.locator('pre.approval-preview').evaluate(e=>{e.scrollTop=e.scrollHeight;});
