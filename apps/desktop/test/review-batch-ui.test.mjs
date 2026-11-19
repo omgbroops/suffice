@@ -55,7 +55,7 @@ test('Changes: accept, reject, comment, one Send with outcome chips, errors stay
   assert.deepEqual(await page.locator('.review-card .review-outcome').allInnerTexts(),['Fixed','Skipped','No change needed']);
   const turns=await app.evaluate(()=>globalThis.turns);assert.equal(turns.length,1);assert.match(turns[0].prompt,/Comment 1[\s\S]*Comment 2[\s\S]*Comment 3/);assert.match(turns[0].prompt,/src\/calc\.js:\d+/);assert.equal(await page.locator('.review-footer').count(),0);await shot('4-outcomes');
   // A malformed reply never turns into 'fixed': the card stays sent with an error row.
-  const line=page.locator('.code-line.addition',{hasText:'"two"'});await line.hover();await line.locator('.review-gutter').click();await page.locator('.review-compose textarea').fill('Again');await page.locator('.review-compose').getByRole('button',{name:'Add comment'}).click();
+  const line=page.locator('.code-line.addition',{hasText:'"two"'});await line.hover();await line.locator('.review-gutter').click();await page.locator('.review-compose textarea').fill('x'.repeat(4000));assert.equal(await page.locator('.review-count').textContent(),'2000/2000');await page.locator('.review-compose textarea').fill('Again');await page.locator('.review-compose').getByRole('button',{name:'Add comment'}).click();
   await app.evaluate(()=>{globalThis.reply=()=>({text:'Everything is fixed.'});});
   await page.locator('.review-send').click();await page.locator('.review-card[data-state="sent"] .review-error').waitFor();
   assert.equal(await page.locator('.review-card',{hasText:'Again'}).locator('.review-outcome').innerText(),'Sent');await shot('5-error');
