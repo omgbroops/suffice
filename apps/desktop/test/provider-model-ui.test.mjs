@@ -8,7 +8,7 @@ import {_electron} from 'playwright-core';
 import {guard} from './electron-guard.mjs';
 
 test('connected providers, modal cancellation and model visibility persist into the picker',{timeout:60000},async()=>{
- const home=await mkdtemp(resolve(tmpdir(),'suffice-provider-models-')),env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
+ const home=await mkdtemp(resolve(tmpdir(),'suffice-provider-models-')),env={...process.env,PI_OFFLINE:'1',SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
  const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
  try{
   await app.evaluate(({ipcMain,BrowserWindow})=>{
