@@ -1,0 +1,18 @@
+/* Cursor overlay: a full-display transparent page. Only the pill and the ring draw; everything else stays clear. */
+html, body.overlay-window { margin: 0; height: 100%; background: transparent; overflow: hidden; }
+.overlay-window #overlay { position: fixed; inset: 0; font: 450 13px/18px var(--font-sans, system-ui); letter-spacing: -0.01em; color: var(--text); -webkit-font-smoothing: antialiased; }
+.ov-pill { position: absolute; display: flex; flex-direction: column; gap: 6px; width: 300px; padding: 6px; border-radius: 14px; background: var(--surface-sidebar); box-shadow: var(--shadow-overlay), 0 0 0 0.5px var(--border-strong); }
+.ov-status { display: flex; align-items: center; gap: 8px; min-height: 28px; padding: 0 8px; }
+.ov-glyph { flex: none; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 8px; background: var(--well-bg); color: var(--text-muted); }
+.ov-glyph svg { width: 14px; height: 14px; }
+.ov-pill[data-mode='listening'] .ov-glyph { background: var(--send-bg); color: var(--send-fg); }
+.ov-hint { color: var(--text-faint); font-size: 12.5px; }
+.ov-text { padding: 2px 8px 6px; max-height: 180px; overflow: hidden; color: var(--text-strong); white-space: pre-wrap; overflow-wrap: anywhere; }
+.ov-notice { color: var(--text-muted); }
+.ov-field { border-radius: 8px; background: var(--well-bg); box-shadow: var(--shadow-well); }
+.ov-field:focus-within { box-shadow: var(--shadow-well), 0 0 0 1px var(--border-focus); }
+.ov-field input { display: block; width: 100%; height: 36px; border: 0; outline: 0; background: transparent; color: var(--text-strong); font: inherit; font-size: 14px; padding: 0 12px; }
+.ov-field input::placeholder { color: var(--text-faint); }
+.ov-ring { position: absolute; width: 56px; height: 56px; margin: -28px 0 0 -28px; border-radius: 50%; border: 2px solid var(--text-strong); box-shadow: 0 0 0 1px var(--surface-sidebar), 0 0 0 1px var(--surface-sidebar) inset; opacity: 0; }
+.ov-ring-label { position: absolute; max-width: 220px; padding: 3px 8px; border-radius: 8px; background: var(--surface-sidebar); color: var(--text-strong); box-shadow: var(--shadow-overlay), 0 0 0 0.5px var(--border-strong); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0; }
+@media (prefers-reduced-motion: reduce) { .ov-ring { transition: none; } }

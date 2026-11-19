@@ -1,0 +1,9 @@
+.reminders-section { display: flex; flex-direction: column; margin: 0 0 var(--space-2); }
+.reminders-list { display: flex; flex-direction: column; gap: 2px; padding: 0 var(--space-2); }
+.reminder-row { display: grid; grid-template-columns: 1fr auto; grid-template-areas: 'text done' 'due done'; column-gap: 8px; align-items: center; padding: 6px 8px; border-radius: 8px; }
+.reminder-row:hover { background: var(--hover-fill); }
+.reminder-text { grid-area: text; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text-strong); font-size: var(--text-sm, 13px); }
+.reminder-due { grid-area: due; color: var(--text-faint); font-size: var(--text-xs); }
+.reminder-row[data-fired='true'] .reminder-due { color: var(--text-muted); }
+.reminder-done { grid-area: done; height: 24px; padding: 0 8px; border: 0; border-radius: 8px; background: transparent; color: var(--text-muted); font: inherit; font-size: var(--text-xs); cursor: pointer; }
+.reminder-done:hover { background: var(--selected-fill); color: var(--text-strong); }
