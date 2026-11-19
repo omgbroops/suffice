@@ -61,3 +61,20 @@ test('large page: truncation marker reaches the loop; rapid clicks resolve again
   const rs = await Promise.all([b.click('a', '@e2'), b.click('a', '@e3'), b.click('a', '@e2')]);
   assert.deepEqual(rs.map((x) => x.ok), [true, true, true]);
 });
+
+import { nativeDesktop } from '../src/ref-browser.mjs';
+test('nativeDesktop: snapshot refs -> press/set via ax-snapshot exec; stale ref rejected', async () => {
+  const calls = [];
+  const exec = async (bin, a) => { calls.push(a); return JSON.stringify(a[0] === 'snapshot' ? { tree: { id: '0', role: 'AXApplication', name: 'App', children: [{ id: '0.0', role: 'AXButton', name: 'Save', actions: ['press'] }, { id: '0.1', role: 'AXTextField', name: 'Name', value: '' }] } } : { ok: true }); };
+  const d = nativeDesktop(exec, 'ax');
+  const s = await d.snapshot('a', 'App');
+  const els = s.data.tree.children;
+  assert.ok(s.ok && els.length >= 2);
+  const btn = els.find((e) => e.name === 'Save'); const fld = els.find((e) => e.name === 'Name');
+  assert.equal((await d.click('a', btn.ref)).ok, true);
+  assert.deepEqual(calls.at(-1), ['press', '0.0']);
+  assert.equal((await d.type('a', fld.ref, 'hi')).ok, true);
+  assert.deepEqual(calls.at(-1), ['set', '0.1', 'hi']);
+  await d.snapshot('a', 'App');
+  assert.equal((await d.click('a', '@e99')).reason, 'stale_ref');
+});
