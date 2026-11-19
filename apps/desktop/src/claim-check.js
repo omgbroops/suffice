@@ -50,7 +50,7 @@ export function claimsFor(items){
     else{
      const events=mine.map(x=>({type:'exec',seq:prior.indexOf(x)+1,data:{command:String(x.input?.command||''),code:code(x)}}));
      const v=verifyClaim(c,events,{seq:prior.length+1});
-     row=v.ok?{ok:true}:{ok:false,reason:v.reason==='no exec event backs this claim'?`no matching command ran in this turn`:v.reason.replace('exec exited','last matching command exited')};
+     row=v.ok?{ok:true}:{ok:false,reason:mine.at(-1)?.status==='interrupted'?'last matching command was stopped before it finished':v.reason==='no exec event backs this claim'?`no matching command ran in this turn`:v.reason.replace('exec exited','last matching command exited')};
      if(v.ok){const l=events.reduce((m,e)=>!m||e.seq>m.seq?e:m,null);row.cmd=l?.data.command;}
      else if(events.length)row.cmd=events.at(-1).data.command;
     }
