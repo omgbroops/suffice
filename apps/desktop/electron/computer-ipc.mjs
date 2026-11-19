@@ -52,7 +52,7 @@ export function createComputer({dataDir, env = process.env, send}) {
   live.set(id, ac);
   let deps, win = null;
   if (fake) { const f = fakeComputer(url.href); deps = {browser: f.browser, decide: f.decide}; }
-  else if (env.SUFFICE_COMPUTER_REF === 'cdp') {
+  else if (env.SUFFICE_COMPUTER_REF !== 'exec') { // ref snapshots are the default; SUFFICE_COMPUTER_REF=exec opts back to the exec browser
    if (!backend) throw new Error('Backend is not ready');
    // Ref snapshots over a hidden Electron page (webContents.debugger): no screen, no pointer. Navigation stays on the start site.
    const {BrowserWindow} = await import('electron');
@@ -60,7 +60,7 @@ export function createComputer({dataDir, env = process.env, send}) {
    const wc = win.webContents, ok = u => { try { return new URL(u).hostname === url.hostname; } catch { return false; } };
    wc.on('will-navigate', (e, u) => { if (!ok(u)) e.preventDefault(); });
    wc.setWindowOpenHandler(() => ({action: 'deny'}));
-   deps = {browser: cdpBrowser(wc), decide: backend.decide};
+   deps = {browser: cdpBrowser(wc), decide: backend.decide, limits: {shots: false}}; // screenshots only when the tree is empty
   }
   else {
    if (!backend) throw new Error('Backend is not ready');

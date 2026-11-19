@@ -11,7 +11,7 @@ import { fill, keyOf, template } from './replay.mjs';
 const MODES = ['tree', 'snapshot', 'hybrid', 'screenshot'];
 const ALLOWED = { browser: ['click', 'type', 'press', 'navigate', 'scroll', 'wait'], desktop: ['click', 'type', 'scroll', 'key'] };
 const INTERACTIVE = /button|link|textbox|checkbox|radio|combobox|menu|tab|switch|search|slider|option|input|field/i;
-const DEFAULTS = { maxSteps: 20, maxMs: 300000, maxFailures: 3, loopRepeats: 3, maxEscalations: 1, maxElements: 40, maxChars: 4000, maxText: 2000, threshold: 0.6 };
+const DEFAULTS = { maxSteps: 20, maxMs: 300000, maxFailures: 3, loopRepeats: 3, maxEscalations: 1, maxElements: 40, maxChars: 4000, maxText: 2000, threshold: 0.6, shots: true };
 // §4.1: page text is data; neutralise the delimiter so it cannot close the untrusted block early.
 const esc = (s) => String(s ?? '').replace(/\[(?=\[)/g, '[ ').replace(/\](?=\])/g, '] ');
 const cut = (s, n) => String(s ?? '').slice(0, n);
@@ -60,7 +60,7 @@ export function createComputerAgent({ browser, desktop, decide, journal, clock, 
         walk(r?.data?.tree);
       }
       let shot = null;
-      if (mode === 'hybrid' || mode === 'screenshot' || !elements.length) {
+      if (((mode === 'hybrid' || mode === 'screenshot') && L.shots) || !elements.length) {
         const p = join(tmpdir(), `computer-${String(agentId).replace(/[^\w-]/g, '_')}.png`);
         const r = surface === 'browser' ? await browser.screenshot(id, p) : await desktop.screenshot(id, S.app, p);
         if (r?.ok) shot = p;
