@@ -168,3 +168,17 @@ test('replay hands a {{secret}} step to the model, resumes, and does not count a
   assert.equal((await replay.get(key)).fails, 0);
   assert.equal((await replay.get(key)).steps[1].text, '{{secret}}');
 });
+
+test('replay: a denied approval ends the run; the live model is not asked to retry', async () => {
+  const pages = { home: { url: 'https://d.test/', els: [['button', 'Delete account', { to: 'gone' }]] }, gone: { url: 'https://d.test/gone', els: [['heading', 'Gone']] } };
+  const replay = createReplayCache({ dir: await fs.mkdtemp(path.join(os.tmpdir(), 'gaps-')) });
+  const key = keyOf('g', 'browser', 'https://d.test/');
+  await replay.put(key, [{ action: 'click', role: 'button', name: 'Delete account' }], 'a');
+  const b = fakeBrowser(pages);
+  const d = fakeDecide({ acts: [{ action: 'click', ref: 'delete account' }], 'action.approve': { decision: 'deny', reason: 'no' } });
+  const r = await run(createComputerAgent({ browser: b, decide: d, clock: fakeClock(), replay }), { start: 'https://d.test/' });
+  assert.deepEqual([r.ok, r.stopReason, r.steps.length, r.steps[0].reason], [false, 'denied', 1, 'no']);
+  assert.equal(d.count('computer.act'), 0);
+  assert.equal(b.state.page, 'home');
+  assert.equal((await replay.get(key)).fails, 0);
+});

@@ -532,3 +532,12 @@ test('pool: desktop actions on the same app are serialised, different apps overl
   await Promise.all([go('Notes', 'p3'), go('Mail', 'p4')]);
   assert.equal(d2.state.globalPeak, 2);
 });
+
+test('shots:false ignores a model-chosen screenshot but keeps the empty-tree fallback', async () => {
+  let b = fakeBrowser(); let d = fakeDecide({ 'computer.observe': { mode: 'hybrid' }, acts: [{ action: 'none', done: true }] });
+  await run(createComputerAgent({ browser: b, decide: d, clock: fakeClock(), limits: { shots: false } }));
+  assert.ok(!b.state.log.some((l) => l[0] === 'screenshot'));
+  b = fakeBrowser({ home: { url: 'https://c.test/', els: [] } });
+  await run(createComputerAgent({ browser: b, decide: fakeDecide({ acts: [{ action: 'none', done: true }] }), clock: fakeClock(), limits: { shots: false } }), { start: 'https://c.test/' });
+  assert.ok(b.state.log.some((l) => l[0] === 'screenshot'));
+});

@@ -1,4 +1,5 @@
 // The computer-use loop: observe, act, check, continue. Every choice goes through the injected decide().
+import {formatElements} from '../../../../src/snapshot.mjs';
 import { randomBytes } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -10,7 +11,7 @@ import { fill, keyOf, template } from './replay.mjs';
 const MODES = ['tree', 'snapshot', 'hybrid', 'screenshot'];
 const ALLOWED = { browser: ['click', 'type', 'press', 'navigate', 'scroll', 'wait'], desktop: ['click', 'type', 'scroll', 'key'] };
 const INTERACTIVE = /button|link|textbox|checkbox|radio|combobox|menu|tab|switch|search|slider|option|input|field/i;
-const DEFAULTS = { maxSteps: 20, maxMs: 300000, maxFailures: 3, loopRepeats: 3, maxEscalations: 1, maxElements: 40, maxChars: 4000, maxText: 2000, threshold: 0.6 };
+const DEFAULTS = { maxSteps: 20, maxMs: 300000, maxFailures: 3, loopRepeats: 3, maxEscalations: 1, maxElements: 40, maxChars: 4000, maxText: 2000, threshold: 0.6, shots: true };
 // §4.1: page text is data; neutralise the delimiter so it cannot close the untrusted block early.
 const esc = (s) => String(s ?? '').replace(/\[(?=\[)/g, '[ ').replace(/\](?=\])/g, '] ');
 const cut = (s, n) => String(s ?? '').slice(0, n);
@@ -59,7 +60,7 @@ export function createComputerAgent({ browser, desktop, decide, journal, clock, 
         walk(r?.data?.tree);
       }
       let shot = null;
-      if (mode === 'hybrid' || mode === 'screenshot' || !elements.length) {
+      if (((mode === 'hybrid' || mode === 'screenshot') && L.shots) || !elements.length) {
         const p = join(tmpdir(), `computer-${String(agentId).replace(/[^\w-]/g, '_')}.png`);
         const r = surface === 'browser' ? await browser.screenshot(id, p) : await desktop.screenshot(id, S.app, p);
         if (r?.ok) shot = p;
@@ -102,7 +103,7 @@ export function createComputerAgent({ browser, desktop, decide, journal, clock, 
           ? await ground({ target: act.ref, elements: visible(o), cached: [act.ref], ask: null })
           : await ground({ target: act.ref, elements: visible(o), ask, threshold: L.threshold, deeper: async () => visible(await observe('snapshot', 12)) });
         if (!g?.element || (replaying && g.rung !== 'cache')) r = { ...bad('not_found', `target not found: ${typeof act.ref === 'string' ? act.ref : act.ref?.name}`), final: true };
-        else { el = g.element; rec.rung = g.rung; sel = { role: el.role, name: el.name }; rec.targetRole = el.role; rec.targetName = el.name; }
+        else { el = g.element; rec.rung = g.rung; sel = { role: el.role, name: el.name }; rec.targetRole = el.role; rec.targetName = el.name; rec.ref = el.ref; }
       }
       if (!r) {
         tags = tagAction({ surface, action: act, element: el ?? undefined, obs: o, app: S.app });
@@ -214,12 +215,13 @@ export function createComputerAgent({ browser, desktop, decide, journal, clock, 
     }
 
     async function commit(rec, act, o) {
+      rec.snap = formatElements(visible(o).filter((e) => e.role), {});
       S.steps.push(rec);
       S.history.push({ step: rec.step, action: rec.action, target: rec.targetName, ok: rec.ok, sig: `${rec.action}|${rec.targetRole}|${rec.targetName}|${act?.text ?? ''}`, changed: S.lastAfter ? S.lastAfter.sig !== o.sig : false });
       S.lastAction = { action: rec.action, target: rec.targetName, ok: rec.ok };
-      const { step, mode, action, targetRole, targetName, rung, riskTags, approved, ok, ms, reason, textLen } = rec;
+      const { step, mode, action, targetRole, targetName, rung, riskTags, approved, ok, ms, reason, textLen, ref, snap } = rec;
       try {
-        await journal?.append({ type: 'computer.step', data: { step, mode, action, targetRole, targetName, rung, riskTags, approved, ok, ms, reason: reason ?? null, ...(textLen !== undefined ? { textLen } : {}) } });
+        await journal?.append({ type: 'computer.step', data: { step, mode, action, targetRole, targetName, rung, riskTags, approved, ok, ms, reason: reason ?? null, ...(ref ? { ref } : {}), ...(snap ? { snap } : {}), ...(textLen !== undefined ? { textLen } : {}) } });
         await slots?.publish(agentId, S.steps);
       } catch { S.jerr = true; }
     }
@@ -265,6 +267,8 @@ export function createComputerAgent({ browser, desktop, decide, journal, clock, 
           o = await observe('tree');
           rec = await doStep(o, { action: st.action, ...(st.role || st.name ? { ref: { role: st.role, name: st.name } } : {}), text, key: st.key, url: st.url }, true);
         }
+        // a denied approval is final (§4.7): end the run, do not let the live model re-ask; the cache is not at fault
+        if (rec && rec.approved === false) { await commit(rec, { text }, o); return finish(false, 'denied'); }
         if (!rec?.ok) { rep.fellBackAt = i; await replay.fail(key); break; }
         await commit(rec, { text }, o);
         if (S.jerr) return finish(false, 'journal_failed');
