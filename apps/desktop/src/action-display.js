@@ -27,6 +27,7 @@ export function actionTitle(part){
   const actions=[...new Set([...names].map(label))];
   return actions.length?joinActivityLabels(actions):(active?'Running code':'Executed code');
  }
+ if(part.name==='tool_search'&&part.done){let found;try{found=JSON.parse(part.output).length}catch{found=0}return `Found ${found} tool${found===1?'':'s'}`;}
  const verb=label(part.name);
  return verb;
 }

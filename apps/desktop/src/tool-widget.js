@@ -18,6 +18,6 @@ export function createToolWidget(part){
  const output=document.createElement('pre');output.className='tool-output';output.textContent=part.output||'';output.hidden=!part.output;
  body.append(input,output);widget.append(summary,body);
  widget.addEventListener('toggle',()=>{if(widget.open&&value)void import('./code-highlight.js').then(({colorCode})=>colorCode(input,part.name==='codemode'?'input.js':part.name==='bash'?'input.sh':'input.json')).catch(()=>{});});
- function update(text,error=false,pending=false){decorateActivitySummary(summary,actionTitle({...part,done:!pending}));const pinned=output.scrollHeight-output.scrollTop-output.clientHeight<48;output.hidden=!text;output.textContent=text;widget.dataset.status=error?'error':pending?'pending':'completed';if(pinned)output.scrollTop=output.scrollHeight;widget.dispatchEvent(new Event('activity-label-change',{bubbles:true}));}
+ function update(text,error=false,pending=false){decorateActivitySummary(summary,actionTitle({...part,done:!pending,output:text}));const pinned=output.scrollHeight-output.scrollTop-output.clientHeight<48;output.hidden=!text;output.textContent=text;widget.dataset.status=error?'error':pending?'pending':'completed';if(pinned)output.scrollTop=output.scrollHeight;widget.dispatchEvent(new Event('activity-label-change',{bubbles:true}));}
  update(part.output||'',part.isError,!part.done);return {element:widget,update};
 }

@@ -45,7 +45,7 @@ export const settingsSections=[
  ]},
  {id:'context',subtitle:'',title:'Context & memory',icon:'context',category:'Agent',groups:[
   group('Context window',[toggle('auto-compact','Automatic compaction',true),select('compact-at','Compact at','80%',['70%','80%','90%']),toggle('context-ring','Show context usage',true)]),
-  group('Token savings',[toggle('defer-mcp-schemas','Load MCP tool details on demand',true),toggle('compact-tool-results','Shorten large tool results',true),select('compact-limit','Shorten results over','2,000 tokens',['1,000 tokens','2,000 tokens','4,000 tokens','8,000 tokens'])]),
+  group('Token savings',[select('defer-tool-schemas','Defer tool schemas','Auto',['Auto','On','Off']),toggle('defer-mcp-schemas','Load MCP tool details on demand',true),toggle('compact-tool-results','Shorten large tool results',true),select('compact-limit','Shorten results over','2,000 tokens',['1,000 tokens','2,000 tokens','4,000 tokens','8,000 tokens'])]),
   group('Repository context',[toggle('project-instructions','Read project instructions',true),toggle('git-context','Include Git context',true),toggle('remember-context','Remember project context',false)]),
  ]},
  {id:'projects',subtitle:'',title:'Projects & Git',icon:'branch',category:'Workspace',groups:[

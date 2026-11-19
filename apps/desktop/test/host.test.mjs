@@ -67,3 +67,13 @@ test('desktop settings reach the harness and approvals wait for the matching ans
  const second=messages.filter(message=>message.event==='approval').at(-1);await host({id:5,action:'approval-answer',payload:{requestId:second.requestId,allow:false}});await rerun;
  assert.equal(disposed,1);assert.equal(captured[1].desktopSettings['compact-at'],'90%');assert.equal(messages.find(message=>message.id===4).result.text,'Denied fixture');
 });
+
+test('first turn of a new thread completes without a scope error (3 concurrent hosts)',async()=>{
+ await Promise.all([1,2,3].map(async n=>{
+  const home=await mkdtemp(resolve(tmpdir(),'suffice-host-first-')),cwd=await mkdtemp(resolve(tmpdir(),'suffice-first-cwd-')),messages=[];
+  const host=createHarnessHost({home,send:m=>messages.push(m),createRuntime:async()=>({isUsingSubscription:()=>true}),createSession:async()=>({session:{setSessionName(){},subscribe(){},setThinkingLevel(){}},sessionPath:()=>null,dispose:async()=>{},run:async()=>'reply '+n})});
+  await host({id:1,action:'status'});
+  await host({id:2,action:'run',payload:{prompt:'hi',effort:'low',cwd,desktopSettings:{naming:'Automatic'}}});
+  const done=messages.find(m=>m.id===2);assert.equal(done.ok,true,done.error);assert.equal(done.result.text,'reply '+n);
+ }));
+});

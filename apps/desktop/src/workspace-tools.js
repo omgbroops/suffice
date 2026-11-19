@@ -26,8 +26,8 @@ export function connectWorkspaceTools(api){
   setupPanelResize({handle:resize,panel:sidebar,property:'--right-panel-width',key:'suffice-right-panel-width',side:'right',minimum:360,maximum:()=>Math.min(960,Math.max(260,innerWidth-document.querySelector('.sidebar').getBoundingClientRect().width-376))});
   connectRightPanel({sidebar,resize,toggle,api});
   const details=document.createElement('div');details.id='context-usage-details';details.className='context-usage-details';details.setAttribute('role','tooltip');details.hidden=true;
-  const labels=['Cost','Window (est.)','Window tokens (est.)','Session total tokens'];
-  const values=labels.map(label=>{const row=document.createElement('div'),name=document.createElement('span'),value=document.createElement('strong');name.textContent=label;value.textContent='–';row.append(name,value);details.append(row);return value;});
+  const labels=['Cost','Window (est.)','Window tokens (est.)','Session total tokens','Tools','Tool tokens saved'];
+  const rows=[];const values=labels.map(label=>{const row=document.createElement('div'),name=document.createElement('span'),value=document.createElement('strong');rows.push(row);name.textContent=label;value.textContent='–';row.append(name,value);details.append(row);return value;});
   const format=new Intl.NumberFormat(undefined,{maximumFractionDigits:0});
   function update(usage){const valid=value=>Number.isFinite(value);const percent=usage?.windowPercent;
     ring.style.setProperty('--context-percent',valid(percent)?Math.min(100,Math.max(0,percent)):0);
@@ -37,6 +37,7 @@ export function connectWorkspaceTools(api){
     values[1].textContent=valid(percent)?`${Math.round(percent)}%`:'–';
     values[2].textContent=valid(usage?.windowTokens)?format.format(usage.windowTokens):'–';
     values[3].textContent=valid(usage?.totalTokens)?format.format(usage.totalTokens):'–';
+    const t=usage?.tools;rows[4].hidden=rows[5].hidden=!t;if(t){values[4].textContent=`${format.format(t.loaded)} loaded · ${format.format(t.deferred)} deferred`;values[5].textContent=format.format(t.saved);}
   }
   let revision=0;
   async function refresh(){if(inSession())return;const version=++revision;try{const usage=await api.usage(viewState.id);if(version===revision)update(usage);}catch{/* Keep the last receipt if the harness is restarting. */}}

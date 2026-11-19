@@ -28,6 +28,8 @@ const extensionPrompts=new Map();let extensionSequence=0;
 const approvals=new Map();let approvalSequence=0,preferencesKey='';
 let resumePath=null,viewedUsage=null,viewRevision=0,capState=null,pendingTurn=null,turnCount=0;const turns=[];
 const threads=threadStore??createThreadStore(home);
+// Tool-schema deferral counts ride on the usage receipt; absent when the session has no registry.
+const withTools=usage=>{const t=agent?.toolStats?.();return usage&&t?.total?{...usage,tools:{loaded:t.loaded,deferred:t.deferred,saved:t.saved}}:usage;};
 async function receive(message) {
   const {id,action,payload={}}=message;
   let ownsRun=false,turnPresentation;
@@ -38,7 +40,7 @@ async function receive(message) {
     if(action==='steer'){if(!busy||!agent)throw new Error('This thread is not running');if(typeof payload.prompt!=='string'||!payload.prompt.trim()||payload.prompt.length>1000000)throw new Error('A valid steering message is required');agent.session.sessionManager?.appendCustomEntry?.('suffice:user-presentation',{promptHash:createHash('sha256').update(payload.prompt).digest('hex'),displayPrompt:payload.displayPrompt??payload.prompt,attachments:payload.attachmentMetadata||[]});await agent.session.steer(payload.prompt,payload.images);send({id,ok:true});return;}
     if(action==='approval-answer'){approvals.get(payload.requestId)?.(!!payload.allow);approvals.delete(payload.requestId);send({id,ok:true});return;}
     if(action==='abort'){abortRequested=true;for(const finish of extensionPrompts.values())finish(undefined);for(const resolve of approvals.values())resolve(false);approvals.clear();agent?.abort();send({id,ok:true});return;}
-    if(action==='usage'){send({id,ok:true,result:sessionUsage(agent?.session)??viewedUsage});return;}
+    if(action==='usage'){send({id,ok:true,result:withTools(sessionUsage(agent?.session))??viewedUsage});return;}
     // Context inspector: what the next turn would send. Without a live agent only the saved messages are known.
     if(action==='context'){const live=agent?.session,messages=live?live.messages??[]:resumePath?SessionManager.open(resumePath).buildSessionContext().messages:[];send({id,ok:true,result:{...sessionInventory(live,messages),turns:turns.map(turn=>({...turn}))}});return;}
     if(action==='threads'){send({id,ok:true,result:await threads.list()});return;}
@@ -104,7 +106,7 @@ async function receive(message) {
           if(event.result){const entry=agent.session.sessionManager?.getEntries().findLast(entry=>entry.type==='compaction');agent.session.sessionManager?.appendCustomEntry('suffice:compaction',{entryId:entry?.id,reason:event.reason});}
           send({event:'compaction_end',reason:event.reason,completed:!!event.result,aborted:event.aborted,errorMessage:event.errorMessage});
         }
-        if(['message_end','tool_execution_end','agent_end'].includes(event.type)){const usage=sessionUsage(agent.session);send({event:'usage',usage});const stop=capState&&!capState.message&&(runCapExceeded(capState.base,usage,capState.caps)||topUp(capState,usage));if(stop){capState.message=stop;agent.abort();}}
+        if(['message_end','tool_execution_end','agent_end'].includes(event.type)){const usage=sessionUsage(agent.session);send({event:'usage',usage:withTools(usage)});const stop=capState&&!capState.message&&(runCapExceeded(capState.base,usage,capState.caps)||topUp(capState,usage));if(stop){capState.message=stop;agent.abort();}}
         if(event.type==='message_update'&&event.assistantMessageEvent?.type==='text_delta')send({event:'text',text:event.assistantMessageEvent.delta});
         if(event.type==='message_start'&&event.message?.role==='assistant'){send({event:'assistant_start'});pendingTurn?.();pendingTurn=null;}
         if(event.type==='message_update'&&event.assistantMessageEvent?.type==='thinking_delta')send({event:'reasoning',text:event.assistantMessageEvent.delta});
