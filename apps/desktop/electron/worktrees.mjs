@@ -68,6 +68,11 @@ export async function adopt(home,repo,path,threadId){
  meta.items[id]={id,repo:top,path,base,threadId:threadId||null,pinned:false,created:Date.now(),...allocatePorts(meta.items)};
  await writeMeta(home,meta);return meta.items[id];
 }
+// Prompt note telling the agent which ports its worktree owns.
+export async function portNote(home,path){
+ const real=await realpath(path).catch(()=>path),i=Object.values((await readMeta(home)).items).find(x=>!x.gone&&x.path===real);
+ return i?`\n\nThis worktree owns dev-server ports ${i.portBase}-${i.portEnd}; use them, never another worktree's.`:'';
+}
 // The app registers a worktree under the client's pending id; swap in the real thread id once it exists.
 export async function claim(home,pendingId,threadId){
  const meta=await readMeta(home);let n=0;

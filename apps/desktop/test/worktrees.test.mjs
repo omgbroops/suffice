@@ -4,7 +4,7 @@ import {mkdtemp,mkdir,writeFile,readFile,symlink,lstat,rm,realpath} from 'node:f
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {execFileSync} from 'node:child_process';
-import {create,list,pin,remove,restore,evict,closeThread} from '../electron/worktrees.mjs';
+import {create,list,pin,remove,restore,evict,closeThread,portNote} from '../electron/worktrees.mjs';
 import {checkpoint,list as rlist,restore as rewind} from '../electron/rewind.mjs';
 const sh=(cwd,cmd)=>execFileSync('sh',['-c',cmd],{cwd,env:{...process.env,GIT_AUTHOR_NAME:'t',GIT_AUTHOR_EMAIL:'t@t',GIT_COMMITTER_NAME:'t',GIT_COMMITTER_EMAIL:'t@t'}}).toString();
 async function fixture(){
@@ -70,5 +70,12 @@ test('closing a thread removes an unchanged worktree and keeps a changed one',as
  assert.deepEqual(await closeThread(home,'y'),[]);
  await assert.rejects(lstat(a.path));await lstat(b.path);
  assert.equal(await readFile(join(repo,'node_modules/pkg/index.js'),'utf8'),'dep');
+ await rm(dir,{recursive:true,force:true});
+});
+test('portNote names the worktree ports and is empty elsewhere',async()=>{
+ const {dir,repo,home}=await fixture();
+ const a=await create(home,repo,{threadId:'p'});
+ assert.match(await portNote(home,a.path),new RegExp(`${a.portBase}-${a.portEnd}`));
+ assert.equal(await portNote(home,repo),'');
  await rm(dir,{recursive:true,force:true});
 });
