@@ -1,5 +1,6 @@
 import {parse} from 'acorn';
 import {joinActivityLabels} from './activity-groups.js';
+import {WEB_TOOLS} from './web-card.js';
 export function groupActions(messages){
  const calls=[],output=[];
  const resultText=parts=>parts.map(part=>{const text=part.text||'';try{const data=JSON.parse(text);return typeof data.output==='string'?data.output:JSON.stringify(data,null,2);}catch{return text;}}).filter(Boolean).join('\n\n');
@@ -14,7 +15,7 @@ export function groupActions(messages){
 }
 export function actionTitle(part){
  let input={};try{input=JSON.parse(part.text||'{}');}catch{}
- const active=part.done===false,labels={read:['Reading files','Read files'],file_read:['Reading files','Read files'],write:['Writing files','Wrote files'],file_write:['Writing files','Wrote files'],edit:['Editing files','Edited files'],file_edit:['Editing files','Edited files'],bash:['Running bash','Ran bash'],powershell:['Running PowerShell','Ran PowerShell'],browser_tabs:['Getting browser tabs','Got browser tabs'],web_search:['Searching the web','Searched the web'],fetch_content:['Reading web pages','Read web pages'],get_search_content:['Reading search results','Read search results'],set_session_title:['Naming session','Named session'],search:['Searching files','Searched files'],files:['Listing files','Listed files']};
+ const active=part.done===false,labels={...Object.fromEntries(Object.entries(WEB_TOOLS).map(([name,[a,d]])=>[name,[a,d]])),read:['Reading files','Read files'],file_read:['Reading files','Read files'],write:['Writing files','Wrote files'],file_write:['Writing files','Wrote files'],edit:['Editing files','Edited files'],file_edit:['Editing files','Edited files'],bash:['Running bash','Ran bash'],powershell:['Running PowerShell','Ran PowerShell'],browser_tabs:['Getting browser tabs','Got browser tabs'],web_search:['Searching the web','Searched the web'],fetch_content:['Reading web pages','Read web pages'],get_search_content:['Reading search results','Read search results'],set_session_title:['Naming session','Named session'],search:['Searching files','Searched files'],files:['Listing files','Listed files']};
  const label=name=>(labels[name]||[ `Using ${name.replaceAll('_',' ')}`,`Used ${name.replaceAll('_',' ')}`])[active?0:1];
  if(part.name==='codemode'){
   const names=new Set();

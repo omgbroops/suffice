@@ -17,5 +17,5 @@ export function syncActivityGroup(group){
  group.dataset.single=String(single);
  if(single)widgets[0].open=true;
  else if(wasSingle)widgets[0].open=false;
- const summary=group.querySelector(':scope > summary');decorateActivitySummary(summary,joinActivityLabels(widgets.map(widget=>widget.querySelector(':scope > summary').textContent)));
+ const summary=group.querySelector(':scope > summary');decorateActivitySummary(summary,joinActivityLabels(widgets.map(widget=>(summary=>summary.dataset.label||summary.textContent)(widget.querySelector(':scope > summary')))));
 }

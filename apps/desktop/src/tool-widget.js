@@ -1,5 +1,6 @@
 import {actionTitle} from './action-display.js';
 import {decorateActivitySummary} from './activity-groups.js';
+import {isWebTool,createWebCard} from './web-card.js';
 export function toolOutput(result){
  if(!result)return '';
  if(typeof result==='string')return result;
@@ -7,6 +8,7 @@ export function toolOutput(result){
  return parts.map(part=>{const text=part.text||'';try{const value=JSON.parse(text);return typeof value.output==='string'?value.output:text;}catch{return text;}}).filter(Boolean).join('\n\n');
 }
 export function createToolWidget(part){
+ if(isWebTool(part.name))return createWebCard(part);
  const widget=document.createElement('details');widget.className='thread-detail tool-widget';
  const summary=document.createElement('summary');summary.textContent=actionTitle(part);
  const body=document.createElement('div');body.className='tool-widget-body';
