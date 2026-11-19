@@ -22,7 +22,7 @@
 .settings-nav-label { font-size:11px; color:var(--text-faint); margin:14px 9px 6px; }
 .desktop-app .settings-nav-item { font-weight:400; width:100%; display:flex; align-items:center; gap:9px; text-align:left; border:0; border-radius:var(--radius-button); padding:5px 9px; min-height:30px; margin:3px 0; background:transparent; color:var(--text-muted); transition:background 120ms,color 120ms; }
 .settings-nav-item .icon { width:15px; height:15px; opacity:.8; flex-shrink:0; }
-.settings-nav-item:hover { background:var(--hover-fill); color:var(--text); }
+.settings-nav-item:not([aria-current=page]):hover { color:var(--text-strong); } /* no fill on hover: the current section is the only highlighted row */
 .settings-nav-item[aria-current=page] { background:var(--selected-fill); color:var(--text-strong); }
 .settings-main { position:absolute; inset:0; z-index:5; min-width:0; min-height:0; display:flex; flex-direction:column; overflow:hidden; background:var(--surface-thread); color:var(--text); font-family:var(--font-sans); font-size:var(--text-base); }
 .settings-page-heading { height:43px; flex-shrink:0; display:flex; align-items:center; gap:12px; padding:0 22px; color:var(--text-faint); font-size:12px; -webkit-app-region:drag; }
