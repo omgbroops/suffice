@@ -48,7 +48,7 @@ test('voice backend: provider choice in Settings, cost before the call, cascade 
    await page.keyboard.press('Control+,');await page.locator('.sidebar > .settings-page').waitFor({state:'visible'});await page.getByRole('button',{name:'Agent',exact:true}).click();
    const row=page.getByRole('button',{name:'Voice provider',exact:true});
    assert.equal((await row.textContent()).trim(),'Cascade');
-   const detail=await page.locator('.settings-option',{has:row}).textContent();assert.match(detail,/Cascade: about \$0\.05 for 5 min/);assert.match(detail,/Realtime: about \$0\.75 for 5 min/);
+   const detail=await page.locator('.settings-option',{has:row}).textContent();assert.match(detail,/Cascade: speech to text/);assert.match(detail,/Realtime: one speech-to-speech/);assert.doesNotMatch(detail,/\$/);
    await row.click();assert.deepEqual(await page.getByRole('menuitemradio').allTextContents(),['Cascade','Realtime']);
    await shot('settings-agent-voice-provider-dark');
    await page.getByRole('menuitemradio',{name:'Realtime'}).click();await until(async()=>(await stored())==='Realtime','saved Realtime');
@@ -58,13 +58,13 @@ test('voice backend: provider choice in Settings, cost before the call, cascade 
   await t.test('the cost shows before the call, for the chosen provider, and Cancel starts nothing',async()=>{
    assert.equal(await estimate.isVisible(),false);
    await startButton.click();await estimate.waitFor({state:'visible'});
-   assert.equal((await estimate.locator('.voice-estimate-text').textContent()).trim(),'Realtime: About $0.75 for 5 min');
+   assert.equal((await estimate.locator('.voice-estimate-text').textContent()).trim(),'Realtime: One speech-to-speech model, lowest delay');
    assert.equal(await strip.isVisible(),false);assert.equal(await page.evaluate(()=>!!document.querySelector('form.composer').dataset.voice),false);
    assert.equal(await page.evaluate(()=>document.activeElement.textContent),'Start call');
    await page.keyboard.press('Escape');assert.equal(await estimate.isVisible(),false);
    await pick('Cascade');await closeSettings();
    await startButton.click();await estimate.waitFor({state:'visible'});
-   assert.equal((await estimate.locator('.voice-estimate-text').textContent()).trim(),'Cascade: About $0.05 for 5 min');
+   assert.equal((await estimate.locator('.voice-estimate-text').textContent()).trim(),'Cascade: Speech to text, then your agent, then a spoken reply');
    await shot('estimate-before-call-dark');
    await estimate.getByRole('button',{name:'Cancel',exact:true}).click();assert.equal(await estimate.isVisible(),false);assert.equal(await app.evaluate(()=>globalThis.voiceRuns.length),0);
   });
@@ -90,6 +90,15 @@ test('voice backend: provider choice in Settings, cost before the call, cascade 
    await startButton.click();await strip.waitFor({state:'visible'});assert.equal(await estimate.isVisible(),false);
    await page.locator('.voice-stop').click();await until(async()=>!(await strip.isVisible()),'fake call ended');
    await page.evaluate(()=>localStorage.removeItem('suffice-voice-provider'));
+  });
+
+  await t.test('an empty model catalog blocks Start call: no strip, no mic',async()=>{
+   const handle=models=>app.evaluate(({ipcMain},m)=>{ipcMain.removeHandler('suffice:models');ipcMain.handle('suffice:models',()=>m);},models);
+   await handle([]);await page.reload();await page.locator('form.composer').waitFor({state:'visible'});
+   await page.waitForFunction(()=>document.querySelector('.composer')?.modelsNone===true);
+   await startButton.click();await page.waitForTimeout(500);
+   assert.equal(await strip.isVisible(),false);assert.equal(await estimate.isVisible(),false);
+   await handle([{id:'fixture',provider:'openai',name:'Fixture',available:true,efforts:['low']}]);await page.reload();await page.locator('form.composer').waitFor({state:'visible'});
   });
 
   await t.test('light theme screenshots',async()=>{

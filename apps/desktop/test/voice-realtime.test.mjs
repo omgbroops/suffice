@@ -298,3 +298,13 @@ test('mute survives a startup retry',async()=>{
  assert.equal(r.states().at(-1),'muted');
  await r.p.stop();
 });
+
+test('offer is sent after ICE gathering, with candidates',async()=>{
+ const r=rig();const P=r.pc;// first start with the plain fake to get a class-free rig, then a gathering fake
+ const g=rig({RTCPeerConnectionImpl:class{constructor(){this.iceGatheringState='gathering';this.localDescription={sdp:'OFFER'};this.l=[];g.pc2=this;}
+  addTrack(){} addEventListener(n,f){this.l.push(f);} createDataChannel(){return {readyState:'open',close(){}};}
+  async createOffer(){return {type:'offer',sdp:'OFFER'};} async setLocalDescription(){setTimeout(()=>{this.localDescription={sdp:'OFFER a=candidate:1'};this.iceGatheringState='complete';this.l.forEach(f=>f());},5);}
+  async setRemoteDescription(){} close(){}}});
+ await g.p.start();
+ assert.match(g.fetchCalls[0].i.body,/a=candidate/);
+});

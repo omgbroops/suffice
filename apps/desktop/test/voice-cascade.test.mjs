@@ -69,13 +69,13 @@ test('cascade: muting closes the mic and ignores sound', async () => {
   const n = r.events.length; first.onLevel(0.5); assert.equal(r.events.length, n);
 });
 
-test('estimate and settings: registry prices drive the quote and the Settings row', () => {
+test('estimate and settings: registry notes drive the quote and the Settings row', () => {
   assert.deepEqual(voiceLabels(), ['Cascade', 'Realtime']);
-  assert.equal(callEstimate('cascade').text, 'About $0.05 for 5 min');
-  assert.equal(callEstimate('openai-realtime').text, 'About $0.75 for 5 min');
+  assert.equal(callEstimate('cascade').text, 'Speech to text, then your agent, then a spoken reply');
+  assert.equal(callEstimate('openai-realtime').text, 'One speech-to-speech model, lowest delay');
   assert.equal(callEstimate('fake'), null);
   assert.equal(voiceByLabel('nope').kind, 'cascade');
   const row = settingsSections.find(s => s.id === 'agent').groups.flatMap(g => g.rows).find(x => x.id === 'voice-provider');
   assert.deepEqual([row.value, row.options], ['Cascade', ['Cascade', 'Realtime']]);
-  assert.match(row.detail, /Cascade: about \$0\.05/);
+  assert.match(row.detail, /Cascade: speech to text/);assert.doesNotMatch(row.detail, /\$/);
 });

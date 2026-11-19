@@ -163,20 +163,21 @@ export function connectVoice({ form, prompt, toast = () => {}, api = window.suff
     fullMute.innerHTML = MIC; fullMute.setAttribute('aria-label', 'Mute microphone'); fullMute.title = 'Mute microphone';
     delete window.__sufficeVoice;
   }
-  const canStart = () => form.modelsDisabled ? { ok: false, reason: 'Enable a model in Settings, Models, first.' } : form.dataset.requireProject === 'true' ? { ok: false, reason: 'Choose a project above the composer first.' } : { ok: true };
+  const canStart = () => form.modelsDisabled || form.modelsNone ? { ok: false, reason: 'Enable a model in Settings, Models, first.' } : form.dataset.requireProject === 'true' ? { ok: false, reason: 'Choose a project above the composer first.' } : { ok: true };
   // A URL parameter or saved test value wins; otherwise Settings, Agent, Voice provider (default Cascade).
   const chosenKind = () => setting('voiceProvider', '') || voiceByLabel(preference('voice-provider', 'Cascade')).kind;
   let afterStart = null;
   const closeEstimate = () => { estimate.hidden = true; afterStart = null; };
   function begin(after) {
     if (conversation) return after?.();
+    if (form.modelsDisabled || form.modelsNone) { toast('Enable a model in Settings, Models, first.'); return; }
     const quote = callEstimate(chosenKind());
     if (!quote) return start().then(() => after?.());
     estimateText.textContent = `${quote.title}: ${quote.text}`; afterStart = after; estimate.hidden = false; estimateGo.focus({ preventScroll: true });
   }
   async function start() {
     if (conversation) return;
-    if (form.modelsDisabled) { toast('Enable a model in Settings, Models, first.'); return; }
+    if (form.modelsDisabled || form.modelsNone) { toast('Enable a model in Settings, Models, first.'); return; }
     const kind = chosenKind();
     let deviceId; try { deviceId = localStorage.getItem('suffice-voice-device') || undefined; } catch {}
     const current = conversation = createVoiceConversation({
