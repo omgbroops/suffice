@@ -15,7 +15,7 @@ export function connectComposerLayout({form,prompt,toast=()=>{}}){
  // Row inside the box: + | text | dictate, voice or send.
  const row=el('div','composer-row'),actions=el('div','composer-actions');
  const dictate=el('button','button button--ghost dictate-button',{type:'button','aria-label':'Dictate','aria-pressed':'false',title:'Dictate'});dictate.innerHTML=MIC;
- if(voice){voice.innerHTML=WAVE;voice.title='Voice conversation';}
+ if(voice){voice.innerHTML=WAVE+'<span>Voice</span>';voice.title='Start a voice call';voice.setAttribute('aria-label','Start a voice call');}
  actions.append(dictate,...(voice?[voice]:[]),group);
  prompt.before(row);row.append(...(attach?[attach]:[]),prompt,actions);
  toolbar?.remove();
@@ -23,7 +23,9 @@ export function connectComposerLayout({form,prompt,toast=()=>{}}){
  const meta=el('div','composer-meta'),left=el('div','composer-meta-left'),right=el('div','composer-meta-right');
  if(bar)left.append(bar);
  if(chip)left.append(chip);
- for(const node of [access,effort,model,ring])if(node)right.append(node);
+ for(const node of [effort,model,ring])if(node)right.append(node);
+ // Access mode sits top-left, above the box.
+ if(access){const top=el('div','composer-top');top.append(access);form.before(top);}
  meta.append(left,right);form.after(meta);
  // Typed text turns the voice button into Send.
  const sync=()=>{const on=!!prompt.value.trim()||!!form.attachments?.count;form.dataset.hasInput=String(on);};
