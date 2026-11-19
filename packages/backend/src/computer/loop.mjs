@@ -1,4 +1,5 @@
 // The computer-use loop: observe, act, check, continue. Every choice goes through the injected decide().
+import {formatElements} from '../../../../src/snapshot.mjs';
 import { randomBytes } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -102,7 +103,7 @@ export function createComputerAgent({ browser, desktop, decide, journal, clock, 
           ? await ground({ target: act.ref, elements: visible(o), cached: [act.ref], ask: null })
           : await ground({ target: act.ref, elements: visible(o), ask, threshold: L.threshold, deeper: async () => visible(await observe('snapshot', 12)) });
         if (!g?.element || (replaying && g.rung !== 'cache')) r = { ...bad('not_found', `target not found: ${typeof act.ref === 'string' ? act.ref : act.ref?.name}`), final: true };
-        else { el = g.element; rec.rung = g.rung; sel = { role: el.role, name: el.name }; rec.targetRole = el.role; rec.targetName = el.name; }
+        else { el = g.element; rec.rung = g.rung; sel = { role: el.role, name: el.name }; rec.targetRole = el.role; rec.targetName = el.name; rec.ref = el.ref; }
       }
       if (!r) {
         tags = tagAction({ surface, action: act, element: el ?? undefined, obs: o, app: S.app });
@@ -214,12 +215,13 @@ export function createComputerAgent({ browser, desktop, decide, journal, clock, 
     }
 
     async function commit(rec, act, o) {
+      rec.snap = formatElements(visible(o).filter((e) => e.role), {});
       S.steps.push(rec);
       S.history.push({ step: rec.step, action: rec.action, target: rec.targetName, ok: rec.ok, sig: `${rec.action}|${rec.targetRole}|${rec.targetName}|${act?.text ?? ''}`, changed: S.lastAfter ? S.lastAfter.sig !== o.sig : false });
       S.lastAction = { action: rec.action, target: rec.targetName, ok: rec.ok };
-      const { step, mode, action, targetRole, targetName, rung, riskTags, approved, ok, ms, reason, textLen } = rec;
+      const { step, mode, action, targetRole, targetName, rung, riskTags, approved, ok, ms, reason, textLen, ref, snap } = rec;
       try {
-        await journal?.append({ type: 'computer.step', data: { step, mode, action, targetRole, targetName, rung, riskTags, approved, ok, ms, reason: reason ?? null, ...(textLen !== undefined ? { textLen } : {}) } });
+        await journal?.append({ type: 'computer.step', data: { step, mode, action, targetRole, targetName, rung, riskTags, approved, ok, ms, reason: reason ?? null, ...(ref ? { ref } : {}), ...(snap ? { snap } : {}), ...(textLen !== undefined ? { textLen } : {}) } });
         await slots?.publish(agentId, S.steps);
       } catch { S.jerr = true; }
     }

@@ -49,7 +49,8 @@ export function connectComputer({api,toast}){
    const li=el('li','cu-step');li.dataset.state=!s.approved?'denied':s.ok?'ok':'bad';
    li.setAttribute('aria-label',`Step ${s.step}: ${VERB[s.action]||s.action} ${s.targetName||''}, ${!s.approved?'denied':s.ok?'done':'failed'}`);
    const head=el('div','cu-step-head');head.append(el('span','cu-step-n',String(s.step)),el('span','cu-step-mark'));
-   li.append(head,el('div','cu-step-action',VERB[s.action]||String(s.action)),el('div','cu-step-target',s.targetName||s.reason||''));
+   li.append(head,el('div','cu-step-action',(VERB[s.action]||String(s.action))+(s.ref?' '+s.ref:'')),el('div','cu-step-target',s.targetName||s.reason||''));
+   if(s.snap){const pre=el('pre','cu-step-snap',s.snap);pre.tabIndex=0;pre.setAttribute('aria-label','Snapshot for step '+s.step);li.append(pre);}
    if(s.riskTags?.length)li.append(tags(s.riskTags));
    if(!s.approved)li.append(el('div','cu-step-note','Denied'));else if(!s.ok&&s.reason)li.append(el('div','cu-step-note',s.reason));
    ol.append(li);
