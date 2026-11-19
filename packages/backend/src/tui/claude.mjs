@@ -104,7 +104,7 @@ function emitCall(state, out, callId) {
     return emit(state, out, it);
   }
   const { category, title } = classify(c.name, input);
-  const status = !r ? 'running' : r.denied ? 'denied' : r.isError ? 'error' : 'ok';
+  const status = !r ? 'running' : r.denied ? 'denied' : r.isError && r.text.startsWith('[Request interrupted by user') ? 'interrupted' : r.isError ? 'error' : 'ok';
   const it = { id: `tool:${callId}`, ts: c.ts, kind: 'tool', callId, name: c.name, category, title, input, status };
   if (INTERNAL.has(c.name)) { it.category = 'other'; it.internal = true; }
   if (c.name === 'ExitPlanMode') it.title = 'Plan';

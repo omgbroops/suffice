@@ -33,9 +33,11 @@ function mark(root){const r=root.getBoundingClientRect(),hit=document.elementFro
 const resizes=typeof ResizeObserver==='function'?new ResizeObserver(entries=>{const root=entries[0].target.closest('.thread-transcript'),m=root&&marks.get(root);if(!m||!m.hit.isConnected)return;const d=m.hit.getBoundingClientRect().top-root.getBoundingClientRect().top-m.y;if(Math.abs(d)>.5){root.scrollTop+=d;mark(root);}}):null;
 const watched=new WeakSet();
 function watch(element){const root=element.closest('.thread-transcript');if(root&&!watched.has(root)){watched.add(root);root.addEventListener('scroll',()=>mark(root),{passive:true});mark(root);}resizes?.observe(element);}
+// The watchdog chip is appended by the transcript, not part of the markdown: unrendering or re-rendering must not wipe it.
+const keepChip=e=>[...e.querySelectorAll(':scope > .claim-chip')];
 function apply(hides,shows){
  const sizes=hides.map(e=>e.getBoundingClientRect().height);
- hides.forEach((e,i)=>{if(!sizes[i])return;e.replaceChildren();e.dataset.lazyMarkdown='';e.style.minHeight=sizes[i]+'px';});
+ hides.forEach((e,i)=>{if(!sizes[i])return;e.replaceChildren(...keepChip(e));e.dataset.lazyMarkdown='';e.style.minHeight=sizes[i]+'px';});
  for(const e of shows){e.style.minHeight='';e.removeAttribute('data-lazy-markdown');renderNow(e,sources.get(e));}
  for(const e of shows){const h=e.getBoundingClientRect().height;if(h>0){ratio.h+=h;ratio.n+=sources.get(e).length;}}
 }
@@ -56,8 +58,8 @@ export function renderMessageMarkdown(element,text){
  watch(element);release(element);batch.push([element,text]);renderNow(element,text);
 }
 function renderNow(element,text){
- const current={nonce:crypto.randomUUID(),formulas:[],files:[]};context=current;let html;try{html=parser.parse(text);}finally{context=null;}
- element.innerHTML=DOMPurify.sanitize(html,{USE_PROFILES:{html:true},ALLOW_DATA_ATTR:false,ADD_ATTR:['data-suffice-math','data-suffice-file'],FORBID_TAGS:['img','video','audio','iframe','form','input','button','style'],FORBID_ATTR:['style','id','name']});
+ const chip=keepChip(element);const current={nonce:crypto.randomUUID(),formulas:[],files:[]};context=current;let html;try{html=parser.parse(text);}finally{context=null;}
+ element.innerHTML=DOMPurify.sanitize(html,{USE_PROFILES:{html:true},ALLOW_DATA_ATTR:false,ADD_ATTR:['data-suffice-math','data-suffice-file'],FORBID_TAGS:['img','video','audio','iframe','form','input','button','style'],FORBID_ATTR:['style','id','name']});element.append(...chip);
  for(const file of current.files){const anchor=element.querySelector(`[data-suffice-file="${file.key}"]`);if(anchor)anchor.dataset.sufficeFile=file.href;}
  if(current.formulas.length){library??=import('katex');void library.then(({default:katex})=>{for(const formula of current.formulas){const node=element.querySelector(`[data-suffice-math="${formula.key}"]`);if(!node)continue;node.removeAttribute('data-suffice-math');try{katex.render(formula.text,node,{displayMode:formula.display,throwOnError:false,trust:false,strict:'ignore',maxExpand:1000,maxSize:10,output:'htmlAndMathml',macros:{}});}catch{node.textContent=formula.raw;}}}).catch(()=>{for(const formula of current.formulas){const node=element.querySelector(`[data-suffice-math="${formula.key}"]`);if(node)node.textContent=formula.raw;}});}
  finish(element);
