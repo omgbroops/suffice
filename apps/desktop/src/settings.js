@@ -94,6 +94,7 @@ export function createSettings(){
  main.addEventListener('input',event=>{if(event.target.matches('.settings-model-search input')){modelQuery=event.target.value;filterModels();}});
  main.addEventListener('click',event=>{const restore=event.target.closest('[data-restore-thread]');if(!restore)return;const id=restore.dataset.restoreThread;threadViewState.updateFor(id,{sidebar:{...threadViewState.read(id).sidebar,archived:false}});render();});
  main.addEventListener('click',event=>{const button=event.target.closest('[data-delete-thread]');if(button)document.dispatchEvent(new CustomEvent('suffice-delete-thread',{detail:{id:button.dataset.deleteThread}}));});
+ document.addEventListener('suffice-theme-change',event=>{for(const preview of content.querySelectorAll('.theme-preview'))preview.dataset.theme=event.detail;}); // gallery cards follow the live mode
  document.addEventListener('suffice-thread-deleted',()=>{if(active&&selected==='general')render();});
  threadViewState.subscribe(event=>{if(active&&selected==='general'&&event.changed?.includes('sidebar'))render();});
  main.addEventListener('input',event=>{const input=event.target;if(!input.matches('[data-range]'))return;previewSurfaceOpacity(input.value);input.style.setProperty('--dim-progress',(Number(input.value)-Number(input.min))/(Number(input.max)-Number(input.min))*100+'%');input.nextElementSibling.value=input.value+'%';});

@@ -20,7 +20,7 @@ test('skills library: create, edit, delete in Settings, then attach from the com
   const shot=async name=>{if(!shots)return;for(const theme of ['dark','light']){await page.locator('html').evaluate((el,t)=>{el.dataset.theme=t;},theme);await page.waitForTimeout(150);await page.screenshot({path:resolve(shots,`${name}-${theme}.png`)});}};
   await page.locator('html').evaluate(el=>{el.dataset.theme='dark';});
   await page.getByRole('button',{name:'Settings',exact:true}).click();
-  await page.getByRole('button',{name:'Skills',exact:true}).click();
+  await page.getByRole('button',{name:'Tools & MCP',exact:true}).click();
   for(const name of ['Code review','Write tests','Explain codebase','Fix CI'])await page.getByText(name,{exact:true}).first().waitFor();
   await shot('settings-skills');
   await page.getByRole('button',{name:'New skill',exact:true}).click();
