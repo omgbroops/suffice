@@ -38,7 +38,7 @@ async function stat(root,from,to){
  const files=new Map();
  for(const line of (await git(root,['diff-tree','-r','--numstat','--no-renames','-z',from,to])).split('\0')){const m=/^(\d+|-)\t(\d+|-)\t(.+)$/.exec(line);if(m)files.set(m[3],{added:m[1]==='-'?0:+m[1],removed:m[2]==='-'?0:+m[2]});}
  let added=0,removed=0;for(const f of files.values()){added+=f.added;removed+=f.removed;}
- return {files:files.size,added,removed};
+ return {files:files.size,added,removed,names:[...files.keys()].sort().slice(0,50)};
 }
 export async function list(cwd,threadId){
  if(!idOk(threadId))throw new Error('Invalid thread');

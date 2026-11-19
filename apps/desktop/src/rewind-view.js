@@ -17,6 +17,7 @@ export async function mountRewind(body,{api,id,valid}){
   for(const c of st.items){
    const row=el('button','rewind-item');row.type='button';row.dataset.id=c.id;row.dataset.kind=c.kind;row.setAttribute('role','option');row.setAttribute('aria-selected',String(c.id===st.selected));row.tabIndex=c.id===st.selected?0:-1;
    const text=el('span','rewind-text');text.append(el('span','rewind-name',title(c)),el('span','rewind-label',c.label),el('span','rewind-meta',`${ago(c.time)} · ${c.vsNow.files?c.vsNow.files+(c.vsNow.files===1?' file ':' files '):'No changes '}`));
+   if(c.vsNow.names?.length)text.lastChild.title=c.vsNow.names.join('\n')+(c.vsNow.files>c.vsNow.names.length?`\n+${c.vsNow.files-c.vsNow.names.length} more`:'');
    if(c.vsNow.files){const m=text.lastChild;const a=el('span','thread-added','+'+c.vsNow.added),r=el('span','thread-removed','−'+c.vsNow.removed);m.append(a,document.createTextNode(' '),r);}
    row.append(el('span','rewind-dot'),text);row.addEventListener('click',()=>send({type:'select',id:c.id}));list.append(row);
   }
