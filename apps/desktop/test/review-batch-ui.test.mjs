@@ -6,6 +6,7 @@ import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
+import {fileURLToPath} from 'node:url';
 import {_electron} from 'playwright-core';
 import {guard} from './electron-guard.mjs';
 const SHOTS=process.env.REVIEW_SHOTS;
@@ -20,7 +21,7 @@ test('Changes: accept, reject, comment, one Send with outcome chips, errors stay
  const changed=edit(base,changes);await writeFile(resolve(cwd,'src/calc.js'),changed.join('\n')+'\n');
  const now=new Date().toISOString();await writeFile(resolve(dir,'one.jsonl'),[{type:'session',version:3,id:'review-batch-fixture',timestamp:now,cwd},{type:'message',id:'user',parentId:null,timestamp:now,message:{role:'user',content:[{type:'text',text:'Review the calculator'}],timestamp:Date.now()}}].map(value=>JSON.stringify(value)).join('\n')+'\n');
  const env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home,SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_SESSIONS_SOCKET:'sfx-fr-batched-inline-review-'+process.pid,SUFFICE_HISTORY_HOME:resolve(home,'history')};delete env.ELECTRON_RUN_AS_NODE;
- const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
+ const app=await _electron.launch({executablePath:electronPath,args:[...guard,fileURLToPath(new URL('..',import.meta.url)),'--user-data-dir='+resolve(home,'electron')],env});
  try{
   const page=await app.firstWindow(),errors=[];page.on('pageerror',error=>errors.push(error.message));
   // Fake worker: canned replies in the shape the agent is asked for; records each turn.
