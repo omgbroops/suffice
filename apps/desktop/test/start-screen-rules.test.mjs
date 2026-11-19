@@ -20,7 +20,7 @@ test('Start screen rules: no pill/circle radius, hover grows the label before th
   const bad=await page.evaluate(()=>{const out=[];for(const el of document.querySelectorAll('.workspace *')){if(el.closest('canvas,svg'))continue;const r=el.getBoundingClientRect(),cs=getComputedStyle(el);if(r.width<2||r.height<2||cs.visibility==='hidden'||cs.display==='none'||+cs.opacity===0)continue;const paints=cs.backgroundColor!=='rgba(0, 0, 0, 0)'||parseFloat(cs.borderTopWidth)>0||cs.boxShadow!=='none';if(!paints)continue;const v=cs.borderTopLeftRadius,px=v.endsWith('%')?parseFloat(v)/100*r.height:parseFloat(v);if(px>0&&px>=r.height/2)out.push(`${el.tagName}.${el.className} ${px}px h${r.height}`);}return out;});
   assert.deepEqual(bad,[],'pill or circle shapes on the start screen');
   // (3) git text: none on the screen or composer row
-  const text=await page.locator('.workspace').innerText();assert.doesNotMatch(text,/No Git|Own worktree|\bmain\b/);
+  const text=await page.locator('.workspace').innerText();assert.doesNotMatch(text,/No Git|Isolate in worktree|\bmain\b/);
   assert.equal(await page.locator('.composer-meta :is(.git-pill,.worktree-toggle),.project-bar :is(.git-pill,.worktree-toggle)').count(),0);
   // (2) hover: label grows (smoothly) before the dropdown opens
   for(const sel of ['.access-mode-picker','.effort-picker']){
@@ -35,6 +35,6 @@ test('Start screen rules: no pill/circle radius, hover grows the label before th
   // git moved into the project menu
   await page.mouse.move(5,5);await page.locator('.project-picker').click();
   const menu=page.locator('.project-menu:not(.branch-menu)');await menu.waitFor({state:'visible'});
-  assert.match(await menu.innerText(),/main/);assert.match(await menu.innerText(),/Own worktree/);
+  assert.match(await menu.innerText(),/main/);assert.match(await menu.innerText(),/Isolate in worktree/);
  }finally{await Promise.race([app.close(),new Promise(r=>setTimeout(r,5000))]).catch(()=>{});try{process.kill(app.process().pid,'SIGKILL');}catch{}try{execFileSync('tmux',['-L','sfx-fix2-screen2-test','kill-server'],{stdio:'ignore'});}catch{}}
 });

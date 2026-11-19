@@ -17,7 +17,7 @@ test('own-worktree thread: toggle creates it, header shows branch, diff, PR dry 
   const page=await app.firstWindow(),errors=[];page.on('pageerror',e=>errors.push(e.message));
   await app.evaluate(({ipcMain,BrowserWindow})=>{BrowserWindow.getAllWindows()[0].setContentSize(1440,900);ipcMain.removeHandler('suffice:models');ipcMain.handle('suffice:models',()=>[{id:'fixture',provider:'openai',name:'Fixture model',efforts:['low','medium','high']}]);});
   await page.reload();await page.locator('.composer').waitFor();await page.waitForFunction(()=>!document.querySelector('.git-pill')?.disabled&&!document.querySelector('.worktree-toggle').hidden);
-  const toggle=page.getByRole('switch',{name:/Own worktree/});assert.equal(await toggle.getAttribute('aria-checked'),'false');
+  const toggle=page.getByRole('switch',{name:/Isolate in worktree/});assert.equal(await toggle.getAttribute('aria-checked'),'false');
   await shot(page,'1-toggle-off');
   await toggle.click();assert.equal(await toggle.getAttribute('aria-checked'),'true');await shot(page,'2-toggle-on');
   // Real send path: the run fails offline, but the worktree is made before the agent starts.

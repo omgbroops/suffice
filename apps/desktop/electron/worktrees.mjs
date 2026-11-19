@@ -58,6 +58,14 @@ export async function create(home,repo,{threadId,pinned=false}={}){
  return {...meta.items[id],linked,included};
 }
 
+// Register a worktree made elsewhere (thread-worktree.cjs) so the list, cap and ports cover it too.
+export async function adopt(home,repo,path,threadId){
+ const top=(await git(repo,['rev-parse','--show-toplevel'])).trim(),base=(await git(path,['rev-parse','HEAD'])).trim(),id=randomUUID().replace(/-/g,'').slice(0,8);
+ await linkDeps(top,path);await copyIncluded(top,path);
+ const meta=await readMeta(home);
+ meta.items[id]={id,repo:top,path,base,threadId:threadId||null,pinned:false,created:Date.now(),...allocatePorts(meta.items)};
+ await writeMeta(home,meta);return meta.items[id];
+}
 async function sizeOf(dir,skipLinks=true){
  let total=0;
  for(const e of await readdir(dir,{withFileTypes:true}).catch(()=>[])){

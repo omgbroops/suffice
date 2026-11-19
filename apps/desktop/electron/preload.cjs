@@ -54,6 +54,7 @@ contextBridge.exposeInMainWorld('sufficeDesktop',{
   openExternal:url=>ipcRenderer.invoke('suffice:open-external',url),
   windowControl:action=>ipcRenderer.invoke('suffice:window',action),
   issues:{list:projectId=>ipcRenderer.invoke('suffice:issues-list',projectId),create:payload=>ipcRenderer.invoke('suffice:issues-create',payload),update:payload=>ipcRenderer.invoke('suffice:issues-update',payload),remove:id=>ipcRenderer.invoke('suffice:issues-delete',id)},
+  worktreesList:()=>ipcRenderer.invoke('suffice:worktrees-list'),worktreesAction:payload=>ipcRenderer.invoke('suffice:worktrees-action',payload),
   budgetGet:()=>ipcRenderer.invoke('suffice:budget-get'),budgetSet:caps=>ipcRenderer.invoke('suffice:budget-set',caps),
   usageReport:()=>ipcRenderer.invoke('suffice:usage-report'),
   automations:()=>ipcRenderer.invoke('suffice:automations'),
