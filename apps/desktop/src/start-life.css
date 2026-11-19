@@ -10,10 +10,10 @@
 /* Mark, title, optional Needs-you pill. Hidden inside a thread. */
 .workspace.thread-view .life { display: none; }
 .life-in { animation: life-in 200ms var(--ease-out) backwards; animation-delay: calc(var(--i, 0) * 36ms); }
-@keyframes life-in { from { opacity: 0; transform: translateY(6px); } }
+@keyframes life-in { from { opacity: 0; transform: translateY(var(--space-1)); } }
 .life-head { margin: 0 0 var(--space-6); text-align: center; }
-.life-mark { display: block; margin: 0 0 var(--space-3); font-family: 'Geist Pixel', monospace; font-size: var(--text-xl); line-height: 28px; letter-spacing: -.03em; color: var(--blue); }
-.life-hello { margin: 0; font-size: 30px; line-height: 36px; font-weight: var(--weight-medium); letter-spacing: -.025em; color: var(--text-strong); }
+.life-mark { display: grid; place-items: center; margin: 0 0 var(--space-3); color: var(--blue); }
+.life-hello { margin: 0; font-size: calc(30px * var(--density)); line-height: calc(36px * var(--density)); font-weight: var(--weight-medium); letter-spacing: -.025em; color: var(--text-strong); }
 
 /* Starter cards: raised, three across, each carrying one crop of the wallpaper's dither. */
 .life-tail { margin-top: var(--space-6); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-3); }
@@ -29,10 +29,10 @@
 .desktop-app .new-session .icon { width: 14px; height: 14px; }
 
 /* Sidebar skeleton: blurred bars, radius 4, 2 s pulse (0 / 1 / 2 s). */
-.sidebar-skeleton { display: grid; gap: 18px; padding: 8px 14px; animation: sk-pulse 2s var(--start-ease) infinite; -webkit-mask-image: linear-gradient(#000 55%, transparent); mask-image: linear-gradient(#000 55%, transparent); }
+.sidebar-skeleton { display: grid; gap: var(--space-4); padding: var(--space-2) var(--space-3); animation: sk-pulse 2s var(--start-ease) infinite; -webkit-mask-image: linear-gradient(#000 55%, transparent); mask-image: linear-gradient(#000 55%, transparent); }
 .sidebar-skeleton i { display: block; border-radius: var(--radius-1); background: var(--text-faint-2); filter: blur(1px); opacity: .5; }
 .sk-head { width: 56px; height: 10px; }
-.sk-row { display: grid; gap: 8px; }
+.sk-row { display: grid; gap: var(--space-2); }
 .sk-title { width: 86%; height: 12px; }
 .sk-meta { width: 44%; height: 10px; opacity: .3; }
 .sk-row:nth-child(even) .sk-title { width: 70%; }

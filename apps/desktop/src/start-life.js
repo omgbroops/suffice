@@ -1,5 +1,6 @@
 import './start-life.css';
 import {paintStarterImage,sampleWallpaper} from './start-cards.js';
+import {mark as brandMark} from './brand.js';
 // Start screen: mark + title, Needs-you pill when something waits, a suggestion typed into the composer once, 3 starter cards drawn in the wallpaper's own dither.
 const q=(s,r=document)=>r.querySelector(s);
 const mk=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
@@ -49,7 +50,7 @@ export function connectStartLife({api}={}){
  const area=q('.agent-area'),form=q('.composer'),prompt=q('#prompt'),workspace=q('.workspace');
  if(!area||!form||!prompt)return;
  const head=mk('div','life life-head'),tail=mk('div','life life-tail');
- const mark=mk('span','life-mark','[suffice]');mark.setAttribute('aria-hidden','true');
+ const mark=mk('span','life-mark');mark.innerHTML=brandMark.replace('brand-mark','brand-mark logo-mark');mark.setAttribute('aria-hidden','true');
  head.append(mark,mk('h2','life-hello'));
  const base=prompt.placeholder;let hints={failing:[],todos:[]},list=[],first=true,timer=0,typed=false,typer=0,ready=false;
  const home=()=>!workspace?.classList.contains('thread-view');

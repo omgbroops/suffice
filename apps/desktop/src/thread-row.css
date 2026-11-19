@@ -1,5 +1,5 @@
 .desktop-app .sidebar-sessions { gap: 4px; }
-.desktop-app .thread-row.thread-card { display: flex; flex-direction: column; align-items: stretch; gap: 2px; padding: 4px 8px; min-height: 46px; width: 100%; border-radius: var(--radius-control); text-align: left; background: transparent; color: var(--text); font-weight: 400; }
+.desktop-app .thread-row.thread-card { display: flex; flex-direction: column; align-items: stretch; gap: 2px; padding: 4px 8px; min-height: calc(46px * var(--density)); width: 100%; border-radius: var(--radius-control); text-align: left; background: transparent; color: var(--text); font-weight: 400; }
 .desktop-app :is(.thread-card[aria-pressed='true'],.new-session[aria-current='page']) { background: var(--hover-fill); }
 .desktop-app :is(.thread-card,.new-session):hover { background: var(--hover-fill); }
 .thread-card-heading,.thread-project-line,.thread-branch-line { display: flex; align-items: center; min-width: 0; gap: 6px; }
@@ -72,7 +72,7 @@
 .desktop-app .sidebar-sessions { overflow-y: auto; scrollbar-gutter: stable; padding-right: 6px; margin-right: -2px; }
 
 /* Full-width navigation with a quiet, independent scrollbar at the outer edge. */
-.desktop-app .thread-row.thread-card { padding: 4px 8px; gap: 2px; min-height: 46px; }
+.desktop-app .thread-row.thread-card { padding: 4px 8px; gap: 2px; min-height: calc(46px * var(--density)); }
 .desktop-app .sidebar-sessions { scrollbar-width: none; scrollbar-gutter: auto; padding-right: 0; margin-right: 0; }
 .desktop-app .sidebar-sessions::-webkit-scrollbar { display: none; }
 .overlay-scroll-host { position: relative; }
@@ -96,7 +96,7 @@
 .thread-group-count { color: var(--text-muted); font-size: 12px; }
 .thread-group-rows { display: flex; flex-direction: column; gap: 2px; }
 .thread-group-rows[hidden] { display: none; }
-.desktop-app [data-group='project'] .thread-card { min-height: 46px; }
+.desktop-app [data-group='project'] .thread-card { min-height: calc(46px * var(--density)); }
 .desktop-app [data-compact='true'] .thread-card { min-height: 34px; padding: 6px 10px; }
 [data-compact='true'] .thread-card-heading { gap: 7px; }
 [data-compact='true'] .thread-card-heading > .thread-project-icon { flex-shrink: 0; }

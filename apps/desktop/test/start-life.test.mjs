@@ -31,7 +31,7 @@ test('Start screen: mark and title, typed suggestion from real repo state, three
   if(SHOTS)await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].setContentSize(1440,900));
   await page.locator('.start-card').first().waitFor();
   assert.match(await page.locator('.life-hello').textContent(),/\?$|build/);
-  assert.equal(await page.locator('.life-mark').textContent(),'[suffice]');
+  assert.equal(await page.locator('.life-mark svg.brand-mark').count(),1); // new DOM: the brand mark replaces the text mark
   assert.equal(await page.locator('.life-label,.life-card').count(),0,'the pick-up strip is gone');
   assert.equal(await page.locator('.start-card').count(),3);
   assert.equal(await page.locator('.start-card canvas.start-card-art').count(),3);
