@@ -5,12 +5,17 @@
 .desktop-app .sidebar-nav > .button[hidden],.desktop-app .sidebar-nav :is(.nav-more-wrap,.nav-more-group) > .button[hidden] { display: none; }
 .desktop-app .sidebar-nav > .button .icon,.desktop-app .sidebar-nav :is(.nav-more-wrap,.nav-more-group) > .button .icon { width: 18px; height: 18px; flex: 0 0 18px; }
 .desktop-app .sidebar-nav > .button:hover,.desktop-app .sidebar-nav :is(.nav-more-wrap,.nav-more-group) > .button:hover { background: var(--hover-fill); color: var(--text); }
-.desktop-app .sidebar-nav > .new-session { color: var(--text-strong); background: var(--surface-active); box-shadow: inset 0 1px 0 #ffffff12, 0 1px 2px #0000002e; }
-.desktop-app[data-theme='light'] .sidebar-nav > .new-session { box-shadow: inset 0 1px 0 #ffffffb0, 0 1px 2px #00000018; }
-.desktop-app .sidebar-nav > .new-session:hover { background: var(--surface-active); filter: brightness(1.08); }
+.desktop-app .sidebar-nav > .new-session { color: var(--text-strong); }
+.desktop-app .sidebar-nav > .new-session[aria-current='page'] { background: var(--surface-active); box-shadow: inset 0 1px 0 #ffffff12, 0 1px 2px #0000002e; }
+.desktop-app[data-theme='light'] .sidebar-nav > .new-session[aria-current='page'] { box-shadow: inset 0 1px 0 #ffffffb0, 0 1px 2px #00000018; }
+.desktop-app .sidebar-nav > .new-session[aria-current='page']:hover { background: var(--surface-active); filter: brightness(1.08); }
 .desktop-app .sidebar-nav :is(.nav-more-wrap,.nav-more-group) > .button:is([aria-current='page'],[aria-pressed='true']) { background: var(--surface-active); color: var(--text-strong); }
 .nav-more-wrap,.nav-more-group { display: flex; flex-direction: column; gap: var(--space-1); }
 .nav-more-group[hidden] { display: none; }
+.nav-more-group { padding-left: var(--space-4); }
+.desktop-app .sidebar-nav .nav-more > .nav-chevron { width: 14px; height: 14px; flex: 0 0 14px; margin-left: auto; color: var(--text-faint); transition: transform var(--duration-hover) var(--ease-out); }
+.desktop-app .sidebar-nav .nav-more[aria-expanded='true'] > .nav-chevron { transform: rotate(180deg); }
+@media (prefers-reduced-motion: reduce) { .desktop-app .sidebar-nav .nav-more > .nav-chevron { transition: none; } }
 .nav-label,.needs-nav-label,.issues-nav-label,.flows-nav-label,.computer-nav-label { flex: 1; text-align: left; }
 
 .desktop-app .session-section { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; overflow: hidden; margin-top: var(--space-2); }

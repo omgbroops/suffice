@@ -122,7 +122,7 @@ document.querySelector('#app').innerHTML = `
     ${button('Scheduled', { icon: 'calendar', className: 'nav-item scheduled-nav', action: 'scheduled', content: '<span class="nav-label">Scheduled</span>' })}
     ${button('Plugins', { icon: 'plug', className: 'nav-item', action: 'plugins', content: '<span class="nav-label">Plugins</span>' })}
     ${button('Teamwork', { icon: 'users', className: 'nav-item teamwork-nav', action: 'teamwork', attrs: 'hidden', content: '<span class="nav-label">Teamwork</span>' })}
-    <div class="nav-more-wrap">${button('More', { icon: 'more', className: 'nav-item nav-more', action: 'nav-more', attrs: 'aria-expanded="false" aria-controls="nav-more-group"', content: '<span class="nav-label">More</span>' })}
+    <div class="nav-more-wrap">${button('More', { icon: 'more', className: 'nav-item nav-more', action: 'nav-more', attrs: 'aria-expanded="false" aria-controls="nav-more-group"', content: `<span class="nav-label">More</span>${icon('chevron', 'nav-chevron')}` })}
     <div class="nav-more-group" id="nav-more-group" hidden>
     ${button('Needs you', { icon: 'inbox', className: 'needs-nav', action: 'needs-you', attrs: 'hidden', content: '<span class="needs-nav-label">Needs you</span><span class="needs-count" hidden>0</span>' })}
     ${button('Issues', { icon: 'bug', className: 'issues-nav', action: 'issues', content: '<span class="issues-nav-label">Issues</span><span class="issues-count" hidden>0</span>' })}
