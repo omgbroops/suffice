@@ -24,7 +24,7 @@ export function mountOverlay(api = window.sufficeDesktop?.overlay) {
   }
   function build(x, y) {
     root.replaceChildren(); anchor = { x, y };
-    pill = el('div', 'ov-pill'); pill.dataset.mode = 'ready'; pill.setAttribute('role', 'status');
+    pill = el('div', 'ov-card'); pill.dataset.mode = 'ready'; pill.setAttribute('role', 'status');
     const status = el('div', 'ov-status'); const glyph = el('span', 'ov-glyph'); glyph.innerHTML = MIC; glyph.setAttribute('aria-hidden', 'true');
     hint = el('span', 'ov-hint', 'Hold Option to speak, tap to type'); status.append(glyph, hint);
     line = el('div', 'ov-text'); line.hidden = true;
@@ -39,8 +39,8 @@ export function mountOverlay(api = window.sufficeDesktop?.overlay) {
   const show = (text, cls = '') => { line.hidden = !text; line.className = 'ov-text ' + cls; line.textContent = text; place(); };
 
   function ring(x, y, label) {
-    const r = el('div', 'ov-ring'); r.style.left = x + 'px'; r.style.top = y + 'px'; r.dataset.role = 'ring';
-    const l = el('div', 'ov-ring-label', label); l.dataset.role = 'ring-label'; root.append(r, l);
+    const r = el('div', 'ov-mark'); r.style.left = x + 'px'; r.style.top = y + 'px'; r.dataset.role = 'ring';
+    const l = el('div', 'ov-mark-label', label); l.dataset.role = 'ring-label'; root.append(r, l);
     const place = () => { l.style.left = Math.min(x + 40, innerWidth - l.offsetWidth - 8) + 'px'; l.style.top = Math.max(8, y - 12) + 'px'; };
     place();
     const spring = { duration: 700, easing: SPRING, fill: 'forwards' };

@@ -46,7 +46,7 @@ test('overlay: open, type, reply streams, ring lands, reminder fires',async()=>{
   assert.equal(await app.evaluate(()=>globalThis.shortcuts.has('Option+Space')),true,'and back on');
   await app.evaluate(()=>globalThis.shortcuts.get('Option+Space')());
   const o=await overlayPage(app);await wallpaper(o);
-  await o.locator('.ov-pill').waitFor();
+  await o.locator('.ov-card').waitFor();
   const flags=await app.evaluate(()=>{const w=globalThis.sufficeTestOverlay.window.window();return {focusable:w.isFocusable(),top:w.isAlwaysOnTop?.()??null,bounds:w.getBounds()};});
   assert.equal(flags.focusable,false,'overlay never takes focus until typing');
   await shot(o,'1-ready');
@@ -79,7 +79,7 @@ test('overlay: open, type, reply streams, ring lands, reminder fires',async()=>{
 
   // remind me: stored, listed in the sidebar, notification fires
   await app.evaluate(()=>globalThis.shortcuts.get('Option+Space')());
-  const o2=await overlayPage(app);await wallpaper(o2);await o2.locator('.ov-pill').waitFor();
+  const o2=await overlayPage(app);await wallpaper(o2);await o2.locator('.ov-card').waitFor();
   await app.evaluate(()=>{const f=globalThis.sufficeTestOverlay.flow;f.onKey('option','down',5000);f.onKey('option','up',5060);});
   await o2.locator('.ov-field input').fill('remind me to call mum in 1 second');
   await o2.locator('.ov-field input').press('Enter');
