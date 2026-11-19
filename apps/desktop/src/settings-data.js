@@ -6,7 +6,7 @@ const group=(title,rows)=>({title,rows});
 
 export const settingsSections=[
  {id:'general',subtitle:'',title:'General',icon:'settings',category:'Personal',groups:[
-  group('Defaults',[select('default-model','Default model','Last used',['Last used']),select('default-effort','Reasoning effort','Medium',['Low','Medium','High','Extra high','Max']),select('approval-mode','Permission mode','Ask when needed',['Ask before every action','Ask when needed','Never ask']),select('default-dir','Default directory','~/Suffice',['~/Suffice','Home'])]),
+  group('Defaults',[select('default-model','Default model','Last used',['Last used']),select('default-effort','Effort','Medium',['Low','Medium','High','Extra high','Max']),select('approval-mode','Permission mode','Ask when needed',['Ask before every action','Ask when needed','Never ask']),select('default-directory','Default directory','~/Suffice',['~/Suffice','Last used project','Home'])]),
   group('Application',[select('language','Language','System',['System','English']),select('send','Send messages with','Enter',['Enter','Ctrl + Enter']),toggle('startup','Launch at login'),toggle('tray','Keep running in the background',false)]),
   group('Conversations',[select('working-send','While agent is working','Steer',['Queue','Steer']),toggle('escape','Stop agent with Escape'),toggle('close-panel','Close right panel with its last tab'),select('naming','Thread naming','Automatic',['Automatic','First message','Untitled']),select('new-project','New threads use','Last used project',['Last used project','Ask each time'])]),
  ]},
@@ -33,7 +33,7 @@ export const settingsSections=[
  ]},
  {id:'automations',subtitle:'',title:'Automations',icon:'calendar',category:'Agent',groups:[{title:'Automations',rows:[],empty:'Loading…'}]},
  {id:'providers',subtitle:'',title:'Providers',icon:'globe',category:'Agent',groups:[group('Connected',[]),group('Available',[])]},
- ...[['mcps','Tools & MCP','plug'],['skills','Skills','code'],['extensions','Extensions','puzzle'],['templates','Prompt templates','files']].map(([id,title,icon])=>({id,subtitle:'',title,icon,category:'Agent',groups:[{title:'Resources',rows:[],empty:'Loading…'}]})),
+ ...[['mcps','Tools & MCP','plug'],['skills','Skills','code'],['extensions','Plugins','puzzle'],['templates','Prompt templates','files']].map(([id,title,icon])=>({id,subtitle:'',title,icon,category:'Agent',groups:[{title:'Resources',rows:[],empty:'Loading…'}]})),
  {id:'agent',subtitle:'',title:'Agent',icon:'bolt',category:'Agent',groups:[
   group('Ask bar',[toggle('local-agent','Screen-aware ask bar'),toggle('keys-trigger','Double-tap Option opens Suffice',true)]),
   group('Voice',[toggle('voice-input','Voice input',true),toggle('voice-auto-send','Send when speech ends')]),
