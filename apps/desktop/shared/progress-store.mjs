@@ -8,10 +8,12 @@ export const TOOL_STAT={bash:'debugging',edit:'patience',write:'wisdom',test:'ri
 const RUNNER=/^(?:(?:npx|env|time|sudo)\s+|[A-Z_][A-Z0-9_]*=\S*\s+)*(?:pytest|jest|vitest|mocha|rspec|phpunit|(?:npm|yarn|pnpm|bun|cargo|go|make|deno|mix|dotnet|gradle|mvn|swift|rake)\s+(?:run\s+)?test\b|npm\s+t\b|node\s+(?:\S+\s+)*--test\b|python3?\s+-m\s+(?:pytest|unittest)\b|\.\/gradlew\s+test\b)/i;
 export const isTestCommand=input=>String(input?.command||input?.cmd||'').split(/&&|\|\||[;|\n]/).some(seg=>RUNNER.test(seg.trim()));
 // Session-cumulative usage is tracked per thread, so a second run in a thread adds only its own delta.
-const cums=new Map();
-export const runCtx=key=>key==null?{}:{get tokens(){return cums.get(key)||0;},set tokens(v){cums.set(key,v);}};
-// A new chat's job is rebound from its pending key to the real thread id; carry the baseline across.
-export const rekeyCtx=(from,to)=>{if(from!=null&&to!=null&&cums.has(from)){cums.set(to,cums.get(from));cums.delete(from);}};
+const cums=new Map(),alias=new Map();
+const real=k=>{while(alias.has(k))k=alias.get(k);return k;};
+// A strip keeps the key it was created with, so lookups follow the pending -> real rebind.
+export const runCtx=key=>key==null?{}:{get tokens(){return cums.get(real(key))||0;},set tokens(v){cums.set(real(key),v);}};
+// A new chat's job is rebound from its pending key to the real thread id; carry the baseline across and keep old ctxs pointing at it.
+export const rekeyCtx=(from,to)=>{if(from==null||to==null||from===to)return;if(cums.has(from)){cums.set(to,cums.get(from));cums.delete(from);}alias.set(from,to);};
 const name=n=>String(n||'').toLowerCase().replace(/[^a-z]/g,'');
 export function verbFor(tool,input){const n=name(tool);
  if(/todo|plan/.test(n))return 'Planning';

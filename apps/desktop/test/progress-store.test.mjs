@@ -38,3 +38,10 @@ test('token baseline survives a pending-to-real thread id rebind',()=>{
  rekeyCtx('pending:u1','real-1');s=step(s,use(runCtx('real-1'),160000)).state;
  assert.equal(s.tokens,160000);
 });
+
+test('usage arriving after the rebind through the old strip ctx keeps the baseline',()=>{
+ const use=(ctx,total)=>toLogEvent({event:'usage',usage:{totalTokens:total}},ctx,D(1));
+ const a=runCtx('pending:u2');rekeyCtx('pending:u2','real-2');let s=step(initial(),use(a,150000)).state;
+ s=step(s,use(runCtx('real-2'),160000)).state;
+ assert.equal(s.tokens,160000);
+});
