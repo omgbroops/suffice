@@ -23,6 +23,6 @@ test('footer shows the run token count and the thread project name',{timeout:600
   },cwd);
   await page.reload();await page.locator('.thread-row').first().click();await page.locator('.thread-assistant').waitFor();
   await page.waitForFunction(()=>document.querySelector('.context-chip')?.textContent.trim()==='4.3k');
-  assert.equal(await page.locator('.project-picker .project-name').textContent(),basename(cwd));
+  assert.equal(await page.locator('.project-picker .project-name').first().textContent(),basename(cwd));
  }finally{await app.close();}
 });
