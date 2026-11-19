@@ -10,7 +10,7 @@
 @keyframes session-state-pulse { 50% { opacity: .35; transform: scale(.8); } }
 @media (prefers-reduced-motion: reduce) { .session-state-chip[data-state='working'] .session-state-mark { animation: none; } }
 /* One indicator per session row: the chip replaces the icon. */
-.session-row .thread-state { display: none; }
+.session-row:has(.session-state-chip) .thread-state { display: none; }
 .session-row .thread-card-heading .session-state-chip { margin-left: auto; margin-right: 6px; }
 .session-row .thread-card-heading .thread-age { margin-left: 0; }
 .session-term-tabs { position: absolute; top: 50px; left: 32px; right: 32px; display: flex; gap: 6px; pointer-events: auto; }
