@@ -176,6 +176,7 @@ export function connectVoice({ form, prompt, toast = () => {}, api = window.suff
   }
   async function start() {
     if (conversation) return;
+    if (form.modelsDisabled) { toast('Enable a model in Settings, Models, first.'); return; }
     const kind = chosenKind();
     let deviceId; try { deviceId = localStorage.getItem('suffice-voice-device') || undefined; } catch {}
     const current = conversation = createVoiceConversation({
