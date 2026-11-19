@@ -89,6 +89,7 @@
 /* Keep the atmosphere mounted and transformed while its solid cover fades in. */
 .desktop-app.hide-chat-background:not(.settings-open) .workspace.thread-view .thread-backdrop,
 .desktop-app.hide-settings-background.settings-open .workspace .thread-backdrop { opacity:1; }
+.desktop-app[data-theme].hide-settings-background.settings-open .workspace .thread-backdrop { opacity:1; }
 .settings-scroll,.settings-nav nav { --fade-top:0px; --fade-bottom:0px; mask-image:linear-gradient(to bottom,transparent,#000 var(--fade-top),#000 calc(100% - var(--fade-bottom)),transparent); }
 .settings-scroll[data-fade-top=true],.settings-nav nav[data-fade-top=true] { --fade-top:12px; }
 .settings-scroll[data-fade-bottom=true],.settings-nav nav[data-fade-bottom=true] { --fade-bottom:12px; }

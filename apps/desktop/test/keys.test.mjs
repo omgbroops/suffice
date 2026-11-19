@@ -46,7 +46,7 @@ test('keys: trigger opens the floater near the point, Enter makes a thread, Esca
   assert.ok(far.b.x+far.b.width<=far.area.x+far.area.width&&far.b.y+far.b.height<=far.area.y+far.area.height,'clamped '+JSON.stringify(far));
   const closed2=bar.waitForEvent('close',{timeout:5000});await bar.keyboard.press('Escape').catch(()=>{});await closed2;
   // Settings switch (default on) stops the trigger.
-  await page.getByRole('button',{name:'Settings',exact:true}).click();
+  await page.getByRole('button',{name:'Settings',exact:true}).click();await page.locator('.settings-nav-item[data-section="agent"]').click();
   const toggle=page.getByRole('switch',{name:SELECT,exact:true});await toggle.waitFor();
   assert.equal(await toggle.getAttribute('aria-checked'),'true','default on');
   await toggle.click();await page.waitForFunction(()=>document.querySelector('[aria-label="Double-tap Option opens Suffice"]').getAttribute('aria-checked')==='false');

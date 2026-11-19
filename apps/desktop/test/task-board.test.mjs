@@ -37,6 +37,12 @@ test(`task board (${theme}): queue, limit, needs-you, cancel, retry, via sidebar
   await page.getByRole('button',{name:'Tasks',exact:true}).click();await board.waitFor();
   assert.equal(await page.locator('#tb-text').evaluate(el=>document.activeElement===el),true);
   await shot(page,theme,'01-empty');
+  // Leaving with unsaved text asks "Discard?" in a popover attached to the Tasks row: inside the sidebar, clear of the composer and the seam.
+  await page.locator('#tb-text').fill('unsaved');await page.locator('.new-session').click();
+  const bubble=page.locator('.tb-discard');await bubble.waitFor();
+  const [bb,sb,tb]=await Promise.all([bubble.boundingBox(),page.locator('.sidebar').boundingBox(),page.getByRole('button',{name:'Tasks',exact:true}).boundingBox()]);
+  assert.ok(bb.x>=sb.x&&bb.x+bb.width<=sb.x+sb.width,'discard bubble stays inside the sidebar');assert.ok(bb.y>=tb.y+tb.height,'discard bubble sits under the Tasks row');
+  await shot(page,theme,'01b-discard');await bubble.getByRole('button',{name:'Keep'}).click();await bubble.waitFor({state:'hidden'});await page.locator('#tb-text').fill('');
   // Escape closes, Cmd+K entry reopens.
   await page.keyboard.press('Escape');await board.waitFor({state:'hidden'});
   await page.keyboard.press('Control+k');const input=page.getByRole('combobox',{name:'Search threads and commands'});await input.fill('tasks');await input.press('Enter');await board.waitFor();

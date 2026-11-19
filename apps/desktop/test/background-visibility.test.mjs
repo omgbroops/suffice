@@ -14,7 +14,7 @@ test('chat and settings background visibility persist independently and fade to 
  const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'profile')],env});
  try{
   const page=await app.firstWindow();await page.locator('.thread-row').first().waitFor();await page.getByRole('button',{name:'Settings',exact:true}).click();await page.getByRole('button',{name:'Appearance',exact:true}).click();
-  const settings=page.getByRole('switch',{name:'Show background in settings',exact:true}),chat=page.getByRole('switch',{name:'Show background in chat',exact:true});
+  const settings=page.getByRole('switch',{name:'Show in settings',exact:true}),chat=page.getByRole('switch',{name:'Show in chat',exact:true});
   assert.equal(await settings.getAttribute('aria-checked'),'true');assert.equal(await chat.getAttribute('aria-checked'),'true');
   await settings.click();await page.waitForFunction(()=>document.documentElement.classList.contains('hide-settings-background'));
   assert.equal(await page.locator('.thread-backdrop').evaluate(el=>getComputedStyle(el).transitionProperty),'opacity');
@@ -22,7 +22,7 @@ test('chat and settings background visibility persist independently and fade to 
   await chat.click();await page.waitForFunction(()=>document.documentElement.classList.contains('hide-chat-background'));
   await page.getByRole('button',{name:'Suffice home',exact:true}).click();await page.waitForFunction(()=>getComputedStyle(document.querySelector('.thread-backdrop')).opacity==='0');
   await page.locator('.thread-row').first().click();await page.waitForFunction(()=>getComputedStyle(document.querySelector('.thread-backdrop')).opacity==='1');
-  await page.getByRole('button',{name:'Settings',exact:true}).click();await settings.click();await page.waitForFunction(()=>!document.documentElement.classList.contains('hide-settings-background'));await page.waitForFunction(()=>Number(getComputedStyle(document.querySelector('.thread-backdrop')).opacity)<1);
+  await page.getByRole('button',{name:'Settings',exact:true}).click();await page.getByRole('button',{name:'Appearance',exact:true}).click();await settings.click();await page.waitForFunction(()=>!document.documentElement.classList.contains('hide-settings-background'));await page.waitForFunction(()=>Number(getComputedStyle(document.querySelector('.thread-backdrop')).opacity)<1);
   await page.reload();await page.getByRole('button',{name:'Settings',exact:true}).click();await page.getByRole('button',{name:'Appearance',exact:true}).click();assert.equal(await settings.getAttribute('aria-checked'),'true');assert.equal(await chat.getAttribute('aria-checked'),'false');
   await page.getByRole('group',{name:'Mode',exact:true}).getByRole('button',{name:'Light',exact:true}).click();await settings.click();await page.waitForFunction(()=>getComputedStyle(document.querySelector('.thread-backdrop')).opacity==='1');
  }finally{await app.close();}

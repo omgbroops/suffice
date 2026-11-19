@@ -25,11 +25,12 @@ test('Computer use edges: settings closes, cancel mid-run, interrupted approval 
  const row=(page,goal)=>page.locator('.cu-item',{hasText:goal});
 
  await launch(async page=>{
-  // Settings stays open after the switch: opening Computer use must leave it
+  // Settings is modal now (sidebar inert): leave it with Back, then Computer use opens and Settings stays closed
   await page.locator('[data-action=settings]').first().click();
   await page.locator('[data-section=agent]').click();
   await page.getByRole('switch',{name:'Computer use sessions'}).click();
   await page.locator('[role=switch][aria-label="Computer use sessions"][aria-checked=true]').waitFor();
+  await page.getByRole('button',{name:'Back to chats'}).click();
   await page.locator('.computer-nav').click();
   await page.locator('.computer-view:not([hidden])').waitFor();
   await page.waitForFunction(()=>!document.documentElement.classList.contains('settings-open'));
