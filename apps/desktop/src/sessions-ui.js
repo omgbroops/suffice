@@ -117,6 +117,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  }
  // Start flow from the composer: the typed text is the first message; resolves false when nothing started.
  async function start(agent,text,{background=false}={}){
+  const cap=await sx.capacity().catch(()=>null);if(cap&&!cap.free){toast(`Local agents are at capacity (${cap.running} of ${cap.max}). Stop one to start another.`);return false;}
   const cwd=project();if(!cwd){toast('Choose a project');return false;}
   try{const s=await sx.start({agent,cwd});bump(s.id);await refresh();if(text){titles.set(s.id,shortTitle(text,60));firstText.set(s.id,text);sendWhenReady(s.id,text);}if(background)toast('Session started in the background');else open(rows.get(s.id)?._s||s,true);return true;}catch(e){toast(e.message);return false;}
  }
@@ -178,7 +179,7 @@ export function connectSessions({toast,form,workspace,header,hooks}){
  document.addEventListener('click',e=>{if(e.target.closest?.('[data-menu-action^="import-chat:"]'))openImport();});
  document.addEventListener('suffice-open-history',e=>{void view(e.detail);});
  connectThreadHover(side);
- connectSessionContextMenu(side,{toast,openFolder:cwd=>window.sufficeDesktop.openProjectFolder?.(cwd),getSession:row=>{const s=row._s;return s&&{id:s.id,title:c.name(s),cwd:s.cwd,attach:()=>sx.attachCommand(s.id),attachTerminal:()=>sx.attachTerminal(s.id),show:()=>{if(c.active?.id!==s.id)open(s);setMode('terminal');},stop:async()=>{await sx.stop(s.id);holds.get(s.id)?.();if(c.active?.id===s.id){leave();hooks.clear?.();}await refresh();}};}});
+ connectSessionContextMenu(side,{toast,openFolder:cwd=>window.sufficeDesktop.openProjectFolder?.(cwd),getSession:row=>{const s=row._s;return s&&{id:s.id,title:c.name(s),cwd:s.cwd,attach:()=>sx.attachCommand(s.id),handoff:()=>sx.handoff(s.id),attachTerminal:()=>sx.attachTerminal(s.id),show:()=>{if(c.active?.id!==s.id)open(s);setMode('terminal');},stop:async()=>{await sx.stop(s.id);holds.get(s.id)?.();if(c.active?.id===s.id){leave();hooks.clear?.();}await refresh();}};}});
  sidebarPreferences.subscribe(()=>sortRows());
  threadViewState.subscribe(ev=>{if(ev.type==='update'&&ev.changed?.includes('sidebar')){for(const r of rows.values())paint(r._s);if(c.active)c.paintHeader();}});
  void refresh();
