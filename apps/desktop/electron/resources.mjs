@@ -1,6 +1,6 @@
 import {filterSufficeResources,isolateSufficeResourceLoader} from '../../../packages/cli/src/resource-scope.mjs';
 import {mkdir,readFile,writeFile,rename,realpath} from 'node:fs/promises';
-import {resolve,join,relative,basename} from 'node:path';
+import {resolve,join,relative,basename,isAbsolute} from 'node:path';
 import {randomUUID} from 'node:crypto';
 import {spawn} from 'node:child_process';
 import {TOOLKITS,scopeLookup,projectKey} from '../../../packages/cli/src/mcp-scope.mjs';
@@ -10,8 +10,8 @@ import {SettingsManager,DefaultPackageManager,DefaultResourceLoader} from '@eare
 export function createResourceService(home,{choosePath}={}){
  let tail=Promise.resolve(),mutations=Promise.resolve(),schemas;const children=new Set();
  const queue=fn=>{const job=mutations.then(fn);mutations=job.catch(()=>{});return job;};
- const json=async file=>{try{return JSON.parse(await readFile(resolve(home,file),'utf8'));}catch(e){if(e.code==='ENOENT')return {};throw e;}};
- const save=(file,value)=>{const job=tail.then(async()=>{await mkdir(home,{recursive:true});const target=resolve(home,file),temporary=target+'.'+randomUUID()+'.tmp';await writeFile(temporary,JSON.stringify(value,null,2),{mode:0o600});await rename(temporary,target);});tail=job.catch(()=>{});return job;};
+ const json=async(file,dir=home)=>{try{return JSON.parse(await readFile(resolve(dir,file),'utf8'));}catch(e){if(e.code==='ENOENT')return {};throw e;}};
+ const save=(file,value,dir=home)=>{const job=tail.then(async()=>{await mkdir(dir,{recursive:true});const target=resolve(dir,file),temporary=target+'.'+randomUUID()+'.tmp';await writeFile(temporary,JSON.stringify(value,null,2),{mode:0o600});await rename(temporary,target);});tail=job.catch(()=>{});return job;};
  async function list(){
   const settings=SettingsManager.create(home,home,{projectTrusted:false}),mcp=await json('mcp.json'),state=await json('resource-state.json');
   const manager=new DefaultPackageManager({cwd:home,agentDir:home,settingsManager:settings});
@@ -22,6 +22,9 @@ export function createResourceService(home,{choosePath}={}){
   return {mcp:mcp.mcpServers||{},skills:loader.getSkills().skills.map(s=>({name:s.name,description:s.description,path:s.filePath,enabled:state.skills?.[s.name]!==false})),templates:loader.getPrompts().prompts.map(p=>({name:p.name,description:p.description,path:p.filePath,enabled:state.templates?.[p.name]!==false})),extensions:resolved.extensions.filter(e=>!e.path.startsWith('builtin:')).map(e=>({path:e.path,enabled:e.enabled,...e.metadata})),packages:settings.getSettings().packages||[],diagnostics:[...loader.getSkills().diagnostics,...loader.getPrompts().diagnostics],settings:settings.getSettings()};
  }
 
+ // Per-project servers live in <project>/.suffice/mcp.json; p.where==='project' targets it, anything else the global file.
+ const dirOf=p=>{if(p?.where!=='project')return home;if(typeof p.project!=='string'||!isAbsolute(p.project))throw new Error('Select a project first');return resolve(p.project,'.suffice');};
+ const hkey=(p,name)=>p?.where==='project'?projectKey(p.project)+'::'+name:name;
  // Real tool schemas of the built-in toolkits, loaded once; an unreadable engine just shows no cost.
  const toolkitSchemas=()=>schemas??=import('../../../packages/cli/src/tools.mjs').then(m=>new Map(m.repositoryTools({workspace:home,access:'full'}).map(t=>[t.name,t]))).catch(()=>new Map());
  async function state(p={}){
@@ -30,14 +33,16 @@ export function createResourceService(home,{choosePath}={}){
   const look=scopeLookup(scope,{project:typeof p.project==='string'&&p.project?projectKey(p.project):null,thread:typeof p.thread==='string'?p.thread:null,level});
   const short=t=>t.length>48?t.slice(0,47)+'…':t;
   const toolkits=Object.entries(TOOLKITS).map(([id,t])=>{const o=look('toolkit:'+id),found=t.tools.filter(n=>known.has(n));return {id,kind:'toolkit',name:t.title,detail:t.detail,tools:t.tools,tokens:found.length?estimateTokens(found.map(n=>known.get(n))):0,enabled:o?.enabled??true,source:o?.source||'default'};});
-  const items=Object.entries(servers).map(([name,c])=>{const o=look(name),h=health[name];return {id:name,kind:'server',name,detail:c.url||short([c.command,...(c.args||[])].map((a,i)=>i&&!String(a).startsWith('/')?a:basename(String(a))).join(' ')),remote:!!c.url,enabled:o?.enabled??c.enabled!==false,source:o?.source||'default',health:h?{ok:h.ok,error:h.error,tools:h.tools,tokens:h.tokens,at:h.at}:null};});
+  const items=Object.entries(servers).map(([name,c])=>{const o=look(name),h=health[name];return {id:name,kind:'server',name,detail:c.url||short([c.command,...(c.args||[])].map((a,i)=>i&&!String(a).startsWith('/')?a:basename(String(a))).join(' ')),remote:!!c.url,enabled:o?.enabled??c.enabled!==false,source:o?.source||'default',health:h?{ok:h.ok,error:h.error,tools:h.tools,costs:h.costs,tokens:h.tokens,at:h.at}:null};});
+  const project=typeof p.project==='string'&&isAbsolute(p.project)?p.project:null,local=project?(await json('mcp.json',resolve(project,'.suffice'))).mcpServers||{}:{};
+  for(const [name,c] of Object.entries(local)){const o=look(name),h=health[hkey({where:'project',project},name)];items.push({id:name,kind:'server',where:'project',name,detail:c.url||short([c.command,...(c.args||[])].map((a,i)=>i&&!String(a).startsWith('/')?a:basename(String(a))).join(' ')),remote:!!c.url,enabled:o?.enabled??c.enabled!==false,source:o?.source||'default',health:h?{ok:h.ok,error:h.error,tools:h.tools,costs:h.costs,tokens:h.tokens,at:h.at}:null});}
   const tokens=[...toolkits,...items].reduce((n,x)=>n+(x.enabled?(x.tokens??x.health?.tokens??0):0),0);
   return {level,toolkits,servers:items,tokens,activeCount:[...toolkits,...items].filter(x=>x.enabled).length};
  }
- async function health(name){
-  const servers=(await json('mcp.json')).mcpServers||{};if(!Object.hasOwn(servers,name))throw new Error('Unknown server');
-  const result=await checkServer(servers[name],{cwd:home,track:c=>{children.add(c);c.once('close',()=>children.delete(c));}});
-  await queue(async()=>{const all=await json('mcp-health.json');all[name]=result;await save('mcp-health.json',all);});
+ async function health(p){
+  const name=p.name,servers=(await json('mcp.json',dirOf(p))).mcpServers||{};if(!Object.hasOwn(servers,name))throw new Error('Unknown server');
+  const result=await checkServer(servers[name],{cwd:p.where==='project'?p.project:home,track:c=>{children.add(c);c.once('close',()=>children.delete(c));}});
+  await queue(async()=>{const all=await json('mcp-health.json');all[hkey(p,name)]=result;await save('mcp-health.json',all);});
   return list();
  }
  async function scopeSet(p){
@@ -52,7 +57,8 @@ export function createResourceService(home,{choosePath}={}){
  }
  async function action(p){if(!p||typeof p.action!=='string')throw new Error('Invalid resource action');
  if(p.action==='resource-toggle'){if(!['skills','templates'].includes(p.kind)||typeof p.name!=='string')throw new Error('Invalid resource');const state=await json('resource-state.json');state[p.kind]={...state[p.kind],[p.name]:p.enabled===true};await save('resource-state.json',state);return list();}
- if(p.action==='mcp-save'){const data=JSON.parse(p.text);if(!data.mcpServers||typeof data.mcpServers!=='object'||Array.isArray(data.mcpServers))throw new Error('Expected mcpServers object');for(const [name,server] of Object.entries(data.mcpServers)){if(!/^[a-zA-Z0-9_-]+$/.test(name)||!server||typeof server!=='object'||(!server.command&&!server.url))throw new Error('Each server needs a valid name and command or URL');if(server.args&&(!Array.isArray(server.args)||server.args.some(a=>typeof a!=='string')))throw new Error('Arguments must be a JSON array of strings');if(server.command&&typeof server.command!=='string')throw new Error('Command must be one executable');if(server.url&&!/^https?:\/\//.test(server.url))throw new Error('Expected an HTTP URL');}await save('mcp.json',data);return list();}
+ if(p.action==='mcp-save'){const data=JSON.parse(p.text);if(!data.mcpServers||typeof data.mcpServers!=='object'||Array.isArray(data.mcpServers))throw new Error('Expected mcpServers object');for(const [name,server] of Object.entries(data.mcpServers)){if(!/^[a-zA-Z0-9_-]+$/.test(name)||!server||typeof server!=='object'||(!server.command&&!server.url))throw new Error('Each server needs a valid name and command or URL');if(server.args&&(!Array.isArray(server.args)||server.args.some(a=>typeof a!=='string')))throw new Error('Arguments must be a JSON array of strings');if(server.command&&typeof server.command!=='string')throw new Error('Command must be one executable');if(server.url&&!/^https?:\/\//.test(server.url))throw new Error('Expected an HTTP URL');}await save('mcp.json',data,dirOf(p));return list();}
+ if(p.action==='mcp-remove'){const dir=dirOf(p),data=await json('mcp.json',dir);if(typeof p.name!=='string'||!Object.hasOwn(data.mcpServers||{},p.name))throw new Error('Unknown server');delete data.mcpServers[p.name];await save('mcp.json',data,dir);const all=await json('mcp-health.json');delete all[hkey(p,p.name)];await save('mcp-health.json',all);return list();}
  if(p.action==='mcp-toggle'){const data=await json('mcp.json');if(!Object.hasOwn(data.mcpServers||{},p.name))throw new Error('Unknown server');data.mcpServers[p.name].enabled=p.enabled===true;await save('mcp.json',data);return list();}
  if(p.action==='write'){if(!['skills','templates'].includes(p.kind)||(!p.path&&!/^[a-zA-Z0-9_-]{1,80}$/.test(p.name))||typeof p.text!=='string'||p.text.length>200000)throw new Error('Use a short name with letters, numbers or dashes');let target;if(p.path){const items=await list(),entry=items[p.kind].find(x=>x.path===p.path);if(!entry)throw new Error('Unknown resource');target=await realpath(entry.path);}else{const dir=resolve(home,p.kind==='skills'?'skills/'+p.name:'prompts');await mkdir(dir,{recursive:true});target=join(dir,p.kind==='skills'?'SKILL.md':p.name+'.md');}await writeFile(target,p.text,{mode:0o600});return list();}
  if(p.action==='read'){const items=await list(),entry=[...items.skills,...items.templates].find(x=>x.path===p.path);if(!entry)throw new Error('Unknown resource');return readFile(await realpath(entry.path),'utf8');}
@@ -72,7 +78,7 @@ export function createResourceService(home,{choosePath}={}){
  if(['mcp-check','mcp-login','mcp-logout'].includes(p.action)){const args=p.action==='mcp-check'?['mcp','list']:['mcp',p.action==='mcp-login'?'login':'logout',p.name];if(p.name&&!/^[a-zA-Z0-9_-]+$/.test(p.name))throw new Error('Invalid server');const entry=(await import('node:url')).fileURLToPath(import.meta.resolve('@earendil-works/pi-coding-agent'));const cli=resolve(entry,'..','bundle','cli.js');return new Promise((resolveResult,reject)=>{const child=spawn(process.execPath,[cli,...args],{cwd:home,env:{...process.env,ELECTRON_RUN_AS_NODE:'1',PI_CODING_AGENT_DIR:home},windowsHide:true,stdio:['ignore','pipe','pipe']});children.add(child);child.once('close',()=>children.delete(child));let output='';const take=chunk=>{output=(output+chunk.toString()).slice(-60000);};child.stdout.on('data',take);child.stderr.on('data',take);child.on('error',error=>{clearTimeout(timer);reject(error);});const timer=setTimeout(()=>child.kill(),p.action==='mcp-login'?180000:30000);child.on('exit',code=>{clearTimeout(timer);resolveResult({output,ok:code===0});});});}
  if(p.action==='mcp-state')return state(p);
  if(p.action==='mcp-scope')return scopeSet(p);
- if(p.action==='mcp-install'){const incoming=parseSnippet(p.text,typeof p.name==='string'&&p.name.trim()?p.name.trim():undefined).mcpServers,current=(await json('mcp.json')).mcpServers||{};const clash=Object.keys(incoming).filter(n=>Object.hasOwn(current,n));if(clash.length)throw new Error('Already installed: '+clash.join(', '));return action({action:'mcp-save',text:JSON.stringify({...await json('mcp.json'),mcpServers:{...current,...incoming}})});}
+ if(p.action==='mcp-install'){const incoming=parseSnippet(p.text,typeof p.name==='string'&&p.name.trim()?p.name.trim():undefined).mcpServers,current=(await json('mcp.json',dirOf(p))).mcpServers||{};const clash=Object.keys(incoming).filter(n=>Object.hasOwn(current,n));if(clash.length)throw new Error('Already installed: '+clash.join(', '));return action({action:'mcp-save',text:JSON.stringify({...await json('mcp.json',dirOf(p)),mcpServers:{...current,...incoming}}),where:p.where,project:p.project});}
  throw new Error('Unknown resource action');}
- return {list,dispose(){for(const child of children)child.kill();children.clear();},action:payload=>payload?.action==='mcp-health'&&typeof payload.name==='string'?health(payload.name):queue(()=>action(payload))};
+ return {list,dispose(){for(const child of children)child.kill();children.clear();},action:payload=>payload?.action==='mcp-health'&&typeof payload.name==='string'?health(payload):queue(()=>action(payload))};
 }
