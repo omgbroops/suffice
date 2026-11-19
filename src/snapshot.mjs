@@ -55,11 +55,16 @@ export function createRefControl({ source, backend, opts }) {
     if (!node) return { ok: false, reason: 'stale_ref', error: EXPIRED, text: '' };
     const b = node.bounds; const centre = b && [b.x + b.w / 2, b.y + b.h / 2];
     let r;
-    if (action === 'click') r = backend.press ? await backend.press(node) : { ok: false };
-    else if (action === 'type' || action === 'fill') r = await backend.setValue?.(node, String(text ?? ''));
-    else if (action === 'scroll') r = await backend.scroll?.(node, dir ?? 'down');
-    else return { ok: false, reason: 'invalid_arg', error: `unknown action ${action}`, text: '' };
-    if (!r?.ok && action === 'click' && centre && backend.clickAt) r = await backend.clickAt(...centre); // fallback: moves the real pointer
+    try {
+      if (action === 'click') r = backend.press ? await backend.press(node) : { ok: false };
+      else if (action === 'type' || action === 'fill') r = await backend.setValue?.(node, String(text ?? ''));
+      else if (action === 'scroll') r = await backend.scroll?.(node, dir ?? 'down');
+      else return { ok: false, reason: 'invalid_arg', error: `unknown action ${action}`, text: '' };
+      if (!r?.ok && action === 'click' && centre && backend.clickAt) r = await backend.clickAt(...centre); // fallback: moves the real pointer
+    } catch (e) {
+      const m = String(e?.message ?? e);
+      return /no node|not find node|detached|could not find|not attached/i.test(m) ? { ok: false, reason: 'stale_ref', error: EXPIRED, text: '' } : { ok: false, reason: 'action_failed', error: m, text: '' };
+    }
     return r?.ok ? { ok: true, text: `${action} ${ref}`, node: node.id } : { ok: false, reason: 'action_failed', error: r?.error ?? 'action failed', text: '' };
   };
   return { snapshot, observe, act, step: () => step };

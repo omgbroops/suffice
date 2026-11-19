@@ -64,3 +64,12 @@ test('snapshot costs far fewer tokens than a 1440x900 screenshot (logged)', () =
   console.log(`TOKENS snapshot=${t} screenshot_1440x900=${i} ratio=${(i / t).toFixed(1)}x`);
   assert.ok(t * 10 < i);
 });
+
+test('backend exception in act returns a result; detached node reads as expired', async () => {
+  const f = fake(); const c = createRefControl({source: {tree: async () => fx.tree}, backend: {...f.backend, press: async () => { throw new Error('No node with given id found'); }, setValue: async () => { throw new Error('boom'); }}});
+  await c.observe();
+  const a = await c.act({action: 'click', ref: '@e6'});
+  assert.deepEqual([a.ok, a.reason, a.error], [false, 'stale_ref', EXPIRED]);
+  const b = await c.act({action: 'fill', ref: '@e3', text: 'x'});
+  assert.deepEqual([b.ok, b.reason, b.error], [false, 'action_failed', 'boom']);
+});
