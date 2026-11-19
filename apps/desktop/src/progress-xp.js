@@ -24,7 +24,7 @@ const KEYS=[['Cmd+K','Search'],['Cmd+N','New chat'],['Cmd+B','Sidebar'],['Cmd+,'
 export {rekeyCtx};
 export function createRunStrip(threadId){
  const ctx=runCtx(threadId),root=el('div','run-strip');root.setAttribute('role','group');root.setAttribute('aria-label','Run progress');root.hidden=true;
- const verb=el('span','run-strip-verb','Working'),time=el('span','run-strip-time','0:00'),tok=el('span','run-strip-tokens','0 tokens');
+ const verb=el('span','run-strip-verb','Working'),time=el('span','run-strip-time','0:00'),tok=el('span','run-strip-tokens','0 tokens');tok.hidden=true;
  const chip=el('button','xp-chip');chip.type='button';chip.dataset.tooltipExtra='';chip.setAttribute('aria-haspopup','true');chip.setAttribute('aria-expanded','false');
  const bar=el('span','xp-bar'),fill=el('span','xp-fill');bar.append(fill);const lv=el('span','xp-level'),streak=el('span','xp-streak');
  let menu=null,stageNow=-1,levelNow=0,started=0,timer=0,total=0;
@@ -50,7 +50,7 @@ export function createRunStrip(threadId){
   root._sub=u=>paint(u);chips.add(new WeakRef(root));paint(false);
  return {element:root,
   start(){if(started)return;started=Date.now();root.hidden=false;tick();timer=setInterval(tick,1000);},
-  event(ev){this.start();const t=toLogEvent(ev,ctx);if(t){record(t);if(t.outcome==='tokens'){total+=t.tokens;tok.textContent=fmtK(total)+' tokens';}}
+  event(ev){this.start();const t=toLogEvent(ev,ctx);if(t){record(t);if(t.outcome==='tokens'){total+=t.tokens;tok.textContent=fmtK(total)+' tokens';tok.hidden=false;}}
    if(ev.event==='tool_start'){verb.textContent=verbFor(ev.name,ev.input);}
    if(ev.event==='tool_end'||ev.event==='assistant_start')verb.textContent='Working';
    if(ev.event==='approval'){verb.textContent='Waiting for approval';cue('approval');}},
