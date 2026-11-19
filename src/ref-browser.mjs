@@ -10,7 +10,7 @@ export function cdpBrowser(wc, opts) {
   const key = { Enter: [13, '\r'], Tab: [9, ''], Escape: [27, ''], PageDown: [34, ''], PageUp: [33, ''] };
   const res = (r) => (r.ok ? { ok: true, text: r.text } : r);
   return {
-    open: wrap(async (_id, url) => { if (!dbg.isAttached()) dbg.attach('1.3'); await send('Accessibility.enable'); await wc.loadURL(url); return { ok: true, text: url }; }),
+    open: wrap(async (_id, url) => { await wc.loadURL(url); /* attach needs a loaded target */ if (!dbg.isAttached()) { dbg.attach('1.3'); await send('Accessibility.enable'); } return { ok: true, text: url }; }),
     snapshot: wrap(async () => {
       const o = await control.observe();
       const lines = o.text.split('\n').slice(1).map((l) => { const m = /^@(e\d+) (\S+)(?: (.*?))?( \[[^\]]*\])?$/.exec(l); return m ? `- ${m[2]} "${m[3] ?? ''}"${m[4] ?? ''} [ref=${m[1]}]` : l; });

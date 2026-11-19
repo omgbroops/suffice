@@ -63,7 +63,7 @@ export function createRefControl({ source, backend, opts }) {
       if (!r?.ok && action === 'click' && centre && backend.clickAt) r = await backend.clickAt(...centre); // fallback: moves the real pointer
     } catch (e) {
       const m = String(e?.message ?? e);
-      return /no node|not find node|detached|could not find|not attached/i.test(m) ? { ok: false, reason: 'stale_ref', error: EXPIRED, text: '' } : { ok: false, reason: 'action_failed', error: m, text: '' };
+      return /no node|not find node|does not belong|detached|could not find|not attached/i.test(m) ? { ok: false, reason: 'stale_ref', error: EXPIRED, text: '' } : { ok: false, reason: 'action_failed', error: m, text: '' };
     }
     return r?.ok ? { ok: true, text: `${action} ${ref}`, node: node.id } : { ok: false, reason: 'action_failed', error: r?.error ?? 'action failed', text: '' };
   };

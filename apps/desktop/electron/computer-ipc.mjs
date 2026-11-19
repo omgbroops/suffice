@@ -4,6 +4,7 @@ import {createExec, createCommandRunner} from '../../../packages/backend/src/run
 import {createBrowser} from '../../../packages/backend/src/builtins/browser.mjs';
 import {createJournal} from '../../../packages/backend/src/journal/index.mjs';
 import {createComputerAgent, createReplayCache} from '../../../packages/backend/src/computer/index.mjs';
+import {cdpBrowser} from '../../../src/ref-browser.mjs';
 import {fakeComputer} from './computer-fake.mjs';
 
 const RUN_ID = /^cu-[a-z0-9]+$/;
@@ -49,8 +50,18 @@ export function createComputer({dataDir, env = process.env, send}) {
   const j = journal(id);
   await j.append({type: 'computer.run', data: {goal, start: url.href}});
   live.set(id, ac);
-  let deps;
+  let deps, win = null;
   if (fake) { const f = fakeComputer(url.href); deps = {browser: f.browser, decide: f.decide}; }
+  else if (env.SUFFICE_COMPUTER_REF === 'cdp') {
+   if (!backend) throw new Error('Backend is not ready');
+   // Ref snapshots over a hidden Electron page (webContents.debugger): no screen, no pointer. Navigation stays on the start site.
+   const {BrowserWindow} = await import('electron');
+   win = new BrowserWindow({show: false, webPreferences: {sandbox: true, contextIsolation: true}});
+   const wc = win.webContents, ok = u => { try { return new URL(u).hostname === url.hostname; } catch { return false; } };
+   wc.on('will-navigate', (e, u) => { if (!ok(u)) e.preventDefault(); });
+   wc.setWindowOpenHandler(() => ({action: 'deny'}));
+   deps = {browser: cdpBrowser(wc), decide: backend.decide};
+  }
   else {
    if (!backend) throw new Error('Backend is not ready');
    deps = {browser: createBrowser({exec, clock, policy: {allowedDomains: ['.' + url.hostname]}}), decide: backend.decide};
@@ -60,7 +71,7 @@ export function createComputer({dataDir, env = process.env, send}) {
    let r;
    try { r = await agent.run({goal, surface: 'browser', start: url.href, agentId: id, signal: ac.signal}); } catch (e) { r = {ok: false, stopReason: 'error', error: String(e?.message || e)}; }
    const cancelled = ac.signal.aborted;
-   live.delete(id); drop(id);
+   live.delete(id); drop(id); try { win?.destroy(); } catch {}
    await j.append({type: 'computer.end', data: {ok: !!r.ok && !cancelled, cancelled, stopReason: r.stopReason, answer: r.answer ?? null, error: r.error ?? null, replay: r.replay ?? null}}).catch(() => {});
    poke();
   })();
