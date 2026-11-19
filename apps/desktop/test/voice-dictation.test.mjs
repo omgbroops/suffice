@@ -88,3 +88,17 @@ test('5 minute cap behaves as accept', async (t) => {
   assert.equal(r.d.state, 'idle');
   assert.equal(r.track.stopped, 1); assert.equal(r.closed, 1);
 });
+
+test('cancel while the mic is still opening releases the late stream', async () => {
+  const track = { stopped: 0, stop() { this.stopped++; } };
+  let resolveGum; let recorders = 0;
+  const d = createDictation({
+    getUserMedia: () => new Promise((r) => { resolveGum = () => r({ getTracks: () => [track] }); }),
+    MediaRecorderImpl: class { constructor() { recorders++; } },
+    AudioContextImpl: class {}, transcribe: async () => ({}),
+  });
+  const started = d.start();
+  await d.cancel();
+  resolveGum(); await started;
+  assert.equal(track.stopped, 1); assert.equal(recorders, 0); assert.equal(d.state, 'idle');
+});

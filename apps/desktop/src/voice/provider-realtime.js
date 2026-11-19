@@ -328,10 +328,15 @@ export function createRealtimeVoiceProvider({
       dc.onmessage = (m) => { if (res.dead) return; let ev; try { ev = JSON.parse(m.data); } catch { return; } onEvent(ev); };
       const offer = await pc.createOffer();
       await pc.setLocalDescription(offer);
+      // The calls endpoint takes one SDP with no trickle: wait (max 2 s) for ICE candidates, then send the full local description.
+      if (pc.iceGatheringState && pc.iceGatheringState !== 'complete') await new Promise((done) => {
+        const t = setTimer(done, 2000);
+        pc.addEventListener?.('icegatheringstatechange', () => { if (pc.iceGatheringState === 'complete') { clearTimer(t); done(); } });
+      });
       const r = await fetchImpl(CALLS_URL, {
         method: 'POST',
         headers: { Authorization: `Bearer ${session.clientSecret}`, 'Content-Type': 'application/sdp' },
-        body: offer.sdp,
+        body: pc.localDescription?.sdp || offer.sdp,
       });
       if (stale()) return;
       if (!r.ok) return fail('Could not connect to OpenAI voice. Try again in a moment.');

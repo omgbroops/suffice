@@ -10,7 +10,7 @@ export function createDictation({
   transcribe = (p) => window.sufficeDesktop.voiceTranscribe(p),
   deviceId, onLevel, onState, now = () => performance.now(), prompt,
 } = {}) {
-  let state = 'idle', stream, ctx, recorder, chunks = [], t0 = 0, tEnd = 0, timer, cap, mime = '';
+  let state = 'idle', stream, ctx, recorder, chunks = [], t0 = 0, tEnd = 0, timer, cap, mime = '', gen = 0;
   const set = (s, message) => { state = s; onState?.(message ? { state: s, message } : { state: s }); };
   const release = () => {
     clearInterval(timer); clearTimeout(cap); timer = cap = undefined;
@@ -30,9 +30,13 @@ export function createDictation({
     async start() {
       if (state !== 'idle' && state !== 'error') return;
       set('starting');
+      const my = ++gen;
+      let got;
       try {
-        stream = await getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, ...(deviceId ? { deviceId: { exact: deviceId } } : {}) } });
-      } catch { fail(MIC_DENIED); return; }
+        got = await getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, ...(deviceId ? { deviceId: { exact: deviceId } } : {}) } });
+      } catch { if (my === gen) fail(MIC_DENIED); return; }
+      if (my !== gen) { got?.getTracks().forEach((t) => t.stop()); return; } // cancelled while the mic was opening
+      stream = got;
       try {
         mime = MIMES.find((m) => MediaRecorderImpl.isTypeSupported?.(m)) || '';
         recorder = new MediaRecorderImpl(stream, mime ? { mimeType: mime } : undefined);
@@ -73,6 +77,7 @@ export function createDictation({
     },
     async cancel() {
       if (state !== 'recording' && state !== 'starting') return;
+      gen++;
       await stopRecorder(); release(); chunks = []; set('idle');
     },
   };
