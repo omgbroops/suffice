@@ -69,3 +69,18 @@ export function fakeComputer(start) {
  };
  return {browser, decide, calls};
 }
+
+// Native-app fake: stands in for the ax-snapshot binary (exec(bin,args) -> JSON) and scripts the model.
+export function fakeNative() {
+ const calls = [];
+ const exec = async (_bin, a) => { calls.push(a); return JSON.stringify(a[0] === 'snapshot' ? {tree: {id: '0', role: 'AXApplication', name: 'Notes', children: [{id: '0.0', role: 'AXButton', name: 'New Note', actions: ['press']}]}} : {ok: true}); };
+ const decide = async (point, input) => {
+  if (point === 'computer.act') return (input.history?.length ?? 0) ? {action: 'none', done: true, answer: 'Pressed New Note'} : {action: 'click', ref: 'New Note'};
+  if (point === 'computer.observe') return {mode: 'tree'};
+  if (point === 'action.approve') return {decision: 'allow'};
+  if (point === 'computer.check') return {ok: true, reason: 'fake'};
+  if (point === 'run.continue') return {continue: true};
+  return undefined;
+ };
+ return {exec, decide, calls};
+}
