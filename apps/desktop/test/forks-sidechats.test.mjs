@@ -61,14 +61,14 @@ test('fork at a message, lineage on rows and transcript, side chat drawer that n
   assert.match(await page.locator('.thread-fork-origin').innerText(),/Forked from Plan the Postgres migration/);
   assert.equal(await page.locator('.thread-message').count(),2,'history stops at the fork point');
   const row=page.locator('.thread-row',{hasText:'Fork of Plan the Postgres migration'});
-  assert.match(await row.locator('.thread-fork').innerText(),/Plan the Postgres migration/);
+  assert.match(await row.locator('.thread-fork-mark').getAttribute('aria-label'),/Plan the Postgres migration/);
   await both('fork-open');
   // the lineage link goes back to the source
   await page.locator('.thread-fork-origin-link').click();
   await page.locator('.thread-message').nth(3).waitFor();assert.equal(await page.locator('.thread-message').count(),4);
   assert.equal(await page.locator('.thread-fork-origin').count(),0);
   await row.locator('.thread-card-title').click();await page.locator('.thread-fork-origin').waitFor();
-  await row.locator('.thread-fork').click();await page.waitForFunction(()=>document.querySelectorAll('.thread-messages > .thread-message').length===4&&!document.querySelector('.thread-fork-origin'));
+  await page.locator('.thread-fork-origin-link').click();await page.waitForFunction(()=>document.querySelectorAll('.thread-messages > .thread-message').length===4&&!document.querySelector('.thread-fork-origin'));
 
   // fork before a user message puts that message back in the composer
   await source().click();await page.locator('.thread-message').nth(3).waitFor();

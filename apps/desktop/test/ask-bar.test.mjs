@@ -33,7 +33,7 @@ const shotTo=async(page,name)=>{if(process.env.ASK_SHOT_DIR){const okay=page.get
 const pressShortcut=app=>app.evaluate(({},key)=>{const callback=globalThis.shortcuts.get(key);if(!callback)throw new Error('shortcut not registered');callback();},ACCELERATOR);
 const registered=app=>app.evaluate(({},key)=>globalThis.shortcuts.has(key),ACCELERATOR);
 const openBar=async app=>{const opened=app.waitForEvent('window',{timeout:15000});await pressShortcut(app);const bar=await opened;await bar.locator('.ask-panel').waitFor();return bar;};
-const turnOn=async page=>{await page.getByRole('button',{name:'Settings',exact:true}).click();const toggle=page.getByRole('switch',{name:'Screen-aware ask bar',exact:true});await toggle.waitFor();if(await toggle.getAttribute('aria-checked')!=='true')await toggle.click();await page.waitForFunction(()=>document.querySelector('[aria-label="Screen-aware ask bar"]').getAttribute('aria-checked')==='true');};
+const turnOn=async page=>{await page.getByRole('button',{name:'Settings',exact:true}).click();await page.locator('.settings-nav-item[data-section="agent"]').click();const toggle=page.getByRole('switch',{name:'Screen-aware ask bar',exact:true});await toggle.waitFor();if(await toggle.getAttribute('aria-checked')!=='true')await toggle.click();await page.waitForFunction(()=>document.querySelector('[aria-label="Screen-aware ask bar"]').getAttribute('aria-checked')==='true');};
 
 test('ask bar: off by default, Settings switch, shortcut, permission flow, answer, send to thread',{timeout:150000},async t=>{
  const {app,page,errors,image}=await launch('not-determined');
@@ -130,7 +130,7 @@ test('ask bar: off by default, Settings switch, shortcut, permission flow, answe
   });
   await t.test('Settings off closes an open bar and frees the shortcut',async()=>{
    bar=await openBar(app);
-   await page.getByRole('button',{name:'Settings',exact:true}).click();await page.getByRole('switch',{name:'Screen-aware ask bar',exact:true}).waitFor();
+   await page.getByRole('button',{name:'Settings',exact:true}).click();await page.locator('.settings-nav-item[data-section="agent"]').click();await page.getByRole('switch',{name:'Screen-aware ask bar',exact:true}).waitFor();
    const closed=bar.waitForEvent('close',{timeout:5000});
    await page.getByRole('switch',{name:'Screen-aware ask bar',exact:true}).click();await closed;
    assert.equal(await registered(app),false);
