@@ -17,7 +17,8 @@ export function createReviewStore(home){
  return {
   state:id=>chain.then(()=>load(id)),
   add:(id,input)=>change(id,data=>{
-   const body=text(input?.text,2000);if(!body)throw new Error('Write a comment first');
+   const body=text(input?.text,Infinity);if(!body)throw new Error('Write a comment first');
+   if(body.length>2000)throw new Error('Comment is over 2000 characters');
    if(typeof input.file!=='string'||!input.file||typeof input.hunkId!=='string'||!Number.isInteger(input.rel)||input.rel<0)throw new Error('Invalid comment position');
    const comment={id:randomUUID().slice(0,8),file:input.file,hunkId:input.hunkId,rel:input.rel,line:Number.isInteger(input.line)?input.line:null,text:body,state:'open',origin:input.origin==='reviewer'?'reviewer':'you'};
    if(comment.origin==='reviewer'){comment.severity=['high','medium','low'].includes(input.severity)?input.severity:'medium';comment.fix=text(input.fix,600);}

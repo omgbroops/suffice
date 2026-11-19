@@ -5,6 +5,7 @@ import {renderPrompt,parseOutcomes} from './review-prompt.mjs';
 // (cwdFor, diffFor, checkpoint, run) so the tests drive it with fakes.
 export function createReviewIpc({store,cwdFor,diffFor,isRunning,checkpoint,run}){
  const diffs=async(cwd,files)=>{const map=new Map();for(const file of files)try{map.set(file,await diffFor(cwd,file));}catch{map.set(file,null);}return map;};
+ const sending=new Set();
  return {
   state:id=>store.state(id),
   add:async(id,input)=>{await store.add(id,input);return store.state(id);},
@@ -12,7 +13,7 @@ export function createReviewIpc({store,cwdFor,diffFor,isRunning,checkpoint,run})
   accept:async(id,hunkId,on)=>{await store.accept(id,hunkId,on);return store.state(id);},
   reopen:async(id,commentId)=>{await store.reopen(id,commentId);return store.state(id);},
   async reject(id,{file,hunkId}){
-   if(isRunning(id))throw new Error('Stop this thread before rejecting changes');
+   if(isRunning(id)||sending.has(id))throw new Error('Stop this thread before rejecting changes');
    const cwd=cwdFor(id),result=await diffFor(cwd,file);
    if(result.untracked||!result.text)throw new Error('A new file cannot be rejected by hunk');
    // The checkpoint goes first so Rewind undoes the reject.
@@ -30,14 +31,15 @@ export function createReviewIpc({store,cwdFor,diffFor,isRunning,checkpoint,run})
    return store.state(id);
   },
   async send(id,{model,provider,effort}){
-   const {comments}=await store.state(id),open=comments.filter(c=>c.state==='open');if(!open.length)throw new Error('No comments to send');
+   // markSent claims the open cards atomically, so a second quick click finds none and cannot start another turn.
+   const open=await store.markSent(id);if(!open.length)throw new Error('No comments to send');
+   sending.add(id);
+   try{
    const cwd=cwdFor(id),map=await diffs(cwd,[...new Set(open.map(c=>c.file))]);
    const items=open.map(c=>{const text=map.get(c.file)?.text,at=text&&locate(parseHunks(text).hunks,c.hunkId,c.rel);return {id:c.id,file:c.file,line:at?.line??c.line,excerpt:at?.excerpt||'',text:c.text+(c.fix?`\nSuggested fix: ${c.fix}`:'')};});
-   await store.markSent(id);
-   try{
     const reply=await run({prompt:renderPrompt(items),effort,model,provider,threadId:id});
     await store.settle(id,parseOutcomes(reply?.text,items.map(i=>i.id)),'The agent gave no outcome for this comment');
-   }catch(error){await store.fail(id,error.message);}
+   }catch(error){await store.fail(id,error.message);}finally{sending.delete(id);}
    return store.state(id);
   },
  };

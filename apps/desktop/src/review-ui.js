@@ -32,7 +32,7 @@ function card(comment,{api,threadId,change,live}){
 function compose(row,line,{api,threadId,file,change}){
  const anchor=row.parentElement.classList.contains('split-diff-row')?row.parentElement:row;
  if(anchor.nextElementSibling?.classList.contains('review-compose')){anchor.nextElementSibling.querySelector('textarea').focus();return;}
- const form=el('form','review-note review-compose'),input=el('textarea');input.rows=2;input.setAttribute('aria-label',`Comment on line ${line.new}`);input.placeholder='Comment for the agent';
+ const form=el('form','review-note review-compose'),input=el('textarea');input.rows=2;input.maxLength=2000;input.setAttribute('aria-label',`Comment on line ${line.new}`);input.placeholder='Comment for the agent';
  const add=button('Add comment','button button--subtle review-apply','Add comment'),cancel=button('Cancel comment','button button--ghost review-cancel','Cancel');add.type='submit';
  const actions=el('div','review-compose-actions');actions.append(add,cancel);form.append(input,actions);anchor.after(form);input.focus();
  cancel.addEventListener('click',()=>form.remove());

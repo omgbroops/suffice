@@ -79,3 +79,29 @@ test('prompt parser: aliases, last array wins, junk throws',()=>{
  for(const bad of ['','[]','[{"id":"a","outcome":"maybe"}]','[not json'])assert.throws(()=>parseOutcomes(bad,['a']),/did not return outcomes/);
  assert.match(renderPrompt([{id:'a',file:'f.js',line:2,excerpt:'+x',text:'t'}]),/\[a\] f\.js:2/);
 });
+
+test('rapid Send: three concurrent sends make one turn',async()=>{
+ const {cwd,home}=await fixture();let calls=0;
+ const {ipc}=wire(cwd,home,{run:async()=>{calls++;await new Promise(r=>setTimeout(r,50));return {text:'[]'};}});
+ const hunks=parseHunks((await workspace.diff(cwd,'a.txt')).text).hunks;
+ for(const h of hunks.slice(0,2))await ipc.add(ID,{file:'a.txt',hunkId:h.id,rel:1,line:3,text:'c'});
+ await Promise.allSettled([1,2,3].map(()=>ipc.send(ID,{})));
+ assert.equal(calls,1);
+});
+
+test('reject is refused while a Send turn is in flight, file unchanged, cards stay sent',async()=>{
+ const {cwd,home,changed}=await fixture();let release,started;const running=new Promise(r=>{started=r;});
+ const {ipc}=wire(cwd,home,{run:()=>new Promise(r=>{release=()=>r({text:'[]'});started();})});
+ const hunks=parseHunks((await workspace.diff(cwd,'a.txt')).text).hunks;
+ await ipc.add(ID,{file:'a.txt',hunkId:hunks[0].id,rel:1,line:3,text:'c'});
+ const sending=ipc.send(ID,{});await running;
+ await assert.rejects(ipc.reject(ID,{file:'a.txt',hunkId:hunks[0].id}),/Stop this thread|still working/);
+ assert.equal(await readFile(resolve(cwd,'a.txt'),'utf8'),changed.join('\n')+'\n');
+ release();const state=await sending;assert.equal(state.comments.length,1);
+});
+
+test('a comment over 2000 characters is refused, never cut',async()=>{
+ const {cwd,home}=await fixture(),{ipc}=wire(cwd,home);
+ const h=parseHunks((await workspace.diff(cwd,'a.txt')).text).hunks[0];
+ await assert.rejects(ipc.add(ID,{file:'a.txt',hunkId:h.id,rel:1,line:3,text:'x'.repeat(2001)}),/2000/);
+});
