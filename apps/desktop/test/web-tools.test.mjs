@@ -60,6 +60,13 @@ test('web tools: Settings switch gates the toolkit and chat shows compact cards 
   // Nothing covered: each card sits inside the thread column and above the composer.
   const geo=await page.evaluate(()=>{const c=document.querySelector('.composer').getBoundingClientRect();return [...document.querySelectorAll('.web-card')].map(e=>{const r=e.getBoundingClientRect(),f=e.querySelector('.web-card-facts').getBoundingClientRect();return {w:r.width,b:r.bottom,fits:f.right<=r.right+0.5&&f.left>=r.left-0.5,above:r.bottom<=c.top+0.5};});});
   for(const g of geo){assert.ok(g.w>200&&g.fits&&g.above,JSON.stringify(g));}
+  // Many cards: after following the stream and after a manual scroll to the end, the last card must clear the composer.
+  for(let i=0;i<8;i++){await send({event:'tool_start',id:'t1/m'+i,name:'fetch_content',input:{url:'https://example.com/m'+i}});await send({event:'tool_end',id:'t1/m'+i,result:{content:[{type:'text',text:'body '+i}]}});}
+  await page.waitForFunction(()=>document.querySelectorAll('.web-card').length>=11);await page.waitForTimeout(600);
+  const clear=()=>page.evaluate(()=>{const t=document.querySelector('.thread-transcript'),c=document.querySelector('.composer').getBoundingClientRect(),last=[...document.querySelectorAll('.web-card')].pop().getBoundingClientRect(),m=t.querySelector('.thread-messages').getBoundingClientRect();return {gap:c.top-last.bottom,msgGap:c.top-m.bottom,atEnd:t.scrollHeight-t.scrollTop-t.clientHeight};});
+  const solid=await page.evaluate(()=>getComputedStyle(document.querySelector('.composer')).backgroundColor);assert.doesNotMatch(solid,/rgba|\//,'composer must be opaque so scrolled cards do not show through: '+solid);
+  await page.evaluate(()=>{const t=document.querySelector('.thread-transcript');t.scrollTop=t.scrollHeight;});await page.waitForTimeout(300);
+  const ended=await clear();assert.ok(ended.gap>=-0.5,'scrolled to end: '+JSON.stringify(ended));
   // The group label keeps the plain verbs, not the card facts.
   assert.doesNotMatch(await page.locator('.thread-activity > summary').first().innerText(),/tokens saved|KB/);
   await shot('chat-web-cards','.web-card');
