@@ -267,6 +267,8 @@ export function createComputerAgent({ browser, desktop, decide, journal, clock, 
           o = await observe('tree');
           rec = await doStep(o, { action: st.action, ...(st.role || st.name ? { ref: { role: st.role, name: st.name } } : {}), text, key: st.key, url: st.url }, true);
         }
+        // a denied approval is final (§4.7): end the run, do not let the live model re-ask; the cache is not at fault
+        if (rec && rec.approved === false) { await commit(rec, { text }, o); return finish(false, 'denied'); }
         if (!rec?.ok) { rep.fellBackAt = i; await replay.fail(key); break; }
         await commit(rec, { text }, o);
         if (S.jerr) return finish(false, 'journal_failed');
