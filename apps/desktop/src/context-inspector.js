@@ -20,7 +20,7 @@ export function connectContextInspector({api,form,toast}){
  }
  function paintChip(){
   // No estimate (or an empty one): fall back to the real count the run's usage reported.
-  const id=viewState.id,est=data?.items?.length?nextTotal(data.items,mine(id)):0,total=est||usage?.windowTokens||usage?.totalTokens||0;
+  const id=viewState.id,est=data?.items?.length?nextTotal(data.items,mine(id)):0,total=est||usage?.totalTokens||usage?.windowTokens||0;
   chip.innerHTML=icon('context')+`<span>${fmt(total)}</span>`;chip.title=`Context: ${total.toLocaleString()} tokens`;
  }
  async function load(){
