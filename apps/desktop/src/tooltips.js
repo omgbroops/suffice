@@ -11,7 +11,7 @@ export function connectTooltips(){
   // A visible label already explains its control. Only reveal extra text when
   // that label was actually clipped; icon-only controls still need a name.
   const clipped=[target,...target.querySelectorAll('span')].some(el=>el.clientWidth>0&&el.scrollWidth>el.clientWidth+1);
-  if(visible&&!clipped)return;
+  if(visible&&!clipped&&!target.hasAttribute('data-tooltip-extra'))return;
   const text=target.dataset.tooltip||target.getAttribute('aria-label')||visible;if(!text||target.disabled)return;
   hide();current=target;previousDescription=target.getAttribute('aria-describedby');
   timer=setTimeout(()=>{if(!target.isConnected)return;tip.textContent=text;tip.hidden=false;tip.showPopover?.();target.setAttribute('aria-describedby',[previousDescription,tip.id].filter(Boolean).join(' '));const rect=target.getBoundingClientRect();tip.style.left=`${Math.max(6,Math.min(rect.left+rect.width/2-tip.offsetWidth/2,innerWidth-tip.offsetWidth-6))}px`;tip.style.top=`${Math.min(rect.bottom+7,innerHeight-tip.offsetHeight-6)}px`;if(!keyboard&&!matchMedia('(prefers-reduced-motion: reduce)').matches)tip.animate([{opacity:0},{opacity:1}],{duration:120});},300);
