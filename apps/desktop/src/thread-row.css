@@ -12,7 +12,7 @@
 .thread-monogram { color: var(--project-color); background: color-mix(in srgb,var(--project-color) 14%,transparent); font: 700 7.5px/14px var(--font-mono); letter-spacing: -.6px; }
 .thread-branch-line { color: var(--text-faint); font-size: 12px; line-height: 16px; min-height: 16px; }
 .thread-checks { flex-shrink: 0; color: var(--warning-ink); }
-.thread-branch,.thread-no-branch { flex: 1; min-width: 0; display: flex; align-items: center; gap: 5px; }
+.thread-branch { flex: 1; min-width: 0; display: flex; align-items: center; gap: 5px; }
 .thread-branch span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .thread-branch .icon { width: 12px; height: 12px; flex-shrink: 0; }
 .thread-state { display: inline-flex; color: var(--text-faint); flex-shrink: 0; }
@@ -70,7 +70,6 @@
 .desktop-app .session-section { display: flex; flex-direction: column; overflow: hidden; }
 .desktop-app .session-section > .section-label { flex-shrink: 0; padding-right: 2px; }
 .desktop-app .sidebar-sessions { overflow-y: auto; scrollbar-gutter: stable; padding-right: 6px; margin-right: -2px; }
-.thread-no-branch .icon { width: 12px; height: 12px; flex-shrink: 0; }
 
 /* Full-width navigation with a quiet, independent scrollbar at the outer edge. */
 .desktop-app .thread-row.thread-card { padding: 4px 8px; gap: 2px; min-height: 46px; }
@@ -102,7 +101,7 @@
 [data-compact='true'] .thread-card-heading { gap: 7px; }
 [data-compact='true'] .thread-card-heading > .thread-project-icon { flex-shrink: 0; }
 [data-compact='true'] .thread-card-heading > .thread-state { margin-left: auto; }
-[data-branch='false'] :is(.thread-branch,.thread-no-branch),[data-provider='false'] .thread-provider-history,[data-diff='false'] .thread-diff { display: none; }
+[data-branch='false'] .thread-branch,[data-provider='false'] .thread-provider-history,[data-diff='false'] .thread-diff { display: none; }
 .sidebar-empty { padding: 16px 10px; color: var(--text-faint); font-size: 12px; }
 
 /* Completed checks add noise to single-line rows; active and attention states stay visible. */
@@ -194,8 +193,6 @@
 .thread-peek-prompt { color: var(--text-strong); }
 .thread-peek-foot { font-size: 11px; color: var(--text-faint); font-variant-numeric: tabular-nums; }
 
-/* "No Git" never wraps; the project name truncates first. */
-.thread-no-branch { flex: 0 0 auto; white-space: nowrap; }
 
 .thread-row[hidden] { display:none!important; }
 .thread-card[data-status='ended'] { opacity:.55; }
