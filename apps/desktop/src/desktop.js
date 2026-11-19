@@ -7,6 +7,8 @@ import {connectEffortPicker} from './effort-picker.js';
 import { connectThreads } from './threads-ui.js';
 import { connectProjects } from './projects-ui.js';
 import {connectModels} from './models-ui.js';
+import {connectUsageHint} from './usage-hint.js';
+import {connectUsageMeter} from './usage-meter.js';
 import {connectTooltips} from './tooltips.js';
 import {connectWorkspaceTools} from './workspace-tools.js';
 import {connectStartLife} from './start-life.js';
@@ -36,6 +38,8 @@ export function connectDesktop({prompt,send,toast,escapeHtml}) {
   connectQueuedMessages(prompt.form,prompt,toast);
   connectProjects({api,toast});
   connectModels({api,toast});
+  connectUsageHint({form:prompt.form,prompt});
+  connectUsageMeter({api,form:prompt.form});
   connectWorkspaceTools(api);
   connectChatChangesWidget();
   connectStartLife({api});
