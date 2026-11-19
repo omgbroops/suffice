@@ -66,3 +66,10 @@
 .message-fork:disabled { opacity: .4; pointer-events: none; }
 .desktop-app .toast[popover] { border-radius: var(--radius-card); }
 .desktop-app .message-actions-slot[data-role='user'] { justify-content: flex-start; }
+
+/* Action bar: every control is one 24px box with a 14px icon and one gap token, so the icons sit evenly. Text labels get the icon's inner padding. */
+.desktop-app .message-toolbar { gap: var(--space-2); }
+.desktop-app .workspace .message-actions-slot .message-toolbar { gap: var(--space-2); }
+.desktop-app .message-toolbar :is(.message-copy,.message-action,.message-fork) { width: 24px; height: 24px; padding: 0; }
+.desktop-app .message-toolbar :is(.message-copy,.message-action,.message-fork) .icon { width: 14px; height: 14px; }
+.desktop-app .message-toolbar > :is(span,time) { padding-inline: var(--space-1); }
