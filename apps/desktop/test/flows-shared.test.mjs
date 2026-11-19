@@ -5,7 +5,7 @@ import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import electronPath from 'electron';
 import {_electron} from 'playwright-core';
-import {guard,killTmux} from './electron-guard.mjs';
+import {guard,killTmux,openMore} from './electron-guard.mjs';
 
 const rowOf=(page,title)=>page.locator('.flow-item',{has:page.locator('.flow-title',{hasText:title})});
 
@@ -17,7 +17,7 @@ test('Workflows: two live windows over one runs dir: one owner per run, the othe
   if(n>1){await mkdir(resolve(home,'profile'+n),{recursive:true});await symlink(resolve(home,'profile1','sessions'),resolve(home,'profile'+n,'sessions'));}
   const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'profile'+n)],env});
   apps.push({app,socket});const page=await app.firstWindow();
-  await page.locator('.flows-nav').click();await page.locator('.flows-view:not([hidden])').waitFor();
+  await openMore(page);await page.locator('.flows-nav').click();await page.locator('.flows-view:not([hidden])').waitFor();
   return page;
  };
  try{
@@ -35,7 +35,7 @@ test('Workflows: two live windows over one runs dir: one owner per run, the othe
   await p1.locator('.flow-approval').getByRole('button',{name:'Approve'}).click();
   await rowOf(p1,'Shared one').getByText('Done',{exact:true}).waitFor();
   // Window 2 re-lists when its view reopens (the nav toggles: leave, return).
-  await p2.locator('.flows-nav').click();await p2.locator('.flows-nav').click();
+  await openMore(p2);await p2.locator('.flows-nav').click();await openMore(p2);await p2.locator('.flows-nav').click();
   await rowOf(p2,'Shared one').getByText('Done',{exact:true}).waitFor({timeout:15000});
  }finally{
   for(const {app,socket} of apps){try{await app.close();}catch{}killTmux(socket);}

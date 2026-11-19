@@ -345,7 +345,7 @@ export function connectThreads({api,prompt,send,toast}){
  connectNeedsYou({api,approvals,toast,retry:retryThread,markRead:id=>updateMetadata(id,{unread:false})});
  connectIssues({api,toast});
  connectFlows({api,toast});
- connectIssues({api,toast});connectComputer({api,toast});
+ connectComputer({api,toast});
  connectScheduled({api});
  api.onClearCache?.(()=>{savedHistories.clear();});
  document.addEventListener('suffice-preference',event=>{if(event.detail.id==='collapse-work')document.querySelectorAll('.thread-activity').forEach(group=>group.open=!event.detail.value);if(event.detail.id==='new-project'&&!activeId)form.dataset.requireProject=String(event.detail.value==='Ask each time');});

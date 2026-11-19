@@ -5,3 +5,5 @@ const P='/Users/abhayg/suffice-desktop-wt/ui-shots/no-dialog.cjs';
 export const guard=existsSync(P)?['-r',P]:[];
 // Stops a test's private tmux server (tmux -L <socket>); call in finally so it dies even when the test fails. Never pass 'suffice'.
 export const killTmux=socket=>{if(socket&&socket!=='suffice')try{execFileSync('tmux',['-L',socket,'kill-server'],{stdio:'ignore'});}catch{}};
+// The sidebar folds Tasks, Needs you, Issues, Workflows and Computer use under More; open it before clicking one of them.
+export const openMore=async page=>{const more=page.getByRole('button',{name:'More',exact:true});if(await more.getAttribute('aria-expanded')!=='true')await more.click();};

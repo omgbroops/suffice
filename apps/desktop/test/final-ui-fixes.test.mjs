@@ -56,8 +56,8 @@ test('final UI fixes: sidebar selection, meta line, needs-you accent',{timeout:2
   const accented=await page.evaluate(b=>[...document.querySelectorAll('.needs-act')].filter(x=>getComputedStyle(x).backgroundColor===b).map(x=>x.textContent),blue);
   if(JSON.stringify(prim)!==JSON.stringify([['Approve'],['Open'],[],[]]))fails.push('needs primaries '+JSON.stringify(prim));
   if(accented.join()!=='Approve,Open')fails.push('accent fill on '+accented.join()+' (blue '+blue+')');
-  const meta=await page.locator('.thread-row',{hasText:'Audit color tokens'}).locator('.thread-branch-line').evaluate(e=>{const h=e.getBoundingClientRect().height,lh=parseFloat(getComputedStyle(e).lineHeight);return {h,lh};});
-  if(meta.h>meta.lh+1)fails.push(`meta line height ${meta.h} vs one line ${meta.lh}`);
+  const meta=await page.locator('.thread-row',{hasText:'Audit color tokens'}).locator('.thread-card-title').evaluate(e=>{const h=e.getBoundingClientRect().height,lh=parseFloat(getComputedStyle(e).lineHeight);return {h,lh};});
+  if(meta.h>meta.lh+1)fails.push(`row title height ${meta.h} vs one line ${meta.lh}`);
   await page.keyboard.press('Escape');await page.locator('.needs-view').waitFor({state:'hidden'});
   await page.locator(rows.tasks).click();await page.locator('.task-board').waitFor({state:'visible'});
   await shot('c-tasks','dark');await check('tasks',['tasks']);await shot('c-tasks','light');

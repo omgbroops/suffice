@@ -17,9 +17,11 @@ test('own-worktree thread: toggle creates it, header shows branch, diff, PR dry 
   const page=await app.firstWindow(),errors=[];page.on('pageerror',e=>errors.push(e.message));
   await app.evaluate(({ipcMain,BrowserWindow})=>{BrowserWindow.getAllWindows()[0].setContentSize(1440,900);ipcMain.removeHandler('suffice:models');ipcMain.handle('suffice:models',()=>[{id:'fixture',provider:'openai',name:'Fixture model',efforts:['low','medium','high']}]);});
   await page.reload();await page.locator('.composer').waitFor();await page.waitForFunction(()=>!document.querySelector('.git-pill')?.disabled&&!document.querySelector('.worktree-toggle').hidden);
+  // The merged project picker holds the git row (branch + worktree switch) inside its popover.
+  await page.locator('.project-picker').first().click();
   const toggle=page.getByRole('switch',{name:/Own worktree/});assert.equal(await toggle.getAttribute('aria-checked'),'false');
   await shot(page,'1-toggle-off');
-  await toggle.click();assert.equal(await toggle.getAttribute('aria-checked'),'true');await shot(page,'2-toggle-on');
+  await toggle.click();assert.equal(await toggle.getAttribute('aria-checked'),'true');await shot(page,'2-toggle-on');await page.keyboard.press('Escape');
   // Real send path: the run fails offline, but the worktree is made before the agent starts.
   await page.locator('#prompt').fill('make b.txt');await page.locator('.composer').evaluate(el=>el.requestSubmit());
   let path,branch;for(let i=0;i<60&&!path;i++){const list=(await git('worktree','list','--porcelain')).split('\n\n');const extra=list.find(block=>block.includes('branch refs/heads/agent/'));if(extra){path=extra.match(/^worktree (.+)$/m)[1];branch=extra.match(/branch refs\/heads\/(.+)$/m)[1];}else await page.waitForTimeout(500);}

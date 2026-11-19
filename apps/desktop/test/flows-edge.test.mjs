@@ -5,7 +5,7 @@ import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import electronPath from 'electron';
 import {_electron} from 'playwright-core';
-import {guard,killTmux} from './electron-guard.mjs';
+import {guard,killTmux,openMore} from './electron-guard.mjs';
 
 const OK='node -e process.exit(0)';
 const rowOf=(page,title)=>page.locator('.flow-item',{has:page.locator('.flow-title',{hasText:title})});
@@ -18,7 +18,7 @@ test('Workflows: escaping, double start, empty test command, 12 runs, kill and r
   const env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home,SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_TEST_NO_SCHEDULER:'1',SUFFICE_FLOW_RUNNER:'fake',SUFFICE_FLOW_RUN_TOKENS:'100000',SUFFICE_SESSIONS_SOCKET:socket,SUFFICE_HISTORY_HOME:await mkdtemp(resolve(tmpdir(),'suffice-flow-hist-'))};delete env.ELECTRON_RUN_AS_NODE;
   const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'profile')],env});
   apps.push({app,socket});const page=await app.firstWindow();
-  await page.locator('.flows-nav').click();await page.locator('.flows-view:not([hidden])').waitFor();
+  await openMore(page);await page.locator('.flows-nav').click();await page.locator('.flows-view:not([hidden])').waitFor();
   return {app,page,pid:app.process().pid};
  };
  try{

@@ -19,7 +19,8 @@ async function launch(tmp,extra={}){
   SUFFICE_TEST_NODE:process.execPath,SUFFICE_TEST_CLAUDE_AGENT:resolve('apps/desktop/test/sessions-trust-agent.mjs'),SUFFICE_SESSIONS_SOCKET:SOCKET,SUFFICE_HISTORY_HOME:home,SIM_LOG:simLog,BOOT_MS:'0',...extra});
  const app=await _electron.launch({executablePath:electronPath,args:['-r','/Users/abhayg/suffice-desktop-wt/ui-shots/no-dialog.cjs',appDir,`--user-data-dir=${data}`],env});
  const page=await app.firstWindow();page.setDefaultTimeout(15000);
- await page.locator('[data-action="send-menu"]').waitFor();
+ // The send group stays hidden until the composer has text, so readiness is "attached", not "visible".
+ await page.locator('[data-action="send-menu"]').waitFor({state:'attached'});
  await page.evaluate(()=>{document.querySelector('.composer').modelSelection={provider:'cli',model:'fakeclaude'};});
  return {app,page,simLog};
 }
