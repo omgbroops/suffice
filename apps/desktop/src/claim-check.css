@@ -1,0 +1,16 @@
+/* Watchdog chip under an agent message: tokens only. */
+.claim-chip { position: relative; display: flex; align-items: center; gap: 6px; width: max-content; max-width: 100%; margin-top: 8px; padding: 2px 6px; border-radius: var(--radius-control); font-size: 12px; line-height: 16px; color: var(--text-muted); cursor: default; outline: none; }
+.claim-chip:is(:hover,:focus-visible) { background: var(--selected-fill); }
+.claim-chip:focus-visible { box-shadow: 0 0 0 1.5px var(--blue); }
+.claim-chip[data-state="verified"] .claim-icon, .claim-row[data-state="verified"] .claim-icon { color: var(--green); }
+.claim-chip[data-state="failed"], .claim-chip[data-state="failed"] > .claim-icon, .claim-row[data-state="failed"] .claim-icon { color: var(--red); }
+.claim-chip[data-state="checking"] .claim-icon { color: var(--blue); animation: claim-pulse 1.2s ease-in-out infinite; }
+@keyframes claim-pulse { 50% { opacity: .35; } }
+@media (prefers-reduced-motion: reduce) { .claim-chip[data-state="checking"] .claim-icon { animation: none; } }
+.claim-icon { flex: none; }
+.claim-detail { position: fixed; z-index: 700; min-width: 240px; max-width: min(420px, 80vw); padding: 6px; border: .5px solid var(--border-strong); border-radius: var(--radius-popover); background: var(--surface-menu); color: var(--text); box-shadow: var(--shadow-popover, 0 6px 24px rgba(0,0,0,.28)); }
+.claim-row { display: flex; align-items: flex-start; gap: 8px; padding: 4px 6px; }
+.claim-row .claim-icon { margin-top: 3px; }
+.claim-body { display: flex; flex-direction: column; min-width: 0; }
+.claim-label { font-size: 13px; line-height: 18px; color: var(--text); }
+.claim-why { font-size: 12px; line-height: 16px; color: var(--text-muted); font-family: var(--font-mono); overflow-wrap: anywhere; }

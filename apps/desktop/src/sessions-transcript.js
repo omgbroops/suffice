@@ -9,9 +9,11 @@ import {clampLong} from './message-actions.js';
 import {renderCode} from './panel-content.js';
 import {summarizeTools} from '../../../packages/backend/src/tui/summary.mjs';
 import './sessions-transcript.css';
+import './claim-check.css';
 
 import {el} from './sessions-util.js';
 import {threadViewState as viewState} from './thread-view-state.js';
+import {claimsFor,attachClaimChip} from './claim-check.js';
 const base=p=>String(p||'').split('/').filter(Boolean).pop()||'';
 const dur=n=>n<60?n+'s':Math.floor(n/60)+'m '+String(n%60).padStart(2,'0')+'s';
 const kfmt=n=>n>=1000?(n/1000).toFixed(1).replace(/\.0$/,'')+'k':String(n);
@@ -145,12 +147,13 @@ function createCore({hooks,ctx}){
   if(first)items.push({kind:'user',id:'pending-user',text:first,pending:true});
   for(let it of ui.items){if(hide(it))continue;if(it.kind==='subagent'&&ctx.sub(it.callId))it={...it,...ctx.sub(it.callId)};
    if(at.has(it.id)){items[at.get(it.id)]=it;continue;}at.set(it.id,items.length);items.push(it);}
-  const entries=group(items),keep=new Set();let prev=null;
+  const entries=group(items),keep=new Set(),claims=claimsFor(items.map(it=>it.kind==='tool'&&it.status==='running'&&!working?{...it,status:'interrupted'}:it));let prev=null;
   for(const e of entries){
-   keep.add(e.id);const sg=JSON.stringify(e.run||e.it)+(e.it?.kind==='user'?'':working),c=cache.get(e.id);let node=c?.el;
+   keep.add(e.id);const cl=claims.get(e.id),sg=JSON.stringify(e.run||e.it)+(e.it?.kind==='user'?'':working)+(cl?.sig||''),c=cache.get(e.id);let node=c?.el;
    if(!c||c.sig!==sg){
     const n=e.run?buildRun(e.run,later,0,working):build(e.it,later,0,working);
     if(!n){if(c){c.el.remove();cache.delete(e.id);}continue;}
+    if(cl)attachClaimChip(n,cl);
     n.dataset.entry=e.id;if(c?.el){restore(n,c.el);c.el.replaceWith(n);}
     node=n;cache.set(e.id,{sig:sg,el:n});
    }
