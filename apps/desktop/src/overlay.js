@@ -1,6 +1,7 @@
 // The overlay page: a small pill at the cursor (listening / typing / reply) and a pulsing ring where the model pointed.
 import './tokens.css';
 import './overlay.css';
+import { createMic } from './overlay-mic.js';
 
 const MIC = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><rect x="5.5" y="1.5" width="5" height="8" rx="2.5"/><path d="M3 7.5a5 5 0 0 0 10 0M8 12.5V15"/></svg>';
 // Damped spring sampled into a CSS linear() easing: overshoots, then settles.
@@ -13,7 +14,7 @@ const SPRING = springEasing();
 
 export function mountOverlay(api = window.sufficeDesktop?.overlay) {
   const root = document.getElementById('overlay');
-  let pill, line, hint, field, input, anchor = { x: 40, y: 40 }, recorder = null, chunks = [], reply = '';
+  let pill, line, hint, field, input, anchor = { x: 40, y: 40 }, reply = '', mic = null;
   const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text !== undefined) n.textContent = text; return n; };
 
   function place() {
@@ -37,16 +38,6 @@ export function mountOverlay(api = window.sufficeDesktop?.overlay) {
   const setMode = (mode, text) => { pill.dataset.mode = mode; if (text !== undefined) hint.textContent = text; place(); };
   const show = (text, cls = '') => { line.hidden = !text; line.className = 'ov-text ' + cls; line.textContent = text; place(); };
 
-  async function startRecording() {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      chunks = []; recorder = new MediaRecorder(stream);
-      recorder.ondataavailable = (e) => chunks.push(e.data);
-      recorder.onstop = async () => { stream.getTracks().forEach((t) => t.stop()); const blob = new Blob(chunks, { type: recorder.mimeType || 'audio/webm' }); api.audio(await blob.arrayBuffer(), blob.type); };
-      recorder.start();
-    } catch { show('Microphone is not available', 'ov-notice'); }
-  }
-
   function ring(x, y, label) {
     const r = el('div', 'ov-ring'); r.style.left = x + 'px'; r.style.top = y + 'px'; r.dataset.role = 'ring';
     const l = el('div', 'ov-ring-label', label); l.dataset.role = 'ring-label'; root.append(r, l);
@@ -61,10 +52,11 @@ export function mountOverlay(api = window.sufficeDesktop?.overlay) {
     root.dataset.ring = `${x},${y}`;
   }
 
+  mic = createMic({ getUserMedia: (c) => navigator.mediaDevices.getUserMedia(c), Recorder: MediaRecorder, onAudio: (buf, type) => api.audio(buf, type), onError: () => show('Microphone is not available', 'ov-notice') });
   api.onCommand((c) => {
     if (c.type === 'show') { build(c.x, c.y); reply = ''; }
     else if (!pill) return;
-    else if (c.type === 'listening') { if (c.on) { setMode('listening', 'Listening'); startRecording(); } else { setMode('ready', 'Hold Option to speak, tap to type'); recorder?.state === 'recording' && recorder.stop(); } }
+    else if (c.type === 'listening') { if (c.on) { setMode('listening', 'Listening'); mic.start(); } else { setMode('ready', 'Hold Option to speak, tap to type'); mic.stop(); } }
     else if (c.type === 'typing') { field.hidden = false; setMode('typing', 'Enter to send, Esc to close'); place(); input.focus(); }
     else if (c.type === 'thinking') { reply = ''; field.hidden = true; setMode('busy', c.text.slice(0, 80)); show(''); }
     else if (c.type === 'text') { reply += c.text; show(reply); }
