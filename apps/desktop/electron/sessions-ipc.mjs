@@ -7,6 +7,7 @@ import {createHandoff,compact} from '../../../packages/backend/src/board/index.m
 import {createPluginHost} from '../../../packages/backend/src/plugins/index.mjs';
 import {viewsFromSlot} from '../../../packages/backend/src/views/generate.mjs';
 import {createComputer} from './computer-ipc.mjs';
+import {createKeysHandlers,createKeyring} from './byok-keys.mjs';
 import {createBackend} from '../../../packages/backend/src/app/backend.mjs';
 import {createIpcBridge} from '../../../packages/backend/src/app/ipc.mjs';
 import {createClaudeMapper} from '../../../packages/backend/src/tui/claude.mjs';
@@ -66,7 +67,8 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
  const pluginHost=createPluginHost({dirs:[path.join(dataDir,'plugins')],bus:{on(){},emit(){}},clock:{now:()=>Date.now()},grant:()=>false});
  const flow=createFlow({dataDir,env,send});
  const computer=createComputer({dataDir,env,send});
- const backend=createBackend({dataDir,sessions:true,history:true,socketName:socket,home:historyHome,sessionAgents,exec:flow.exec,approve:flow.approve,runners:flow.runners,limits:flow.limits,...((testAgent||simAgent)&&{idleMs:400,settleMs:100})});
+ const keyring=createKeyring(dataDir);
+ const backend=createBackend({dataDir,sessions:true,history:true,byok:true,keyring,socketName:socket,home:historyHome,sessionAgents,exec:flow.exec,approve:flow.approve,runners:flow.runners,limits:flow.limits,...((testAgent||simAgent)&&{idleMs:400,settleMs:100})});
  flow.attach(backend);computer.attach(backend);
  const bridge=createIpcBridge(backend);
  bridge.subscribe(send);
@@ -182,6 +184,7 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
   handlers:{
    ...flow.handlers,
    ...computer.handlers,
+   ...createKeysHandlers({call,keyring}),
    'sessions-available':()=>{
     const caps=backend.capabilities().sessions;
     if(!caps?.ok)return {ok:false,reason:caps?.reason==='tmux not found'?'Needs tmux':caps?.reason||'Unavailable',agents:[]};

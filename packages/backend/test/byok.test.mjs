@@ -143,6 +143,8 @@ test('key never leaks: errors, thrown fetch errors, vault file, list', async (t)
   for (const r of [r1, r2]) { assert.equal(r.ok, false); assert.ok(!JSON.stringify(r).includes(KEY)); }
   assert.match(r2.error, /invalid key \[redacted\]/);
   assert.deepEqual(byok.keys.list(), ['openai']);
+  assert.deepEqual(byok.keys.hints(), { openai: `…${KEY.slice(-4)}` });
+  assert.ok(!JSON.stringify(byok.keys.hints()).includes(KEY));
   assert.ok(!JSON.stringify(byok.keys.list()).includes(KEY));
   for (const f of await fs.readdir(path.join(dir, 'byok'))) assert.ok(!(await fs.readFile(path.join(dir, 'byok', f), 'utf8')).includes(KEY));
   assert.equal(redact(`a ${KEY} b`, KEY), 'a [redacted] b');
@@ -279,4 +281,11 @@ test('schema validator subset', () => {
   assert.match(validate({ required: ['a'] }, [])[0], /expected object/);
   assert.deepEqual(validate({ type: ['string', 'null'] }, null), []);
   assert.match(validate({ type: 'number' }, NaN)[0], /expected number/);
+});
+
+test('test() times out on an endpoint that never answers', async (t) => {
+  const hang = (init) => new Promise((_, rej) => init.signal.addEventListener('abort', () => rej(new Error('aborted')), { once: true }));
+  const { byok } = await setup(t, [hang, hang, hang], { testTimeoutMs: 30 });
+  byok.keys.set('openai', KEY);
+  assert.deepEqual(await byok.test('openai'), { ok: false, error: 'timed out after 0.03 s' });
 });

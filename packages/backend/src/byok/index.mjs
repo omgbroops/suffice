@@ -41,7 +41,7 @@ function vetBase(baseUrl) {
 
 const checkProvider = (p) => { if (!PROVIDERS.includes(p)) throw new TypeError(`provider must be one of ${PROVIDERS.join(', ')}`); };
 
-export function createByok({ fetch = globalThis.fetch, vault, clock, budget, sleep = (ms, signal) => new Promise((r) => { const t = setTimeout(r, ms); signal?.addEventListener('abort', () => { clearTimeout(t); r(); }, { once: true }); }), maxRetryWaitMs = 30000 } = {}) {
+export function createByok({ fetch = globalThis.fetch, vault, clock, budget, testTimeoutMs = 15000, sleep = (ms, signal) => new Promise((r) => { const t = setTimeout(r, ms); signal?.addEventListener('abort', () => { clearTimeout(t); r(); }, { once: true }); }), maxRetryWaitMs = 30000 } = {}) {
   assertShape('vault', vault, ['seal', 'open', 'put', 'get', 'list', 'delete']);
   assertShape('clock', clock, ['now']);
   if (typeof fetch !== 'function') throw new TypeError('fetch must be a function');
@@ -57,6 +57,8 @@ export function createByok({ fetch = globalThis.fetch, vault, clock, budget, sle
     has: (provider) => vault.get(KIND, provider) !== undefined,
     remove: (provider) => vault.delete(KIND, provider),
     list: () => vault.list(KIND).map((x) => x.id),
+    /** Last 4 characters per stored key: enough to tell keys apart, never the key. */
+    hints: () => Object.fromEntries(vault.list(KIND).map((x) => [x.id, `…${vault.open(vault.get(KIND, x.id)).payload.key.slice(-4)}`])),
   };
   const keyOf = (provider) => { const d = vault.get(KIND, provider); return d ? vault.open(d).payload : undefined; };
   const wrongOrigin = (stored, base) => stored?.origin && new URL(base).origin !== stored.origin;
@@ -185,7 +187,9 @@ export function createByok({ fetch = globalThis.fetch, vault, clock, budget, sle
     if (!key) return { ok: false, error: `no API key set for ${provider}` };
     if (wrongOrigin(stored, base)) return { ok: false, error: `key for ${provider} is bound to a different origin than baseUrl` };
     const url = provider === 'anthropic' ? `${base}/v1/models?limit=1` : provider === 'openrouter' ? `${base}/models/user` : `${base}/models`;
-    const { error } = await send(url, { method: 'GET', headers: headers(provider, key) }, key, signal);
+    const timer = AbortSignal.timeout(testTimeoutMs);
+    const { error } = await send(url, { method: 'GET', headers: headers(provider, key) }, key, signal ? AbortSignal.any([signal, timer]) : timer);
+    if (error === 'aborted' && timer.aborted && !signal?.aborted) return { ok: false, error: `timed out after ${testTimeoutMs / 1000} s` };
     return error ? { ok: false, error } : { ok: true };
   }
 
