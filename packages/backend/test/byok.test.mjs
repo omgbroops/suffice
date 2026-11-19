@@ -282,3 +282,10 @@ test('schema validator subset', () => {
   assert.deepEqual(validate({ type: ['string', 'null'] }, null), []);
   assert.match(validate({ type: 'number' }, NaN)[0], /expected number/);
 });
+
+test('test() times out on an endpoint that never answers', async (t) => {
+  const hang = (init) => new Promise((_, rej) => init.signal.addEventListener('abort', () => rej(new Error('aborted')), { once: true }));
+  const { byok } = await setup(t, [hang, hang, hang], { testTimeoutMs: 30 });
+  byok.keys.set('openai', KEY);
+  assert.deepEqual(await byok.test('openai'), { ok: false, error: 'timed out after 0.03 s' });
+});

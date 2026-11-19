@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import http from 'node:http';
-import {mkdtemp,mkdir,writeFile,readFile,readdir} from 'node:fs/promises';
+import {mkdtemp,mkdir,writeFile,readFile,readdir,rm} from 'node:fs/promises';
+import {existsSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import electronPath from 'electron';
@@ -13,6 +14,7 @@ test('Settings > Models: add, test, lock and remove a BYOK key through the real 
  // Fake OpenAI-compatible endpoint: GET /v1/models; a wrong key gets a 401 that echoes it, to prove redaction.
  const server=http.createServer((req,res)=>{const auth=req.headers.authorization||'';res.setHeader('content-type','application/json');if(auth===`Bearer ${GOOD}`){res.end('{"data":[]}');return;}res.statusCode=401;res.end(JSON.stringify({error:{message:`Incorrect API key provided: ${auth.slice(7)}`}}));});
  await new Promise(r=>server.listen(0,'127.0.0.1',r));const base=`http://127.0.0.1:${server.address().port}/v1`;
+ const hang=http.createServer(()=>{});await new Promise(r=>hang.listen(0,'127.0.0.1',r));const hangBase=`http://127.0.0.1:${hang.address().port}/v1`;
  const home=await mkdtemp(resolve(tmpdir(),'suffice-byok-ui-'));
  const env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home,SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_SESSIONS_SOCKET:'sfx-fr-byok-keys-1',SUFFICE_HISTORY_HOME:await mkdtemp(resolve(tmpdir(),'suffice-byok-hist-'))};delete env.ELECTRON_RUN_AS_NODE;
  const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'profile')],env});
@@ -25,7 +27,11 @@ test('Settings > Models: add, test, lock and remove a BYOK key through the real 
   await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].setContentSize(1440,900));
   await open();
   assert.match(await page.locator('.keys-state').innerText(),/Vault unlocked/);await shot('keys-empty');
-  const form=page.locator('.keys-form');
+  const form=page.locator('.keys-form'),note=page.locator('.keys-note');
+  // Validation notes: empty or malformed Base URL is refused visibly and creates no row.
+  await form.getByLabel('Provider').selectOption('openai-compatible');await form.getByLabel('API key').fill(GOOD);
+  await form.getByRole('button',{name:'Add key'}).click();await note.getByText(/Base URL/).waitFor();assert.equal(await page.locator('.keys-row').count(),0);
+  await form.getByLabel('Base URL').fill('not a url');await form.getByRole('button',{name:'Add key'}).click();await note.getByText(/valid URL/).waitFor();assert.equal(await page.locator('.keys-row').count(),0);
   await form.getByLabel('Provider').selectOption('openai-compatible');
   await form.getByLabel('Base URL').fill(base);await form.getByLabel('API key').fill(GOOD);await form.getByRole('button',{name:'Add key'}).click();
   const row=page.locator('.keys-row[data-key-provider="openai-compatible"]');await row.waitFor();
@@ -42,6 +48,12 @@ test('Settings > Models: add, test, lock and remove a BYOK key through the real 
   const vdir=resolve(home,'profile','sessions','vault','byok');
   for(const f of await readdir(vdir))for(const k of [GOOD,BAD])assert.ok(!(await readFile(resolve(vdir,f),'utf8')).includes(k));
   for(const k of [GOOD,BAD])assert.ok(!logs.join('').includes(k));
+  // A hanging endpoint ends in a timeout, not an endless Testing.
+  await form.getByLabel('Provider').selectOption('openai-compatible');await form.getByLabel('Base URL').fill(hangBase);await form.getByLabel('API key').fill(GOOD);await form.getByRole('button',{name:'Add key'}).click();
+  await page.locator('.keys-row code',{hasText:'…abcd'}).waitFor();await page.locator('.keys-row').getByRole('button',{name:'Test'}).click();
+  await page.getByText(/timed out/).waitFor({timeout:30000});assert.ok(await page.locator('.keys-row').getByRole('button',{name:'Test'}).isEnabled());
+  await form.getByLabel('Provider').selectOption('openai-compatible');await form.getByLabel('Base URL').fill(base);await form.getByLabel('API key').fill(BAD);await form.getByRole('button',{name:'Add key'}).click();
+  await page.locator('.keys-row code',{hasText:'…wxyz'}).waitFor();
   // Persisted across reload.
   await page.reload();await open();await page.locator('.keys-row code',{hasText:'…wxyz'}).waitFor();
   // Lock: an unreadable key file locks the vault and the form.
@@ -49,9 +61,19 @@ test('Settings > Models: add, test, lock and remove a BYOK key through the real 
   await page.reload();await open();assert.match(await page.locator('.keys-state').innerText(),/Vault locked/);
   assert.ok(await page.locator('.keys-form').getByRole('button',{name:'Add key'}).isDisabled());await shot('keys-locked');
   await writeFile(keyFile,good);await page.reload();await open();assert.match(await page.locator('.keys-state').innerText(),/Vault unlocked/);
+  // Deleted key file: locked, and the file is not regenerated (that would orphan the sealed keys).
+  await rm(keyFile);await page.reload();await open();assert.match(await page.locator('.keys-state').innerText(),/Vault locked/);
+  assert.ok(await page.locator('.keys-form').getByRole('button',{name:'Add key'}).isDisabled());assert.equal(existsSync(keyFile),false);
+  await writeFile(keyFile,good);await page.reload();await open();assert.match(await page.locator('.keys-state').innerText(),/Vault unlocked/);
   // Remove.
   await page.locator('.keys-row').getByRole('button',{name:'Remove'}).click();await page.locator('.keys-row').waitFor({state:'detached'});
   assert.deepEqual(await readdir(vdir),[]);
   assert.deepEqual(errors,[]);
- }finally{await app.close();server.close();}
+ }finally{await app.close();server.close();hang.close();}
+});
+
+test('keys-set refuses an openai-compatible key without a Base URL before touching the backend',async()=>{
+ const {createKeysHandlers}=await import('../electron/byok-keys.mjs');const calls=[];
+ const h=createKeysHandlers({call:async m=>{calls.push(m);return true;},keyring:{current:()=>({})}});
+ await assert.rejects(h['keys-set']({provider:'openai-compatible',key:'k'}),/Base URL/);assert.deepEqual(calls,[]);
 });
