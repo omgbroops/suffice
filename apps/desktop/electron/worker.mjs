@@ -6,7 +6,7 @@ import {invalidateProjectMetadata} from './sidebar-metadata.mjs';
 import {createChatChangeTracker} from './chat-changes.mjs';
 import {createChatGitTracker} from './chat-git.mjs';
 import {createThreadRouter} from './thread-router.mjs';
-import {sessionUsage,runCaps,runCapExceeded} from './usage.mjs';
+import {sessionUsage,runCaps,runCapExceeded,topUp,dailyBudget,reserveRoom,recordSpend,budgetFullMessage} from './usage.mjs';
 import {savedRunTokens,gateTurn} from './budget-caps.mjs';
 import {installContext,sessionInventory} from '../shared/context-items.mjs';
 import {randomUUID,createHash} from 'node:crypto';
@@ -104,7 +104,7 @@ async function receive(message) {
           if(event.result){const entry=agent.session.sessionManager?.getEntries().findLast(entry=>entry.type==='compaction');agent.session.sessionManager?.appendCustomEntry('suffice:compaction',{entryId:entry?.id,reason:event.reason});}
           send({event:'compaction_end',reason:event.reason,completed:!!event.result,aborted:event.aborted,errorMessage:event.errorMessage});
         }
-        if(['message_end','tool_execution_end','agent_end'].includes(event.type)){const usage=sessionUsage(agent.session);send({event:'usage',usage});const stop=capState&&!capState.message&&runCapExceeded(capState.base,usage,capState.caps);if(stop){capState.message=stop;agent.abort();}}
+        if(['message_end','tool_execution_end','agent_end'].includes(event.type)){const usage=sessionUsage(agent.session);send({event:'usage',usage});const stop=capState&&!capState.message&&(runCapExceeded(capState.base,usage,capState.caps)||topUp(capState,usage));if(stop){capState.message=stop;agent.abort();}}
         if(event.type==='message_update'&&event.assistantMessageEvent?.type==='text_delta')send({event:'text',text:event.assistantMessageEvent.delta});
         if(event.type==='message_start'&&event.message?.role==='assistant'){send({event:'assistant_start'});pendingTurn?.();pendingTurn=null;}
         if(event.type==='message_update'&&event.assistantMessageEvent?.type==='thinking_delta')send({event:'reasoning',text:event.assistantMessageEvent.delta});
@@ -117,14 +117,15 @@ async function receive(message) {
     turnPresentation={id:randomUUID(),startedAt:payload.turnStartedAt||Date.now(),provider:agent.session.model?.provider||payload.provider,model:agent.session.model?.id||payload.model,modelName:agent.session.model?.name,effort:agent.session.thinkingLevel||payload.effort};
     agent.session.sessionManager?.appendCustomEntry?.('suffice:turn-start',{...turnPresentation,promptHash:createHash('sha256').update(payload.prompt).digest('hex'),displayPrompt:payload.displayPrompt??payload.prompt,attachments:payload.attachmentMetadata||[]});send({event:'turn_started',presentation:turnPresentation});
     await changeTracker?.beginTurn();
-    const recordWeekly=gateTurn(home),fileTokens=savedRunTokens(home);capState={base:sessionUsage(agent.session),caps:runCaps(process.env,fileTokens),message:null,recordWeekly};
+    const recordWeekly=gateTurn(home),caps=runCaps(process.env,payload.desktopSettings,savedRunTokens(home)),got=reserveRoom(dailyBudget(home,payload.desktopSettings),caps);if(got.full)throw new Error(budgetFullMessage(got));
+    capState={base:sessionUsage(agent.session),caps,message:null,hold:got.hold,budget:got.budget,recordWeekly};if(got.room!=null){capState.room=got.room;if(got.room<caps.tokens){caps.tokens=got.room;caps.daily=true;}}
     if(sessionPath)await checkpoint(cwd,threadId(sessionPath),payload.displayPrompt??payload.prompt).catch(()=>{});// a checkpoint failure never blocks the turn
     const choices=payload.context,restoreContext=installContext(agent.session,choices);
     pendingTurn=()=>{turns.push({n:++turnCount,at:Date.now(),...sessionInventory(agent.session,agent.session.messages??[]),removed:choices?.exclude||[],summaries:!!choices?.summaries});if(turns.length>10)turns.shift();};
-    let text;try{text=await agent.run(payload.prompt,{images:payload.images});}finally{restoreContext();pendingTurn=null;capState.recordWeekly((sessionUsage(agent.session)?.totalTokens??0)-(capState.base?.totalTokens??0));}if(newlyCreated&&(payload.desktopSettings||{}).naming==='Automatic'&&text&&agent.title){const title=await agent.title(payload.prompt,text);if(title)agent.session.setSessionName(title);}if(capState.message)throw new Error(capState.message);finishPresentation('completed');
+    let text;try{text=await agent.run(payload.prompt,{images:payload.images});}finally{restoreContext();pendingTurn=null;try{recordSpend(capState,sessionUsage(agent.session));}catch{}try{capState.recordWeekly((sessionUsage(agent.session)?.totalTokens??0)-(capState.base?.totalTokens??0));}catch{}}if(capState.message)throw new Error(capState.message);finishPresentation('completed');
     await changeTracker?.flush().catch(()=>{});if(payload.desktopSettings?.['remember-context'])await rememberProject(home,cwd,text);
     send({id,ok:true,result:{text,presentation:turnPresentation,sessionPath:agent.sessionPath(),threadId:agent.sessionPath()?threadId(agent.sessionPath()):null,usage:agent.totals}});
-  } catch(error){finishPresentation(abortRequested?'interrupted':'failed');if(ownsRun)await changeTracker?.flush().catch(()=>{});if(ownsRun&&abortRequested){agent?.session.sessionManager?.appendCustomEntry('suffice:interrupted');send({id,ok:true,result:{interrupted:true,presentation:turnPresentation,threadId:agent?.sessionPath()?threadId(agent.sessionPath()):null}});}else send({id,ok:false,error:capState?.message||error.message});}
+  } catch(error){finishPresentation(abortRequested?'interrupted':'failed');try{capState?.hold?.release();}catch{}if(ownsRun)await changeTracker?.flush().catch(()=>{});if(ownsRun&&abortRequested){agent?.session.sessionManager?.appendCustomEntry('suffice:interrupted');send({id,ok:true,result:{interrupted:true,presentation:turnPresentation,threadId:agent?.sessionPath()?threadId(agent.sessionPath()):null}});}else send({id,ok:false,error:capState?.message||error.message});}
   finally {if(ownsRun){busy=false;capState=null;}}
 }
 return receive;

@@ -28,8 +28,9 @@ export const settingsSections=[
  ]},
  {id:'account',subtitle:'',title:'Account',icon:'pin',category:'Personal',groups:[group('Profile',[{id:'avatar',label:'Profile picture',type:'avatar'},select('account-avatar','Use GitHub picture','GitHub',['GitHub','Initials']),toggle('sidebar-teamwork','Teamwork in sidebar')])]},
  {id:'models',subtitle:'',title:'Models',icon:'deep',category:'Agent',groups:[]},
- {id:'usage',subtitle:'',title:'Usage',icon:'chart',category:'Agent',groups:[
-  group('Optimizer',[toggle('optimizer-hint','Suggest cheaper settings',true),toggle('optimizer-auto','Apply suggestions automatically',false)]),
+ {id:'usage',subtitle:'Spend limits, and when Suffice suggests cheaper settings.',title:'Usage',icon:'context',category:'Agent',groups:[
+  group('Limits',[select('run-cap-usd','Cost cap per run','$5',['$1','$2','$5','$10','$25','No cap'],'A run stops when it spends more than this.'),select('run-cap-tokens','Token cap per run','2M',['500K','1M','2M','5M','No cap'],'A run stops when it uses more tokens than this.'),select('budget-daily-tokens','Daily token budget','Off',['Off','1M','5M','20M','50M'],'New runs are refused once the day total is reached. Resets at midnight.')]),
+  group('Optimizer',[toggle('optimizer-hint','Suggest cheaper settings',true,'Shows a hint above the composer when a task looks simple.'),toggle('optimizer-auto','Apply suggestions automatically',false,'Off by default. When on, Suffice switches model or effort for you and offers Undo.')]),
  ]},
  {id:'automations',subtitle:'',title:'Automations',icon:'calendar',category:'Agent',groups:[{title:'Automations',rows:[],empty:'Loading…'}]},
  {id:'providers',subtitle:'',title:'Providers',icon:'globe',category:'Agent',groups:[group('Connected',[]),group('Available',[])]},

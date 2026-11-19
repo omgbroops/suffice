@@ -59,8 +59,20 @@ export function createBudget({ clock, store, limits }) {
   assertShape('clock', clock, ['now']);
   assertShape('store', store, ['load', 'save']);
   let lim = validate(limits);
-  const saved = store.load();
-  let used = { ...(saved?.windows ?? {}) }; // name -> {start, used}
+  let used = {}; // name -> {start, used}
+  const mine = []; // this instance's holds
+  let holds = []; // in-flight reservations {id, pid, n, tags}, shared through the store so other processes see them
+  const alive = (pid) => { try { process.kill(pid, 0); return true; } catch (e) { return e.code === 'EPERM'; } };
+  // Reload shared state; holds of dead processes are dropped so a crash never pins room.
+  const sync = () => {
+    const s = store.load();
+    if (s) used = { ...(s.windows ?? {}) }; // a store with nothing saved (or that never saves) leaves in-memory usage alone
+    // own holds stay in memory (a store that does not persist must still see them); others come from the file
+    holds = [...mine, ...(s?.holds ?? []).filter((h) => !mine.some((m) => m.id === h.id) && (h.pid === process.pid || alive(h.pid)))];
+  };
+  // load-modify-save under the store's lock when it has one (file stores shared by several processes)
+  const txn = (fn) => (store.withLock ?? ((f) => f()))(() => { sync(); const r = fn(); store.save({ windows: used, holds }); return r; });
+  sync();
 
   // A window whose start moved since last seen starts again at zero; 'run' windows are one slot per runId.
   const slot = (l, tags) => (l.period === 'run' ? `${l.name}\0${tags?.runId ?? ''}` : l.name);
@@ -69,27 +81,14 @@ export function createBudget({ clock, store, limits }) {
     return { start, used: w && w.start === start ? w.used : 0 };
   };
   const applies = (l, tags) => !l.tag || tags?.[l.tag.key] === l.tag.value;
-  // Windows are shared by every window on one data dir: apply this instance's deltas to what is on disk under the store's lock, never overwrite it with a stale copy.
-  const refresh = () => { if (store.update) used = { ...(store.load()?.windows ?? {}) }; };
-  const persist = (deltas) => {
-    if (!store.update) return store.save({ windows: used });
-    used = store.update((s) => {
-      const w = { ...(s?.windows ?? {}) };
-      if (!deltas) return { windows: { ...used } };
-      for (const [k, d] of deltas) w[k] = { start: d.start, used: (w[k]?.start === d.start ? w[k].used : 0) + d.n };
-      return { windows: w };
-    }).windows;
-  };
-  const holds = new Set(); // in-flight reservations: {n, tags}
   const held = (l, tags) => {
     let n = 0;
     for (const h of holds) if (applies(l, h.tags) && (l.period !== 'run' || (h.tags?.runId ?? '') === (tags?.runId ?? ''))) n += h.n;
     return n;
   };
 
-  function check(estimate, tags) {
+  function peek(estimate, tags) {
     count(estimate, 'estimate');
-    refresh();
     const now = clock.now();
     let tight = null;
     for (const l of lim) {
@@ -102,41 +101,77 @@ export function createBudget({ clock, store, limits }) {
     if (estimate <= remaining) return { allow: true, remaining };
     return { allow: false, remaining, reason: `Window "${tight.l.name}" (${tight.l.period}) has ${remaining} tokens left and this needs ${estimate}.` };
   }
-  function record(usage, tags) {
+  function add(usage, tags) {
     if (!usage || typeof usage !== 'object') fail('usage must be an object');
     const n = count(usage.inputTokens, 'inputTokens') + count(usage.outputTokens, 'outputTokens');
     const now = clock.now();
-    const deltas = [];
-    for (const l of lim) if (applies(l, tags)) { const v = view(l, now, tags); used[slot(l, tags)] = { start: v.start, used: v.used + n }; deltas.push([slot(l, tags), { start: v.start, n }]); }
-    persist(deltas);
+    for (const l of lim) if (applies(l, tags)) { const v = view(l, now, tags); used[slot(l, tags)] = { start: v.start, used: v.used + n }; }
   }
-  // check + hold in one synchronous step, so parallel callers cannot all pass the same peek
+  const check = (estimate, tags) => { sync(); return peek(estimate, tags); };
+  const record = (usage, tags) => txn(() => add(usage, tags));
+  // check + hold in one locked step, so parallel callers (threads or processes) cannot all pass the same peek
   function reserve(estimate, tags) {
-    const d = check(estimate, tags);
-    if (!d.allow) return { ...d, release() {}, settle() {} };
-    const h = { n: estimate, tags };
-    holds.add(h);
-    return { ...d, release: () => { holds.delete(h); }, settle(usage) { if (holds.delete(h)) record(usage, tags); } };
+    const h = { id: `${process.pid}-${Math.random().toString(36).slice(2)}`, pid: process.pid, n: estimate, tags };
+    const d = txn(() => { const r = peek(estimate, tags); if (r.allow) { mine.push(h); holds.push(h); } return r; });
+    if (!d.allow) return { ...d, release() {}, settle() {}, extend: () => false, held: 0 };
+    const drop = (usage) => txn(() => {
+      const i = holds.findIndex((x) => x.id === h.id);
+      if (i < 0) return;
+      holds.splice(i, 1);
+      mine.splice(mine.findIndex((x) => x.id === h.id), 1);
+      if (usage) add(usage, tags);
+    });
+    // extend: grow this hold under the lock while the window has room, so a long run keeps reserving as it spends
+    const extend = (more) => txn(() => { const r = peek(more, tags); if (r.allow) h.n += more; return r.allow; });
+    return { ...d, release: () => drop(), settle: (usage) => drop(usage), extend, get held() { return h.n; } };
   }
 
   return {
     check, record, reserve,
     status() {
+      sync();
       const now = clock.now();
       return lim.map((l) => {
-        const ceiling = ceilingAt(l, now), u = view(l, now).used;
-        return { name: l.name, period: l.period, tokens: l.tokens, ceiling, used: u, remaining: Math.max(0, ceiling - u) };
+        const ceiling = ceilingAt(l, now), u = view(l, now).used, h = held(l);
+        return { name: l.name, period: l.period, tokens: l.tokens, ceiling, used: u, held: h, remaining: Math.max(0, ceiling - u - h) }; // remaining is what a new run can still reserve
       });
     },
     setLimits(next) { // keeps usage of windows whose name survives
       lim = validate(next);
-      used = Object.fromEntries(Object.entries(used).filter(([k]) => lim.some((l) => k === l.name || k.startsWith(`${l.name}\0`))));
-      persist();
+      txn(() => { used = Object.fromEntries(Object.entries(used).filter(([k]) => lim.some((l) => k === l.name || k.startsWith(`${l.name}\0`)))); });
     },
   };
 }
 
-export function createFileStore(path) {
+export function createFileStore(path, { waitMs = 60000 } = {}) {
+  const lockDir = `${path}.lock`, nap = new Int32Array(new SharedArrayBuffer(4));
+  const alive = (pid) => { try { process.kill(pid, 0); return true; } catch (e) { return e.code === 'EPERM'; } };
+  const owner = (dir) => { try { return fs.readFileSync(`${dir}/owner`, 'utf8'); } catch { return null; } };
+  // A lock is stale only when its holder process is gone; a holder that is merely paused (SIGSTOP, thermal guard) keeps it. Ownerless dirs are legacy locks, stale after 60 s.
+  const stale = (dir) => {
+    const o = owner(dir);
+    if (o) return !alive(parseInt(o, 10));
+    try { return Date.now() - fs.statSync(dir).mtimeMs > 60000; } catch { return false; }
+  };
+  // The directory is built complete (owner file inside), then renamed into place: rename onto a non-empty dir fails, so the owner is never missing and two takers never both win.
+  const take = (dir, token) => {
+    const tmp = `${dir}.${token}.tmp`;
+    fs.mkdirSync(tmp); fs.writeFileSync(`${tmp}/owner`, token);
+    try { fs.renameSync(tmp, dir); return true; } catch (e) {
+      fs.rmSync(tmp, { recursive: true, force: true });
+      if (e.code === 'EEXIST' || e.code === 'ENOTEMPTY') return false;
+      throw e;
+    }
+  };
+  const drop = (dir, token) => { if (owner(dir) === token) fs.rmSync(dir, { recursive: true, force: true }); };
+  const away = (dir, token) => { const dead = `${dir}.${token}.dead`; fs.renameSync(dir, dead); fs.rmSync(dead, { recursive: true, force: true }); };
+  // Only the holder of the break mutex removes a stale lock, and nobody else can create the lock while the stale dir stands, so a live lock is never removed.
+  // shortcut: a break mutex whose owner died is renamed away unguarded; a pid reused by a stranger would keep a lock until that process exits, upgrade if pids get reused on the hosts.
+  const breakStale = (token) => {
+    const brk = `${lockDir}.brk`;
+    if (!take(brk, token)) { if (stale(brk)) away(brk, token); return; }
+    try { if (stale(lockDir)) away(lockDir, token); } finally { drop(brk, token); }
+  };
   return {
     load() {
       try { return JSON.parse(fs.readFileSync(path, 'utf8')); } catch (e) { if (e.code === 'ENOENT') return null; throw e; }
@@ -146,18 +181,16 @@ export function createFileStore(path) {
       fs.writeFileSync(tmp, JSON.stringify(state));
       fs.renameSync(tmp, path);
     },
-    // load, change, save under a lock file so several processes on one file never lose each other's writes
-    update(fn) {
-      const lock = `${path}.lock`, wait = new Int32Array(new SharedArrayBuffer(4));
-      for (let i = 0; ; i++) {
-        try { fs.closeSync(fs.openSync(lock, 'wx')); break; } catch (e) {
-          if (e.code !== 'EEXIST') throw e;
-          try { if (Date.now() - fs.statSync(lock).mtimeMs > 10000) fs.rmSync(lock, { force: true }); } catch { /* released meanwhile */ } // a crashed holder
-          if (i > 2000) throw new Error('budget: store is locked');
-          Atomics.wait(wait, 0, 0, 5);
-        }
+    withLock(fn) {
+      const token = `${process.pid}-${Math.random().toString(36).slice(2)}`;
+      // a live holder may be paused (thermal guard): wait with backoff up to waitMs, then say so
+      const end = Date.now() + waitMs;
+      for (let ms = 5; !take(lockDir, token); ms = Math.min(ms * 2, 250)) {
+        try { if (stale(lockDir)) breakStale(token); } catch {}
+        if (Date.now() > end) throw new Error(`budget: lock busy (held by a live process for over ${Math.round(waitMs / 1000)}s)`);
+        Atomics.wait(nap, 0, 0, ms);
       }
-      try { const next = fn(this.load()); this.save(next); return next; } finally { fs.rmSync(lock, { force: true }); }
+      try { return fn(); } finally { try { drop(lockDir, token); } catch {} }
     },
   };
 }
