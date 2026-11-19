@@ -6,7 +6,6 @@ const mk=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className
 const motionOk=()=>!matchMedia('(prefers-reduced-motion: reduce)').matches;
 export const greeting=(h=new Date().getHours())=>h<5?'Still up? Build something.':h<12?'Morning. What are we building?':h<18?'What are we building this afternoon?':'What are we building tonight?';
 export const ago=(ms,now=Date.now())=>{const s=Math.max(0,Math.floor((now-ms)/1000));return s<60?'just now':s<3600?Math.floor(s/60)+'m ago':s<86400?Math.floor(s/3600)+'h ago':Math.floor(s/86400)+'d ago';};
-const NEEDS=['approval','input','failed'];
 // Priority: failing test, uncommitted files, TODO/FIXME, last thread.
 export function suggestions({failing=[],changes=[],todos=[],thread=null}){
  const out=[];
@@ -51,7 +50,7 @@ export function connectStartLife({api}={}){
  if(!area||!form||!prompt)return;
  const head=mk('div','life life-head'),tail=mk('div','life life-tail');
  const mark=mk('span','life-mark','[suffice]');mark.setAttribute('aria-hidden','true');
- head.append(mark,mk('h2','life-hello'),mk('div','life-sub'));
+ head.append(mark,mk('h2','life-hello'));
  const base=prompt.placeholder;let hints={failing:[],todos:[]},list=[],first=true,timer=0,typed=false,typer=0,ready=false;
  const home=()=>!workspace?.classList.contains('thread-view');
  const full=()=>list.length&&home()?list[0]:base;
@@ -86,9 +85,7 @@ export function connectStartLife({api}={}){
  function render(){
   const rs=rows().sort((a,b)=>(b._threadDetails.modified||0)-(a._threadDetails.modified||0));
   const text=greeting();const h=head.querySelector('.life-hello');if(h.textContent!==text)h.textContent=text;
-  const sub=head.querySelector('.life-sub'),needing=rs.filter(r=>NEEDS.includes(r.dataset.status));
-  if(needing.length){const pill=mk('button','life-needs',`${needing.length} need${needing.length===1?'s':''} you`);pill.type='button';pill.dataset.count=String(needing.length);pill.addEventListener('click',()=>needing[0]?.click());sub.replaceChildren(pill);}else sub.replaceChildren();
-  const next=suggestions({...hints,thread:rs[0]?._threadDetails});
+    const next=suggestions({...hints,thread:rs[0]?._threadDetails});
   if(next.join('|')!==list.join('|')){list=next;if(!prompt.value)setPh();}
   if(!tail.firstChild)buildCards();
   if(first){first=false;typeOnce();if(motionOk())for(const n of [mark,h,...tail.children])n.classList.add('life-in');}
