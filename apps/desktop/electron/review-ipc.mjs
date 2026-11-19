@@ -14,11 +14,15 @@ export function createReviewIpc({store,cwdFor,diffFor,isRunning,checkpoint,run})
   reopen:async(id,commentId)=>{await store.reopen(id,commentId);return store.state(id);},
   async reject(id,{file,hunkId}){
    if(isRunning(id)||sending.has(id))throw new Error('Stop this thread before rejecting changes');
+   sending.add(id);// claimed synchronously so a Send cannot start during reject's awaits
+   try{
    const cwd=cwdFor(id),result=await diffFor(cwd,file);
    if(result.untracked||!result.text)throw new Error('A new file cannot be rejected by hunk');
    // The checkpoint goes first so Rewind undoes the reject.
    await checkpoint(cwd,id,`Before rejecting a change in ${file}`);
-   await rejectHunk(cwd,result.text,hunkId);await store.dropHunk(id,file,hunkId);return store.state(id);
+   await rejectHunk(cwd,result.text,hunkId);await store.dropHunk(id,file,hunkId);
+   }finally{sending.delete(id);}
+   return store.state(id);
   },
   // Reviewer findings become the same cards; findings without a diff row stay as plain notes in the UI.
   async importFindings(id,findings){
@@ -32,14 +36,17 @@ export function createReviewIpc({store,cwdFor,diffFor,isRunning,checkpoint,run})
   },
   async send(id,{model,provider,effort}){
    // markSent claims the open cards atomically, so a second quick click finds none and cannot start another turn.
-   const open=await store.markSent(id);if(!open.length)throw new Error('No comments to send');
+   if(sending.has(id))throw new Error('This thread is busy; wait for the current change to finish');
    sending.add(id);
+   try{
+   const open=await store.markSent(id);if(!open.length)throw new Error('No comments to send');
    try{
    const cwd=cwdFor(id),map=await diffs(cwd,[...new Set(open.map(c=>c.file))]);
    const items=open.map(c=>{const text=map.get(c.file)?.text,at=text&&locate(parseHunks(text).hunks,c.hunkId,c.rel);return {id:c.id,file:c.file,line:at?.line??c.line,excerpt:at?.excerpt||'',text:c.text+(c.fix?`\nSuggested fix: ${c.fix}`:'')};});
     const reply=await run({prompt:renderPrompt(items),effort,model,provider,threadId:id});
     await store.settle(id,parseOutcomes(reply?.text,items.map(i=>i.id)),'The agent gave no outcome for this comment');
-   }catch(error){await store.fail(id,error.message);}finally{sending.delete(id);}
+   }catch(error){await store.fail(id,error.message);}
+    }finally{sending.delete(id);}
    return store.state(id);
   },
  };

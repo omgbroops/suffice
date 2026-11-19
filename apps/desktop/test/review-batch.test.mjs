@@ -100,6 +100,16 @@ test('reject is refused while a Send turn is in flight, file unchanged, cards st
  release();const state=await sending;assert.equal(state.comments.length,1);
 });
 
+test('Send started during reject is refused, so no card is sent for a reverted hunk',async()=>{
+ const {cwd,home}=await fixture();let calls=0;
+ const {ipc}=wire(cwd,home,{run:async()=>{calls++;return {text:'[]'};}});
+ const hunks=parseHunks((await workspace.diff(cwd,'a.txt')).text).hunks;
+ await ipc.add(ID,{file:'a.txt',hunkId:hunks[0].id,rel:1,line:3,text:'c'});
+ const rej=ipc.reject(ID,{file:'a.txt',hunkId:hunks[0].id});
+ await assert.rejects(ipc.send(ID,{}),/busy/);
+ await rej;assert.equal(calls,0);
+});
+
 test('a comment over 2000 characters is refused, never cut',async()=>{
  const {cwd,home}=await fixture(),{ipc}=wire(cwd,home);
  const h=parseHunks((await workspace.diff(cwd,'a.txt')).text).hunks[0];
