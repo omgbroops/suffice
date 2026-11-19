@@ -32,6 +32,9 @@ test('web tools: Settings switch gates the toolkit and chat shows compact cards 
   assert.equal(JSON.parse(await readFile(resolve(home,'mcp-scope.json'),'utf8')).global['toolkit:web'],false);
   assert.equal(mcpScope(home).toolkit('web'),false,'the CLI session sees the switch');assert.equal(mcpScope(home).tool('crawl_to_markdown'),false);await shot('settings-web-off');
   await sw.click();await page.waitForFunction(()=>document.querySelector('[aria-label="Web toolkit"]')?.getAttribute('aria-checked')==='true');assert.equal(mcpScope(home).tool('crawl_to_markdown'),true);
+  // Rapid toggling: 10 synchronous clicks must flip the switch ten times, ending where it started.
+  await page.evaluate(()=>{const b=document.querySelector('[aria-label="Web toolkit"]');for(let i=0;i<10;i++)b.click();});
+  await page.waitForTimeout(1500);assert.equal(await page.getByRole('switch',{name:'Web toolkit'}).getAttribute('aria-checked'),'true');assert.equal(mcpScope(home).toolkit('web'),true);
   // Chat: stub the run, then stream web tool events the way the engine emits nested calls.
   await app.evaluate(({ipcMain})=>{for(const a of ['run','thread','threads','models'])ipcMain.removeHandler('suffice:'+a);ipcMain.handle('suffice:models',()=>[{provider:'anthropic',id:'claude-haiku',name:'Claude Haiku',available:true,efforts:['low']}]);ipcMain.handle('suffice:threads',()=>[]);ipcMain.handle('suffice:thread',(_e,id)=>({id,title:id,messages:[]}));ipcMain.handle('suffice:run',()=>new Promise(()=>{}));});
   await page.evaluate(()=>localStorage.setItem('suffice-model',JSON.stringify({provider:'anthropic',model:'claude-haiku',effort:'low'})));await page.reload();await page.locator('.composer').waitFor();
