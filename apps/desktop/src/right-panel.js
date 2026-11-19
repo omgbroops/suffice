@@ -6,6 +6,7 @@ import {showPopover,hidePopover,keyboardInteraction} from './popover-motion.js';
 import {threadViewState as store} from './thread-view-state.js';
 import {mountRewind} from './rewind-view.js';
 import {reviewFor,findingsFor,reviewButton,decorateRows} from './review.js';
+import {loadReview} from './review-ui.js';
 import {renderFileTree,renderChanges,renderCode,textElement} from './panel-content.js';
 import {renderPullRequest} from './pr-review.js';
 
@@ -67,6 +68,9 @@ export function connectRightPanel({sidebar,resize,toggle,api}){
   const valid=()=>request===version&&store.id===id&&mounted===record&&store.state.panelOpen;
   if(record.previewKey===key)return;
   editor.setPreview(view);editor.select(view.file);scroller.setAttribute('aria-busy','false');
+  // Comments, Accept/Reject and the Send footer live in the main process; cards repaint from that state.
+  const repaint=()=>{if(!valid())return;view.scroll=scroller.scrollTop;record.previewKey=null;void load();};
+  const review=type==='changes'?await loadReview({api,threadId:id,file:view.file,preview:scroller.parentElement,change:repaint,refresh:()=>{if(store.id===id){view.scroll=scroller.scrollTop;refreshPanel();}}}):null;if(!valid())return;
   const entry=changed?.entries.find(entry=>entry.path===view.file);
   if(type==='changes')editor.bar.querySelector('.panel-path').textContent=view.file||(changed.git?`${changed.entries.length} changed files`:'No Git repository');
   if(!view.file){record.previewKey=key;if(type==='files')editor.empty();return;}
@@ -76,7 +80,7 @@ export function connectRightPanel({sidebar,resize,toggle,api}){
    if(!result){scroller.append(textNode('p','panel-inline-note','Loading…'));scroller.setAttribute('aria-busy','true');result=type==='files'?api.file(view.file):api.diff(view.file);record.cache.set(view.file,result);}
    result=await result;if(!valid())return;record.cache.set(view.file,result);scroller.replaceChildren();
    if(entry)editor.bar.querySelector('.panel-path').dataset.kind=entry.status==='??'||entry.status.includes('A')?'added':entry.status.includes('D')?'deleted':'modified';
-   renderCode(scroller,{...result,...(entry?{added:entry.added,removed:entry.removed,binary:entry.binary||result.binary}:{})},type==='changes',{...view,annotations:type==='changes'?findingsFor(id,view.file):[]});record.previewKey=key;scroller.scrollTop=view.scroll||0;
+   renderCode(scroller,{...result,...(entry?{added:entry.added,removed:entry.removed,binary:entry.binary||result.binary}:{})},type==='changes',{...view,annotations:type==='changes'?(review?review.unplaced(findingsFor(id,view.file)):findingsFor(id,view.file)):[],review});record.previewKey=key;scroller.scrollTop=view.scroll||0;
   }catch(error){record.cache.delete(view.file);if(!valid())return;scroller.replaceChildren();if(type==='changes'&&/no longer has changes|ENOENT|no such file|does not exist|not a file/i.test(error.message))patchView(type,{file:null,scroll:0});else scroller.append(textNode('p','panel-inline-note',error.message));}
   finally{if(valid())scroller.setAttribute('aria-busy','false');}
  }

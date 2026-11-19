@@ -9,7 +9,7 @@ export async function runReview(api,id){
  const selection=document.querySelector('.composer')?.modelSelection;
  if(!selection?.model||!selection.provider||selection.provider==='cli'){results.set(id,{state:'error',error:'Pick a model in the composer first',findings:[]});changed();return;}
  results.set(id,{state:'running',findings:[]});changed();
- try{const {findings}=await api.review({model:selection.model,provider:selection.provider,effort:selection.effort||'low'});results.set(id,{state:'done',findings});}
+ try{const {findings}=await api.review({model:selection.model,provider:selection.provider,effort:selection.effort||'low'});results.set(id,{state:'done',findings});try{await api.reviewImport({threadId:id,findings});}catch{/* findings stay plain notes */}}
  catch(error){results.set(id,{state:'error',error:error.message.replace(/^Error invoking remote method '[^']+': (Error: )?/,''),findings:[]});}
  changed();
 }

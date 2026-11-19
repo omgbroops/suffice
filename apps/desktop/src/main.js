@@ -24,6 +24,7 @@ import '@fontsource/geist-mono/500.css';
 import './styles.css';
 import './tactile.css';
 import './right-panel.css';
+import './review-cards.css';
 import './pr-review.css';
 import './composer-files.css';
 import './composer-quick.css';

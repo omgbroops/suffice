@@ -28,24 +28,28 @@ export function splitDiffRows(rows){
   const deleted=[],added=[];while(index<rows.length&&['addition','deletion'].includes(rows[index].kind)){const line=rows[index++];(line.kind==='deletion'?deleted:added).push(line);}for(let pair=0;pair<Math.max(deleted.length,added.length);pair++)result.push({left:deleted[pair]??null,right:added[pair]??null});
  }return result;
 }
-export function renderCode(container,result,isDiff=false,{wrap=false,diffLayout='unified',annotations=[]}={}){
+export function renderCode(container,result,isDiff=false,{wrap=false,diffLayout='unified',annotations=[],review=null}={}){
  if(result.binary){container.append(textElement('p','panel-inline-note','Binary file'));return;}
  const diff=isDiff;
  const rows=diff&&!result.untracked?parseUnifiedDiff(result.text):(result.text?result.text.split('\n'):[]).slice(0,result.text.endsWith('\n')?-1:undefined).map((text,index)=>({kind:diff?'addition':'context',text,old:null,new:index+1}));
+ const rv=diff&&!result.untracked?review:null;if(rv)rv.tag(rows,result.text);
  const limit=5000,sourceRows=rows.slice(0,limit),paint=[];
  if(result.truncated||rows.length>limit)container.append(textElement('p','panel-inline-note','Preview truncated'));
  const code=document.createElement('div');code.className='panel-code'+(diff?' panel-diff':'');code.dataset.wrap=String(wrap);code.dataset.layout=diff?diffLayout:'unified';code.setAttribute('role','region');code.setAttribute('aria-label',diff?'File diff':'File contents');
- const placed=new Set(),notesAfter=line=>{if(!diff||line?.new==null||line.kind==='deletion')return[];return annotations.filter(finding=>finding.line===line.new&&!placed.has(finding)&&placed.add(finding)).map(noteNode);};
+ const placed=new Set(),notesAfter=line=>{if(!diff||line?.new==null||line.kind==='deletion')return[];return [...annotations.filter(finding=>finding.line===line.new&&!placed.has(finding)&&placed.add(finding)).map(noteNode),...(rv?rv.cardsAfter(line):[])];};
  function lineNode(line,side){
   const row=document.createElement('div');row.className='code-line '+(line?.kind||'diff-empty');if(!line)return row;
+  if(rv)rv.mark(row,line.hunkId);
   if(diff&&!side){const old=textElement('span','code-number',line.old??'');old.setAttribute('aria-hidden','true');row.append(old);}
   const number=textElement('span','code-number',side==='left'?line.old??'':line.new??'');number.setAttribute('aria-hidden','true');
   const mark=textElement('span','code-sign',line.kind==='addition'?'+':line.kind==='deletion'?'−':'');mark.setAttribute('aria-hidden','true');
-  const content=textElement('code','code-text',line.text||' ');row.append(number,mark,content);paint.push({line,element:content});return row;
+  const content=textElement('code','code-text',line.text||' ');row.append(number,mark,content);paint.push({line,element:content});
+  if(rv&&line.kind==='hunk')row.append(rv.hunkTools(line,row));else if(rv&&side!=='left'){const gutter=rv.gutter(line,row);if(gutter)row.append(gutter);}
+  return row;
  }
  if(diff&&diffLayout==='split'){
   const labels=document.createElement('div');labels.className='split-diff-labels';labels.append(textElement('span','','Before'),textElement('span','','After'));code.append(labels);
-  for(const pair of splitDiffRows(sourceRows)){if(pair.hunk){const header=textElement('div','code-line hunk split-hunk',pair.hunk.text);code.append(header);continue;}const row=document.createElement('div');row.className='split-diff-row';row.append(lineNode(pair.left,'left'),lineNode(pair.right,'right'));code.append(row,...notesAfter(pair.right));}
+  for(const pair of splitDiffRows(sourceRows)){if(pair.hunk){const header=textElement('div','code-line hunk split-hunk',pair.hunk.text);if(rv){rv.mark(header,pair.hunk.hunkId);header.append(rv.hunkTools(pair.hunk,header));}code.append(header);continue;}const row=document.createElement('div');row.className='split-diff-row';row.append(lineNode(pair.left,'left'),lineNode(pair.right,'right'));code.append(row,...notesAfter(pair.right));}
  }else for(const line of sourceRows)code.append(lineNode(line),...notesAfter(line));
  if(diff)code.append(...annotations.filter(finding=>!placed.has(finding)).map(noteNode));
  if(!rows.length)container.append(textElement('p','panel-inline-note',diff?'No text diff':'Empty file'));else container.append(code);
