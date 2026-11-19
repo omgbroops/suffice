@@ -57,6 +57,8 @@ export function createByok({ fetch = globalThis.fetch, vault, clock, budget, sle
     has: (provider) => vault.get(KIND, provider) !== undefined,
     remove: (provider) => vault.delete(KIND, provider),
     list: () => vault.list(KIND).map((x) => x.id),
+    /** Last 4 characters per stored key: enough to tell keys apart, never the key. */
+    hints: () => Object.fromEntries(vault.list(KIND).map((x) => [x.id, `…${vault.open(vault.get(KIND, x.id)).payload.key.slice(-4)}`])),
   };
   const keyOf = (provider) => { const d = vault.get(KIND, provider); return d ? vault.open(d).payload : undefined; };
   const wrongOrigin = (stored, base) => stored?.origin && new URL(base).origin !== stored.origin;

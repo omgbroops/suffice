@@ -143,6 +143,8 @@ test('key never leaks: errors, thrown fetch errors, vault file, list', async (t)
   for (const r of [r1, r2]) { assert.equal(r.ok, false); assert.ok(!JSON.stringify(r).includes(KEY)); }
   assert.match(r2.error, /invalid key \[redacted\]/);
   assert.deepEqual(byok.keys.list(), ['openai']);
+  assert.deepEqual(byok.keys.hints(), { openai: `…${KEY.slice(-4)}` });
+  assert.ok(!JSON.stringify(byok.keys.hints()).includes(KEY));
   assert.ok(!JSON.stringify(byok.keys.list()).includes(KEY));
   for (const f of await fs.readdir(path.join(dir, 'byok'))) assert.ok(!(await fs.readFile(path.join(dir, 'byok', f), 'utf8')).includes(KEY));
   assert.equal(redact(`a ${KEY} b`, KEY), 'a [redacted] b');

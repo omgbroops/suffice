@@ -82,6 +82,7 @@ export function createIpcBridge(backend) {
         'keys.has': (m) => K().keys.has(prov(m)),
         'keys.remove': (m) => K().keys.remove(prov(m)),
         'keys.list': () => K().keys.list(),
+        'keys.hints': () => K().keys.hints(),
         'keys.test': (m) => K().test(prov(m), { baseUrl: m.baseUrl }),
         'models.run': (m) => {
           if (typeof m.prompt !== 'string') bad('prompt: expected a string');
