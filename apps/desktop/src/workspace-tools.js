@@ -14,7 +14,7 @@ export function connectWorkspaceTools(api){
   const toggle=document.createElement('button');toggle.type='button';toggle.className='button button--ghost workspace-tool';toggle.setAttribute('aria-label','Toggle right panel');toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-controls','right-sidebar');
   toggle.innerHTML=icon('panel');
   const sideBtn=document.createElement('button');sideBtn.type='button';sideBtn.className='button button--ghost workspace-tool side-chat-toggle';sideBtn.setAttribute('aria-label','Side chat');sideBtn.title='Side chat (Ctrl/Cmd+Shift+U)';sideBtn.setAttribute('aria-expanded','false');sideBtn.setAttribute('aria-controls','side-chat');sideBtn.innerHTML=icon('message');sideBtn.addEventListener('click',()=>document.dispatchEvent(new Event('suffice-side-chat-toggle')));
-  const modeBtn=document.createElement('button');modeBtn.type='button';modeBtn.className='button button--ghost workspace-tool session-mode-toggle';modeBtn.hidden=true;
+  const modeBtn=document.createElement('button');modeBtn.type='button';modeBtn.className='button button--ghost workspace-tool session-mode-toggle';modeBtn.hidden=true;modeBtn.setAttribute('aria-label','Switch session mode');
   const resumeBtn=document.createElement('button');resumeBtn.type='button';resumeBtn.className='button button--primary button--small workspace-tool session-resume';resumeBtn.textContent='Resume';resumeBtn.hidden=true;
   let cfg=null;
   modeBtn.addEventListener('click',()=>cfg?.onMode?.(cfg.mode==='terminal'?'chat':'terminal'));resumeBtn.addEventListener('click',()=>cfg?.onResume?.());
