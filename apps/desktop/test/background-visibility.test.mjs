@@ -10,7 +10,7 @@ import {guard} from './electron-guard.mjs';
 test('chat and settings background visibility persist independently and fade to solid',{timeout:60000},async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-background-')),sessions=resolve(home,'sessions','fixture');await mkdir(sessions,{recursive:true});
  const timestamp=new Date().toISOString();await writeFile(resolve(sessions,'chat.jsonl'),[{type:'session',version:3,id:'background-fixture',timestamp,cwd:home},{type:'message',id:'user',parentId:null,timestamp,message:{role:'user',content:[{type:'text',text:'Background fixture'}],timestamp:Date.now()}}].map(JSON.stringify).join('\n')+'\n');
- const env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
+ const env={...process.env,PI_OFFLINE:'1',SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
  const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'profile')],env});
  try{
   const page=await app.firstWindow();await page.locator('.thread-row').first().waitFor();await page.getByRole('button',{name:'Settings',exact:true}).click();await page.getByRole('button',{name:'Appearance',exact:true}).click();

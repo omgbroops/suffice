@@ -29,7 +29,7 @@ test('Automations settings page creates, runs, pauses, edits and deletes through
    await body(page,shot);assert.deepEqual(errors,[]);}
   finally{await app.close();}
  };
- const open=async page=>{await page.getByRole('button',{name:'Settings',exact:true}).click();await page.getByRole('button',{name:'Automations',exact:true}).click();await page.locator('.automation-card').waitFor();};
+ const open=async page=>{await page.getByRole('button',{name:'Settings',exact:true}).click();await page.getByRole('button',{name:'Agent',exact:true}).click();await page.locator('.automation-card').waitFor();};
 
  await run(async(page,shot)=>{
   await open(page);

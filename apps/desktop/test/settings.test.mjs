@@ -8,7 +8,7 @@ import {_electron} from 'playwright-core';
 import {guard} from './electron-guard.mjs';
 
 test('settings persist real preferences, preserve chats and use Pi provider registry',{timeout:60000},async()=>{
- const home=await mkdtemp(resolve(tmpdir(),'suffice-settings-')),env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
+ const home=await mkdtemp(resolve(tmpdir(),'suffice-settings-')),env={...process.env,PI_OFFLINE:'1',SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
  const sessions=resolve(home,'sessions','fixture');await mkdir(sessions,{recursive:true});for(let index=0;index<24;index++){const timestamp=new Date().toISOString();await writeFile(resolve(sessions,`${index}.jsonl`),[{type:'session',version:3,id:`settings-${index}`,timestamp,cwd:home},{type:'message',id:'user',parentId:null,timestamp,message:{role:'user',content:[{type:'text',text:`Settings fixture ${index}`}],timestamp:Date.now()}}].map(value=>JSON.stringify(value)).join('\n')+'\n');}
  const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
  try{

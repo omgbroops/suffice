@@ -294,7 +294,7 @@
 .desktop-app .settings-nav nav { scrollbar-width:none; scrollbar-gutter:auto; }
 .desktop-app .settings-nav nav::-webkit-scrollbar { display:none; }
 .desktop-app .settings-nav-item[aria-current='page'] { background:var(--surface-active); }
-.desktop-app .settings-nav-item:hover { background:var(--hover-fill); }
+.desktop-app .settings-nav-item:hover:not([aria-current='page']) { background:transparent; }
 
 /* Match the inner corner to the outer 8px radius minus its 3px inset. */
 .desktop-app .sidebar-collapsed-tools .button,
