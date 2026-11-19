@@ -36,10 +36,14 @@ const wallpaper=page=>process.env.OVERLAY_SHOT_DIR?page.addStyleTag({content:'ht
 test('overlay: open, type, reply streams, ring lands, reminder fires',async()=>{
  const {app,page,errors}=await launch();
  try{
-  await page.evaluate(()=>window.sufficeDesktop.desktopPreference({id:'local-agent',value:true}));
-  await page.waitForFunction(()=>true);
   for(let i=0;i<50&&!(await app.evaluate(()=>globalThis.shortcuts.has('Option+Space')));i++)await new Promise(r=>setTimeout(r,100));
-  assert.equal(await app.evaluate(()=>globalThis.shortcuts.has('Option+Space')),true,'fallback shortcut registered when no key helper runs');
+  assert.equal(await app.evaluate(()=>globalThis.shortcuts.has('Option+Space')),true,'fallback shortcut registered on a fresh profile (setting defaults on) when no key helper runs');
+  await page.evaluate(()=>window.sufficeDesktop.desktopPreference({id:'keys-trigger',value:false}));
+  for(let i=0;i<50&&(await app.evaluate(()=>globalThis.shortcuts.has('Option+Space')));i++)await new Promise(r=>setTimeout(r,100));
+  assert.equal(await app.evaluate(()=>globalThis.shortcuts.has('Option+Space')),false,'turning the setting off unregisters it');
+  await page.evaluate(()=>window.sufficeDesktop.desktopPreference({id:'keys-trigger',value:true}));
+  for(let i=0;i<50&&!(await app.evaluate(()=>globalThis.shortcuts.has('Option+Space')));i++)await new Promise(r=>setTimeout(r,100));
+  assert.equal(await app.evaluate(()=>globalThis.shortcuts.has('Option+Space')),true,'and back on');
   await app.evaluate(()=>globalThis.shortcuts.get('Option+Space')());
   const o=await overlayPage(app);await wallpaper(o);
   await o.locator('.ov-pill').waitFor();
@@ -76,7 +80,7 @@ test('overlay: open, type, reply streams, ring lands, reminder fires',async()=>{
   // remind me: stored, listed in the sidebar, notification fires
   await app.evaluate(()=>globalThis.shortcuts.get('Option+Space')());
   const o2=await overlayPage(app);await wallpaper(o2);await o2.locator('.ov-pill').waitFor();
-  await app.evaluate(()=>{const f=globalThis.sufficeTestOverlay.flow;f.onKey('option','down',0);f.onKey('option','up',60);});
+  await app.evaluate(()=>{const f=globalThis.sufficeTestOverlay.flow;f.onKey('option','down',5000);f.onKey('option','up',5060);});
   await o2.locator('.ov-field input').fill('remind me to call mum in 1 second');
   await o2.locator('.ov-field input').press('Enter');
   await o2.locator('.ov-text').filter({hasText:'Reminder set'}).waitFor();
