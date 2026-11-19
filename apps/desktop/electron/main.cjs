@@ -92,6 +92,9 @@ if(primary)app.whenReady().then(async()=>{
   handle('boxes-list',async()=>(await import('./boxes-ipc.mjs')).boxesList(settingsHome));
   handle('boxes-checkpoints',async id=>(await import('./boxes-ipc.mjs')).boxCheckpoints(settingsHome,id));
   handle('boxes-restore',async p=>(await import('./boxes-ipc.mjs')).boxRestore(settingsHome,p?.id,p?.checkpoint));
+  handle('boxes-manifest',async()=>(await import('./boxes-ipc.mjs')).boxesManifest());
+  handle('boxes-slots',async()=>(await import('./boxes-ipc.mjs')).boxesSlots(settingsHome));
+  handle('boxes-activate',async()=>(await import('./boxes-ipc.mjs')).boxesActivate(settingsHome));
   handle('boxes-fork',async p=>(await import('./boxes-ipc.mjs')).boxFork(settingsHome,p?.id,p?.checkpoint));
   handle('budget-get',async()=>(await import('./budget-caps.mjs')).budgetState(settingsHome));
   handle('budget-set',async caps=>{const m=await import('./budget-caps.mjs');m.writeCaps(settingsHome,caps);return m.budgetState(settingsHome);});
