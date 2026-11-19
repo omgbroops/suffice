@@ -8,6 +8,8 @@ import { threadViewState } from '../thread-view-state.js';
 import { createVoiceConversation } from './conversation.js';
 import { createOrb } from './orb.js';
 import { icon } from '../ui.js';
+import { preference } from '../settings-preferences.js';
+import { callEstimate, voiceByLabel } from './backend-voices.js';
 
 const glyph = paths => `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
 const MIC = glyph('<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>');
@@ -65,6 +67,14 @@ export function connectVoice({ form, prompt, toast = () => {}, api = window.suff
   right.append(mute, fullButton, stopButton);
   strip.append(left, right);
   form.before(strip);
+
+  // Before a paid call: one line with the price for a 5 minute call, in the strip's own slot. Free providers (the offline fake) skip it.
+  const estimate = el('div', 'voice-estimate', { role: 'group', 'aria-label': 'Voice call estimate' }); estimate.hidden = true;
+  const estimateText = el('span', 'voice-estimate-text'), estimateControls = el('div', 'voice-estimate-controls');
+  const estimateCancel = el('button', 'voice-estimate-btn', { type: 'button' }), estimateGo = el('button', 'voice-estimate-btn voice-estimate-go', { type: 'button' });
+  estimateCancel.textContent = 'Cancel'; estimateGo.textContent = 'Start call';
+  estimateControls.append(estimateCancel, estimateGo); estimate.append(estimateText, estimateControls);
+  strip.before(estimate);
 
   // Full voice: a call view over the workspace. One calm orb, one word, three round
   // controls. The thread keeps filling in behind it.
@@ -154,9 +164,19 @@ export function connectVoice({ form, prompt, toast = () => {}, api = window.suff
     delete window.__sufficeVoice;
   }
   const canStart = () => form.modelsDisabled ? { ok: false, reason: 'Enable a model in Settings, Models, first.' } : form.dataset.requireProject === 'true' ? { ok: false, reason: 'Choose a project above the composer first.' } : { ok: true };
+  // A URL parameter or saved test value wins; otherwise Settings, Agent, Voice provider (default Cascade).
+  const chosenKind = () => setting('voiceProvider', '') || voiceByLabel(preference('voice-provider', 'Cascade')).kind;
+  let afterStart = null;
+  const closeEstimate = () => { estimate.hidden = true; afterStart = null; };
+  function begin(after) {
+    if (conversation) return after?.();
+    const quote = callEstimate(chosenKind());
+    if (!quote) return start().then(() => after?.());
+    estimateText.textContent = `${quote.title}: ${quote.text}`; afterStart = after; estimate.hidden = false; estimateGo.focus({ preventScroll: true });
+  }
   async function start() {
     if (conversation) return;
-    const kind = setting('voiceProvider', 'openai-realtime');
+    const kind = chosenKind();
     let deviceId; try { deviceId = localStorage.getItem('suffice-voice-device') || undefined; } catch {}
     const current = conversation = createVoiceConversation({
       kind, onEvent,
@@ -189,7 +209,10 @@ export function connectVoice({ form, prompt, toast = () => {}, api = window.suff
     relay();
   }
 
-  startButton.addEventListener('click', () => (conversation ? stop() : void start()));
+  startButton.addEventListener('click', () => (conversation ? stop() : !estimate.hidden ? closeEstimate() : void begin()));
+  estimateCancel.addEventListener('click', () => { closeEstimate(); prompt.focus({ preventScroll: true }); });
+  estimateGo.addEventListener('click', () => { const after = afterStart; closeEstimate(); void start().then(() => after?.()); });
+  estimate.addEventListener('keydown', event => { if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); closeEstimate(); prompt.focus({ preventScroll: true }); } });
   stopButton.addEventListener('click', stop); fullEnd.addEventListener('click', stop);
   fullButton.addEventListener('click', () => setMode('full')); fullMute.addEventListener('click', toggleMute); fullMini.addEventListener('click', () => setMode('mini'));
   // Focus cycle for the open call view: its buttons, then any toast buttons (the toast sits outside the view).
@@ -210,9 +233,9 @@ export function connectVoice({ form, prompt, toast = () => {}, api = window.suff
   document.addEventListener('keydown', event => {
     if (!(event.ctrlKey || event.metaKey) || !event.shiftKey) return;
     const key = event.key.toLowerCase();
-    if (key === 'm') { event.preventDefault(); if (conversation) stop(); else void start(); }
+    if (key === 'm') { event.preventDefault(); if (conversation) stop(); else void begin(); }
     else if (key === 'u' && conversation) { event.preventDefault(); toggleMute(); }
   }, true);
 
-  return { start, stop, toggle: () => (conversation ? stop() : void start()), full: async () => { if (!conversation) await start(); if (conversation) setMode('full'); }, minimize: async () => { if (!conversation) await start(); if (conversation) setMode('mini'); }, get active() { return !!conversation; }, get mode() { return mode; } };
+  return { start, stop, toggle: () => (conversation ? stop() : void begin()), full: () => begin(() => conversation && setMode('full')), minimize: () => begin(() => conversation && setMode('mini')), get active() { return !!conversation; }, get mode() { return mode; } };
 }

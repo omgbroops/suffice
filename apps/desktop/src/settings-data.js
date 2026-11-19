@@ -1,3 +1,4 @@
+import {voiceLabels,priceNotes} from './voice/backend-voices.js';
 const toggle=(id,label,value=false,detail='')=>({id,label,value,detail,type:'toggle'});
 const select=(id,label,value,options,detail='')=>({id,label,value,options,detail,type:'select'});
 const keys=(label,value)=>({label,value,type:'keys'});
@@ -36,7 +37,7 @@ export const settingsSections=[
  ...[['mcps','Tools & MCP','plug'],['skills','Skills','code'],['extensions','Extensions','puzzle'],['templates','Prompt templates','files']].map(([id,title,icon])=>({id,subtitle:'',title,icon,category:'Agent',groups:[{title:'Resources',rows:[],empty:'Loading…'}]})),
  {id:'agent',subtitle:'',title:'Agent',icon:'bolt',category:'Agent',groups:[
   group('Ask bar',[toggle('local-agent','Screen-aware ask bar'),toggle('keys-trigger','Double-tap Option opens Suffice',true)]),
-  group('Voice',[toggle('voice-input','Voice input',true),toggle('voice-auto-send','Send when speech ends')]),
+  group('Voice',[select('voice-provider','Voice provider','Cascade',voiceLabels(),priceNotes()+'. Estimates.'),toggle('voice-input','Voice input',true),toggle('voice-auto-send','Send when speech ends')]),
   group('Execution',[select('execution-shell','Command shell','Native Bash',['Native Bash','PowerShell','System default']),toggle('allow-network','Browser & desktop tools',true),toggle('background-agents','Allow background agents',true)]),
   group('Computer use',[toggle('computer-use','Computer use sessions',false,'Lets an agent drive a web page for you. Risky steps wait for your approval.')]),
   group('Transcript',[toggle('collapse-work','Collapse completed actions',true),toggle('show-reasoning','Show reasoning status',true),toggle('stream-markdown','Render Markdown while streaming',true)]),

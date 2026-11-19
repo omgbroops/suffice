@@ -1,7 +1,7 @@
 /* Voice strip: one slim bar directly above the composer, in the same dark glass as the
    composer and chips. Status on the left, controls on the right, nothing else.
    Geometry: one inset (6px) on all four sides; outer radius 12 = control radius 6 + inset 6. */
-.voice-strip {
+.voice-strip, .voice-estimate {
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
   width: 100%; height: 36px; margin: 0 0 8px; padding: 6px; border-radius: 12px;
   background: var(--shared-chrome-fill, var(--surface-composer)); color: var(--text);
@@ -24,7 +24,7 @@
 .voice-meter[data-source='agent'] .voice-bar[data-on='true'] { background: var(--text-strong); }
 .voice-meter + .voice-meter { margin-left: 8px; }
 
-.voice-control {
+.voice-control, .voice-estimate-btn {
   height: 24px; padding: 0 8px; border: 0; border-radius: 6px; background: transparent;
   color: var(--text-muted); font-size: 12px; line-height: 24px; font-weight: 500;
 }
@@ -34,9 +34,9 @@
 .voice-start[aria-pressed='true'] { background: var(--selected-fill, var(--surface-active)); color: var(--text-strong); }
 
 @media (hover: hover) and (pointer: fine) {
-  .voice-control:hover { background: var(--hover-fill, var(--surface-hover)); color: var(--text-strong); }
+  :is(.voice-control, .voice-estimate-btn):hover { background: var(--hover-fill, var(--surface-hover)); color: var(--text-strong); }
 }
-.voice-control:focus-visible { outline: 2px solid var(--focus-ring, var(--focus)); outline-offset: 1px; }
+:is(.voice-control, .voice-estimate-btn):focus-visible { outline: 2px solid var(--focus-ring, var(--focus)); outline-offset: 1px; }
 /* Reduced motion drops the meters and keeps the controls. */
 .reduce-motion .voice-meter { display: none; }
 @media (prefers-reduced-motion: reduce) { .voice-meter { display: none; } }
@@ -72,3 +72,9 @@
 .desktop-app[data-keyboard='true'] .voice-full:not([hidden]), .desktop-app[data-keyboard='true'] .voice-full:not([hidden]) .voice-orb,
 .reduce-motion .voice-full:not([hidden]), .reduce-motion .voice-full:not([hidden]) .voice-orb { animation: none; }
 @media (prefers-reduced-motion: reduce) { .voice-full:not([hidden]), .voice-full:not([hidden]) .voice-orb { animation: none; } }
+
+/* Call estimate: the same strip, one line of text and two controls. */
+.voice-estimate[hidden] { display: none; }
+.voice-estimate-text { min-width: 0; padding-left: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; line-height: 20px; font-weight: 500; color: var(--text-strong); }
+.voice-estimate-controls { display: flex; align-items: center; gap: 2px; }
+.voice-estimate-go { color: var(--text-strong); }

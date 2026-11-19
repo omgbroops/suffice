@@ -5,6 +5,7 @@ import { createVoiceProvider } from './provider.js';
 import { createVoiceState } from './state.js';
 import './provider-fake.js';
 import './provider-realtime.js';
+import './provider-cascade.js';
 
 const PROGRESS_INTERVAL_MS = 2000;
 const LEVEL_INTERVAL_MS = 90;
