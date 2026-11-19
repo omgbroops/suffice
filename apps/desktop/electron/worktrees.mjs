@@ -2,7 +2,7 @@
 // list/pin/evict, snapshot-before-delete + restore, no-change cleanup, dev-server port ranges.
 // Ideas: Cline Kanban symlinked deps (github.com/cline/kanban), Codex worktrees; code written in-repo.
 // Turn checkpoints and rewind live in rewind.mjs (private refs, whole-tree capture), not here.
-import {mkdir,readFile,writeFile,readdir,lstat,unlink,rm,copyFile,symlink,stat,access} from 'node:fs/promises';
+import {mkdir,readFile,writeFile,readdir,lstat,unlink,rm,copyFile,symlink,stat,access,realpath} from 'node:fs/promises';
 import {join,dirname,resolve,relative,isAbsolute,sep} from 'node:path';
 import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
@@ -40,7 +40,7 @@ async function linkDeps(repo,dest){
 }
 // Lowest free block of PORT_SPAN ports not held by another worktree.
 export function allocatePorts(items){
- const used=new Set(Object.values(items).map(i=>i.portBase).filter(Number.isInteger));
+ const used=new Set(Object.values(items).filter(i=>!i.gone).map(i=>i.portBase).filter(Number.isInteger));
  let base=PORT_BASE;while(used.has(base))base+=PORT_SPAN;
  return {portBase:base,portEnd:base+PORT_SPAN-1};
 }
@@ -51,20 +51,28 @@ export async function create(home,repo,{threadId,pinned=false}={}){
  const id=randomUUID().replace(/-/g,'').slice(0,8),path=join(home,'worktrees',id);
  await mkdir(join(home,'worktrees'),{recursive:true});
  await git(top,['worktree','add','--detach',path,base]);
+ const real=await realpath(path).catch(()=>path);
  const linked=await linkDeps(top,path),included=await copyIncluded(top,path);
  const meta=await readMeta(home);
- meta.items[id]={id,repo:top,path,base,threadId:threadId||null,pinned,created:Date.now(),...allocatePorts(meta.items)};
+ meta.items[id]={id,repo:top,path:real,base,threadId:threadId||null,pinned,created:Date.now(),...allocatePorts(meta.items)};
  await writeMeta(home,meta);
  return {...meta.items[id],linked,included};
 }
 
 // Register a worktree made elsewhere (thread-worktree.cjs) so the list, cap and ports cover it too.
 export async function adopt(home,repo,path,threadId){
+ path=await realpath(path);// git reports the realpath; keep path-equality lookups working
  const top=(await git(repo,['rev-parse','--show-toplevel'])).trim(),base=(await git(path,['rev-parse','HEAD'])).trim(),id=randomUUID().replace(/-/g,'').slice(0,8);
  await linkDeps(top,path);await copyIncluded(top,path);
  const meta=await readMeta(home);
  meta.items[id]={id,repo:top,path,base,threadId:threadId||null,pinned:false,created:Date.now(),...allocatePorts(meta.items)};
  await writeMeta(home,meta);return meta.items[id];
+}
+// The app registers a worktree under the client's pending id; swap in the real thread id once it exists.
+export async function claim(home,pendingId,threadId){
+ const meta=await readMeta(home);let n=0;
+ for(const i of Object.values(meta.items))if(i.threadId===pendingId){i.threadId=threadId;n++;}
+ if(n)await writeMeta(home,meta);return n;
 }
 async function sizeOf(dir,skipLinks=true){
  let total=0;
@@ -136,10 +144,10 @@ export async function restore(home,id){
  delete item.gone;delete item.removed;await writeMeta(home,meta);
  return item;
 }
-// Keep newest N live worktrees; evict the oldest unpinned (with snapshot) beyond that.
-export async function evict(home,keep=KEEP){
+// Keep newest N live worktrees; evict the oldest unpinned, not-running ones (with snapshot) beyond that.
+export async function evict(home,keep=KEEP,busy=new Set()){
  const meta=await readMeta(home),live=Object.values(meta.items).filter(i=>!i.gone).sort((a,b)=>b.created-a.created);
- const over=live.slice(keep).filter(i=>!i.pinned).reverse(),gone=[];
+ const over=live.slice(keep).filter(i=>!i.pinned&&!busy.has(i.threadId)).reverse(),gone=[];
  for(const i of over){await remove(home,i.id);gone.push(i.id);}
  return gone;
 }
