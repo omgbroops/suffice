@@ -19,7 +19,7 @@ test('rewind to a turn forks the conversation before it or after it',async()=>{
 });
 test('wiring: archive closes the worktree, adopt is awaited, rewind offers the conversation option',async()=>{
  const rd=f=>readFile(new URL('../'+f,import.meta.url),'utf8'),main=await rd('electron/main.cjs'),ui=await rd('src/threads-ui.js'),view=await rd('src/rewind-view.js');
- assert.match(main,/await w\.adopt\(/);
+ assert.match(main,/await w\.adopt\([^;]*\)\.catch\(\(\)=>\{\}\);/);
  assert.match(main,/action==='close'[^;]*closeThread/);
  assert.match(ui,/patch\.archived===true\)api\.worktreesAction\(\{action:'close'/);
  assert.match(view,/type='checkbox';chat\.checked=convo/);assert.match(view,/convo=false/);
