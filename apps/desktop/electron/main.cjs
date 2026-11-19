@@ -90,7 +90,7 @@ if(primary)app.whenReady().then(async()=>{
   handle('issues-update',({id,patch}={})=>issues.update(id,patch));
   handle('issues-delete',id=>issues.remove(id));
   handle('worktrees-list',async()=>(await import('./worktrees.mjs')).list(settingsHome));
-  handle('worktrees-action',async p=>{const w=await import('./worktrees.mjs');if(p?.action==='pin')return w.pin(settingsHome,p.id,p.pinned);if(p?.action==='remove')return w.remove(settingsHome,p.id);if(p?.action==='restore')return w.restore(settingsHome,p.id);if(p?.action==='close'&&typeof p.threadId==='string')return w.closeThread(settingsHome,p.threadId);throw new Error('Invalid worktree action');});
+  handle('worktrees-action',async p=>{const w=await import('./worktrees.mjs');if(p?.action==='pin')return w.pin(settingsHome,p.id,p.pinned);if(p?.action==='remove')return w.remove(settingsHome,p.id);if(p?.action==='restore')return w.restore(settingsHome,p.id);if(p?.action==='close'&&typeof p.threadId==='string')return (threadRuns.has(p.threadId)||background?.has?.(p.threadId))?Promise.reject(new Error('Stop this thread before archiving it')):w.closeThread(settingsHome,p.threadId);throw new Error('Invalid worktree action');});
   handle('budget-get',async()=>(await import('./budget-caps.mjs')).budgetState(settingsHome));
   handle('budget-set',async caps=>{const m=await import('./budget-caps.mjs');m.writeCaps(settingsHome,caps);return m.budgetState(settingsHome);});
   handle('usage-report',async()=>(await import('./usage-report.mjs')).readUsageReport(settingsHome));
