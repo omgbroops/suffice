@@ -20,10 +20,10 @@ const app=await _electron.launch({executablePath:electronPath,args:['-r','/Users
 try{
  const page=await app.firstWindow();page.setDefaultTimeout(15000);
  const shot=async n=>{if(!SHOTS)return;const b=await app.evaluate(async({BrowserWindow})=>(await BrowserWindow.getAllWindows()[0].webContents.capturePage()).toPNG().toString('base64'));await writeFile(resolve(SHOTS,n),Buffer.from(b,'base64'));};
- await page.locator('[data-action="send-menu"]').waitFor();
+ await page.locator('[data-action="send-menu"]').waitFor({state:'attached'});
  await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].setBounds({width:1440,height:900}));
  await page.waitForFunction(()=>innerWidth===1440&&innerHeight===900);
- const cwd=await app.evaluate(()=>process.env.SUFFICE_START_PROJECT);await page.evaluate(([a,p])=>sufficeDesktop.sessions.start({agent:a,cwd:p}),['fakeclaude',cwd]);await page.reload();await page.locator('[data-action="send-menu"]').waitFor();await page.locator('.sidebar-cli-sessions .thread-row').first().click();
+ const cwd=await app.evaluate(()=>process.env.SUFFICE_START_PROJECT);await page.evaluate(([a,p])=>sufficeDesktop.sessions.start({agent:a,cwd:p}),['fakeclaude',cwd]);await page.reload();await page.locator('[data-action="send-menu"]').waitFor({state:'attached'});await page.locator('.sidebar-cli-sessions .thread-row').first().click();
  await page.locator('.composer-approval:not([hidden])').waitFor({timeout:20000});
  await page.locator('.composer-approval button',{hasText:/^\s*(1\.\s*)?Yes\s*$/}).first().click();
  await page.waitForFunction(()=>!document.querySelector('.thread-messages > .thread-status'),null,{timeout:20000});await page.waitForTimeout(700);

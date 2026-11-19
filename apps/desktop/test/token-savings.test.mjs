@@ -18,9 +18,9 @@ test('token savings toggles are reachable in Settings, persist, and the limit se
   const page=await app.firstWindow();page.setDefaultTimeout(15000);
   await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].setBounds({width:1440,height:900}));
   await page.waitForFunction(()=>innerWidth===1440&&innerHeight===900);
-  const open=async()=>{await page.getByRole('button',{name:'Settings',exact:true}).click();await page.getByRole('button',{name:'Context & memory',exact:true}).click();};
+  const open=async()=>{await page.getByRole('button',{name:'Settings',exact:true}).click();await page.getByRole('button',{name:'Agent',exact:true}).click();};
   const shot=async name=>{if(!process.env.SHOTS)return;await mkdir(process.env.SHOTS,{recursive:true});await page.waitForTimeout(400);const b=await app.evaluate(async({BrowserWindow})=>(await BrowserWindow.getAllWindows()[0].webContents.capturePage()).toPNG().toString('base64'));await writeFile(resolve(process.env.SHOTS,name+'.png'),Buffer.from(b,'base64'));};
-  const mode=async m=>{await page.getByRole('button',{name:'Appearance',exact:true}).click();await page.getByRole('group',{name:'Mode',exact:true}).getByRole('button',{name:m,exact:true}).click();await page.getByRole('button',{name:'Context & memory',exact:true}).click();};
+  const mode=async m=>{await page.getByRole('button',{name:'Appearance',exact:true}).click();await page.getByRole('group',{name:'Mode',exact:true}).getByRole('button',{name:m,exact:true}).click();await page.getByRole('button',{name:'Agent',exact:true}).click();};
   await open();
   const defer=page.getByRole('switch',{name:'Load MCP tool details on demand',exact:true}),compact=page.getByRole('switch',{name:'Shorten large tool results',exact:true});
   assert.equal(await defer.getAttribute('aria-checked'),'true');assert.equal(await compact.getAttribute('aria-checked'),'true');

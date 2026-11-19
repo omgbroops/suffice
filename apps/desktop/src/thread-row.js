@@ -27,7 +27,7 @@ export function populateThreadRow(row,thread,{draft=false,unread=false,pinned=fa
  row.classList.add('thread-card');row.dataset.status=thread.status||'idle';row.dataset.unread=String(unread);row.dataset.nested=String(nested);row.dataset.richTooltip='true';
  const title=span('thread-card-title row-title',thread.title),heading=span('thread-card-heading');
  if(thread.agent){const mark=span('thread-provider');mark.append(providerMark(thread.provider));heading.append(mark);}else if(badge)heading.append(projectBadge(thread));
- if(thread.forkOf){const marker=span('thread-fork-mark');marker.innerHTML=icon('branch');marker.setAttribute('role','img');marker.setAttribute('aria-label','Forked from '+thread.forkOf.title);marker.title='Forked from '+thread.forkOf.title;heading.append(marker);}
+ if(thread.forkOf){const marker=span('thread-fork-mark');marker.innerHTML=icon('branch');marker.setAttribute('role','img');marker.setAttribute('aria-label','Forked from '+thread.forkOf.title);marker.title='Forked from '+thread.forkOf.title;marker.addEventListener('click',event=>{event.stopPropagation();document.dispatchEvent(new CustomEvent('suffice-open-thread',{detail:{id:thread.forkOf.id}}));});heading.append(marker);}
  heading.append(title);
  if(pinned){const marker=span('thread-pin');marker.innerHTML=icon('pin');marker.setAttribute('role','img');marker.setAttribute('aria-label','Pinned');heading.append(marker);}
  if(draft){const marker=span('thread-draft');marker.innerHTML=icon('pencil');marker.setAttribute('role','img');marker.setAttribute('aria-label','Unsent draft');heading.append(marker);}

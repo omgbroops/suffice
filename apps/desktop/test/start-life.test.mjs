@@ -59,12 +59,12 @@ test('Start screen: mark and title, typed suggestion from real repo state, three
   assert.deepEqual(calm.filter(v=>v!==full&&v!==''&&full.startsWith(v)),[],'no partial text under reduced motion '+JSON.stringify(calm));
   await page.emulateMedia({reducedMotion:'no-preference'});await page.reload();await page.locator('.start-card').first().waitFor();
   if(SHOTS)for(const th of ['dark','light']){await page.evaluate(t=>{localStorage.setItem('suffice-theme',t);},th);await page.reload();await page.locator('.start-card').first().waitFor();await page.waitForTimeout(4000);await shot(resolve(SHOTS,'home-'+th+'.png'));}
-  // Needs-you: a thread waiting on approval raises the pill and it opens that thread.
+  // Needs-you: a thread waiting on approval no longer raises a start-screen chip (the sidebar Needs you badge owns it).
   await page.evaluate(()=>{const r=document.querySelector('.sidebar .thread-row');r.dataset.status='approval';r.append(document.createElement('i'));});
-  await page.waitForFunction(()=>document.querySelector('.life-needs')?.dataset.count==='1');
-  assert.equal(await page.locator('.life-needs').textContent(),'1 needs you');
+  await page.waitForTimeout(300);
+  assert.equal(await page.locator('.life-needs').count(),0);
   await page.evaluate(()=>{const r=document.querySelector('.sidebar .thread-row');r.dataset.status='done';r.append(document.createElement('i'));});
-  await page.waitForFunction(()=>!document.querySelector('.life-needs'));
+  assert.equal(await page.locator('.life-needs').count(),0);
   await page.locator('.suggest-key').click();assert.match(await page.locator('#prompt').inputValue(),/^Fix the failing test/);await page.locator('#prompt').fill('');
   // Tab on an empty box writes the real-state suggestion in.
   const prompt=page.locator('#prompt');await prompt.click({position:{x:8,y:8}});await page.keyboard.press('Tab');

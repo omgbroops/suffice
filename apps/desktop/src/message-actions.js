@@ -16,7 +16,11 @@ export function connectMessageActions(workspace,transcript){
  // The bar sits in normal flow: a reserved slot right after the message holds it, so it never covers the next message.
  const slotAfter=anchor=>anchor?.nextElementSibling?.classList.contains('message-actions-slot')?anchor.nextElementSibling:null;
  function ensureSlot(anchor,role){if(!anchor?.parentNode)return null;let slot=slotAfter(anchor);if(!slot){slot=document.createElement('div');slot.className='message-actions-slot';anchor.after(slot);}slot.dataset.role=role;return slot;}
- function place(turn){if(turn.active||!turn.anchor?.parentNode)return;const slot=ensureSlot(turn.anchor,'assistant');if(turn.slotEl&&turn.slotEl!==slot)turn.slotEl.remove();turn.slotEl=slot;if(!turn.bar){turn.bar=document.createElement('div');turn.bar.className='message-toolbar';turn.bar.setAttribute('role','toolbar');}fill(turn.bar,turn);if(turn.bar.parentNode!==slot)slot.append(turn.bar);}
+ const lazyBars=new WeakMap(),lazyIO=new IntersectionObserver(entries=>{for(const e of entries){const turn=lazyBars.get(e.target);if(!turn||turn.active)continue;if(e.isIntersecting){if(!turn.bar.firstChild)fill(turn.bar,turn);}else{turn.bar.replaceChildren();turn.bar.hidden=true;}}},{rootMargin:'1200px 0px'});
+ function place(turn){if(turn.active||!turn.anchor?.parentNode)return;const slot=ensureSlot(turn.anchor,'assistant');if(turn.slotEl&&turn.slotEl!==slot)turn.slotEl.remove();turn.slotEl=slot;if(!turn.bar){turn.bar=document.createElement('div');turn.bar.className='message-toolbar';turn.bar.setAttribute('role','toolbar');}
+  // Long transcripts build each turn's bar only while its slot is near the viewport, so the DOM stays bounded.
+  if(turn.lazy??=turn.anchor.parentNode.childElementCount>240){lazyBars.set(slot,turn);lazyIO.observe(slot);if(turn.bar.firstChild)fill(turn.bar,turn);else turn.bar.hidden=true;}else fill(turn.bar,turn);
+  if(turn.bar.parentNode!==slot)slot.append(turn.bar);}
  function position(){if(!shown?.anchor?.isConnected||shown.active){hide();return;}const slot=ensureSlot(shown.anchor,shown.role);if(slot&&bar.parentNode!==slot)slot.append(bar);}
  function fill(bar,info){
   bar.replaceChildren();bar.dataset.role=info.role;bar.setAttribute('aria-label',info.role==='user'?'User message actions':'Agent turn actions');

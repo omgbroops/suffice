@@ -9,7 +9,7 @@ const el=(tag,cls,text)=>{const node=document.createElement(tag);if(cls)node.cla
 
 // Composer chip + popover: what the next turn will send, per category, with removal and summaries-only.
 export function connectContextInspector({api,form,toast}){
- const choices=new Map();let data=null,panel=null,off=null,viewing=0,loads=0;
+ const choices=new Map();let data=null,used=null,panel=null,off=null,viewing=0,loads=0;
  const mine=id=>{if(!choices.has(id))choices.set(id,{exclude:new Set(),summaries:false});return choices.get(id);};
  const chip=el('button','button context-chip');chip.type='button';chip.setAttribute('aria-haspopup','dialog');chip.setAttribute('aria-expanded','false');chip.setAttribute('aria-label','Context inspector');
  form.querySelector('.toolbar-right').prepend(chip);
@@ -19,13 +19,15 @@ export function connectContextInspector({api,form,toast}){
   return items.reduce((sum,item)=>choice.exclude.has(item.id)&&!item.fixed?sum:sum+(choice.summaries&&item.summaryTokens!=null?item.summaryTokens:item.tokens),0);
  }
  function paintChip(){
-  const id=viewState.id,total=data?.items?.length?nextTotal(data.items,mine(id)):0;
+  const id=viewState.id,total=data?.items?.length?nextTotal(data.items,mine(id)):(used||0);
   chip.innerHTML=icon('context')+`<span>${fmt(total)}</span>`;chip.title=`Context: ${total.toLocaleString()} tokens`;
  }
  async function load(){
   const id=viewState.id,run=++loads;
-  if(!id||String(id).startsWith('session-')||String(id).startsWith('pending:')){data=null;paintChip();return;}
-  try{const result=await api.context(id);if(run!==loads)return;data=result;}catch{if(run!==loads)return;data=null;}
+  if(!id||String(id).startsWith('session-')){data=null;used=null;paintChip();return;}
+  if(String(id).startsWith('pending:'))data=null;else try{const result=await api.context(id);if(run!==loads)return;data=result;}catch{if(run!==loads)return;data=null;}
+  // Threads without an inspectable context still show what the run used.
+  try{const u=await api.usage?.(id);if(run!==loads)return;used=Number.isFinite(u?.totalTokens)?u.totalTokens:null;}catch{used=null;}
   paintChip();if(panel)paintPanel();
  }
 

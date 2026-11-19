@@ -473,7 +473,7 @@ const spotlight=createSpotlight({commands:()=>[
  {id:'background-send',title:'Start session in background',icon:'play',run:()=>act('background-send:start')},
  {id:'home',title:'Go home',icon:'home',run:()=>document.querySelector('[data-action="brand-home"]')?.click()},
  {id:'theme',title:getTheme()==='dark'?'Use light theme':'Use dark theme',icon:'agent',run:()=>setTheme(getTheme()==='dark'?'light':'dark')},
- {id:'ask-screen',title:'Ask about my screen',icon:'monitor',run:()=>{if(!preference('local-agent',false)){toast('Turn on the screen-aware ask bar in Settings first.');showSettings();return;}window.sufficeDesktop?.askBar?.open().catch(error=>toast(error.message));}},
+ {id:'ask-screen',title:'Ask about my screen',icon:'monitor',run:()=>{if(!preference('local-agent',false)){toast('Turn on the screen-aware ask bar in Settings first.');document.dispatchEvent(new CustomEvent('suffice-open-settings',{detail:{section:'agent'}}));return;}window.sufficeDesktop?.askBar?.open().catch(error=>toast(error.message));}},
  ...Object.keys(backgroundPresets).map(key=>({id:'background:'+key,title:'Background: '+backgroundPresets[key].label,icon:'monitor',run:()=>act('background:'+key)})),
  {id:'motion',title:'Pause or resume background animation',icon:'pause',run:()=>act('motion:toggle')},
  ...['Normal Fast','Normal','Deep'].map(label=>({id:'model:'+label,title:'Model speed: '+label,icon:'bolt',run:()=>act('model:'+label)})),
