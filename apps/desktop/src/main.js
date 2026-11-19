@@ -130,6 +130,8 @@ document.querySelector('#app').innerHTML = `
 
     <div class="session-section"><div class="section-label"><span id="sidebar-section-label">Threads</span></div><div class="sidebar-sessions">${sessions.map((s, i) => sessionRow(s, i, true)).join('')}</div></div>
 
+    <div class="reminders-section" hidden><div class="section-label"><span>Reminders</span></div><div class="reminders-list"></div></div>
+
     <div class="sidebar-account"><button type="button" class="account-button" data-action="account-menu" aria-label="Account"><span class="account-avatar" aria-hidden="true"></span><span class="account-text"><span class="account-name">Account</span><span class="account-plan">Free</span></span>${icon('chevron')}</button>${button('Settings', { icon: 'gear', action: 'settings', className: 'settings-gear' })}</div>
 
   </aside>
