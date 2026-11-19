@@ -133,6 +133,7 @@
 
 /* Queued messages sit on the same well as the box they belong to. */
 .desktop-app .queued-messages { background: var(--well-fill); }
+.desktop-app.desktop-app .thread-view .queued-messages { background: linear-gradient(var(--well-fill), var(--well-fill)), var(--surface-card); }
 
 /* Starter cards: raised. */
 .desktop-app .start-card { background: var(--raised-fill); box-shadow: var(--raised-shadow); transition: background-color var(--duration-hover) var(--ease-out), transform var(--duration-hover) var(--ease-out); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }

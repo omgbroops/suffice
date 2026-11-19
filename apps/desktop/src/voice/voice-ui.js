@@ -45,7 +45,7 @@ export function connectVoice({ form, prompt, toast = () => {}, api = window.suff
   if (!form || !prompt) return null;
   const el = (tag, className, attrs = {}) => { const node = document.createElement(tag); node.className = className; for (const [key, value] of Object.entries(attrs)) node.setAttribute(key, value); return node; };
 
-  const startButton = el('button', 'button button--ghost voice-start', { type: 'button', 'aria-label': 'Start voice conversation', title: 'Start voice conversation', 'aria-pressed': 'false' });
+  const startButton = el('button', 'button button--ghost voice-start', { type: 'button', 'aria-label': 'Start a voice call', title: 'Start a voice call', 'aria-pressed': 'false' });
   startButton.innerHTML = MIC;
   form.querySelector('.send-group')?.before(startButton);
 
@@ -157,7 +157,7 @@ export function connectVoice({ form, prompt, toast = () => {}, api = window.suff
   function close() {
     conversation = null; liveReply = null; spokenUser = null;
     strip.hidden = true; delete strip.dataset.state; delete form.dataset.voiceState; delete form.dataset.voice;
-    startButton.setAttribute('aria-pressed', 'false'); startButton.setAttribute('aria-label', 'Start voice conversation'); startButton.title = 'Start voice conversation';
+    startButton.setAttribute('aria-pressed', 'false'); startButton.setAttribute('aria-label', 'Start a voice call'); startButton.title = 'Start a voice call';
     mute.setAttribute('aria-pressed', 'false'); mute.textContent = 'Mute';
     orb.setState('idle'); fullOrb.setState('idle'); full.hidden = true; mode = 'inline'; void api?.voiceWindow?.('close');
     fullMute.innerHTML = MIC; fullMute.setAttribute('aria-label', 'Mute microphone'); fullMute.title = 'Mute microphone';
@@ -196,7 +196,7 @@ export function connectVoice({ form, prompt, toast = () => {}, api = window.suff
       },
     });
     strip.hidden = false; form.dataset.voice = 'on';
-    startButton.setAttribute('aria-pressed', 'true'); startButton.setAttribute('aria-label', 'Stop voice conversation'); startButton.title = 'Stop voice conversation';
+    startButton.setAttribute('aria-pressed', 'true'); startButton.setAttribute('aria-label', 'Stop voice call'); startButton.title = 'Stop voice call';
     // Test and demo hook; only present with the offline provider.
     if (kind === 'fake') window.__sufficeVoice = { conversation: current, emit: event => current.emit?.(event), orb };
     try { await current.start(); } catch (error) { toast(error?.message || 'Voice could not start.'); if (conversation === current) close(); }
