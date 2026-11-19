@@ -11,7 +11,7 @@ export async function mountBoxes(body,{api,valid}){
   for(const x of items){const row=el('button','rewind-item');row.type='button';row.dataset.id=x.id;row.setAttribute('role','option');row.setAttribute('aria-selected',String(x.id===sel));row.tabIndex=x.id===sel?0:-1;
    const t=el('span','rewind-text');t.append(el('span','rewind-name',x.name),el('span','rewind-meta',[x.state,x.created&&new Date(x.created).toLocaleString()].filter(Boolean).join(' · ')||x.id));
    row.append(el('span','rewind-dot'),t);row.addEventListener('click',()=>onPick(x.id));list.append(row);}
-  list.addEventListener('keydown',ev=>{const i=items.findIndex(x=>x.id===sel),d={ArrowDown:1,ArrowUp:-1}[ev.key];if(!d)return;ev.preventDefault();const n=items[i+d];if(n)onPick(n.id);});
+  list.addEventListener('keydown',ev=>{const i=items.findIndex(x=>x.id===sel),d={ArrowDown:1,ArrowUp:-1}[ev.key],n=ev.key==='Home'?items[0]:ev.key==='End'?items[items.length-1]:d&&items[i+d];if(!d&&!n)return;ev.preventDefault();if(n)onPick(n.id);});
   return list;
  };
  function draw(){
@@ -48,6 +48,8 @@ export async function mountBoxes(body,{api,valid}){
   row.append(fork,res);box.append(row);return box;
  }
  draw();
- try{const r=await api.boxesList();if(!valid())return;st.connected=r.connected;st.boxes=r.boxes;if(r.boxes.length)await pickBox(r.boxes[0].id);else draw();}
+ // Poll so boxes created or removed elsewhere show up; the loop ends when the panel is gone.
+ const poll=async()=>{await new Promise(r=>setTimeout(r,4000));if(!valid())return;try{const r=await api.boxesList();if(!valid())return;if(st.phase!=='working'&&JSON.stringify([r.connected,r.boxes])!==JSON.stringify([st.connected,st.boxes])){st.connected=r.connected;st.boxes=r.boxes;if(st.box&&!r.boxes.some(b=>b.id===st.box)){st.box=null;st.cks=[];st.ck=null;st.phase='idle';}if(!st.box&&r.boxes.length)await pickBox(r.boxes[0].id);else draw();}}catch{}poll();};
+ try{const r=await api.boxesList();if(!valid())return;st.connected=r.connected;st.boxes=r.boxes;if(r.boxes.length)await pickBox(r.boxes[0].id);else draw();poll();}
  catch(e){if(valid())root.replaceChildren(empty('Couldn’t load boxes',e.message));}
 }

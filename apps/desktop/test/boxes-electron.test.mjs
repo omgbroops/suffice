@@ -23,7 +23,7 @@ function fakeApi(){
   if(m&&m[2]==='rewind'){const list=cks[m[1]];list.push({id:'ck-safe',vm_id:m[1],name:'before-restore',created_at:'2026-11-18T13:00:00Z'});return send(200,{ok:true});}
   if(m&&m[2]==='fork'){const v={id:'vm-cccccccc03',name:'fork-of-agent-run-a',state:'running'};vms.push(v);cks[v.id]=[];return send(201,v);}
   send(404,{error:{code:'not_found',message:'no'}});});});
- return new Promise(r=>server.listen(0,'127.0.0.1',()=>r({server,calls,url:'http://127.0.0.1:'+server.address().port})));
+ return new Promise(r=>server.listen(0,'127.0.0.1',()=>r({server,calls,vms,cks,url:'http://127.0.0.1:'+server.address().port})));
 }
 test('boxes tab: list, checkpoints, restore, fork and not-connected state',{timeout:120000},async()=>{
  const fake=await fakeApi();
@@ -67,6 +67,18 @@ test('boxes tab: list, checkpoints, restore, fork and not-connected state',{time
    await page.locator('.rewind-line',{hasText:'Forked'}).waitFor();
    const fk=fake.calls.find(c=>c.url.endsWith('/fork'));assert.equal(fk.body.checkpoint,'ck-3');
    assert.equal(await page.locator('.boxes-list .rewind-item').count(),3);await shot('forked');
+   // End jumps to the last checkpoint, Home back to the first.
+   await cks.nth(1).focus();await page.keyboard.press('End');assert.equal(await cks.nth(await cks.count()-1).getAttribute('aria-selected'),'true');
+   await page.keyboard.press('Home');assert.equal(await cks.nth(0).getAttribute('aria-selected'),'true');
+   // Long unbroken names wrap instead of widening the scroller.
+   fake.cks['vm-bbbbbbbb02']=Array.from({length:40},(_,i)=>({id:'ck-l'+i,vm_id:'vm-bbbbbbbb02',name:('long-name-'+i+'-').padEnd(120,'x'),created_at:'2026-11-18T10:00:00Z'}));
+   await page.locator('.boxes-list .rewind-item[data-id="vm-bbbbbbbb02"]').click();await cks.nth(39).waitFor();
+   assert.equal(await page.locator('.rewind-scroll').evaluate(n=>n.scrollWidth<=n.clientWidth),true);
+   // Boxes created or removed elsewhere appear without reopening the tab.
+   fake.vms.push({id:'vm-dddddddd04',name:'made-elsewhere',state:'running'});
+   await page.locator('.boxes-list .rewind-item[data-id="vm-dddddddd04"]').waitFor({timeout:10000});
+   fake.vms.splice(fake.vms.findIndex(v=>v.id==='vm-dddddddd04'),1);
+   await page.locator('.boxes-list .rewind-item[data-id="vm-dddddddd04"]').waitFor({state:'detached',timeout:10000});
    assert.deepEqual(stderr.filter(l=>l.includes('[no-dialog]')),[]);
   }finally{await app.close();}
  }finally{fake.server.close();}
