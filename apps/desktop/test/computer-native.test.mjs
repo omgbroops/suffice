@@ -13,3 +13,15 @@ test('computer-start with app drives nativeDesktop and presses by ref',{timeout:
  assert.equal(d.state,'done');assert.equal(d.start,'Notes');assert.equal(d.answer,'Pressed New Note');
  assert.equal(d.steps[0].action,'click');
 });
+
+test('missing ax-snapshot binary gives a clear message, not ENOENT',{timeout:30000},async()=>{
+ const c=createComputer({dataDir:await mkdtemp(resolve(tmpdir(),'suffice-cu-nobin-')),env:{SUFFICE_AX_BIN:resolve(tmpdir(),'no-such-ax-snapshot')},send(){}});
+ await assert.rejects(c.handlers['computer-start']({goal:'make a note',app:'Notes'}),e=>/Native control unavailable/.test(e.message)&&!/ENOENT/.test(e.message));
+});
+
+test('build-ax-snapshot.sh produces a binary',{timeout:240000,skip:process.platform!=='darwin'},async()=>{
+ const {execFileSync}=await import('node:child_process'),{existsSync}=await import('node:fs');
+ const out=resolve(await mkdtemp(resolve(tmpdir(),'suffice-ax-build-')),'ax-snapshot');
+ execFileSync('sh',[new URL('../native/build-ax-snapshot.sh',import.meta.url).pathname,out]);
+ assert.ok(existsSync(out));
+});

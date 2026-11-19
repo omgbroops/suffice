@@ -56,8 +56,10 @@ export function createComputer({dataDir, env = process.env, send}) {
   live.set(id, ac);
   let deps, win = null;
   if (app) { // native app: ax-snapshot refs, no CDP
+   const bin = env.SUFFICE_AX_BIN || fileURLToPath(new URL('../native/ax-snapshot', import.meta.url));
+   if (!fake && !fs.existsSync(bin)) { live.delete(id); throw new Error('Native control unavailable: ax-snapshot is not built. Run: sh apps/desktop/native/build-ax-snapshot.sh'); }
    if (!fake && !backend) throw new Error('Backend is not ready');
-   const f = fake ? fakeNative() : null, bin = env.SUFFICE_AX_BIN || fileURLToPath(new URL('../native/ax-snapshot', import.meta.url));
+   const f = fake ? fakeNative() : null;
    deps = {desktop: nativeDesktop(f ? f.exec : (b, a) => new Promise((res, rej) => execFile(b, a, {timeout: 30000, maxBuffer: 8 << 20}, (e, out) => e ? rej(e) : res(out))), bin), decide: f ? f.decide : backend.decide};
   }
   else if (fake) { const f = fakeComputer(url.href); deps = {browser: f.browser, decide: f.decide}; }

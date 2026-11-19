@@ -1,6 +1,7 @@
 import {execFileSync} from 'node:child_process';
 import {createRequire} from 'node:module';
 import {dirname,resolve} from 'node:path';
+import {fileURLToPath} from 'node:url';
 import {lstat,chmod} from 'node:fs/promises';
 const require=createRequire(import.meta.url);
 execFileSync(process.execPath,[require.resolve('electron/install.js')],{stdio:'inherit',windowsHide:true});
@@ -14,4 +15,9 @@ if(process.platform==='darwin'){
   if((info.mode&0o111)!==0o111)await chmod(file,info.mode|0o111);
   console.log('node-pty helper executable:',relative);
  }
+}
+// Native computer control helper; a build failure leaves "native control unavailable" at runtime, never a failed install.
+if(process.platform==='darwin'){
+ try{execFileSync('sh',[resolve(dirname(fileURLToPath(import.meta.url)),'../apps/desktop/native/build-ax-snapshot.sh')],{stdio:'inherit'});}
+ catch(error){console.warn('ax-snapshot build skipped:',error.message);}
 }
