@@ -37,7 +37,7 @@ test('session list, row menu, start flow and send options',{timeout:180000},asyn
   // One normal thread so rows can be compared.
   await app.evaluate(({ipcMain},cwd)=>{ipcMain.removeHandler('suffice:threads');ipcMain.handle('suffice:threads',()=>[{id:'normal-1',title:'Fix flaky upload test',project:'demo-project',cwd,modified:Date.now()-3*3600e3,provider:'anthropic',model:'claude-sonnet'}]);},project);
   await page.reload();await page.locator('.composer').waitFor();await page.locator('[data-thread="normal-1"]').waitFor();
-  const start=agent=>page.evaluate(a=>window.sufficeDesktop.sessions.start({agent:a,cwd:document.querySelector('.project-picker')?.dataset.tooltip}),agent);
+  const start=agent=>page.evaluate(([a,cwd])=>window.sufficeDesktop.sessions.start({agent:a,cwd}),[agent,project]);
   const first=await start('fakeclaude');await page.waitForTimeout(400);const second=await start('fakeclaude');
   await page.evaluate(([id,t])=>window.sufficeDesktop.sessions.send(id,t),[second.id,'Port the parser to Rust']);
   await page.evaluate(id=>localStorage.setItem('suffice-thread-view-v1:session-'+id,JSON.stringify({sidebar:{title:'Renamed in header'}})),first.id);
@@ -60,6 +60,7 @@ test('session list, row menu, start flow and send options',{timeout:180000},asyn
   await page.evaluate(()=>{window.__copied=[];navigator.clipboard.writeText=async t=>{window.__copied.push(t);};});
   await rows.first().click({button:'right'});await page.waitForTimeout(300);await shot('row-context-menu.png');
   const items=await page.locator('.thread-context-menu:not([hidden]) [data-menu-action]').allInnerTexts().catch(()=>[]);console.log('menu',JSON.stringify(items));
+  assert.equal(await page.locator('.thread-context-menu:not([hidden])').getByRole('menuitem',{name:'Open in'}).count(),1,'Open in submenu (session has a folder)');
   check(()=>assert.deepEqual(items.map(s=>s.split('\n')[0].trim()),['Show terminal','Copy attach command','Attach in Terminal','Copy title','Stop session']));
   if(!BASELINE){await page.locator('[data-menu-action="session:attach"]').click();await page.waitForTimeout(300);
    const copied=await page.evaluate(()=>window.__copied);assert.ok(copied.some(t=>t.includes(`-L ${SOCKET}`)),'attach command names the private socket: '+JSON.stringify(copied));}
