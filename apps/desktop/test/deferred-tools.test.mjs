@@ -23,6 +23,9 @@ test('Defer tool schemas setting defaults to Auto, can be set Off, and persists'
   await shot('setting-auto-dark');await row.click();await page.getByText('Off',{exact:true}).click();
   await page.getByRole('button',{name:/Defer tool schemas/}).filter({hasText:'Off'}).waitFor();
   assert.equal(JSON.parse(await readFile(resolve(suffice,'desktop-settings.json'),'utf8'))['defer-tool-schemas'],'Off');
+  await page.getByRole('button',{name:/Defer tool schemas/}).click();await page.getByText('On',{exact:true}).first().click();
+  await page.getByRole('button',{name:/Defer tool schemas/}).filter({hasText:'On'}).waitFor();
+  assert.equal(JSON.parse(await readFile(resolve(suffice,'desktop-settings.json'),'utf8'))['defer-tool-schemas'],'On');
  }finally{await app.close().catch(()=>{});}
 });
 
