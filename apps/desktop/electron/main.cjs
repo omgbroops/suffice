@@ -113,6 +113,15 @@ if(primary)app.whenReady().then(async()=>{
    if(!files.length)throw new Error('No text changes to review');
    return request('review',{cwd:project,prompt:reviewPrompt(files),paths:files.map(file=>file.path),model:payload.model,provider:payload.provider,effort:payload.effort});
   });
+  const reviewIpc=(await import('./review-ipc.mjs')).createReviewIpc({store:(await import('./review-store.mjs')).createReviewStore(settingsHome),cwdFor:id=>threadLocations.get(id)||project,diffFor:(cwd,file)=>workspaceFiles.diff(cwd,file),isRunning:id=>threadRuns.has(id)||!!background?.has?.(id),checkpoint:(...args)=>import('./rewind.mjs').then(rewind=>rewind.checkpoint(...args)),run:payload=>(process.env.SUFFICE_TEST_HIDE_WINDOW==='1'&&globalThis.sufficeTestRun||runTask)(payload)});
+  handle('review-state',id=>reviewIpc.state(id));
+  handle('review-add',p=>reviewIpc.add(p?.threadId,p));
+  handle('review-remove',p=>reviewIpc.remove(p?.threadId,p?.id));
+  handle('review-accept',p=>reviewIpc.accept(p?.threadId,p?.hunkId,p?.on!==false));
+  handle('review-reopen',p=>reviewIpc.reopen(p?.threadId,p?.id));
+  handle('review-reject',p=>reviewIpc.reject(p?.threadId,p||{}));
+  handle('review-import',p=>reviewIpc.importFindings(p?.threadId,Array.isArray(p?.findings)?p.findings:[]));
+  handle('review-send',p=>reviewIpc.send(p?.threadId,p||{}));
   const prReview=require('./pr-review.cjs').createPrReview();
   handle('pr-review',()=>prReview.load(project));
   handle('clipboard-files',()=>clipboardFiles(clipboard));

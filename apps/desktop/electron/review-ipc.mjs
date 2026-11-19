@@ -24,16 +24,15 @@ export function createReviewIpc({store,cwdFor,diffFor,isRunning,checkpoint,run})
    const cwd=cwdFor(id),map=await diffs(cwd,[...new Set(findings.map(f=>f.path))]),{comments}=await store.state(id);
    for(const f of findings){
     const text=map.get(f.path)?.text,at=text&&anchorLine(parseHunks(text).hunks,f.line);if(!at)continue;
-    const body=f.message+(f.fix?`\nSuggested fix: ${f.fix}`:'');
-    if(comments.some(c=>c.file===f.path&&c.origin==='reviewer'&&c.text===body))continue;
-    await store.add(id,{file:f.path,...at,line:f.line,text:body,origin:'reviewer',severity:f.severity,fix:f.fix});
+    if(comments.some(c=>c.file===f.path&&c.origin==='reviewer'&&c.text===f.message))continue;
+    await store.add(id,{file:f.path,...at,line:f.line,text:f.message,origin:'reviewer',severity:f.severity,fix:f.fix});
    }
    return store.state(id);
   },
   async send(id,{model,provider,effort}){
    const {comments}=await store.state(id),open=comments.filter(c=>c.state==='open');if(!open.length)throw new Error('No comments to send');
    const cwd=cwdFor(id),map=await diffs(cwd,[...new Set(open.map(c=>c.file))]);
-   const items=open.map(c=>{const text=map.get(c.file)?.text,at=text&&locate(parseHunks(text).hunks,c.hunkId,c.rel);return {id:c.id,file:c.file,line:at?.line??c.line,excerpt:at?.excerpt||'',text:c.text};});
+   const items=open.map(c=>{const text=map.get(c.file)?.text,at=text&&locate(parseHunks(text).hunks,c.hunkId,c.rel);return {id:c.id,file:c.file,line:at?.line??c.line,excerpt:at?.excerpt||'',text:c.text+(c.fix?`\nSuggested fix: ${c.fix}`:'')};});
    await store.markSent(id);
    try{
     const reply=await run({prompt:renderPrompt(items),effort,model,provider,threadId:id});
