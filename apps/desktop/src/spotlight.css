@@ -47,7 +47,7 @@
 @media(prefers-reduced-motion:reduce){.spotlight[open],.spotlight[open]::backdrop{animation:none}}
 
 /* Spotlight is a search surface, not a modal form field. */
-.desktop-app dialog.spotlight .spotlight-search input { background:transparent; border:0; outline:0!important; box-shadow:none!important; }
+.desktop-app dialog.spotlight .spotlight-search input { background:transparent; border:0; outline:0!important; box-shadow:var(--shadow-well)!important; border-radius:var(--radius-control); padding:0 8px; }
 .spotlight-thread .spotlight-result-title { flex:1 1 auto; min-width:80px; }
 .spotlight-thread[data-unread='true'] .spotlight-result-title { color:var(--text-strong); }
 .spotlight-thread :is(.spotlight-dot,.spotlight-project,.spotlight-age) { flex-shrink:0; }
