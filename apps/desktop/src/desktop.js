@@ -4,6 +4,7 @@ import {fileLinkPath} from './file-links.js';
 import {connectQueuedMessages} from './queued-messages.js';
 import {connectChatChangesWidget} from './chat-changes-widget.js';
 import {connectAccessModePicker} from './access-mode-picker.js';
+import {connectToolsChip} from './mcp-chip.js';
 import {connectEffortPicker} from './effort-picker.js';
 import { connectThreads } from './threads-ui.js';
 import { connectProjects } from './projects-ui.js';
@@ -36,6 +37,7 @@ export function connectDesktop({prompt,send,toast,escapeHtml}) {
   connectAccount({api});
   connectReminders({api});
   connectAccessModePicker(prompt.form);
+  connectToolsChip(prompt.form,api);
   connectEffortPicker(prompt.form);
   connectQueuedMessages(prompt.form,prompt,toast);
   connectProjects({api,toast});

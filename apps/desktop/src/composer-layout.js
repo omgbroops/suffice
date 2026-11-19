@@ -18,6 +18,7 @@ export function connectComposerLayout({form,prompt,toast=()=>{}}){
  if(voice){voice.innerHTML=WAVE+'<span>Voice</span>';voice.title='Start a voice call';voice.setAttribute('aria-label','Start a voice call');}
  actions.append(dictate,...(voice?[voice]:[]),group);
  prompt.before(row);row.append(...(attach?[attach]:[]),prompt,actions);
+ const tools=form.querySelector('.tools-chip');
  toolbar?.remove();
  // Row below the box.
  const meta=el('div','composer-meta'),left=el('div','composer-meta-left'),right=el('div','composer-meta-right');
@@ -25,7 +26,7 @@ export function connectComposerLayout({form,prompt,toast=()=>{}}){
  if(chip)left.append(chip);
  for(const node of [effort,model,ring])if(node)right.append(node);
  // Access mode sits top-left, above the box.
- if(access){const top=el('div','composer-top');top.append(access);form.before(top);}
+ if(access){const top=el('div','composer-top');top.append(access);if(tools)top.append(tools);form.before(top);}
  meta.append(left,right);form.after(meta);
  // Typed text turns the voice button into Send.
  const sync=()=>{const on=!!prompt.value.trim()||!!form.attachments?.count;form.dataset.hasInput=String(on);};

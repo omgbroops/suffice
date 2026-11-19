@@ -8,7 +8,7 @@ const name=value=>level[value]||String(value).charAt(0).toUpperCase()+String(val
 // Composer hint: suggests cheaper settings for simple asks. Dismissable; switches on its own only with the optimizer-auto setting.
 export function connectUsageHint({form,prompt}){
  const hint=document.createElement('div');hint.className='usage-hint';hint.hidden=true;hint.setAttribute('role','status');
- hint.innerHTML='<span class="usage-hint-text"></span><button type="button" class="usage-hint-apply"></button><button type="button" class="usage-hint-dismiss" aria-label="Dismiss suggestion"></button>';
+ hint.innerHTML='<span class="usage-hint-text"></span><button type="button" class="usage-hint-apply" aria-label="Apply suggestion"></button><button type="button" class="usage-hint-dismiss" aria-label="Dismiss suggestion"></button>';
  hint.querySelector('.usage-hint-dismiss').innerHTML=icon('close');
  prompt.after(hint);
  const [text,apply,dismiss]=[...hint.children];

@@ -7,7 +7,7 @@ const group=(title,rows)=>({title,rows});
 
 export const settingsSections=[
  {id:'general',subtitle:'',title:'General',icon:'settings',category:'Personal',groups:[
-  group('Defaults',[select('default-model','Default model','Last used',['Last used']),select('default-effort','Effort','Medium',['Low','Medium','High','Extra high','Max']),select('approval-mode','Permission mode','Ask when needed',['Ask before every action','Ask when needed','Never ask']),select('default-directory','Default directory','~/Suffice',['~/Suffice','Last used project','Home'])]),
+  group('Defaults',[select('default-model','Default model','Last used',['Last used']),select('default-effort','Effort','Medium',['Low','Medium','High','Extra high','Max']),select('approval-mode','Permission mode','Ask when needed',['Ask before every action','Ask when needed','Never ask']),select('default-dir','Default directory','~/Suffice',['~/Suffice','Home'])]),
   group('Application',[select('language','Language','System',['System','English']),select('send','Send messages with','Enter',['Enter','Ctrl + Enter']),toggle('startup','Launch at login'),toggle('tray','Keep running in the background',false)]),
   group('Conversations',[select('working-send','While agent is working','Steer',['Queue','Steer']),toggle('escape','Stop agent with Escape'),toggle('close-panel','Close right panel with its last tab'),select('naming','Thread naming','Automatic',['Automatic','First message','Untitled']),select('new-project','New threads use','Last used project',['Last used project','Ask each time'])]),
  ]},
