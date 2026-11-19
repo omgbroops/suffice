@@ -20,6 +20,8 @@
 | C1 | Restore composer items lost in a merge: Tools chip, default-folder setting, single voice button, icon visibility at rest | `apps/desktop/src/composer*`, `send-controls.js`, `voice-ui.js`, `settings-data.js`, `access-mode-picker.js`, effort/model pickers | claude | doing |
 | C2 | Start screen + sidebar: More collapsed by default, no floating icon above composer, real token counts in chip and progress strip | `sidebar*`, `start-life.*`, `screen.css`, `progress-*` | claude | doing |
 | C3 | Less-3D look: composer, model picker (search, order by provider/cost, cost bars), start screen, chat, sidebar | `apps/desktop/src/look-flat.css` (new), `tokens.css`, `model-picker*`, `message*.css`, `thread-row.css` | claude | doing |
+| C5 | Own thin icon set replacing Lucide (old title-bar icon style) | `apps/desktop/src/icons/` (new), every `icon()` call site, `package.json` lucide dep | claude | doing |
+| C6 | Orbital wallpaper at 8% with a little more content | `apps/desktop/src/backgrounds/*`, `background.js` | claude | doing |
 | C4 | Scoreboard, task board, merging finished branches into `forge/join` | `forge/join` branch | claude | doing |
 
 ## Open (free to claim)
