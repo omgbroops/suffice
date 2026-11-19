@@ -8,11 +8,13 @@ import {requiresDesktopApproval} from './desktop-policy.mjs';
 import {mkdir, appendFile} from 'node:fs/promises';
 import {resolve} from 'node:path';
 import {randomUUID} from 'node:crypto';
-import {createAgentSession, DefaultResourceLoader, SettingsManager, SessionManager, createCodemodeExtension, createMcpExtension,createToolSearchExtension,ProjectTrustStore} from '@earendil-works/pi-coding-agent';
+import {createAgentSession, DefaultResourceLoader, SettingsManager, SessionManager, createCodemodeExtension, createMcpExtension,ProjectTrustStore} from '@earendil-works/pi-coding-agent';
 import {repositoryTools} from './tools.mjs';
 import {hash} from './workspace.mjs';
 import {VERSION} from './options.mjs';
 import {createAutomation} from './automation.mjs';
+import {createDeferralExtension} from '../../backend/src/tokens/tool-deferral.mjs';
+import {ledgerLine} from '../../backend/src/tokens/tool-registry.mjs';
 import {VOICE_RULES,withEffortRules,TITLE_SYSTEM,cleanTitle} from './voice.mjs';
 
 // Kept verbatim from the frozen general-v1 configuration. Product I/O is separate.
@@ -43,6 +45,7 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
   if(trust.get(workspace)===null&&['mcp.json','settings.json','extensions','skills','prompts'].some(name=>existsSync(resolve(workspace,'.suffice',name)))&&onApproval){trusted=await onApproval('Trust project resources',{cwd:workspace,detail:'Allow project-local Suffice settings, skills, extensions and MCP servers to load. Extensions can execute code.'});trust.set(workspace,trusted);}
   const persisted=SettingsManager.create(workspace,options.home);persisted.setProjectTrusted(false);
   const settings=SettingsManager.inMemory({...persisted.getSettings(),compaction:{enabled:options.desktopSettings?.['auto-compact']!==false,reserveTokens:Math.round(contextWindow*(1-parseInt(options.desktopSettings?.['compact-at']||'80%')/100)),keepRecentTokens:Math.min(10000,Math.floor(contextWindow*.15))},retry:{enabled:true,maxRetries:1,baseDelayMs:5000,maxAgentDelayMs:30000,provider:{maxRetries:0}},cacheWarming:'off',defaultTools:[...names,'codemode'],codemode:{mode:'only',inlineBudget:2000},transport:'sse',enableAnalytics:false,enableInstallTelemetry:false});
+  const deferral=createDeferralExtension({setting:options.desktopSettings?.['defer-tool-schemas'],contextWindow});
   const stop=reason=>{if(allowance) allowance.reason??=reason; queueMicrotask(()=>void session?.abort());};
   const observer=pi=>{
     pi.on('tool_call',async e=>{
@@ -67,7 +70,7 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
   };
   const resourceState=()=>{try{return JSON.parse(readFileSync(resolve(options.home,'resource-state.json'),'utf8'));}catch(e){if(e.code==='ENOENT')return {};throw e;}};
   const webExtension=externalAccess&&scope.toolkit('web')?await loadWebExtension(options.home):null;
-  const loader=isolateSufficeResourceLoader(new DefaultResourceLoader({additionalExtensionPaths:sufficeProjectExtensions(workspace,trusted),additionalSkillPaths:trusted&&existsSync(resolve(workspace,'.suffice','skills'))?[resolve(workspace,'.suffice','skills')]:[],additionalPromptTemplatePaths:trusted&&existsSync(resolve(workspace,'.suffice','prompts'))?[resolve(workspace,'.suffice','prompts')]:[],cwd:workspace,agentDir:options.home,settingsManager:settings,skillsOverride:base=>{const state=resourceState();return {...base,skills:base.skills.filter(skill=>state.skills?.[skill.name]!==false)};},promptsOverride:base=>{const state=resourceState();return {...base,prompts:base.prompts.filter(prompt=>state.templates?.[prompt.name]!==false)};},noExtensions:!externalAccess,noSkills:false,noPromptTemplates:false,noThemes:true,noContextFiles:options.desktopSettings?.['project-instructions']===false,systemPrompt,extensionFactories:[createCodemodeExtension({mode:'only',models:true,inlineBudget:2000}),...(externalAccess?[createToolSearchExtension(),createMcpExtension({loadConfig:ctx=>mcpConfig(options.home,workspace,ctx.isProjectTrusted(),manager.getSessionFile(),options.desktopSettings?.['defer-mcp-schemas']===false),logPath:resolve(options.home,'mcp.log')})]:[]),observer,...(webExtension?[webExtension]:[]),...(options.extensions??[])]}),options.home);
+  const loader=isolateSufficeResourceLoader(new DefaultResourceLoader({additionalExtensionPaths:sufficeProjectExtensions(workspace,trusted),additionalSkillPaths:trusted&&existsSync(resolve(workspace,'.suffice','skills'))?[resolve(workspace,'.suffice','skills')]:[],additionalPromptTemplatePaths:trusted&&existsSync(resolve(workspace,'.suffice','prompts'))?[resolve(workspace,'.suffice','prompts')]:[],cwd:workspace,agentDir:options.home,settingsManager:settings,skillsOverride:base=>{const state=resourceState();return {...base,skills:base.skills.filter(skill=>state.skills?.[skill.name]!==false)};},promptsOverride:base=>{const state=resourceState();return {...base,prompts:base.prompts.filter(prompt=>state.templates?.[prompt.name]!==false)};},noExtensions:!externalAccess,noSkills:false,noPromptTemplates:false,noThemes:true,noContextFiles:options.desktopSettings?.['project-instructions']===false,systemPrompt,extensionFactories:[createCodemodeExtension({mode:'only',models:true,inlineBudget:2000}),...(externalAccess?[deferral,createMcpExtension({loadConfig:ctx=>mcpConfig(options.home,workspace,ctx.isProjectTrusted(),manager.getSessionFile(),options.desktopSettings?.['defer-mcp-schemas']===false),logPath:resolve(options.home,'mcp.log')})]:[]),observer,...(webExtension?[webExtension]:[]),...(options.extensions??[])]}),options.home);
   settings.setProjectTrusted(trusted);
   const reloadResources=loader.reload.bind(loader);
   loader.reload=async reloadOptions=>{const disk=SettingsManager.create(workspace,options.home);disk.setProjectTrusted(false);const config=disk.getSettings();settings.setExtensionPaths(config.extensions||[]);settings.setSkillPaths(config.skills||[]);settings.setPromptTemplatePaths(config.prompts||[]);settings.setPackages(config.packages||[]);await reloadResources(reloadOptions);};
@@ -103,6 +106,7 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
     const known=Number.isFinite(u?.cost?.total);
     if(known) totals.estimatedApiUsd+=u.cost.total;
     if(!known || ['error','aborted'].includes(m.stopReason)) totals.costUnknown=true;
+    log(ledgerLine(totals.modelCalls,deferral.snapshot(),u));
     log({type:'assistant',model:m.model,usage:u,stopReason:m.stopReason,error:m.errorMessage,content:m.content});
     if(allowance) {
       allowance.turns++; allowance.spent+=known?u.cost.total:0;
@@ -114,7 +118,7 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
   });
   log({type:'startup',version:`suffice-cli-${VERSION}`,profile:'general-v1-derived',cwd:workspace,model:model.id,effort:session.thinkingLevel,systemPrompt,tools:session.getActiveToolNames(),capabilities:{browser:externalAccess&&options.browser!==false,desktop:externalAccess&&options.desktop!==false},sandbox:false});
   return {
-    session, totals, eventPath, sessionPath:()=>manager.getSessionFile(), created,
+    session, totals, eventPath, toolStats:deferral.snapshot, sessionPath:()=>manager.getSessionFile(), created,
     services:{cwd:workspace,agentDir:options.home,modelRuntime:runtime,settingsManager:settings,resourceLoader:loader,diagnostics:[]},
     async flush() {clearTimeout(taskTimer);await tail;if(logError) throw logError;},
     async run(prompt,options={}) {
