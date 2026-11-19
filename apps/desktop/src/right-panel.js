@@ -5,12 +5,13 @@ import {createPanelEditor} from './panel-editor.js';
 import {showPopover,hidePopover,keyboardInteraction} from './popover-motion.js';
 import {threadViewState as store} from './thread-view-state.js';
 import {mountRewind} from './rewind-view.js';
+import {mountBoxes} from './boxes-view.js';
 import {reviewFor,findingsFor,reviewButton,decorateRows} from './review.js';
 import {loadReview} from './review-ui.js';
 import {renderFileTree,renderChanges,renderCode,textElement} from './panel-content.js';
 import {renderPullRequest} from './pr-review.js';
 
-const options={files:{label:'Files',icon:'files'},changes:{label:'Changes',icon:'changes'},rewind:{label:'Rewind',icon:'rewind'},pr:{label:'Pull request',icon:'merge'},terminal:{label:'Terminal',icon:'terminal'}};
+const options={files:{label:'Files',icon:'files'},changes:{label:'Changes',icon:'changes'},rewind:{label:'Rewind',icon:'rewind'},boxes:{label:'Boxes',icon:'server'},pr:{label:'Pull request',icon:'merge'},terminal:{label:'Terminal',icon:'terminal'}};
 export function panelIconButton(label,glyph){const button=document.createElement('button');button.type='button';button.className='button button--ghost';button.setAttribute('aria-label',label);button.title=label;button.innerHTML=icon(glyph);return button;}
 const textNode=textElement;
 export function connectRightPanel({sidebar,resize,toggle,api}){
@@ -92,6 +93,7 @@ export function connectRightPanel({sidebar,resize,toggle,api}){
   body.setAttribute('role','tabpanel');body.setAttribute('aria-labelledby','panel-tab-'+type);body.setAttribute('aria-busy','true');
   if(terminalTab(type)){try{const terminals=await terminalViews();if(request!==version||id!==store.id||!store.state.panelOpen)return;await terminals.mount(body,id,type,state.terminals[type]?.ordinal);}catch(error){if(request===version&&id===store.id)message('Could not open terminal',error.message,true);}finally{if(request===version)body.setAttribute('aria-busy','false');}return;}
   if(type==='rewind'){mounted=null;await mountRewind(body,{api,id,valid:()=>request===version&&id===store.id&&store.state.panelOpen});if(request===version)body.setAttribute('aria-busy','false');return;}
+  if(type==='boxes'){mounted=null;await mountBoxes(body,{api,valid:()=>request===version&&id===store.id&&store.state.panelOpen});if(request===version)body.setAttribute('aria-busy','false');return;}
   if(type==='pr'){
    mounted=null;if(prThread!==id){prThread=id;prData=null;Object.assign(prView,{tab:'overview',file:null});}
    const keep=body.querySelector('.pq-view')?.scrollTop,focused=body.contains(document.activeElement)&&document.activeElement.matches('.pq-tab');
@@ -140,7 +142,7 @@ export function connectRightPanel({sidebar,resize,toggle,api}){
  store.subscribe(event=>{const changedView=['files','changes'].some(type=>event.changed?.includes(type)&&(event.state[type].file!==previous[type].file||event.state[type].directory!==previous[type].directory||event.state[type].filterOpen!==previous[type].filterOpen||event.state[type].explorerOpen!==previous[type].explorerOpen||JSON.stringify(event.state[type].expanded)!==JSON.stringify(previous[type].expanded)||event.state[type].wrap!==previous[type].wrap||event.state[type].diffLayout!==previous[type].diffLayout));previous=event.state;event.changedView=changedView;sync(event);});
  toggle.addEventListener('click',()=>{if(store.id)store.update({panelOpen:!store.state.panelOpen});});
  const saveWidth=()=>{if(store.id)store.update({panelWidth:Math.round(sidebar.getBoundingClientRect().width)});};resize.addEventListener('lostpointercapture',saveWidth);resize.addEventListener('keydown',saveWidth);resize.addEventListener('dblclick',saveWidth);
- api.onEvent(event=>{if(event.event==='tool_end'&&store.state.panelOpen&&store.state.activeTab!=='rewind'){clearTimeout(refreshTimer);refreshTimer=setTimeout(refreshPanel,300);}});document.addEventListener('suffice:thread-updated',refreshPanel);
+ api.onEvent(event=>{if(event.event==='tool_end'&&store.state.panelOpen&&store.state.activeTab!=='rewind'&&store.state.activeTab!=='boxes'){clearTimeout(refreshTimer);refreshTimer=setTimeout(refreshPanel,300);}});document.addEventListener('suffice:thread-updated',refreshPanel);
  document.addEventListener('keydown',event=>{if(!store.id||!store.state.panelOpen||!store.state.activeTab||terminalTab(store.state.activeTab)||!(event.ctrlKey||event.metaKey))return;const type=store.state.activeTab;if(event.key.toLowerCase()==='p'){event.preventDefault();focusFilter=true;patchView(type,{explorerOpen:true,filterOpen:true});body.querySelector('.panel-filter')?.focus();}if(event.key==='\\'){event.preventDefault();patchView(type,{explorerOpen:store.state[type].explorerOpen===false});}});
  sync();
 }

@@ -26,6 +26,7 @@ const paths = {
   download: '<path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/>',
   file: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/>',
   files: '<path d="M14 2H6a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6Z"/><path d="M14 2v4h4M8 22h12a2 2 0 0 0 2-2V8"/>',
+  server: '<rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/>',
   rewind: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/>',
   changes: '<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 9h8M12 5v8M8 17h8"/>',
   'diff-add': '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12h8m-4-4v8"/>',
