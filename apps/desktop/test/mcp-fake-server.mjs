@@ -1,4 +1,4 @@
 // Stdio MCP server fixture: answers initialize and tools/list over newline-delimited JSON-RPC.
 import {createInterface} from 'node:readline';
-const tools=[{name:'search_docs',description:'Search the documentation index.',inputSchema:{type:'object',properties:{query:{type:'string'}},required:['query']}},{name:'read_page',description:'Read one documentation page.',inputSchema:{type:'object',properties:{path:{type:'string'}},required:['path']}}];
+const tools=process.argv.includes('--empty')?[]:[{name:'search_docs',description:'Search the documentation index.',inputSchema:{type:'object',properties:{query:{type:'string'}},required:['query']}},{name:'read_page',description:'Read one documentation page.',inputSchema:{type:'object',properties:{path:{type:'string'}},required:['path']}}];
 for await(const line of createInterface({input:process.stdin})){const m=JSON.parse(line);if(m.id===undefined)continue;const result=m.method==='initialize'?{protocolVersion:'2025-06-18',capabilities:{tools:{}},serverInfo:{name:'fake',version:'1'}}:m.method==='tools/list'?{tools}:{};process.stdout.write(JSON.stringify({jsonrpc:'2.0',id:m.id,result})+'\n');}

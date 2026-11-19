@@ -37,6 +37,6 @@ async function listHttp(config,{timeout}){
 }
 export async function checkServer(config,{cwd,track,timeout=15000}={}){
  const started=Date.now();
- try{const tools=await (config.url?listHttp(config,{timeout}):listStdio(config,{cwd,track,timeout}));return {ok:true,tools:tools.map(t=>t.name),tokens:estimateTokens(tools),ms:Date.now()-started,at:Date.now()};}
+ try{const tools=await (config.url?listHttp(config,{timeout}):listStdio(config,{cwd,track,timeout}));return {ok:true,tools:tools.map(t=>t.name),costs:tools.map(t=>estimateTokens([t])),tokens:estimateTokens(tools),ms:Date.now()-started,at:Date.now()};}
  catch(e){return {ok:false,error:e.name==='TimeoutError'||e.name==='AbortError'?'Timed out':e.message,tools:[],tokens:0,ms:Date.now()-started,at:Date.now()};}
 }

@@ -122,7 +122,7 @@ export function createSettings(){
  function showConnectionMessage(message,cancel=false){connectionModal.message(message,cancel);}
  search.addEventListener('input',()=>{render();scroll.scrollTop=0;});
  document.addEventListener('keydown',event=>{
-  if(!active||event.defaultPrevented||connectionModal.isOpen)return;
+  if(!active||event.defaultPrevented||connectionModal.isOpen||document.querySelector('dialog[open]'))return;
   if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='f'){event.preventDefault();event.stopPropagation();search.focus();search.select();}
   if(event.key==='Escape'&&(popup.hidden||popup.inert)){event.stopPropagation();if(search.value){search.value='';render();search.focus();}else close();}
   if(event.target.closest('nav')&&['ArrowDown','ArrowUp','Home','End'].includes(event.key)){event.preventDefault();const items=[...nav.querySelectorAll('button')],index=items.indexOf(document.activeElement);items[event.key==='Home'?0:event.key==='End'?items.length-1:(index+(event.key==='ArrowDown'?1:-1)+items.length)%items.length]?.focus();}
