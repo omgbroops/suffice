@@ -65,6 +65,6 @@ export function toLogEvent(ev,ctx,ts=Date.now()){
  if(ev.event==='tool_start'){(ctx.tools??={})[ev.id]={name:ev.name,input:ev.input};return null;}
  if(ev.event==='tool_end'){const t=ctx.tools?.[ev.id];if(!t)return null;const test=verbFor(t.name,t.input)==='Testing';
   return {tool:t.name,tokens:0,outcome:ev.isError?'fail':test?'pass':'ok',ts};}
- if(ev.event==='usage'&&ev.usage){const total=Number(ev.usage.totalTokens)||0,d=Math.max(0,total-(ctx.tokens||0));ctx.tokens=Math.max(ctx.tokens||0,total);return d?{tool:'',tokens:d,outcome:'tokens',ts}:null;}
+ if(ev.event==='usage'&&ev.usage){const u=ev.usage,total=Number(u.totalTokens)||(Number(u.inputTokens)||0)+(Number(u.outputTokens)||0),d=Math.max(0,total-(ctx.tokens||0));ctx.tokens=Math.max(ctx.tokens||0,total);return d?{tool:'',tokens:d,outcome:'tokens',ts}:null;}
  return null;
 }

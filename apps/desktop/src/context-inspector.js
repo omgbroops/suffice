@@ -19,9 +19,9 @@ export function connectContextInspector({api,form,toast}){
   return items.reduce((sum,item)=>choice.exclude.has(item.id)&&!item.fixed?sum:sum+(choice.summaries&&item.summaryTokens!=null?item.summaryTokens:item.tokens),0);
  }
  function paintChip(){
-  // No estimate (or an empty one): fall back to the real count the run's usage reported.
-  const id=viewState.id,est=data?.items?.length?nextTotal(data.items,mine(id)):0,total=est||usage?.totalTokens||usage?.windowTokens||0;
-  chip.innerHTML=icon('context')+`<span>${fmt(total)}</span>`;chip.title=`Context: ${total.toLocaleString()} tokens`;
+  // The run's reported context size wins; the estimate and totals are fallbacks.
+  const id=viewState.id,est=data?.items?.length?nextTotal(data.items,mine(id)):0,total=usage?.windowTokens||est||usage?.totalTokens||(usage?.inputTokens||0)+(usage?.outputTokens||0);
+  chip.hidden=!id||String(id).startsWith('session-')||String(id).startsWith('pending:');chip.innerHTML=icon('context')+`<span>${fmt(total)}</span>`;chip.title=`Context: ${total.toLocaleString()} tokens`;
  }
  async function load(){
   const id=viewState.id,run=++loads;
@@ -44,6 +44,7 @@ export function connectContextInspector({api,form,toast}){
   chip.setAttribute('aria-expanded','true');addEventListener('resize',place);showPopover(panel);panel.addEventListener('animationend',()=>place(),{once:true});setTimeout(()=>panel&&place(),250);panel.focus({preventScroll:true});void load();
  }
  chip.addEventListener('click',open);
+ viewState.subscribe(event=>{if(event.type==='select'||event.type==='adopt')void load();});void load();
  api.onEvent?.(event=>{if(event.event==='usage'&&event.usage&&(!event.threadId||event.threadId===viewState.id)){usage=event.usage;paintChip();}});
 
  function place(){
