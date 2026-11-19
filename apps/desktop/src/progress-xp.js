@@ -1,5 +1,5 @@
 // Run strip: elapsed, tokens, status verb, plan ticks and a level chip. XP comes from real work only (shared/progress-store.mjs).
-import {runCtx,initial,step,toLogEvent,verbFor,liveStreak,progress,tooltip,stageFor,ACHIEVEMENTS} from '../shared/progress-store.mjs';
+import {runCtx,rekeyCtx,initial,step,toLogEvent,verbFor,liveStreak,progress,tooltip,stageFor,ACHIEVEMENTS} from '../shared/progress-store.mjs';
 const KEY='suffice.progress.v1',SOUND='suffice.progress.sound';
 const read=(k,f)=>{try{const v=localStorage.getItem(k);return v==null?f:JSON.parse(v);}catch{return f;}};
 const write=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch{}};
@@ -21,6 +21,7 @@ const glyph=stage=>{const n=stage+3,pts=Array.from({length:n},(_,i)=>{const a=-M
  const s=document.createElementNS('http://www.w3.org/2000/svg','svg');s.setAttribute('viewBox','0 0 16 16');s.setAttribute('aria-hidden','true');s.innerHTML=`<polygon points="${pts}"/>`;return s;};
 const TIPS=['Rewind restores files to an earlier checkpoint.','Cmd+B hides the sidebar.'];
 const KEYS=[['Cmd+K','Search'],['Cmd+N','New chat'],['Cmd+B','Sidebar'],['Cmd+,','Settings']];
+export {rekeyCtx};
 export function createRunStrip(threadId){
  const ctx=runCtx(threadId),root=el('div','run-strip');root.setAttribute('role','group');root.setAttribute('aria-label','Run progress');root.hidden=true;
  const verb=el('span','run-strip-verb','Working'),time=el('span','run-strip-time','0:00'),tok=el('span','run-strip-tokens','0 tokens');

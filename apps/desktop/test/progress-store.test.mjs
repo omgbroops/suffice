@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {reduce,step,initial,toLogEvent,liveStreak,verbFor,statFor,ACHIEVEMENTS,dayKey,xpForLevel,levelFor,runCtx,isTestCommand} from '../shared/progress-store.mjs';
+import {reduce,step,initial,toLogEvent,liveStreak,verbFor,statFor,ACHIEVEMENTS,dayKey,xpForLevel,levelFor,runCtx,rekeyCtx,isTestCommand} from '../shared/progress-store.mjs';
 import {parsePlan} from '../src/live-plan.js';
 const D=n=>new Date(2026,10,n,12).getTime();
 const fixture=[{tool:'Bash',tokens:0,outcome:'ok',ts:D(1)},{tool:'',tokens:12000,outcome:'tokens',ts:D(1)},{tool:'Bash',tokens:0,outcome:'pass',ts:D(1)},{tool:'Edit',tokens:0,outcome:'ok',ts:D(2)},{tool:'',tokens:0,outcome:'finish',ts:D(2)},{tool:'',tokens:0,outcome:'rewind',ts:D(3)},{tool:'',tokens:3000,outcome:'tokens',ts:D(3)}];
@@ -30,4 +30,11 @@ test('only real test runners count as a test run',()=>{
  for(const c of ['ls test','cat tests/a.txt','grep -r "test" src','echo test','git log --grep=test'])assert.equal(isTestCommand({command:c}),false,c);
  for(const c of ['node --test','node --test tests/*.test.mjs','npm test','npm run test -- -u','cargo test -p x','cd a && bun test','FOO=1 pytest -q','npx vitest run','go test ./...','python3 -m pytest'])assert.equal(isTestCommand({command:c}),true,c);
  assert.equal(verbFor('Bash',{command:'ls test'}),'Running');
+});
+
+test('token baseline survives a pending-to-real thread id rebind',()=>{
+ const use=(ctx,total)=>toLogEvent({event:'usage',usage:{totalTokens:total}},ctx,D(1));
+ const a=runCtx('pending:u1');let s=step(initial(),use(a,150000)).state;
+ rekeyCtx('pending:u1','real-1');s=step(s,use(runCtx('real-1'),160000)).state;
+ assert.equal(s.tokens,160000);
 });
