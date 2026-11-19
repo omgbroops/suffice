@@ -4,8 +4,12 @@
 export const TOKENS_PER_XP=500,XP_FINISH=20,XP_PASS=10;
 export const STAGE_LEVELS=[1,4,8,13,20];
 export const TOOL_STAT={bash:'debugging',edit:'patience',write:'wisdom',test:'rigor'};
-const TEST=/\b(test|tests|pytest|jest|vitest|mocha|rspec|phpunit)\b|go test|cargo test|npm t\b/i;
-export const isTestCommand=input=>TEST.test(String(input?.command||input?.cmd||''));
+// A test run is a runner command at the start of a shell segment; "ls test" or "grep test" is not one.
+const RUNNER=/^(?:(?:npx|env|time|sudo)\s+|[A-Z_][A-Z0-9_]*=\S*\s+)*(?:pytest|jest|vitest|mocha|rspec|phpunit|(?:npm|yarn|pnpm|bun|cargo|go|make|deno|mix|dotnet|gradle|mvn|swift|rake)\s+(?:run\s+)?test\b|npm\s+t\b|node\s+(?:\S+\s+)*--test\b|python3?\s+-m\s+(?:pytest|unittest)\b|\.\/gradlew\s+test\b)/i;
+export const isTestCommand=input=>String(input?.command||input?.cmd||'').split(/&&|\|\||[;|\n]/).some(seg=>RUNNER.test(seg.trim()));
+// Session-cumulative usage is tracked per thread, so a second run in a thread adds only its own delta.
+const cums=new Map();
+export const runCtx=key=>key==null?{}:{get tokens(){return cums.get(key)||0;},set tokens(v){cums.set(key,v);}};
 const name=n=>String(n||'').toLowerCase().replace(/[^a-z]/g,'');
 export function verbFor(tool,input){const n=name(tool);
  if(/todo|plan/.test(n))return 'Planning';

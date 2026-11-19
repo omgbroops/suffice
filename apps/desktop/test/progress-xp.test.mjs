@@ -2,6 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdtemp,mkdir,writeFile} from 'node:fs/promises';
 import {resolve} from 'node:path';
+import {fileURLToPath} from 'node:url';
+const appDir=resolve(fileURLToPath(import.meta.url),'../..');
 import {tmpdir} from 'node:os';
 import electronPath from 'electron';
 import {_electron} from 'playwright-core';
@@ -10,7 +12,7 @@ const shots='/Users/abhayg/suffice-desktop-wt/ui-shots/frontier/progress-xp-run-
 test('run strip: verb, tokens, plan tick, XP chip, achievements toast, menu',{timeout:150000},async()=>{
  const tmp=await mkdtemp(resolve(tmpdir(),'sfx-xp-'));const [project,data,home]=['project','data','history'].map(d=>resolve(tmp,d));for(const d of [project,data,home])await mkdir(d,{recursive:true});await mkdir(shots,{recursive:true});
  const env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:resolve(tmp,'suffice'),SUFFICE_START_PROJECT:project,SUFFICE_TEST_HIDE_WINDOW:'1',SUFFICE_SESSIONS_SOCKET:'sfx-fr-progress-xp-run-view-'+process.pid,SUFFICE_HISTORY_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
- const app=await _electron.launch({executablePath:electronPath,args:[...guard,resolve('apps/desktop'),'--user-data-dir='+data],env});
+ const app=await _electron.launch({executablePath:electronPath,args:[...guard,appDir,'--user-data-dir='+data],env,timeout:30000});
  try{
   const page=await app.firstWindow();page.setDefaultTimeout(15000);
   await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].setBounds({width:1440,height:900}));await page.waitForFunction(()=>innerWidth===1440&&innerHeight===900);

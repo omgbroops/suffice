@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {reduce,step,initial,toLogEvent,liveStreak,verbFor,statFor,ACHIEVEMENTS,dayKey,xpForLevel,levelFor} from '../shared/progress-store.mjs';
+import {reduce,step,initial,toLogEvent,liveStreak,verbFor,statFor,ACHIEVEMENTS,dayKey,xpForLevel,levelFor,runCtx,isTestCommand} from '../shared/progress-store.mjs';
 import {parsePlan} from '../src/live-plan.js';
 const D=n=>new Date(2026,10,n,12).getTime();
 const fixture=[{tool:'Bash',tokens:0,outcome:'ok',ts:D(1)},{tool:'',tokens:12000,outcome:'tokens',ts:D(1)},{tool:'Bash',tokens:0,outcome:'pass',ts:D(1)},{tool:'Edit',tokens:0,outcome:'ok',ts:D(2)},{tool:'',tokens:0,outcome:'finish',ts:D(2)},{tool:'',tokens:0,outcome:'rewind',ts:D(3)},{tool:'',tokens:3000,outcome:'tokens',ts:D(3)}];
@@ -19,3 +19,15 @@ test('worker events map to log events',()=>{const c={};assert.equal(toLogEvent({
 });
 test('plan checklist state from canned todo updates',()=>{const todo=(...s)=>({todos:s.map((status,i)=>({content:'t'+i,status}))});
  const st=i=>parsePlan('TodoWrite',i).map(x=>x.state);assert.deepEqual(st(todo('in_progress','pending')),['active','todo']);assert.deepEqual(st(todo('completed','in_progress')),['done','active']);assert.deepEqual(st(todo('completed','completed')),['done','done']);});
+
+test('session-cumulative usage across runs in one thread is not double counted',()=>{
+ const use=(ctx,total)=>toLogEvent({event:'usage',usage:{totalTokens:total}},ctx,D(1));
+ const a=runCtx('thread-x'),b=runCtx('thread-x'),other=runCtx('thread-y');
+ let s=initial();for(const e of [use(a,150000),use(b,160000),use(other,5000)])s=step(s,e).state;
+ assert.equal(s.tokens,165000);
+});
+test('only real test runners count as a test run',()=>{
+ for(const c of ['ls test','cat tests/a.txt','grep -r "test" src','echo test','git log --grep=test'])assert.equal(isTestCommand({command:c}),false,c);
+ for(const c of ['node --test','node --test tests/*.test.mjs','npm test','npm run test -- -u','cargo test -p x','cd a && bun test','FOO=1 pytest -q','npx vitest run','go test ./...','python3 -m pytest'])assert.equal(isTestCommand({command:c}),true,c);
+ assert.equal(verbFor('Bash',{command:'ls test'}),'Running');
+});

@@ -1,14 +1,16 @@
 // Run strip: elapsed, tokens, status verb, plan ticks and a level chip. XP comes from real work only (shared/progress-store.mjs).
-import {initial,step,toLogEvent,verbFor,liveStreak,progress,tooltip,stageFor,ACHIEVEMENTS} from '../shared/progress-store.mjs';
+import {runCtx,initial,step,toLogEvent,verbFor,liveStreak,progress,tooltip,stageFor,ACHIEVEMENTS} from '../shared/progress-store.mjs';
 const KEY='suffice.progress.v1',SOUND='suffice.progress.sound';
 const read=(k,f)=>{try{const v=localStorage.getItem(k);return v==null?f:JSON.parse(v);}catch{return f;}};
 const write=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch{}};
 let saved=read(KEY,null);let state=saved?.state||initial();let tail=saved?.tail||[];
-const chips=new Set();
+const chips=new Set();// WeakRefs to strip roots: a dropped run's strip is collected, not called forever
+
 // shortcut: strips stay subscribed for the page lifetime; state + last 500 events persist, not the full log; move to a file log when history needs auditing.
 function record(ev){if(!ev)return;tail=[...tail.slice(-499),ev];const r=step(state,ev);state=r.state;write(KEY,{state,tail});
- chips.forEach(f=>f(r.unlocked.length>0));
+ for(const w of chips){const f=w.deref()?._sub;if(f)f(r.unlocked.length>0);else chips.delete(w);}
  if(r.unlocked.length)document.dispatchEvent(new CustomEvent('suffice-toast',{detail:'Unlocked · '+r.unlocked.map(a=>a.title).join(' · ')}));}
+document.addEventListener('suffice-rewind-restored',()=>record({tool:'',tokens:0,outcome:'rewind',ts:Date.now()}));
 export const progressState=()=>state;
 export const soundOn=()=>read(SOUND,false)===true;
 function cue(kind){if(!soundOn())return;try{const c=new AudioContext(),o=c.createOscillator(),g=c.createGain();o.frequency.value={finish:660,fail:220,approval:440}[kind];g.gain.setValueAtTime(.05,c.currentTime);g.gain.exponentialRampToValueAtTime(.0001,c.currentTime+.18);o.connect(g).connect(c.destination);o.start();o.stop(c.currentTime+.2);o.onended=()=>c.close();}catch{}}
@@ -19,8 +21,8 @@ const glyph=stage=>{const n=stage+3,pts=Array.from({length:n},(_,i)=>{const a=-M
  const s=document.createElementNS('http://www.w3.org/2000/svg','svg');s.setAttribute('viewBox','0 0 16 16');s.setAttribute('aria-hidden','true');s.innerHTML=`<polygon points="${pts}"/>`;return s;};
 const TIPS=['Rewind restores files to an earlier checkpoint.','Cmd+B hides the sidebar.'];
 const KEYS=[['Cmd+K','Search'],['Cmd+N','New chat'],['Cmd+B','Sidebar'],['Cmd+,','Settings']];
-export function createRunStrip(){
- const ctx={},root=el('div','run-strip');root.setAttribute('role','group');root.setAttribute('aria-label','Run progress');root.hidden=true;
+export function createRunStrip(threadId){
+ const ctx=runCtx(threadId),root=el('div','run-strip');root.setAttribute('role','group');root.setAttribute('aria-label','Run progress');root.hidden=true;
  const verb=el('span','run-strip-verb','Working'),time=el('span','run-strip-time','0:00'),tok=el('span','run-strip-tokens','0 tokens');
  const chip=el('button','xp-chip');chip.type='button';chip.setAttribute('aria-haspopup','true');chip.setAttribute('aria-expanded','false');
  const bar=el('span','xp-bar'),fill=el('span','xp-fill');bar.append(fill);const lv=el('span','xp-level'),streak=el('span','xp-streak');
@@ -44,8 +46,7 @@ export function createRunStrip(){
  chip.addEventListener('click',openMenu);
  root.append(verb,time,tok,el('span','run-strip-gap'),chip);
  const tick=()=>{time.textContent=fmtT(Date.now()-started);};
- const onRewind=()=>record({tool:'',tokens:0,outcome:'rewind',ts:Date.now()});
- const sub=u=>paint(u);chips.add(sub);document.addEventListener('suffice-rewind-restored',onRewind);paint(false);
+  root._sub=u=>paint(u);chips.add(new WeakRef(root));paint(false);
  return {element:root,
   start(){if(started)return;started=Date.now();root.hidden=false;tick();timer=setInterval(tick,1000);},
   event(ev){this.start();const t=toLogEvent(ev,ctx);if(t){record(t);if(t.outcome==='tokens'){total+=t.tokens;tok.textContent=fmtK(total)+' tokens';}}

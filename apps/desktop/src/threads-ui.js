@@ -298,7 +298,7 @@ export function connectThreads({api,prompt,send,toast}){
  function createJob(id,title,node){
   const job={id,title,history:node,running:true,approvalRequests:new Set(),startedAt:Date.now(),provider:form.modelSelection?.provider,model:form.modelSelection?.model,terminalCount:0,runTools:[]};if(activeId===id)clearFollowups(form);jobs.set(id,job);job.turn=messageActions.turn({...form.modelSelection,startedAt:job.startedAt},true);
   let current=null,streamed='',reasoning='',group=null,log=null,compaction=null,envCard=null,envLog=null;const tools=new Map(),live=new Map();
-  const statusLine=document.createElement('div');statusLine.className='thread-status';statusLine.setAttribute('role','status');statusLine.textContent='Working';node.append(statusLine);const strip=createRunStrip();strip.start();node.append(strip.element);const plan=createLivePlan();node.append(plan.element);
+  const statusLine=document.createElement('div');statusLine.className='thread-status';statusLine.setAttribute('role','status');statusLine.textContent='Working';node.append(statusLine);const strip=createRunStrip(id);strip.start();node.append(strip.element);const plan=createLivePlan();node.append(plan.element);
   const status=text=>{statusLine.textContent=text;statusLine.hidden=false;};
   const response=()=>{if(!current){current=document.createElement('article');current.className='thread-message thread-assistant';node.insertBefore(current,statusLine);messageActions.assistant(current,job.turn,'');}return current;};
   // The status is the live insertion point, not a footer below queued messages.
