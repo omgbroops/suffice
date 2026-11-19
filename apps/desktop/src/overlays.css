@@ -162,7 +162,7 @@
 @media(prefers-reduced-motion:reduce){ .desktop-app .toast { animation: none; } .desktop-app .popover[data-motion='true'] { transition: none; transform: none; } }
 
 /* Tasks "Discard?" bubble: fixed beside the control that triggered it (placed in JS). */
-.tb-discard { position: fixed; display: flex; align-items: center; gap: var(--space-2); padding: var(--space-1) var(--space-1) var(--space-1) var(--space-3); border-radius: var(--radius-card); background: var(--surface-menu); box-shadow: inset 0 0 0 var(--hairline) var(--border-strong), var(--overlay-outset); font: 500 13px/16px var(--font-sans); color: var(--text-strong); z-index: 5; }
+.tb-discard { position: fixed; display: flex; align-items: center; gap: var(--space-2); padding: var(--space-1) var(--space-1) var(--space-1) var(--space-3); border-radius: var(--radius-card); background: var(--surface-menu); box-shadow: inset 0 0 0 var(--hairline) var(--border-strong), var(--overlay-outset); font: 500 13px/16px var(--font-sans); color: var(--text-strong); z-index: 600; }
 .tb-discard span { flex: 1; }
 .tb-discard[hidden] { display: none; }
 .tb-discard button { height: var(--control-height-xs); padding: 0 var(--space-2); border: 0; border-radius: calc(var(--radius-card) - var(--space-1)); background: var(--surface-hover); color: var(--text); font: 500 12px/16px var(--font-sans); cursor: pointer; }

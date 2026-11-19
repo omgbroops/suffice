@@ -51,7 +51,7 @@ export function createTaskBoardView({api=window.sufficeDesktop,board,host=docume
  bubble.querySelector('.tb-drop').addEventListener('click',()=>{text.value='';$('#tb-repo').value='';queue.disabled=true;hideBubble();setOpen(false,false);});
  // Leaving the board (any click outside, or a thread/session switch) closes it; unsaved input asks first and never forces the view.
  const leave=()=>{if(!open)return false;if(dirty()){showBubble();return true;}setOpen(false,false);return false;};
- document.addEventListener('click',event=>{if(open&&(trigger=event.target.closest('button,a,[role=button]'))&&!root.contains(event.target)&&!badge.contains(event.target)&&!event.target.closest('.popover,dialog')&&leave()){event.preventDefault();event.stopPropagation();}},true);
+ document.addEventListener('click',event=>{if(open&&(trigger=event.target.closest('button,a,[role=button]'))&&!root.contains(event.target)&&!badge.contains(event.target)&&!event.target.closest('.popover,dialog,.tb-discard')&&leave()){event.preventDefault();event.stopPropagation();}},true);
  viewState.subscribe(event=>{if(event.type==='select')leave();});
  text.addEventListener('input',()=>{queue.disabled=!splitTasks(text.value).length;error.textContent='';});
  $('.tb-add').addEventListener('submit',event=>{event.preventDefault();const lines=splitTasks(text.value);if(!lines.length)return;board.add(lines);text.value='';queue.disabled=true;});
