@@ -77,11 +77,13 @@ export function pageToMarkdown(html,base){
  return {title,markdown,links:[...new Set(links)]};
 }
 const PRIVATE=/^(127\.|10\.|0\.|169\.254\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|::1$|::$|f[cd][0-9a-f]{2}:|fe80:|::ffff:(127|10|0|169\.254|192\.168|172\.(1[6-9]|2\d|3[01]))\.)/i;
+// WHATWG rewrites ::ffff:127.0.0.1 to ::ffff:7f00:1, so turn the hex tail back into dotted form before matching.
+const unmap=a=>a.replace(/^::ffff:([0-9a-f]{1,4}):([0-9a-f]{1,4})$/i,(_,h,l)=>[h,l].map(x=>parseInt(x,16)).flatMap(n=>[n>>8,n&255]).join('.').replace(/^/,'::ffff:'));
 export async function assertPublic(href,{allowPrivate=false}={}){
  const u=new URL(href);if(!/^https?:$/.test(u.protocol))throw new Error('Only http and https URLs can be fetched');
  if(allowPrivate)return u;const host=u.hostname.replace(/^\[|\]$/g,'');
  const addrs=isIP(host)?[host]:(await lookup(host,{all:true})).map(a=>a.address);
- if(host==='localhost'||host.endsWith('.localhost')||addrs.some(a=>PRIVATE.test(a)))throw new Error('Refusing to fetch a private or local address');
+ if(host==='localhost'||host.endsWith('.localhost')||addrs.some(a=>PRIVATE.test(unmap(a))))throw new Error('Refusing to fetch a private or local address');
  return u;
 }
 export async function fetchCapped(href,{fetchImpl=fetch,maxBytes=2_000_000,timeoutMs=15000,allowPrivate=false,signal}={}){
@@ -98,6 +100,7 @@ export async function fetchCapped(href,{fetchImpl=fetch,maxBytes=2_000_000,timeo
  }
  throw new Error('Too many redirects');
 }
+const sameOrigin=(l,o)=>{try{return new URL(l).origin===o;}catch{return false;}};
 export async function crawlToMarkdown(start,{maxPages=1,maxChars=20000,...opts}={}){
  maxPages=Math.min(Math.max(1,maxPages|0||1),10);maxChars=Math.min(Math.max(500,maxChars|0||20000),100000);
  const seen=new Set([start]),queue=[start],pages=[];let rawBytes=0,chars=0,truncated=false;const origin=new URL(start).origin;
@@ -106,7 +109,7 @@ export async function crawlToMarkdown(start,{maxPages=1,maxChars=20000,...opts}=
   rawBytes+=got.bytes;const page=/html|xml/.test(got.type)||/^\s*</.test(got.html)?pageToMarkdown(got.html,got.url):{title:'',markdown:got.html.trim(),links:[]};
   let body=page.markdown;const room=maxChars-chars;if(body.length>room){body=body.slice(0,room)+'\n\n[truncated]';truncated=true;}
   chars+=body.length;pages.push({url:got.url,title:page.title,markdown:body});
-  for(const l of page.links)if(l.startsWith(origin)&&!seen.has(l)){seen.add(l);queue.push(l);}
+  for(const l of page.links)if(sameOrigin(l,origin)&&!seen.has(l)){seen.add(l);queue.push(l);}
  }
  const text=pages.map(p=>`# ${p.title||p.url}\n<${p.url}>\n\n${p.markdown}`).join('\n\n---\n\n');
  const tokens=estimateTokens(text.length),rawTokens=estimateTokens(rawBytes);

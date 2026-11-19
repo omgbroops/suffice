@@ -32,3 +32,12 @@ test('crawl follows same-site links, caps size, reports tokens saved, blocks pri
  }finally{server.close();}
  for(const bad of ['http://localhost/x','http://[::1]/','http://169.254.169.254/','http://10.1.2.3/','file:///etc/passwd'])await assert.rejects(()=>assertPublic(bad));
 });
+test('SSRF: IPv4-mapped IPv6 literals are refused',async()=>{
+ for(const h of ['[::ffff:127.0.0.1]','[::ffff:a9fe:a9fe]','[::ffff:7f00:1]','[::ffff:c0a8:1]','[::ffff:a00:1]'])await assert.rejects(()=>assertPublic(`http://${h}:80/`),/private or local/,h);
+});
+test('same-site check compares origins, not string prefixes',async()=>{
+ const seen=[];const html='<html><body><main><h1>T</h1><p>'+'Readable sentence. '.repeat(30)+'<a href="/ok">ok</a> <a href="https://example.com.attacker.test/steal">x</a> <a href="https://example.com:8443/p">y</a></p></main></body></html>';
+ const fetchImpl=async u=>{seen.push(String(u));return new Response(html,{headers:{'content-type':'text/html'}});};
+ await crawlToMarkdown('https://example.com/',{allowPrivate:true,fetchImpl,maxPages:6});
+ assert.deepEqual(seen,['https://example.com/','https://example.com/ok']);
+});
