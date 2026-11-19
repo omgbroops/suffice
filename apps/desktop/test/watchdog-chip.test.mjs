@@ -32,12 +32,17 @@ try{
  assert.match(await chips.nth(2).textContent(),/Checking claims/);
  await chips.nth(2).hover();await page.waitForTimeout(200);await shot('checking-dark.png');
  // approve -> the pending claim resolves to verified
- await page.locator('.composer-approval button',{hasText:/^\s*(1\.\s*)?Yes\s*$/}).first().click();
+ // hover the checking chip and approve with a DOM click so the pointer stays: the open detail must not outlive the chip
+ await chips.nth(2).hover();assert.equal(await page.locator('body > .claim-detail').count(),1);
+ await page.locator('.composer-approval button',{hasText:/^\s*(1\.\s*)?Yes\s*$/}).first().evaluate(b=>b.click());
  await page.waitForFunction(()=>document.querySelectorAll('.thread-messages .claim-chip[data-state="checking"]').length===0&&!document.querySelector('.thread-messages > .thread-status'),null,{timeout:20000});
  await page.waitForTimeout(500);
  const states=await chips.evaluateAll(l=>l.map(c=>c.dataset.state));
  assert.equal(states.length,3);
  assert.deepEqual(states,['verified','failed','verified']);
+ await page.mouse.move(5,5);await page.waitForTimeout(200);assert.equal(await page.locator('body > .claim-detail').count(),0,'stale detail after re-render');
+ // screen readers get the reason through aria-describedby
+ assert.match(await chips.nth(1).evaluate(c=>document.getElementById(c.getAttribute('aria-describedby'))?.textContent||''),/util\.js: no edit or write/);
  // hover detail names the reason, and is opaque and unclipped
  await chips.nth(1).hover();await page.waitForTimeout(250);
  const d=page.locator('body > .claim-detail');assert.equal(await d.isVisible(),true);

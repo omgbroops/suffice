@@ -35,3 +35,13 @@ test('no matching command at all is a failure; unrelated command does not back t
 test('a still-running test command is checking, not verified', () => {
  assert.equal(claimsFor([user,sh('t','npm test','running'),say('a','Tests pass.')]).get('a').state,'checking');
 });
+
+test('product names such as Node.js are not file claims', () => {
+ assert.deepEqual(extractClaims('Updated Node.js to v20. Updated `Next.js` too.'),[]);
+ assert.deepEqual(extractClaims('Updated `a.js`.').map(x=>x.path),['a.js']);
+});
+
+test('rows are ranked: failed first', () => {
+ const v=claimsFor([user,ed('e','/p/a.js'),say('a','Updated `a.js`. Updated `b.js`.')]).get('a');
+ assert.deepEqual(v.ordered.map(r=>r.label+':'+(r.ok?'ok':'bad')),['b.js:bad','a.js:ok']);
+});
