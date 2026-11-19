@@ -3,6 +3,9 @@ import {execFile} from 'node:child_process';
 import path from 'node:path';
 import os from 'node:os';
 import {createFlow} from './flow-ipc.mjs';
+import {createHandoff,compact} from '../../../packages/backend/src/board/index.mjs';
+import {createPluginHost} from '../../../packages/backend/src/plugins/index.mjs';
+import {viewsFromSlot} from '../../../packages/backend/src/views/generate.mjs';
 import {createComputer} from './computer-ipc.mjs';
 import {createBackend} from '../../../packages/backend/src/app/backend.mjs';
 import {createIpcBridge} from '../../../packages/backend/src/app/ipc.mjs';
@@ -16,6 +19,14 @@ import {createUsageMeter,format as formatUsage} from '../../../packages/backend/
 const LABELS={claude:'Claude Code',codex:'Codex',fake:'Fake agent',fakeclaude:'Fake Claude',simclaude:'Sim Claude'};
 const AGENT_BY_SOURCE={'claude-code':'claude',codex:'codex'};
 const q=v=>typeof v==='string'?v.slice(0,200):''; // search text is clamped, not rejected: a huge paste must search, not fall back to the unfiltered list
+// Local-agent capacity: live tmux sessions are capped so a laptop is not swamped; SUFFICE_MAX_AGENTS overrides.
+const maxAgents=env=>Number(env.SUFFICE_MAX_AGENTS)>0?Math.floor(Number(env.SUFFICE_MAX_AGENTS)):Math.max(2,Math.min(8,Math.floor(os.cpus().length/2)));
+// A resumed chat whose folder is gone opens in the nearest folder that still exists; the repo root wins over a subfolder.
+export function resolveProject(cwd){
+ let dir=path.resolve(cwd);while(!fs.existsSync(dir)&&path.dirname(dir)!==dir)dir=path.dirname(dir);
+ let root=dir;for(let d=dir;;d=path.dirname(d)){if(fs.existsSync(path.join(d,'.git'))){root=d;break;}if(path.dirname(d)===d)break;}
+ return {path:dir,root,name:path.basename(root),moved:dir!==path.resolve(cwd)};
+}
 const str=v=>typeof v==='string'&&v.length>0&&v.length<4096;
 const onPath=bin=>(process.env.PATH||'').split(path.delimiter).some(dir=>{try{fs.accessSync(path.join(dir,bin),fs.constants.X_OK);return true;}catch{return false;}});
 
@@ -51,6 +62,8 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
  const historyHome=env.SUFFICE_HISTORY_HOME||(env.SUFFICE_TEST_HIDE_WINDOW==='1'?fs.mkdtempSync(path.join(os.tmpdir(),'sfx-history-')):process.env.HOME);
  const socket=env.SUFFICE_SESSIONS_SOCKET||'suffice';
  let lastScan=0;
+ const handoff=createHandoff({dir:path.join(dataDir,'handoff'),clock:{now:()=>Date.now()}});
+ const pluginHost=createPluginHost({dirs:[path.join(dataDir,'plugins')],bus:{on(){},emit(){}},clock:{now:()=>Date.now()},grant:()=>false});
  const flow=createFlow({dataDir,env,send});
  const computer=createComputer({dataDir,env,send});
  const backend=createBackend({dataDir,sessions:true,history:true,socketName:socket,home:historyHome,sessionAgents,exec:flow.exec,approve:flow.approve,runners:flow.runners,limits:flow.limits,...((testAgent||simAgent)&&{idleMs:400,settleMs:100})});
@@ -162,6 +175,7 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
   if(action==='keys'&&Array.isArray(args.keys)){const K={up:'\x1b[A',down:'\x1b[B',enter:'\r',esc:'\x1b'};return run(args.keys.map(k=>K[k]||'').join(''));}
   throw new Error('Unsupported control');
  };
+ const capacity=async()=>{const max=maxAgents(env),running=(await call({type:'sessions.list'})).length;return {running,max,free:Math.max(0,max-running)};};
  return {
   socket,
   async attach(sessionId){const rows=await call({type:'sessions.list'});const row=rows.find(r=>r.id===sessionId);if(!row)throw new Error('Unknown session');return {command:['tmux','-L',socket,'-f','/dev/null','set-option','-t','sfx-'+row.id,'mouse','on',';','attach','-t','sfx-'+row.id],cwd:row.cwd};},
@@ -176,7 +190,29 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
    'sessions-catalog':p=>{const t=tracked.get(id(p));if(!t)throw new Error('Unknown session');const a=t.kind;
     let cmds=[];try{cmds=commands.slashCommands(a,{home:historyHome,cwd:t.state?.cwd});}catch{}
     return {agent:a,commands:cmds,savesDefault:{model:a==='codex',effort:a==='claude'},models:commands.models(a),modes:commands.modes(a),efforts:commands.efforts(a)};},
-   'sessions-start':async p=>{await ready;const args=Array.isArray(p?.args)&&p.args.every(str)?p.args:undefined;const r=await call({type:'sessions.start',agent:agentName(p?.agent),cwd:folder(p?.cwd),...(args&&{args})});track(r);attachSubs(r);return r;},
+   // slots.read: the latest value of one slot, so a reloaded renderer does not wait for the next change.
+   'slots-read':p=>call({type:'slots.read',id:typeof p?.id==='string'&&p.id.length<200?p.id:''}),
+   'sessions-capacity':capacity,
+   // Saved views the slot catalog can draw: one generated spec per slot with an object schema.
+   'views-list':async()=>{const cat=await call({type:'slots.catalog'});const out=[];for(const def of cat||[])try{out.push({slot:def.id,title:def.title,spec:viewsFromSlot(def)});}catch{}return out;},
+   // Plugins found under <data>/plugins: manifests only, nothing is run from here.
+   'plugins-list':async()=>(await pluginHost.discover()).map(r=>({name:r.name,version:r.version,valid:r.valid,errors:r.errors})),
+   'projects-resolve':p=>resolveProject(folder(p?.cwd)),
+   // Folders of past chats, newest first, only those that still exist.
+   'projects-recent':async()=>{await call({type:'history.scan'});const rows=await call({type:'history.list',opts:{limit:200}});const by=new Map();
+    for(const r of rows||[]){if(!r.cwd||!fs.existsSync(r.cwd))continue;const g=by.get(r.cwd)||{cwd:r.cwd,name:path.basename(r.cwd),chats:0,updatedAt:0};g.chats++;g.updatedAt=Math.max(g.updatedAt,r.updatedAt||0);by.set(r.cwd,g);}
+    return [...by.values()].sort((a,b)=>b.updatedAt-a.updatedAt).slice(0,20);},
+   // Writes a handoff note for one session (what was said, what is still open) after compacting the transcript.
+   'sessions-handoff':async p=>{const t=tracked.get(id(p));if(!t)throw new Error('Unknown session');
+    const msgs=t.order.map(i=>t.byId.get(i)).filter(i=>i&&typeof i.text==='string'&&i.text.trim()&&(i.kind==='user'||i.kind==='assistant')).map(i=>({role:i.kind,content:i.text.trim()}));
+    if(!msgs.length)throw new Error('Nothing to hand off yet');
+    const kept=compact(msgs,{maxChars:4000,keep:6}).filter(m=>m.role!=='system');
+    const lastUser=[...msgs].reverse().find(m=>m.role==='user');
+    return handoff.writeHandoff({runId:id(p),done:kept.filter(m=>m.role==='assistant').map(m=>m.content.slice(0,300)),open:t.prompt?[String(t.prompt.title||t.prompt.question||'A prompt is waiting')]:msgs.at(-1).role==='user'?[msgs.at(-1).content.slice(0,300)]:[],next:(lastUser?.content||'Continue').slice(0,300)});},
+   'sessions-handoff-read':p=>handoff.readHandoff(id(p)),
+   // Symbol search over a folder (parser-based, JavaScript only).
+   'code-symbols':async p=>{const {createNavigation}=await import('../../../src/symbol-navigation.mjs');const tool=createNavigation({workspace:folder(p?.cwd)}).find(x=>x.name==='symbols');return (await tool.execute(null,{query:q(p?.query),limit:20})).structuredContent;},
+   'sessions-start':async p=>{await ready;const cap=await capacity();if(!cap.free)throw new Error(`Local agents are at capacity (${cap.running} of ${cap.max}). Stop one to start another.`);const args=Array.isArray(p?.args)&&p.args.every(str)?p.args:undefined;const r=await call({type:'sessions.start',agent:agentName(p?.agent),cwd:folder(p?.cwd),...(args&&{args})});track(r);attachSubs(r);return r;},
    'sessions-list':async p=>{await ready;const rows=trackAll(await call({type:'sessions.list'}));if(p?.republish)for(const r of rows||[])tracked.get(r.id)?.soon?.();return rows;}, // a reloaded renderer has no cached slots; republish once so titles seed
    'sessions-control':p=>control(id(p?.id),String(p?.action),p?.args),
    'sessions-stop':p=>{untrack(id(p));return call({type:'sessions.stop',id:id(p)});},
@@ -187,7 +223,7 @@ export function createSessionsIpc({dataDir,env=process.env,send}){
    'history-list':async p=>{await call({type:'history.scan'});return call({type:'history.list',opts:{limit:200,...(q(p?.query)&&{query:q(p.query)})}});},
    'history-search':async p=>{if(Date.now()-lastScan>30000){lastScan=Date.now();await call({type:'history.scan'});}return call({type:'history.find',query:q(p?.query),opts:{limit:50}});},
    'history-read':p=>call({type:'history.read',entry:{source:String(p?.source),path:String(p?.path)}}),
-   'sessions-resume':async p=>{const agent=AGENT_BY_SOURCE[p?.source];if(!agent||!str(p?.sessionId)||!str(p?.cwd))throw new Error('Cannot resume this chat');await ready;const r=await call({type:'sessions.resume',agent,cwd:folder(p.cwd),sessionId:p.sessionId});track(r);attachSubs(r);return r;},
+   'sessions-resume':async p=>{const agent=AGENT_BY_SOURCE[p?.source];if(!agent||!str(p?.sessionId)||!str(p?.cwd))throw new Error('Cannot resume this chat');await ready;const r=await call({type:'sessions.resume',agent,cwd:resolveProject(folder(p.cwd)).path,sessionId:p.sessionId});track(r);attachSubs(r);return r;},
   },
   dispose:()=>{for(const k of [...tracked.keys()])untrack(k);return backend.dispose();},
  };
