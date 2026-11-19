@@ -3,7 +3,7 @@ import {getThreadDirectory} from './thread-directory.js';
 const el=(tag,cls,text)=>{const node=document.createElement(tag);if(cls)node.className=cls;if(text!=null)node.textContent=text;return node;};
 // Mounts the rewind timeline into the right panel body. `valid()` says whether this mount is still the current one.
 export async function mountRewind(body,{api,id,valid}){
- let st=initial();const root=el('div','rewind');body.replaceChildren(root);
+ let st=initial(),convo=false;const root=el('div','rewind');body.replaceChildren(root);
  const running=()=>['working','approval'].includes(getThreadDirectory().threads.find(t=>t.id===id)?.status);
  const send=e=>{st=reduce(st,e);draw();};
  function draw(){
@@ -46,7 +46,9 @@ export async function mountRewind(body,{api,id,valid}){
   const row=el('div','rewind-actions');
   const yes=el('button','rewind-button rewind-button--primary',busy?'Rewinding…':st.phase==='failed'?'Try again':'Rewind');yes.type='button';yes.disabled=busy;
   const no=el('button','rewind-button','Cancel');no.type='button';no.disabled=busy;no.addEventListener('click',()=>send({type:'cancel'}));
-  yes.addEventListener('click',async()=>{send({type:'start'});try{const res=await api.rewindRestore({threadId:id,checkpoint:c.id});const fresh=await api.rewindList(id);if(!valid())return;send({type:'ok',res:{...res,checkpoints:fresh.checkpoints}});document.dispatchEvent(new CustomEvent('suffice-rewind-restored'));}catch(error){send({type:'fail',message:error.message||'Unknown error.'});}});
+  yes.addEventListener('click',async()=>{send({type:'start'});try{const res=await api.rewindRestore({threadId:id,checkpoint:c.id});const fresh=await api.rewindList(id);if(!valid())return;send({type:'ok',res:{...res,checkpoints:fresh.checkpoints}});document.dispatchEvent(new CustomEvent('suffice-rewind-restored'));if(convo&&c.turn)document.dispatchEvent(new CustomEvent('suffice-fork-thread',{detail:{id,turn:c.turn,kind:c.kind}}));}catch(error){send({type:'fail',message:error.message||'Unknown error.'});}});
+  const lab=el('label','rewind-note'),chat=el('input');chat.type='checkbox';chat.checked=convo;chat.disabled=busy||!c.turn;chat.addEventListener('change',()=>{convo=chat.checked;});lab.append(chat,document.createTextNode(' Also restore the conversation to this turn (opens it as a new thread)'));
+  box.append(lab);
   row.append(no,yes);box.append(row);return box;
  }
  root.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&st.phase==='confirming'){ev.stopPropagation();send({type:'cancel'});}});
