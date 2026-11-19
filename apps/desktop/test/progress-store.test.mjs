@@ -45,3 +45,11 @@ test('usage arriving after the rebind through the old strip ctx keeps the baseli
  s=step(s,use(runCtx('real-2'),160000)).state;
  assert.equal(s.tokens,160000);
 });
+
+test('rekey merges baselines instead of overwriting the real key',()=>{
+ const use=(ctx,total)=>toLogEvent({event:'usage',usage:{totalTokens:total}},ctx,D(1));
+ let s=step(initial(),use(runCtx('real-3'),160000)).state;
+ s=step(s,use(runCtx('pending:u3'),150000)).state;
+ rekeyCtx('pending:u3','real-3');s=step(s,use(runCtx('real-3'),170000)).state;
+ assert.equal(s.tokens,160000+150000+10000);
+});

@@ -13,7 +13,7 @@ const real=k=>{while(alias.has(k))k=alias.get(k);return k;};
 // A strip keeps the key it was created with, so lookups follow the pending -> real rebind.
 export const runCtx=key=>key==null?{}:{get tokens(){return cums.get(real(key))||0;},set tokens(v){cums.set(real(key),v);}};
 // A new chat's job is rebound from its pending key to the real thread id; carry the baseline across and keep old ctxs pointing at it.
-export const rekeyCtx=(from,to)=>{if(from==null||to==null||from===to)return;if(cums.has(from)){cums.set(to,cums.get(from));cums.delete(from);}alias.set(from,to);};
+export const rekeyCtx=(from,to)=>{if(from==null||to==null||from===to)return;if(cums.has(from)){cums.set(to,Math.max(cums.get(from),cums.get(to)||0));cums.delete(from);}alias.set(from,to);};
 const name=n=>String(n||'').toLowerCase().replace(/[^a-z]/g,'');
 export function verbFor(tool,input){const n=name(tool);
  if(/todo|plan/.test(n))return 'Planning';
