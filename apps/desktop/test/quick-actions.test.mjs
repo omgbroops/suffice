@@ -58,9 +58,10 @@ test('quick actions: slash commands, mentions, drop, markdown copy and edit-and-
    await page.locator('.attachment-tray .attachment-remove').dispatchEvent('click');
   });
   await t.test('copy as Markdown works for user and agent messages',async()=>{
-   const bar=page.locator('.message-toolbar'),copy=async(target,name)=>{await target.hover();await bar.getByRole('button',{name,exact:true}).click();await page.waitForTimeout(250);return app.evaluate(({clipboard})=>clipboard.readText());};
-   assert.equal(await copy(page.locator('.thread-user').last(),'Copy as Markdown'),'### You\n\nSecond question\n');
-   assert.equal(await copy(page.locator('.thread-assistant').last(),'Copy as Markdown'),'### Suffice\n\nAnswer two.\n');
+   // every message now keeps its own bar: pick the user or agent one by its label.
+   const copy=async(target,name,bar)=>{await target.hover();await page.getByRole('toolbar',{name:bar}).last().getByRole('button',{name,exact:true}).click();await page.waitForTimeout(250);return app.evaluate(({clipboard})=>clipboard.readText());};
+   assert.equal(await copy(page.locator('.thread-user').last(),'Copy as Markdown','User message actions'),'### You\n\nSecond question\n');
+   assert.equal(await copy(page.locator('.thread-assistant').last(),'Copy as Markdown','Agent turn actions'),'### Suffice\n\nAnswer two.\n');
   });
   await t.test('edit-and-resend branches before the last user message and leaves the source untouched',async()=>{
    const source=resolve(folder,'a.jsonl'),before=await readFile(source,'utf8'),bar=page.locator('.message-toolbar');

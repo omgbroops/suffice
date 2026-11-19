@@ -35,6 +35,6 @@ test('Start screen rules: no pill/circle radius, hover grows the label before th
   // git moved into the project menu
   await page.mouse.move(5,5);await page.locator('.project-picker').click();
   const menu=page.locator('.project-menu:not(.branch-menu)');await menu.waitFor({state:'visible'});
-  assert.match(await menu.innerText(),/main/);assert.match(await menu.innerText(),/Isolate in worktree/);
+  assert.match(await menu.innerText(),/main/);assert.match(await menu.innerText(),/Own worktree/);
  }finally{await Promise.race([app.close(),new Promise(r=>setTimeout(r,5000))]).catch(()=>{});try{process.kill(app.process().pid,'SIGKILL');}catch{}try{execFileSync('tmux',['-L','sfx-fix2-screen2-test','kill-server'],{stdio:'ignore'});}catch{}}
 });

@@ -28,8 +28,8 @@ test('Usage page works through the real desktop UI and the composer shows no sug
   await page.waitForFunction(()=>document.querySelector('.composer')?.modelState?.().model?.id==='sol');
   const prompt=page.locator('#prompt'),effort=()=>page.locator('.composer').evaluate(f=>f.modelState().effort),model=()=>page.locator('.composer').evaluate(f=>f.modelState().model.id);
 
-  // The composer carries no suggestion banner for now (it returns redesigned); the model and effort never change on their own.
-  await prompt.fill('Explain what this function does');await page.waitForTimeout(200);assert.equal(await page.locator('.usage-hint').count(),0);assert.equal(await effort(),'high');await prompt.fill('');
+  // The optimizer banner is back: it only suggests (Apply button); the model and effort never change on their own.
+  await prompt.fill('Explain what this function does');await page.waitForTimeout(200);assert.equal(await page.locator('.usage-hint:not([hidden]) .usage-hint-apply').count(),1,'a suggestion, not a silent switch');assert.equal(await effort(),'high');await prompt.fill('');
 
   // Settings > Usage: counters from saved threads.
   await page.locator('.composer').evaluate(f=>f.chooseModel({effort:'high'}));

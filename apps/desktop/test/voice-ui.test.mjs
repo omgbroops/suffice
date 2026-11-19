@@ -46,26 +46,27 @@ test('voice: strip, full view, floating orb window, transcript rules, geometry a
 
   await t.test('mic button: names, pressed state, strip, composer size and strip position',async()=>{
    assert.equal(await startButton.count(),1);
-   assert.equal(await startButton.getAttribute('aria-label'),'Start voice conversation');assert.equal(await startButton.getAttribute('aria-pressed'),'false');
+   assert.equal(await startButton.getAttribute('aria-label'),'Start a voice call');assert.equal(await startButton.getAttribute('aria-pressed'),'false');
    assert.equal(await strip.isVisible(),false);assert.equal(await on(),false);
    const before=await form.boundingBox();
    await start();
    assert.equal(await attr(),'on');
-   assert.equal(await page.getByRole('button',{name:'Stop voice conversation',exact:true}).count(),1);assert.equal(await startButton.getAttribute('aria-pressed'),'true');
+   assert.equal(await page.getByRole('button',{name:'Stop voice call',exact:true}).count(),1);assert.equal(await startButton.getAttribute('aria-pressed'),'true');
    assert.equal(await strip.isVisible(),true);assert.equal(await strip.getAttribute('role'),'group');
    assert.equal(await prompt.isVisible(),true);assert.equal(await prompt.isEnabled(),true);
    const after=await form.boundingBox(),s=await strip.boundingBox();
    assert.ok(Math.abs(after.width-before.width)<=1,`composer width ${before.width} -> ${after.width}`);assert.ok(Math.abs(after.height-before.height)<=1,`composer height ${before.height} -> ${after.height}`);
-   assert.equal(await strip.evaluate(el=>el.nextElementSibling===document.querySelector('form.composer')),true,'strip is directly before the composer form');
+   assert.equal(await strip.evaluate(el=>[el.nextElementSibling,el.nextElementSibling?.nextElementSibling].includes(document.querySelector('form.composer'))&&(el.nextElementSibling.matches('form.composer')||el.nextElementSibling.matches('.composer-top'))),true,'strip is directly before the composer form');
    assert.ok(Math.abs(s.width-after.width)<=1,`strip width ${s.width} vs composer ${after.width}`);assert.ok(Math.abs(s.x-after.x)<=1);
-   assert.ok(after.y-(s.y+s.height)>=0&&after.y-(s.y+s.height)<=12,'strip sits directly above the composer');
+   const nextY=await strip.evaluate(el=>el.nextElementSibling.getBoundingClientRect().y); // the access-picker row (.composer-top) may sit between strip and form
+   assert.ok(nextY-(s.y+s.height)>=0&&nextY-(s.y+s.height)<=12,'strip sits directly above the composer');
    assert.equal(await strip.locator('canvas.voice-orb').count(),1);assert.equal(await strip.locator('.voice-word').getAttribute('role'),'status');
    for(const source of ['mic','agent'])assert.equal(await strip.locator(`.voice-meter[data-source="${source}"] .voice-bar`).count(),6,source);
    assert.deepEqual(await strip.locator('.voice-control').allTextContents(),['Mute','Full','Stop']);assert.equal(await strip.locator('.voice-mute').getAttribute('aria-pressed'),'false');
    assert.deepEqual(await strip.locator('.voice-orb').evaluate(el=>[el.getBoundingClientRect().width,el.getBoundingClientRect().height]),[20,20]);
    await emit({type:'level',input:1,output:0},130);assert.equal(await strip.locator('.voice-meter[data-source="mic"] .voice-bar').last().getAttribute('data-on'),'true');
    await startButton.click();await page.waitForFunction(()=>!document.querySelector('form.composer').dataset.voice);
-   assert.equal(await strip.isVisible(),false);assert.equal(await startButton.getAttribute('aria-pressed'),'false');assert.equal(await startButton.getAttribute('aria-label'),'Start voice conversation');
+   assert.equal(await strip.isVisible(),false);assert.equal(await startButton.getAttribute('aria-pressed'),'false');assert.equal(await startButton.getAttribute('aria-label'),'Start a voice call');
    assert.equal(await prompt.isEnabled(),true);
   });
 
@@ -201,9 +202,9 @@ test('voice: strip, full view, floating orb window, transcript rules, geometry a
    assert.equal(await full.isVisible(),false);
    await page.locator('.voice-expand').click();await full.waitFor();
    assert.equal(await attr(),'full');assert.equal(await full.getAttribute('role'),'dialog');
-   await page.waitForTimeout(600); // the orb eases in from scale .9 over 450 ms
+   await page.waitForFunction(()=>Math.abs(document.querySelector('.voice-full .voice-orb').getBoundingClientRect().width-168)<0.5,null,{timeout:4000}); // the orb eases in from scale .9 over 450 ms
    const orb=await page.locator('.voice-full .voice-orb').evaluate(el=>({w:el.getBoundingClientRect().width,h:el.getBoundingClientRect().height,rendering:getComputedStyle(el).imageRendering,bitmap:el.width}));
-   assert.deepEqual([orb.w,orb.h],[168,168]);assert.equal(orb.rendering,'pixelated');assert.equal(orb.bitmap,56);
+   assert.deepEqual([Math.round(orb.w),Math.round(orb.h)],[168,168]);assert.equal(orb.rendering,'pixelated');assert.equal(orb.bitmap,56);
    assert.equal(await full.locator('.voice-word').textContent(),'listening');
    for(const name of ['mute','end','mini']){
     const r=await page.locator('.voice-full-'+name).evaluate(el=>({w:el.getBoundingClientRect().width,h:el.getBoundingClientRect().height,radius:getComputedStyle(el).borderTopLeftRadius}));

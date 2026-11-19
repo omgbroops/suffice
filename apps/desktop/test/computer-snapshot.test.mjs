@@ -18,7 +18,7 @@ test('Computer use steps show ref snapshots and ref actions',{timeout:120000},as
   await page.locator('[data-action=settings]').first().click();await page.locator('[data-section=agent]').click();
   await page.getByRole('switch',{name:'Computer use sessions'}).click();
   await page.locator('[role=switch][aria-label="Computer use sessions"][aria-checked=true]').waitFor(); await page.locator('[data-action=settings]').first().click();
-  await page.locator('.computer-nav').click();await page.locator('.computer-view:not([hidden])').waitFor();
+  if(await page.locator('.nav-more[aria-expanded=false]').count())await page.locator('.nav-more').click();await page.locator('.computer-nav').click();await page.locator('.computer-view:not([hidden])').waitFor();
   await page.getByRole('button',{name:'New session'}).last().click();
   await page.locator('[data-field=goal]').fill('Find a laptop');await page.locator('[data-field=url]').fill('https://shop.test/');
   await page.locator('.cu-form [data-act=start]').click();

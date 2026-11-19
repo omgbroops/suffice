@@ -35,7 +35,7 @@ test('desktop: Settings edits the script, a task shows the collapsible setup car
  const shot=async(page,name)=>{await page.waitForTimeout(700);if(!SHOTS)return;for(const t of ['light','dark']){await page.evaluate(t=>{document.documentElement.dataset.theme=t;},t);await page.waitForTimeout(200);await page.screenshot({path:resolve(SHOTS,`${name}-${t}.png`)});}};
  try{
   const page=app.windows()[0]||await app.firstWindow({timeout:100000});await page.setViewportSize({width:1440,height:900}).catch(()=>{});await page.locator('.composer').waitFor();
-  await app.evaluate(({ipcMain})=>{ipcMain.removeHandler('suffice:models');ipcMain.handle('suffice:models',()=>[{id:'fixture',provider:'openai',name:'Fixture model',efforts:['low','medium','high']}]);});await page.reload();await page.locator('.composer').waitFor();
+  await app.evaluate(({ipcMain})=>{ipcMain.removeHandler('suffice:models');ipcMain.handle('suffice:models',()=>[{id:'fixture',provider:'openai',name:'Fixture model',efforts:['low','medium','high']}]);});await page.evaluate(()=>localStorage.setItem('suffice-own-worktree','0')); /* a task in the project folder, so the second one can hit the setup cache */await page.reload();await page.locator('.composer').waitFor();
   await page.getByRole('button',{name:'Settings',exact:true}).click();await page.locator('[data-section="projects"]').click();
   if(process.env.THEME==='light'){await page.locator('[data-section="appearance"]').click();await page.getByRole('button',{name:'Light',exact:true}).click();await page.locator('[data-section="projects"]').click();}
   await page.locator('#env-script').fill('echo installing deps; sleep 1; echo ready');

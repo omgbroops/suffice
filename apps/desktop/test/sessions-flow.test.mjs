@@ -22,7 +22,7 @@ async function launch(tmp,extra={}){
   SUFFICE_TEST_NODE:process.execPath,SUFFICE_TEST_CLAUDE_AGENT:resolve('apps/desktop/test/sessions-trust-agent.mjs'),SUFFICE_SESSIONS_SOCKET:SOCKET,SUFFICE_HISTORY_HOME:home,SIM_LOG:simLog,BOOT_MS:'0',...extra});
  const app=await _electron.launch({executablePath:electronPath,args:['-r','/Users/abhayg/suffice-desktop-wt/ui-shots/no-dialog.cjs',appDir,`--user-data-dir=${data}`],env});
  const page=await app.firstWindow();page.setDefaultTimeout(15000);
- await page.locator('[data-action="send-menu"]').waitFor();
+ await page.locator('[data-action="send-menu"]').waitFor({state:'attached'}); // the send group shows only once the box has text
  await page.evaluate(()=>{document.querySelector('.composer').modelSelection={provider:'cli',model:'fakeclaude'};});
  return {app,page,simLog};
 }
@@ -62,7 +62,7 @@ test('Stop dialog: Escape keeps the session running, Cancel too, Stop ends it',{
 for(const [title,query] of [['Add rate limiting to the API','rate'],['Port the parser to Rust','parser']])
 test('Import "'+title+'": read-only view, no row until Resume, then a live row and usable prompt',{timeout:120000},async()=>{
  await run(async page=>{
-  await page.locator('[data-action="send-menu"]').click();await page.locator('[data-menu-action="import-chat:open"]').click();
+  await page.locator('#prompt').fill('import');await page.locator('[data-action="send-menu"]').click();await page.locator('[data-menu-action="import-chat:open"]').click();
   await page.locator('.session-import input').fill(query);
   await page.locator('.session-import-row',{hasText:title}).click();
   assert.equal(await rows(page).count(),0,'viewing history adds no row');

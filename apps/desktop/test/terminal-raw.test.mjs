@@ -46,7 +46,7 @@ test('rendered terminal is raw: platform mono, standard palette, grapheme widths
   const page=await app.firstWindow();await page.setViewportSize({width:1440,height:900});
   await page.locator('.thread-row').filter({hasText:'Raw terminal thread'}).click();
   // Settings: nothing that restyles the terminal.
-  await page.getByRole('button',{name:'Settings',exact:true}).click();await page.getByRole('button',{name:'Terminal',exact:true}).click();
+  await page.getByRole('button',{name:'Settings',exact:true}).click();await page.locator('[data-section="projects"]').click();/* Terminal settings now live in the Projects tab */
   const settingsText=await page.locator('body').innerText();for(const label of ['Blink cursor','Cursor','Font size'])assert.ok(!new RegExp('(^|\\n)'+label+'(\\n|$)').test(settingsText),'Settings still offers '+label);
   await page.keyboard.press('Escape');
   const asset=(await readdir(resolve('apps/desktop/dist/assets'))).find(n=>/^terminal-view-.*\.js$/.test(n));

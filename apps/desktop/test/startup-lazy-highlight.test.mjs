@@ -11,7 +11,8 @@ const dist=resolve('apps/desktop/dist');
 test('eager chunks exclude shiki and katex',async()=>{
  const seen=new Set(),visit=async f=>{if(seen.has(f))return;seen.add(f);const t=await readFile(resolve(dist,f),'utf8');for(const m of t.matchAll(/(?:from|import)\s*["']\.\/([^"']+\.js)["']/g))await visit('assets/'+m[1]);};
  const files=await readdir(resolve(dist,'assets'));
- await visit('assets/'+files.find(f=>/^index-.*\.js$/.test(f)));await visit('assets/'+files.find(f=>/^main-.*\.js$/.test(f)));
+ // The build's entry is whatever index.html loads (main-*.js now; it was index-*.js), so read it from there.
+ const html=await readFile(resolve(dist,'index.html'),'utf8'),entries=[...html.matchAll(/(?:src|href)="\.\/(assets\/[^"]+\.js)"/g)].map(m=>m[1]);assert.ok(entries.length>=1,'index.html loads an entry chunk');for(const e of entries)await visit(e);
  for(const f of seen){const t=await readFile(resolve(dist,f),'utf8');assert.ok(!/codeToTokens|createHighlighter|katex-html/.test(t),f+' eagerly carries a heavy library');}
 });
 test('code block opened right after launch is coloured by the lazy highlighter',{timeout:120000},async()=>{

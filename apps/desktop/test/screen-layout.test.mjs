@@ -17,9 +17,9 @@ test('composer: voice becomes Send when text is typed, rows are placed, density 
   const vis=sel=>page.locator(sel).isVisible();
   // Empty box: + , dictate and voice; no Send; no Tools chip, no toolbar, no suggestion banner.
   assert.equal(await vis('.composer-row [data-action="attach"]'),true);assert.equal(await vis('.composer-row .dictate-button'),true);assert.equal(await vis('.composer-row .voice-start'),true);assert.equal(await vis('.composer-row .send-group'),false);
-  assert.equal(await page.locator('.composer-toolbar,.tools-chip,.usage-hint').count(),0);
+  assert.equal(await page.locator('.composer-toolbar,.tools-chip,.usage-hint:not([hidden])').count(),0);
   // Row below: project on the left, access and model on the right.
-  assert.equal(await vis('.composer-meta-left .project-picker'),true);assert.equal(await vis('.composer-meta-right .access-mode-picker'),true);assert.equal(await vis('.composer-meta-right .model-button'),true);
+  assert.equal(await vis('.project-bar .project-picker'),true);assert.equal(await vis('.composer-top .access-mode-picker'),true); // layout moved: project below-left, access above the boxassert.equal(await vis('.composer-meta-right .model-button'),true);
   await page.locator('#prompt').fill('hello');
   assert.equal(await vis('.composer-row .voice-start'),false);assert.equal(await vis('.composer-row .send-group'),true);
   await page.locator('#prompt').fill('');

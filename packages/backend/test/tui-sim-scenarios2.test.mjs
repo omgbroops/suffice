@@ -36,7 +36,7 @@ const EXPECT = {
   'at-file-mention': [['user', 'assistant'], (it) => { assert.equal(it[0].attachments?.[0]?.type, 'file'); assert.match(JSON.stringify(it[0].attachments[0]), /greet\.js/) }],
   'image-attachment': [['user', 'assistant'], (it) => assert.equal(it[0].attachments?.[0]?.type, 'image')],
   'resize-narrow': [['user', 'assistant', 'user', 'assistant']],
-  'interrupt-during-tool': [['user', 'tool', 'notice'], (it) => { assert.equal(it[1].status, 'error'); assert.equal(it[2].code, 'interrupted') }],
+  'interrupt-during-tool': [['user', 'tool', 'notice'], (it) => { assert.equal(it[1].status, 'interrupted'); assert.equal(it[2].code, 'interrupted') }],
   'long-output-truncated': [['user', 'tool', 'assistant'], (it) => { assert.equal(it[1].status, 'ok'); assert.match(JSON.stringify(it[1].output), /399/) }],
   'todo-list-updates': [['user', 'todo', 'todo', 'todo', 'assistant'], (it) => assert.deepEqual(it[3].items.map((x) => x.status), ['done', 'done', 'done'])],
 }

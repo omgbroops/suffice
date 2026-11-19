@@ -61,7 +61,7 @@ test('session list, row menu, start flow and send options',{timeout:180000},asyn
   await rows.first().click({button:'right'});await page.waitForTimeout(300);await shot('row-context-menu.png');
   const items=await page.locator('.thread-context-menu:not([hidden]) [data-menu-action]').allInnerTexts().catch(()=>[]);console.log('menu',JSON.stringify(items));
   assert.equal(await page.locator('.thread-context-menu:not([hidden])').getByRole('menuitem',{name:'Open in'}).count(),1,'Open in submenu (session has a folder)');
-  check(()=>assert.deepEqual(items.map(s=>s.split('\n')[0].trim()),['Show terminal','Copy attach command','Attach in Terminal','Copy title','Stop session']));
+  check(()=>assert.deepEqual(items.map(s=>s.split('\n')[0].trim()),['Show terminal','Save handoff note','Copy attach command','Attach in Terminal','Copy title','Stop session']));
   if(!BASELINE){await page.locator('[data-menu-action="session:attach"]').click();await page.waitForTimeout(300);
    const copied=await page.evaluate(()=>window.__copied);assert.ok(copied.some(t=>t.includes(`-L ${SOCKET}`)),'attach command names the private socket: '+JSON.stringify(copied));}
   else await page.keyboard.press('Escape');
