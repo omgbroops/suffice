@@ -1,7 +1,7 @@
 import './start-life.css';
 import {paintStarterImage,sampleWallpaper} from './start-cards.js';
 import {mark as brandMark} from './brand.js';
-// Start screen: mark + title, Needs-you pill when something waits, a suggestion typed into the composer once, 3 starter cards drawn in the wallpaper's own dither.
+// Start screen: mark + title, a suggestion typed into the composer once, 3 starter cards drawn in the wallpaper's own dither.
 const q=(s,r=document)=>r.querySelector(s);
 const mk=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
 const motionOk=()=>!matchMedia('(prefers-reduced-motion: reduce)').matches;
