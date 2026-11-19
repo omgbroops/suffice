@@ -66,3 +66,6 @@
 .message-fork:disabled { opacity: .4; pointer-events: none; }
 .desktop-app .toast[popover] { border-radius: var(--radius-card); }
 .desktop-app .message-actions-slot[data-role='user'] { justify-content: flex-start; }
+
+/* Toasts sit at the top right so they never cover the follow-up chips above the composer. */
+.desktop-app .toast[popover]:popover-open { inset: 48px 16px auto auto; }
