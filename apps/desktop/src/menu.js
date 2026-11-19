@@ -98,6 +98,7 @@ export function createMenu(element) {
     element.style.top = `${Math.max(12, Math.min(above ? rect.top - element.offsetHeight - 8 : rect.bottom + 8, innerHeight - element.offsetHeight - 12))}px`; // never opens below the window
     element.style.setProperty('--popover-origin', `${above ? 'bottom' : 'top'} ${endAligned ? 'right' : 'left'}`);
     showPopover(element);
+    const over = element.getBoundingClientRect().bottom + 12 - innerHeight; if (over > 0) element.style.top = `${Math.max(12, parseFloat(element.style.top) - over)}px`; // height is only known once shown
     if (keyboard) focusPanel(panel);
   }
   listen(document,'pointerdown', e => {
