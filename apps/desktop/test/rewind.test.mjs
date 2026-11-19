@@ -50,3 +50,12 @@ test('threads are isolated and bad input is refused',async()=>{
  const plain=await mkdtemp(resolve(tmpdir(),'suffice-rewind-plain-'));
  assert.deepEqual(await list(plain,T),{git:false,checkpoints:[]});assert.equal(await checkpoint(plain,T,'x',1),null);
 });
+
+test('an end tick holds the state after the turn and does not shift turn numbers',async()=>{
+ const {cwd}=await repo();
+ await checkpoint(cwd,T,'Turn nine',9);await writeFile(resolve(cwd,'a.txt'),'after nine\n');
+ const end=await checkpoint(cwd,T,'Turn nine',undefined,'end');assert.ok(end);
+ const rows=(await list(cwd,T)).checkpoints,last=rows[rows.length-1];
+ assert.equal(last.kind,'end');assert.equal(await run('git',['-C',cwd,'show',last.id+':a.txt']).then(r=>r.stdout),'after nine\n');
+ assert.match(await checkpoint(cwd,T,'next'),new RegExp('/'+String(rows.length+1).padStart(5,'0')+'$'));
+});

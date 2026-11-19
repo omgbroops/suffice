@@ -34,9 +34,9 @@ export async function mountRewind(body,{api,id,valid}){
   if(!c)return box;
   const busy=st.phase==='rewinding',block=running();
   if(st.phase==='idle'||st.phase==='done'){
-   if(st.phase==='done'&&st.restored)box.append(el('p','rewind-line',`Restored ${st.restored.files} ${st.restored.files===1?'file':'files'} to before turn ${st.restored.turn??'?'}.`),el('p','rewind-note','Your earlier files are saved as the selected checkpoint. Rewind to it to undo.'));
+   if(st.phase==='done'&&st.restored)box.append(el('p','rewind-line',`Restored ${st.restored.files} ${st.restored.files===1?'file':'files'} to ${st.restored.kind==='end'?'after':'before'} turn ${st.restored.turn??'?'}.`),el('p','rewind-note','Your earlier files are saved as the selected checkpoint. Rewind to it to undo.'));
    else box.append(el('p','rewind-line',impact(c)));
-   const go=el('button','rewind-button','Rewind…');go.type='button';go.disabled=block||!c.vsNow.files;go.addEventListener('click',()=>send({type:'ask'}));
+   const go=el('button','rewind-button','Rewind to here');go.type='button';go.disabled=block||!c.vsNow.files;go.addEventListener('click',()=>send({type:'ask'}));
    box.append(go);if(block)box.append(el('p','rewind-note','Wait for this turn to finish.'));
    return box;
   }

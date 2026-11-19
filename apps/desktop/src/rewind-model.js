@@ -12,11 +12,11 @@ export function reduce(s,e){
   case 'ask':return s.selected&&s.phase!=='rewinding'?{...s,phase:'confirming',error:''}:s;
   case 'cancel':return s.phase==='confirming'||s.phase==='failed'?{...s,phase:'idle',error:''}:s;
   case 'start':return s.phase==='confirming'||s.phase==='failed'?{...s,phase:'rewinding'}:s;
-  case 'ok':{const items=order(e.res?.checkpoints||s.items),safety=items.find(x=>x.ref===e.res?.safety);return {...s,items,phase:'done',error:'',restored:{turn:e.res?.restored??null,files:e.res?.files??0,safety:safety?.id??null},selected:safety?.id??items[0]?.id??null};}
+  case 'ok':{const items=order(e.res?.checkpoints||s.items),safety=items.find(x=>x.ref===e.res?.safety);return {...s,items,phase:'done',error:'',restored:{turn:e.res?.restored??null,kind:e.res?.kind,files:e.res?.files??0,safety:safety?.id??null},selected:safety?.id??items[0]?.id??null};}
   case 'fail':return s.phase==='rewinding'?{...s,phase:'failed',error:e.message}:s;
   default:return s;
  }
 }
-export const title=c=>c.kind==='rewind'?c.label:`Before turn ${c.turn??'?'}`;
+export const title=c=>c.kind==='rewind'?c.label:`${c.kind==='end'?'After':'Before'} turn ${c.turn??'?'}`;
 export const impact=c=>c.vsNow.files?`${c.vsNow.files} ${c.vsNow.files===1?'file':'files'} will change`:'Matches your files now';
 export function ago(time,now=Date.now()){const s=Math.max(0,Math.round((now-time)/1000));return s<45?'just now':s<3600?Math.round(s/60)+' min ago':s<86400?Math.round(s/3600)+' h ago':Math.round(s/86400)+' d ago';}

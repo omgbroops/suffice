@@ -27,11 +27,12 @@ async function save(root,threadId,tree,kind,label,turn){
  const ref=NS+threadId+'/'+String(next).padStart(5,'0');
  await git(root,['update-ref',ref,commit]);return ref;
 }
-export async function checkpoint(cwd,threadId,label,turn){
+// kind 'turn' = state before a turn starts; kind 'end' = state after it finished (same turn number).
+export async function checkpoint(cwd,threadId,label,turn,kind='turn'){
  if(!idOk(threadId))throw new Error('Invalid thread');
  const root=await topLevel(cwd);if(!root)return null;
- turn??=1+(await git(root,['for-each-ref','--format=%(trailers:key='+KIND+',valueonly,separator=)',NS+threadId+'/'])).split('\n').filter(l=>l.trim()==='turn').length;
- return save(root,threadId,await snapshotTree(root),'turn',label,turn);
+ turn??=(kind==='end'?0:1)+(await git(root,['for-each-ref','--format=%(trailers:key='+KIND+',valueonly,separator=)',NS+threadId+'/'])).split('\n').filter(l=>l.trim()==='turn').length;
+ return save(root,threadId,await snapshotTree(root),kind,label,turn);
 }
 async function stat(root,from,to){
  const files=new Map();
@@ -68,5 +69,5 @@ export async function restore(cwd,threadId,id){
    await git(root,['checkout-index','-f','-z','--stdin'],{env,input:write.join('\0')+'\0'});
   }finally{await rm(dir,{recursive:true,force:true});}
  }
- return {restored:target.turn,files:remove.length+write.length,safety};
+ return {restored:target.turn,kind:target.kind,files:remove.length+write.length,safety};
 }

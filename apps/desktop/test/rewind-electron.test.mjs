@@ -48,18 +48,18 @@ test('rewind tab: timeline, scrub, confirm, restore and undo in the real panel',
   // Scrub with the keyboard, then ask and cancel.
   await items.nth(0).focus();await page.keyboard.press('ArrowDown');
   assert.equal(await items.nth(1).getAttribute('aria-selected'),'true');
-  await page.getByRole('button',{name:'Rewind…'}).click();await page.locator('.rewind-actions').waitFor();
+  await page.getByRole('button',{name:'Rewind to here'}).click();await page.locator('.rewind-actions').waitFor();
   await shot('confirm');
   await page.getByRole('button',{name:'Cancel'}).click();assert.equal(await page.locator('.rewind-actions').count(),0);
   // Restore to before turn 1.
-  await page.getByRole('button',{name:'Rewind…'}).click();await page.locator('.rewind-actions').getByRole('button',{name:'Rewind',exact:true}).click();
+  await page.getByRole('button',{name:'Rewind to here'}).click();await page.locator('.rewind-actions').getByRole('button',{name:'Rewind',exact:true}).click();
   await page.locator('.rewind-line',{hasText:'Restored'}).waitFor();
   assert.equal(await readFile(resolve(cwd,'app.js'),'utf8'),'export const greeting = "hello";\n');assert.equal(await access(resolve(cwd,'test.js')).then(()=>true,()=>false),false);
   assert.equal(await items.count(),3);assert.equal(await page.locator('.rewind-item[data-kind="rewind"]').count(),1);
   assert.equal(await git('stash','list').then(r=>r.stdout),'');
   await shot('restored');
   // Undo through the safety checkpoint.
-  await page.getByRole('button',{name:'Rewind…'}).click();await page.locator('.rewind-actions').getByRole('button',{name:'Rewind',exact:true}).click();
+  await page.getByRole('button',{name:'Rewind to here'}).click();await page.locator('.rewind-actions').getByRole('button',{name:'Rewind',exact:true}).click();
   await page.locator('.rewind-line',{hasText:'Restored'}).waitFor();
   assert.equal(await readFile(resolve(cwd,'app.js'),'utf8'),'export const hi = () => "hello";\n');assert.equal(await readFile(resolve(cwd,'test.js'),'utf8'),'import {hi} from "./app.js";\n');
   // Empty and no-Git states.
