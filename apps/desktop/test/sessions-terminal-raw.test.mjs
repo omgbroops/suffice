@@ -1,5 +1,6 @@
 import electronPath from 'electron';
 // Hidden: the session Terminal view shows the tmux pane raw (tmux mouse on, platform mono, grapheme widths). Private tmux socket sfx-r2-terminal. SHOTS=<dir> writes a PNG.
+import './electron-guard.mjs';
 import {_electron} from 'playwright-core';
 import {resolve} from 'node:path';
 import {mkdir,mkdtemp,writeFile,realpath} from 'node:fs/promises';

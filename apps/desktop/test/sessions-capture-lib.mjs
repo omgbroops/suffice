@@ -1,6 +1,7 @@
 // Hidden launch + capture for CLI-session UI tests. Fake agents only, a private tmux socket, a synthetic history home.
 // Run with the worktree root as cwd. Nothing is shown on screen: SUFFICE_TEST_HIDE_WINDOW=1 and webContents.capturePage.
 import electronPath from 'electron';
+import './electron-guard.mjs';
 import {_electron} from 'playwright-core';
 import {resolve} from 'node:path';
 import {mkdir,mkdtemp,writeFile,rm,utimes,realpath} from 'node:fs/promises';

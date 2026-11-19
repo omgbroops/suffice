@@ -1,5 +1,6 @@
 // Hidden regression capture: standard chat with a multi-tool activity group. OUT=<png> writes the shot; prints measured tool-widget spacing + summaries as JSON.
 import electronPath from 'electron';
+import './electron-guard.mjs';
 import {_electron} from 'playwright-core';
 import {resolve} from 'node:path';
 import {mkdir,mkdtemp,writeFile,realpath} from 'node:fs/promises';

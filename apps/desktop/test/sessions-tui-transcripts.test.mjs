@@ -1,6 +1,7 @@
 import electronPath from 'electron';
 // Hidden: real subagent tracker cards + slash menu from the real catalog, dark and light. SHOTS=<dir> writes PNGs.
 // SHOTS=<dir> also writes PNGs (webContents.capturePage, 1440x900).
+import './electron-guard.mjs';
 import {_electron} from 'playwright-core';
 import {resolve} from 'node:path';
 import {mkdir,mkdtemp,writeFile,realpath} from 'node:fs/promises';

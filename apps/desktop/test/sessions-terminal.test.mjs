@@ -1,5 +1,6 @@
 import electronPath from 'electron';
 // Hidden checks + captures for the CLI-session terminal. Always hidden (SUFFICE_TEST_HIDE_WINDOW) and always on the private tmux socket sfx-test-session-terminal.
+import './electron-guard.mjs';
 import {_electron} from 'playwright-core';
 import {resolve} from 'node:path';
 import {mkdir,mkdtemp,writeFile,rm,realpath} from 'node:fs/promises';

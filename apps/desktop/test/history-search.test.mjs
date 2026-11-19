@@ -3,6 +3,7 @@ import electronPath from 'electron';
 // SHOT_DIR saves dark + light screenshots at 1440x900. Private tmux socket and a synthetic history home only.
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import './electron-guard.mjs';
 import {_electron} from 'playwright-core';
 import {resolve} from 'node:path';
 import {mkdir,mkdtemp,writeFile,rm,utimes,realpath} from 'node:fs/promises';

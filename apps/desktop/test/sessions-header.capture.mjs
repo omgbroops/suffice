@@ -1,5 +1,6 @@
 // Hidden capture + checks for the session caption. SHOTS=<dir> picks the output folder; MODE=before skips the new-header assertions.
 import electronPath from 'electron';
+import './electron-guard.mjs';
 import {_electron} from 'playwright-core';
 import {resolve} from 'node:path';
 import {mkdir,mkdtemp,writeFile,rm,realpath} from 'node:fs/promises';

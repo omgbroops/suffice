@@ -1,6 +1,7 @@
 import electronPath from 'electron';
 // Hidden (SUFFICE_TEST_HIDE_WINDOW=1) check + capture of the CLI-session transcript against the fake Claude agent on a private tmux socket.
 // SHOTS=<dir> also writes PNGs (webContents.capturePage, 1440x900).
+import './electron-guard.mjs';
 import {_electron} from 'playwright-core';
 import {resolve} from 'node:path';
 import {mkdir,mkdtemp,writeFile,realpath} from 'node:fs/promises';

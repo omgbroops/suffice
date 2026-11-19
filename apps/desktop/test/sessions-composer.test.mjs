@@ -1,6 +1,7 @@
 import electronPath from 'electron';
 // Hidden run (SUFFICE_TEST_HIDE_WINDOW=1) of the session composer controls against fake agents on a private tmux socket.
 // Screenshots go to $COMPOSER_SHOTS (default ui-shots/composer-controls/after). Never touches the "suffice" socket.
+import './electron-guard.mjs';
 import {_electron} from 'playwright-core';
 import {resolve} from 'node:path';
 import {mkdir,mkdtemp,realpath} from 'node:fs/promises';

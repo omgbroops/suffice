@@ -3,6 +3,7 @@ import electronPath from 'electron';
 // Private tmux socket only; the live "suffice" socket is never touched. SHOT_DIR saves screenshots; BASELINE=1 records shots without asserting.
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import './electron-guard.mjs';
 import {_electron} from 'playwright-core';
 import {resolve} from 'node:path';
 import {mkdir,mkdtemp,writeFile,realpath} from 'node:fs/promises';
