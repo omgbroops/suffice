@@ -83,12 +83,12 @@ async function receive(message) {
     if(!(await stat(cwd)).isDirectory())throw new Error('Choose a project directory');
     busy=true;ownsRun=true;abortRequested=false;const nextPreferences=JSON.stringify([payload.desktopSettings||{},payload.skillContext||'']);if(agent&&preferencesKey!==nextPreferences){resumePath=agent.sessionPath();await agent.dispose();agent=null;}preferencesKey=nextPreferences;
     if(agent&&workspace!==cwd){await agent.dispose();agent=null;}
-    let newlyCreated=false,autoName=false; // set when this run builds the session; read after the run to title it
+    let newlyCreated=false; // set when this run builds the session; read after the run to title it
     if(!agent){
       workspace=cwd;
       const options=parseOptions(['--cwd',cwd]);
       options.effort=payload.effort;if(payload.side)options.access='read';
-      options.home=home;options.additionalContext=(await projectContext(home,cwd,payload.desktopSettings||{}))+(payload.skillContext||'');newlyCreated=!resumePath;options.desktopSettings=payload.desktopSettings||{};autoName=options.desktopSettings.naming==='Automatic';options.extensions=[createReducerExtension({dir:resolve(home,'tool-outputs'),settings:options.desktopSettings})];options.onTitleChanged=()=>send({event:'history_changed'});if(options.desktopSettings['allow-network']===false){options.browser=false;options.desktop=false;}
+      options.home=home;options.additionalContext=(await projectContext(home,cwd,payload.desktopSettings||{}))+(payload.skillContext||'');newlyCreated=!resumePath;options.desktopSettings=payload.desktopSettings||{};options.extensions=[createReducerExtension({dir:resolve(home,'tool-outputs'),settings:options.desktopSettings})];options.onTitleChanged=()=>send({event:'history_changed'});if(options.desktopSettings['allow-network']===false){options.browser=false;options.desktop=false;}
 
       if(selected){options.model=selected.id;options.modelObject=selected;}
       if(resumePath)options.sessionManager=SessionManager.open(resumePath,dirname(resumePath));
@@ -124,7 +124,7 @@ async function receive(message) {
     if(sessionPath)await checkpoint(cwd,threadId(sessionPath),payload.displayPrompt??payload.prompt).catch(()=>{});// a checkpoint failure never blocks the turn
     const choices=payload.context,restoreContext=installContext(agent.session,choices);
     pendingTurn=()=>{turns.push({n:++turnCount,at:Date.now(),...sessionInventory(agent.session,agent.session.messages??[]),removed:choices?.exclude||[],summaries:!!choices?.summaries});if(turns.length>10)turns.shift();};
-    let text;try{text=await agent.run(payload.prompt,{images:payload.images});}finally{restoreContext();pendingTurn=null;try{recordSpend(capState,sessionUsage(agent.session));}catch{}try{capState.recordWeekly((sessionUsage(agent.session)?.totalTokens??0)-(capState.base?.totalTokens??0));}catch{}}if(newlyCreated&&autoName&&text&&agent.title){const title=await agent.title(payload.prompt,text);if(title)agent.session.setSessionName(title);}if(capState.message)throw new Error(capState.message);finishPresentation('completed');
+    let text;try{text=await agent.run(payload.prompt,{images:payload.images});}finally{restoreContext();pendingTurn=null;try{recordSpend(capState,sessionUsage(agent.session));}catch{}try{capState.recordWeekly((sessionUsage(agent.session)?.totalTokens??0)-(capState.base?.totalTokens??0));}catch{}}if(newlyCreated&&payload.desktopSettings?.naming==='Automatic'&&text&&agent.title){const title=await agent.title(payload.prompt,text);if(title)agent.session.setSessionName(title);}if(capState.message)throw new Error(capState.message);finishPresentation('completed');
     await changeTracker?.flush().catch(()=>{});if(sessionPath)await checkpoint(cwd,threadId(sessionPath),payload.displayPrompt??payload.prompt,undefined,'end').catch(()=>{});if(payload.desktopSettings?.['remember-context'])await rememberProject(home,cwd,text);
     send({id,ok:true,result:{text,presentation:turnPresentation,sessionPath:agent.sessionPath(),threadId:agent.sessionPath()?threadId(agent.sessionPath()):null,usage:agent.totals}});
   } catch(error){finishPresentation(abortRequested?'interrupted':'failed');try{capState?.hold?.release();}catch{}if(ownsRun)await changeTracker?.flush().catch(()=>{});if(ownsRun&&abortRequested){agent?.session.sessionManager?.appendCustomEntry('suffice:interrupted');send({id,ok:true,result:{interrupted:true,presentation:turnPresentation,threadId:agent?.sessionPath()?threadId(agent.sessionPath()):null}});}else send({id,ok:false,error:capState?.message||error.message});}
