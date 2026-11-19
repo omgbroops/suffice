@@ -8,7 +8,7 @@ import {resolve} from 'node:path';
 import {mkdir,mkdtemp,writeFile,realpath} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {execFileSync} from 'node:child_process';
-import {guard} from './electron-guard.mjs';
+import {guard,openMore} from './electron-guard.mjs';
 
 const SOCKET=process.env.SUFFICE_SESSIONS_SOCKET&&process.env.SUFFICE_SESSIONS_SOCKET!=='suffice'?process.env.SUFFICE_SESSIONS_SOCKET:'sfx-fix1-bugs-'+process.pid,SHOTS=process.env.SHOT_DIR;
 let app,page,project,tmp;
@@ -33,14 +33,14 @@ before(async()=>{
 after(async()=>{try{await app?.close();}finally{tmux('kill-server');}});
 
 test('13: leaving the Tasks view by clicking elsewhere closes it',async()=>{
- await page.getByRole('button',{name:'Tasks',exact:true}).click();
+ await openMore(page);await page.getByRole('button',{name:'Tasks',exact:true}).click();
  const board=page.getByRole('region',{name:'Tasks'});await board.waitFor();
  await shot('13-tasks-open.png');
  await page.locator('[data-thread="normal-1"]').click();
  await board.waitFor({state:'hidden'});
  assert.equal(await page.evaluate(()=>document.body.classList.contains('tasks-open')),false);
  // The board stays open while the click lands inside it, and X still closes it.
- await page.getByRole('button',{name:'Tasks',exact:true}).click();await board.waitFor();await page.locator('#tb-text').click();assert.equal(await board.isVisible(),true);
+ await openMore(page);await page.getByRole('button',{name:'Tasks',exact:true}).click();await board.waitFor();await page.locator('#tb-text').click();assert.equal(await board.isVisible(),true);
  await page.getByRole('button',{name:'Close tasks'}).click();await board.waitFor({state:'hidden'});
 });
 

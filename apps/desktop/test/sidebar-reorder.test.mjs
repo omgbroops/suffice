@@ -36,7 +36,7 @@ test('sidebar: sort menu reorders with one check, drag reorders rows and moves i
  await page.waitForFunction(()=>document.querySelector('.thread-project-group:has([data-thread="a"]) .thread-group-name')?.textContent==='Launch');
  // Teamwork is hidden until its Settings toggle is on
  assert.equal(await page.locator('.teamwork-nav').isVisible(),false);
- await page.keyboard.press('Meta+,');await page.getByText('Teamwork in sidebar',{exact:true}).waitFor();await page.getByText('Teamwork in sidebar',{exact:true}).locator('xpath=ancestor::*[.//*[@role="switch" or @type="checkbox"]][1]').locator('[role="switch"],[type="checkbox"]').first().click();
+ await page.keyboard.press('Meta+,');await page.locator('.settings-nav-item[data-section=account]').click();await page.getByText('Teamwork in sidebar',{exact:true}).waitFor();await page.getByText('Teamwork in sidebar',{exact:true}).locator('xpath=ancestor::*[.//*[@role="switch" or @type="checkbox"]][1]').locator('[role="switch"],[type="checkbox"]').first().click();
  await page.waitForFunction(()=>!document.querySelector('.teamwork-nav').hidden);
  }finally{await app.close();}
 });

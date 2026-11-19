@@ -113,20 +113,19 @@ document.querySelector('#app').innerHTML = `
 
     <nav class="sidebar-nav" aria-label="Navigation">
     ${button('New session', { icon: 'plus', variant: 'subtle', className: 'new-session', action: 'new', content: '<span class="nav-label">New</span>' })}
-    ${button('Search', { icon: 'search', className: 'nav-item', action: 'search-sessions', content: '<span class="nav-label">Search</span>' })}
+    ${button('Search sessions', { icon: 'search', className: 'nav-item', action: 'search-sessions', content: '<span class="nav-label">Search</span>' })}
     ${button('Projects', { icon: 'folder', className: 'nav-item projects-nav', action: 'projects', content: '<span class="nav-label">Projects</span>' })}
-    ${button('Scheduled', { icon: 'calendar', className: 'nav-item', action: 'scheduled', content: '<span class="nav-label">Scheduled</span>' })}
+    ${button('Scheduled', { icon: 'calendar', className: 'nav-item scheduled-nav', action: 'scheduled', content: '<span class="nav-label">Scheduled</span>' })}
     ${button('Plugins', { icon: 'plug', className: 'nav-item', action: 'plugins', content: '<span class="nav-label">Plugins</span>' })}
     ${button('Teamwork', { icon: 'users', className: 'nav-item teamwork-nav', action: 'teamwork', attrs: 'hidden', content: '<span class="nav-label">Teamwork</span>' })}
+    <div class="nav-more-wrap">${button('More', { icon: 'more', className: 'nav-item nav-more', action: 'nav-more', attrs: 'aria-expanded="false" aria-controls="nav-more-group"', content: '<span class="nav-label">More</span>' })}
+    <div class="nav-more-group" id="nav-more-group" hidden>
     ${button('Needs you', { icon: 'inbox', className: 'needs-nav', action: 'needs-you', attrs: 'hidden', content: '<span class="needs-nav-label">Needs you</span><span class="needs-count" hidden>0</span>' })}
-
-    ${button('Computer use', { icon: 'bolt', className: 'computer-nav', action: 'computer', attrs: 'hidden', content: '<span class="computer-nav-label">Computer use</span><span class="computer-count" hidden>0</span>' })}
-    ${button('Scheduled', { icon: 'calendar', className: 'scheduled-nav', action: 'scheduled', content: '<span class="issues-nav-label">Scheduled</span>' })}
-
     ${button('Issues', { icon: 'bug', className: 'issues-nav', action: 'issues', content: '<span class="issues-nav-label">Issues</span><span class="issues-count" hidden>0</span>' })}
-    </nav>
-
     ${button('Workflows', { icon: 'branch', className: 'flows-nav', action: 'flows', content: '<span class="flows-nav-label">Workflows</span><span class="flows-count" hidden>0</span>' })}
+    ${button('Computer use', { icon: 'bolt', className: 'computer-nav', action: 'computer', attrs: 'hidden', content: '<span class="computer-nav-label">Computer use</span><span class="computer-count" hidden>0</span>' })}
+    </div></div>
+    </nav>
 
     <div class="session-section"><div class="section-label"><span id="sidebar-section-label">Threads</span></div><div class="sidebar-sessions">${sessions.map((s, i) => sessionRow(s, i, true)).join('')}</div></div>
 
@@ -378,12 +377,12 @@ document.addEventListener('click', (e) => {
     case 'workspace-menu': menu(control, [{ label: 'Sidebar', children: () => sidebarPreferences.items() }, { label: 'Background', children: backgroundOptions }, { label: 'Theme', children: themeOptions }, { label: 'Workspace settings', action: 'settings:open' }]); break;
 
 
+    case 'nav-more': {const g=document.querySelector('#nav-more-group'),open=g.hidden;g.hidden=!open;control.setAttribute('aria-expanded',String(open));break;}
     case 'search-sessions': case 'search-collapsed': showSearch(); break;
 
     case 'settings': showSettings(); break;
 
     case 'projects': sidebarPreferences.choose('group=project'); document.querySelector('.sidebar-sessions')?.scrollTo({top:0}); break;
-    case 'scheduled': document.dispatchEvent(new CustomEvent('suffice-open-settings', { detail: { section: 'automations' } })); break;
     case 'plugins': document.dispatchEvent(new CustomEvent('suffice-open-settings', { detail: { section: 'extensions' } })); break;
     case 'teamwork': openCompare({api:window.sufficeDesktop,prompt,toast}); break;
     case 'account-menu': menu(control, accountItems(), 'Account'); break;
@@ -524,3 +523,10 @@ window.sufficeDesktop?.onNotification?.(event=>{if(!event.play)return;const Audi
 
 connectSettingsPrivacy();
 import './focus-modality.js';
+
+// More group: open while one of its pages is showing, so the current nav row is never hidden.
+{const ws=document.querySelector('.workspace'),more=document.querySelector('.nav-more'),grp=document.querySelector('#nav-more-group'),needs=document.querySelector('.needs-nav');
+ const reveal=()=>{if(grp.hidden){grp.hidden=false;more.setAttribute('aria-expanded','true');}};
+ if(ws&&more&&grp){new MutationObserver(()=>{if(['issues-open','needs-open','flows-open','computer-open'].some(c=>ws.classList.contains(c)))reveal();}).observe(ws,{attributes:true,attributeFilter:['class']});
+  // Something waits for the user: show the group so the count is never hidden.
+  const badge=needs.querySelector('.needs-count'),check=()=>{if(!badge.hidden)reveal();};check();new MutationObserver(check).observe(badge,{attributes:true,attributeFilter:['hidden']});}}

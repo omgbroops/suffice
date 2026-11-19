@@ -8,7 +8,7 @@ import {resolve} from 'node:path';
 import {mkdir,mkdtemp,writeFile,readFile,realpath} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {createRequire} from 'node:module';
-import {guard} from './electron-guard.mjs';
+import {guard,openMore} from './electron-guard.mjs';
 import {groupIssues,threadPrompt,ago,code} from '../src/issues-model.js';
 const {createIssueStore,pullRef}=createRequire(import.meta.url)('../electron/issues.cjs');
 
@@ -74,7 +74,7 @@ test('issues page: sidebar entry, create, edit, link, start a thread, persist',{
   const issuesOnDisk=async()=>JSON.parse(await readFile(resolve(data,'issues.json'),'utf8'));
 
   // sidebar entry -> empty state
-  assert.equal(await nav.isVisible(),true);
+  await openMore(page);assert.equal(await nav.isVisible(),true);
   await nav.click();await page.locator('.issues-view').waitFor({state:'visible'});
   assert.equal(await nav.getAttribute('aria-current'),'page');
   assert.equal(await page.locator('.issues-empty-title').innerText(),'No issues yet');
@@ -148,22 +148,22 @@ test('issues page: sidebar entry, create, edit, link, start a thread, persist',{
 
   // reopen from the entry: the linked thread opens from the page, state survives a reload
   await page.reload();await page.locator('.thread-row').first().waitFor();await page.waitForFunction(()=>document.documentElement.dataset.projectId);
-  await page.locator('.issues-nav').click();await page.locator('.issue-row',{hasText:'Cold start p95'}).click();
+  await openMore(page);await page.locator('.issues-nav').click();await page.locator('.issue-row',{hasText:'Cold start p95'}).click();
   await page.locator('[data-kind=thread][data-id=started1]').waitFor();
   await shot('issue-linked','dark');await shot('issue-linked','light');await page.evaluate(()=>{document.documentElement.dataset.theme='dark';});
   await page.locator('[data-kind=thread][data-id=old1] .issue-link-main').click();
   await page.waitForFunction(()=>!document.querySelector('.issues-view:not([hidden])'));
 
   // keyboard + interop: Escape steps back then closes; opening Needs you closes Issues
-  await page.locator('.issues-nav').click();await page.locator('.issue-row').first().click();
+  await openMore(page);await page.locator('.issues-nav').click();await page.locator('.issue-row').first().click();
   await page.keyboard.press('Escape');await page.locator('.issues-list-page').waitFor({state:'visible'});
   await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('.issues-view:not([hidden])'));
-  await page.locator('.issues-nav').click();await page.locator('.needs-nav').click();
+  await openMore(page);await page.locator('.issues-nav').click();await page.locator('.needs-nav').click();
   await page.waitForFunction(()=>document.querySelector('.issues-view').hidden&&!document.querySelector('.needs-view').hidden);
   await page.locator('.needs-nav').click();
 
   // delete needs a second click; an abandoned blank issue is cleaned up on leaving
-  await page.locator('.issues-nav').click();
+  await openMore(page);await page.locator('.issues-nav').click();
   await page.locator('.issues-add').click();await page.locator('.issue-back').click();
   await page.waitForFunction(()=>document.querySelectorAll('.issue-row').length===4);
   assert.equal((await issuesOnDisk()).filter(i=>i.title==='New issue').length,0);

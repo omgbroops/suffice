@@ -20,9 +20,10 @@ test('automation form saves once, a double-clicked switch cancels out, Scheduled
   const page=await app.firstWindow(),errors=[];page.on('pageerror',e=>errors.push(e.message));
   const nav=page.locator('.scheduled-nav'),rows=page.locator('.scheduled-view .automation-row'),list=()=>page.evaluate(()=>window.sufficeDesktop.automations());
   // Settings > Automations, then the sidebar Scheduled entry: Scheduled must be on top and Settings closed.
-  await page.getByRole('button',{name:'Settings',exact:true}).click();await page.getByRole('button',{name:'Automations',exact:true}).click();
+  await page.getByRole('button',{name:'Settings',exact:true}).click();await page.getByRole('button',{name:'Agent',exact:true}).click();
   await page.locator('html.settings-open').waitFor();
-  await nav.click();await page.locator('.scheduled-view').waitFor();
+  // Settings makes the sidebar inert, so the entry is reached the way the command menu does: a programmatic click.
+  await nav.evaluate(el=>el.click());await page.locator('.scheduled-view').waitFor();
   assert.equal(await page.locator('html').evaluate(el=>el.classList.contains('settings-open')),false);
   assert.equal(await page.locator('.scheduled-view').evaluate(el=>{const r=el.getBoundingClientRect(),hit=document.elementFromPoint(r.left+r.width/2,r.top+40);return !!hit&&el.contains(hit);}),true);
   await rows.first().waitFor();

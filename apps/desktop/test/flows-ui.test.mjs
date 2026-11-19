@@ -5,7 +5,7 @@ import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import electronPath from 'electron';
 import {_electron} from 'playwright-core';
-import {guard} from './electron-guard.mjs';
+import {guard,openMore} from './electron-guard.mjs';
 
 const shots=process.env.FLOW_SHOTS;
 
@@ -20,7 +20,7 @@ test('Workflows page starts, gates, approves, cancels, resumes and budget-stops 
    await body(page,shot);assert.deepEqual(errors,[]);}
   finally{await app.close();}
  };
- const open=async page=>{await page.locator('.flows-nav').click();await page.locator('.flows-view:not([hidden])').waitFor();};
+ const open=async page=>{await openMore(page);await page.locator('.flows-nav').click();await page.locator('.flows-view:not([hidden])').waitFor();};
  const start=async(page,kind,task,testCmd)=>{
   await page.getByRole('button',{name:'New run'}).click();await page.getByRole('radio',{name:kind}).click();
   await page.locator('[data-field=task]').fill(task);await page.locator('[data-field=test]').fill(testCmd);

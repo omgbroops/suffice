@@ -15,16 +15,16 @@ export function connectThreadContextMenu(list,{getThread,metadata,update,onArchi
   function items(state){
   const section=metadata(selected.id).section,names=sections(),targets=nestTargets(selected.id),under=state.under;
   return [
-   ...(selected.cwd?[{label:'Open in',icon:'folder',children:[{label:'Finder',action:'thread:open-folder'},{label:'Copy path',action:'thread:copy-directory'}]}]:[]),
+   ...(selected.cwd?[{label:'Open in',icon:'folder',children:[{label:'Finder',icon:'folder',action:'thread:open-folder'},{label:'Copy path',icon:'files',action:'thread:copy-directory'}]}]:[]),
    {label:state.pinned?'Unpin':'Pin',icon:'pin',action:'thread:pin',key:'P',separator:!!selected.cwd},
    {label:state.unread?'Mark as read':'Mark as unread',icon:'inbox',action:'thread:read',key:'U'},
    {label:'Rename',icon:'pencil',action:'thread:rename',key:'R'},
    ...(!selected.running?[{label:'Fork',icon:'branch',action:'thread:fork',key:'F'},{label:'Hand off',icon:'move-project',action:'thread:handoff'}]:[]),
-   {label:'Move to section',icon:'folder',separator:true,children:()=>[...names.map(name=>({label:name,selected:name===section,action:'thread:section='+encodeURIComponent(name)})),{label:'New section',action:'thread:section-new',separator:!!names.length},...(section?[{label:'Remove from section',action:'thread:section-none'}]:[])]},
+   {label:'Move to section',icon:'folder',separator:true,children:()=>[...names.map(name=>({label:name,selected:name===section,action:'thread:section='+encodeURIComponent(name)})),{label:'New section',icon:'plus',action:'thread:section-new',separator:!!names.length},...(section?[{label:'Remove from section',action:'thread:section-none'}]:[])]},
    {label:'Move under',icon:'branch',children:()=>targets.length||under?[...targets.map(t=>({label:t.title,selected:t.id===under,action:'thread:under='+encodeURIComponent(t.id)})),...(under?[{label:'No parent',action:'thread:under-none',separator:!!targets.length}]:[])]:[{label:'No other threads',action:'thread:noop',disabled:true}]},
    ...(!selected.running&&projectManagement?[{label:'Move to project',icon:'move-project',children:()=>projectManagement.moveItems(selected)}]:[]),
    ...(selected.cwd&&!isGrouped()&&projectManagement?[{label:'Manage project',icon:'folder',children:()=>projectManagement.projectItems(selected)}]:[]),
-   {label:'Export',icon:'files',children:[{label:'Markdown file',action:'thread:export-md'},{label:'HTML file',action:'thread:export-html'},{label:'Copy as Markdown',action:'thread:export-copy'}]},
+   {label:'Export',icon:'files',children:[{label:'Markdown file',icon:'files',action:'thread:export-md'},{label:'HTML file',icon:'files',action:'thread:export-html'},{label:'Copy as Markdown',icon:'files',action:'thread:export-copy'}]},
    ...(!selected.running?[{label:state.archived?'Unarchive':'Archive',icon:'archive',action:'thread:archive',key:'A',separator:true},{label:'Delete',icon:'trash',action:'thread:delete',key:'D',danger:true}]:[])
   ];
  }

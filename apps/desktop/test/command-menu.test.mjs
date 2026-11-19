@@ -24,7 +24,7 @@ test('command menu: tabs, filter chips, actions and settings reached from Cmd+K'
   const options=()=>page.getByRole('option');
   // entry: keyboard shortcut
   await page.keyboard.press('Control+k');await dialog.waitFor();
-  assert.deepEqual(await dialog.getByRole('tab').evaluateAll(t=>t.map(x=>x.firstChild.textContent)),['All','Threads','Sessions','Actions','Settings']);
+  assert.deepEqual(await dialog.getByRole('tab').evaluateAll(t=>t.map(x=>x.firstChild.textContent)),['All','Threads','Sessions','Actions','Settings','History']);
   for(const hint of ['Enter','Navigate','Esc'])assert.ok((await dialog.locator('footer').textContent()).includes(hint),hint);
   // rows: status dot, title, project, age
   const first=options().filter({hasText:'Fix webhook retries'});

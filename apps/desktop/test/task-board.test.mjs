@@ -5,7 +5,7 @@ import {mkdtemp,mkdir,writeFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import {_electron} from 'playwright-core';
-import {guard} from './electron-guard.mjs';
+import {guard,openMore} from './electron-guard.mjs';
 
 const shots=process.env.TASK_BOARD_SHOTS;
 async function launch(){
@@ -34,7 +34,7 @@ test(`task board (${theme}): queue, limit, needs-you, cancel, retry, via sidebar
   await page.evaluate(t=>localStorage.setItem('suffice-theme',t),theme);await page.reload();await page.locator('.composer').waitFor();
   const board=page.getByRole('region',{name:'Tasks'});
   // Entry 1: sidebar button.
-  await page.getByRole('button',{name:'Tasks',exact:true}).click();await board.waitFor();
+  await openMore(page);await page.getByRole('button',{name:'Tasks',exact:true}).click();await board.waitFor();
   assert.equal(await page.locator('#tb-text').evaluate(el=>document.activeElement===el),true);
   await shot(page,theme,'01-empty');
   // Leaving with unsaved text asks "Discard?" in a popover attached to the Tasks row: inside the sidebar, clear of the composer and the seam.

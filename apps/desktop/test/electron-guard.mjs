@@ -34,3 +34,5 @@ if(!_electron.__sufficeHardened){
  };
  process.on('exit',()=>sockets.forEach(killTmux));
 }
+// The sidebar folds Tasks, Needs you, Issues, Workflows and Computer use under More; open it before clicking one of them.
+export const openMore=async page=>{const more=page.getByRole('button',{name:'More',exact:true});if(await more.getAttribute('aria-expanded')!=='true')await more.click();};

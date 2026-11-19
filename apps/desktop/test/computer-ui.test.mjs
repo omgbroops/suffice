@@ -5,7 +5,7 @@ import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import electronPath from 'electron';
 import {_electron} from 'playwright-core';
-import {guard,killTmux} from './electron-guard.mjs';
+import {guard,killTmux,openMore} from './electron-guard.mjs';
 
 // Hidden window, fake computer (scripted pages), real backend agent: toggle, start, approval, replay strip, deny, replay, injection flag, cancel, restart.
 const shots=process.env.COMPUTER_SHOTS;
@@ -42,8 +42,8 @@ test('Computer use: Settings toggle, session start, approval on risky actions, r
   assert.equal(await sw.getAttribute('aria-checked'),'false');
   await sw.click();await page.locator('[role=switch][aria-label="Computer use sessions"][aria-checked=true]').waitFor(); // aria-checked flips after the async save
   await page.locator('[data-action=settings]').first().click();
-  await page.locator('.computer-nav').waitFor();
-  await page.locator('.computer-nav').click();await page.locator('.computer-view:not([hidden])').waitFor();
+  await openMore(page);await page.locator('.computer-nav').waitFor();
+  await openMore(page);await page.locator('.computer-nav').click();await page.locator('.computer-view:not([hidden])').waitFor();
   await page.getByText('No sessions yet').waitFor();await shot('computer-empty');
 
   // validation
@@ -100,7 +100,7 @@ test('Computer use: Settings toggle, session start, approval on risky actions, r
 
  // restart: sessions and their steps persist, entry stays on
  await launch(async page=>{
-  await page.locator('.computer-nav').click();await page.locator('.computer-view:not([hidden])').waitFor();
+  await openMore(page);await page.locator('.computer-nav').click();await page.locator('.computer-view:not([hidden])').waitFor();
   assert.equal(await page.locator('.cu-row').count(),4);
   assert.equal(await page.locator('.cu-row[data-state=cancelled]').count(),1);
   await expand(page.locator('.cu-item',{hasText:'Buy a laptop'}).last());

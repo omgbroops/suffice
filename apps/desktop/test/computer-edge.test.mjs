@@ -5,7 +5,7 @@ import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import electronPath from 'electron';
 import {_electron} from 'playwright-core';
-import {guard,killTmux} from './electron-guard.mjs';
+import {guard,killTmux,openMore} from './electron-guard.mjs';
 
 // Hidden window, fake computer: leaving Settings by opening Computer use, cancel while steps run, quit while an approval waits.
 test('Computer use edges: settings closes, cancel mid-run, interrupted approval after quit',{timeout:120000},async()=>{
@@ -31,7 +31,7 @@ test('Computer use edges: settings closes, cancel mid-run, interrupted approval 
   await page.getByRole('switch',{name:'Computer use sessions'}).click();
   await page.locator('[role=switch][aria-label="Computer use sessions"][aria-checked=true]').waitFor();
   await page.getByRole('button',{name:'Back to chats'}).click();
-  await page.locator('.computer-nav').click();
+  await page.evaluate(()=>{const m=document.querySelector('.nav-more');if(m.getAttribute('aria-expanded')!=='true')m.click();});await page.locator('.computer-nav').evaluate(el=>el.click());
   await page.locator('.computer-view:not([hidden])').waitFor();
   await page.waitForFunction(()=>!document.documentElement.classList.contains('settings-open'));
   await page.locator('.settings-scroll').waitFor({state:'hidden'});
@@ -56,7 +56,7 @@ test('Computer use edges: settings closes, cancel mid-run, interrupted approval 
  });
 
  await launch(async page=>{
-  await page.locator('.computer-nav').click();await page.locator('.computer-view:not([hidden])').waitFor();
+  await openMore(page);await page.locator('.computer-nav').click();await page.locator('.computer-view:not([hidden])').waitFor();
   const r=row(page,'Buy a laptop');
   await r.locator('.cu-row[data-state=interrupted]').waitFor();
   assert.match(await r.locator('.cu-reason').innerText(),/before you answered[\s\S]*not taken/);

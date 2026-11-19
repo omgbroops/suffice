@@ -16,7 +16,7 @@ export function createTaskBoardView({api=window.sufficeDesktop,board,host=docume
  const $=selector=>root.querySelector(selector),text=$('#tb-text'),queue=$('.tb-queue'),error=$('.tb-error'),issues=$('.tb-issues');
  let open=false,returnFocus=null;
  const badge=document.createElement('button');badge.type='button';badge.className='button subtle sidebar-tasks';badge.dataset.action='tasks';badge.setAttribute('aria-label','Tasks');badge.innerHTML=`${icon('plan')}<span>Tasks</span><span class="tb-badge" hidden></span>`;
- document.querySelector('.new-session')?.after(badge);
+ document.querySelector('#nav-more-group')?.prepend(badge);
  const card=task=>{
   const li=document.createElement('li');li.className='tb-card';li.dataset.id=task.id;li.dataset.status=task.status;
   const title=document.createElement('p');title.className='tb-title';title.textContent=task.text;title.title=task.text;

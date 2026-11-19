@@ -125,6 +125,6 @@ export function connectComputer({api,toast}){
  },true);
  document.addEventListener('keydown',event=>{if(!isOpen_||event.key!=='Escape'||event.defaultPrevented||document.querySelector('.popover:not([hidden])'))return;event.preventDefault();if(composing){composing=false;render();}else close();});
  new MutationObserver(()=>{if(document.documentElement.classList.contains('settings-open'))close(false);}).observe(document.documentElement,{attributes:true,attributeFilter:['class']});
- document.addEventListener('suffice-open-computer',()=>{if(enabled())open();else toast('Turn on Computer use in Settings first');});
+ document.addEventListener('suffice-open-computer',open);
  paint();void load();
 }

@@ -51,7 +51,7 @@ export function createMenu(element) {
     showPopover(node);
     if (focus) focusPanel(panel);
   }
-  function render(panel, items, heading, showHeading = !['Account', 'Sidebar'].includes(heading)) {
+  function render(panel, items, heading, showHeading = !['Account', 'Sidebar', 'Project', 'Thread', 'Session'].includes(heading)) {
     const node = panel.element;
     node.setAttribute('role', 'menu'); node.setAttribute('aria-label', heading);
     node.dataset.menuLevel = String(panel.depth); node.dataset.keyboard = String(keyboard);
