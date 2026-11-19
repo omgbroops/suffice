@@ -338,3 +338,6 @@ body:not(:has(.thread-view)) .right-sidebar { visibility: hidden; pointer-events
 /* An error strip joins the column above the diff; the absolutely placed scroller drops into flow so nothing overlaps. */
 .editor-preview:has(.review-strip) { display:flex; flex-direction:column; }
 .editor-preview:has(.review-strip) .panel-scroll { position:relative; inset:auto; flex:1; min-height:0; }
+/* Boxes tab: the box list is capped so the checkpoint rail below keeps room; only checkpoints get the rail line. */
+.boxes-list { max-height: 180px; overflow: auto; margin-bottom: 8px; }
+.boxes-list::before { display: none; }
