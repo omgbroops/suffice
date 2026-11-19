@@ -64,6 +64,17 @@ test('parse reminder',()=>{
  assert.equal(new Date(parseReminder('remind me to submit at 9am',now).dueAt).getDate(),19); // already past today
  const tomorrow=new Date(parseReminder('remind me to renew tomorrow',now).dueAt);assert.equal(tomorrow.getDate(),19);assert.equal(tomorrow.getHours(),9);
  assert.equal(parseReminder('remind me to nap',now).dueAt,now+3600000);
+ assert.equal(parseReminder('can you remind me what the save button does',now),null);
+ assert.equal(parseReminder('why did the build fail, remind me to check it',now),null);
+ assert.equal(parseReminder('Please remind me in 10 minutes to stretch',now).text,'stretch');
+ assert.equal(parseReminder('remind me in 1 hour to check the build',now).text,'check the build');
+ assert.equal(parseReminder('remind me at 5pm to submit',now).text,'submit');
+});
+test('reminders due while timers were frozen (sleep) fire on start()',()=>{
+ const c=clock(),file=join(mkdtempSync(join(tmpdir(),'rem-')),'r.json'),fired=[];
+ const r=createReminders({file,...c,notify:x=>fired.push(x.text)});r.add({text:'a',dueAt:c.now()+1000});
+ c.timers.length=0;c.advance(5000); // clock moved, the monotonic timer never fired
+ assert.deepEqual(fired,[]);r.start();assert.deepEqual(fired,['a']);
 });
 
 function clock(){let t=1000;const timers=[];return {now:()=>t,setTimer:(fn,ms)=>{const x={fn,at:t+ms};timers.push(x);return x;},clearTimer:x=>{const i=timers.indexOf(x);if(i>=0)timers.splice(i,1);},advance(ms){t+=ms;for(const x of timers.filter(x=>x.at<=t).sort((a,b)=>a.at-b.at)){timers.splice(timers.indexOf(x),1);x.fn();}},timers};}

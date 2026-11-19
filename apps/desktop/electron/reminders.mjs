@@ -8,7 +8,8 @@ const UNIT = {second: 1e3, sec: 1e3, minute: 6e4, min: 6e4, hour: 36e5, hr: 36e5
 
 // "remind me to call mum in 20 minutes" | "... at 5pm" | "... at 17:30" | "... tomorrow". Returns null when it is not a reminder.
 export function parseReminder(input, now) {
-  const m = /\bremind me\b\s*(?:to\s+|that\s+|about\s+)?(.*)/i.exec(String(input));
+  // Anchored at the start, and the words after "remind me" must be a connector or a time, so "can you remind me what the save button does" is a question, not a reminder.
+  const m = /^\s*(?:(?:please|hey|can you|could you|would you)\s+)*remind me\s+(?=(?:to|that|about|in|after|at|tomorrow)\b)(?:(?:to|that|about)\s+)?(.*)/i.exec(String(input));
   if (!m) return null;
   let text = m[1].trim(), dueAt = null;
   const rel = /\b(?:in|after)\s+(an?|\d+(?:\.\d+)?)\s*(seconds?|secs?|minutes?|mins?|hours?|hrs?|days?|weeks?)\b/i.exec(text);
@@ -28,7 +29,7 @@ export function parseReminder(input, now) {
     }
   }
   if (dueAt === null && tomorrow) { const d = new Date(now); d.setDate(d.getDate() + 1); d.setHours(9, 0, 0, 0); dueAt = d.getTime(); }
-  text = text.replace(/\btomorrow\b/i, '').replace(/\s+/g, ' ').replace(/[\s.,]+$/, '').trim();
+  text = text.replace(/\btomorrow\b/i, '').replace(/\s+/g, ' ').replace(/[\s.,]+$/, '').trim().replace(/^(?:to|that|about)\s+/i, ''); // "in 1 hour to check" leaves a dangling "to" after the time is cut
   return {text: text || 'Reminder', dueAt: dueAt ?? now + DEFAULT_DELAY};
 }
 
