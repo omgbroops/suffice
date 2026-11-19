@@ -6,7 +6,7 @@ export const TOOLKITS={
  files:{title:'Files',detail:'Read, edit and write files',tools:['read','edit','write']},
  shell:{title:'Shell',detail:'Run commands in the project',tools:['bash','powershell']},
  navigation:{title:'Code navigation',detail:'Find symbols and references',tools:['symbols','symbol_read','symbol_references']},
- web:{title:'Web',detail:'Search and fetch pages, loaded on demand',tools:['web_search','fetch_content','get_search_content']}
+ web:{title:'Web',detail:'Search and fetch pages, loaded on demand',tools:['web_search','fetch_content','get_search_content','crawl_to_markdown']}
 };
 // Same formula as the desktop's thread ids (apps/desktop/electron/threads.mjs).
 export const threadKey=path=>createHash('sha256').update(process.platform==='win32'?resolve(path).toLowerCase():resolve(path)).digest('hex').slice(0,32);

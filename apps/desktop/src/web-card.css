@@ -1,0 +1,8 @@
+/* Web tool cards: label row plus a compact facts block, inside the normal Work log. */
+.thread-activity .web-card > summary,.thread-activity[data-single='true'] > .thread-activity-log > .web-card > summary { display: flex; flex-wrap: wrap; align-items: center; width: 100%; max-width: 100%; box-sizing: border-box; }
+.web-card > summary .web-card-facts { flex: 0 0 100%; box-sizing: border-box; display: grid; gap: 2px; margin: 4px 0 2px 0; padding: 6px 10px; min-width: 0; border: 1px solid var(--border); border-radius: 6px; background: var(--surface-card); font-size: 12px; line-height: 1.5; }
+.web-card-url { font: 12px/1.5 ui-monospace, monospace; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.web-card-title { color: var(--text-strong); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.web-card-meta { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.web-card[data-status='error'] .web-card-meta { color: var(--red); }
+.web-card .tool-output { max-height: 180px; }

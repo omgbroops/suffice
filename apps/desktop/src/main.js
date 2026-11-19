@@ -39,6 +39,7 @@ import './motion.css';
 import './overlays.css';
 import './chat-polish.css';
 import './sidebar.css';
+import './web-card.css';
 import {connectMotion} from './motion.js';
 import {connectSharedChrome} from './shared-chrome.js';
 import '@fontsource/jetbrains-mono/400.css';
