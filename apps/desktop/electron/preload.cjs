@@ -60,6 +60,7 @@ contextBridge.exposeInMainWorld('sufficeDesktop',{
   issues:{list:projectId=>ipcRenderer.invoke('suffice:issues-list',projectId),create:payload=>ipcRenderer.invoke('suffice:issues-create',payload),update:payload=>ipcRenderer.invoke('suffice:issues-update',payload),remove:id=>ipcRenderer.invoke('suffice:issues-delete',id)},
   keys:{list:()=>ipcRenderer.invoke('suffice:keys-list'),set:p=>ipcRenderer.invoke('suffice:keys-set',p),remove:p=>ipcRenderer.invoke('suffice:keys-remove',p),test:p=>ipcRenderer.invoke('suffice:keys-test',p)},
   boxesList:()=>ipcRenderer.invoke('suffice:boxes-list'),boxesCheckpoints:id=>ipcRenderer.invoke('suffice:boxes-checkpoints',id),boxesRestore:p=>ipcRenderer.invoke('suffice:boxes-restore',p),boxesFork:p=>ipcRenderer.invoke('suffice:boxes-fork',p),boxesManifest:()=>ipcRenderer.invoke('suffice:boxes-manifest'),boxesSlots:()=>ipcRenderer.invoke('suffice:boxes-slots'),boxesActivate:()=>ipcRenderer.invoke('suffice:boxes-activate'),
+  worktreesList:()=>ipcRenderer.invoke('suffice:worktrees-list'),worktreesAction:payload=>ipcRenderer.invoke('suffice:worktrees-action',payload),
   budgetGet:()=>ipcRenderer.invoke('suffice:budget-get'),budgetSet:caps=>ipcRenderer.invoke('suffice:budget-set',caps),
   usageReport:()=>ipcRenderer.invoke('suffice:usage-report'),
   automations:()=>ipcRenderer.invoke('suffice:automations'),

@@ -152,7 +152,7 @@ export function connectThreads({api,prompt,send,toast}){
  let batching=false;const batch=fn=>{batching=true;try{fn();}finally{batching=false;drawThreads();}};
  viewState.subscribe(event=>{if(!batching&&event.type==='update'&&event.changed?.some(key=>['draft','sidebar'].includes(key)))drawThreads();});
  const metadata=id=>viewState.read(id).sidebar||{};
- const updateMetadata=(id,patch)=>viewState.updateFor(id,{sidebar:{...metadata(id),...patch}});
+ const updateMetadata=(id,patch)=>{if(patch.archived===true)api.worktreesAction({action:'close',threadId:id}).catch(()=>{});return viewState.updateFor(id,{sidebar:{...metadata(id),...patch}});};
  // The caption stays the same node so window chrome can move it between layouts.
  header.contentEditable='plaintext-only';header.tabIndex=0;header.setAttribute('role','textbox');header.setAttribute('aria-label','Chat title');header.setAttribute('aria-multiline','false');header.spellcheck=false;
  let titleEdit=null;

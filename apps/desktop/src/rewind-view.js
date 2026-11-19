@@ -3,7 +3,7 @@ import {getThreadDirectory} from './thread-directory.js';
 const el=(tag,cls,text)=>{const node=document.createElement(tag);if(cls)node.className=cls;if(text!=null)node.textContent=text;return node;};
 // Mounts the rewind timeline into the right panel body. `valid()` says whether this mount is still the current one.
 export async function mountRewind(body,{api,id,valid}){
- let st=initial();const root=el('div','rewind');body.replaceChildren(root);
+ let st=initial(),convo=false;const root=el('div','rewind');body.replaceChildren(root);
  const running=()=>['working','approval'].includes(getThreadDirectory().threads.find(t=>t.id===id)?.status);
  const send=e=>{st=reduce(st,e);draw();};
  function draw(){
@@ -17,6 +17,7 @@ export async function mountRewind(body,{api,id,valid}){
   for(const c of st.items){
    const row=el('button','rewind-item');row.type='button';row.dataset.id=c.id;row.dataset.kind=c.kind;row.setAttribute('role','option');row.setAttribute('aria-selected',String(c.id===st.selected));row.tabIndex=c.id===st.selected?0:-1;
    const text=el('span','rewind-text');text.append(el('span','rewind-name',title(c)),el('span','rewind-label',c.label),el('span','rewind-meta',`${ago(c.time)} · ${c.vsNow.files?c.vsNow.files+(c.vsNow.files===1?' file ':' files '):'No changes '}`));
+   if(c.vsNow.names?.length)text.lastChild.title=c.vsNow.names.join('\n')+(c.vsNow.files>c.vsNow.names.length?`\n+${c.vsNow.files-c.vsNow.names.length} more`:'');
    if(c.vsNow.files){const m=text.lastChild;const a=el('span','thread-added','+'+c.vsNow.added),r=el('span','thread-removed','−'+c.vsNow.removed);m.append(a,document.createTextNode(' '),r);}
    row.append(el('span','rewind-dot'),text);row.addEventListener('click',()=>send({type:'select',id:c.id}));list.append(row);
   }
@@ -34,9 +35,9 @@ export async function mountRewind(body,{api,id,valid}){
   if(!c)return box;
   const busy=st.phase==='rewinding',block=running();
   if(st.phase==='idle'||st.phase==='done'){
-   if(st.phase==='done'&&st.restored)box.append(el('p','rewind-line',`Restored ${st.restored.files} ${st.restored.files===1?'file':'files'} to before turn ${st.restored.turn??'?'}.`),el('p','rewind-note','Your earlier files are saved as the selected checkpoint. Rewind to it to undo.'));
+   if(st.phase==='done'&&st.restored)box.append(el('p','rewind-line',`Restored ${st.restored.files} ${st.restored.files===1?'file':'files'} to ${st.restored.kind==='end'?'after':'before'} turn ${st.restored.turn??'?'}.`),el('p','rewind-note','Your earlier files are saved as the selected checkpoint. Rewind to it to undo.'));
    else box.append(el('p','rewind-line',impact(c)));
-   const go=el('button','rewind-button','Rewind…');go.type='button';go.disabled=block||!c.vsNow.files;go.addEventListener('click',()=>send({type:'ask'}));
+   const go=el('button','rewind-button','Rewind to here');go.type='button';go.disabled=block||!c.vsNow.files;go.addEventListener('click',()=>send({type:'ask'}));
    box.append(go);if(block)box.append(el('p','rewind-note','Wait for this turn to finish.'));
    return box;
   }
@@ -45,7 +46,9 @@ export async function mountRewind(body,{api,id,valid}){
   const row=el('div','rewind-actions');
   const yes=el('button','rewind-button rewind-button--primary',busy?'Rewinding…':st.phase==='failed'?'Try again':'Rewind');yes.type='button';yes.disabled=busy;
   const no=el('button','rewind-button','Cancel');no.type='button';no.disabled=busy;no.addEventListener('click',()=>send({type:'cancel'}));
-  yes.addEventListener('click',async()=>{send({type:'start'});try{const res=await api.rewindRestore({threadId:id,checkpoint:c.id});const fresh=await api.rewindList(id);if(!valid())return;send({type:'ok',res:{...res,checkpoints:fresh.checkpoints}});document.dispatchEvent(new CustomEvent('suffice-rewind-restored'));}catch(error){send({type:'fail',message:error.message||'Unknown error.'});}});
+  yes.addEventListener('click',async()=>{send({type:'start'});try{const res=await api.rewindRestore({threadId:id,checkpoint:c.id});const fresh=await api.rewindList(id);if(!valid())return;send({type:'ok',res:{...res,checkpoints:fresh.checkpoints}});document.dispatchEvent(new CustomEvent('suffice-rewind-restored'));if(convo&&c.turn)document.dispatchEvent(new CustomEvent('suffice-fork-thread',{detail:{id,turn:c.turn,kind:c.kind}}));}catch(error){send({type:'fail',message:error.message||'Unknown error.'});}});
+  const lab=el('label','rewind-note'),chat=el('input');chat.type='checkbox';chat.checked=convo;chat.disabled=busy||!c.turn;chat.addEventListener('change',()=>{convo=chat.checked;});lab.append(chat,document.createTextNode(' Also restore the conversation to this turn (opens it as a new thread)'));
+  box.append(lab);
   row.append(no,yes);box.append(row);return box;
  }
  root.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&st.phase==='confirming'){ev.stopPropagation();send({type:'cancel'});}});

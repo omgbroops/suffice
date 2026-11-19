@@ -50,7 +50,7 @@ export const settingsSections=[
  ]},
  {id:'projects',subtitle:'',title:'Projects & Git',icon:'branch',category:'Workspace',groups:[
   group('Projects',[select('project-open','Open projects in','Current window',['Current window','New window']),toggle('restore-project','Restore last project',true)]),
-  group('Git',[select('worktree-location','Worktree location','Default',['Default','Custom location']),toggle('signoff','Ask the agent to sign off commits'),toggle('confirm-push','Confirm detected Git pushes',true)]),
+  group('Git',[select('worktree-location','Worktree location','Default',['Default','Custom location']),select('worktree-keep','Worktrees kept','15',['5','10','15','30','50'],'Oldest unpinned ones are removed beyond this'),toggle('signoff','Ask the agent to sign off commits'),toggle('confirm-push','Confirm detected Git pushes',true)]),
  ]},
  {id:'files',subtitle:'',title:'Files & editor',icon:'files',category:'Workspace',groups:[
   group('Explorer',[toggle('hidden-files','Show hidden files',true),toggle('gitignored','Show ignored files'),toggle('file-icons','Show file-type icons',true),select('file-sort','Sort files by','Name',['Name','Type','Modified'])]),

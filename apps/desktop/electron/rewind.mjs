@@ -27,17 +27,18 @@ async function save(root,threadId,tree,kind,label,turn){
  const ref=NS+threadId+'/'+String(next).padStart(5,'0');
  await git(root,['update-ref',ref,commit]);return ref;
 }
-export async function checkpoint(cwd,threadId,label,turn){
+// kind 'turn' = state before a turn starts; kind 'end' = state after it finished (same turn number).
+export async function checkpoint(cwd,threadId,label,turn,kind='turn'){
  if(!idOk(threadId))throw new Error('Invalid thread');
  const root=await topLevel(cwd);if(!root)return null;
- turn??=1+(await git(root,['for-each-ref','--format=%(trailers:key='+KIND+',valueonly,separator=)',NS+threadId+'/'])).split('\n').filter(l=>l.trim()==='turn').length;
- return save(root,threadId,await snapshotTree(root),'turn',label,turn);
+ turn??=(kind==='end'?0:1)+(await git(root,['for-each-ref','--format=%(trailers:key='+KIND+',valueonly,separator=)',NS+threadId+'/'])).split('\n').filter(l=>l.trim()==='turn').length;
+ return save(root,threadId,await snapshotTree(root),kind,label,turn);
 }
 async function stat(root,from,to){
  const files=new Map();
  for(const line of (await git(root,['diff-tree','-r','--numstat','--no-renames','-z',from,to])).split('\0')){const m=/^(\d+|-)\t(\d+|-)\t(.+)$/.exec(line);if(m)files.set(m[3],{added:m[1]==='-'?0:+m[1],removed:m[2]==='-'?0:+m[2]});}
  let added=0,removed=0;for(const f of files.values()){added+=f.added;removed+=f.removed;}
- return {files:files.size,added,removed};
+ return {files:files.size,added,removed,names:[...files.keys()].sort().slice(0,50)};
 }
 export async function list(cwd,threadId){
  if(!idOk(threadId))throw new Error('Invalid thread');
@@ -68,5 +69,5 @@ export async function restore(cwd,threadId,id){
    await git(root,['checkout-index','-f','-z','--stdin'],{env,input:write.join('\0')+'\0'});
   }finally{await rm(dir,{recursive:true,force:true});}
  }
- return {restored:target.turn,files:remove.length+write.length,safety};
+ return {restored:target.turn,kind:target.kind,files:remove.length+write.length,safety};
 }

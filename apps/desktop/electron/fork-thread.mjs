@@ -14,7 +14,7 @@ function forkLeaf(manager,entryId,before){
  return leaf;
 }
 // area 'sessions' = a listed thread; any other area is a private snapshot (side chats) the thread list never scans.
-export async function forkSavedThread({sourcePath,cwd,home,title,entryId,before=false,area='sessions',label='Fork of '}){
+export async function forkSavedThread({sourcePath,cwd,home,title,entryId,before=false,turn,kind,area='sessions',label='Fork of '}){
  const source=await realpath(sourcePath),root=await realpath(resolve(home,'sessions')),target=await realpath(cwd);
  if(!source.startsWith(root+sep))throw new Error('Thread path is outside the session directory');
  if(!(await stat(target)).isDirectory())throw new Error('Choose a project directory');
@@ -30,6 +30,12 @@ export async function forkSavedThread({sourcePath,cwd,home,title,entryId,before=
    manager.createBranchedSession(path[from-1].id);manager.appendSessionInfo(('Edit of '+(title||'conversation')).slice(0,90));
    return {id:threadId(resolve(home,area,relative(out,manager.getSessionFile()))),path:manager.getSessionFile(),cwd:target};
   }
+ // Rewind: cut the conversation where checkpoint `turn` (kind 'turn' = before it, 'end' = after it) sits; turn N = Nth user message.
+ if(Number.isInteger(turn)&&turn>0){
+  const m=SessionManager.open(source,directory,target),path=m.getBranch(),users=path.filter(e=>e.type==='message'&&e.message?.role==='user'),next=users[kind==='end'?turn:turn-1];
+  if(!users[turn-1])throw new Error('Turn not found');
+  entryId=next?next.id:path.at(-1).id;before=!!next;
+ }
  let session;
  if(entryId){session=SessionManager.open(source,directory,target);session.createBranchedSession(forkLeaf(session,entryId,before));}
  else session=SessionManager.forkFrom(source,target,directory);

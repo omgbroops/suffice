@@ -23,7 +23,7 @@ test('checkpoints use a private ref namespace and leave index, stash and HEAD al
  assert.equal(await git('stash','list'),'');assert.equal(await git('diff','--cached','--name-only'),'');assert.equal(await git('rev-parse','HEAD'),head);
  assert.equal(await git('status','--porcelain'),' M a.txt\n?? new.txt\n');
  const {git:isGit,checkpoints}=await list(cwd,T);assert.equal(isGit,true);assert.equal(checkpoints.length,1);
- assert.equal(checkpoints[0].label,'Add feature');assert.equal(checkpoints[0].turn,1);assert.deepEqual(checkpoints[0].vsNow,{files:0,added:0,removed:0});
+ assert.equal(checkpoints[0].label,'Add feature');assert.equal(checkpoints[0].turn,1);assert.deepEqual(checkpoints[0].vsNow,{files:0,added:0,removed:0,names:[]});
 });
 
 test('restore returns the tree to a turn, removes later files, keeps ignored files, and is undoable',async()=>{
@@ -31,7 +31,7 @@ test('restore returns the tree to a turn, removes later files, keeps ignored fil
  await writeFile(resolve(cwd,'a.txt'),'two\n');await checkpoint(cwd,T,'Turn two',2); // state before turn 2
  await writeFile(resolve(cwd,'a.txt'),'three\n');await mkdir(resolve(cwd,'deep/er'),{recursive:true});await writeFile(resolve(cwd,'deep/er/x.txt'),'x\n');
  await writeFile(resolve(cwd,'gone.txt'),'edited\n');await rm(resolve(cwd,'gone.txt'));await writeFile(resolve(cwd,'ignored.log'),'secret\n');
- const before=(await list(cwd,T)).checkpoints[0];assert.equal(before.vsNow.files,3);
+ const before=(await list(cwd,T)).checkpoints[0];assert.equal(before.vsNow.files,3);assert.deepEqual(before.vsNow.names,['a.txt','deep/er/x.txt','gone.txt']);
  const result=await restore(cwd,T,before.id);assert.equal(result.files,3);
  assert.equal(await readFile(resolve(cwd,'a.txt'),'utf8'),'two\n');assert.equal(await readFile(resolve(cwd,'gone.txt'),'utf8'),'keep me\n');
  assert.equal(await exists(resolve(cwd,'deep')),false);assert.equal(await readFile(resolve(cwd,'ignored.log'),'utf8'),'secret\n');
@@ -49,4 +49,13 @@ test('threads are isolated and bad input is refused',async()=>{
  await assert.rejects(()=>restore(cwd,'b'.repeat(32),first),/not found/);
  const plain=await mkdtemp(resolve(tmpdir(),'suffice-rewind-plain-'));
  assert.deepEqual(await list(plain,T),{git:false,checkpoints:[]});assert.equal(await checkpoint(plain,T,'x',1),null);
+});
+
+test('an end tick holds the state after the turn and does not shift turn numbers',async()=>{
+ const {cwd}=await repo();
+ await checkpoint(cwd,T,'Turn nine',9);await writeFile(resolve(cwd,'a.txt'),'after nine\n');
+ const end=await checkpoint(cwd,T,'Turn nine',undefined,'end');assert.ok(end);
+ const rows=(await list(cwd,T)).checkpoints,last=rows[rows.length-1];
+ assert.equal(last.kind,'end');assert.equal(await run('git',['-C',cwd,'show',last.id+':a.txt']).then(r=>r.stdout),'after nine\n');
+ assert.match(await checkpoint(cwd,T,'next'),new RegExp('/'+String(rows.length+1).padStart(5,'0')+'$'));
 });
