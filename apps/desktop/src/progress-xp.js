@@ -25,7 +25,7 @@ export {rekeyCtx};
 export function createRunStrip(threadId){
  const ctx=runCtx(threadId),root=el('div','run-strip');root.setAttribute('role','group');root.setAttribute('aria-label','Run progress');root.hidden=true;
  const verb=el('span','run-strip-verb','Working'),time=el('span','run-strip-time','0:00'),tok=el('span','run-strip-tokens','0 tokens');
- const chip=el('button','xp-chip');chip.type='button';chip.setAttribute('aria-haspopup','true');chip.setAttribute('aria-expanded','false');
+ const chip=el('button','xp-chip');chip.type='button';chip.dataset.tooltipExtra='';chip.setAttribute('aria-haspopup','true');chip.setAttribute('aria-expanded','false');
  const bar=el('span','xp-bar'),fill=el('span','xp-fill');bar.append(fill);const lv=el('span','xp-level'),streak=el('span','xp-streak');
  let menu=null,stageNow=-1,levelNow=0,started=0,timer=0,total=0;
  const paint=levelUp=>{const s=state;const st=stageFor(s.level);
