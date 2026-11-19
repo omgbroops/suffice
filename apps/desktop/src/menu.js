@@ -45,8 +45,12 @@ export function createMenu(element) {
     const viewport = document.documentElement.clientWidth;
     const right = rect.right + 6;
     const left = right + node.offsetWidth <= viewport - 12 ? right : rect.left - node.offsetWidth - 6;
-    node.style.left = `${Math.max(12, left)}px`;
-    node.style.top = `${Math.max(12, Math.min(rect.top - 6, innerHeight - node.offsetHeight - 12))}px`;
+    // A flip to the left must not cover the anchor (e.g. the open row): open under the trigger instead.
+    const open = trigger?.getBoundingClientRect();
+    const covers = left < right && open && left < open.right && left + node.offsetWidth > open.left;
+    const x = covers ? viewport - 12 - node.offsetWidth : left, y = covers ? rect.bottom + 4 : rect.top - 6;
+    node.style.left = `${Math.max(12, x)}px`;
+    node.style.top = `${Math.max(12, Math.min(y, innerHeight - node.offsetHeight - 12))}px`;
     node.style.setProperty('--popover-origin', left < rect.left ? 'top right' : 'top left');
     showPopover(node);
     if (focus) focusPanel(panel);
