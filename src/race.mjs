@@ -35,11 +35,11 @@ export async function runRace({ runtime, task, variant, n = 3, runDir, thinkingL
       await mkdir(attemptDir, { recursive: true });
       await cp(task.workspaceDir, workspace, { recursive: true });
       const agent = await runAgentImpl({ runtime, workspace, runDir: attemptDir, task, variant, thinkingLevel, timeoutMs, signal: controller.signal });
-      if (controller.signal.aborted) return { index, status: agent.status, passed: false, usage: agent.usage, usageCostUnknown: agent.usageCostUnknown, turns: agent.turns, latencyMs: agent.latencyMs, workspace, runDir: attemptDir };
+      if (controller.signal.aborted) return { index, status: agent.status, providerFailureKind: agent.providerFailureKind, passed: false, usage: agent.usage, usageCostUnknown: agent.usageCostUnknown, turns: agent.turns, latencyMs: agent.latencyMs, workspace, runDir: attemptDir };
       const acceptance = await runNodeTests(workspace, task.acceptancePath, { signal: controller.signal });
       const passed = agent.status === 'completed' && acceptance.status === 'passed' && await immutableIntact(workspace, task.workspaceDir);
       const { diffLines } = passed ? await attemptDiff(workspace, task.workspaceDir) : { diffLines: null };
-      return { index, status: agent.status, passed, diffLines, acceptanceStatus: acceptance.status, usage: agent.usage, usageCostUnknown: agent.usageCostUnknown, turns: agent.turns, latencyMs: agent.latencyMs, workspace, runDir: attemptDir };
+      return { index, status: agent.status, providerFailureKind: agent.providerFailureKind, passed, diffLines, acceptanceStatus: acceptance.status, usage: agent.usage, usageCostUnknown: agent.usageCostUnknown, turns: agent.turns, latencyMs: agent.latencyMs, workspace, runDir: attemptDir };
     })().then(
       attempt => ({ settled: true, attempt }),
       error => ({ settled: true, attempt: { index, status: 'harness_error', passed: false, error: String(error?.message ?? error) } }),
@@ -64,8 +64,13 @@ export async function runRace({ runtime, task, variant, n = 3, runDir, thinkingL
   // Collect the rest of the attempts for the record after the winner is known.
   for (const r of await Promise.all(jobs)) if (!attempts.includes(r.attempt)) attempts.push(r.attempt);
   attempts.sort((a, b) => a.index - b.index);
+  // Surface a uniform failure kind so callers can gate on provider health:
+  // when every attempt failed the same way, that is the race's status.
+  const settledStatuses = new Set(attempts.map(a => a.status));
+  const uniformFailure = !winner && settledStatuses.size === 1 ? attempts[0].status : null;
   const result = {
-    status: winner ? 'completed' : 'no_winner', chosen: winner?.index ?? null, selection, attempts,
+    status: winner ? 'completed' : uniformFailure ?? 'no_winner', providerFailureKind: uniformFailure === 'provider_error' ? attempts[0].providerFailureKind : undefined,
+    chosen: winner?.index ?? null, selection, attempts,
     latencyMs: Date.now() - started,
     usage: attempts.reduce((sum, a) => {
       for (const k of ['input', 'output', 'cacheRead', 'cacheWrite', 'totalTokens', 'estimatedApiUsd']) sum[k] = (sum[k] ?? 0) + (a.usage?.[k] ?? 0);
