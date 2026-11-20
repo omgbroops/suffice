@@ -24,7 +24,7 @@ async function immutableIntact(workspace, baseline) {
 // 'best' = wait for every attempt, then pick the smallest accepted diff.
 // attemptSpecs[i] (optional) diversifies attempt i: thinkingLevel, variant,
 // or a promptSuffix appended to the task prompt.
-export async function runRace({ runtime, task, variant, n = 3, runDir, thinkingLevel = 'low', timeoutMs = 240_000, selection = 'first', attemptSpecs = [], runAgentImpl = runAgent }) {
+export async function runRace({ runtime, task, variant, n = 3, runDir, thinkingLevel = 'low', timeoutMs = 240_000, selection = 'first', attemptSpecs = [], iterate = false, runAgentImpl = runAgent }) {
   if (!['first', 'best'].includes(selection)) throw new Error(`Unknown selection: ${selection}`);
   const controller = new AbortController();
   const started = Date.now();
@@ -75,11 +75,25 @@ export async function runRace({ runtime, task, variant, n = 3, runDir, thinkingL
   // is a plain 'no_winner', not a success.
   const settledStatuses = new Set(attempts.map(a => a.status));
   const uniformFailure = !winner && settledStatuses.size === 1 && attempts[0].status !== 'completed' ? attempts[0].status : null;
+  // Iterate-on-winner: one refinement pass on the chosen workspace. If the
+  // refined state fails verification, revert to the pre-iteration winner.
+  let iteration = null;
+  if (winner && iterate) {
+    const backup = resolve(runDir, 'winner-backup');
+    await mkdir(backup, { recursive: true });
+    await cp(winner.workspace, backup, { recursive: true });
+    const refineTask = { ...task, prompt: `${task.prompt}\n\nA verified fix already exists in this workspace. Tighten it: the smallest correct change only — remove any unrelated edits, do not refactor or reformat. Run the test tool once at the end, then stop.` };
+    const iterAgent = await runAgentImpl({ runtime, workspace: winner.workspace, runDir: resolve(runDir, 'iterate'), task: refineTask, variant, thinkingLevel, timeoutMs, signal: controller.signal });
+    const acceptance = await runNodeTests(winner.workspace, task.acceptancePath);
+    const ok = iterAgent.status === 'completed' && acceptance.status === 'passed' && await immutableIntact(winner.workspace, task.workspaceDir);
+    if (!ok) await cp(backup, winner.workspace, { recursive: true, force: true });
+    iteration = { accepted: ok, agentStatus: iterAgent.status, latencyMs: iterAgent.latencyMs, turns: iterAgent.turns, usage: iterAgent.usage };
+  }
   const result = {
     status: winner ? 'completed' : uniformFailure ?? 'no_winner', providerFailureKind: uniformFailure === 'provider_error' ? attempts[0].providerFailureKind : undefined,
-    chosen: winner?.index ?? null, selection, attempts,
+    chosen: winner?.index ?? null, selection, attempts, iteration,
     latencyMs: Date.now() - started,
-    usage: attempts.reduce((sum, a) => {
+    usage: [...attempts, ...(iteration ? [iteration] : [])].reduce((sum, a) => {
       for (const k of ['input', 'output', 'cacheRead', 'cacheWrite', 'totalTokens', 'estimatedApiUsd']) sum[k] = (sum[k] ?? 0) + (a.usage?.[k] ?? 0);
       return sum;
     }, {}),

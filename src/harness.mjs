@@ -10,7 +10,7 @@ import { Type } from 'typebox';
 import { buildCodeGraph, rankGraphCandidates } from './code-graph.mjs';
 import { selectContext } from './context-policy.mjs';
 import { createReadOnlyAssistant, createRoutingExtension } from './control-policy.mjs';
-import { serviceTierExtension, latencyTracker, withSpeculativeTests } from './fast.mjs';
+import { serviceTierExtension, latencyTracker, withSpeculativeTests, withStreamPrefire } from './fast.mjs';
 
 export const variants = Object.freeze([
   { id: 'pi', core: false },
@@ -74,6 +74,24 @@ export const variants = Object.freeze([
     { thinkingLevel: 'low' },
     { thinkingLevel: 'low', promptSuffix: 'Prefer the smallest correct change. Do not refactor or reformat unrelated code.' },
     { thinkingLevel: 'low', promptSuffix: 'Check edge cases and the full contract before finishing.' },
+  ] } },
+  // Stream-prefire: execute read-only tool calls while the response decodes.
+  { id: 'fast-prefire', core: true, effort: 'low', fast: { speculativeTest: true, streamPrefire: true } },
+  // Race then refine the winner once: smallest correct diff, revert if broken.
+  { id: 'race-3-low-iterate', core: true, fast: { speculativeTest: true }, race: { n: 3, selection: 'first', iterate: true, attempts: [
+    { thinkingLevel: 'low' },
+    { thinkingLevel: 'low', promptSuffix: 'Prefer the smallest correct change. Do not refactor or reformat unrelated code.' },
+    { thinkingLevel: 'low', promptSuffix: 'Check edge cases and the full contract before finishing.' },
+  ] } },
+  // SpecAgent: Luna scouts read-only, Sol repairs with the scout's notes.
+  { id: 'spec-agent', core: true, effort: 'low', fast: { speculativeTest: true }, spec: { draftModel: 'gpt-6-luna', draftEffort: 'low', draftTurns: 8 } },
+  // Five cheap attempts: more min-of-N draws at still ~solo-medium cost.
+  { id: 'race-5-low', core: true, fast: { speculativeTest: true }, race: { n: 5, selection: 'first', attempts: [
+    { thinkingLevel: 'low' },
+    { thinkingLevel: 'low', promptSuffix: 'Prefer the smallest correct change. Do not refactor or reformat unrelated code.' },
+    { thinkingLevel: 'low', promptSuffix: 'Check edge cases and the full contract before finishing.' },
+    { thinkingLevel: 'low', promptSuffix: 'Look at the tests first; make only the change they require.' },
+    { thinkingLevel: 'low', promptSuffix: 'Work quickly: identify the faulty logic, fix it, verify once, stop.' },
   ] } },
 ]);
 
@@ -294,17 +312,21 @@ export async function runAgent({ runtime, workspace, runDir, task, variant, time
     systemPrompt: variant.core ? CORE_PROMPT : undefined,
     extensionFactories: [...(codemode ? [createCodemodeExtension({ mode: 'only', models: false, inlineBudget: 2000 })] : []), extension, latencyTracker(log),
       ...(variant.route ? [createRoutingExtension({ runtime, log })] : []),
-      ...(fast?.serviceTier ? [serviceTierExtension({ tier: fast.serviceTier, log })] : [])],
+      ...(fast?.serviceTier ? [serviceTierExtension({ tier: fast.serviceTier, log })] : []),
+      ...(streamPrefire ? [streamPrefire.ext] : [])],
   });
+  let tools = workspaceTools({ workspace, log, artifactsDir: resolve(runDir, 'artifacts'), signal: controller.signal, defaultReadLimit: variant.defaultReadLimit ?? 200 });
+  if (variant.readOnly) tools = tools.filter(t => !['file_edit', 'file_write'].includes(t.name));
+  if (fast?.speculativeTest) tools = withSpeculativeTests(tools, { workspace, snapshotRoot: resolve(runDir, 'spec-snapshots'), artifactsDir: resolve(runDir, 'artifacts'), signal: controller.signal, log });
+  const streamPrefire = fast?.streamPrefire ? withStreamPrefire(tools, { log }) : null;
+  if (streamPrefire) tools = streamPrefire.tools;
   try {
     await resourceLoader.reload();
     const created = await createAgentSession({ cwd: workspace, agentDir: resolve(stateDir, 'empty-agent'), modelRuntime: runtime,
       model: runtime.getModel('openai', variant.model ?? 'gpt-6.1-sol'), thinkingLevel,
       resourceLoader, settingsManager: settings, sessionManager: SessionManager.inMemory(workspace),
-      tools: [...toolNames, ...(codemode ? ['codemode'] : [])],
-      customTools: [...(fast?.speculativeTest
-        ? withSpeculativeTests(workspaceTools({ workspace, log, artifactsDir: resolve(runDir, 'artifacts'), signal: controller.signal, defaultReadLimit: variant.defaultReadLimit ?? 200 }), { workspace, snapshotRoot: resolve(runDir, 'spec-snapshots'), artifactsDir: resolve(runDir, 'artifacts'), signal: controller.signal, log })
-        : workspaceTools({ workspace, log, artifactsDir: resolve(runDir, 'artifacts'), signal: controller.signal, defaultReadLimit: variant.defaultReadLimit ?? 200 })), historyTool],
+      tools: [...toolNames.filter(n => !variant.readOnly || !['file_edit', 'file_write'].includes(n)), ...(codemode ? ['codemode'] : [])],
+      customTools: [...tools, historyTool],
     });
     session = created.session;
     await session.bindExtensions({});

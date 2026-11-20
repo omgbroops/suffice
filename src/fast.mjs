@@ -69,6 +69,57 @@ export function latencyTracker(log = () => {}) {
   };
 }
 
+// Stream-prefire: the provider streams function_call arguments before the
+// message completes; once `function_call_arguments.done` arrives the call is
+// already determined, so read-only tools can execute while the rest of the
+// message decodes. When the agent later issues the identical call the
+// prefired result is returned. Only pure tools are prefired — writes wait.
+const PREFIREABLE = new Set(['files', 'file_read', 'search', 'test', 'history_read']);
+const canonical = value => {
+  if (Array.isArray(value)) return `[${value.map(canonical).join(',')}]`;
+  if (value && typeof value === 'object') return `{${Object.keys(value).sort().map(k => `${JSON.stringify(k)}:${canonical(value[k])}`).join(',')}}`;
+  return JSON.stringify(value);
+};
+export function withStreamPrefire(tools, { log = () => {} } = {}) {
+  const byName = new Map(tools.map(t => [t.name, t]));
+  const pending = new Map();
+  const callKey = (name, args) => `${name}\n${canonical(args)}`;
+  const ext = pi => {
+    const names = new Map();
+    pi.on('provider_stream_event', event => {
+      const d = event.data;
+      if (d?.type === 'response.output_item.added' && d.item?.type === 'function_call') names.set(d.item.id, d.item.name);
+      if (d?.type === 'response.function_call_arguments.done') {
+        const name = names.get(d.item_id);
+        if (!name || !PREFIREABLE.has(name)) return;
+        let args; try { args = JSON.parse(d.arguments); } catch { return; }
+        const tool = byName.get(name);
+        if (!tool) return;
+        const key = callKey(name, args);
+        if (pending.has(key)) return;
+        log({ type: 'stream_prefire', event: 'started', tool: name });
+        pending.set(key, Promise.resolve()
+          .then(() => tool.execute(`prefire-${d.item_id}`, args))
+          .then(result => { log({ type: 'stream_prefire', event: 'finished', tool: name }); return result; })
+          .catch(error => ({ __prefireError: error })));
+      }
+    });
+  };
+  const wrapped = tools.map(t => PREFIREABLE.has(t.name)
+    ? { ...t, async execute(id, args, signal, onUpdate) {
+        const key = callKey(t.name, args);
+        const p = pending.get(key);
+        if (!p) return t.execute(id, args, signal, onUpdate);
+        pending.delete(key);
+        const result = await p;
+        if (result && typeof result === 'object' && '__prefireError' in result) throw result.__prefireError;
+        log({ type: 'stream_prefire', event: 'reused', tool: t.name });
+        return result;
+      } }
+    : t);
+  return { tools: wrapped, ext };
+}
+
 // Hash over every src/ file: the workspace's only mutable region.
 export async function srcFingerprint(workspace) {
   const parts = [];
