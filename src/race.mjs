@@ -1,6 +1,6 @@
 // Race N identical trajectories in isolated workspace copies. Wall clock is
 // max-of-N, not sum-of-N; the first verified winner can stop the rest.
-import { cp, mkdir, writeFile } from 'node:fs/promises';
+import { cp, mkdir, rm, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { runAgent } from './harness.mjs';
 import { filesIn, readText, hash, runNodeTests } from './workspace.mjs';
@@ -88,7 +88,7 @@ export async function runRace({ runtime, task, variant, n = 3, runDir, thinkingL
     const iterAgent = await runAgentImpl({ runtime, workspace: winner.workspace, runDir: resolve(runDir, 'iterate'), task: refineTask, variant, thinkingLevel, timeoutMs });
     const acceptance = await runNodeTests(winner.workspace, task.acceptancePath);
     const ok = iterAgent.status === 'completed' && acceptance.status === 'passed' && await immutableIntact(winner.workspace, task.workspaceDir);
-    if (!ok) await cp(backup, winner.workspace, { recursive: true, force: true });
+    if (!ok) { await rm(winner.workspace, { recursive: true, force: true }); await cp(backup, winner.workspace, { recursive: true }); }
     iteration = { accepted: ok, agentStatus: iterAgent.status, latencyMs: iterAgent.latencyMs, turns: iterAgent.turns, usage: iterAgent.usage };
   }
   const result = {
