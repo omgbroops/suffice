@@ -315,7 +315,7 @@ export async function runAgent({ runtime, workspace, runDir, task, variant, time
     const final = session.getLastAssistantText();
     const lastAssistant = [...session.messages].reverse().find(m => m.role === 'assistant');
     const status = abortedReason ?? (lastAssistant?.stopReason === 'error' || lastAssistant?.stopReason === 'aborted' ? 'provider_error' : 'completed');
-    const providerFailureKind = status === 'provider_error' ? (/overloaded|temporarily unavailable|server error/i.test(providerErrors.at(-1) ?? '') ? 'transient_capacity' : 'other') : undefined;
+    const providerFailureKind = status === 'provider_error' ? (/overloaded|temporarily unavailable|server error|rate.?limit|429/i.test(providerErrors.at(-1) ?? '') ? 'transient_capacity' : 'other') : undefined;
     return { status, providerFailureKind, turns, toolCalls, usage, usageCostUnknown, usageTelemetryMissing, prefixRegressions, watcherCalls, skippedPlanned, decisions, contextDecisions,
       routingDecisions: events.filter(e => e.type === 'routing_decision'), contextTreatmentValid: contextDecisions.every(d => d.status !== 'fail_open'),
       routingTreatmentValid: events.filter(e => e.type === 'routing_decision').every(e => !['error','unavailable'].includes(e.status)), latencyMs: Date.now() - started, final };
