@@ -129,7 +129,92 @@ otherwise. Never let workers edit the same file.
 | Tools | unchanged (parallel already default); `terminate` on no-follow-up results |
 | Decomposition | optional fork-join only for tasks with disjoint file partitions |
 
-## Measure first
+## Round 2 — what the literature adds
+
+### 7. Speculative tool execution — the most-cited harness lever
+
+Coding-agent tool patterns are stable and predictable, so you can run them
+*before* the model asks:
+
+- **PASTE** (arXiv:2603.18897): pre-execute predictable tool patterns (search
+  -> visit top hits; list -> read). −48.5% task time, 1.8x tool throughput.
+- **TomasuLLM** (arXiv:2609.38201): out-of-order speculative tool execution
+  built *for coding agents* — draft the next action, run it in a copy-on-write
+  overlay, commit results in trajectory order only after validation.
+  1.31x on SWE-bench Verified; zero false accepts across 4,010 commits. The
+  insight: tests/builds take seconds-to-minutes while the model idles.
+- **SPORK** (arXiv:2607.03333): the model is its own predictor — a probe
+  forked at the start of generation predicts the tool call and starts it
+  while the message is still decoding. Tool wait is 16-37% of wall time.
+
+Suffice versions, cheap to expensive:
+
+1. **Read prefetch**: on every `search`/`files` result, asynchronously read
+   the top-k candidate files into a content cache keyed by (path, hash); a
+   later `file_read` for a warm path returns instantly. Zero risk — reads are
+   pure.
+2. **Speculative test run**: after a `file_edit`/`file_write` lands, kick off
+   the visible test command in a worktree overlay immediately. When the model
+   calls `test`, return the already-running/finished result if the command
+   matches; discard if the workspace changed again. This is TomasuLLM-lite.
+3. **Stream-prefire**: parse partial tool-call JSON from
+   `provider_stream_event` and prefire read-only tools before `message_end`.
+   Needs care — abort the prefire if the final args differ.
+
+### 8. Weak-drafts-strong-verifies (SpecAgent)
+
+arXiv:2610.21463: a weak model drafts a segment of read-only trajectory steps
+(executing tools itself, grounded in real observations), and the strong model
+verifies the whole segment in **one prefill pass**, commits the longest valid
+prefix, and repairs the first rejected step. ~half wall time, near-parity
+quality — verification replaces autoregressive authoring.
+
+Suffice already has both actors (Luna drafts, Sol verifies) and a routing
+extension (`createRoutingExtension`); this generalizes it from per-turn model
+switching into a draft/verify protocol. Applies to the read/investigate phase
+— the part of a coding task that burns the most serial turns.
+
+### 9. Teams-of-N, not solo-of-N (parallel agent teams)
+
+arXiv:2611.09798 (Nov 2026): best-of-N over *small collaborating teams*
+(ten teams of ten sharing a forum) beats best-of-N over solo agents on 10/12
+long-horizon tasks and beats one big team everywhere it was run. Solo samples
+have low mean; one big team has no variance. If we build the race (lever 2),
+the raced unit could be a 2-3 agent team rather than a solo session once N
+is large enough — though N=3 solos is the right first step.
+
+### 10. Skeleton-first parallelism (SoT)
+
+Skeleton-of-Thought (arXiv:2307.15337): emit a skeleton, then fan out
+parallel calls to fill each point. For Suffice this is the disciplined version
+of lever 3: one cheap planner turn produces an explicit per-file/per-module
+edit skeleton; workers each fill one skeleton slot. Better than ad-hoc
+decomposition because the skeleton is a contract (echoes the existing
+`submit_contract` mechanism in `workflow-agent.mjs`).
+
+### 11. Trajectory recycling (SWE-Replay)
+
+arXiv:2601.22129: don't resample from scratch — archive trajectories and
+branch at high-value intermediate steps. Suffice's desktop already persists
+threads and transcript checkpoints; a fast mode could resume a stalled race
+from the leading attempt's last good checkpoint instead of restarting.
+
+### 12. Hybrid serial+parallel (S*)
+
+arXiv:2502.14382: parallel sampling *then* sequential iterative debugging on
+the survivors. Pure best-of-N throws away runner-up information; racing then
+iterating on the best attempt (or merging two attempts via the selection
+step, as CodeMonkeys' selection trajectory does) is strictly better for
+quality at the same latency.
+
+### Not actionable via API (noted for completeness)
+
+AgentSpec, ToolSpec, SchemaFill, SGLang/RadixAttention — speculative decoding
+and KV-reuse inside the inference engine. OpenAI's hosted models don't expose
+these; serviceTier is the only TPS knob we control. If a self-hosted Luna-
+class model ever becomes a worker option, this whole class unlocks.
+
+
 
 Add per-phase latency events before building: for each turn log
 `provider_wait_ms` (request -> first stream event) and `tool_ms` (call ->
