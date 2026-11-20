@@ -35,6 +35,7 @@ export async function runRace({ runtime, task, variant, n = 3, runDir, thinkingL
       await mkdir(attemptDir, { recursive: true });
       await cp(task.workspaceDir, workspace, { recursive: true });
       const agent = await runAgentImpl({ runtime, workspace, runDir: attemptDir, task, variant, thinkingLevel, timeoutMs, signal: controller.signal });
+      if (controller.signal.aborted) return { index, status: agent.status, passed: false, usage: agent.usage, turns: agent.turns, latencyMs: agent.latencyMs, workspace, runDir: attemptDir };
       const acceptance = await runNodeTests(workspace, task.acceptancePath, { signal: controller.signal });
       const passed = agent.status === 'completed' && acceptance.status === 'passed' && await immutableIntact(workspace, task.workspaceDir);
       const { diffLines } = passed ? await attemptDiff(workspace, task.workspaceDir) : { diffLines: null };

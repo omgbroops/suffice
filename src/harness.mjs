@@ -91,6 +91,7 @@ export async function runAgent({ runtime, workspace, runDir, task, variant, time
   const abort = reason => { abortedReason ??= reason; controller.abort(); if (session) void session.abort(); };
   const timer = setTimeout(() => abort('run_timeout'), timeoutMs);
   signal?.addEventListener('abort', () => abort('external_cancel'), { once: true });
+  if (signal?.aborted) abort('external_cancel');
   const watcher = variant.watcher && variant.watcher !== 'rules' ? createWatcher({
     kind: variant.watcher, runtime, ledgerPath: resolve(stateDir, 'jev-budget.jsonl'), timeoutMs: watcherTimeoutMs,
   }) : undefined;
@@ -295,7 +296,7 @@ export async function runAgent({ runtime, workspace, runDir, task, variant, time
         if (turns >= maxTurns) queueMicrotask(() => abort('turn_limit'));
       }
     });
-    await session.prompt(`${task.prompt}\nUse the provided test tool for the test command. Work only in this workspace; only src/ can be changed.`);
+    if (!abortedReason) await session.prompt(`${task.prompt}\nUse the provided test tool for the test command. Work only in this workspace; only src/ can be changed.`);
     const final = session.getLastAssistantText();
     const lastAssistant = [...session.messages].reverse().find(m => m.role === 'assistant');
     const status = abortedReason ?? (lastAssistant?.stopReason === 'error' || lastAssistant?.stopReason === 'aborted' ? 'provider_error' : 'completed');
