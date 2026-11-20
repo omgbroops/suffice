@@ -65,9 +65,11 @@ export async function runRace({ runtime, task, variant, n = 3, runDir, thinkingL
   for (const r of await Promise.all(jobs)) if (!attempts.includes(r.attempt)) attempts.push(r.attempt);
   attempts.sort((a, b) => a.index - b.index);
   // Surface a uniform failure kind so callers can gate on provider health:
-  // when every attempt failed the same way, that is the race's status.
+  // when every attempt failed the same way, that is the race's status. A
+  // uniform 'completed' means every agent finished but none verified, which
+  // is a plain 'no_winner', not a success.
   const settledStatuses = new Set(attempts.map(a => a.status));
-  const uniformFailure = !winner && settledStatuses.size === 1 ? attempts[0].status : null;
+  const uniformFailure = !winner && settledStatuses.size === 1 && attempts[0].status !== 'completed' ? attempts[0].status : null;
   const result = {
     status: winner ? 'completed' : uniformFailure ?? 'no_winner', providerFailureKind: uniformFailure === 'provider_error' ? attempts[0].providerFailureKind : undefined,
     chosen: winner?.index ?? null, selection, attempts,
