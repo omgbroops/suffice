@@ -307,6 +307,11 @@ export async function runAgent({ runtime, workspace, runDir, task, variant, time
   const toolNames = ['files', 'file_read', 'search', 'file_edit', 'file_write', 'test', 'history_read'];
   const settings = SettingsManager.inMemory({ compaction: { enabled: false }, retry: { enabled: true, maxRetries: fast ? 1 : 2, baseDelayMs: fast ? 1000 : 5000, maxAgentDelayMs: fast ? 15000 : 30000, provider: { maxRetries: 0 } }, cacheWarming: fast ? 'on' : 'off',
     defaultTools: [...toolNames, ...(codemode ? ['codemode'] : [])], codemode: { mode: 'only', inlineBudget: 2000 }, transport: fast ? 'websocket-cached' : 'sse' });
+  let tools = workspaceTools({ workspace, log, artifactsDir: resolve(runDir, 'artifacts'), signal: controller.signal, defaultReadLimit: variant.defaultReadLimit ?? 200 });
+  if (variant.readOnly) tools = tools.filter(t => !['file_edit', 'file_write'].includes(t.name));
+  if (fast?.speculativeTest) tools = withSpeculativeTests(tools, { workspace, snapshotRoot: resolve(runDir, 'spec-snapshots'), artifactsDir: resolve(runDir, 'artifacts'), signal: controller.signal, log });
+  const streamPrefire = fast?.streamPrefire ? withStreamPrefire(tools, { log }) : null;
+  if (streamPrefire) tools = streamPrefire.tools;
   const resourceLoader = new DefaultResourceLoader({ cwd: workspace, agentDir: resolve(stateDir, 'empty-agent'), settingsManager: settings,
     noExtensions: true, noSkills: true, noPromptTemplates: true, noThemes: true, noContextFiles: true,
     systemPrompt: variant.core ? CORE_PROMPT : undefined,
@@ -315,11 +320,6 @@ export async function runAgent({ runtime, workspace, runDir, task, variant, time
       ...(fast?.serviceTier ? [serviceTierExtension({ tier: fast.serviceTier, log })] : []),
       ...(streamPrefire ? [streamPrefire.ext] : [])],
   });
-  let tools = workspaceTools({ workspace, log, artifactsDir: resolve(runDir, 'artifacts'), signal: controller.signal, defaultReadLimit: variant.defaultReadLimit ?? 200 });
-  if (variant.readOnly) tools = tools.filter(t => !['file_edit', 'file_write'].includes(t.name));
-  if (fast?.speculativeTest) tools = withSpeculativeTests(tools, { workspace, snapshotRoot: resolve(runDir, 'spec-snapshots'), artifactsDir: resolve(runDir, 'artifacts'), signal: controller.signal, log });
-  const streamPrefire = fast?.streamPrefire ? withStreamPrefire(tools, { log }) : null;
-  if (streamPrefire) tools = streamPrefire.tools;
   try {
     await resourceLoader.reload();
     const created = await createAgentSession({ cwd: workspace, agentDir: resolve(stateDir, 'empty-agent'), modelRuntime: runtime,
