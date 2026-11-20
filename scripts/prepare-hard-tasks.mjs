@@ -56,7 +56,7 @@ for (const t of hardTasks.filter(t => !only || t.id === only)) {
   for (const dir of [resolve(ws, 'src'), resolve(ref, 'src')]) {
     const depCount = Object.keys(JSON.parse(await readFile(resolve(dir, 'package.json'), 'utf8')).dependencies ?? {}).length;
     if (depCount) {
-      const inst = spawnSync('npm', ['install', '--ignore-scripts', '--no-audit', '--no-fund', '--silent'], { cwd: dir, encoding: 'utf8' });
+      const inst = spawnSync('npm', ['install', '--ignore-scripts', '--package-lock=false', '--no-audit', '--no-fund', '--silent'], { cwd: dir, encoding: 'utf8' });
       if (inst.status !== 0) throw new Error(`npm install failed for ${t.id}: ${inst.stderr.slice(0, 400)}`);
     }
   }

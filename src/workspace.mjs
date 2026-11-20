@@ -37,7 +37,7 @@ export async function filesIn(root, directory = '') {
   const entries = await readdir(resolve(root, directory), { withFileTypes: true });
   const result = [];
   for (const entry of entries.sort((a, b) => a.name.localeCompare(b.name))) {
-    if (entry.name.startsWith('.') || entry.isSymbolicLink() || entry.name === 'node_modules') continue;
+    if (entry.name.startsWith('.') || entry.isSymbolicLink() || entry.name === 'node_modules' || entry.name === 'package-lock.json') continue;
     const path = [directory, entry.name].filter(Boolean).join('/');
     if (entry.isDirectory()) result.push(...await filesIn(root, path));
     else if (entry.isFile()) result.push(path);
