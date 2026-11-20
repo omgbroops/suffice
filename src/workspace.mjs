@@ -89,6 +89,11 @@ export async function runNodeTests(workspace, testPath, { signal, timeoutMs = 15
 }
 
 function toolResult(data) { return { content: [{ type: 'text', text: typeof data === 'string' ? data : JSON.stringify(data) }], structuredContent: data, details: {} }; }
+export async function formatTestResult(result, artifactsDir) {
+  await mkdir(artifactsDir, { recursive: true });
+  const id = `test-${Date.now()}.json`; await writeFile(resolve(artifactsDir, id), JSON.stringify(result));
+  return { ...result, stdout: result.stdout?.slice(0, 12_000), stderr: result.stderr?.slice(0, 3000), artifact: id };
+}
 const unknown = Type.Unknown();
 export function workspaceTools({ workspace, log = () => {}, artifactsDir, signal, defaultReadLimit = 200 }) {
   let serial = Promise.resolve();
@@ -107,6 +112,6 @@ export function workspaceTools({ workspace, log = () => {}, artifactsDir, signal
     make('file_write', 'Write a complete UTF-8 src/ file; use file_edit for smaller changes.', Type.Object({ path: Type.String(), content: Type.String() }),
       args => mutate(async () => { if (Buffer.byteLength(args.content) > MAX_FILE_BYTES) throw new Error('File too large.'); const target = await scopedPath(workspace, args.path, { write: true }); await mkdir(dirname(target), { recursive: true }); await writeFile(target, args.content); return { path: args.path, version: hash(args.content), written: true }; })),
     make('test', 'Run the visible Node test suite. Returns status and diagnostic output. Acceptance tests are run separately by the evaluator.', Type.Object({}),
-      async () => { const result = await runNodeTests(workspace, resolve(workspace, 'tests/visible.test.mjs'), { signal }); await mkdir(artifactsDir, { recursive: true }); const id = `test-${Date.now()}.json`; await writeFile(resolve(artifactsDir, id), JSON.stringify(result)); return { ...result, stdout: result.stdout.slice(0, 12_000), stderr: result.stderr.slice(0, 3000), artifact: id }; }),
+      async () => { const result = await runNodeTests(workspace, resolve(workspace, 'tests/visible.test.mjs'), { signal }); return formatTestResult(result, artifactsDir); }),
   ];
 }
