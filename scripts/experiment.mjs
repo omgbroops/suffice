@@ -72,14 +72,14 @@ for (const [index, item] of schedule.entries()) {
   console.log(JSON.stringify({ event: 'run_start', index: index + 1, total: schedule.length, runId }));
   let agent;
   if (variant.race) {
-    const { race, ...inner } = variant;
-    const raced = await runRace({ runtime, task, variant: inner, n: race.n ?? 3, selection: race.selection ?? 'first', attemptSpecs: race.attempts ?? [], runDir, thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000) });
+    const { race, effort, ...inner } = variant;
+    const raced = await runRace({ runtime, task, variant: inner, n: race.n ?? 3, selection: race.selection ?? 'first', attemptSpecs: race.attempts ?? [], runDir, thinkingLevel: effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000) });
     const winner = raced.attempts.find(a => a.index === raced.chosen);
     if (winner) await cp(winner.workspace, workspace, { recursive: true, force: true });
     agent = { ...raced, decisions: [], watcherCalls: 0, turns: raced.attempts.reduce((s, a) => s + (a.turns ?? 0), 0),
       usageCostUnknown: raced.attempts.some(a => a.usageCostUnknown), race: raced };
   } else {
-    agent = await runAgent({ runtime, workspace, runDir, task, variant, thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000) });
+    agent = await runAgent({ runtime, workspace, runDir, task, variant, thinkingLevel: variant.effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000) });
   }
   const before = hash(await readFile(task.acceptancePath));
   const acceptance = await runNodeTests(workspace, task.acceptancePath);
