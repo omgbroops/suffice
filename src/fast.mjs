@@ -80,7 +80,7 @@ const canonical = value => {
   if (value && typeof value === 'object') return `{${Object.keys(value).sort().map(k => `${JSON.stringify(k)}:${canonical(value[k])}`).join(',')}}`;
   return JSON.stringify(value);
 };
-export function withStreamPrefire(tools, { log = () => {} } = {}) {
+export function withStreamPrefire(tools, { log = () => {}, workspace } = {}) {
   const byName = new Map(tools.map(t => [t.name, t]));
   const pending = new Map();
   const callKey = (name, args) => `${name}\n${canonical(args)}`;
@@ -98,9 +98,13 @@ export function withStreamPrefire(tools, { log = () => {} } = {}) {
         const key = callKey(name, args);
         if (pending.has(key)) return;
         log({ type: 'stream_prefire', event: 'started', tool: name });
+        // A write call later in the same response executes after decode
+        // finishes, so capture the fingerprint now: a changed src/ means the
+        // prefired result was computed on pre-edit state and must be dropped.
+        const fp = srcFingerprint(workspace);
         pending.set(key, Promise.resolve()
           .then(() => tool.execute(`prefire-${d.item_id}`, args))
-          .then(result => { log({ type: 'stream_prefire', event: 'finished', tool: name }); return result; })
+          .then(async result => { log({ type: 'stream_prefire', event: 'finished', tool: name }); return { result, fp: await fp }; })
           .catch(error => ({ __prefireError: error })));
       }
     });
@@ -111,10 +115,14 @@ export function withStreamPrefire(tools, { log = () => {} } = {}) {
         const p = pending.get(key);
         if (!p) return t.execute(id, args, signal, onUpdate);
         pending.delete(key);
-        const result = await p;
-        if (result && typeof result === 'object' && '__prefireError' in result) throw result.__prefireError;
+        const out = await p;
+        if (out && typeof out === 'object' && '__prefireError' in out) throw out.__prefireError;
+        if (await srcFingerprint(workspace) !== out.fp) {
+          log({ type: 'stream_prefire', event: 'discarded_stale', tool: t.name });
+          return t.execute(id, args, signal, onUpdate);
+        }
         log({ type: 'stream_prefire', event: 'reused', tool: t.name });
-        return result;
+        return out.result;
       } }
     : t);
   return { tools: wrapped, ext };

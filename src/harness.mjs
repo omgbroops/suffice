@@ -310,7 +310,7 @@ export async function runAgent({ runtime, workspace, runDir, task, variant, time
   let tools = workspaceTools({ workspace, log, artifactsDir: resolve(runDir, 'artifacts'), signal: controller.signal, defaultReadLimit: variant.defaultReadLimit ?? 200 });
   if (variant.readOnly) tools = tools.filter(t => !['file_edit', 'file_write'].includes(t.name));
   if (fast?.speculativeTest) tools = withSpeculativeTests(tools, { workspace, snapshotRoot: resolve(runDir, 'spec-snapshots'), artifactsDir: resolve(runDir, 'artifacts'), signal: controller.signal, log });
-  const streamPrefire = fast?.streamPrefire ? withStreamPrefire(tools, { log }) : null;
+  const streamPrefire = fast?.streamPrefire ? withStreamPrefire(tools, { log, workspace }) : null;
   if (streamPrefire) tools = streamPrefire.tools;
   const resourceLoader = new DefaultResourceLoader({ cwd: workspace, agentDir: resolve(stateDir, 'empty-agent'), settingsManager: settings,
     noExtensions: true, noSkills: true, noPromptTemplates: true, noThemes: true, noContextFiles: true,
