@@ -76,7 +76,7 @@ export const variants = Object.freeze([
     { thinkingLevel: 'low', promptSuffix: 'Check edge cases and the full contract before finishing.' },
   ] } },
   // Stream-prefire: execute read-only tool calls while the response decodes.
-  { id: 'fast-prefire', core: true, effort: 'low', fast: { speculativeTest: true, streamPrefire: true } },
+  { id: 'fast-prefire', core: true, effort: 'low', codemode: false, fast: { speculativeTest: true, streamPrefire: true } },
   // Race then refine the winner once: smallest correct diff, revert if broken.
   { id: 'race-3-low-iterate', core: true, fast: { speculativeTest: true }, race: { n: 3, selection: 'first', iterate: true, attempts: [
     { thinkingLevel: 'low' },
