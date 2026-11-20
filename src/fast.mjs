@@ -33,6 +33,8 @@ export function serviceTierExtension({ tier = FAST_TIER, log = () => {} } = {}) 
     pi.on('message_end', event => {
       const usage = event.message?.role === 'assistant' ? event.message.usage : null;
       if (!usage?.cost) return;
+      // Only requests we tagged on the wire get repriced.
+      if (wireTier === undefined) { echoedTier = undefined; return; }
       const sdkApplied = TIER_MULTIPLIER[echoedTier] ?? 1; echoedTier = undefined;
       const injected = TIER_MULTIPLIER[wireTier] ?? 1; wireTier = undefined;
       if (sdkApplied === injected) return;

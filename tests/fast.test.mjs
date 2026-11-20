@@ -28,6 +28,7 @@ test('serviceTierExtension rescales usage cost when the SDK priced the default r
   h.get('message_end')({ message });
   assert.equal(message.usage.cost.total, 4);
   // When the provider echoes the applied tier the SDK already priced it: no double count.
+  h.get('before_provider_request')({ payload: { model: 'gpt-6.1-sol' } });
   h.get('provider_stream_event')({ data: { response: { service_tier: 'priority' } } });
   const message2 = { role: 'assistant', usage: { cost: { input: 1, output: 1, cacheRead: 0, cacheWrite: 0, total: 2 } } };
   h.get('message_end')({ message: message2 });
