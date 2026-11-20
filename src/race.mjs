@@ -22,24 +22,29 @@ async function immutableIntact(workspace, baseline) {
 
 // selection: 'first' = first verified pass wins, losers are aborted.
 // 'best' = wait for every attempt, then pick the smallest accepted diff.
-export async function runRace({ runtime, task, variant, n = 3, runDir, thinkingLevel = 'low', timeoutMs = 240_000, selection = 'first', runAgentImpl = runAgent }) {
+// attemptSpecs[i] (optional) diversifies attempt i: thinkingLevel, variant,
+// or a promptSuffix appended to the task prompt.
+export async function runRace({ runtime, task, variant, n = 3, runDir, thinkingLevel = 'low', timeoutMs = 240_000, selection = 'first', attemptSpecs = [], runAgentImpl = runAgent }) {
   if (!['first', 'best'].includes(selection)) throw new Error(`Unknown selection: ${selection}`);
   const controller = new AbortController();
   const started = Date.now();
   const jobs = [];
   for (let i = 0; i < n; i++) {
     const index = i;
+    const spec = attemptSpecs[index] ?? {};
+    const attemptTask = spec.promptSuffix ? { ...task, prompt: `${task.prompt}\n\n${spec.promptSuffix}` } : task;
+    const attemptThinking = spec.thinkingLevel ?? thinkingLevel;
     jobs.push((async () => {
       const attemptDir = resolve(runDir, `attempt-${index}`);
       const workspace = resolve(attemptDir, 'workspace');
       await mkdir(attemptDir, { recursive: true });
       await cp(task.workspaceDir, workspace, { recursive: true });
-      const agent = await runAgentImpl({ runtime, workspace, runDir: attemptDir, task, variant, thinkingLevel, timeoutMs, signal: controller.signal });
-      if (controller.signal.aborted) return { index, status: agent.status, providerFailureKind: agent.providerFailureKind, passed: false, usage: agent.usage, usageCostUnknown: agent.usageCostUnknown, turns: agent.turns, latencyMs: agent.latencyMs, workspace, runDir: attemptDir };
+      const agent = await runAgentImpl({ runtime, workspace, runDir: attemptDir, task: attemptTask, variant: spec.variant ?? variant, thinkingLevel: attemptThinking, timeoutMs, signal: controller.signal });
+      if (controller.signal.aborted) return { index, spec, status: agent.status, providerFailureKind: agent.providerFailureKind, passed: false, usage: agent.usage, usageCostUnknown: agent.usageCostUnknown, turns: agent.turns, latencyMs: agent.latencyMs, workspace, runDir: attemptDir };
       const acceptance = await runNodeTests(workspace, task.acceptancePath, { signal: controller.signal });
       const passed = agent.status === 'completed' && acceptance.status === 'passed' && await immutableIntact(workspace, task.workspaceDir);
       const { diffLines } = passed ? await attemptDiff(workspace, task.workspaceDir) : { diffLines: null };
-      return { index, status: agent.status, providerFailureKind: agent.providerFailureKind, passed, diffLines, acceptanceStatus: acceptance.status, usage: agent.usage, usageCostUnknown: agent.usageCostUnknown, turns: agent.turns, latencyMs: agent.latencyMs, workspace, runDir: attemptDir };
+      return { index, spec, status: agent.status, providerFailureKind: agent.providerFailureKind, passed, diffLines, acceptanceStatus: acceptance.status, usage: agent.usage, usageCostUnknown: agent.usageCostUnknown, turns: agent.turns, latencyMs: agent.latencyMs, workspace, runDir: attemptDir };
     })().then(
       attempt => ({ settled: true, attempt }),
       error => ({ settled: true, attempt: { index, status: 'harness_error', passed: false, error: String(error?.message ?? error) } }),

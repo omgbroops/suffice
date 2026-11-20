@@ -73,7 +73,7 @@ for (const [index, item] of schedule.entries()) {
   let agent;
   if (variant.race) {
     const { race, ...inner } = variant;
-    const raced = await runRace({ runtime, task, variant: inner, n: race.n ?? 3, selection: race.selection ?? 'first', runDir, thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000) });
+    const raced = await runRace({ runtime, task, variant: inner, n: race.n ?? 3, selection: race.selection ?? 'first', attemptSpecs: race.attempts ?? [], runDir, thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000) });
     const winner = raced.attempts.find(a => a.index === raced.chosen);
     if (winner) await cp(winner.workspace, workspace, { recursive: true, force: true });
     agent = { ...raced, decisions: [], watcherCalls: 0, turns: raced.attempts.reduce((s, a) => s + (a.turns ?? 0), 0),
