@@ -33,3 +33,22 @@ test('race first: earliest verified pass wins and losers are aborted', async () 
   assert.equal(result.chosen, 1);
   assert.ok(result.attempts[1].passed);
 });
+
+test('race: uniform completed-but-unverified attempts stay no_winner', async () => {
+  const { dir, task } = await taskFixture();
+  // Sabotage the acceptance test so finished agents can never pass.
+  await writeFile(resolve(task.workspaceDir, 'tests/accept.test.mjs'), "import test from 'node:test';\ntest('nope', () => { throw new Error('fail'); });\n");
+  const agent = async () => ({ status: 'completed', usage: { input: 1 }, turns: 1, latencyMs: 1 });
+  const result = await runRace({ runtime: {}, task, variant: {}, n: 2, runDir: resolve(dir, 'run'), selection: 'best', runAgentImpl: agent });
+  assert.equal(result.status, 'no_winner');
+  assert.equal(result.chosen, null);
+});
+
+test('race: uniform provider failure propagates as the race status', async () => {
+  const { dir, task } = await taskFixture();
+  const agent = async () => ({ status: 'provider_error', providerFailureKind: 'other', usage: { input: 1 }, turns: 1, latencyMs: 1 });
+  const result = await runRace({ runtime: {}, task, variant: {}, n: 2, runDir: resolve(dir, 'run'), selection: 'best', runAgentImpl: agent });
+  assert.equal(result.status, 'provider_error');
+  assert.equal(result.providerFailureKind, 'other');
+  assert.equal(result.chosen, null);
+});
