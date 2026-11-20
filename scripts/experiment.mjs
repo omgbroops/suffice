@@ -11,7 +11,8 @@ const split = args['--split'] ?? 'pilot';
 const thinkingLevel = args['--effort'] ?? 'medium';
 if (!['low', 'medium', 'high'].includes(thinkingLevel)) throw new Error('Supported experiment efforts: low, medium, high.');
 const selectedTasks = tasks.filter(t => t.split === split && (!args['--task'] || t.id === args['--task']) && t.id !== args['--exclude-task']);
-const selectedVariants = variants.filter(v => !args['--variants'] || args['--variants'].split(',').includes(v.id));
+const modelOverride = args['--model'];
+const selectedVariants = variants.filter(v => !args['--variants'] || args['--variants'].split(',').includes(v.id)).map(v => modelOverride ? { ...v, model: modelOverride } : v);
 if (args['--variants'] && args['--variants'].split(',').some(id => !variants.some(v => v.id === id))) throw new Error('Unknown variant; refusing partial experiment.');
 if (!selectedTasks.length || !selectedVariants.length) throw new Error('No matching tasks or variants.');
 const repetitions = Number(args['--repetitions'] ?? 1);
@@ -36,7 +37,7 @@ for (let repetition = 0; repetition < repetitions; repetition++) {
     for (const variant of order) schedule.push({ task: selectedTasks[taskIndex].id, variant: variant.id, repetition });
   }
 }
-const manifest = { version: 5, campaign, startedAt: new Date().toISOString(), pi: '1.2.0', mainModel: 'variant-specific: gpt-6.1-sol or gpt-6-luna', variants: selectedVariants, reasoning: thinkingLevel, retry: { maxRetries: 2, baseDelayMs: 5000, maxAgentDelayMs: 30000, providerMaxRetries: 0 },
+const manifest = { version: 5, campaign, startedAt: new Date().toISOString(), pi: '1.2.0', mainModel: modelOverride ?? 'variant-specific: gpt-6.1-sol or gpt-6-luna', variants: selectedVariants, reasoning: thinkingLevel, retry: { maxRetries: 2, baseDelayMs: 5000, maxAgentDelayMs: 30000, providerMaxRetries: 0 },
   runtime: { node: process.version, platform: process.platform, arch: process.arch },
   split, repetitions, taskProvenance: 'AI-authored synthetic', schedule, inputs,
   limitations: ['Restricted workspace tools shared by all arms; Pi SDK baseline, not unrestricted stock CLI.', 'Runtime permission boundary is Node permissions, not an OS sandbox.', 'Provider cache warmth is observed, not forcibly reset.', 'Subscription cost is API-equivalent estimate, not billed spend.'] };
