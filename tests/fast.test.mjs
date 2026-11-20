@@ -32,6 +32,11 @@ test('serviceTierExtension rescales usage cost when the SDK priced the default r
   const message2 = { role: 'assistant', usage: { cost: { input: 1, output: 1, cacheRead: 0, cacheWrite: 0, total: 2 } } };
   h.get('message_end')({ message: message2 });
   assert.equal(message2.usage.cost.total, 2);
+  // A payload carrying its own tier is repriced by that tier, not the configured one.
+  assert.equal(h.get('before_provider_request')({ payload: { model: 'm', service_tier: 'flex' } }), undefined);
+  const message3 = { role: 'assistant', usage: { cost: { input: 1, output: 1, cacheRead: 0, cacheWrite: 0, total: 2 } } };
+  h.get('message_end')({ message: message3 });
+  assert.equal(message3.usage.cost.total, 1);
 });
 
 test('latencyTracker emits provider and tool timings', async () => {

@@ -14,10 +14,11 @@ export const TIER_MULTIPLIER={flex:0.5,priority:2,fast:2,ultrafast:2};
 export function serviceTierExtension({tier=FAST_TIER,log=()=>{}}={}) {
   if(!VALID_TIERS.includes(tier)) throw new Error(`Unknown service tier: ${tier}`);
   return pi=>{
-    let echoedTier;
+    let echoedTier, wireTier;
     pi.on('before_provider_request',event=>{
       if(!event?.payload||typeof event.payload!=='object'||Array.isArray(event.payload))return;
-      if('service_tier' in event.payload)return;
+      if('service_tier' in event.payload){wireTier=event.payload.service_tier;return;}
+      wireTier=tier;
       log({type:'service_tier',tier,model:event.payload.model});
       return {...event.payload,service_tier:tier};
     });
@@ -29,7 +30,7 @@ export function serviceTierExtension({tier=FAST_TIER,log=()=>{}}={}) {
       const usage=event.message?.role==='assistant'?event.message.usage:null;
       if(!usage?.cost)return;
       const sdkApplied=TIER_MULTIPLIER[echoedTier]??1; echoedTier=undefined;
-      const injected=TIER_MULTIPLIER[tier]??1;
+      const injected=TIER_MULTIPLIER[wireTier]??1; wireTier=undefined;
       if(sdkApplied===injected)return;
       const factor=injected/sdkApplied;
       for(const key of ['input','output','cacheRead','cacheWrite']) usage.cost[key]*=factor;
