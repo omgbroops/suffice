@@ -83,7 +83,9 @@ export async function runRace({ runtime, task, variant, n = 3, runDir, thinkingL
     await mkdir(backup, { recursive: true });
     await cp(winner.workspace, backup, { recursive: true });
     const refineTask = { ...task, prompt: `${task.prompt}\n\nA verified fix already exists in this workspace. Tighten it: the smallest correct change only — remove any unrelated edits, do not refactor or reformat. Run the test tool once at the end, then stop.` };
-    const iterAgent = await runAgentImpl({ runtime, workspace: winner.workspace, runDir: resolve(runDir, 'iterate'), task: refineTask, variant, thinkingLevel, timeoutMs, signal: controller.signal });
+    // The race controller is already aborted to kill the losers; the
+    // refinement gets a fresh signal so it is not born cancelled.
+    const iterAgent = await runAgentImpl({ runtime, workspace: winner.workspace, runDir: resolve(runDir, 'iterate'), task: refineTask, variant, thinkingLevel, timeoutMs });
     const acceptance = await runNodeTests(winner.workspace, task.acceptancePath);
     const ok = iterAgent.status === 'completed' && acceptance.status === 'passed' && await immutableIntact(winner.workspace, task.workspaceDir);
     if (!ok) await cp(backup, winner.workspace, { recursive: true, force: true });
