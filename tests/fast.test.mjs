@@ -19,6 +19,21 @@ test('serviceTierExtension injects service_tier once into payloads', () => {
 });
 test('serviceTierExtension rejects unknown tiers', () => assert.throws(() => serviceTierExtension({ tier: 'warp' }), /Unknown service tier/));
 
+test('serviceTierExtension rescales usage cost when the SDK priced the default rate', () => {
+  const h = handlers(serviceTierExtension({ tier: 'priority' }));
+  h.get('before_provider_request')({ payload: { model: 'gpt-6.1-sol' } });
+  // Codex echoes 'default' even when a tier was applied on the wire.
+  h.get('provider_stream_event')({ data: { response: { service_tier: 'default' } } });
+  const message = { role: 'assistant', usage: { cost: { input: 1, output: 1, cacheRead: 0, cacheWrite: 0, total: 2 } } };
+  h.get('message_end')({ message });
+  assert.equal(message.usage.cost.total, 4);
+  // When the provider echoes the applied tier the SDK already priced it: no double count.
+  h.get('provider_stream_event')({ data: { response: { service_tier: 'priority' } } });
+  const message2 = { role: 'assistant', usage: { cost: { input: 1, output: 1, cacheRead: 0, cacheWrite: 0, total: 2 } } };
+  h.get('message_end')({ message: message2 });
+  assert.equal(message2.usage.cost.total, 2);
+});
+
 test('latencyTracker emits provider and tool timings', async () => {
   const logged = [];
   const h = handlers(latencyTracker(e => logged.push(e)));

@@ -3,18 +3,38 @@
 export const FAST_TIER='ultrafast';
 export const VALID_TIERS=['ultrafast','priority','default','auto','flex','scale'];
 
-// Rewrites each provider request payload to set service_tier. pi-ai already
-// forwards options.serviceTier on the OpenAI Responses/Codex-Responses paths
-// and applies tier cost multipliers; the coding-agent layer just never sets
-// it, so we inject it at the payload level here.
+// Rewrites each provider request payload to set service_tier. The coding-agent
+// layer never populates the stream option pi-ai prices from, so a payload-only
+// injection would leave usage receipts at the default rate; the message_end
+// handler below rescales reported cost by the injected tier's multiplier.
+// Multipliers mirror pi-ai getServiceTierCostMultiplier; 'ultrafast' is
+// estimated at priority rates until the SDK publishes one.
+export const TIER_MULTIPLIER={flex:0.5,priority:2,fast:2,ultrafast:2};
+
 export function serviceTierExtension({tier=FAST_TIER,log=()=>{}}={}) {
   if(!VALID_TIERS.includes(tier)) throw new Error(`Unknown service tier: ${tier}`);
   return pi=>{
+    let echoedTier;
     pi.on('before_provider_request',event=>{
       if(!event?.payload||typeof event.payload!=='object'||Array.isArray(event.payload))return;
       if('service_tier' in event.payload)return;
       log({type:'service_tier',tier,model:event.payload.model});
       return {...event.payload,service_tier:tier};
+    });
+    pi.on('provider_stream_event',event=>{
+      const echoed=event.data?.response?.service_tier;
+      if(typeof echoed==='string') echoedTier=echoed;
+    });
+    pi.on('message_end',event=>{
+      const usage=event.message?.role==='assistant'?event.message.usage:null;
+      if(!usage?.cost)return;
+      const sdkApplied=TIER_MULTIPLIER[echoedTier]??1; echoedTier=undefined;
+      const injected=TIER_MULTIPLIER[tier]??1;
+      if(sdkApplied===injected)return;
+      const factor=injected/sdkApplied;
+      for(const key of ['input','output','cacheRead','cacheWrite']) usage.cost[key]*=factor;
+      usage.cost.total=usage.cost.input+usage.cost.output+usage.cost.cacheRead+usage.cost.cacheWrite;
+      log({type:'service_tier_cost',tier,factor,estimated:tier==='ultrafast'});
     });
   };
 }
