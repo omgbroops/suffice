@@ -10,13 +10,13 @@ export async function freezeSources(campaign) {
   const manifest = JSON.parse(await readFile(resolve(directory, 'manifest.json'), 'utf8'));
   const receipts = [];
   for (const [key, expected] of Object.entries(manifest.inputs)) {
-    let relative = key;
-    if (key.startsWith('acceptance:')) relative = `benchmarks/tasks/${key.slice(11)}/acceptance.test.mjs`;
-    else if (key.startsWith('task:')) {
+    let relative = manifest.inputPaths?.[key] ?? key;
+    if (!manifest.inputPaths?.[key] && key.startsWith('acceptance:')) relative = `benchmarks/tasks/${key.slice(11)}/acceptance.test.mjs`;
+    else if (!manifest.inputPaths?.[key] && key.startsWith('task:')) {
       const [id, ...segments] = key.slice(5).split('/');
       relative = `benchmarks/tasks/${id}/workspace/${segments.join('/')}`;
     }
-    if (!/^[A-Za-z0-9_./-]+$/.test(relative) || relative.split('/').some(s => s.startsWith('.')) || relative.startsWith('/')) throw new Error('Invalid snapshot source path.');
+    if (!/^[A-Za-z0-9_./-]+$/.test(relative) || relative.split('/').some((s, i) => s.startsWith('.') && !(i === 0 && s === '.suffice')) || relative.startsWith('/')) throw new Error('Invalid snapshot source path.');
     const bytes = await readFile(resolve(root, relative));
     const matched = hash(bytes) === expected;
     receipts.push({ key, relative, expected, matched });
