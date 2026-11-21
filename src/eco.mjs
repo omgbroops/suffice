@@ -2,7 +2,7 @@
 // runs when the cheap path provably failed (no verified patch). Unlike
 // review-on-success, escalation pays for Sol only when needed — the strong
 // model's quality ceiling is preserved whenever Luna actually fails.
-import { cp, mkdir, writeFile } from 'node:fs/promises';
+import { cp, mkdir, writeFile, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { runAgent } from './harness.mjs';
 import { workspacePrefill } from './race.mjs';
@@ -17,7 +17,7 @@ async function check(workspace, task, baseline, signal) {
     return { passed: false, detail: `acceptance ${digest}` };
   }
   for (const path of (await filesIn(baseline)).filter(p => !p.startsWith('src/'))) {
-    if (hash(await readText(workspace, path)) !== hash(await readText(baseline, path))) return { passed: false, detail: `non-source file changed: ${path}` };
+    if (hash(await readFile(resolve(workspace, path))) !== hash(await readFile(resolve(baseline, path)))) return { passed: false, detail: `non-source file changed: ${path}` };
   }
   return { passed: true };
 }

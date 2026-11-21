@@ -1,6 +1,6 @@
 // Race N identical trajectories in isolated workspace copies. Wall clock is
 // max-of-N, not sum-of-N; the first verified winner can stop the rest.
-import { cp, mkdir, rm, writeFile } from 'node:fs/promises';
+import { cp, mkdir, rm, writeFile, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { runAgent } from './harness.mjs';
 import { filesIn, readText, hash, materializeWorkspace } from './workspace.mjs';
@@ -16,7 +16,7 @@ async function attemptDiff(workspace, baseline) {
 
 async function immutableIntact(workspace, baseline) {
   for (const path of (await filesIn(baseline)).filter(p => !p.startsWith('src/'))) {
-    if (hash(await readText(workspace, path)) !== hash(await readText(baseline, path))) return false;
+    if (hash(await readFile(resolve(workspace, path))) !== hash(await readFile(resolve(baseline, path)))) return false;
   }
   return true;
 }

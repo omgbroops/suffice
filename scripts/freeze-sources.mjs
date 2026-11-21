@@ -16,7 +16,10 @@ export async function freezeSources(campaign) {
       const [id, ...segments] = key.slice(5).split('/');
       relative = `benchmarks/tasks/${id}/workspace/${segments.join('/')}`;
     }
-    if (!/^[A-Za-z0-9_./-]+$/.test(relative) || relative.split('/').some((s, i) => s.startsWith('.') && !(i === 0 && s === '.suffice')) || relative.startsWith('/')) throw new Error('Invalid snapshot source path.');
+    // Block traversal/absolute/hidden segments; legit repo files may carry
+    // spaces, '@', '+', '~', unicode etc.
+    if (relative.startsWith('/') || relative.includes('\\') || /[\0-\x1f]/.test(relative)
+      || relative.split('/').some((s, i) => s === '..' || (s.startsWith('.') && !(i === 0 && s === '.suffice')))) throw new Error('Invalid snapshot source path.');
     const bytes = await readFile(resolve(root, relative));
     const matched = hash(bytes) === expected;
     receipts.push({ key, relative, expected, matched });

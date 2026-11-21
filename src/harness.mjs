@@ -360,7 +360,9 @@ export async function runAgent({ runtime, workspace, runDir, task, variant, time
     defaultTools: [...toolNames, ...(codemode ? ['codemode'] : [])], codemode: { mode: 'only', inlineBudget: 2000 }, transport: fast ? 'websocket-cached' : 'sse' });
   let tools = workspaceTools({ workspace, log, artifactsDir: resolve(runDir, 'artifacts'), signal: controller.signal, defaultReadLimit: variant.defaultReadLimit ?? 200 });
   if (variant.readOnly) tools = tools.filter(t => !['file_edit', 'file_write'].includes(t.name));
-  if (fast?.speculativeTest) tools = withSpeculativeTests(tools, { workspace, snapshotRoot: resolve(runDir, 'spec-snapshots'), artifactsDir: resolve(runDir, 'artifacts'), signal: controller.signal, log });
+  // Speculation replays the suite's visible spec file; DeepSWE tasks have
+  // none (their `test` tool already runs the base suite via deepswe.json).
+  if (fast?.speculativeTest && !task.deepswe) tools = withSpeculativeTests(tools, { workspace, snapshotRoot: resolve(runDir, 'spec-snapshots'), artifactsDir: resolve(runDir, 'artifacts'), signal: controller.signal, log });
   const streamPrefire = fast?.streamPrefire ? withStreamPrefire(tools, { log, workspace }) : null;
   if (streamPrefire) tools = streamPrefire.tools;
   const resourceLoader = new DefaultResourceLoader({ cwd: workspace, agentDir: resolve(stateDir, 'empty-agent'), settingsManager: settings,

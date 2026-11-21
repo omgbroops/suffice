@@ -110,7 +110,7 @@ for (const [index, item] of schedule.entries()) {
   const after = hash(await readFile(task.acceptancePath));
   if (before !== after || after !== inputs[`acceptance:${task.id}`]) throw new Error('Acceptance changed; abort experiment.');
   const source = {};
-  for (const path of await filesIn(workspace)) source[path] = hash(await readText(workspace, path));
+  for (const path of await filesIn(workspace)) source[path] = hash(await readFile(resolve(workspace, path)));
   const immutableFilesIntact = Object.entries(source).filter(([path]) => !path.startsWith('src/') && !generatedFiles.includes(path)).every(([path, value]) => value === inputs[`task:${task.id}/${path}`]);
   const result = { runId, ...item, ...agent, acceptance: { ...acceptance, stdout: undefined, stderr: undefined },
     success: agent.status === 'completed' && acceptance.status === 'passed' && immutableFilesIntact, immutableFilesIntact, source,
