@@ -75,6 +75,13 @@ export const variants = Object.freeze([
     { thinkingLevel: 'low', promptSuffix: 'Prefer the smallest correct change. Do not refactor or reformat unrelated code.' },
     { thinkingLevel: 'low', promptSuffix: 'Check edge cases and the full contract before finishing.' },
   ] } },
+  // Race-3-low + workspace prefill: file tree + manifest in every attempt's
+  // first prompt, skipping the blind exploration rounds.
+  { id: 'race-3-low-prefill', core: true, fast: { speculativeTest: true }, race: { n: 3, selection: 'first', attempts: [
+    { thinkingLevel: 'low', prefill: true },
+    { thinkingLevel: 'low', prefill: true, promptSuffix: 'Prefer the smallest correct change. Do not refactor or reformat unrelated code.' },
+    { thinkingLevel: 'low', prefill: true, promptSuffix: 'Check edge cases and the full contract before finishing.' },
+  ] } },
   // Stream-prefire: execute read-only tool calls while the response decodes.
   { id: 'fast-prefire', core: true, effort: 'low', codemode: false, fast: { speculativeTest: true, streamPrefire: true } },
   // Race then refine the winner once: smallest correct diff, revert if broken.

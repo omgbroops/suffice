@@ -23,16 +23,30 @@ async function immutableIntact(workspace, baseline) {
 // selection: 'first' = first verified pass wins, losers are aborted.
 // 'best' = wait for every attempt, then pick the smallest accepted diff.
 // attemptSpecs[i] (optional) diversifies attempt i: thinkingLevel, variant,
-// or a promptSuffix appended to the task prompt.
+// a promptSuffix appended to the task prompt, or prefill: inject the
+// workspace file tree + package manifest into the prompt so attempts skip
+// their blind exploration turns.
+async function workspacePrefill(workspaceDir) {
+  const files = (await filesIn(workspaceDir)).filter(p => p.startsWith('src/') && !p.startsWith('src/node_modules/')).slice(0, 80);
+  let manifest = '';
+  try {
+    const pkg = JSON.parse(await readText(workspaceDir, 'src/package.json'));
+    manifest = `\n\npackage.json: name=${pkg.name} version=${pkg.version} main=${pkg.main ?? 'index.js'} deps=${Object.keys(pkg.dependencies ?? {}).join(',') || 'none'}`;
+  } catch {}
+  return `Workspace layout (src/):\n${files.join('\n')}${manifest}\n\nPrefer the smallest correct diff — targeted edits over full-file rewrites.`;
+}
+
 export async function runRace({ runtime, task, variant, n = 3, runDir, thinkingLevel = 'low', timeoutMs = 240_000, selection = 'first', attemptSpecs = [], iterate = false, runAgentImpl = runAgent }) {
   if (!['first', 'best'].includes(selection)) throw new Error(`Unknown selection: ${selection}`);
   const controller = new AbortController();
   const started = Date.now();
+  const prefill = attemptSpecs.some(s => s.prefill) ? await workspacePrefill(task.workspaceDir) : '';
   const jobs = [];
   for (let i = 0; i < n; i++) {
     const index = i;
     const spec = attemptSpecs[index] ?? {};
-    const attemptTask = spec.promptSuffix ? { ...task, prompt: `${task.prompt}\n\n${spec.promptSuffix}` } : task;
+    const suffix = [spec.prefill ? prefill : '', spec.promptSuffix ?? ''].filter(Boolean).join('\n\n');
+    const attemptTask = suffix ? { ...task, prompt: `${task.prompt}\n\n${suffix}` } : task;
     const attemptThinking = spec.thinkingLevel ?? thinkingLevel;
     jobs.push((async () => {
       const attemptDir = resolve(runDir, `attempt-${index}`);
