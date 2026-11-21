@@ -1,4 +1,4 @@
-import { cp, mkdir, readFile, writeFile, statfs, rm } from 'node:fs/promises';
+import { cp, mkdir, readFile, writeFile, statfs, rm, readdir } from 'node:fs/promises';
 import { resolve, relative } from 'node:path';
 import { tasks } from '../benchmarks/tasks.mjs';
 import { realTasks } from '../benchmarks/real/tasks.mjs';
@@ -133,6 +133,7 @@ for (const [index, item] of schedule.entries()) {
   result.totalEstimatedUsd = result.usageCostUnknown || result.watcherCostUnknown ? null : result.knownEstimatedUsd;
   await writeFile(resolve(runDir, 'acceptance.json'), JSON.stringify(acceptance, null, 2));
   await writeFile(resolve(runDir, 'result.json'), JSON.stringify(result, null, 2));
+  for (const e of await readdir(runDir)) if (!e.endsWith('.json') && !e.endsWith('.jsonl')) await rm(resolve(runDir, e), { recursive: true, force: true });
   console.log(JSON.stringify({ event: 'run_end', runId, status: result.status, success: result.success, turns: result.turns,
     tokens: result.usage.totalTokens, estimatedUsd: result.totalEstimatedUsd, watcherCalls: result.watcherCalls, latencyMs: result.latencyMs }));
   if (result.status === 'provider_error' && result.providerFailureKind !== 'transient_capacity') {
