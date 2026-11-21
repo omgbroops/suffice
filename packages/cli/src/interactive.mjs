@@ -2,6 +2,7 @@ import {mkdir,writeFile} from 'node:fs/promises';
 import {resolve,basename} from 'node:path';
 import {InteractiveMode,createAgentSessionRuntime,SessionManager} from '@earendil-works/pi-coding-agent';
 import {createSufficeSession} from './session.mjs';
+import {sufficeFastCommand} from './fast-command.mjs';
 import {recentProjects,rememberProject,resolveProject} from './projects.mjs';
 import {hash} from './workspace.mjs';
 import {VERSION} from './options.mjs';
@@ -65,7 +66,7 @@ export async function runInteractive(options,runtime) {
   const controls=[];let host;
   const factory=async({cwd,sessionManager})=>{
     let control;
-    control=await createSufficeSession({...options,cwd,sessionManager,modelObject:host?.session.model,effort:host?.session.thinkingLevel??options.effort,deferBindings:true,extensions:[sufficeInterface({...options,getUsage:()=>control?.totals})]},runtime);
+    control=await createSufficeSession({...options,cwd,sessionManager,modelObject:host?.session.model,effort:host?.session.thinkingLevel??options.effort,deferBindings:true,extensions:[sufficeInterface({...options,getUsage:()=>control?.totals}),sufficeFastCommand(options,runtime)]},runtime);
     controls.push(control);
     // Native quit exits the process after session_shutdown; flush durable receipts
     // in the shutdown event rather than relying only on a surrounding finally.
