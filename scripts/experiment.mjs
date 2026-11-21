@@ -1,4 +1,4 @@
-import { cp, mkdir, readFile, writeFile, statfs } from 'node:fs/promises';
+import { cp, mkdir, readFile, writeFile, statfs, rm } from 'node:fs/promises';
 import { resolve, relative } from 'node:path';
 import { tasks } from '../benchmarks/tasks.mjs';
 import { realTasks } from '../benchmarks/real/tasks.mjs';
@@ -83,7 +83,10 @@ for (const [index, item] of schedule.entries()) {
     const { race, effort, ...inner } = variant;
     const raced = await runRace({ runtime, task, variant: inner, n: race.n ?? 3, selection: race.selection ?? 'first', attemptSpecs: race.attempts ?? [], iterate: !!race.iterate, attemptDeadlineMs: race.attemptDeadlineMs ?? null, runDir, thinkingLevel: effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000), maxTurns });
     const winner = raced.attempts.find(a => a.index === raced.chosen);
-    if (winner) await cp(winner.workspace, workspace, { recursive: true, force: true, verbatimSymlinks: true });
+    if (winner) {
+      await rm(resolve(workspace, 'src', 'node_modules'), { recursive: true, force: true });
+      await cp(winner.workspace, workspace, { recursive: true, force: true, verbatimSymlinks: true });
+    }
     agent = { ...raced, decisions: [], watcherCalls: 0, turns: raced.attempts.reduce((s, a) => s + (a.turns ?? 0), 0),
       usageCostUnknown: raced.attempts.some(a => a.usageCostUnknown), race: raced };
   } else if (variant.spec !== undefined) {
@@ -93,12 +96,18 @@ for (const [index, item] of schedule.entries()) {
   } else if (variant.eco !== undefined) {
     const { eco, effort, ...inner } = variant;
     const ecoed = await runEco({ runtime, task, variant: inner, eco, runDir, thinkingLevel: effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000), maxTurns });
-    if (ecoed.winnerWorkspace) await cp(ecoed.winnerWorkspace, workspace, { recursive: true, force: true, verbatimSymlinks: true });
+    if (ecoed.winnerWorkspace) {
+      await rm(resolve(workspace, 'src', 'node_modules'), { recursive: true, force: true });
+      await cp(ecoed.winnerWorkspace, workspace, { recursive: true, force: true, verbatimSymlinks: true });
+    }
     agent = { ...ecoed, decisions: [], watcherCalls: 0 };
   } else if (variant.auto !== undefined) {
     const { auto, effort, ...inner } = variant;
     const autoed = await runAuto({ runtime, task, variant: inner, workspace, runDir, thinkingLevel: effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000), maxTurns });
-    if (autoed.winnerWorkspace && autoed.winnerWorkspace !== workspace) await cp(autoed.winnerWorkspace, workspace, { recursive: true, force: true, verbatimSymlinks: true });
+    if (autoed.winnerWorkspace && autoed.winnerWorkspace !== workspace) {
+      await rm(resolve(workspace, 'src', 'node_modules'), { recursive: true, force: true });
+      await cp(autoed.winnerWorkspace, workspace, { recursive: true, force: true, verbatimSymlinks: true });
+    }
     agent = { ...autoed, decisions: [], watcherCalls: 0 };
   } else if (variant.basePi) {
     agent = await runBasePi({ runtime, workspace, runDir, task, thinkingLevel: variant.effort ?? thinkingLevel, model: variant.basePiModel, timeoutMs: Number(args['--timeout-ms'] ?? 240000), maxTurns });
