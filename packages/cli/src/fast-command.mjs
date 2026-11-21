@@ -1,4 +1,4 @@
-import {mkdtemp,cp,rm,readdir,readFile,writeFile,mkdir,symlink,lstat,realpath} from 'node:fs/promises';
+import {mkdtemp,cp,rm,readdir,readFile,writeFile,mkdir,symlink,lstat,realpath,rename} from 'node:fs/promises';
 import {existsSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join,relative,basename,dirname} from 'node:path';
@@ -61,9 +61,19 @@ async function linkedAncestor(base,rel){
 async function materializeLink(base,anc){
   const linkPath=join(base,anc);
   const target=await realpath(linkPath).catch(()=>null);
+  if(target){
+    const staged=`${linkPath}.materialize-${process.pid}`;
+    try{
+      // dereference:false keeps the target's nested links as links —
+      // dereferencing would throw on dangling dependency symlinks.
+      await cp(target,staged,{recursive:true,dereference:false});
+      await rm(linkPath,{force:true});
+      await rename(staged,linkPath);
+      return;
+    }catch{await rm(staged,{recursive:true,force:true});}
+  }
   await rm(linkPath,{force:true});
-  if(target) await cp(target,linkPath,{recursive:true,dereference:true});
-  else await mkdir(linkPath,{recursive:true});
+  await mkdir(linkPath,{recursive:true});
 }
 
 // Applies what the winning attempt changed relative to the pre-race snapshot onto

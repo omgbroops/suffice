@@ -90,6 +90,27 @@ test('applyPatch materializes a linked dir before writing through it',async()=>{
   }finally{for(const d of [snapshot,base,attempt,target]) await rm(d,{recursive:true,force:true});}
 });
 
+test('applyPatch materializes a linked dir containing dangling links',async()=>{
+  const snapshot=await makeTree(),base=await makeTree(),attempt=await makeTree(),target=await mkdtemp(join(tmpdir(),'fast-cmd-target-'));
+  try{
+    await rm(join(base,'src'),{recursive:true});
+    await mkdir(join(target,'src'),{recursive:true});
+    await writeFile(join(target,'src','a.js'),'export const a=1;');
+    await writeFile(join(target,'src','b.js'),'export const b=2;');
+    await symlink(join(target,'missing.js'),join(target,'src','dep.js')); // dangling
+    await symlink(join(target,'src'),join(base,'src'),'dir');
+    await writeFile(join(attempt,'src','a.js'),'export const a=99;');
+    await applyPatch(base,snapshot,attempt);
+    const st=await lstat(join(base,'src'));
+    assert.equal(st.isSymbolicLink(),false);
+    assert.equal(await readFile(join(base,'src','a.js'),'utf8'),'export const a=99;');
+    // Nested dangling link survives as a link, still dangling — no throw.
+    const nested=await lstat(join(base,'src','dep.js'));
+    assert.equal(nested.isSymbolicLink(),true);
+    assert.equal(await readFile(join(target,'src','a.js'),'utf8'),'export const a=1;');
+  }finally{for(const d of [snapshot,base,attempt,target]) await rm(d,{recursive:true,force:true});}
+});
+
 test('diffFiles reports no diff on identical trees',async()=>{
   const from=await makeTree(),to=await makeTree();
   try{
