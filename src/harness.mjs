@@ -92,6 +92,24 @@ export const variants = Object.freeze([
   ] } },
   // SpecAgent: Luna scouts read-only, Sol repairs with the scout's notes.
   { id: 'spec-agent', core: true, effort: 'low', fast: { speculativeTest: true }, spec: { draftModel: 'gpt-6-luna', draftEffort: 'low', draftTurns: 8 } },
+  // Cost levers (research/cost-mode.md):
+  // Eco: Luna attempts the repair; Sol only runs when Luna's patch fails the
+  // verifier. Escalate-on-failure keeps the strong model's ceiling while
+  // paying its price only on misses — unlike review-on-success.
+  { id: 'eco-luna-sol', core: true, effort: 'low', fast: { speculativeTest: true }, eco: { cheapModel: 'gpt-6-luna', cheapEffort: 'low', prefill: true, cheapRetries: 2 } },
+  // Per-call effort routing: medium thinking while exploring/planning, low for
+  // the edit turns that follow.
+  { id: 'effort-route', core: true, effort: 'medium', effortRoute: { to: 'low', afterTurns: 2 } },
+  // Compact tool observations: clamp long tool outputs (head+tail) before the
+  // model sees them. Ledger: -19.8% input cost, neutral quality.
+  { id: 'compact-obs', core: true, effort: 'low', compactObs: true },
+  // Race-3-low-prefill with a per-attempt deadline: stragglers are killed
+  // instead of billed to the full timeout.
+  { id: 'race-3-low-deadline', core: true, fast: { speculativeTest: true }, race: { n: 3, selection: 'first', attemptDeadlineMs: 60_000, attempts: [
+    { thinkingLevel: 'low', prefill: true },
+    { thinkingLevel: 'low', prefill: true, promptSuffix: 'Prefer the smallest correct change. Do not refactor or reformat unrelated code.' },
+    { thinkingLevel: 'low', prefill: true, promptSuffix: 'Check edge cases and the full contract before finishing.' },
+  ] } },
   // Five cheap attempts: more min-of-N draws at still ~solo-medium cost.
   { id: 'race-5-low', core: true, fast: { speculativeTest: true }, race: { n: 5, selection: 'first', attempts: [
     { thinkingLevel: 'low' },
@@ -135,7 +153,7 @@ export async function runAgent({ runtime, workspace, runDir, task, variant, time
     .replace(/Bearer\s+\S+/gi, 'Bearer [redacted]').replace(/eyJ[A-Za-z0-9_.-]+/g, '[redacted]').replace(/sk-[A-Za-z0-9_-]+/g, '[redacted]')
     .replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, '[email]').slice(0, 700);
   const started = Date.now();
-  let session, abortedReason, turns = 0, toolCalls = 0, previousContext = [], watcherBusy = false, watcherCalls = 0, prefixRegressions = 0;
+  let session, abortedReason, turns = 0, toolCalls = 0, previousContext = [], watcherBusy = false, watcherCalls = 0, prefixRegressions = 0, providerRequests = 0, effortDropped = false;
   const seen = new Set();
   const programs = new Map();
   let skippedPlanned = 0;
@@ -217,6 +235,11 @@ export async function runAgent({ runtime, workspace, runDir, task, variant, time
       previousContext = current;
     });
     pi.on('before_provider_request', event => {
+      if (variant.effortRoute && !effortDropped && ++providerRequests > variant.effortRoute.afterTurns) {
+        effortDropped = true;
+        pi.setThinkingLevel(variant.effortRoute.to);
+        log({ type: 'effort_route', afterTurns: variant.effortRoute.afterTurns, to: variant.effortRoute.to });
+      }
       const payload = event.payload;
       log({ type: 'request_shape', keys: Object.keys(payload), model: payload.model,
         toolNames: (payload.tools ?? []).map(t => t.name ?? t.type), bytes: Buffer.byteLength(JSON.stringify(payload)),
@@ -231,6 +254,20 @@ export async function runAgent({ runtime, workspace, runDir, task, variant, time
       if (recentActions.length > 6) recentActions.shift();
     });
     pi.on('tool_result', async event => {
+      if (variant.compactObs && !event.isError) {
+        const cap = variant.compactObsCap ?? 4000;
+        const clamp = text => text.length > cap
+          ? `${text.slice(0, Math.floor(cap * 0.75))}\n… (${text.length - cap} chars omitted) …\n${text.slice(-Math.floor(cap * 0.25))}`
+          : text;
+        const structured = event.structuredContent;
+        if (structured && typeof structured === 'object' && !Array.isArray(structured)) {
+          const next = { ...structured };
+          if (typeof next.text === 'string') next.text = clamp(next.text);
+          return { content: [{ type: 'text', text: JSON.stringify(next) }], structuredContent: next };
+        }
+        const text = event.content.filter(c => c.type === 'text').map(c => c.text).join('\n');
+        if (text.length > cap) return { content: [{ type: 'text', text: clamp(text) }], structuredContent: structured };
+      }
       if (event.toolName === 'file_read' && !event.isError && event.structuredContent?.omittedBefore === 0 && event.structuredContent?.omittedAfter === 0) seen.add(event.input.path);
       if (variant.delegate && event.toolName === 'file_read' && !event.isError && !watcherBusy && watcherCalls < 2 && event.input.path?.startsWith('src/')) {
         watcherBusy = true;
