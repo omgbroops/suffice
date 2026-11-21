@@ -2,9 +2,12 @@ import { cp, mkdir, readFile, writeFile, statfs } from 'node:fs/promises';
 import { resolve, relative } from 'node:path';
 import { tasks } from '../benchmarks/tasks.mjs';
 import { realTasks } from '../benchmarks/real/tasks.mjs';
+import { hardTasks } from '../benchmarks/real-hard/tasks.mjs';
+import { longTasks } from '../benchmarks/real-long/tasks.mjs';
 import { createRuntime, loadEnvironment, root, stateDir } from '../src/runtime.mjs';
 import { variants, runAgent } from '../src/harness.mjs';
 import { runRace } from '../src/race.mjs';
+import { runSpecAgent } from '../src/spec-agent.mjs';
 import { runNodeTests, filesIn, readText, hash } from '../src/workspace.mjs';
 import { freezeSources } from './freeze-sources.mjs';
 
@@ -13,9 +16,9 @@ const split = args['--split'] ?? 'pilot';
 const thinkingLevel = args['--effort'] ?? 'medium';
 if (!['low', 'medium', 'high'].includes(thinkingLevel)) throw new Error('Supported experiment efforts: low, medium, high.');
 const suite = args['--suite'] ?? 'synthetic';
-if (!['synthetic', 'real'].includes(suite)) throw new Error('Supported suites: synthetic, real.');
-const taskPool = suite === 'real' ? realTasks.map(t => ({ ...t, split: 'real' })) : tasks;
-const selectedTasks = taskPool.filter(t => (suite === 'real' || t.split === split) && (!args['--task'] || t.id === args['--task']) && t.id !== args['--exclude-task']);
+if (!['synthetic', 'real', 'real-hard', 'real-long'].includes(suite)) throw new Error('Supported suites: synthetic, real, real-hard, real-long.');
+const taskPool = suite === 'real' ? realTasks.map(t => ({ ...t, split: 'real' })) : suite === 'real-hard' ? hardTasks.map(t => ({ ...t, split: 'real-hard' })) : suite === 'real-long' ? longTasks.map(t => ({ ...t, split: 'real-long' })) : tasks;
+const selectedTasks = taskPool.filter(t => (suite !== 'synthetic' || t.split === split) && (!args['--task'] || t.id === args['--task']) && t.id !== args['--exclude-task']);
 const modelOverride = args['--model'];
 const selectedVariants = variants.filter(v => !args['--variants'] || args['--variants'].split(',').includes(v.id)).map(v => modelOverride ? { ...v, model: modelOverride } : v);
 if (args['--variants'] && args['--variants'].split(',').some(id => !variants.some(v => v.id === id))) throw new Error('Unknown variant; refusing partial experiment.');
@@ -30,7 +33,7 @@ const runtime = await createRuntime();
 if (!runtime.isUsingSubscription('openai')) throw new Error('Run node scripts/login.mjs first.');
 const inputs = {};
 const inputPaths = {};
-for (const file of ['package.json', 'bun.lock', 'scripts/experiment.mjs', 'scripts/run-pilot.mjs', 'scripts/freeze-sources.mjs', 'benchmarks/tasks.mjs', 'benchmarks/manifest.json', 'docs/EXPERIMENT.md', ...(suite === 'real' ? ['benchmarks/real/tasks.mjs'] : []), ...(await filesIn(resolve(root, 'src'))).map(f => `src/${f}`)]) inputs[file] = hash(await readFile(resolve(root, file)));
+for (const file of ['package.json', 'bun.lock', 'scripts/experiment.mjs', 'scripts/run-pilot.mjs', 'scripts/freeze-sources.mjs', 'benchmarks/tasks.mjs', 'benchmarks/manifest.json', 'docs/EXPERIMENT.md', ...(suite === 'real' ? ['benchmarks/real/tasks.mjs'] : suite === 'real-hard' ? ['benchmarks/real-hard/tasks.mjs'] : suite === 'real-long' ? ['benchmarks/real-long/tasks.mjs'] : []), ...(await filesIn(resolve(root, 'src'))).map(f => `src/${f}`)]) inputs[file] = hash(await readFile(resolve(root, file)));
 for (const task of selectedTasks) {
   inputs[`acceptance:${task.id}`] = hash(await readFile(task.acceptancePath));
   inputPaths[`acceptance:${task.id}`] = relative(root, task.acceptancePath);
@@ -47,7 +50,7 @@ for (let repetition = 0; repetition < repetitions; repetition++) {
 }
 const manifest = { version: 5, campaign, startedAt: new Date().toISOString(), pi: '1.2.0', mainModel: modelOverride ?? 'variant-specific: gpt-6.1-sol or gpt-6-luna', variants: selectedVariants, reasoning: thinkingLevel, retry: { maxRetries: 2, baseDelayMs: 5000, maxAgentDelayMs: 30000, providerMaxRetries: 0 },
   runtime: { node: process.version, platform: process.platform, arch: process.arch },
-  split: suite === 'real' ? 'real' : split, repetitions, taskProvenance: suite === 'real' ? 'Real OSS repairs' : 'AI-authored synthetic', schedule, inputs, inputPaths,
+  split: suite !== 'synthetic' ? suite : split, repetitions, taskProvenance: suite !== 'synthetic' ? 'Real OSS repairs' : 'AI-authored synthetic', schedule, inputs, inputPaths,
   limitations: ['Restricted workspace tools shared by all arms; Pi SDK baseline, not unrestricted stock CLI.', 'Runtime permission boundary is Node permissions, not an OS sandbox.', 'Provider cache warmth is observed, not forcibly reset.', 'Subscription cost is API-equivalent estimate, not billed spend.'] };
 if (args['--resume']) {
   const frozen = JSON.parse(await readFile(resolve(directory, 'manifest.json'), 'utf8'));
@@ -72,14 +75,18 @@ for (const [index, item] of schedule.entries()) {
   console.log(JSON.stringify({ event: 'run_start', index: index + 1, total: schedule.length, runId }));
   let agent;
   if (variant.race) {
-    const { race, ...inner } = variant;
-    const raced = await runRace({ runtime, task, variant: inner, n: race.n ?? 3, selection: race.selection ?? 'first', runDir, thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000) });
+    const { race, effort, ...inner } = variant;
+    const raced = await runRace({ runtime, task, variant: inner, n: race.n ?? 3, selection: race.selection ?? 'first', attemptSpecs: race.attempts ?? [], iterate: !!race.iterate, runDir, thinkingLevel: effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000) });
     const winner = raced.attempts.find(a => a.index === raced.chosen);
     if (winner) await cp(winner.workspace, workspace, { recursive: true, force: true });
     agent = { ...raced, decisions: [], watcherCalls: 0, turns: raced.attempts.reduce((s, a) => s + (a.turns ?? 0), 0),
       usageCostUnknown: raced.attempts.some(a => a.usageCostUnknown), race: raced };
+  } else if (variant.spec !== undefined) {
+    const { spec, effort, ...inner } = variant;
+    const speced = await runSpecAgent({ runtime, task, variant: inner, spec, runDir, thinkingLevel: effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000) });
+    agent = { ...speced, decisions: [], watcherCalls: 0 };
   } else {
-    agent = await runAgent({ runtime, workspace, runDir, task, variant, thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000) });
+    agent = await runAgent({ runtime, workspace, runDir, task, variant, thinkingLevel: variant.effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000) });
   }
   const before = hash(await readFile(task.acceptancePath));
   const acceptance = await runNodeTests(workspace, task.acceptancePath);

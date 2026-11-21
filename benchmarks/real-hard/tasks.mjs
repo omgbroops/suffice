@@ -1,0 +1,28 @@
+import { resolve } from 'node:path';
+import { stateDir } from '../../src/runtime.mjs';
+
+// Harder real-OSS suite: adjacent-version diffs of real packages. Each task
+// ships the buggy base under src/; the fixed release is the reference.
+export const hardTasks = [
+  { id: 'qs-614', pkg: 'qs', base: '6.13.0', fix: '6.14.0', issue: 'https://github.com/ljharb/qs',
+    prompt: 'Fix the qs package to support a throwOnLimitExceeded parse option. When it is true, exceeding parameterLimit must throw a RangeError like "Parameter limit exceeded. Only N parameters allowed." and exceeding arrayLimit must throw "Array limit exceeded. Only N elements allowed in an array." When false or absent, limits must keep truncating silently exactly as before.' },
+  { id: 'negotiator-064', pkg: 'negotiator', base: '0.6.3', fix: '0.6.4', issue: 'https://github.com/jshttp/negotiator',
+    prompt: 'Fix the negotiator package so encodings() accepts an optional third argument: a preferred ordering of encodings. After quality sorting, entries appearing in the preferred list must come first in the preferred order; entries not in it keep specifity/order rules as the fallback. With no third argument, behavior must be unchanged.' },
+  { id: 'ini-413', pkg: 'ini', base: '4.1.2', fix: '4.1.3', issue: 'https://github.com/npm/ini',
+    prompt: 'Fix the ini package: when bracketedArray is false, a key repeated on later lines must collect its values into an array under the full key name. Currently the second occurrence is stored under a wrongly shortened key (the last two characters are stripped), corrupting the object: ini.parse("abc=1\\nabc=2", { bracketedArray: false }) must give { abc: ["1","2"] }. Explicit [] suffixes and all other parsing behavior must stay the same.' },
+  { id: 'cookie-072', pkg: 'cookie', base: '0.7.1', fix: '0.7.2', issue: 'https://github.com/jshttp/cookie',
+    prompt: 'Fix the cookie package so parse() survives a cookie whose name shadows inherited Object.prototype members. parse("hasOwnProperty=x; a=1; b=2") currently throws "obj.hasOwnProperty is not a function"; it must return all three pairs. Parsing, encoding and option handling must otherwise stay identical.' },
+  { id: 'ipaddr-220', pkg: 'ipaddr.js', base: '2.1.0', fix: '2.2.0', issue: 'https://github.com/whitequark/ipaddr.js',
+    prompt: 'Fix the ipaddr package: add IPv4.isValidCIDR(string) and IPv6.isValidCIDR(string) returning whether the string is valid CIDR notation (IPv6.isValidCIDR must reject strings without a colon). Also update the special-purpose ranges: IPv4 192.175.48.0/24 and 192.31.196.0/24 are "as112", 192.52.193.0/24 is "amt"; IPv6 100::/64 is "discard" and the "reserved" range is 2001::/23 (which also covers documentation 2001:db8::/32), with 2001:30::/28 as "droneRemoteIdProtocolEntityTags" and an extra as112v6 range 2620:4f:8000::/48.' },
+  { id: 'path-to-regexp-820', pkg: 'path-to-regexp', base: '8.0.0', fix: '8.2.0', issue: 'https://github.com/pillarjs/path-to-regexp',
+    prompt: 'Fix the path-to-regexp package so wildcard parameters match segments containing newlines: match("/files/*rest")("/files/a\\nb") must succeed (wildcard params collect into an array). Also export a stringify(tokenData) function that serializes parse() output back to a path string, escaping reserved characters in literal text. Regular params and the rest of the API must behave as before.' },
+  { id: 'content-disposition-100', pkg: 'content-disposition', base: '0.5.4', fix: '1.0.0', issue: 'https://github.com/jshttp/content-disposition',
+    prompt: 'Fix the content-disposition package so extended parameters accept "utf8" (no dash) as a charset alias in addition to "utf-8": parse("attachment; filename*=utf8\'\'%C3%A9.txt") must return filename "é.txt" instead of throwing "unsupported charset in extended field". utf-8 and iso-8859-1 must keep working and other charsets must still throw.' },
+  { id: 'braces-303', pkg: 'braces', base: '3.0.2', fix: '3.0.3', issue: 'https://github.com/micromatch/braces',
+    prompt: 'Fix the braces package to reject oversized input: patterns longer than 10000 characters must throw a SyntaxError like "Input length (N), exceeds max characters (10000)" by default, instead of being parsed. A numeric options.maxLength below the cap must still be honored, and normal patterns must be unaffected.' },
+  { id: 'shell-quote-183', pkg: 'shell-quote', base: '1.8.1', fix: '1.8.3', issue: 'https://github.com/ljharb/shell-quote',
+    prompt: "Fix the shell-quote quote() function. Two defects: an empty-string argument yields an empty output instead of a quoted '' (quote(['']) must be \"''\", and quote(['x','']) must be \"x ''\"); and an argument containing a backslash is not quoted even though it needs to be (quote(['a\\\\b']) must be \"'a\\\\b'\", quote(['a b\\\\c']) must be \"'a b\\\\c'\", with the backslash left unescaped inside the single quotes). Quoting for spaces, double quotes, single quotes and other specials must stay exactly as it is." },
+  { id: 'express-4212', pkg: 'express', base: '4.19.2', fix: '4.21.2', issue: 'https://github.com/expressjs/express',
+    prompt: 'Fix the express package: res.location(url) currently leaves the scheme://host prefix unencoded via a schemaAndHostRegExp match, so res.location("http://ho st.com/x") yields "http://ho st.com/x". It must instead encode the whole URL with encodeUrl, yielding "http://ho%20st.com/x". Everything else in response.js must be unchanged.' },
+].map(t => ({ ...t, title: t.id, workspaceDir: resolve(stateDir, 'real-tasks', t.id, 'workspace'),
+  acceptancePath: resolve(import.meta.dirname, `${t.id}.test.mjs`) }));
