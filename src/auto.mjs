@@ -20,7 +20,7 @@ const RACE_ATTEMPTS = [
   { thinkingLevel: 'low', prefill: true, promptSuffix: 'Check edge cases and the full contract before finishing.' },
 ];
 
-export async function runAuto({ runtime, task, variant, workspace, runDir, thinkingLevel = 'low', timeoutMs = 240_000 }) {
+export async function runAuto({ runtime, task, variant, workspace, runDir, thinkingLevel = 'low', timeoutMs = 240_000, maxTurns = 24 }) {
   const started = Date.now();
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -37,12 +37,12 @@ export async function runAuto({ runtime, task, variant, workspace, runDir, think
     let outcome;
     if (route === 'repair') {
       outcome = await runEco({ runtime, task, variant, runDir, thinkingLevel, timeoutMs: remaining,
-        eco: { cheapModel: 'gpt-6-luna', cheapEffort: 'low', prefill: true, cheapRetries: 2 } });
+        eco: { cheapModel: 'gpt-6-luna', cheapEffort: 'low', prefill: true, cheapRetries: 2 }, maxTurns });
     } else if (route === 'feature') {
-      outcome = await runAgent({ runtime, workspace, runDir: resolve(runDir, 'agent'), task, variant, thinkingLevel, timeoutMs: remaining, signal: controller.signal });
+      outcome = await runAgent({ runtime, workspace, runDir: resolve(runDir, 'agent'), task, variant, thinkingLevel, timeoutMs: remaining, maxTurns, signal: controller.signal });
       outcome.winnerWorkspace = workspace;
     } else {
-      const raced = await runRace({ runtime, task, variant, n: 3, selection: 'first', attemptSpecs: RACE_ATTEMPTS, runDir, thinkingLevel, timeoutMs: remaining });
+      const raced = await runRace({ runtime, task, variant, n: 3, selection: 'first', attemptSpecs: RACE_ATTEMPTS, runDir, thinkingLevel, timeoutMs: remaining, maxTurns });
       const winner = raced.attempts?.find(a => a.index === raced.chosen);
       outcome = { ...raced, winnerWorkspace: winner?.workspace ?? null,
         turns: raced.attempts?.reduce((s, a) => s + (a.turns ?? 0), 0) ?? 0 };

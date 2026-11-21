@@ -1,6 +1,30 @@
-import { readFile, writeFile, readdir, lstat, realpath, mkdir } from 'node:fs/promises';
+import { readFile, writeFile, readdir, lstat, realpath, mkdir, cp } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import { resolve, relative, sep, dirname, isAbsolute } from 'node:path';
-import { spawn } from 'node:child_process';
+import { spawn, execFileSync } from 'node:child_process';
+
+// Copy a frozen task workspace into a run dir. DeepSWE workspaces keep
+// node_modules outside the tree (task.depsDir) and get it back as a
+// hardlinked copy — a full recursive copy would be hundreds of MB per run.
+// Returns the paths the harness generated on top of the frozen tree (the
+// immutable-file check must not count them as agent edits).
+export async function materializeWorkspace(task, dest) {
+  const generated = [];
+  await cp(task.workspaceDir, dest, { recursive: true, errorOnExist: true });
+  if (task.depsDir && existsSync(resolve(task.depsDir, 'node_modules'))) {
+    const target = resolve(dest, 'src', 'node_modules');
+    try { execFileSync('cp', ['-al', resolve(task.depsDir, 'node_modules'), target]); }
+    catch { await cp(resolve(task.depsDir, 'node_modules'), target, { recursive: true }); }
+  }
+  if (task.prompt && !existsSync(resolve(dest, 'README.md'))) {
+    const orientation = task.deepswe
+      ? 'The repository to fix is under src/ — dependencies are already installed. Use the test tool to run the suite\'s tests.\n\n'
+      : '';
+    await writeFile(resolve(dest, 'README.md'), `${orientation}${task.prompt}\n`);
+    generated.push('README.md');
+  }
+  return generated;
+}
 import { createHash } from 'node:crypto';
 import { Type } from 'typebox';
 
@@ -88,6 +112,23 @@ export async function runNodeTests(workspace, testPath, { signal, timeoutMs = 15
   });
 }
 
+export function runShell(cmd, cwd, { signal, timeoutMs = 300_000 } = {}) {
+  const started = Date.now();
+  return new Promise(resolveResult => {
+    const child = spawn('bash', ['-lc', cmd], { cwd, windowsHide: true, env: { ...process.env, CI: '1', NODE_NO_WARNINGS: '1', PATH: `${resolve(cwd, 'node_modules', '.bin')}:${process.env.PATH}` }, stdio: ['ignore', 'pipe', 'pipe'] });
+    let stdout = '', stderr = '', timedOut = false;
+    child.stdout.on('data', d => { stdout += d; if (stdout.length > 100_000) stdout = stdout.slice(0, 100_000); });
+    child.stderr.on('data', d => { stderr += d; if (stderr.length > 30_000) stderr = stderr.slice(0, 30_000); });
+    const stop = () => { timedOut = true; try { process.kill(-child.pid, 'SIGKILL'); } catch {} child.kill('SIGKILL'); };
+    const timer = setTimeout(stop, timeoutMs);
+    signal?.addEventListener('abort', stop, { once: true });
+    child.on('error', e => { clearTimeout(timer); resolveResult({ status: 'infrastructure_error', stdout: '', stderr: String(e), latencyMs: Date.now() - started }); });
+    child.on('close', code => {
+      clearTimeout(timer); signal?.removeEventListener('abort', stop);
+      resolveResult({ status: timedOut ? 'timeout' : code === 0 ? 'passed' : 'failed', exitCode: code, stdout, stderr, latencyMs: Date.now() - started });
+    });
+  });
+}
 function toolResult(data) { return { content: [{ type: 'text', text: typeof data === 'string' ? data : JSON.stringify(data) }], structuredContent: data, details: {} }; }
 export async function formatTestResult(result, artifactsDir) {
   await mkdir(artifactsDir, { recursive: true });
@@ -112,6 +153,14 @@ export function workspaceTools({ workspace, log = () => {}, artifactsDir, signal
     make('file_write', 'Write a complete UTF-8 src/ file; use file_edit for smaller changes.', Type.Object({ path: Type.String(), content: Type.String() }),
       args => mutate(async () => { if (Buffer.byteLength(args.content) > MAX_FILE_BYTES) throw new Error('File too large.'); const target = await scopedPath(workspace, args.path, { write: true }); await mkdir(dirname(target), { recursive: true }); await writeFile(target, args.content); return { path: args.path, version: hash(args.content), written: true }; })),
     make('test', 'Run the visible Node test suite. Returns status and diagnostic output. Acceptance tests are run separately by the evaluator.', Type.Object({}),
-      async () => { const result = await runNodeTests(workspace, resolve(workspace, 'tests/visible.test.mjs'), { signal }); return formatTestResult(result, artifactsDir); }),
+      async () => {
+        if (existsSync(resolve(workspace, 'deepswe.json'))) {
+          const meta = JSON.parse(await readFile(resolve(workspace, 'deepswe.json'), 'utf8'));
+          const result = await runShell(meta.agentTest, resolve(workspace, 'src'), { signal, timeoutMs: 300_000 });
+          return formatTestResult(result, artifactsDir);
+        }
+        const result = await runNodeTests(workspace, resolve(workspace, 'tests/visible.test.mjs'), { signal });
+        return formatTestResult(result, artifactsDir);
+      }),
   ];
 }

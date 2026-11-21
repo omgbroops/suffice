@@ -103,6 +103,7 @@ export const variants = Object.freeze([
   // Stock Pi: default tools, default prompt, no Suffice mechanisms — the true
   // upstream baseline. Model stays on the subscription default.
   { id: 'base-pi', basePi: true },
+  { id: 'base-pi-luna-xhigh', basePi: true, basePiModel: 'gpt-6-luna', effort: 'xhigh' },
   // Per-call effort routing: medium thinking while exploring/planning, low for
   // the edit turns that follow.
   { id: 'effort-route', core: true, effort: 'medium', effortRoute: { to: 'low', afterTurns: 2 } },
@@ -420,7 +421,7 @@ export async function runAgent({ runtime, workspace, runDir, task, variant, time
 
 // Stock Pi run: Pi's own default tools and system prompt, no Suffice tools,
 // prompt, watchers, or fast machinery — the true upstream baseline arm.
-export async function runBasePi({ runtime, workspace, runDir, task, timeoutMs = 240_000, maxTurns = 24, thinkingLevel = 'medium', signal }) {
+export async function runBasePi({ runtime, workspace, runDir, task, timeoutMs = 240_000, maxTurns = 24, thinkingLevel = 'medium', model = 'gpt-6.1-sol', signal }) {
   if (!runtime.isUsingSubscription('openai')) throw new Error('OpenAI subscription authentication is required.');
   await mkdir(runDir, { recursive: true });
   const events = [];
@@ -445,7 +446,7 @@ export async function runBasePi({ runtime, workspace, runDir, task, timeoutMs = 
   try {
     await resourceLoader.reload();
     const created = await createAgentSession({ cwd: workspace, agentDir: resolve(stateDir, 'empty-agent'), modelRuntime: runtime,
-      model: runtime.getModel('openai', 'gpt-6.1-sol'), thinkingLevel,
+      model: runtime.getModel('openai', model), thinkingLevel,
       resourceLoader, settingsManager: settings, sessionManager: SessionManager.inMemory(workspace) });
     session = created.session;
     await session.bindExtensions({});

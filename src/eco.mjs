@@ -6,11 +6,12 @@ import { cp, mkdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { runAgent } from './harness.mjs';
 import { workspacePrefill } from './race.mjs';
-import { filesIn, readText, hash, runNodeTests } from './workspace.mjs';
+import { filesIn, readText, hash, materializeWorkspace } from './workspace.mjs';
+import { runTaskAcceptance } from './deepswe-verify.mjs';
 
 // Returns { passed } plus a compact failure digest the cheap model can retry against.
 async function check(workspace, task, baseline, signal) {
-  const acceptance = await runNodeTests(workspace, task.acceptancePath, { signal });
+  const acceptance = await runTaskAcceptance(workspace, task, { signal });
   if (acceptance.status !== 'passed') {
     const digest = `${acceptance.status}: ${(acceptance.stdout ?? '').split('\n').filter(l => /not ok|fail|Error/i.test(l)).slice(0, 10).join('\n')}`.slice(0, 3000);
     return { passed: false, detail: `acceptance ${digest}` };
@@ -22,7 +23,7 @@ async function check(workspace, task, baseline, signal) {
 }
 
 // eco = { cheapModel, cheapEffort, cheapTurns, cheapTimeoutMs, prefill, cheapRetries }
-export async function runEco({ runtime, task, variant, runDir, thinkingLevel = 'low', timeoutMs = 240_000, eco = {}, runAgentImpl = runAgent }) {
+export async function runEco({ runtime, task, variant, runDir, thinkingLevel = 'low', timeoutMs = 240_000, eco = {}, maxTurns = 24, runAgentImpl = runAgent }) {
   const started = Date.now();
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -33,7 +34,7 @@ export async function runEco({ runtime, task, variant, runDir, thinkingLevel = '
     const cheapDir = resolve(runDir, 'cheap');
     const cheapWorkspace = resolve(cheapDir, 'workspace');
     await mkdir(cheapDir, { recursive: true });
-    await cp(task.workspaceDir, cheapWorkspace, { recursive: true });
+    await materializeWorkspace(task, cheapWorkspace);
     const cheapTask = eco.prefill ? { ...task, prompt: `${task.prompt}\n\n${await workspacePrefill(task.workspaceDir)}` } : task;
     const cheapVariant = { ...variant, model: eco.cheapModel ?? 'gpt-6-luna' };
     const retries = eco.cheapRetries ?? 0;
@@ -63,10 +64,10 @@ export async function runEco({ runtime, task, variant, runDir, thinkingLevel = '
       const strongDir = resolve(runDir, 'strong');
       const strongWorkspace = resolve(strongDir, 'workspace');
       await mkdir(strongDir, { recursive: true });
-      await cp(task.workspaceDir, strongWorkspace, { recursive: true });
+      await materializeWorkspace(task, strongWorkspace);
       strong = await runAgentImpl({
         runtime, workspace: strongWorkspace, runDir: strongDir, task, variant,
-        thinkingLevel: eco.strongEffort ?? thinkingLevel, timeoutMs, signal: controller.signal });
+        thinkingLevel: eco.strongEffort ?? thinkingLevel, timeoutMs, maxTurns, signal: controller.signal });
     }
     const winner = cheapPassed ? cheap : strong;
     const usage = {};

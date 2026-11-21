@@ -3,7 +3,8 @@
 import { cp, mkdir, rm, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { runAgent } from './harness.mjs';
-import { filesIn, readText, hash, runNodeTests } from './workspace.mjs';
+import { filesIn, readText, hash, materializeWorkspace } from './workspace.mjs';
+import { runTaskAcceptance } from './deepswe-verify.mjs';
 import { workflowPatch } from './workflow-agent.mjs';
 
 async function attemptDiff(workspace, baseline) {
@@ -36,7 +37,7 @@ export async function workspacePrefill(workspaceDir) {
   return `Workspace layout (src/):\n${files.join('\n')}${manifest}\n\nPrefer the smallest correct diff — targeted edits over full-file rewrites.`;
 }
 
-export async function runRace({ runtime, task, variant, n = 3, runDir, thinkingLevel = 'low', timeoutMs = 240_000, selection = 'first', attemptSpecs = [], iterate = false, attemptDeadlineMs = null, runAgentImpl = runAgent }) {
+export async function runRace({ runtime, task, variant, n = 3, runDir, thinkingLevel = 'low', timeoutMs = 240_000, selection = 'first', attemptSpecs = [], iterate = false, attemptDeadlineMs = null, maxTurns = 24, runAgentImpl = runAgent }) {
   if (!['first', 'best'].includes(selection)) throw new Error(`Unknown selection: ${selection}`);
   const controller = new AbortController();
   const started = Date.now();
@@ -52,17 +53,17 @@ export async function runRace({ runtime, task, variant, n = 3, runDir, thinkingL
       const attemptDir = resolve(runDir, `attempt-${index}`);
       const workspace = resolve(attemptDir, 'workspace');
       await mkdir(attemptDir, { recursive: true });
-      await cp(task.workspaceDir, workspace, { recursive: true });
+      await materializeWorkspace(task, workspace);
       // Cost cap: a straggler attempt is killed at attemptDeadlineMs — a
       // loser that far behind the pack almost never wins anyway.
       const attemptCtl = new AbortController();
       const deadline = attemptDeadlineMs ? setTimeout(() => attemptCtl.abort('deadline'), attemptDeadlineMs) : null;
       controller.signal.addEventListener('abort', () => attemptCtl.abort(), { once: true });
       if (controller.signal.aborted) attemptCtl.abort();
-      const agent = await runAgentImpl({ runtime, workspace, runDir: attemptDir, task: attemptTask, variant: spec.variant ?? variant, thinkingLevel: attemptThinking, timeoutMs, signal: attemptCtl.signal });
+      const agent = await runAgentImpl({ runtime, workspace, runDir: attemptDir, task: attemptTask, variant: spec.variant ?? variant, thinkingLevel: attemptThinking, timeoutMs, maxTurns, signal: attemptCtl.signal });
       if (deadline) clearTimeout(deadline);
       if (controller.signal.aborted) return { index, spec, status: agent.status, providerFailureKind: agent.providerFailureKind, passed: false, usage: agent.usage, usageCostUnknown: agent.usageCostUnknown, turns: agent.turns, latencyMs: agent.latencyMs, workspace, runDir: attemptDir };
-      const acceptance = await runNodeTests(workspace, task.acceptancePath, { signal: controller.signal });
+      const acceptance = await runTaskAcceptance(workspace, task, { signal: controller.signal });
       const passed = agent.status === 'completed' && acceptance.status === 'passed' && await immutableIntact(workspace, task.workspaceDir);
       const { diffLines } = passed ? await attemptDiff(workspace, task.workspaceDir) : { diffLines: null };
       return { index, spec, status: agent.status, providerFailureKind: agent.providerFailureKind, passed, diffLines, acceptanceStatus: acceptance.status, usage: agent.usage, usageCostUnknown: agent.usageCostUnknown, turns: agent.turns, latencyMs: agent.latencyMs, workspace, runDir: attemptDir };
@@ -107,7 +108,7 @@ export async function runRace({ runtime, task, variant, n = 3, runDir, thinkingL
     // The race controller is already aborted to kill the losers; the
     // refinement gets a fresh signal so it is not born cancelled.
     const iterAgent = await runAgentImpl({ runtime, workspace: winner.workspace, runDir: resolve(runDir, 'iterate'), task: refineTask, variant, thinkingLevel, timeoutMs });
-    const acceptance = await runNodeTests(winner.workspace, task.acceptancePath);
+    const acceptance = await runTaskAcceptance(winner.workspace, task);
     const ok = iterAgent.status === 'completed' && acceptance.status === 'passed' && await immutableIntact(winner.workspace, task.workspaceDir);
     if (!ok) { await rm(winner.workspace, { recursive: true, force: true }); await cp(backup, winner.workspace, { recursive: true }); }
     iteration = { accepted: ok, agentStatus: iterAgent.status, latencyMs: iterAgent.latencyMs, turns: iterAgent.turns, usage: iterAgent.usage };
