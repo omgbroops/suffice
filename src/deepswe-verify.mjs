@@ -117,7 +117,9 @@ function resultsByName(runner, stdout, cwd) {
       if (t.title) put(t.title, t.status);
     }
   }
-  return map.size ? map : null;
+  // An empty map is still a report (e.g. the spec suite failed to load —
+  // its whitelist ids grade as missing => failed, never infra).
+  return map;
 }
 
 function grade(ids, map) {
@@ -172,14 +174,11 @@ export async function runDeepSweAcceptance(workspace, task, { timeoutMs = 900_00
       if (r.timedOut) return { status: 'timeout', detail: `${label} spec timed out` };
       detail[label] = { command, code: r.code, latencyMs: r.latencyMs, tail: (r.stderr + '\n' + r.stdout).slice(-tail) };
       const map = resultsByName(meta.runner, r.stdout, src);
-      if (!map) {
-        // "No tests found" = the suite legitimately ran but selected nothing
-        // (e.g. the agent removed spec files) — contributes an empty map, and
-        // whitelist ids grade as missing => failed, never infra.
-        if (/No tests found|0 matches/.test(r.stderr + r.stdout)) continue;
-        return { status: 'infrastructure_error', detail: `no ${meta.runner} JSON report for ${label} (exit ${r.code}): ${(r.stderr + r.stdout).slice(-1000)}` };
-      }
-      mergeIn(map);
+      // DeepSWE semantics: a suite that produces no report (build fails before
+      // the runner starts, spec can't compile against the unfixed API, runner
+      // exits early) contributes nothing — its whitelist ids grade as
+      // missing => failed, matching the real grader's "no report = failed".
+      if (map) mergeIn(map);
     }
     return null;
   };
@@ -187,7 +186,19 @@ export async function runDeepSweAcceptance(workspace, task, { timeoutMs = 900_00
   // new spec: every f2p whitelist id must pass
   const newErr = await runAll(newCommands, 'new', 4000);
   if (newErr) return { ...newErr, tests: 0, passed: 0, failed: meta.f2p.length };
+
+  // Base suite runs WITHOUT the hidden spec (real test.sh mv's it to .bak):
+  // a spec that can't compile against the base repo must not block base.
+  const addedByPatch = [...patch.matchAll(/--- \/dev\/null\n\+\+\+ b\/(\S+)/g)].map(m => m[1]);
+  const { renameSync } = await import('node:fs');
+  const parked = [];
+  for (const rel of addedByPatch) {
+    try { renameSync(resolve(src, rel), resolve(src, `${rel}.dsw-bak`)); parked.push(rel); } catch { }
+  }
   const baseErr = await runAll(baseCommands, 'base', 2000);
+  for (const rel of parked) {
+    try { renameSync(resolve(src, `${rel}.dsw-bak`), resolve(src, rel)); } catch { }
+  }
   if (baseErr) return { ...baseErr, tests: 0, passed: 0, failed: meta.f2p.length };
 
   const f2p = grade(meta.f2p, merged);

