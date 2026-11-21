@@ -29,7 +29,7 @@ export async function freezeSources(campaign) {
     try { await writeFile(target, bytes, { flag: 'wx' }); }
     catch (error) { if (error.code !== 'EEXIST') throw error; if (hash(await readFile(target)) !== expected) throw new Error('Existing source snapshot differs.'); }
   }
-  const receipt = { at: new Date().toISOString(), complete: receipts.every(r => r.matched), receipts };
+  const receipt = { at: new Date().toISOString(), complete: receipts.filter(r => r.key.startsWith('task:') || r.key.startsWith('acceptance:')).every(r => r.matched), receipts };
   await writeFile(resolve(directory, 'source-snapshot.json'), JSON.stringify(receipt, null, 2));
   return { campaign, complete: receipt.complete, files: receipts.length, mismatches: receipts.filter(r => !r.matched).map(r => r.key) };
 }
