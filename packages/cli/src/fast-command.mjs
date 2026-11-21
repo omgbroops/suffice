@@ -1,4 +1,4 @@
-import {mkdtemp,cp,rm,readdir,readFile,writeFile,mkdir,symlink} from 'node:fs/promises';
+import {mkdtemp,cp,rm,readdir,readFile,writeFile,mkdir,symlink,lstat} from 'node:fs/promises';
 import {existsSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join,relative,basename,dirname} from 'node:path';
@@ -41,12 +41,51 @@ export async function diffFiles(from,to){
   return {changed,deleted};
 }
 
+// Deepest ancestor of `rel` inside `base` that is itself a symlink, or null.
+// Path ops must not traverse it: deleting children through a linked dir would
+// destroy the link's real target outside (or shared with) the worktree.
+async function linkedAncestor(base,rel){
+  let cur=base;
+  for(const part of rel.split('/').slice(0,-1)){
+    cur=join(cur,part);
+    const st=await lstat(cur).catch(()=>null);
+    if(!st) return null;
+    if(st.isSymbolicLink()) return relative(base,cur);
+  }
+  return null;
+}
+
+// Replace a linked dir in `base` with a real directory mirroring the snapshot
+// (what the winning attempt saw), so file writes land on the worktree itself.
+async function materializeLink(base,snapshot,anc){
+  await rm(join(base,anc),{force:true});
+  await cp(join(snapshot,anc),join(base,anc),{recursive:true,dereference:true});
+}
+
 // Applies what the winning attempt changed relative to the pre-race snapshot onto
 // the live worktree, so edits the user made during the race on other files survive.
 export async function applyPatch(base,snapshot,attempt){
   const {changed,deleted}=await diffFiles(snapshot,attempt);
-  for(const rel of changed){const to=join(base,rel);await mkdir(dirname(to),{recursive:true});await writeFile(to,await readFile(join(attempt,rel)));}
-  for(const rel of deleted) await rm(join(base,rel),{force:true});
+  for(const rel of changed){
+    const anc=await linkedAncestor(base,rel);
+    if(anc) await materializeLink(base,snapshot,anc);
+    const to=join(base,rel);await mkdir(dirname(to),{recursive:true});await writeFile(to,await readFile(join(attempt,rel)));
+  }
+  const pending=new Set(deleted);
+  const byLink=new Map();
+  for(const rel of deleted){
+    const anc=await linkedAncestor(base,rel);
+    if(anc) byLink.set(anc,[...(byLink.get(anc)??[]),rel]);
+  }
+  for(const [anc,rels] of byLink){
+    const underLink=(await listFiles(join(snapshot,anc))).map(p=>join(anc,p));
+    // Whole linked dir gone in the winner: remove only the link, never its target.
+    if(underLink.every(p=>pending.has(p))){
+      await rm(join(base,anc),{recursive:true,force:true});
+      for(const p of rels) pending.delete(p);
+    }
+  }
+  for(const rel of pending) await rm(join(base,rel),{force:true});
   return changed.length+deleted.length;
 }
 

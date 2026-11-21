@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtemp,mkdir,writeFile,readFile,rm} from 'node:fs/promises';
+import {mkdtemp,mkdir,writeFile,readFile,rm,symlink,lstat} from 'node:fs/promises';
 import {existsSync} from 'node:fs';
 import {join} from 'node:path';
 import {tmpdir} from 'node:os';
@@ -49,6 +49,42 @@ test('applyPatch preserves base edits made during the race',async()=>{
     assert.equal(await readFile(join(base,'src','a.js'),'utf8'),'export const a=42;');
     assert.equal(await readFile(join(base,'src','b.js'),'utf8'),'export const b="user";');
   }finally{for(const d of [snapshot,base,attempt]) await rm(d,{recursive:true,force:true});}
+});
+
+test('applyPatch removes a linked dir without touching its target',async()=>{
+  const snapshot=await makeTree(),base=await makeTree(),attempt=await makeTree(),target=await mkdtemp(join(tmpdir(),'fast-cmd-target-'));
+  try{
+    // base has src -> <external target>; snapshot/attempt have the dereferenced real dir.
+    await rm(join(base,'src'),{recursive:true});
+    await mkdir(join(target,'src'),{recursive:true});
+    await writeFile(join(target,'src','a.js'),'export const a=1;');
+    await writeFile(join(target,'src','b.js'),'export const b=2;');
+    await symlink(join(target,'src'),join(base,'src'),'dir');
+    // Winner deletes the whole dir.
+    await rm(join(attempt,'src'),{recursive:true});
+    await applyPatch(base,snapshot,attempt);
+    const st=await lstat(join(base,'src')).catch(()=>null);
+    assert.equal(st,null);
+    assert.equal(await readFile(join(target,'src','a.js'),'utf8'),'export const a=1;');
+  }finally{for(const d of [snapshot,base,attempt,target]) await rm(d,{recursive:true,force:true});}
+});
+
+test('applyPatch materializes a linked dir before writing through it',async()=>{
+  const snapshot=await makeTree(),base=await makeTree(),attempt=await makeTree(),target=await mkdtemp(join(tmpdir(),'fast-cmd-target-'));
+  try{
+    await rm(join(base,'src'),{recursive:true});
+    await mkdir(join(target,'src'),{recursive:true});
+    await writeFile(join(target,'src','a.js'),'export const a=1;');
+    await writeFile(join(target,'src','b.js'),'export const b=2;');
+    await symlink(join(target,'src'),join(base,'src'),'dir');
+    await writeFile(join(attempt,'src','a.js'),'export const a=99;');
+    await applyPatch(base,snapshot,attempt);
+    const st=await lstat(join(base,'src'));
+    assert.equal(st.isSymbolicLink(),false);
+    assert.equal(await readFile(join(base,'src','a.js'),'utf8'),'export const a=99;');
+    // Target untouched.
+    assert.equal(await readFile(join(target,'src','a.js'),'utf8'),'export const a=1;');
+  }finally{for(const d of [snapshot,base,attempt,target]) await rm(d,{recursive:true,force:true});}
 });
 
 test('diffFiles reports no diff on identical trees',async()=>{
