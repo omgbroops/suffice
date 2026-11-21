@@ -59,7 +59,8 @@ const manifest = { version: 5, campaign, startedAt: new Date().toISOString(), pi
   limitations: ['Restricted workspace tools shared by all arms; Pi SDK baseline, not unrestricted stock CLI.', 'Runtime permission boundary is Node permissions, not an OS sandbox.', 'Provider cache warmth is observed, not forcibly reset.', 'Subscription cost is API-equivalent estimate, not billed spend.'] };
 if (args['--resume']) {
   const frozen = JSON.parse(await readFile(resolve(directory, 'manifest.json'), 'utf8'));
-  if (frozen.reasoning !== manifest.reasoning || frozen.mainModel !== manifest.mainModel || JSON.stringify(frozen.inputs) !== JSON.stringify(inputs) || JSON.stringify(frozen.schedule) !== JSON.stringify(schedule)) throw new Error('Cannot resume: frozen configuration or inputs changed.');
+  const taskInputs = obj => Object.fromEntries(Object.entries(obj).filter(([k]) => k.startsWith('task:') || k.startsWith('acceptance:')));
+  if (frozen.reasoning !== manifest.reasoning || frozen.mainModel !== manifest.mainModel || JSON.stringify(taskInputs(frozen.inputs)) !== JSON.stringify(taskInputs(inputs)) || JSON.stringify(frozen.schedule) !== JSON.stringify(schedule)) throw new Error('Cannot resume: frozen configuration or task inputs changed.');
 } else {
   await writeFile(resolve(directory, 'manifest.json'), JSON.stringify(manifest, null, 2), { flag: 'wx' });
 }
