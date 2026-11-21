@@ -1,6 +1,6 @@
 # Suffice
 
-The local Electron app lives in [apps/desktop](apps/desktop/README.md). Run `bun install` and `bun run desktop` from this repository root. Bun hoists dependencies into the existing root `node_modules`; the desktop app does not have a separate install.
+The Electron desktop app lives in [apps/desktop](apps/desktop/README.md). Run `bun install`, then `bun run desktop` from this repository root. It drives the same harness as the CLI (`@suffice/harness`) and shares `~/.suffice` with it.
 
 The **Suffice CLI alpha** is available in [packages/cli](packages/cli/README.md). From this clone, run `bun install` once, then `node packages/cli/bin/suffice.mjs`. It uses Pi's native terminal interface with Suffice's tools and branding: `/project` selects a repository and `/login` signs in. No global install or tarball step is needed. The research scripts below and frozen benchmark worktrees are unchanged.
 

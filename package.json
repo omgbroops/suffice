@@ -32,8 +32,7 @@
     "test:desktop": "node --test --test-concurrency=1 apps/desktop/test/*.test.mjs",
     "desktop:setup": "bun scripts/setup-desktop.mjs",
     "postinstall": "bun run desktop:setup",
-    "desktop:installer": "node scripts/desktop/package.mjs",
-    "desktop:smoke": "node scripts/desktop/smoke.mjs"
+    "desktop:start": "bun run --cwd apps/desktop start"
   },
   "dependencies": {
     "@earendil-works/pi-ai": "1.5.2",
