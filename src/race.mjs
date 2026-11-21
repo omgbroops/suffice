@@ -26,7 +26,7 @@ async function immutableIntact(workspace, baseline) {
 // a promptSuffix appended to the task prompt, or prefill: inject the
 // workspace file tree + package manifest into the prompt so attempts skip
 // their blind exploration turns.
-async function workspacePrefill(workspaceDir) {
+export async function workspacePrefill(workspaceDir) {
   const files = (await filesIn(workspaceDir)).filter(p => p.startsWith('src/') && !p.startsWith('src/node_modules/')).slice(0, 80);
   let manifest = '';
   try {

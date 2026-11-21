@@ -96,7 +96,7 @@ export const variants = Object.freeze([
   // Eco: Luna attempts the repair; Sol only runs when Luna's patch fails the
   // verifier. Escalate-on-failure keeps the strong model's ceiling while
   // paying its price only on misses — unlike review-on-success.
-  { id: 'eco-luna-sol', core: true, effort: 'low', fast: { speculativeTest: true }, eco: { cheapModel: 'gpt-6-luna', cheapEffort: 'low' } },
+  { id: 'eco-luna-sol', core: true, effort: 'low', fast: { speculativeTest: true }, eco: { cheapModel: 'gpt-6-luna', cheapEffort: 'low', prefill: true, cheapRetries: 2 } },
   // Per-call effort routing: medium thinking while exploring/planning, low for
   // the edit turns that follow.
   { id: 'effort-route', core: true, effort: 'medium', effortRoute: { to: 'low', afterTurns: 2 } },
