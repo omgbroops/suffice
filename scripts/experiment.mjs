@@ -1,5 +1,6 @@
 import { cp, mkdir, readFile, writeFile, statfs, rm, readdir } from 'node:fs/promises';
 import { resolve, relative } from 'node:path';
+import { spawnSync } from 'node:child_process';
 import { tasks } from '../benchmarks/tasks.mjs';
 import { realTasks } from '../benchmarks/real/tasks.mjs';
 import { hardTasks } from '../benchmarks/real-hard/tasks.mjs';
@@ -18,6 +19,11 @@ import { freezeSources } from './freeze-sources.mjs';
 const args = Object.fromEntries(process.argv.slice(2).map(s => { const at = s.indexOf('='); return at < 0 ? [s, true] : [s.slice(0, at), s.slice(at + 1)]; }));
 const split = args['--split'] ?? 'pilot';
 const thinkingLevel = args['--effort'] ?? 'medium';
+
+function syncWinner(source, destination) {
+  const result = spawnSync('rsync', ['-a', '--delete', '--exclude=/src/node_modules/', `${source}/`, `${destination}/`], { encoding: 'utf8' });
+  if (result.status !== 0 && result.status !== 24) throw new Error(`Winner workspace sync failed: ${result.stderr || result.stdout}`);
+}
 if (!['low', 'medium', 'high'].includes(thinkingLevel)) throw new Error('Supported experiment efforts: low, medium, high.');
 const suite = args['--suite'] ?? 'synthetic';
 if (!['synthetic', 'real', 'real-hard', 'real-long', 'real-deepswe'].includes(suite)) throw new Error('Supported suites: synthetic, real, real-hard, real-long, real-deepswe.');
@@ -84,10 +90,7 @@ for (const [index, item] of schedule.entries()) {
     const { race, effort, ...inner } = variant;
     const raced = await runRace({ runtime, task, variant: inner, n: race.n ?? 3, selection: race.selection ?? 'first', attemptSpecs: race.attempts ?? [], iterate: !!race.iterate, attemptDeadlineMs: race.attemptDeadlineMs ?? null, runDir, thinkingLevel: effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000), maxTurns });
     const winner = raced.attempts.find(a => a.index === raced.chosen);
-    if (winner) {
-      await rm(resolve(workspace, 'src', 'node_modules'), { recursive: true, force: true });
-      await cp(winner.workspace, workspace, { recursive: true, force: true, verbatimSymlinks: true });
-    }
+    if (winner) syncWinner(winner.workspace, workspace);
     agent = { ...raced, decisions: [], watcherCalls: 0, turns: raced.attempts.reduce((s, a) => s + (a.turns ?? 0), 0),
       usageCostUnknown: raced.attempts.some(a => a.usageCostUnknown), race: raced };
   } else if (variant.spec !== undefined) {
@@ -97,18 +100,12 @@ for (const [index, item] of schedule.entries()) {
   } else if (variant.eco !== undefined) {
     const { eco, effort, ...inner } = variant;
     const ecoed = await runEco({ runtime, task, variant: inner, eco, runDir, thinkingLevel: effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000), maxTurns });
-    if (ecoed.winnerWorkspace) {
-      await rm(resolve(workspace, 'src', 'node_modules'), { recursive: true, force: true });
-      await cp(ecoed.winnerWorkspace, workspace, { recursive: true, force: true, verbatimSymlinks: true });
-    }
+    if (ecoed.winnerWorkspace) syncWinner(ecoed.winnerWorkspace, workspace);
     agent = { ...ecoed, decisions: [], watcherCalls: 0 };
   } else if (variant.auto !== undefined) {
     const { auto, effort, ...inner } = variant;
     const autoed = await runAuto({ runtime, task, variant: inner, workspace, runDir, thinkingLevel: effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000), maxTurns });
-    if (autoed.winnerWorkspace && autoed.winnerWorkspace !== workspace) {
-      await rm(resolve(workspace, 'src', 'node_modules'), { recursive: true, force: true });
-      await cp(autoed.winnerWorkspace, workspace, { recursive: true, force: true, verbatimSymlinks: true });
-    }
+    if (autoed.winnerWorkspace && autoed.winnerWorkspace !== workspace) syncWinner(autoed.winnerWorkspace, workspace);
     agent = { ...autoed, decisions: [], watcherCalls: 0 };
   } else if (variant.basePi) {
     agent = await runBasePi({ runtime, workspace, runDir, task, thinkingLevel: variant.effort ?? thinkingLevel, model: variant.basePiModel, timeoutMs: Number(args['--timeout-ms'] ?? 240000), maxTurns });
