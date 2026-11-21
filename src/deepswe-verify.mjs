@@ -172,7 +172,13 @@ export async function runDeepSweAcceptance(workspace, task, { timeoutMs = 900_00
       if (r.timedOut) return { status: 'timeout', detail: `${label} spec timed out` };
       detail[label] = { command, code: r.code, latencyMs: r.latencyMs, tail: (r.stderr + '\n' + r.stdout).slice(-tail) };
       const map = resultsByName(meta.runner, r.stdout, src);
-      if (!map) return { status: 'infrastructure_error', detail: `no ${meta.runner} JSON report for ${label} (exit ${r.code}): ${(r.stderr + r.stdout).slice(-1000)}` };
+      if (!map) {
+        // "No tests found" = the suite legitimately ran but selected nothing
+        // (e.g. the agent removed spec files) — contributes an empty map, and
+        // whitelist ids grade as missing => failed, never infra.
+        if (/No tests found|0 matches/.test(r.stderr + r.stdout)) continue;
+        return { status: 'infrastructure_error', detail: `no ${meta.runner} JSON report for ${label} (exit ${r.code}): ${(r.stderr + r.stdout).slice(-1000)}` };
+      }
       mergeIn(map);
     }
     return null;
