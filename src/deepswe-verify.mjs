@@ -21,8 +21,8 @@ function run(cmd, cwd, { timeoutMs, env = {} } = {}) {
       PATH: `${resolve(cwd, 'node_modules', '.bin')}:${process.env.PATH}`,
     }, stdio: ['ignore', 'pipe', 'pipe'] });
     let stdout = '', stderr = '', timedOut = false;
-    child.stdout.on('data', d => { stdout += d; if (stdout.length > 2_000_000) stdout = stdout.slice(0, 2_000_000); });
-    child.stderr.on('data', d => { stderr += d; if (stderr.length > 500_000) stderr = stderr.slice(0, 500_000); });
+    child.stdout.on('data', d => { stdout += d; if (stdout.length > 32_000_000) stdout = stdout.slice(-32_000_000); });
+    child.stderr.on('data', d => { stderr += d; if (stderr.length > 500_000) stderr = stderr.slice(-500_000); });
     const timer = setTimeout(() => { timedOut = true; try { process.kill(-child.pid, 'SIGKILL'); } catch {} child.kill('SIGKILL'); }, timeoutMs);
     child.on('error', e => { clearTimeout(timer); resolveResult({ code: -1, stdout, stderr: stderr + String(e), timedOut, latencyMs: Date.now() - started }); });
     child.on('close', code => { clearTimeout(timer); resolveResult({ code, stdout, stderr, timedOut, latencyMs: Date.now() - started }); });
@@ -31,6 +31,13 @@ function run(cmd, cwd, { timeoutMs, env = {} } = {}) {
 
 // Extract the last parseable JSON object from noisy runner stdout.
 function lastJson(stdout) {
+  const lastBrace = stdout.lastIndexOf('}');
+  for (let i = 0; i < stdout.length; i++) {
+    if (stdout[i] !== '{') continue;
+    // Prefer a slice ending at the final '}' (JSON report followed by
+    // coverage/text noise); fall back to slice-to-end inside the loop.
+    try { return JSON.parse(stdout.slice(i, lastBrace + 1)); } catch { }
+  }
   for (let i = stdout.length - 1; i >= 0; i--) {
     if (stdout[i] !== '{') continue;
     try { return JSON.parse(stdout.slice(i)); } catch { /* keep scanning */ }

