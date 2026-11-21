@@ -36,7 +36,7 @@ async function workspacePrefill(workspaceDir) {
   return `Workspace layout (src/):\n${files.join('\n')}${manifest}\n\nPrefer the smallest correct diff — targeted edits over full-file rewrites.`;
 }
 
-export async function runRace({ runtime, task, variant, n = 3, runDir, thinkingLevel = 'low', timeoutMs = 240_000, selection = 'first', attemptSpecs = [], iterate = false, runAgentImpl = runAgent }) {
+export async function runRace({ runtime, task, variant, n = 3, runDir, thinkingLevel = 'low', timeoutMs = 240_000, selection = 'first', attemptSpecs = [], iterate = false, attemptDeadlineMs = null, runAgentImpl = runAgent }) {
   if (!['first', 'best'].includes(selection)) throw new Error(`Unknown selection: ${selection}`);
   const controller = new AbortController();
   const started = Date.now();
@@ -53,7 +53,14 @@ export async function runRace({ runtime, task, variant, n = 3, runDir, thinkingL
       const workspace = resolve(attemptDir, 'workspace');
       await mkdir(attemptDir, { recursive: true });
       await cp(task.workspaceDir, workspace, { recursive: true });
-      const agent = await runAgentImpl({ runtime, workspace, runDir: attemptDir, task: attemptTask, variant: spec.variant ?? variant, thinkingLevel: attemptThinking, timeoutMs, signal: controller.signal });
+      // Cost cap: a straggler attempt is killed at attemptDeadlineMs — a
+      // loser that far behind the pack almost never wins anyway.
+      const attemptCtl = new AbortController();
+      const deadline = attemptDeadlineMs ? setTimeout(() => attemptCtl.abort('deadline'), attemptDeadlineMs) : null;
+      controller.signal.addEventListener('abort', () => attemptCtl.abort(), { once: true });
+      if (controller.signal.aborted) attemptCtl.abort();
+      const agent = await runAgentImpl({ runtime, workspace, runDir: attemptDir, task: attemptTask, variant: spec.variant ?? variant, thinkingLevel: attemptThinking, timeoutMs, signal: attemptCtl.signal });
+      if (deadline) clearTimeout(deadline);
       if (controller.signal.aborted) return { index, spec, status: agent.status, providerFailureKind: agent.providerFailureKind, passed: false, usage: agent.usage, usageCostUnknown: agent.usageCostUnknown, turns: agent.turns, latencyMs: agent.latencyMs, workspace, runDir: attemptDir };
       const acceptance = await runNodeTests(workspace, task.acceptancePath, { signal: controller.signal });
       const passed = agent.status === 'completed' && acceptance.status === 'passed' && await immutableIntact(workspace, task.workspaceDir);
