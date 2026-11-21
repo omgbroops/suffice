@@ -133,6 +133,7 @@ function StepView({ step, project, live }: { step: Step; project: string; live: 
       </Row>
     )
   }
+  if (step.kind === 'note') return <Row verb={step.text} error={step.level === 'error'} />
   if (step.kind === 'approval') {
     const { verb, meta } = describeTool(step.name, step.input)
     return <Row verb={step.state === 'denied' ? `Denied: ${verb.toLowerCase()}` : `Allowed: ${verb.toLowerCase()}`} meta={meta} />
@@ -162,7 +163,8 @@ function AgentMessageView({ msg, project, onApproval }: { msg: Agent; project: s
   const steps = visibleSteps(msg.steps)
   const last = steps.at(-1)
   const pendingApprovals = steps.filter((s): s is ApprovalStep => s.kind === 'approval' && s.state === 'pending')
-  const final = last?.kind === 'text' ? last : undefined
+  // Efficient and Fast runs report through notes; the last one is the result.
+  const final = last?.kind === 'text' || (last?.kind === 'note' && msg.done) ? last : undefined
   const work = steps.filter(s => s !== final && !(s.kind === 'approval' && s.state === 'pending'))
   const [open, setOpen] = useState(!msg.done)
   const live = !msg.done
@@ -186,14 +188,14 @@ function AgentMessageView({ msg, project, onApproval }: { msg: Agent; project: s
       )}
       {live && steps.length === 0 && <div className="pending">Thinking</div>}
       {pendingApprovals.map(s => <ApprovalCard key={s.id} step={s} onAnswer={allow => onApproval(s.id, allow)} />)}
-      {final && <Prose text={final.text} />}
+      {final && (final.kind === 'note' ? <div className={`msg-note${final.level === 'error' ? ' is-error' : ''}`}>{final.text}</div> : <Prose text={final.text} />)}
       {msg.error && <div className="msg-error">{msg.error}</div>}
       {msg.done && (
         <div className="msg-foot">
-          {final && <CopyButton text={final.text} />}
+          {final?.kind === 'text' && <CopyButton text={final.text} />}
           <span className="meta">
-            {msg.model}
-            {msg.effort && msg.effort !== 'off' ? ` · ${EFFORT_LABEL[msg.effort] ?? msg.effort}` : ''}
+            {msg.mode === 'efficient' ? `Efficient · ${msg.cheap ?? 'cheap'} → ${msg.model}` : msg.mode === 'fast' ? `Fast · ${msg.model} ×3` : msg.model}
+            {msg.mode !== 'fast' && msg.effort && msg.effort !== 'off' ? ` · ${EFFORT_LABEL[msg.effort] ?? msg.effort}` : ''}
           </span>
         </div>
       )}

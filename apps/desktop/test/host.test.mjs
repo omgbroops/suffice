@@ -8,6 +8,7 @@ import { createHost, effectiveEffort, effortsFor } from '../electron/host/host.m
 const MODELS = [
   { id: 'gpt-6.1-sol', name: 'GPT-6.1 Sol', reasoning: true, contextWindow: 272000, cost: { input: 2, output: 10, cacheRead: 0.1 }, thinkingLevelMap: { off: null, minimal: null, low: 'low', medium: 'medium', high: 'high', xhigh: 'xhigh' } },
   { id: 'gpt-4o', name: 'GPT-4o', reasoning: false, contextWindow: 128000, cost: { input: 2.5, output: 10 } },
+  { id: 'gpt-6-luna', name: 'GPT-6 Luna', reasoning: true, contextWindow: 272000, cost: { input: 0.1, output: 0.5 } },
 ]
 
 function fakeRuntime() {
@@ -78,7 +79,7 @@ test('a run streams events, waits for approval and saves its transcript', async 
     })
     const info = await host.init()
     assert.equal(info.signedIn, true)
-    assert.equal(host.models().length, 2)
+    assert.equal(host.models().length, 3)
     await host.updateSettings({ approval: 'never' })
     const r = await host.run({ threadId: 't', project: home, prompt: 'test it', model: 'gpt-6.1-sol', effort: 'off', fast: false })
     assert.equal(r.effort, 'low')
@@ -109,6 +110,36 @@ test('runs refuse without a project or with an unknown model', async () => {
     await assert.rejects(host.run({ threadId: 'a', project: null, prompt: 'x', model: 'gpt-6.1-sol', effort: 'low' }), /Choose a project/)
     await assert.rejects(host.run({ threadId: 'a', project: home, prompt: 'x', model: 'nope', effort: 'low' }), /not in the model catalog/)
     assert.equal(await host.chooseProject(), null)
+    await host.dispose()
+  } finally {
+    await rm(home, { recursive: true, force: true })
+  }
+})
+
+test('efficient and fast runs go through the harness commands', async () => {
+  const home = await mkdtemp(join(tmpdir(), 'suffice-desktop-'))
+  try {
+    const prompts = []
+    const ends = []
+    const createSession = async options => {
+      assert.equal(options.extensions.length, 3)
+      return {
+        session: { model: MODELS[0], setModel: async () => {}, setThinkingLevel: () => {}, subscribe: () => {} },
+        totals: {},
+        sessionPath: () => join(home, 's.jsonl'),
+        abort: () => {},
+        dispose: async () => {},
+        run: async prompt => prompts.push(prompt),
+      }
+    }
+    const host = await createHost({ home, runtime: fakeRuntime(), createSession, openExternal: () => {}, chooseDirectory: async () => home, emit: (c, p) => c === 'thread:event' && p.event.type === 'end' && ends.push(p.event) })
+    await host.run({ threadId: 'e', project: home, prompt: 'fix it', model: 'gpt-6.1-sol', effort: 'low', mode: 'efficient', cheapModel: 'gpt-6-luna' })
+    await host.run({ threadId: 'f', project: home, prompt: 'go', model: 'gpt-6.1-sol', effort: 'low', mode: 'fast' })
+    await new Promise(r => setTimeout(r, 50))
+    assert.equal(prompts.length, 3)
+    assert.ok(prompts.includes('/efficient fix it') && prompts.includes('/fast go') && prompts.indexOf('/efficient cheap gpt-6-luna') < prompts.indexOf('/efficient fix it'))
+    assert.equal(ends.length, 2)
+    await assert.rejects(host.run({ threadId: 'g', project: home, prompt: 'x', model: 'gpt-6.1-sol', effort: 'low', mode: 'efficient', cheapModel: 'nope' }), /not in the model catalog/)
     await host.dispose()
   } finally {
     await rm(home, { recursive: true, force: true })

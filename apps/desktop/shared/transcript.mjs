@@ -6,9 +6,10 @@
 /** @typedef {{kind:'thinking', text:string, startedAt:number, endedAt?:number}} ThinkingStep */
 /** @typedef {{kind:'tool', id:string, parent?:string, name:string, input:any, status:'running'|'done'|'error', output?:string, patch?:string}} ToolStep */
 /** @typedef {{kind:'approval', id:string, name:string, input:any, state:'pending'|'allowed'|'denied'}} ApprovalStep */
-/** @typedef {TextStep|ThinkingStep|ToolStep|ApprovalStep} Step */
+/** @typedef {{kind:'note', text:string, level:'info'|'warning'|'error'}} NoteStep */
+/** @typedef {TextStep|ThinkingStep|ToolStep|ApprovalStep|NoteStep} Step */
 /** @typedef {{id:string, role:'user', text:string, at:number}} UserMessage */
-/** @typedef {{id:string, role:'agent', model:string, effort:string, steps:Step[], done:boolean, error?:string, startedAt:number, endedAt?:number}} AgentMessage */
+/** @typedef {{id:string, role:'agent', model:string, effort:string, mode?:'balanced'|'efficient'|'fast', cheap?:string, steps:Step[], done:boolean, error?:string, startedAt:number, endedAt?:number}} AgentMessage */
 /** @typedef {{version:1, messages:(UserMessage|AgentMessage)[]}} Transcript */
 
 export const OUTPUT_LIMIT = 8000
@@ -57,7 +58,7 @@ export function reduce(t, e) {
       messages.push({ id: e.id, role: 'user', text: e.text, at })
       return { ...t, messages }
     case 'agent_start':
-      messages.push({ id: e.id, role: 'agent', model: e.model, effort: e.effort, steps: [], done: false, startedAt: at })
+      messages.push({ id: e.id, role: 'agent', model: e.model, effort: e.effort, ...(e.mode && e.mode !== 'balanced' ? { mode: e.mode } : {}), ...(e.cheap ? { cheap: e.cheap } : {}), steps: [], done: false, startedAt: at })
       return { ...t, messages }
     case 'text':
       return withAgent(a => {
@@ -86,6 +87,12 @@ export function reduce(t, e) {
         const i = a.steps.findIndex(s => s.kind === 'tool' && s.id === e.id)
         if (i < 0) return a
         a.steps[i] = { ...a.steps[i], status: e.isError ? 'error' : 'done', output: clip(e.output), patch: e.patch }
+        return a
+      })
+    case 'note':
+      return withAgent(a => {
+        closeThinking(a, at)
+        a.steps.push({ kind: 'note', text: e.text, level: e.level ?? 'info' })
         return a
       })
     case 'approval':

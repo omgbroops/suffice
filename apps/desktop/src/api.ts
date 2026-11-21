@@ -17,7 +17,11 @@ export type Settings = {
   fast: Record<string, boolean>
   approval: 'ask' | 'every' | 'never'
   recentModels: string[]
+  mode: Mode
+  cheapModel: string
 }
+
+export type Mode = 'balanced' | 'efficient' | 'fast'
 
 export type InitInfo = { signedIn: boolean; home: string; settings: Settings; projects: string[]; platform: string }
 export type ThreadSummary = { path: string; title: string; modified: number; running: boolean }
@@ -54,7 +58,7 @@ export const api = {
   setProject: (path: string) => bridge().invoke<{ project: string; projects: string[] }>('projects:set', { path }),
   threads: (project: string) => bridge().invoke<ThreadSummary[]>('threads:list', { project }),
   openThread: (threadId: string, path: string) => bridge().invoke<Transcript>('threads:open', { threadId, path }),
-  run: (args: { threadId: string; path?: string; project: string; prompt: string; model: string; effort: string; fast: boolean }) => bridge().invoke<{ threadId: string; effort: string }>('run:start', args),
+  run: (args: { threadId: string; path?: string; project: string; prompt: string; model: string; effort: string; fast: boolean; mode: Mode; cheapModel: string }) => bridge().invoke<{ threadId: string; effort: string; mode: Mode }>('run:start', args),
   abort: (threadId: string) => bridge().invoke('run:abort', { threadId }),
   answerApproval: (id: string, allow: boolean) => bridge().invoke('approval:answer', { id, allow }),
   updateSettings: (patch: Partial<Settings>) => bridge().invoke<Settings>('settings:update', patch),

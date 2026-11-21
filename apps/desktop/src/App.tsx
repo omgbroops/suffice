@@ -334,7 +334,7 @@ export default function App() {
     const p = t?.project ?? project
     if (!p || !settings) return
     try {
-      await api.run({ threadId: key, path: t?.path, project: p, prompt: text, model: settings.model, effort: effortFor(modelInfo), fast: !!settings.fast[settings.model] })
+      await api.run({ threadId: key, path: t?.path, project: p, prompt: text, model: settings.model, effort: effortFor(modelInfo), fast: !!settings.fast[settings.model], mode: settings.mode ?? 'balanced', cheapModel: settings.cheapModel ?? 'gpt-6-luna' })
     } catch (e) {
       failLocally(key, text, e instanceof Error ? e.message : String(e))
     }
@@ -370,6 +370,10 @@ export default function App() {
     <ModelPicker
       models={models}
       value={settings.model}
+      mode={settings.mode ?? 'balanced'}
+      cheap={settings.cheapModel ?? 'gpt-6-luna'}
+      onMode={mode => void patchSettings({ mode })}
+      onCheap={cheapModel => void patchSettings({ cheapModel })}
       efforts={settings.efforts}
       fast={settings.fast}
       recent={settings.recentModels}

@@ -72,3 +72,5 @@ export const IconMixer = wrap(R.MixerHorizontalIcon)
 
 export const IconEye = wrap(R.EyeOpenIcon)
 export const IconLockOpen = wrap(R.LockOpen2Icon)
+export const IconLayers = wrap(R.LayersIcon)
+export const IconTarget = wrap(R.TargetIcon)

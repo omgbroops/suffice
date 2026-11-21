@@ -17,11 +17,15 @@ import {
   refreshModelCatalog,
   rememberProject,
   resolveProject,
+  sufficeEfficientCommand,
+  sufficeFastCommand,
 } from '@suffice/harness'
 import { emptyTranscript, fromSessionMessages, reduce, resultText } from '../../shared/transcript.mjs'
 
 export const PROVIDER = 'openai'
 export const DEFAULT_MODEL = 'gpt-6.1-sol'
+export const DEFAULT_CHEAP_MODEL = 'gpt-6-luna'
+export const MODES = ['balanced', 'efficient', 'fast']
 const LEVELS = ['off', 'minimal', 'low', 'medium', 'high', 'xhigh']
 const APPROVAL = { ask: 'Ask when needed', every: 'Ask before every action', never: 'Never ask' }
 
@@ -87,7 +91,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
   const transcriptDir = resolve(desktopDir, 'transcripts')
   await mkdir(transcriptDir, { recursive: true, mode: 0o700 })
   const settingsPath = resolve(desktopDir, 'settings.json')
-  let settings = { project: null, model: DEFAULT_MODEL, efforts: {}, fast: {}, approval: 'ask', recentModels: [], ...(await readJson(settingsPath, {})) }
+  let settings = { project: null, model: DEFAULT_MODEL, efforts: {}, fast: {}, approval: 'ask', recentModels: [], mode: 'balanced', cheapModel: DEFAULT_CHEAP_MODEL, ...(await readJson(settingsPath, {})) }
   const saveSettings = () => writeJson(settingsPath, settings)
 
   const runtime = givenRuntime ?? (await createSufficeModelRuntime(modelRuntimeOptions(home), { onRefresh: () => emit('models:changed', null) }))
@@ -219,7 +223,19 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
       ...(thread.path ? { sessionManager: SessionManager.open(thread.path, sessionDir(home, project)) } : {}),
       extensions: [observer(threadId)],
       onTitleChanged: title => emit('thread:title', { threadId, title }),
+      // The harness's /efficient and /fast commands report through ui.notify.
+      extensionBindings: ui => {
+        const uiContext = Object.create(ui)
+        uiContext.notify = (message, level = 'info') => {
+          if (!thread.quiet) push(threadId, { type: 'note', text: String(message), level })
+        }
+        return { uiContext }
+      },
     }
+    // Their attempts run in workspace copies as fresh sessions: no naming, and
+    // no title changes leaking back into this thread.
+    const commandOptions = { ...options, desktopSettings: { ...desktopSettings, naming: 'Manual' }, onTitleChanged: undefined, extensionBindings: undefined }
+    options.extensions.push(sufficeFastCommand(commandOptions, runtime), sufficeEfficientCommand(commandOptions, runtime))
     thread.agent = await createSession(options, runtime, { onApproval: (name, input) => approve(threadId, name, input) })
     thread.agent.session.subscribe(e => {
       if (e.type !== 'message_update') return
@@ -230,7 +246,9 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     return thread
   }
 
-  async function run({ threadId, path, project, prompt, model, effort, fast = false }) {
+  async function run({ threadId, path, project, prompt, model, effort, fast = false, mode = 'balanced', cheapModel = DEFAULT_CHEAP_MODEL }) {
+    if (!MODES.includes(mode)) throw new Error(`Unknown mode ${mode}`)
+    if (mode === 'efficient' && !runtime.getModel(PROVIDER, cheapModel)) throw new Error(`${cheapModel} is not in the model catalog.`)
     if (!signedIn()) throw new Error('Sign in to start a task.')
     if (!project) throw new Error('Choose a project first.')
     const info = runtime.getModel(PROVIDER, model)
@@ -241,14 +259,24 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     const thread = await ensureAgent(threadId, { path, project, model, effort: level, fast })
     thread.running = true
     push(threadId, { type: 'user', id: randomUUID(), text: prompt })
-    push(threadId, { type: 'agent_start', id: randomUUID(), model: info.name ?? model, effort: level })
+    const cheapInfo = mode === 'efficient' ? runtime.getModel(PROVIDER, cheapModel) : null
+    push(threadId, { type: 'agent_start', id: randomUUID(), model: info.name ?? model, effort: level, mode, cheap: cheapInfo?.name })
     if (!thread.path) {
       thread.path = samePath(thread.agent.sessionPath())
       if (thread.path) emit('thread:session', { threadId, path: thread.path })
     }
     void (async () => {
       try {
-        await thread.agent.run(prompt)
+        if (mode === 'efficient') {
+          thread.quiet = true
+          try {
+            await thread.agent.run(`/efficient cheap ${cheapModel}`)
+          } finally {
+            thread.quiet = false
+          }
+          await thread.agent.run(`/efficient ${prompt}`)
+        } else if (mode === 'fast') await thread.agent.run(`/fast ${prompt}`)
+        else await thread.agent.run(prompt)
         push(threadId, { type: 'end', ok: true, totals: thread.agent.totals })
       } catch (e) {
         const cancelled = /cancelled/.test(e?.message ?? '')
@@ -263,7 +291,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
         emit('threads:changed', { project })
       }
     })()
-    return { threadId, effort: level }
+    return { threadId, effort: level, mode }
   }
 
   function abort(threadId) {

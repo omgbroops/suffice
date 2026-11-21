@@ -858,3 +858,45 @@ button.tab { padding-right: 10px; flex: none; }
   .dd-row:hover { background: rgba(255, 255, 255, 0.05); color: var(--text); }
   .dd-row:hover .dd-path { color: var(--text-3); }
 }
+
+/* modes in the picker */
+.mp-mode-icon { width: 16px; display: grid; place-items: center; flex: none; color: var(--text-3); }
+.mp-row.is-hi .mp-mode-icon, .mp-row[aria-selected='true'] .mp-mode-icon { color: var(--text-2); }
+.mp-divider { height: 1px; margin: 4px 4px; background: var(--hair); }
+.mp-select {
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px;
+  margin-right: -8px;
+  border-radius: 6px;
+  color: var(--text);
+  transition: background-color 150ms var(--ease);
+}
+.mp-select svg { color: var(--text-3); }
+.mp-select.is-open, .mp-select:hover { background: rgba(255, 255, 255, 0.05); }
+.mp-escalate { margin-top: 10px; }
+.mp-scale-label { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); font-size: 11px; color: var(--text-2); white-space: nowrap; }
+.mp-scale:has(.mp-scale-label) { margin-top: 26px; }
+.msg-note { color: var(--text-2); line-height: 22px; }
+.msg-note.is-error { color: var(--red); }
+
+/* surfaces: a solid faint edge and a tight, short shadow that reads as depth, not glow */
+:root {
+  --edge: #262626;
+  --edge-strong: #2e2e2e;
+  --lift: 0 1px 0 rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.35), 0 2px 3px -1px rgba(0, 0, 0, 0.3);
+}
+.home .composer,
+.thread-composer .composer,
+.composer:focus-within { box-shadow: 0 0 0 1px var(--edge), var(--lift); }
+.home .composer:focus-within,
+.thread-composer .composer:focus-within { box-shadow: 0 0 0 1px var(--edge-strong), var(--lift); }
+.mp-list, .mp-detail, .dd, .menu, .mp-sort-menu, .notice { box-shadow: 0 0 0 1px var(--edge-strong), var(--lift); }
+.ask-card { box-shadow: 0 0 0 1px var(--edge), var(--lift); }
+.panel { box-shadow: 0 0 0 1px #1d1d1d, 0 1px 2px rgba(0, 0, 0, 0.4); }
+.bubble, .tab.is-active, .side-item.is-active, .side-thread.is-active, .seg-opt.is-active { box-shadow: 0 0 0 1px #222, 0 1px 0 rgba(0, 0, 0, 0.35), 0 1px 1px rgba(0, 0, 0, 0.25); }
+.detail { box-shadow: 0 0 0 1px var(--edge); }
+.mp-detail { overflow-y: auto; }
+.mp-warn { margin-top: 4px; color: var(--amber); }
