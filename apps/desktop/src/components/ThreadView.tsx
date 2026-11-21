@@ -11,14 +11,17 @@ const STATUS_LABEL: Record<Status, string> = { working: 'Working', done: 'Comple
 
 function inline(s: string): ReactNode[] {
   const out: ReactNode[] = []
-  const re = /(`[^`]+`)|(\*\*[^*]+\*\*)|(\[[^\]]+\]\((https?:[^)\s]+)\))/g
+  // Links first, so a label in backticks stays inside its link.
+  const re = /\[([^\]]+)\]\(([^)\s]+)\)|(`[^`]+`)|(\*\*[^*]+\*\*)/g
   let last = 0
   let m: RegExpExecArray | null
   while ((m = re.exec(s))) {
     if (m.index > last) out.push(s.slice(last, m.index))
-    if (m[1]) out.push(<code key={m.index}>{m[1].slice(1, -1)}</code>)
-    else if (m[2]) out.push(<strong key={m.index}>{m[2].slice(2, -2)}</strong>)
-    else out.push(<a key={m.index} href={m[4]} target="_blank" rel="noreferrer">{m[3].slice(1, m[3].indexOf(']'))}</a>)
+    if (m[1] !== undefined) {
+      const label = inline(m[1])
+      out.push(/^https?:/.test(m[2]) ? <a key={m.index} href={m[2]} target="_blank" rel="noreferrer">{label}</a> : <span key={m.index} title={m[2]}>{label}</span>)
+    } else if (m[3]) out.push(<code key={m.index}>{m[3].slice(1, -1)}</code>)
+    else out.push(<strong key={m.index}>{m[4].slice(2, -2)}</strong>)
     last = m.index + m[0].length
   }
   if (last < s.length) out.push(s.slice(last))
@@ -147,7 +150,7 @@ function ApprovalCard({ step, onAnswer }: { step: ApprovalStep; onAnswer: (allow
       <div className="ask-head">{title}</div>
       {body && <pre className="code ask-code">{body}</pre>}
       <div className="ask-foot">
-        <span className="ask-hint">Turn on Bypass permissions to skip this</span>
+        <span className="ask-hint">Switch to Full access to skip this</span>
         <button className="btn" onClick={() => onAnswer(false)}>Deny</button>
         <button className="btn btn-primary" onClick={() => onAnswer(true)} autoFocus>Allow</button>
       </div>

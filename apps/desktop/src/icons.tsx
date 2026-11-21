@@ -69,3 +69,6 @@ export const IconFolder = ({ size = 15, className }: P) => (
 )
 
 export const IconMixer = wrap(R.MixerHorizontalIcon)
+
+export const IconEye = wrap(R.EyeOpenIcon)
+export const IconLockOpen = wrap(R.LockOpen2Icon)

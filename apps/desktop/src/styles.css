@@ -794,3 +794,67 @@ button.tab { padding-right: 10px; flex: none; }
 .ask-hint { margin-right: auto; color: var(--text-3); font-size: 12px; }
 .side-project-menu { overflow-x: hidden; }
 .side-project-menu .menu-item > span { max-width: 100%; }
+
+/* composer without the outer shell */
+.home .composer, .thread-composer .composer { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 4px 12px -6px rgba(0, 0, 0, 0.6); }
+.composer-row { gap: 2px; }
+.ghost-btn.is-static { cursor: default; }
+.ghost-btn.is-static:hover { background: none; color: var(--text-3); }
+
+/* dropdown menus */
+.dd {
+  position: fixed;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 4px;
+  border-radius: 10px;
+  background: var(--overlay);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 4px 8px -4px rgba(0, 0, 0, 0.6), 0 1px 2px rgba(0, 0, 0, 0.5);
+  transform-origin: top left;
+  animation: menu-in 150ms var(--ease);
+}
+.dd.is-up { transform-origin: bottom left; }
+.dd.is-right { transform-origin: top right; }
+.dd.is-up.is-right { transform-origin: bottom right; }
+.dd-list { display: flex; flex-direction: column; gap: 1px; }
+.dd-row {
+  width: 100%;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 8px;
+  border-radius: 6px;
+  color: var(--text-2);
+  text-align: left;
+  transition: background-color 120ms var(--ease), color 120ms var(--ease);
+}
+.dd-row.is-selected { color: var(--text); }
+.dd-row-tall { min-height: 46px; align-items: flex-start; padding-top: 7px; padding-bottom: 7px; }
+.dd-icon { width: 16px; height: 18px; flex: none; display: grid; place-items: center; color: var(--text-3); }
+.dd-row.is-selected .dd-icon { color: var(--text-2); }
+.dd-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.dd-title { flex: none; white-space: nowrap; line-height: 18px; }
+.dd-note { font-size: 12px; line-height: 16px; color: var(--text-3); }
+.dd-path { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; color: var(--text-4); }
+.dd-check { margin-left: auto; flex: none; margin-top: 2px; color: var(--text-2); }
+.dd-box {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  margin-left: auto;
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+  color: #141414;
+}
+.dd-box.is-on { background: rgba(255, 255, 255, 0.9); box-shadow: none; }
+.dd-section { padding: 10px 8px 4px; font-size: 12px; color: var(--text-3); }
+.dd-rule { height: 1px; margin: 4px -4px; background: var(--hair); }
+@media (hover: hover) and (pointer: fine) {
+  .dd-row:hover { background: rgba(255, 255, 255, 0.05); color: var(--text); }
+  .dd-row:hover .dd-path { color: var(--text-3); }
+}

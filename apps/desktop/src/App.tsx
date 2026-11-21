@@ -2,11 +2,12 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } fro
 import { api, type AuthEvent, type InitInfo, type ModelInfo, type Settings, type ThreadSummary } from './api'
 import { emptyTranscript, reduce, type Transcript } from '../shared/transcript.mjs'
 import { ago, type Status } from './data'
-import { Composer, baseName } from './components/Composer'
+import { Composer } from './components/Composer'
+import { PermissionPicker, ProjectPicker, baseName } from './components/Pickers'
 import { ModelPicker } from './components/ModelPicker'
 import { ThreadView } from './components/ThreadView'
 import { Dither } from './components/Dither'
-import { StatusGlyph } from './components/ui'
+import { Segmented, StatusGlyph } from './components/ui'
 import { IconArrowLeft, IconArrowRight, IconChevronDown, IconClose, IconCompose, IconFolder, IconHome, IconPlus, IconSelector, IconSidebar } from './icons'
 
 type Thread = {
@@ -185,6 +186,7 @@ export default function App() {
   const [hist, setHist] = useState<{ stack: View[]; i: number }>({ stack: [{ kind: 'home' }], i: 0 })
   const [sidebar, setSidebar] = useState(true)
   const [notice, setNotice] = useState('')
+  const [env, setEnv] = useState<'local' | 'cloud'>('local')
   const [, tick] = useState(0)
   const platform = api.platform()
 
@@ -376,13 +378,17 @@ export default function App() {
       onFast={(id, on) => void patchSettings({ fast: { ...settings.fast, [id]: on } })}
     />
   )
-  const composerProps = {
-    project,
-    onProject: browseProject,
-    bypass: settings.approval === 'never',
-    onBypass: (b: boolean) => void patchSettings({ approval: b ? 'never' : 'ask' }),
-    model: picker,
-  }
+  const permissions = <PermissionPicker value={settings.approval} onChange={approval => void patchSettings({ approval })} />
+  const projectPicker = (current: string | null, locked = false) =>
+    locked ? (
+      <span className="ghost-btn is-static" title={current ?? undefined}>
+        <IconFolder size={14} />
+        {current ? baseName(current) : ''}
+      </span>
+    ) : (
+      <ProjectPicker project={current} projects={projects} onPick={p => void pickProject(p)} onAdd={() => void browseProject()} />
+    )
+  const composerProps = { permissions, model: picker }
 
   return (
     <div className={`app${sidebar ? '' : ' no-sidebar'}`}>
@@ -480,7 +486,7 @@ export default function App() {
               <Composer
                 {...composerProps}
                 key={active.key}
-                project={active.project}
+                project={projectPicker(active.project, true)}
                 autoFocus
                 placeholder={statusOf(active) === 'input' ? 'Answer the request above first' : 'Ask for a follow-up…'}
                 working={active.running}
@@ -495,8 +501,17 @@ export default function App() {
             <div className="home-inner">
               <div className="home-head">
                 <span className="logo logo-lg">[suffice]</span>
+                <div className="spacer" />
+                <Segmented<'local' | 'cloud'>
+                  value={env}
+                  onChange={setEnv}
+                  options={[
+                    { v: 'cloud', label: 'Cloud' },
+                    { v: 'local', label: 'Local' },
+                  ]}
+                />
               </div>
-              <Composer {...composerProps} autoFocus tip disabled={project ? undefined : 'Choose a project first'} onSend={startThread} />
+              <Composer {...composerProps} project={projectPicker(project)} autoFocus tip disabled={project ? undefined : 'Choose a project first'} onSend={startThread} />
               {!project && (
                 <button className="home-hint" onClick={() => void browseProject()}>
                   Choose a project folder to start
