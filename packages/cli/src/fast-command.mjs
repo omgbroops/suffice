@@ -3,13 +3,14 @@ import {existsSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join,relative,basename,dirname} from 'node:path';
 import {createSufficeSession} from './session.mjs';
+import {verifyDir} from './verify.mjs';
 
 // /fast — the benchmark winner (race-3-low-prefill) as an in-session command.
 //   /fast            show state
 //   /fast on|off     toggle the low-effort speed profile on the live session
 //   /fast <task>     race the task: 3 attempts on isolated workspace copies,
 //                    first completed patch is applied back to the real worktree
-const RACE_ATTEMPTS=[
+export const RACE_ATTEMPTS=[
   {hint:''},
   {hint:'Prefer the smallest correct change. Do not refactor or reformat unrelated code.'},
   {hint:'Check edge cases and the full contract before finishing.'},
@@ -146,8 +147,8 @@ export function sufficeFastCommand(options,runtime){
         racing=true;
         const base=ctx.cwd,raceDir=await mkdtemp(join(tmpdir(),'suffice-fast-'));
         ctx.ui.notify('Fast race started — 3 attempts on workspace copies','info');
-        const controls=[];
-        let winner=-1;
+        const controls=[],verifyCtl=[];
+        let winner=-1,sawVerifyRun=false;
         try{
           await ctx.waitForIdle();
           // Pristine copy of the worktree: diffs are measured against this snapshot
@@ -169,13 +170,28 @@ export function sufficeFastCommand(options,runtime){
               await control.run(input+'\n\n'+prefill+(spec.hint?'\n\n'+spec.hint:''));
               const {changed,deleted}=await diffFiles(snapshot,dir);
               if(winner<0&&(changed.length||deleted.length)){
-                winner=i;control.appliedChanges=changed.length+deleted.length;
-                for(let j=0;j<controls.length;j++) if(j!==i) controls[j]?.abort();
+                // Verify before claiming: an attempt only wins if the
+                // workspace's own tests pass on its copy (no test command →
+                // the diff verdict stands, same as before). Verification is
+                // command execution — it needs full access like shell work.
+                const verify=(verifyCtl[i]=new AbortController()).signal;
+                const verdict=await verifyDir(dir,{access:options.access,signal:verify});
+                if(verdict.ranTests){
+                  sawVerifyRun=true;
+                  if(!verdict.passed) return;
+                }
+                if(winner<0){
+                  winner=i;control.appliedChanges=changed.length+deleted.length;
+                  for(let j=0;j<controls.length;j++) if(j!==i){ controls[j]?.abort(); verifyCtl[j]?.abort(); }
+                }
               }
             }catch{ /* losing or failed attempt */ }
           });
           await Promise.allSettled(jobs);
-          if(winner<0){ctx.ui.notify('Fast race: all attempts failed or produced no changes','error');return;}
+          if(winner<0){
+            ctx.ui.notify(sawVerifyRun?'Fast race: attempts produced changes but failed the workspace tests — nothing applied':'Fast race: all attempts failed or produced no changes','error');
+            return;
+          }
           const n=await applyPatch(base,snapshot,join(raceDir,`attempt-${winner}`));
           const text=`/fast raced 3 attempts — attempt ${winner+1} finished first with ${n} applied change(s); losers aborted and discarded.`;
           pi.sendMessage({customType:'fast-race',content:text,display:true});

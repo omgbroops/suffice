@@ -4,6 +4,7 @@ import {InteractiveMode,createAgentSessionRuntime,SessionManager} from '@earendi
 import {createSufficeSession} from './session.mjs';
 import {sufficeFastCommand} from './fast-command.mjs';
 import {sufficeEfficientCommand} from './efficient-command.mjs';
+import {sufficeAutoCommand} from './auto-command.mjs';
 import {recentProjects,rememberProject,resolveProject} from './projects.mjs';
 import {hash} from './workspace.mjs';
 import {VERSION} from './options.mjs';
@@ -67,7 +68,7 @@ export async function runInteractive(options,runtime) {
   const controls=[];let host;
   const factory=async({cwd,sessionManager})=>{
     let control;
-    control=await createSufficeSession({...options,cwd,sessionManager,modelObject:host?.session.model,effort:host?.session.thinkingLevel??options.effort,deferBindings:true,extensions:[sufficeInterface({...options,getUsage:()=>control?.totals}),sufficeFastCommand(options,runtime),sufficeEfficientCommand(options,runtime)]},runtime);
+    control=await createSufficeSession({...options,cwd,sessionManager,modelObject:host?.session.model,effort:host?.session.thinkingLevel??options.effort,deferBindings:true,extensions:[sufficeInterface({...options,getUsage:()=>control?.totals}),sufficeFastCommand(options,runtime),sufficeEfficientCommand(options,runtime),sufficeAutoCommand(options,runtime)]},runtime);
     controls.push(control);
     // Native quit exits the process after session_shutdown; flush durable receipts
     // in the shutdown event rather than relying only on a surrounding finally.

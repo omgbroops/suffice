@@ -5,9 +5,11 @@ import { realTasks } from '../benchmarks/real/tasks.mjs';
 import { hardTasks } from '../benchmarks/real-hard/tasks.mjs';
 import { longTasks } from '../benchmarks/real-long/tasks.mjs';
 import { createRuntime, loadEnvironment, root, stateDir } from '../src/runtime.mjs';
-import { variants, runAgent } from '../src/harness.mjs';
+import { variants, runAgent, runBasePi } from '../src/harness.mjs';
 import { runRace } from '../src/race.mjs';
 import { runSpecAgent } from '../src/spec-agent.mjs';
+import { runEco } from '../src/eco.mjs';
+import { runAuto } from '../src/auto.mjs';
 import { runNodeTests, filesIn, readText, hash } from '../src/workspace.mjs';
 import { freezeSources } from './freeze-sources.mjs';
 
@@ -76,7 +78,7 @@ for (const [index, item] of schedule.entries()) {
   let agent;
   if (variant.race) {
     const { race, effort, ...inner } = variant;
-    const raced = await runRace({ runtime, task, variant: inner, n: race.n ?? 3, selection: race.selection ?? 'first', attemptSpecs: race.attempts ?? [], iterate: !!race.iterate, runDir, thinkingLevel: effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000) });
+    const raced = await runRace({ runtime, task, variant: inner, n: race.n ?? 3, selection: race.selection ?? 'first', attemptSpecs: race.attempts ?? [], iterate: !!race.iterate, attemptDeadlineMs: race.attemptDeadlineMs ?? null, runDir, thinkingLevel: effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000) });
     const winner = raced.attempts.find(a => a.index === raced.chosen);
     if (winner) await cp(winner.workspace, workspace, { recursive: true, force: true });
     agent = { ...raced, decisions: [], watcherCalls: 0, turns: raced.attempts.reduce((s, a) => s + (a.turns ?? 0), 0),
@@ -85,6 +87,18 @@ for (const [index, item] of schedule.entries()) {
     const { spec, effort, ...inner } = variant;
     const speced = await runSpecAgent({ runtime, task, variant: inner, spec, runDir, thinkingLevel: effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000) });
     agent = { ...speced, decisions: [], watcherCalls: 0 };
+  } else if (variant.eco !== undefined) {
+    const { eco, effort, ...inner } = variant;
+    const ecoed = await runEco({ runtime, task, variant: inner, eco, runDir, thinkingLevel: effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000) });
+    if (ecoed.winnerWorkspace) await cp(ecoed.winnerWorkspace, workspace, { recursive: true, force: true });
+    agent = { ...ecoed, decisions: [], watcherCalls: 0 };
+  } else if (variant.auto !== undefined) {
+    const { auto, effort, ...inner } = variant;
+    const autoed = await runAuto({ runtime, task, variant: inner, workspace, runDir, thinkingLevel: effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000) });
+    if (autoed.winnerWorkspace && autoed.winnerWorkspace !== workspace) await cp(autoed.winnerWorkspace, workspace, { recursive: true, force: true });
+    agent = { ...autoed, decisions: [], watcherCalls: 0 };
+  } else if (variant.basePi) {
+    agent = await runBasePi({ runtime, workspace, runDir, task, thinkingLevel: variant.effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000) });
   } else {
     agent = await runAgent({ runtime, workspace, runDir, task, variant, thinkingLevel: variant.effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000) });
   }

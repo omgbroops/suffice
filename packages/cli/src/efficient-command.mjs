@@ -5,6 +5,7 @@ import {join,basename} from 'node:path';
 import {clampThinkingLevel} from '@earendil-works/pi-ai';
 import {createSufficeSession} from './session.mjs';
 import {applyPatch,diffFiles,workspacePrefill} from './fast-command.mjs';
+import {verifyDir} from './verify.mjs';
 
 // /efficient — the eco arm (cheap-first, escalate on failure) as an in-session
 // command. The benchmark version gates Luna on acceptance tests; in-session
@@ -104,16 +105,22 @@ export function sufficeEfficientCommand(options,runtime){
           // passes its verdict when the session completed — a crashed run's
           // leftover edits are partial work for the next round to finish,
           // never an accepted patch.
-          let changes=0,errored=false;
+          let changes=0,errored=false,failedDetail=null;
           const cheapEffort=clampThinkingLevel(luna,'low');
           for(let round=0;round<CHEAP_ROUNDS&&changes===0;round++){
             const dir=join(runDir,'cheap');
             if(!existsSync(dir)) await copyTree(worktree,dir);
             ctx.ui.notify(`Efficient: ${cheapId} attempt${round?' retry':''} on a workspace copy`,'info');
-            const nudge=errored?'\n\nYour previous attempt errored before finishing — the files may hold partial edits. Inspect the state and finish the task.':'\n\nYour previous attempt made no changes — the task is not done. Keep fixing the actual files.';
-            errored=false;
+            const nudge=errored?'\n\nYour previous attempt errored before finishing — the files may hold partial edits. Inspect the state and finish the task.':failedDetail?`\n\nYour previous attempt's changes fail the project's tests:\n${failedDetail}\nKeep fixing until the tests pass.`:'\n\nYour previous attempt made no changes — the task is not done. Keep fixing the actual files.';
+            errored=false;failedDetail=null;
             try{ changes=await attempt(dir,round?prompt+nudge:prompt,luna,cheapEffort,snapshot); }
             catch{ errored=true;changes=0; }
+            // Verify on the copy: a diff that fails the project's tests is a
+            // miss, and its failure digest nudges the next round.
+            if(changes>0){
+              const verdict=await verifyDir(dir,{access:options.access});
+              if(verdict.ranTests&&!verdict.passed){ failedDetail=verdict.detail; changes=0; }
+            }
           }
           let winnerDir=null,path='';
           if(changes>0){ winnerDir=join(runDir,'cheap'); path=`${cheapId} solved it (${changes} change(s)) — no escalation, strong-model cost skipped`; }
@@ -128,7 +135,11 @@ export function sufficeEfficientCommand(options,runtime){
             const strongEffort=clampThinkingLevel(strongModel,ctx.thinkingLevel??'low');
             try{
               const strongChanges=await attempt(strongDir,prompt,strongModel,strongEffort,snapshot);
-              if(strongChanges>0){ winnerDir=strongDir; path=`escalated to ${strongModel?.id??'session model'} after ${cheapId} missed (${strongChanges} change(s))`; }
+              if(strongChanges>0){
+                const verdict=await verifyDir(strongDir,{access:options.access});
+                if(verdict.ranTests&&!verdict.passed){ ctx.ui.notify(`Escalation produced changes but they fail the workspace tests:\n${verdict.detail}`,'warning'); }
+                else{ winnerDir=strongDir; path=`escalated to ${strongModel?.id??'session model'} after ${cheapId} missed (${strongChanges} change(s))`; }
+              }
             }catch{ /* fall through to the failure notice */ }
           }
           if(!winnerDir){ctx.ui.notify('Efficient: cheap and the escalation both produced no changes','error');return;}
