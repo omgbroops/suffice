@@ -3,7 +3,7 @@
 // the task's f2p (fail-to-pass) and p2p (pass-to-pass) whitelists — same
 // semantics as the DeepSWE grader, minus the docker frame.
 import { spawn, execFileSync } from 'node:child_process';
-import { readFile } from 'node:fs/promises';
+import { readFile, open, unlink } from 'node:fs/promises';
 import { resolve, relative } from 'node:path';
 import { runNodeTests } from './workspace.mjs';
 
@@ -13,34 +13,81 @@ export async function runTaskAcceptance(workspace, task, opts = {}) {
   return task.deepswe ? runDeepSweAcceptance(workspace, task, opts) : runNodeTests(workspace, task.acceptancePath, opts);
 }
 
+// Runners that print a JSON report then call process.exit() can lose the
+// tail of a *piped* stdout (unflushed pipe data is dropped on exit) — jest
+// does exactly this with --json. Capture to temp files instead: file writes
+// are flushed before exit.
 function run(cmd, cwd, { timeoutMs, env = {} } = {}) {
   const started = Date.now();
-  return new Promise(resolveResult => {
-    const child = spawn('bash', ['-c', cmd], { cwd, env: {
-      ...process.env, ...env, CI: '1', NODE_NO_WARNINGS: '1',
-      PATH: `${resolve(cwd, 'node_modules', '.bin')}:${process.env.PATH}`,
-    }, stdio: ['ignore', 'pipe', 'pipe'] });
-    let stdout = '', stderr = '', timedOut = false;
-    child.stdout.on('data', d => { stdout += d; if (stdout.length > 32_000_000) stdout = stdout.slice(-32_000_000); });
-    child.stderr.on('data', d => { stderr += d; if (stderr.length > 500_000) stderr = stderr.slice(-500_000); });
+  return new Promise(async resolveResult => {
+    const tag = `.dsw-verify-${process.pid}-${Math.random().toString(36).slice(2, 8)}`;
+    const outPath = resolve(cwd, `${tag}.out`);
+    const errPath = resolve(cwd, `${tag}.err`);
+    let outFd, errFd, child;
+    try {
+      outFd = await open(outPath, 'w');
+      errFd = await open(errPath, 'w');
+      child = spawn('bash', ['-c', cmd], { cwd, env: {
+        ...process.env, ...env, CI: '1', NODE_NO_WARNINGS: '1',
+        PATH: `${resolve(cwd, 'node_modules', '.bin')}:${process.env.PATH}`,
+      }, stdio: ['ignore', outFd.fd, errFd.fd] });
+    } catch (e) {
+      await outFd?.close(); await errFd?.close();
+      return resolveResult({ code: -1, stdout: '', stderr: String(e), timedOut: false, latencyMs: 0 });
+    }
+    let timedOut = false;
+    const finish = async (code, extraErr = '') => {
+      clearTimeout(timer);
+      await outFd.close(); await errFd.close();
+      const [stdoutRaw, stderrRaw] = await Promise.all([
+        readFile(outPath, 'utf8').catch(() => ''), readFile(errPath, 'utf8').catch(() => ''),
+      ]);
+      await unlink(outPath).catch(() => {}); await unlink(errPath).catch(() => {});
+      resolveResult({
+        code,
+        stdout: stdoutRaw.length > 32_000_000 ? stdoutRaw.slice(-32_000_000) : stdoutRaw,
+        stderr: (stderrRaw + extraErr).slice(-500_000),
+        timedOut, latencyMs: Date.now() - started,
+      });
+    };
     const timer = setTimeout(() => { timedOut = true; try { process.kill(-child.pid, 'SIGKILL'); } catch {} child.kill('SIGKILL'); }, timeoutMs);
-    child.on('error', e => { clearTimeout(timer); resolveResult({ code: -1, stdout, stderr: stderr + String(e), timedOut, latencyMs: Date.now() - started }); });
-    child.on('close', code => { clearTimeout(timer); resolveResult({ code, stdout, stderr, timedOut, latencyMs: Date.now() - started }); });
+    child.on('error', e => finish(-1, String(e)));
+    child.on('close', code => finish(code));
   });
 }
 
-// Extract the last parseable JSON object from noisy runner stdout.
-function lastJson(stdout) {
-  const lastBrace = stdout.lastIndexOf('}');
-  for (let i = 0; i < stdout.length; i++) {
-    if (stdout[i] !== '{') continue;
-    // Prefer a slice ending at the final '}' (JSON report followed by
-    // coverage/text noise); fall back to slice-to-end inside the loop.
-    try { return JSON.parse(stdout.slice(i, lastBrace + 1)); } catch { }
+// Extract a test-report JSON object from noisy runner stdout: runner output
+// may carry deprecation warnings, coverage tables, or summaries around the
+// JSON, so walk braces string-aware and keep the first complete object that
+// looks like a report (scanning from the end — the report is printed last).
+// One pass collecting every complete top-level {...} span, string-aware.
+function topLevelObjects(s) {
+  const spans = [];
+  let depth = 0, inStr = false, esc = false, start = -1;
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (inStr) {
+      if (esc) esc = false;
+      else if (c === '\\') esc = true;
+      else if (c === '"') inStr = false;
+      continue;
+    }
+    if (c === '"') inStr = true;
+    else if (c === '{') { if (depth++ === 0) start = i; }
+    else if (c === '}' && --depth === 0) spans.push([start, i + 1]);
   }
-  for (let i = stdout.length - 1; i >= 0; i--) {
-    if (stdout[i] !== '{') continue;
-    try { return JSON.parse(stdout.slice(i)); } catch { /* keep scanning */ }
+  return spans;
+}
+
+function lastJson(stdout) {
+  const looksReport = o => o && typeof o === 'object'
+    && (o.testResults || o.assertionResults || o.passes || o.failures || o.stats || o.numTotalTests !== undefined);
+  const spans = topLevelObjects(stdout);
+  for (let i = spans.length - 1; i >= 0; i--) {
+    try {
+      const o = JSON.parse(stdout.slice(spans[i][0], spans[i][1]));
+      if (looksReport(o)) return o;
+    } catch { /* not a standalone object */ }
   }
   return null;
 }
