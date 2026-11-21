@@ -32,7 +32,7 @@ const repetitions = Number(args['--repetitions'] ?? 1);
 if (!Number.isInteger(repetitions) || repetitions < 1 || repetitions > 4) throw new Error('Repetitions must be 1-4.');
 const campaign = String(args['--campaign'] ?? `pilot-${new Date().toISOString().replace(/[:.]/g, '-')}`);
 if (!/^[a-zA-Z0-9_-]+$/.test(campaign)) throw new Error('Invalid campaign name.');
-const directory = resolve(stateDir, 'runs', campaign); await mkdir(directory, { recursive: true });
+const directory = resolve(stateDir, 'runs', campaign); await mkdir(directory, { recursive: true, verbatimSymlinks: true });
 loadEnvironment();
 const runtime = await createRuntime();
 if (!runtime.isUsingSubscription('openai')) throw new Error('Run node scripts/login.mjs first.');
@@ -83,7 +83,7 @@ for (const [index, item] of schedule.entries()) {
     const { race, effort, ...inner } = variant;
     const raced = await runRace({ runtime, task, variant: inner, n: race.n ?? 3, selection: race.selection ?? 'first', attemptSpecs: race.attempts ?? [], iterate: !!race.iterate, attemptDeadlineMs: race.attemptDeadlineMs ?? null, runDir, thinkingLevel: effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000), maxTurns });
     const winner = raced.attempts.find(a => a.index === raced.chosen);
-    if (winner) await cp(winner.workspace, workspace, { recursive: true, force: true });
+    if (winner) await cp(winner.workspace, workspace, { recursive: true, force: true, verbatimSymlinks: true });
     agent = { ...raced, decisions: [], watcherCalls: 0, turns: raced.attempts.reduce((s, a) => s + (a.turns ?? 0), 0),
       usageCostUnknown: raced.attempts.some(a => a.usageCostUnknown), race: raced };
   } else if (variant.spec !== undefined) {
@@ -93,12 +93,12 @@ for (const [index, item] of schedule.entries()) {
   } else if (variant.eco !== undefined) {
     const { eco, effort, ...inner } = variant;
     const ecoed = await runEco({ runtime, task, variant: inner, eco, runDir, thinkingLevel: effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000), maxTurns });
-    if (ecoed.winnerWorkspace) await cp(ecoed.winnerWorkspace, workspace, { recursive: true, force: true });
+    if (ecoed.winnerWorkspace) await cp(ecoed.winnerWorkspace, workspace, { recursive: true, force: true, verbatimSymlinks: true });
     agent = { ...ecoed, decisions: [], watcherCalls: 0 };
   } else if (variant.auto !== undefined) {
     const { auto, effort, ...inner } = variant;
     const autoed = await runAuto({ runtime, task, variant: inner, workspace, runDir, thinkingLevel: effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000), maxTurns });
-    if (autoed.winnerWorkspace && autoed.winnerWorkspace !== workspace) await cp(autoed.winnerWorkspace, workspace, { recursive: true, force: true });
+    if (autoed.winnerWorkspace && autoed.winnerWorkspace !== workspace) await cp(autoed.winnerWorkspace, workspace, { recursive: true, force: true, verbatimSymlinks: true });
     agent = { ...autoed, decisions: [], watcherCalls: 0 };
   } else if (variant.basePi) {
     agent = await runBasePi({ runtime, workspace, runDir, task, thinkingLevel: variant.effort ?? thinkingLevel, model: variant.basePiModel, timeoutMs: Number(args['--timeout-ms'] ?? 240000), maxTurns });

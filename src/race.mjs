@@ -52,7 +52,7 @@ export async function runRace({ runtime, task, variant, n = 3, runDir, thinkingL
     jobs.push((async () => {
       const attemptDir = resolve(runDir, `attempt-${index}`);
       const workspace = resolve(attemptDir, 'workspace');
-      await mkdir(attemptDir, { recursive: true });
+      await mkdir(attemptDir, { recursive: true, verbatimSymlinks: true });
       await materializeWorkspace(task, workspace);
       // Cost cap: a straggler attempt is killed at attemptDeadlineMs — a
       // loser that far behind the pack almost never wins anyway.
@@ -102,15 +102,15 @@ export async function runRace({ runtime, task, variant, n = 3, runDir, thinkingL
   let iteration = null;
   if (winner && iterate) {
     const backup = resolve(runDir, 'winner-backup');
-    await mkdir(backup, { recursive: true });
-    await cp(winner.workspace, backup, { recursive: true });
+    await mkdir(backup, { recursive: true, verbatimSymlinks: true });
+    await cp(winner.workspace, backup, { recursive: true, verbatimSymlinks: true });
     const refineTask = { ...task, prompt: `${task.prompt}\n\nA verified fix already exists in this workspace. Tighten it: the smallest correct change only — remove any unrelated edits, do not refactor or reformat. Run the test tool once at the end, then stop.` };
     // The race controller is already aborted to kill the losers; the
     // refinement gets a fresh signal so it is not born cancelled.
     const iterAgent = await runAgentImpl({ runtime, workspace: winner.workspace, runDir: resolve(runDir, 'iterate'), task: refineTask, variant, thinkingLevel, timeoutMs });
     const acceptance = await runTaskAcceptance(winner.workspace, task);
     const ok = iterAgent.status === 'completed' && acceptance.status === 'passed' && await immutableIntact(winner.workspace, task.workspaceDir);
-    if (!ok) { await rm(winner.workspace, { recursive: true, force: true }); await cp(backup, winner.workspace, { recursive: true }); }
+    if (!ok) { await rm(winner.workspace, { recursive: true, force: true, verbatimSymlinks: true }); await cp(backup, winner.workspace, { recursive: true, verbatimSymlinks: true }); }
     iteration = { accepted: ok, agentStatus: iterAgent.status, latencyMs: iterAgent.latencyMs, turns: iterAgent.turns, usage: iterAgent.usage };
   }
   const result = {

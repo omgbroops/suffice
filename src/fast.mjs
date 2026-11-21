@@ -146,10 +146,10 @@ export function withSpeculativeTests(tools, { workspace, snapshotRoot, artifacts
   const speculate = () => {
     if (signal?.aborted || pending) return;
     pending = (async () => {
-      await mkdir(snapshotRoot, { recursive: true });
+      await mkdir(snapshotRoot, { recursive: true, verbatimSymlinks: true });
       const dir = await mkdtemp(resolve(snapshotRoot, 'spec-'));
       const skip = [snapshotRoot, artifactsDir].filter(Boolean).map(p => resolve(p));
-      await cp(workspace, dir, { recursive: true, filter: src => !skip.some(s => src === s || src.startsWith(s + '/')) });
+      await cp(workspace, dir, { recursive: true, verbatimSymlinks: true, filter: src => !skip.some(s => src === s || src.startsWith(s + '/')) });
       // Fingerprint the copied bytes, not the live workspace: edits can land
       // mid-copy, and only the snapshot's own content decides what was run.
       const fp = await srcFingerprint(dir);

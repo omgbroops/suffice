@@ -21,8 +21,8 @@ export async function runSpecAgent({ runtime, task, variant, runDir, thinkingLev
     // Phase A: draft on the cheap model, read-only, capped turns.
     const draftDir = resolve(runDir, 'draft');
     const draftWorkspace = resolve(draftDir, 'workspace');
-    await mkdir(draftDir, { recursive: true });
-    await cp(task.workspaceDir, draftWorkspace, { recursive: true });
+    await mkdir(draftDir, { recursive: true, verbatimSymlinks: true });
+    await cp(task.workspaceDir, draftWorkspace, { recursive: true, verbatimSymlinks: true });
     const draft = await runAgentImpl({
       runtime, workspace: draftWorkspace, runDir: draftDir,
       task: { ...task, prompt: task.prompt + DRAFT_SUFFIX },
@@ -31,8 +31,8 @@ export async function runSpecAgent({ runtime, task, variant, runDir, thinkingLev
       timeoutMs: spec.draftTimeoutMs ?? 90_000, signal: controller.signal });
     // Phase B: verify on the strong model with the scout's notes.
     const workspace = resolve(runDir, 'workspace');
-    await mkdir(workspace, { recursive: true });
-    await cp(task.workspaceDir, workspace, { recursive: true });
+    await mkdir(workspace, { recursive: true, verbatimSymlinks: true });
+    await cp(task.workspaceDir, workspace, { recursive: true, verbatimSymlinks: true });
     const notes = (draft.final ?? '').trim();
     const verifyTask = { ...task, prompt: `${task.prompt}\n\nA scout agent already explored this codebase read-only. Use its findings to go straight to the fix, but verify everything yourself before trusting it.\n\n<scout-notes>\n${notes || '(scout produced no summary)'}\n</scout-notes>` };
     const verify = await runAgentImpl({

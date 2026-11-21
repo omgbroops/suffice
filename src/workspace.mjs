@@ -10,11 +10,11 @@ import { spawn, execFileSync } from 'node:child_process';
 // immutable-file check must not count them as agent edits).
 export async function materializeWorkspace(task, dest) {
   const generated = [];
-  await cp(task.workspaceDir, dest, { recursive: true, errorOnExist: true });
+  await cp(task.workspaceDir, dest, { recursive: true, errorOnExist: true, verbatimSymlinks: true });
   if (task.depsDir && existsSync(resolve(task.depsDir, 'node_modules'))) {
     const target = resolve(dest, 'src', 'node_modules');
     try { execFileSync('cp', ['-al', resolve(task.depsDir, 'node_modules'), target]); }
-    catch { await cp(resolve(task.depsDir, 'node_modules'), target, { recursive: true }); }
+    catch { await cp(resolve(task.depsDir, 'node_modules'), target, { recursive: true, verbatimSymlinks: true }); }
   }
   if (task.prompt && !existsSync(resolve(dest, 'README.md'))) {
     const orientation = task.deepswe
@@ -131,7 +131,7 @@ export function runShell(cmd, cwd, { signal, timeoutMs = 300_000 } = {}) {
 }
 function toolResult(data) { return { content: [{ type: 'text', text: typeof data === 'string' ? data : JSON.stringify(data) }], structuredContent: data, details: {} }; }
 export async function formatTestResult(result, artifactsDir) {
-  await mkdir(artifactsDir, { recursive: true });
+  await mkdir(artifactsDir, { recursive: true, verbatimSymlinks: true });
   const id = `test-${Date.now()}.json`; await writeFile(resolve(artifactsDir, id), JSON.stringify(result));
   return { ...result, stdout: result.stdout?.slice(0, 12_000), stderr: result.stderr?.slice(0, 3000), artifact: id };
 }
@@ -151,7 +151,7 @@ export function workspaceTools({ workspace, log = () => {}, artifactsDir, signal
     make('file_edit', 'Replace one exact unique text occurrence in a src/ file. Fails if old text is missing or ambiguous.', Type.Object({ path: Type.String(), oldText: Type.String({ minLength: 1 }), newText: Type.String() }),
       args => mutate(async () => { const content = await readText(workspace, args.path); if (content.split(args.oldText).length !== 2) throw new Error('oldText must match exactly once.'); const next = content.replace(args.oldText, args.newText); if (Buffer.byteLength(next) > MAX_FILE_BYTES) throw new Error('File too large.'); await writeFile(await scopedPath(workspace, args.path, { write: true }), next); return { path: args.path, version: hash(next), edited: true }; })),
     make('file_write', 'Write a complete UTF-8 src/ file; use file_edit for smaller changes.', Type.Object({ path: Type.String(), content: Type.String() }),
-      args => mutate(async () => { if (Buffer.byteLength(args.content) > MAX_FILE_BYTES) throw new Error('File too large.'); const target = await scopedPath(workspace, args.path, { write: true }); await mkdir(dirname(target), { recursive: true }); await writeFile(target, args.content); return { path: args.path, version: hash(args.content), written: true }; })),
+      args => mutate(async () => { if (Buffer.byteLength(args.content) > MAX_FILE_BYTES) throw new Error('File too large.'); const target = await scopedPath(workspace, args.path, { write: true }); await mkdir(dirname(target), { recursive: true, verbatimSymlinks: true }); await writeFile(target, args.content); return { path: args.path, version: hash(args.content), written: true }; })),
     make('test', 'Run the visible Node test suite. Returns status and diagnostic output. Acceptance tests are run separately by the evaluator.', Type.Object({}),
       async () => {
         if (existsSync(resolve(workspace, 'deepswe.json'))) {
