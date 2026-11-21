@@ -27,20 +27,24 @@ export async function listFiles(dir,base=dir,out=[]){
   return out;
 }
 
-export async function changedFiles(base,attempt){
-  const attemptFiles=await listFiles(attempt),baseFiles=await listFiles(base);
-  const attemptSet=new Set(attemptFiles),baseSet=new Set(baseFiles),changed=[],deleted=[];
-  for(const rel of attemptFiles){
-    if(!baseSet.has(rel)){changed.push(rel);continue;}
-    const next=await readFile(join(attempt,rel)),prior=await readFile(join(base,rel)).catch(()=>null);
+// Files that differ between `from` and `to`: changed = created or edited in `to`,
+// deleted = present in `from` but gone in `to`.
+export async function diffFiles(from,to){
+  const fromFiles=new Set(await listFiles(from)),toFiles=await listFiles(to);
+  const toSet=new Set(toFiles),changed=[],deleted=[];
+  for(const rel of toFiles){
+    if(!fromFiles.has(rel)){changed.push(rel);continue;}
+    const next=await readFile(join(to,rel)),prior=await readFile(join(from,rel)).catch(()=>null);
     if(!prior||!next.equals(prior)) changed.push(rel);
   }
-  for(const rel of baseFiles) if(!attemptSet.has(rel)) deleted.push(rel);
+  for(const rel of fromFiles) if(!toSet.has(rel)) deleted.push(rel);
   return {changed,deleted};
 }
 
-export async function applyPatch(base,attempt){
-  const {changed,deleted}=await changedFiles(base,attempt);
+// Applies what the winning attempt changed relative to the pre-race snapshot onto
+// the live worktree, so edits the user made during the race on other files survive.
+export async function applyPatch(base,snapshot,attempt){
+  const {changed,deleted}=await diffFiles(snapshot,attempt);
   for(const rel of changed){const to=join(base,rel);await mkdir(dirname(to),{recursive:true});await writeFile(to,await readFile(join(attempt,rel)));}
   for(const rel of deleted) await rm(join(base,rel),{force:true});
   return changed.length+deleted.length;
@@ -80,23 +84,33 @@ export function sufficeFastCommand(options,runtime){
         let winner=-1;
         try{
           await ctx.waitForIdle();
+          // Pristine copy of the worktree: diffs are measured against this snapshot
+          // so applyPatch only writes what the winner changed.
+          const snapshot=join(raceDir,'base');
+          await cp(base,snapshot,{recursive:true,filter:src=>!SKIP_COPY.has(basename(src)),dereference:true});
           const prefill=await workspacePrefill(base);
           const jobs=RACE_ATTEMPTS.map(async(spec,i)=>{
             const dir=join(raceDir,`attempt-${i}`);
-            await cp(base,dir,{recursive:true,filter:src=>!SKIP_COPY.has(basename(src))});
+            // dereference: a symlinked source file becomes a real file in the copy,
+            // so attempt edits cannot escape into the real worktree via links.
+            await cp(base,dir,{recursive:true,filter:src=>!SKIP_COPY.has(basename(src)),dereference:true});
+            // node_modules is shared read-mostly for speed: attempts get a link to
+            // the real tree (a full copy of deps would dominate race startup).
             if(existsSync(join(base,'node_modules'))) await symlink(join(base,'node_modules'),join(dir,'node_modules'),'junction').catch(()=>{});
             const control=await createSufficeSession({...options,cwd:dir,sessionManager:undefined,continue:false,effort:'low',speed:'standard',browser:false,desktop:false,modelObject:ctx.model,extensions:[],timeout:options.timeout??600},runtime);
             controls[i]=control;
             try{
               await control.run(input+'\n\n'+prefill+(spec.hint?'\n\n'+spec.hint:''));
-              const {changed,deleted}=await changedFiles(base,dir);
-              if(winner<0&&(changed.length||deleted.length)){winner=i;control.appliedChanges=changed.length+deleted.length;}
+              const {changed,deleted}=await diffFiles(snapshot,dir);
+              if(winner<0&&(changed.length||deleted.length)){
+                winner=i;control.appliedChanges=changed.length+deleted.length;
+                for(let j=0;j<controls.length;j++) if(j!==i) controls[j]?.abort();
+              }
             }catch{ /* losing or failed attempt */ }
           });
           await Promise.allSettled(jobs);
           if(winner<0){ctx.ui.notify('Fast race: all attempts failed or produced no changes','error');return;}
-          for(let i=0;i<controls.length;i++) if(i!==winner) controls[i]?.abort();
-          const n=await applyPatch(base,join(raceDir,`attempt-${winner}`));
+          const n=await applyPatch(base,snapshot,join(raceDir,`attempt-${winner}`));
           const text=`/fast raced 3 attempts — attempt ${winner+1} finished first with ${n} applied change(s); losers aborted and discarded.`;
           pi.sendMessage({customType:'fast-race',content:text,display:true});
           ctx.ui.notify(text,'info');
