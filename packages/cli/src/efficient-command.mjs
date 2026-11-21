@@ -118,7 +118,7 @@ export function sufficeEfficientCommand(options,runtime){
             // Verify on the copy: a diff that fails the project's tests is a
             // miss, and its failure digest nudges the next round.
             if(changes>0){
-              const verdict=await verifyDir(dir);
+              const verdict=await verifyDir(dir,{access:options.access});
               if(verdict.ranTests&&!verdict.passed){ failedDetail=verdict.detail; changes=0; }
             }
           }
@@ -136,7 +136,7 @@ export function sufficeEfficientCommand(options,runtime){
             try{
               const strongChanges=await attempt(strongDir,prompt,strongModel,strongEffort,snapshot);
               if(strongChanges>0){
-                const verdict=await verifyDir(strongDir);
+                const verdict=await verifyDir(strongDir,{access:options.access});
                 if(verdict.ranTests&&!verdict.passed){ ctx.ui.notify(`Escalation produced changes but they fail the workspace tests:\n${verdict.detail}`,'warning'); }
                 else{ winnerDir=strongDir; path=`escalated to ${strongModel?.id??'session model'} after ${cheapId} missed (${strongChanges} change(s))`; }
               }

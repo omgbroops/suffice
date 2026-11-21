@@ -147,7 +147,7 @@ export function sufficeFastCommand(options,runtime){
         racing=true;
         const base=ctx.cwd,raceDir=await mkdtemp(join(tmpdir(),'suffice-fast-'));
         ctx.ui.notify('Fast race started — 3 attempts on workspace copies','info');
-        const controls=[];
+        const controls=[],verifyCtl=[];
         let winner=-1,sawVerifyRun=false;
         try{
           await ctx.waitForIdle();
@@ -172,15 +172,17 @@ export function sufficeFastCommand(options,runtime){
               if(winner<0&&(changed.length||deleted.length)){
                 // Verify before claiming: an attempt only wins if the
                 // workspace's own tests pass on its copy (no test command →
-                // the diff verdict stands, same as before).
-                const verdict=await verifyDir(dir);
+                // the diff verdict stands, same as before). Verification is
+                // command execution — it needs full access like shell work.
+                const verify=(verifyCtl[i]=new AbortController()).signal;
+                const verdict=await verifyDir(dir,{access:options.access,signal:verify});
                 if(verdict.ranTests){
                   sawVerifyRun=true;
                   if(!verdict.passed) return;
                 }
                 if(winner<0){
                   winner=i;control.appliedChanges=changed.length+deleted.length;
-                  for(let j=0;j<controls.length;j++) if(j!==i) controls[j]?.abort();
+                  for(let j=0;j<controls.length;j++) if(j!==i){ controls[j]?.abort(); verifyCtl[j]?.abort(); }
                 }
               }
             }catch{ /* losing or failed attempt */ }

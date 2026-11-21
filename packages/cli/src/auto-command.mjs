@@ -69,7 +69,7 @@ export function sufficeAutoCommand(options,runtime){
       try{ changes=await attempt(dir,round?prompt+nudge:prompt,luna,cheapEffort,snapshot); }
       catch{ errored=true;changes=0; }
       if(changes>0){
-        const verdict=await verifyDir(dir);
+        const verdict=await verifyDir(dir,{access:options.access});
         if(verdict.ranTests&&!verdict.passed){ failedDetail=verdict.detail; changes=0; }
       }
     }
@@ -82,7 +82,7 @@ export function sufficeAutoCommand(options,runtime){
     try{
       const strongChanges=await attempt(strongDir,prompt,ctx.model,strongEffort,snapshot);
       if(strongChanges>0){
-        const verdict=await verifyDir(strongDir);
+        const verdict=await verifyDir(strongDir,{access:options.access});
         if(verdict.ranTests&&!verdict.passed) ctx.ui.notify(`Escalation produced changes but they fail the workspace tests:\n${verdict.detail}`,'warning');
         else return {dir:strongDir,path:`escalated to ${ctx.model?.id??'session model'} (${strongChanges} change(s))`};
       }
@@ -98,7 +98,7 @@ export function sufficeAutoCommand(options,runtime){
     try{
       const changes=await attempt(dir,prompt,ctx.model,effort,snapshot);
       if(changes>0){
-        const verdict=await verifyDir(dir);
+        const verdict=await verifyDir(dir,{access:options.access});
         if(verdict.ranTests&&!verdict.passed){ ctx.ui.notify(`Feature attempt produced changes but they fail the workspace tests:\n${verdict.detail}`,'warning'); return null; }
         return {dir,path:`${ctx.model?.id??'session model'} (${changes} change(s))`};
       }
@@ -107,7 +107,7 @@ export function sufficeAutoCommand(options,runtime){
   };
   // other → 3-attempt race at low effort; first verified diff wins.
   const runRace=async(worktree,snapshot,runDir,input,prefill,ctx)=>{
-    const controls=[];
+    const controls=[],verifyCtl=[];
     let winner=-1,sawVerifyRun=false;
     const jobs=RACE_ATTEMPTS.map(async(spec,i)=>{
       const dir=join(runDir,`attempt-${i}`);
@@ -118,11 +118,12 @@ export function sufficeAutoCommand(options,runtime){
         await control.run(input+'\n\n'+prefill+(spec.hint?'\n\n'+spec.hint:''));
         const {changed,deleted}=await diffFiles(snapshot,dir);
         if(winner<0&&(changed.length||deleted.length)){
-          const verdict=await verifyDir(dir);
+          const verify=(verifyCtl[i]=new AbortController()).signal;
+          const verdict=await verifyDir(dir,{access:options.access,signal:verify});
           if(verdict.ranTests){ sawVerifyRun=true; if(!verdict.passed) return; }
           if(winner<0){
             winner=i;
-            for(let j=0;j<controls.length;j++) if(j!==i) controls[j]?.abort();
+            for(let j=0;j<controls.length;j++) if(j!==i){ controls[j]?.abort(); verifyCtl[j]?.abort(); }
           }
         }
       }catch{ /* losing or failed attempt */ }

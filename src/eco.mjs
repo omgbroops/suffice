@@ -80,7 +80,7 @@ export async function runEco({ runtime, task, variant, runDir, thinkingLevel = '
         cheap: { status: cheap.status, verified: cheapPassed, retries: cheapRuns.length - 1, turns: cheap.turns, latencyMs: cheap.latencyMs },
         strong: strong ? { status: strong.status, turns: strong.turns, latencyMs: strong.latencyMs } : null },
       winnerWorkspace: cheapPassed ? cheapWorkspace : strong ? resolve(runDir, 'strong', 'workspace') : null,
-      usage, usageCostUnknown: cheap.usageCostUnknown || strong?.usageCostUnknown,
+      usage, usageCostUnknown: Boolean(cheap.usageCostUnknown || strong?.usageCostUnknown),
       turns: cheap.turns + (strong?.turns ?? 0), latencyMs: Date.now() - started, final: winner?.final };
     await writeFile(resolve(runDir, 'eco.json'), JSON.stringify(result, null, 2));
     return result;
