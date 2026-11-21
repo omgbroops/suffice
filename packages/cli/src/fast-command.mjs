@@ -65,13 +65,16 @@ async function materializeLink(base,anc){
     const staged=`${linkPath}.materialize-${process.pid}`;
     try{
       // dereference:false keeps the target's nested links as links —
-      // dereferencing would throw on dangling dependency symlinks.
+      // dereferencing would throw on dangling dependency symlinks. A
+      // failed copy must propagate: an empty stand-in dir would silently
+      // drop every unchanged sibling the link provided.
       await cp(target,staged,{recursive:true,dereference:false});
-      await rm(linkPath,{force:true});
-      await rename(staged,linkPath);
-      return;
-    }catch{await rm(staged,{recursive:true,force:true});}
+    }catch(err){await rm(staged,{recursive:true,force:true});throw err;}
+    await rm(linkPath,{force:true});
+    await rename(staged,linkPath);
+    return;
   }
+  // Link is already dangling — nothing to preserve, an empty dir suffices.
   await rm(linkPath,{force:true});
   await mkdir(linkPath,{recursive:true});
 }
@@ -81,9 +84,14 @@ async function materializeLink(base,anc){
 export async function applyPatch(base,snapshot,attempt){
   const {changed,deleted}=await diffFiles(snapshot,attempt);
   for(const rel of changed){
-    const anc=await linkedAncestor(base,rel);
-    if(anc) await materializeLink(base,anc);
-    const to=join(base,rel);await mkdir(dirname(to),{recursive:true});await writeFile(to,await readFile(join(attempt,rel)));
+    // Materialize every link on the write path: the target's own nested
+    // links survive the staged copy, so a deeper link may still redirect
+    // the write into a shared file — keep checking until the path is real.
+    let anc;while((anc=await linkedAncestor(base,rel))) await materializeLink(base,anc);
+    const to=join(base,rel);
+    // A file-level link at the write target redirects the write too.
+    if((await lstat(to).catch(()=>null))?.isSymbolicLink()) await rm(to,{force:true});
+    await mkdir(dirname(to),{recursive:true});await writeFile(to,await readFile(join(attempt,rel)));
   }
   const pending=new Set(deleted);
   const byLink=new Map();
@@ -99,7 +107,12 @@ export async function applyPatch(base,snapshot,attempt){
       for(const p of rels) pending.delete(p);
     }
   }
-  for(const rel of pending) await rm(join(base,rel),{force:true});
+  for(const rel of pending){
+    // Partial deletions under a linked dir must materialize it first —
+    // rm would otherwise traverse the link and destroy files in the target.
+    let anc;while((anc=await linkedAncestor(base,rel))) await materializeLink(base,anc);
+    await rm(join(base,rel),{force:true});
+  }
   return changed.length+deleted.length;
 }
 

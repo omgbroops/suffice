@@ -111,6 +111,29 @@ test('applyPatch materializes a linked dir containing dangling links',async()=>{
   }finally{for(const d of [snapshot,base,attempt,target]) await rm(d,{recursive:true,force:true});}
 });
 
+test('applyPatch materializes nested and file-level links before writing',async()=>{
+  const snapshot=await makeTree(),base=await makeTree(),attempt=await makeTree(),target=await mkdtemp(join(tmpdir(),'fast-cmd-target-'));
+  try{
+    await rm(join(base,'src'),{recursive:true});
+    await mkdir(join(target,'src'),{recursive:true});
+    await writeFile(join(target,'src','a.js'),'export const a=1;');
+    await writeFile(join(target,'src','b.js'),'export const b=2;');
+    // File-level link nested inside the linked dir; winner edits it.
+    await mkdir(join(target,'shared'),{recursive:true});
+    await writeFile(join(target,'shared','dep.js'),'export const dep=1;');
+    await symlink(join(target,'shared','dep.js'),join(target,'src','dep.js'));
+    await symlink(join(target,'src'),join(base,'src'),'dir');
+    await writeFile(join(attempt,'src','dep.js'),'export const dep=99;');
+    await applyPatch(base,snapshot,attempt);
+    // dep.js in base is now a real private file, not a link to shared/.
+    const st=await lstat(join(base,'src','dep.js'));
+    assert.equal(st.isSymbolicLink(),false);
+    assert.equal(await readFile(join(base,'src','dep.js'),'utf8'),'export const dep=99;');
+    // Shared target untouched.
+    assert.equal(await readFile(join(target,'shared','dep.js'),'utf8'),'export const dep=1;');
+  }finally{for(const d of [snapshot,base,attempt,target]) await rm(d,{recursive:true,force:true});}
+});
+
 test('diffFiles reports no diff on identical trees',async()=>{
   const from=await makeTree(),to=await makeTree();
   try{
