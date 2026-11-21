@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import type { Settings } from '../api'
 import { IconCheck, IconEye, IconFolder, IconLockOpen, IconPlus, IconShield } from '../icons'
 import { Dropdown } from './Dropdown'
@@ -60,15 +60,42 @@ export function PermissionPicker({ value, onChange }: { value: Mode; onChange: (
   )
 }
 
-function Box({ on }: { on: boolean }) {
-  return <span className={`dd-box${on ? ' is-on' : ''}`} aria-hidden>{on && <IconCheck size={11} />}</span>
+const TINTS = ['#6f8f7a', '#7d7aa8', '#a07f62', '#6f8aa3', '#a06f86', '#8a9a62']
+function Tile({ name }: { name: string }) {
+  const letters = name.replace(/[^a-z0-9]/gi, '').slice(0, 2).toUpperCase() || '?'
+  let h = 0
+  for (const c of name) h = (h * 31 + c.charCodeAt(0)) >>> 0
+  const tint = TINTS[h % TINTS.length]
+  return <span className="dd-tile" style={{ color: tint, background: `color-mix(in srgb, ${tint} 18%, transparent)` }}>{letters}</span>
+}
+
+function ProjectList({ project, projects, onPick, onAdd, close }: { project: string | null; projects: string[]; onPick: (p: string) => void; onAdd: () => void; close: () => void }) {
+  const [q, setQ] = useState('')
+  const list = projects.filter(p => p.toLowerCase().includes(q.trim().toLowerCase()))
+  return (
+    <div className="dd-list">
+      <input className="dd-search" autoFocus placeholder="Search projects" value={q} onChange={e => setQ(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && list[0]) { onPick(list[0]); close() } }} />
+      {list.map(p => (
+        <button key={p} role="menuitemradio" aria-checked={p === project} className={`dd-row${p === project ? ' is-selected' : ''}`} title={p} onClick={() => { onPick(p); close() }}>
+          <Tile name={baseName(p)} />
+          <span className="dd-title dd-grow">{baseName(p)}</span>
+          {p === project && <IconCheck size={13} className="dd-check" />}
+        </button>
+      ))}
+      {!list.length && <div className="dd-empty">No projects match</div>}
+      <div className="dd-rule" />
+      <button className="dd-row" onClick={() => { close(); onAdd() }}>
+        <span className="dd-icon"><IconPlus size={14} /></span>
+        <span className="dd-title">Add folder…</span>
+      </button>
+    </div>
+  )
 }
 
 export function ProjectPicker({ project, projects, onPick, onAdd }: { project: string | null; projects: string[]; onPick: (p: string) => void; onAdd: () => void }) {
-  const recent = projects.filter(p => p !== project)
   return (
     <Dropdown
-      width={440}
+      width={260}
       trigger={({ open, toggle, ref }) => (
         <button ref={ref} className={`ghost-btn${open ? ' is-open' : ''}`} onClick={toggle} aria-haspopup="menu" aria-expanded={open} title={project ?? 'Choose a project'}>
           <IconFolder size={14} />
@@ -76,38 +103,7 @@ export function ProjectPicker({ project, projects, onPick, onAdd }: { project: s
         </button>
       )}
     >
-      {close => {
-        const pick = (p: string) => {
-          onPick(p)
-          close()
-        }
-        const row = (p: string, on: boolean) => (
-          <button key={p} role="menuitemradio" aria-checked={on} className={`dd-row${on ? ' is-selected' : ''}`} onClick={() => pick(p)} title={p}>
-            <span className="dd-icon"><IconFolder size={14} /></span>
-            <span className="dd-title">{baseName(p)}</span>
-            <span className="dd-path">{shortPath(p)}</span>
-            <Box on={on} />
-          </button>
-        )
-        return (
-          <div className="dd-list">
-            {project && row(project, true)}
-            {recent.length > 0 && <div className="dd-section">Recent</div>}
-            {recent.map(p => row(p, false))}
-            <div className="dd-rule" />
-            <button
-              className="dd-row"
-              onClick={() => {
-                close()
-                onAdd()
-              }}
-            >
-              <span className="dd-icon"><IconPlus size={14} /></span>
-              <span className="dd-title">Add folder…</span>
-            </button>
-          </div>
-        )
-      }}
+      {close => <ProjectList project={project} projects={projects} onPick={onPick} onAdd={onAdd} close={close} />}
     </Dropdown>
   )
 }

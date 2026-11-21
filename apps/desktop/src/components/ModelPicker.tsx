@@ -88,16 +88,36 @@ function ModelSelect({ models, value, onChange, label }: { models: ModelInfo[]; 
 }
 
 function Effort({ m, value, onChange }: { m: ModelInfo; value?: string; onChange: (e: string) => void }) {
-  if (!m.efforts.length) return null
+  const levels = m.efforts
+  const track = useRef<HTMLDivElement>(null)
+  if (!levels.length) return null
+  const i = Math.max(0, levels.indexOf(value ?? ''))
+  const at = levels.length > 1 ? i / (levels.length - 1) : 1
+  const pick = (x: number) => {
+    const r = track.current!.getBoundingClientRect()
+    const t = Math.min(1, Math.max(0, (x - r.left) / r.width))
+    onChange(levels[Math.round(t * (levels.length - 1))])
+  }
   return (
-    <div className="mp-field">
-      <span>Effort</span>
-      <div className="seg mp-seg">
-        {m.efforts.map(e => (
-          <button key={e} className={`seg-opt${value === e ? ' is-active' : ''}`} onClick={() => onChange(e)} title={EFFORT_LABEL[e]}>
-            {SHORT[e] ?? e}
-          </button>
-        ))}
+    <div className="mp-effort">
+      <div className="mp-kv"><span>Reasoning</span><span className="mp-kv-v">{EFFORT_LABEL[levels[i]]}</span></div>
+      <div
+        ref={track}
+        className="mp-slider"
+        role="slider"
+        tabIndex={0}
+        aria-label="Reasoning effort"
+        aria-valuetext={EFFORT_LABEL[levels[i]]}
+        onPointerDown={e => { e.currentTarget.setPointerCapture(e.pointerId); pick(e.clientX) }}
+        onPointerMove={e => e.buttons & 1 && pick(e.clientX)}
+        onKeyDown={e => {
+          if (e.key === 'ArrowRight' || e.key === 'ArrowUp') onChange(levels[Math.min(levels.length - 1, i + 1)])
+          if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') onChange(levels[Math.max(0, i - 1)])
+        }}
+      >
+        <span className="mp-slider-fill" style={{ width: `calc(${at * 100}% - ${at * 14}px + 14px)` }} />
+        {levels.map((l, j) => j > i && <span key={l} className="mp-slider-tick" style={{ left: `calc(${(j / (levels.length - 1)) * 100}% - ${(j / (levels.length - 1)) * 14}px + 7px)` }} />)}
+        <span className="mp-slider-thumb" style={{ left: `calc(${at * 100}% - ${at * 14}px)` }} />
       </div>
     </div>
   )
@@ -105,28 +125,17 @@ function Effort({ m, value, onChange }: { m: ModelInfo; value?: string; onChange
 
 function Prices({ m }: { m: ModelInfo }) {
   return (
-    <div className="mp-prices">
-      {([['Input', m.cost.input], ['Cached', m.cost.cacheRead], ['Output', m.cost.output]] as const).map(([k, v]) => (
-        <div key={k} className="mp-price">
-          <span className="mp-price-k">{k}</span>
-          <span className="mp-price-v">
-            {money(v)}
-            <span className="mp-faint"> / 1M</span>
-          </span>
-        </div>
-      ))}
+    <div className="mp-kvs">
+      <div className="mp-kv"><span>Context</span><span className="mp-kv-v">{ctx(m.contextWindow)}</span></div>
+      <div className="mp-kv"><span>Input</span><span className="mp-kv-v">{money(m.cost.input)}<span className="mp-faint"> / 1M</span></span></div>
+      <div className="mp-kv"><span>Cached</span><span className="mp-kv-v">{money(m.cost.cacheRead)}<span className="mp-faint"> / 1M</span></span></div>
+      <div className="mp-kv"><span>Output</span><span className="mp-kv-v">{money(m.cost.output)}<span className="mp-faint"> / 1M</span></span></div>
     </div>
   )
 }
 
-function Scale({ cost, label }: { cost: number; label?: string }) {
-  return (
-    <div className="mp-scale">
-      <span className="mp-scale-dot" style={{ left: `${Math.min(1, cost) * 100}%` }}>
-        {label && <span className="mp-scale-label">{label}</span>}
-      </span>
-    </div>
-  )
+function Scale(_: { cost: number; label?: string }) {
+  return null
 }
 
 type PickerProps = {
@@ -210,17 +219,13 @@ function ModelDetail({ m, p, cost, maxHeight }: { m: ModelInfo; p: PickerProps; 
         <span className="mp-detail-name">{m.name}</span>
         {effort && <span className="mp-faint">{EFFORT_LABEL[effort] ?? effort}</span>}
       </div>
-      <div className="mp-detail-sub">{ctx(m.contextWindow)} context · Balanced mode</div>
+      
       <Effort m={m} value={effort} onChange={e => p.onEffort(m.id, e)} />
       <div className="mp-field">
         <span>Priority tier</span>
         <Switch on={!!p.fast[m.id]} onChange={v => p.onFast(m.id, v)} label="Priority tier" />
       </div>
       <div className="mp-rule" />
-      <div className="mp-cost-head">
-        <span>Cost</span>
-        <span className="mp-faint">{m.efforts.length ? 'Higher effort uses more tokens' : 'Per million tokens'}</span>
-      </div>
       <Scale cost={cost} />
       <Prices m={m} />
     </div>
@@ -464,7 +469,7 @@ export function ModelPicker(p: PickerProps) {
                           </span>
                           {fast[m.id] && <span className="mp-tag">Priority</span>}
                           {selectedId === m.id && <IconCheck size={13} className="mp-check" />}
-                          <CostMeter cost={costOf(m)} />
+                          <span className="mp-price-tag">{money(m.cost.input)} / {money(m.cost.output)}</span>
                         </button>
                       )
                     })}

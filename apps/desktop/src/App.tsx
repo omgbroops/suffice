@@ -228,8 +228,8 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    void refreshThreads(project)
-  }, [project, refreshThreads])
+    for (const p of new Set([...projects, ...(project ? [project] : [])])) void refreshThreads(p)
+  }, [projects, project, refreshThreads])
 
   useEffect(() => {
     const offs = [
@@ -349,7 +349,7 @@ export default function App() {
     void send(key, text)
   }
 
-  const list = useMemo(() => Object.values(threads).filter(t => t.project === project).sort((a, b) => b.modified - a.modified), [threads, project])
+  const list = useMemo(() => Object.values(threads).sort((a, b) => b.modified - a.modified), [threads])
 
   if (bootError)
     return (
@@ -448,11 +448,10 @@ export default function App() {
             <IconCompose size={14} />
             New thread
           </button>
-          <ProjectMenu project={project} projects={projects} onPick={p => void pickProject(p)} onBrowse={() => void browseProject()} />
         </div>
         <div className="side-label">Threads</div>
         <div className="side-list">
-          {list.length === 0 && <div className="side-empty">{project ? 'No threads in this project yet.' : 'Choose a project to see its threads.'}</div>}
+          {list.length === 0 && <div className="side-empty">No threads yet.</div>}
           {list.map(t => (
             <button key={t.key} className={`side-thread${active?.key === t.key ? ' is-active' : ''}`} onClick={() => go({ kind: 'thread', key: t.key })} title={t.title}>
               <StatusGlyph status={statusOf(t)} />
