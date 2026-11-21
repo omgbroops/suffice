@@ -36,7 +36,12 @@ const unpack = async (pkg, v) => {
 };
 for (const t of longTasks.filter(t => !only || t.id === only)) {
   const taskDir = resolve(stateDir, 'real-tasks', t.id), ws = resolve(taskDir, 'workspace'), ref = resolve(taskDir, 'reference');
-  try { await readFile(resolve(ws, 'src/package.json')); console.log(JSON.stringify({ task: t.id, skipped: 'workspace exists' })); continue; } catch {}
+  try {
+    const prior = JSON.parse(await readFile(resolve(taskDir, 'validation.json'), 'utf8'));
+    if (prior.baseline?.status === 'failed' && prior.reference?.status === 'passed' && prior.regression?.status === 'passed' && prior.referenceRegression?.status === 'passed') {
+      console.log(JSON.stringify({ task: t.id, skipped: 'workspace validated' })); continue;
+    }
+  } catch {}
   await rm(taskDir, { recursive: true, force: true });
   const base = await unpack(t.pkg, t.base), fix = await unpack(t.pkg, t.fix);
   await mkdir(resolve(ws, 'tests'), { recursive: true });
