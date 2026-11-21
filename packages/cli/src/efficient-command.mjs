@@ -2,6 +2,7 @@ import {mkdtemp,cp,rm,symlink} from 'node:fs/promises';
 import {existsSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join,basename} from 'node:path';
+import {clampThinkingLevel} from '@earendil-works/pi-ai';
 import {createSufficeSession} from './session.mjs';
 import {applyPatch,diffFiles,workspacePrefill} from './fast-command.mjs';
 
@@ -99,14 +100,20 @@ export function sufficeEfficientCommand(options,runtime){
           await cp(worktree,snapshot,{recursive:true,filter:src=>!SKIP_COPY.has(basename(src)),dereference:true});
           const prefill=await workspacePrefill(worktree);
           const prompt=`${input}\n\n${prefill}`;
-          // Phase A: cheap model, retry nudged once on a miss.
-          let changes=0;
+          // Phase A: cheap model, retry nudged once on a miss. A round only
+          // passes its verdict when the session completed — a crashed run's
+          // leftover edits are partial work for the next round to finish,
+          // never an accepted patch.
+          let changes=0,errored=false;
+          const cheapEffort=clampThinkingLevel(luna,'low');
           for(let round=0;round<CHEAP_ROUNDS&&changes===0;round++){
             const dir=join(runDir,'cheap');
             if(!existsSync(dir)) await copyTree(worktree,dir);
             ctx.ui.notify(`Efficient: ${cheapId} attempt${round?' retry':''} on a workspace copy`,'info');
-            try{ changes=await attempt(dir,round?prompt+'\n\nYour previous attempt made no changes — the task is not done. Keep fixing the actual files.':prompt,luna,'low',snapshot); }
-            catch{ changes=0; }
+            const nudge=errored?'\n\nYour previous attempt errored before finishing — the files may hold partial edits. Inspect the state and finish the task.':'\n\nYour previous attempt made no changes — the task is not done. Keep fixing the actual files.';
+            errored=false;
+            try{ changes=await attempt(dir,round?prompt+nudge:prompt,luna,cheapEffort,snapshot); }
+            catch{ errored=true;changes=0; }
           }
           let winnerDir=null,path='';
           if(changes>0){ winnerDir=join(runDir,'cheap'); path=`${cheapId} solved it (${changes} change(s)) — no escalation, strong-model cost skipped`; }
@@ -115,9 +122,13 @@ export function sufficeEfficientCommand(options,runtime){
             const strongDir=join(runDir,'strong');
             await copyTree(worktree,strongDir);
             ctx.ui.notify(`Efficient: ${cheapId} failed — escalating to session model`,'info');
+            // '/efficient on' swapped ctx.model to the cheap one — escalate to
+            // the model the session had before the switch.
+            const strongModel=(cheapOn&&priorModel)?priorModel:ctx.model;
+            const strongEffort=clampThinkingLevel(strongModel,ctx.thinkingLevel??'low');
             try{
-              const strongChanges=await attempt(strongDir,prompt,ctx.model,ctx.thinkingLevel??'low',snapshot);
-              if(strongChanges>0){ winnerDir=strongDir; path=`escalated to ${ctx.model?.id??'session model'} after ${cheapId} missed (${strongChanges} change(s))`; }
+              const strongChanges=await attempt(strongDir,prompt,strongModel,strongEffort,snapshot);
+              if(strongChanges>0){ winnerDir=strongDir; path=`escalated to ${strongModel?.id??'session model'} after ${cheapId} missed (${strongChanges} change(s))`; }
             }catch{ /* fall through to the failure notice */ }
           }
           if(!winnerDir){ctx.ui.notify('Efficient: cheap and the escalation both produced no changes','error');return;}
