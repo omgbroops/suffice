@@ -29,7 +29,7 @@ export async function runAuto({ runtime, task, variant, workspace, runDir, think
     const prefill = await workspacePrefill(task.workspaceDir);
     const decision = await classify({
       objective: `Classify this coding task.\n\nTask: ${task.title ?? ''}\n${task.prompt}\n\n${prefill}`.slice(0, 8000),
-      latestEvidence: 'Choose the single route that fits the task best.',
+      latestEvidence: 'Choose the single route that fits the task best. repair = fixing existing behavior: tasks phrased as fix/repair/bug/regression, or describing incorrect behavior to correct — even when the fix adds a parameter or new code path. feature = a purely new capability not framed as a fix. When unsure between repair and feature, choose repair; when unsure otherwise, choose other.',
       candidates: CANDIDATES,
     }, { signal: controller.signal });
     const route = CANDIDATES.some(c => c.id === decision.selectedId) ? decision.selectedId : 'other';

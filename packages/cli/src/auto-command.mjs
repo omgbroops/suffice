@@ -48,7 +48,7 @@ export function sufficeAutoCommand(options,runtime){
     if(!luna) return 'other';
     try{
       const response=await runtime.completeSimple(luna,{
-        systemPrompt:'You classify coding tasks. Reply with exactly one JSON object: {"route":"repair"}, {"route":"feature"}, or {"route":"other"}. repair = fixing existing broken behavior (bug, regression, failing test). feature = adding a capability that does not exist yet. other = ambiguous, refactor, docs, or analysis.',
+        systemPrompt:'You classify coding tasks. Reply with exactly one JSON object: {"route":"repair"}, {"route":"feature"}, or {"route":"other"}. repair = fixing existing behavior: tasks phrased as fix/repair/bug/regression, or describing incorrect behavior to correct — even when the fix adds a parameter or new code path. feature = a purely new capability not framed as a fix. other = ambiguous, refactor, docs, or analysis. When unsure between repair and feature, choose repair; when unsure otherwise, choose other.',
         messages:[{role:'user',content:`Task:\n${input}\n\n${prefill}`.slice(0,8000),timestamp:Date.now()}],
       },{maxTokens:64,reasoning:'low'});
       return parseRoute((response.content??[]).filter(c=>c.type==='text').map(c=>c.text).join(''));
