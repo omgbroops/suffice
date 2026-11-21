@@ -1,4 +1,4 @@
-import {mkdtemp,cp,rm,readdir,readFile,writeFile,mkdir,symlink,lstat} from 'node:fs/promises';
+import {mkdtemp,cp,rm,readdir,readFile,writeFile,mkdir,symlink,lstat,realpath} from 'node:fs/promises';
 import {existsSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join,relative,basename,dirname} from 'node:path';
@@ -55,11 +55,15 @@ async function linkedAncestor(base,rel){
   return null;
 }
 
-// Replace a linked dir in `base` with a real directory mirroring the snapshot
-// (what the winning attempt saw), so file writes land on the worktree itself.
-async function materializeLink(base,snapshot,anc){
-  await rm(join(base,anc),{force:true});
-  await cp(join(snapshot,anc),join(base,anc),{recursive:true,dereference:true});
+// Replace a linked dir in `base` with a real directory holding the target's
+// CURRENT contents (live sibling edits, nested .git/node_modules included),
+// then file writes land on the worktree itself instead of through the link.
+async function materializeLink(base,anc){
+  const linkPath=join(base,anc);
+  const target=await realpath(linkPath).catch(()=>null);
+  await rm(linkPath,{force:true});
+  if(target) await cp(target,linkPath,{recursive:true,dereference:true});
+  else await mkdir(linkPath,{recursive:true});
 }
 
 // Applies what the winning attempt changed relative to the pre-race snapshot onto
@@ -68,7 +72,7 @@ export async function applyPatch(base,snapshot,attempt){
   const {changed,deleted}=await diffFiles(snapshot,attempt);
   for(const rel of changed){
     const anc=await linkedAncestor(base,rel);
-    if(anc) await materializeLink(base,snapshot,anc);
+    if(anc) await materializeLink(base,anc);
     const to=join(base,rel);await mkdir(dirname(to),{recursive:true});await writeFile(to,await readFile(join(attempt,rel)));
   }
   const pending=new Set(deleted);

@@ -77,11 +77,14 @@ test('applyPatch materializes a linked dir before writing through it',async()=>{
     await writeFile(join(target,'src','a.js'),'export const a=1;');
     await writeFile(join(target,'src','b.js'),'export const b=2;');
     await symlink(join(target,'src'),join(base,'src'),'dir');
+    // A live sibling edit under the link (made after the race started) must survive.
+    await writeFile(join(target,'src','b.js'),'export const b="live";');
     await writeFile(join(attempt,'src','a.js'),'export const a=99;');
     await applyPatch(base,snapshot,attempt);
     const st=await lstat(join(base,'src'));
     assert.equal(st.isSymbolicLink(),false);
     assert.equal(await readFile(join(base,'src','a.js'),'utf8'),'export const a=99;');
+    assert.equal(await readFile(join(base,'src','b.js'),'utf8'),'export const b="live";');
     // Target untouched.
     assert.equal(await readFile(join(target,'src','a.js'),'utf8'),'export const a=1;');
   }finally{for(const d of [snapshot,base,attempt,target]) await rm(d,{recursive:true,force:true});}
