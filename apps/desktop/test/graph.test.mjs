@@ -33,3 +33,11 @@ test('the layout settles: linked notes near the link distance, unlinked ones pus
   const next = createSim([...ids, 'new'], [], sim)
   assert.equal(next.nodes.get('hub').x, p('hub').x)
 })
+
+test("Obsidian's collide force keeps notes apart even when a link wants them close", () => {
+  const sim = createSim(['a', 'b', 'c'], [['a', 'b'], ['b', 'c'], ['a', 'c']])
+  for (let i = 0; i < 400; i++) tick(sim, { center: 0.1, repel: 0, link: 1, distance: 30 })
+  const [a, b] = [sim.nodes.get('a'), sim.nodes.get('b')]
+  const d = Math.hypot(a.x - b.x, a.y - b.y)
+  assert.ok(d > 90, `a-b ${d.toFixed(0)}: collide radius 60 should hold them near 120`)
+})

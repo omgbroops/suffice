@@ -4,6 +4,7 @@ import { ago } from '../data'
 import { buildTree, DEFAULT_NOTES_PROMPT, type TreeNode } from '../../shared/notes.mjs'
 import { EnterFullScreenIcon } from '@radix-ui/react-icons'
 import { IconChevronRight, IconClose, IconSearch } from '../icons'
+import { GraphView } from './GraphView'
 import { ObsidianGraph } from './ObsidianGraph'
 import { Prose } from './ThreadView'
 import { displayName } from './groups'
@@ -111,6 +112,7 @@ export function NotesView({ project, prompt, onPrompt, onGenerate }: { project: 
   const [q, setQ] = useState('')
   const [open, setOpen] = useState<Set<string>>(new Set())
   const [graphView, setGraphView] = useState(false)
+  const modified = useMemo(() => new Map((notes ?? []).map(n => [n.path, n.modified])), [notes])
   const all = useMemo(() => linkGraph(notes ?? []), [notes])
   const allNodes = useMemo(() => (notes ?? []).map(n => ({ id: n.path, label: n.title, weight: all.weight.get(n.path) ?? 0 })), [notes, all])
   // local graph: the open note and the notes it links with (Obsidian's default depth 1)
@@ -196,10 +198,7 @@ export function NotesView({ project, prompt, onPrompt, onGenerate }: { project: 
         </div>
       </div>
       {graphView ? (
-        <section className="notes-graph-view" aria-label="Graph view">
-          <ObsidianGraph nodes={allNodes} links={all.links} onOpen={p => (setCurrent(p), setGraphView(false))} label={`Graph of ${projectName}`} />
-          <button className="icon-btn notes-graph-close" aria-label="Close graph view" onClick={() => setGraphView(false)}><IconClose size={14} /></button>
-        </section>
+        <GraphView nodes={allNodes} links={all.links} modified={modified} onOpen={p => (setCurrent(p), setGraphView(false))} onClose={() => setGraphView(false)} />
       ) : (
       <article className="notes-page">
         {listError && <div className="msg-error">{listError}</div>}

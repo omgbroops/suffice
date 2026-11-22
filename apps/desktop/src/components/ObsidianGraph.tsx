@@ -1,7 +1,10 @@
 import { useEffect, useRef } from 'react'
 import { createSim, ease, FADE, nodeScale, nodeSize, OBSIDIAN_FORCES, textAlpha, tick } from '../../shared/graph.mjs'
 
-export type GraphNode = { id: string; label: string; weight: number }
+export type GraphNode = { id: string; label: string; weight: number; color?: string }
+/** Obsidian's Display settings: arrows, text fade threshold (-3..3), node size and link thickness multipliers */
+export type GraphDisplay = { arrows: boolean; textFade: number; nodeSize: number; lineSize: number }
+export const DEFAULT_DISPLAY: GraphDisplay = { arrows: false, textFade: 0, nodeSize: 1, lineSize: 1 }
 type Forces = typeof OBSIDIAN_FORCES
 type Sim = ReturnType<typeof createSim>
 type Anim = { fade: number; rgb: number[]; move: number }
@@ -38,12 +41,12 @@ function wrap(ctx: CanvasRenderingContext2D, text: string, width: number) {
  * in the accent and fades everything unrelated to 20%. Drag a node to move it, drag the background to pan,
  * scroll to zoom, click a node to open it.
  */
-export function ObsidianGraph({ nodes, links, focus, onOpen, forces = OBSIDIAN_FORCES, maxFit = 1, label }: {
-  nodes: GraphNode[]; links: [string, string][]; focus?: string; onOpen: (id: string) => void; forces?: Forces; maxFit?: number; label: string
+export function ObsidianGraph({ nodes, links, focus, onOpen, forces = OBSIDIAN_FORCES, display = DEFAULT_DISPLAY, maxFit = 1, label }: {
+  nodes: GraphNode[]; links: [string, string][]; focus?: string; onOpen: (id: string) => void; forces?: Forces; display?: GraphDisplay; maxFit?: number; label: string
 }) {
   const ref = useRef<HTMLCanvasElement>(null)
-  const live = useRef({ nodes, links, focus, onOpen, forces, maxFit })
-  live.current = { nodes, links, focus, onOpen, forces, maxFit }
+  const live = useRef({ nodes, links, focus, onOpen, forces, maxFit, display })
+  live.current = { nodes, links, focus, onOpen, forces, maxFit, display }
   const state = useRef<{ sim: Sim | null; wake: () => void; refit: () => void }>({ sim: null, wake: () => {}, refit: () => {} })
 
   useEffect(() => {
@@ -61,7 +64,11 @@ export function ObsidianGraph({ nodes, links, focus, onOpen, forces = OBSIDIAN_F
     }
     readColors()
 
-    const size = (id: string) => nodeSize(live.current.nodes.find(n => n.id === id)?.weight ?? 0)
+    const byId = () => new Map(live.current.nodes.map(n => [n.id, n]))
+    let nodeMap = byId()
+    const size = (id: string) => nodeSize(nodeMap.get(id)?.weight ?? 0) * live.current.display.nodeSize
+    const custom = new Map<string, RGBA>()
+    const colorOf = (css: string) => { let c = custom.get(css); if (!c) custom.set(css, (c = parse(css))); return c }
     const toWorld = (sx: number, sy: number) => ({ x: (sx - view.x) / view.s, y: (sy - view.y) / view.s })
     const hit = (sx: number, sy: number) => {
       const sim = state.current.sim
@@ -89,7 +96,8 @@ export function ObsidianGraph({ nodes, links, focus, onOpen, forces = OBSIDIAN_F
 
     const frame = () => {
       raf = 0
-      const { focus, forces } = live.current
+      const { focus, forces, display } = live.current
+      nodeMap = byId()
       const sim = state.current.sim
       if (!sim || !w) return
       let busy = false
@@ -102,7 +110,7 @@ export function ObsidianGraph({ nodes, links, focus, onOpen, forces = OBSIDIAN_F
         view.x = view.zx - wx * view.s; view.y = view.zy - wy * view.s
         busy = true
       }
-      const s = view.s, f = nodeScale(s), ta = textAlpha(s)
+      const s = view.s, f = nodeScale(s), ta = Math.min(1, Math.max(0, textAlpha(s) - display.textFade))
       const ids = new Map([...sim.nodes].map(([id, n]) => [n, id]))
       const near = new Set<string>()
       if (hot) for (const l of sim.links) if (ids.get(l.s) === hot) near.add(ids.get(l.t)!); else if (ids.get(l.t) === hot) near.add(ids.get(l.s)!)
@@ -111,8 +119,8 @@ export function ObsidianGraph({ nodes, links, focus, onOpen, forces = OBSIDIAN_F
       ctx.clearRect(0, 0, w, h)
       const X = (x: number) => x * s + view.x, Y = (y: number) => y * s + view.y
 
-      // links: 1px, from node edge to node edge
-      ctx.lineWidth = 1
+      // links: link thickness in px (1 by default), from node edge to node edge
+      ctx.lineWidth = display.lineSize
       for (const l of sim.links) {
         const a = ids.get(l.s)!, b = ids.get(l.t)!, key = `${a}>${b}`
         const lit = !!hot && (a === hot || b === hot)
@@ -128,6 +136,17 @@ export function ObsidianGraph({ nodes, links, focus, onOpen, forces = OBSIDIAN_F
         ctx.moveTo(X(l.s.x + (dx * rs) / m), Y(l.s.y + (dy * rs) / m))
         ctx.lineTo(X(l.t.x - (dx * rt) / m), Y(l.t.y - (dy * rt) / m))
         ctx.stroke()
+        if (display.arrows) {
+          // Obsidian's arrow: (0,0) (-4,-2) (-3,0) (-4,2), scaled 2*sqrt(link thickness), text colour at half alpha
+          const k = 2 * Math.sqrt(display.lineSize), ang = Math.atan2(dy, dx)
+          const tx = X(l.t.x - (dx * (rt + 1 / s)) / m), ty = Y(l.t.y - (dy * (rt + 1 / s)) / m)
+          const pt = (px: number, py: number) => [tx + (px * Math.cos(ang) - py * Math.sin(ang)) * k, ty + (px * Math.sin(ang) + py * Math.cos(ang)) * k]
+          ctx.fillStyle = rgba(colors.text.rgb, 0.5 * fade * colors.text.a)
+          ctx.beginPath()
+          for (const [i, [px, py]] of [[0, 0], [-4, -2], [-3, 0], [-4, 2]].entries()) i ? ctx.lineTo(...(pt(px, py) as [number, number])) : ctx.moveTo(...(pt(px, py) as [number, number]))
+          ctx.closePath()
+          ctx.fill()
+        }
       }
 
       // nodes, then labels above every node
@@ -135,7 +154,8 @@ export function ObsidianGraph({ nodes, links, focus, onOpen, forces = OBSIDIAN_F
       for (const [id, n] of sim.nodes) {
         const isHot = id === hot
         const target = !hot || isHot || near.has(id) ? 1 : FADE
-        const fill = isHot ? colors.accent : id === focus ? colors.focused : colors.node
+        const own = nodeMap.get(id)?.color
+        const fill = isHot ? colors.accent : id === focus ? colors.focused : own ? colorOf(own) : colors.node
         const an = anim.get(id) ?? { fade: 1, rgb: [...fill.rgb], move: 0 }
         an.fade = ease(an.fade, target)
         an.rgb = an.rgb.map((v, i) => ease(v, fill.rgb[i]))
@@ -161,7 +181,7 @@ export function ObsidianGraph({ nodes, links, focus, onOpen, forces = OBSIDIAN_F
         if (alpha <= 0.001) continue
         const k = isHot && s < 1 ? 1 : f * s
         labels.push(() => {
-          const node = live.current.nodes.find(m => m.id === id)
+          const node = nodeMap.get(id)
           if (!node) return
           ctx.font = `${(14 + sz / 4) * k}px ${FONT}`
           ctx.fillStyle = rgba(colors.text.rgb, alpha)
@@ -271,7 +291,12 @@ export function ObsidianGraph({ nodes, links, focus, onOpen, forces = OBSIDIAN_F
     state.current.refit()
     state.current.wake()
   }, [key])
-  useEffect(() => state.current.wake(), [focus])
+  useEffect(() => state.current.wake(), [focus, display.arrows, display.textFade, display.nodeSize, display.lineSize, nodes])
+  // a forces change reheats the layout, as dragging Obsidian's sliders does
+  useEffect(() => {
+    const sim = state.current.sim
+    if (sim) (sim.alpha = Math.max(sim.alpha, 0.3)), state.current.wake()
+  }, [forces.center, forces.repel, forces.link, forces.distance])
 
   return <canvas ref={ref} className="ob-graph" role="img" aria-label={label} />
 }

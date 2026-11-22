@@ -74,7 +74,7 @@
 
 /* notes: Obsidian's default theme, values read from Obsidian.app's app.css (2026-11-22), in our three-column layout */
 .notes {
-  --ob-bg: #1c1c1c; --ob-bg2: #282828; --ob-border: #333333; --ob-code: #232323;
+  --ob-bg: #1c1c1c; --ob-bg2: #282828; --ob-border: #333333; --ob-border-hover: #3f3f3f; --ob-code: #232323;
   --ob-text: #dadada; --ob-muted: #b3b3b3; --ob-faint: #666666;
   --ob-accent: hsl(258 88% 66%); --ob-text-accent: hsl(255 89.76% 75.9%);
   --ob-hover: color-mix(in oklch, white 6.7%, transparent); --ob-guide: color-mix(in oklch, white 12%, transparent);
@@ -85,7 +85,7 @@
 }
 @media (prefers-color-scheme: light) {
   .notes {
-    --ob-bg: #ffffff; --ob-bg2: #f6f6f6; --ob-border: #e4e4e4; --ob-code: #fafafa;
+    --ob-bg: #ffffff; --ob-bg2: #f6f6f6; --ob-border: #e4e4e4; --ob-border-hover: #dadada; --ob-code: #fafafa;
     --ob-text: #222222; --ob-muted: #5c5c5c; --ob-faint: #ababab;
     --ob-accent: hsl(257 88.88% 70.95%); --ob-text-accent: hsl(258 88% 66%);
     --ob-hover: color-mix(in oklch, black 6.7%, transparent); --ob-guide: color-mix(in oklch, black 12%, transparent);
@@ -145,10 +145,42 @@
 .notes-links .tree-row { padding-left: 8px; }
 .notes-empty { height: 100%; display: grid; place-content: center; gap: 4px; text-align: center; color: var(--text-2); }
 .notes-empty p { margin: 0; }
-/* graph view: the whole page pane, as Obsidian opens it in a tab */
-.notes-graph-view { position: relative; min-height: 0; background: var(--ob-bg); }
-.notes-graph-close { position: absolute; top: 10px; right: 10px; color: var(--ob-faint); }
-.notes-graph-close:hover { color: var(--ob-text); background: var(--ob-hover); }
+/* graph view: Obsidian's tab — title bar, the graph, and its controls panel (values from Obsidian.app app.css) */
+.graph-view { min-height: 0; display: flex; flex-direction: column; background: var(--ob-bg); }
+.graph-view-head { flex: none; height: 40px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 8px; box-shadow: inset 0 -1px 0 var(--ob-border); }
+.graph-view-title { grid-column: 2; font-size: 13px; color: var(--ob-text); }
+.graph-view-close { grid-column: 3; justify-self: end; color: var(--ob-faint); }
+.graph-view-close:hover { color: var(--ob-text); background: var(--ob-hover); }
+.graph-view-body { position: relative; flex: 1; min-height: 0; }
+.graph-controls { position: absolute; top: 12px; right: 12px; width: 240px; max-height: calc(100% - 16px); overflow-y: auto; background: var(--ob-bg2); border: 1px solid var(--ob-border-hover); border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,.121), 0 3.4px 6.7px rgba(0,0,0,.179), 0 15px 30px rgba(0,0,0,.3); font-size: 13px; color: var(--ob-text); scrollbar-width: none; }
+.gc-buttons { position: absolute; top: 4px; right: 6px; display: flex; gap: 2px; z-index: 1; }
+.gc-buttons .icon-btn { color: var(--ob-muted); }
+.gc-buttons .icon-btn:hover { color: var(--ob-text); background: var(--ob-hover); }
+.gc-section { padding: 6px 12px; border-bottom: 1px solid var(--ob-border); }
+.gc-section:last-child { border-bottom: 0; }
+.gc-head { display: flex; align-items: center; min-height: 24px; }
+.gc-title { display: flex; align-items: center; gap: 4px; font-weight: 500; font-size: 13px; color: var(--ob-text); margin-left: -4px; }
+.gc-chev { color: var(--ob-faint); transition: transform 150ms var(--ease); }
+.gc-chev.is-open { transform: rotate(90deg); }
+.gc-body { display: flex; flex-direction: column; gap: 4px; padding: 6px 0 4px; }
+.gc-search { display: flex; align-items: center; gap: 6px; height: 28px; padding: 0 8px; border-radius: 5px; background: var(--ob-bg); box-shadow: inset 0 0 0 1px var(--ob-border-hover); color: var(--ob-faint); }
+.gc-search:focus-within { box-shadow: inset 0 0 0 1px var(--ob-accent); }
+.gc-search input, .gc-group input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; color: var(--ob-text); font: inherit; font-size: 13px; }
+.gc-search input::placeholder, .gc-group input::placeholder { color: var(--ob-faint); }
+.gc-clear { display: grid; place-items: center; width: 16px; height: 16px; border-radius: 8px; color: var(--ob-bg); background: var(--ob-faint); }
+.gc-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 30px; }
+.gc-toggle { position: relative; width: 40px; height: 22px; flex: none; border-radius: 18px; background: var(--ob-border-hover); transition: background-color 150ms var(--ease); }
+.gc-toggle::after { content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.3); transition: transform 150ms var(--ease); }
+.gc-toggle.is-on { background: var(--ob-accent); }
+.gc-toggle.is-on::after { transform: translateX(18px); }
+.gc-slider { display: flex; flex-direction: column; gap: 10px; padding: 6px 0; }
+.gc-slider input { -webkit-appearance: none; appearance: none; width: 100%; height: 4px; border-radius: 2px; background: linear-gradient(90deg, var(--ob-accent) var(--p), var(--ob-border-hover) var(--p)); outline: 0; }
+.gc-slider input::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: #fff; border: 0.5px solid var(--ob-border-hover); box-shadow: 0 1px 3px rgba(0,0,0,.35); cursor: grab; }
+.gc-group { display: flex; align-items: center; gap: 6px; height: 28px; }
+.gc-swatch { width: 16px; height: 16px; flex: none; border-radius: 50%; }
+.gc-cta { margin-top: 6px; height: 30px; border-radius: 5px; background: var(--ob-accent); color: #fff; font-size: 13px; font-weight: 500; }
+.gc-cta:disabled { opacity: 0.5; }
+.graph-controls-open { position: absolute; top: 12px; right: 12px; color: var(--ob-muted); background: var(--ob-bg); }
 .ob-graph { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; user-select: none; }
 
 /* thread top bar: project / glyph title */
