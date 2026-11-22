@@ -13,7 +13,7 @@ export function emptyTranscript(): Transcript
 export function resultText(content: unknown): string
 export function reduce(t: Transcript, e: any): Transcript
 export function fromSessionMessages(messages: any[]): Transcript
-export function summarizeCommand(command: string): { verb: string; present: string; kind?: 'look' }
+export function summarizeCommand(command: string): { verb: string; present: string; kind?: 'look'; meta?: string }
 export type StepGroup = { kind: 'group'; id: string; steps: ToolStep[]; verb: string; meta: string; live: boolean }
 export function groupSteps(steps: Step[]): (Step | StepGroup)[]
 export function patchLines(patch?: string): { t: ' ' | '+' | '-' | '@'; s: string }[]

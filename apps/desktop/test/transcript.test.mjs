@@ -140,7 +140,15 @@ test('summarizeCommand says what a command is for', () => {
   assert.equal(v("sed -n '1,40p' src/retry.ts"), 'Read files')
   assert.equal(v('ls -la'), 'Listed files')
   assert.equal(v('python3 scripts/seed.py'), 'Ran a script')
-  assert.equal(v('./deploy.sh --prod'), 'Ran a command')
+  assert.equal(v('./deploy.sh --prod'), 'Ran')
+  const m = c => summarizeCommand(c).meta
+  assert.equal(m('./deploy.sh --prod'), 'deploy.sh')
+  assert.equal(m('rg -n "withRetry" src'), 'withRetry')
+  assert.equal(m("git grep -n 'retry cap'"), 'retry cap')
+  assert.equal(m("sed -n '1,40p' src/retry.ts"), 'src/retry.ts')
+  assert.equal(m('python3 scripts/seed.py --n 3'), 'scripts/seed.py')
+  assert.equal(m('npm test'), undefined)
+  assert.equal(summarizeCommand('').verb, 'Ran a command')
   assert.equal(summarizeCommand('npm test').present, 'Running tests')
 })
 
@@ -154,6 +162,6 @@ test('groupSteps folds runs of reads and searches into one line', () => {
   ]
   const g = groupSteps(steps)
   assert.deepEqual(g.map(s => s.kind === 'group' ? `${s.verb}: ${s.meta} [${s.steps.map(x => x.id)}]` : s.id), [
-    'Investigated: 2 files, 1 search [1,2,3,4]', '5', 'Investigating: 1 file, 1 search [6,7]', '9', '8',
+    'Investigated: 2 files, 1 search [1,2,3,4]', '5', 'Investigating: 1 file, 1 check [6,7]', '9', '8',
   ])
 })

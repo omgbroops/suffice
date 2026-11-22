@@ -243,7 +243,7 @@ export function describeTool(name, input = {}) {
     case 'bash':
     case 'powershell':
       // say what the command is for; the command itself is in the row's detail
-      return { ...summarizeCommand(str(input.command)), meta: '' }
+      return { meta: '', ...summarizeCommand(str(input.command)) }
     case 'grep':
     case 'search':
       return { verb: 'Searched', meta: str(input.pattern) || str(input.query) }
@@ -281,8 +281,8 @@ const COMMANDS = [
   [/^git commit\b/, 'Committed', 'Committing'],
   [/^git (checkout|switch|branch)\b/, 'Switched branches', 'Switching branches'],
   [/^git (push|pull|fetch)\b/, 'Synced with the remote', 'Syncing with the remote'],
-  [/^git\b/, 'Used git', 'Using git'],
   [/^(rg|grep|ag|ack|git grep)\b/, 'Searched code', 'Searching code', 'look'],
+  [/^git\b/, 'Used git', 'Using git'],
   [/^(cat|head|tail|less|bat|wc|nl)\b|^sed -n\b/, 'Read files', 'Reading files', 'look'],
   [/^(ls|tree|find|fd|du|pwd|stat)\b/, 'Listed files', 'Listing files', 'look'],
   [/^(mkdir|mv|cp|rm|touch|chmod|ln|rmdir)\b/, 'Moved files around', 'Moving files around'],
@@ -294,8 +294,17 @@ const COMMANDS = [
 export function summarizeCommand(command) {
   const steps = command.split(/\n|&&|\|\||;|\|/).map(s => s.trim().replace(/^(sudo|time|env)\s+/, '').replace(/^([A-Z_][A-Z0-9_]*=\S*\s+)+/, '').replace(/^npx\s+/, ''))
   const main = steps.find(s => s && !/^(cd|export|set|source|\.)\b/.test(s)) ?? ''
-  for (const [re, verb, present, kind] of COMMANDS) if (re.test(main)) return { verb, present, ...(kind ? { kind } : {}) }
-  return { verb: 'Ran a command', present: 'Running a command' }
+  // the one argument worth showing: what was searched, read, listed or run
+  const words = (main.match(/'[^']*'|"[^"]*"|\S+/g) ?? []).map(w => w.replace(/^(['"])(.*)\1$/, '$2'))
+  const args = words.slice(words[0] === 'git' ? 2 : 1).filter(w => !w.startsWith('-'))
+  for (const [re, verb, present, kind] of COMMANDS) {
+    if (!re.test(main)) continue
+    const meta = verb === 'Searched code' ? args[0] : verb === 'Read files' ? args.at(-1) : verb === 'Listed files' ? args[0] : verb === 'Ran a script' ? args[0] : undefined
+    return { verb, present, ...(kind ? { kind } : {}), ...(meta ? { meta } : {}) }
+  }
+  // unknown command: name the program, never the whole line
+  const prog = (words[0] ?? '').split('/').pop()
+  return prog ? { verb: 'Ran', present: 'Running', meta: prog } : { verb: 'Ran a command', present: 'Running a command' }
 }
 
 const LOOK = new Set(['read', 'grep', 'search', 'find', 'glob', 'ls', 'list', 'symbols', 'symbol_read', 'symbol_references'])
@@ -313,8 +322,11 @@ export function groupSteps(steps) {
       // a shell cat/head/sed -n counts as a file read, like the read tool
       const reads = run.filter(s => s.name === 'read' || summarizeCommand(str(s.input?.command)).verb === 'Read files')
       const files = new Set(reads.map(s => str(s.input?.path) || str(s.input?.file) || str(s.input?.command)))
-      const searches = run.length - reads.length
-      const parts = [files.size && `${files.size} file${files.size === 1 ? '' : 's'}`, searches && `${searches} search${searches === 1 ? '' : 'es'}`].filter(Boolean)
+      // listings and git looks are neither reads nor searches, so they count as checks
+      const searches = run.filter(s => !reads.includes(s) && (['grep', 'search', 'find', 'glob'].includes(s.name) || summarizeCommand(str(s.input?.command)).verb === 'Searched code')).length
+      const checks = run.length - reads.length - searches
+      const n = (k, one, many) => k && `${k} ${k === 1 ? one : many}`
+      const parts = [n(files.size, 'file', 'files'), n(searches, 'search', 'searches'), n(checks, 'check', 'checks')].filter(Boolean)
       const live = run.some(s => s.status === 'running')
       out.push({ kind: 'group', id: run[0].id, steps: run, verb: live ? 'Investigating' : 'Investigated', meta: parts.join(', '), live })
     } else out.push(...run)
