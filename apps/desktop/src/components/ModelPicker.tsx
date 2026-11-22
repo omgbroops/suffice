@@ -43,12 +43,17 @@ function CostMeter({ cost }: { cost: number }) {
   )
 }
 
-/** Relative cost as five steps, ink only; exact prices live in the detail panel. */
-function CostSteps({ cost, title }: { cost: number; title: string }) {
-  const on = 1 + Math.round(Math.max(0, Math.min(1, cost)) * 4)
+const BAR = 44, SPAN = 0.42
+/**
+ * Devin's cost bar (Abhay 11-20: colour where the reference uses it): a thin track and a segment placed by the
+ * model's blended price, coloured by where it sits (green cheap, orange middle, purple dear), a white dot on the price.
+ */
+function CostBar({ m, cost }: { m: ModelInfo; cost: number }) {
+  const d = Math.min(1, Math.max(0, cost)), a = Math.min(1 - SPAN, Math.max(0, d - SPAN / 2))
   return (
-    <span className="mp-steps" title={title} aria-label={`Cost ${on} of 5`}>
-      {[0, 1, 2, 3, 4].map(i => <i key={i} className={i < on ? 'on' : undefined} />)}
+    <span className="mp-bar" title={`${money(m.cost.input)} in / ${money(m.cost.output)} out per 1M`} aria-label={`${money(m.cost.input)} in, ${money(m.cost.output)} out per million tokens`}>
+      <span className="mp-bar-range" style={{ left: a * BAR, width: SPAN * BAR, backgroundPosition: `${-a * BAR}px 0` }} />
+      <span className="mp-bar-dot" style={{ left: Math.min(BAR - 2, Math.max(2, d * BAR)) }} />
     </span>
   )
 }
@@ -479,7 +484,7 @@ export function ModelPicker(p: PickerProps) {
                           </span>
                           {fast[m.id] && <span className="mp-tag">Priority</span>}
                           {selectedId === m.id && <IconCheck size={13} className="mp-check" />}
-                          <CostSteps cost={costOf(m)} title={`${money(m.cost.input)} in / ${money(m.cost.output)} out per 1M`} />
+                          <CostBar m={m} cost={costOf(m)} />
                         </button>
                       )
                     })}

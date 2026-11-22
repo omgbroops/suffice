@@ -4,10 +4,9 @@
 .btn kbd { margin-left: 8px; font: 500 11px/1 var(--sans); opacity: 0.5; letter-spacing: 0; }
 
 /* model picker: relative cost as five ink steps */
-.mp-steps { display: inline-flex; align-items: flex-end; gap: 2px; margin-left: 10px; height: 10px; flex: none; }
-.mp-steps i { width: 3px; background: var(--text-4); opacity: 0.22; }
-.mp-steps i:nth-child(1) { height: 4px; } .mp-steps i:nth-child(2) { height: 5px; } .mp-steps i:nth-child(3) { height: 7px; } .mp-steps i:nth-child(4) { height: 8px; } .mp-steps i:nth-child(5) { height: 10px; }
-.mp-steps i.on { background: var(--text-2); opacity: 1; }
+.mp-bar { position: relative; width: 44px; height: 4px; margin-left: 10px; flex: none; border-radius: 2px; background: rgba(var(--wash), calc(0.09 * var(--a))); }
+.mp-bar-range { position: absolute; top: 0; height: 4px; border-radius: 2px; background: linear-gradient(90deg, #2f9e55, #e8913f 50%, #a66bd8) 0 0 / 44px 4px no-repeat; }
+.mp-bar-dot { position: absolute; top: 0; width: 4px; height: 4px; margin-left: -2px; border-radius: 2px; background: #fff; box-shadow: 0 0 0 0.5px rgba(0,0,0,.25); }
 
 /* home: one way back into the last thread */
 .home-continue { margin-top: 14px; width: 100%; height: 36px; display: flex; align-items: center; gap: 10px; padding: 0 14px; border-radius: 10px; color: var(--text-3); font-size: 13px; text-align: left; transition: background 150ms var(--ease), color 150ms var(--ease); }
