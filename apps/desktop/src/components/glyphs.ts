@@ -195,13 +195,14 @@ function arc({ c, S, t, s, ink }: G) {
 }
 
 // ---- gen: generated spinners (Abhay 11-22: grids A-F "I like a-f"; square <-> circle morphs; blocks and
-// shapes "okay"; the shaded 3D orbs dropped) ----
+// shapes "okay"; the shaded 3D orbs dropped; shapeshifters added 11-22: turn+breath+squircle, rubik face, orb,
+// breathing squircle) ----
 // The seed picks a family (grids weighted up), a motion, and small speed/direction changes.
-export const GEN_FAMILIES = ['grid', 'morph', 'blocks', 'shapes'] as const
-const GEN_VARIANTS = [6, 3, 3, 2]
+export const GEN_FAMILIES = ['grid', 'morph', 'blocks', 'shapes', 'shift'] as const
+const GEN_VARIANTS = [6, 3, 3, 2, 4]
 export function genPick(seed: number) {
   const r = rng(seed ^ 0x5bd1e995)
-  const u = r(), fam = u < 0.45 ? 0 : u < 0.67 ? 1 : u < 0.84 ? 2 : 3
+  const u = r(), fam = u < 0.36 ? 0 : u < 0.52 ? 1 : u < 0.64 ? 2 : u < 0.76 ? 3 : 4
   return { fam, v: Math.floor(r() * GEN_VARIANTS[fam]), speed: 0.85 + r() * 0.35, dir: r() < 0.5 ? 1 : -1, sides: r() < 0.5 ? 3 : 4, salt: Math.floor(r() * 1e9) }
 }
 
@@ -300,6 +301,7 @@ function gen(g: G) {
   const { S } = g, cx = S / 2, cy = S / 2
   if (p.fam === 0) return grid(g, p, T)
   if (p.fam === 1) return morph(g, p, T)
+  if (p.fam === 4) return shift(g, p, T)
   if (p.fam === 2) {
     const b = S * 0.34, o = (b + S * 0.09) / 2
     const cells = [[-o, -o], [o, -o], [o, o], [-o, o]]
@@ -347,6 +349,61 @@ function gen(g: G) {
   c.closePath()
   c.fill()
   c.restore()
+}
+
+// ---- shapeshifters: one filled outline drawn from a radius function r(theta) ----
+const seg = (t: number, a: number, b: number) => Math.min(1, Math.max(0, (t - a) / (b - a)))
+function polar(c: CanvasRenderingContext2D, cx: number, cy: number, R: number, rot: number, r: (th: number) => number) {
+  c.beginPath()
+  for (let i = 0; i <= 64; i++) {
+    const th = (i / 64) * TAU, k = R * r(th)
+    i ? c.lineTo(cx + Math.cos(th + rot) * k, cy + Math.sin(th + rot) * k) : c.moveTo(cx + Math.cos(th + rot) * k, cy + Math.sin(th + rot) * k)
+  }
+  c.closePath(); c.fill()
+}
+// superellipse |x|^n + |y|^n = 1: n 2 is a circle, 4-5 a squircle
+const squircle = (n: number) => (th: number) => Math.pow(Math.abs(Math.cos(th)) ** n + Math.abs(Math.sin(th)) ** n, -1 / n)
+
+function shift(g: G, p: ReturnType<typeof genPick>, T: number) {
+  const { c, S } = g, cx = S / 2, cy = S / 2
+  c.fillStyle = g.ink(0.95)
+  if (p.v === 0) {
+    // turn + breath + squircle: a quarter turn opens the square to a circle, it breathes once, then closes
+    const k = Math.floor(T / 1.8), t = frac(T / 1.8), open = ease(seg(t, 0, 0.32)), shut = ease(seg(t, 0.7, 1))
+    const breath = 1 - 0.16 * Math.sin(Math.PI * seg(t, 0.36, 0.7))
+    return polar(c, cx, cy, S * 0.34 * breath, (k + open) * (TAU / 4) * p.dir, squircle(4.5 - 2.5 * open + 2.5 * shut))
+  }
+  if (p.v === 1) {
+    // rubik face: 3x3, one row or column slides a cell and wraps round
+    const k = Math.floor(T / 0.62), t = ease(seg(frac(T / 0.62), 0.15, 0.85))
+    const grid = [[0, 1, 2], [1, 2, 0], [2, 0, 1]]
+    const move = (i: number) => [(i * 7) % 3, (i * 5 + 1) % 2 ? 1 : -1, i % 2] as const
+    const apply = ([l, d, col]: readonly [number, number, number]) => {
+      if (!col) grid[l] = d > 0 ? [grid[l][2], grid[l][0], grid[l][1]] : [grid[l][1], grid[l][2], grid[l][0]]
+      else { const v = [grid[0][l], grid[1][l], grid[2][l]], w = d > 0 ? [v[2], v[0], v[1]] : [v[1], v[2], v[0]]; w.forEach((x, y) => (grid[y][l] = x)) }
+    }
+    for (let i = 0; i < k % 24; i++) apply(move(i))
+    const [line, dir, col] = move(k % 24), pitch = S / 3, b = pitch * 0.78, A = [0.95, 0.55, 0.25]
+    c.save(); c.beginPath(); c.rect(0, 0, S, S); c.clip()
+    for (let y = 0; y < 3; y++)
+      for (let x = 0; x < 3; x++) {
+        const moving = col ? x === line : y === line
+        for (const wrap of moving ? [-3, 0, 3] : [0]) {
+          let px = (x + 0.5) * pitch, py = (y + 0.5) * pitch
+          if (moving) col ? (py += (dir * t + wrap) * pitch) : (px += (dir * t + wrap) * pitch)
+          c.fillStyle = g.ink(A[grid[y][x]]); c.beginPath(); c.roundRect(px - b / 2, py - b / 2, b, b, b * 0.24); c.fill()
+        }
+      }
+    return c.restore()
+  }
+  if (p.v === 2) {
+    // shapeshifting orb: a soft blob whose lobes drift between three and four
+    const m = (1 - Math.cos((TAU * T) / 2.4)) / 2, a = 0.07 + 0.03 * Math.sin((TAU * T) / 1.6)
+    return polar(c, cx, cy, S * 0.36, T * 0.9 * p.dir, th => 1 + a * ((1 - m) * Math.cos(3 * th) + m * Math.cos(4 * th + 0.6)))
+  }
+  // breathing squircle: corners breathe between circle and squircle with the size
+  const m = (1 - Math.cos((TAU * T) / 1.5)) / 2
+  polar(c, cx, cy, S * 0.36 * (0.84 + 0.16 * m), 0, squircle(2 + 3.5 * m))
 }
 
 const KINDS: Record<GlyphKind, (g: G) => void> = { swarm, orbit, ripple, eclipse, arc, gen }

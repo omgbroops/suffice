@@ -38,8 +38,8 @@ test('generated spinners: every family and motion is reachable and grid cells st
   const { genPick, GEN_FAMILIES } = await import('data:text/javascript,' + encodeURIComponent(stripTypeScriptTypes(src, { mode: 'transform' })))
   const seen = new Set()
   for (let i = 0; i < 4000; i++) { const p = genPick(hash('t' + i)); seen.add(p.fam + '-' + p.v) }
-  assert.equal(GEN_FAMILIES.length, 4)
-  assert.equal(seen.size, 6 + 3 + 3 + 2, 'all 14 motions occur')
+  assert.equal(GEN_FAMILIES.length, 5)
+  assert.equal(seen.size, 6 + 3 + 3 + 2 + 4, 'all 18 motions occur')
   for (let i = 0; i < 400; i++) {
     const seed = hash('t' + i)
     if (genPick(seed).fam !== 0) continue
@@ -61,4 +61,22 @@ test('generated spinners: every family and motion is reachable and grid cells st
       assert.ok(swings >= size.size / 2, `most cells shrink and grow back (seed ${i}, S ${S}: ${swings}/${size.size})`)
     }
   }
+})
+
+test('shapeshifters stay inside their box at every size and moment', async () => {
+  const { genPick } = await import('data:text/javascript,' + encodeURIComponent(stripTypeScriptTypes(src, { mode: 'transform' })))
+  let checked = 0
+  for (let i = 0; i < 600; i++) {
+    const seed = hash('s' + i)
+    if (genPick(seed).fam !== 4) continue
+    for (const S of [12, 16, 24]) for (const t of [0.05, 0.3, 0.6, 0.9, 1.2, 1.5, 2.1, 3.3]) {
+      const pts = []
+      const c = { save() {}, restore() {}, clip() {}, rect() {}, set fillStyle(v) {}, beginPath() {}, closePath() {}, fill() {}, clearRect() {},
+        moveTo(x, y) { pts.push([x, y]) }, lineTo(x, y) { pts.push([x, y]) }, roundRect() {} }
+      drawGlyph(c, S, 'gen', t, 'working', seed, '255,255,255', 1)
+      for (const [x, y] of pts) assert.ok(x >= -1e-6 && y >= -1e-6 && x <= S + 1e-6 && y <= S + 1e-6, `outline inside the box (seed ${i}, S ${S}, t ${t})`)
+      checked++
+    }
+  }
+  assert.ok(checked > 50, `checked ${checked} frames`)
 })
