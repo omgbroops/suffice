@@ -145,3 +145,6 @@ button.side-group-label:hover .side-group-chev, button.side-group-label:focus-vi
 /* tab: glyph + title form one plain button inside the tab */
 .tab-open { display: flex; align-items: center; gap: 7px; min-width: 0; flex: 1; height: 100%; padding: 0; border: 0; background: none; color: inherit; font: inherit; cursor: pointer; border-radius: 4px; }
 .tab-open:focus-visible { outline: 2px solid var(--focus, rgba(var(--wash), .4)); outline-offset: 2px; }
+
+/* a running command shows its last three output lines under the row */
+.step-tail { margin: 0 0 4px; padding-left: 12px; font-family: var(--mono); font-size: 11px; line-height: 16px; color: var(--text-4); white-space: pre; overflow: hidden; text-overflow: ellipsis; box-shadow: inset 1px 0 0 var(--hair); }

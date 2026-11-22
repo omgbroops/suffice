@@ -173,7 +173,24 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
       pi.on('tool_call', e => {
         push(threadId, { type: 'tool', id: e.toolCallId, parent: e.parentToolCallId, name: e.toolName, input: e.input })
       })
+      // partial output of a running tool (bash streams it): the latest snapshot at most every 250 ms,
+      // trailing, so a command that goes quiet still shows its last lines; dropped once the result lands
+      const pending = new Map()
+      pi.on('tool_execution_update', e => {
+        const output = resultText(e.partialResult?.content)
+        if (!output) return
+        const p = pending.get(e.toolCallId)
+        if (p) return void (p.output = output)
+        const entry = { output }
+        pending.set(e.toolCallId, entry)
+        setTimeout(() => {
+          if (pending.get(e.toolCallId) !== entry) return
+          pending.delete(e.toolCallId)
+          push(threadId, { type: 'tool_update', id: e.toolCallId, output: entry.output })
+        }, 250)
+      })
       pi.on('tool_result', e => {
+        pending.delete(e.toolCallId)
         push(threadId, { type: 'tool_result', id: e.toolCallId, isError: !!e.isError, output: resultText(e.content), patch: typeof e.details?.patch === 'string' ? e.details.patch : undefined })
       })
     }

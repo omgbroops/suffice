@@ -67,7 +67,7 @@ export function Prose({ text, onLink }: { text: string; onLink?: (href: string) 
   return <div className="prose">{blocks}</div>
 }
 
-function Row({ verb, meta, stat, children, defaultOpen = false, live, error }: { verb: string; meta?: string; stat?: ReactNode; children?: ReactNode; defaultOpen?: boolean; live?: boolean; error?: boolean }) {
+function Row({ verb, meta, stat, children, defaultOpen = false, live, error, tail }: { verb: string; meta?: string; stat?: ReactNode; children?: ReactNode; defaultOpen?: boolean; live?: boolean; error?: boolean; tail?: string }) {
   const [open, setOpen] = useState(defaultOpen)
   return (
     <div className={`step${open ? ' is-open' : ''}${error ? ' is-error' : ''}`}>
@@ -78,6 +78,7 @@ function Row({ verb, meta, stat, children, defaultOpen = false, live, error }: {
         {children && <IconChevronDown size={12} className="step-chev" />}
       </button>
       {open && children && <div className="step-body">{children}</div>}
+      {!open && tail && <pre className="step-tail" aria-live="off">{tail}</pre>}
     </div>
   )
 }
@@ -129,7 +130,7 @@ function ToolView({ step, project }: { step: ToolStep; project: string }) {
   const code = step.name === 'codemode' && typeof step.input?.code === 'string' ? step.input.code : null
   const body = command ? `$ ${step.input?.command ?? ''}${step.output ? `\n${step.output}` : ''}` : code ? `${code}${step.output ? `\n\n${step.output}` : ''}` : step.output
   return (
-    <Row verb={verb} meta={rel} live={live} error={error} stat={live && command ? <span className="step-time"><Elapsed from={step.startedAt ?? since} /></span> : undefined}>
+    <Row verb={verb} meta={rel} live={live} error={error} tail={live && command && step.output ? step.output.trimEnd().split('\n').slice(-3).join('\n') : undefined} stat={live && command ? <span className="step-time"><Elapsed from={step.startedAt ?? since} /></span> : undefined}>
       {body && (
         <div className="detail">
           {command && <div className="detail-head"><span className="detail-title">Command in {project.split(/[\\/]/).pop()}</span></div>}

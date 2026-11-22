@@ -113,3 +113,14 @@ test('compactDiff keeps two lines around changes and folds the rest', () => {
   // a short run between two changes is never folded
   assert.deepEqual(compactDiff(patchLines('@@ -1 +1 @@\n-a\n x\n y\n z\n+b')).map(l => l.t), ['-', ' ', ' ', ' ', '+'])
 })
+
+test('tool_update fills a running tool and never revives a finished one', () => {
+  let t = emptyTranscript()
+  for (const e of [{ type: 'user', id: 'u', text: 'go' }, { type: 'agent_start', id: 'a' }, { type: 'tool', id: 'b', name: 'bash', input: { command: 'npm test' } }, { type: 'tool_update', id: 'b', output: '1 passing' }]) t = reduce(t, { ...e, at: 1 })
+  const step = () => t.messages.at(-1).steps.find(s => s.id === 'b')
+  assert.equal(step().output, '1 passing')
+  assert.equal(step().status, 'running')
+  t = reduce(t, { type: 'tool_result', id: 'b', output: 'done', at: 2 })
+  t = reduce(t, { type: 'tool_update', id: 'b', output: 'late', at: 3 })
+  assert.equal(step().output, 'done')
+})

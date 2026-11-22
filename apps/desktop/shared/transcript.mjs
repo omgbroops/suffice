@@ -83,6 +83,13 @@ export function reduce(t, e) {
         a.steps.push({ kind: 'tool', id: e.id, parent: e.parent || undefined, name: e.name, input: e.input, status: 'running', startedAt: at })
         return a
       })
+    case 'tool_update':
+      return withAgent(a => {
+        const i = a.steps.findIndex(s => s.kind === 'tool' && s.id === e.id && s.status === 'running')
+        if (i < 0) return a
+        a.steps[i] = { ...a.steps[i], output: clip(e.output) }
+        return a
+      })
     case 'tool_result':
       return withAgent(a => {
         const i = a.steps.findIndex(s => s.kind === 'tool' && s.id === e.id)
