@@ -9,6 +9,7 @@ const wrap = (I: RadixIcon) => ({ size = 15, className }: P) => (
 )
 
 export const IconSidebar = wrap(R.ViewVerticalIcon)
+export const IconNotes = wrap(R.ReaderIcon)
 export const IconArrowLeft = wrap(R.ArrowLeftIcon)
 export const IconArrowRight = wrap(R.ArrowRightIcon)
 export const IconPlus = wrap(R.PlusIcon)

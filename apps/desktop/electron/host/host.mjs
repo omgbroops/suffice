@@ -21,6 +21,7 @@ import {
   sufficeFastCommand,
 } from '@suffice/harness'
 import { emptyTranscript, fromSessionMessages, reduce, resultText } from '../../shared/transcript.mjs'
+import { readNote, scanNotes } from './notes.mjs'
 
 export const PROVIDER = 'openai'
 export const DEFAULT_MODEL = 'gpt-6.1-sol'
@@ -401,6 +402,12 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     setProject,
     recentProjects: () => recentProjects(home),
     listThreads,
+    // notes are read only from a project the user has opened
+    listNotes: async ({ project }) => ((await recentProjects(home)).includes(project) ? scanNotes(project) : []),
+    readNote: async ({ project, path }) => {
+      if (!(await recentProjects(home)).includes(project)) throw new Error('Open that project first.')
+      return readNote(project, path)
+    },
     openThread: async ({ threadId, path }) => live.get(threadId)?.transcript ?? (await openTranscript(path)),
     run,
     abort,

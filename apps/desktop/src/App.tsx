@@ -8,8 +8,9 @@ import { ModelPicker } from './components/ModelPicker'
 import { ThreadView } from './components/ThreadView'
 import { Dither } from './components/Dither'
 import { Segmented, StatusGlyph } from './components/ui'
-import { IconArrowLeft, IconArrowRight, IconChevronDown, IconClose, IconCompose, IconFolder, IconHome, IconPlus, IconSearch, IconSelector, IconSidebar } from './icons'
+import { IconArrowLeft, IconArrowRight, IconChevronDown, IconClose, IconCompose, IconFolder, IconHome, IconNotes, IconPlus, IconSearch, IconSelector, IconSidebar } from './icons'
 import { ColorsContext, SearchPalette, SideProjects, groupByDate } from './components/Sidebar'
+import { NotesView } from './components/NotesView'
 
 type Thread = {
   key: string
@@ -22,8 +23,8 @@ type Thread = {
   loading?: boolean
 }
 
-type View = { kind: 'home' } | { kind: 'thread'; key: string }
-const same = (a: View, b: View) => a.kind === b.kind && (a.kind === 'home' || a.key === (b as { key: string }).key)
+type View = { kind: 'home' } | { kind: 'notes' } | { kind: 'thread'; key: string }
+const same = (a: View, b: View) => a.kind === b.kind && (a.kind !== 'thread' || a.key === (b as { key: string }).key)
 
 function statusOf(t: Thread): Status {
   const last = t.transcript?.messages.at(-1)
@@ -428,6 +429,12 @@ export default function App() {
             <IconHome size={13} />
             <span className="tab-label">Home</span>
           </button>
+          {view.kind === 'notes' && (
+            <button className="tab is-active">
+              <IconNotes size={13} />
+              <span className="tab-label">Notes</span>
+            </button>
+          )}
           {tabs.map(key => {
             const t = threads[key]
             if (!t) return null
@@ -465,6 +472,10 @@ export default function App() {
             <IconSearch size={14} />
             Search
             <kbd className="side-key">{platform === 'darwin' ? '⌘K' : 'Ctrl K'}</kbd>
+          </button>
+          <button className={`side-item${view.kind === 'notes' ? ' is-active' : ''}`} onClick={() => go({ kind: 'notes' })} disabled={!project} title={project ? undefined : 'Choose a project first'}>
+            <IconNotes size={14} />
+            Notes
           </button>
         </div>
         <div className="side-list">
@@ -514,7 +525,9 @@ export default function App() {
             </button>
           </div>
         )}
-        {active ? (
+        {view.kind === 'notes' && project ? (
+          <NotesView project={project} />
+        ) : active ? (
           <ThreadView
             key={active.key}
             title={active.title}

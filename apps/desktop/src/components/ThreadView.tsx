@@ -10,7 +10,7 @@ const duration = (s: number) => (s < 60 ? `${s}s` : s < 3600 ? `${Math.floor(s /
 
 const STATUS_LABEL: Record<Status, string> = { working: 'Working', done: 'Completed', input: 'Needs input', idle: 'Idle' }
 
-function inline(s: string): ReactNode[] {
+function inline(s: string, onLink?: (href: string) => void): ReactNode[] {
   const out: ReactNode[] = []
   // Links first, so a label in backticks stays inside its link.
   const re = /\[([^\]]+)\]\(([^)\s]+)\)|(`[^`]+`)|(\*\*[^*]+\*\*)/g
@@ -19,8 +19,9 @@ function inline(s: string): ReactNode[] {
   while ((m = re.exec(s))) {
     if (m.index > last) out.push(s.slice(last, m.index))
     if (m[1] !== undefined) {
-      const label = inline(m[1])
-      out.push(/^https?:/.test(m[2]) ? <a key={m.index} href={m[2]} target="_blank" rel="noreferrer">{label}</a> : <span key={m.index} title={m[2]}>{label}</span>)
+      const label = inline(m[1], onLink)
+      const href = m[2]
+      out.push(/^https?:/.test(href) ? <a key={m.index} href={href} target="_blank" rel="noreferrer">{label}</a> : onLink ? <button key={m.index} className="prose-link" onClick={() => onLink(href)}>{label}</button> : <span key={m.index} title={href}>{label}</span>)
     } else if (m[3]) out.push(<code key={m.index}>{m[3].slice(1, -1)}</code>)
     else out.push(<strong key={m.index}>{m[4].slice(2, -2)}</strong>)
     last = m.index + m[0].length
@@ -29,8 +30,8 @@ function inline(s: string): ReactNode[] {
   return out
 }
 
-/** Enough markdown for agent replies: paragraphs, lists, headings, fences, inline code, bold, links. */
-export function Prose({ text }: { text: string }) {
+/** Enough markdown for agent replies and notes: paragraphs, lists, headings, fences, inline code, bold, links. onLink handles non-web links. */
+export function Prose({ text, onLink }: { text: string; onLink?: (href: string) => void }) {
   const blocks: ReactNode[] = []
   const lines = text.replace(/\r\n/g, '\n').split('\n')
   let i = 0
@@ -43,19 +44,19 @@ export function Prose({ text }: { text: string }) {
       i++
       blocks.push(<pre key={blocks.length} className="code prose-code">{body.join('\n')}</pre>)
     } else if (/^#{1,4}\s/.test(line)) {
-      blocks.push(<p key={blocks.length} className="prose-h">{inline(line.replace(/^#+\s/, ''))}</p>)
+      blocks.push(<p key={blocks.length} className="prose-h">{inline(line.replace(/^#+\s/, ''), onLink)}</p>)
       i++
     } else if (/^\s*([-*]|\d+[.)])\s/.test(line)) {
       const ordered = /^\s*\d/.test(line)
       const items: string[] = []
       while (i < lines.length && /^\s*([-*]|\d+[.)])\s/.test(lines[i])) items.push(lines[i++].replace(/^\s*([-*]|\d+[.)])\s/, ''))
       const List = ordered ? 'ol' : 'ul'
-      blocks.push(<List key={blocks.length}>{items.map((it, j) => <li key={j}>{inline(it)}</li>)}</List>)
+      blocks.push(<List key={blocks.length}>{items.map((it, j) => <li key={j}>{inline(it, onLink)}</li>)}</List>)
     } else if (!line.trim()) i++
     else {
       const para: string[] = []
       while (i < lines.length && lines[i].trim() && !/^(```|#{1,4}\s|\s*([-*]|\d+[.)])\s)/.test(lines[i])) para.push(lines[i++])
-      blocks.push(<p key={blocks.length}>{para.map((p, j) => <Fragment key={j}>{j > 0 && <br />}{inline(p)}</Fragment>)}</p>)
+      blocks.push(<p key={blocks.length}>{para.map((p, j) => <Fragment key={j}>{j > 0 && <br />}{inline(p, onLink)}</Fragment>)}</p>)
     }
   }
   return <div className="prose">{blocks}</div>
