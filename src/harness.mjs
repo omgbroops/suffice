@@ -96,17 +96,22 @@ export const variants = Object.freeze([
   // Eco: Luna attempts the repair; Sol only runs when Luna's patch fails the
   // verifier. Escalate-on-failure keeps the strong model's ceiling while
   // paying its price only on misses — unlike review-on-success.
-  { id: 'eco-luna-sol', core: true, effort: 'low', fast: { speculativeTest: true }, eco: { cheapModel: 'gpt-6-luna', cheapEffort: 'low', prefill: true, cheapRetries: 2 } },
+  // effort 'medium' governs only the Sol escalation (cheap attempts stay pinned
+  // to low inside eco) — matches the shipped cheap-first modes.
+  { id: 'eco-luna-sol', core: true, effort: 'medium', fast: { speculativeTest: true }, eco: { cheapModel: 'gpt-6-luna', cheapEffort: 'low', prefill: true, cheapRetries: 2 } },
   // Auto mode: one Luna classify call routes the task — repairs go cheap-first
   // (eco), features go to the strong model directly, the rest get the race.
-  { id: 'auto', core: true, effort: 'low', fast: { speculativeTest: true }, auto: {} },
+  // effort 'medium' matches the shipped /efficient command, whose escalation and
+  // feature paths run at the session thinkingLevel (cheap attempts stay pinned
+  // to low inside eco/auto themselves).
+  { id: 'auto', core: true, effort: 'medium', fast: { speculativeTest: true }, auto: {} },
   // Stock Pi: default tools, default prompt, no Suffice mechanisms — the true
   // upstream baseline. Model stays on the subscription default.
   { id: 'base-pi', basePi: true },
   // Auto-ladder: classify like auto, but a failed solo attempt escalates to a
   // stronger harness shape — race-3 seeded with the losing attempt's diff —
   // instead of another solo try. Mid-run mode routing at the attempt boundary.
-  { id: 'auto-ladder', core: true, effort: 'low', fast: { speculativeTest: true }, autoLadder: {} },
+  { id: 'auto-ladder', core: true, effort: 'medium', fast: { speculativeTest: true }, autoLadder: {} },
   // Per-call effort routing: medium thinking while exploring/planning, low for
   // the edit turns that follow.
   { id: 'effort-route', core: true, effort: 'medium', effortRoute: { to: 'low', afterTurns: 2 } },
