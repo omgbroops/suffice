@@ -159,8 +159,9 @@ function RaceView({ step }: { step: RaceStep }) {
           <div key={name} className={`race-lane is-${state}`}>
             {state === 'running' ? <Live status="working" size={12} seed={name} phase={i * 0.6} /> : <span className="race-dot" />}
             <span className="race-name">{name}</span>
+            {/* no timer while running: the lanes start together, so it repeats "Working for" (Abhay 11-20: less clutter) */}
             <span className="race-state">
-              {state === 'running' && r ? <Elapsed from={r.startedAt} /> : state === 'won' ? `Won · ${r?.changes ?? 0} change${r?.changes === 1 ? '' : 's'}` : LANE_STATE[state] ?? 'Starting'}
+              {state === 'running' ? null : state === 'won' ? `Won · ${r?.changes ?? 0} change${r?.changes === 1 ? '' : 's'}` : LANE_STATE[state] ?? 'Starting'}
             </span>
           </div>
         )
