@@ -60,6 +60,7 @@ export const api = {
   openThread: (threadId: string, path: string) => bridge().invoke<Transcript>('threads:open', { threadId, path }),
   run: (args: { threadId: string; path?: string; project: string; prompt: string; model: string; effort: string; fast: boolean; mode: Mode; cheapModel: string }) => bridge().invoke<{ threadId: string; effort: string; mode: Mode }>('run:start', args),
   abort: (threadId: string) => bridge().invoke('run:abort', { threadId }),
+  guide: (threadId: string, text: string, queue: boolean) => bridge().invoke('run:guide', { threadId, text, queue }),
   answerApproval: (id: string, allow: boolean) => bridge().invoke('approval:answer', { id, allow }),
   updateSettings: (patch: Partial<Settings>) => bridge().invoke<Settings>('settings:update', patch),
   on: (channel: string, listener: (payload: any) => void) => bridge().on(channel, listener),

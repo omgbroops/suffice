@@ -12,6 +12,8 @@ type Props = {
   model: ReactNode
   onSend: (text: string) => void
   onStop?: () => void
+  /** While working: Enter steers the run, queue=true (Cmd/Ctrl+Enter) waits for it to finish. */
+  onGuide?: (text: string, queue: boolean) => void
 }
 
 const MAX = 260
@@ -30,7 +32,12 @@ export function Composer(p: Props) {
   }, [text])
 
   const canSend = text.trim().length > 0 && !p.working && !p.disabled
-  const send = () => {
+  const send = (queue = false) => {
+    if (p.working && p.onGuide && text.trim() && !p.disabled) {
+      p.onGuide(text.trim(), queue)
+      setText('')
+      return
+    }
     if (!canSend) return
     p.onSend(text.trim())
     setText('')
@@ -50,7 +57,7 @@ export function Composer(p: Props) {
           onKeyDown={e => {
             if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
               e.preventDefault()
-              send()
+              send(e.metaKey || e.ctrlKey)
             }
           }}
         />
@@ -73,7 +80,7 @@ export function Composer(p: Props) {
             <IconStop size={13} />
           </button>
         ) : (
-          <button className="send-btn" disabled={!canSend} onClick={send} aria-label="Send" title={p.disabled}>
+          <button className="send-btn" disabled={!canSend} onClick={() => send()} aria-label="Send" title={p.disabled}>
             <IconArrowUp size={15} />
           </button>
         )}

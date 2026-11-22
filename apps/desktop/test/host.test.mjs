@@ -103,6 +103,39 @@ test('a run streams events, waits for approval and saves its transcript', async 
   }
 })
 
+test('guide steers or queues a running thread and refuses otherwise', async () => {
+  const home = await mkdtemp(join(tmpdir(), 'suffice-desktop-'))
+  try {
+    const sent = []
+    let release
+    const gate = new Promise(r => (release = r))
+    const createSession = async () => ({
+      session: { model: MODELS[0], setModel: async () => {}, setThinkingLevel: () => {}, subscribe: () => {}, steer: async t => sent.push(['steer', t]), followUp: async t => sent.push(['followUp', t]) },
+      totals: {},
+      sessionPath: () => join(home, 'g.jsonl'),
+      abort: () => {},
+      dispose: async () => {},
+      run: () => gate,
+    })
+    const notes = []
+    const host = await createHost({ home, runtime: fakeRuntime(), createSession, openExternal: () => {}, chooseDirectory: async () => home, emit: (c, p) => c === 'thread:event' && p.event.type === 'note' && notes.push(p.event.text) })
+    await assert.rejects(host.guide({ threadId: 'g', text: 'x' }), /Nothing is running/)
+    await host.run({ threadId: 'g', project: home, prompt: 'go', model: 'gpt-6.1-sol', effort: 'low' })
+    await host.guide({ threadId: 'g', text: ' use the fake clock ' })
+    await host.guide({ threadId: 'g', text: 'then update docs', queue: true })
+    await assert.rejects(host.guide({ threadId: 'g', text: '  ' }), /Nothing to send/)
+    assert.deepEqual(sent, [['steer', 'use the fake clock'], ['followUp', 'then update docs']])
+    assert.deepEqual(notes, ['You: use the fake clock', 'Queued: then update docs'])
+    await host.run({ threadId: 'f', project: home, prompt: 'go', model: 'gpt-6.1-sol', effort: 'low', mode: 'fast' })
+    await assert.rejects(host.guide({ threadId: 'f', text: 'x' }), /Balanced mode only/)
+    release()
+    await new Promise(r => setTimeout(r, 50)) // both runs end and save before cleanup
+    await host.dispose()
+  } finally {
+    await rm(home, { recursive: true, force: true })
+  }
+})
+
 test('runs refuse without a project or with an unknown model', async () => {
   const home = await mkdtemp(join(tmpdir(), 'suffice-desktop-'))
   try {

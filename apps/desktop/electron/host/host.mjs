@@ -258,6 +258,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     if (existing?.running) throw new Error('This thread is already running.')
     const thread = await ensureAgent(threadId, { path, project, model, effort: level, fast })
     thread.running = true
+    thread.mode = mode
     push(threadId, { type: 'user', id: randomUUID(), text: prompt })
     const cheapInfo = mode === 'efficient' ? runtime.getModel(PROVIDER, cheapModel) : null
     push(threadId, { type: 'agent_start', id: randomUUID(), model: info.name ?? model, effort: level, mode, cheap: cheapInfo?.name })
@@ -292,6 +293,20 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
       }
     })()
     return { threadId, effort: level, mode }
+  }
+
+  /** Mid-run input: steer reaches the agent before its next step; queue waits until it finishes. */
+  async function guide({ threadId, text, queue = false }) {
+    const thread = live.get(threadId)
+    const body = String(text ?? '').trim()
+    if (!body) throw new Error('Nothing to send.')
+    if (!thread?.running) throw new Error('Nothing is running in this thread.')
+    // Efficient and Fast runs drive their own attempts; mid-run input would land in the wrong one.
+    if (thread.mode && thread.mode !== 'balanced') throw new Error('Guiding works in Balanced mode only.')
+    const session = thread.agent.session
+    await (queue ? session.followUp(body) : session.steer(body))
+    push(threadId, { type: 'note', text: queue ? `Queued: ${body}` : `You: ${body}`, level: 'info' })
+    return true
   }
 
   function abort(threadId) {
@@ -389,6 +404,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     openThread: async ({ threadId, path }) => live.get(threadId)?.transcript ?? (await openTranscript(path)),
     run,
     abort,
+    guide,
     answerApproval,
     updateSettings,
     dispose,

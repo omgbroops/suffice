@@ -495,10 +495,17 @@ export default function App() {
                 key={active.key}
                 project={projectPicker(active.project, true)}
                 autoFocus
-                placeholder={statusOf(active) === 'input' ? 'Answer the request above first' : 'Ask for a follow-up…'}
+                placeholder={
+                  statusOf(active) === 'input'
+                    ? 'Answer the request above first'
+                    : active.running
+                      ? `Guide Suffice while it works, or ${platform === 'darwin' ? '⌘↵' : 'Ctrl+Enter'} to queue`
+                      : 'Ask for a follow-up…'
+                }
                 working={active.running}
                 onSend={text => void send(active.key, text)}
                 onStop={() => void api.abort(active.key)}
+                onGuide={(text, queue) => void api.guide(active.key, text, queue).catch(e => setNotice(e instanceof Error ? e.message : String(e)))}
               />
             }
           />

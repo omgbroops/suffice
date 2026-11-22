@@ -59,6 +59,7 @@ const handlers = {
   'threads:open': args => host.openThread(args),
   'run:start': args => host.run(args),
   'run:abort': ({ threadId }) => host.abort(threadId),
+  'run:guide': args => host.guide(args),
   'approval:answer': ({ id, allow }) => host.answerApproval(id, allow),
   'settings:update': patch => host.updateSettings(patch),
 }
