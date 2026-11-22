@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { api, type NoteSummary } from '../api'
 import { ago } from '../data'
 import { IconSearch } from '../icons'
 import { Prose } from './ThreadView'
-import { baseName } from './Pickers'
-import { ProjectEmblem } from './Sidebar'
+import { displayName } from './groups'
+import { NamesContext, ProjectEmblem } from './Sidebar'
 
 const stem = (p: string) => p.split('/').pop()!.replace(/\.(md|markdown)$/i, '')
 const dir = (p: string) => (p.includes('/') ? p.slice(0, p.lastIndexOf('/')) : '')
@@ -129,6 +129,7 @@ function LocalGraph({ notes, current, project, onOpen }: { notes: NoteSummary[];
 const lastNote = new Map<string, string>()
 
 export function NotesView({ project }: { project: string }) {
+  const projectName = displayName(useContext(NamesContext), project)
   const [notes, setNotes] = useState<NoteSummary[] | null>(null)
   const [current, setCurrentRaw] = useState<string | null>(null)
   const [page, setPage] = useState<{ path: string; text?: string; error?: string } | null>(null)
@@ -178,7 +179,7 @@ export function NotesView({ project }: { project: string }) {
   if (notes && notes.length === 0)
     return (
       <div className="notes-empty">
-        <p>No markdown notes in {baseName(project)} yet.</p>
+        <p>No markdown notes in {projectName} yet.</p>
         <p className="meta">Notes are the .md files in the project folder; [[links]] between them draw the graph.</p>
       </div>
     )
@@ -194,7 +195,7 @@ export function NotesView({ project }: { project: string }) {
           {list.map(n => (
             <button key={n.path} role="option" aria-selected={n.path === current} className={`notes-row${n.path === current ? ' is-active' : ''}`} onClick={() => setCurrent(n.path)} title={n.path}>
               <span className="side-thread-title">{n.title}</span>
-              <span className="notes-row-meta">{dir(n.path) || baseName(project)}</span>
+              <span className="notes-row-meta">{dir(n.path) || projectName}</span>
             </button>
           ))}
         </div>
@@ -202,7 +203,7 @@ export function NotesView({ project }: { project: string }) {
       <article className="notes-page">
         {note && (
           <div className="notes-crumbs">
-            <span>{[baseName(project), ...dir(note.path).split('/').filter(Boolean)].join(' / ')}</span>
+            <span>{[projectName, ...dir(note.path).split('/').filter(Boolean)].join(' / ')}</span>
             <span className="meta">{ago(note.modified)}</span>
           </div>
         )}

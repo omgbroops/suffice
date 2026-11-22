@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url'
 import { dirname, relative, resolve, sep } from 'node:path'
 import { createHost } from './host/host.mjs'
 import { inside } from './host/notes.mjs'
+import { gitIdentity } from './host/git.mjs'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const devUrl = process.env.SUFFICE_DESKTOP_DEV_URL
@@ -58,6 +59,7 @@ const applyTheme = s => { if (['system', 'light', 'dark'].includes(s?.theme)) na
 
 const handlers = {
   'app:init': () => host.init(),
+  'git:identity': () => gitIdentity(),
   'auth:login': () => host.login(),
   'auth:answer': ({ id, value }) => host.answerLogin(id, value),
   'auth:cancel': () => host.cancelLogin(),

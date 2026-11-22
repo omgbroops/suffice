@@ -3,13 +3,14 @@ import { api, type AuthEvent, type InitInfo, type ModelInfo, type Settings, type
 import { emptyTranscript, reduce, type Transcript } from '../shared/transcript.mjs'
 import { ago, type Status } from './data'
 import { Composer } from './components/Composer'
-import { PermissionPicker, ProjectPicker, baseName } from './components/Pickers'
+import { PermissionPicker, ProjectPicker } from './components/Pickers'
 import { ModelPicker } from './components/ModelPicker'
 import { ThreadView } from './components/ThreadView'
 import { Dither } from './components/Dither'
 import { Segmented, StatusGlyph } from './components/ui'
-import { IconArrowLeft, IconArrowRight, IconChevronDown, IconClose, IconCompose, IconFolder, IconHome, IconNotes, IconPlus, IconSearch, IconSelector, IconSidebar } from './icons'
-import { ColorsContext, ProjectEmblem, SearchPalette, SideProjects, groupThreads } from './components/Sidebar'
+import { IconArrowLeft, IconArrowRight, IconClose, IconCompose, IconFolder, IconHome, IconNotes, IconPlus, IconSearch, IconSelector, IconSidebar } from './icons'
+import { ColorsContext, IconsContext, NamesContext, ProjectEmblem, SearchPalette, SideProjects } from './components/Sidebar'
+import { baseName, displayName, threadsByProject } from './components/groups'
 import { NotesView } from './components/NotesView'
 import { Live } from './components/Live'
 
@@ -129,61 +130,6 @@ function SignIn({ platform, onDone }: { platform: string; onDone: () => void }) 
   )
 }
 
-function ProjectMenu({ project, projects, onPick, onBrowse }: { project: string | null; projects: string[]; onPick: (p: string) => void; onBrowse: () => void }) {
-  const [open, setOpen] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
-  useEffect(() => {
-    if (!open) return
-    const close = (e: MouseEvent | KeyboardEvent) => {
-      if (e instanceof KeyboardEvent ? e.key === 'Escape' : !ref.current?.contains(e.target as Node)) setOpen(false)
-    }
-    document.addEventListener('mousedown', close)
-    document.addEventListener('keydown', close)
-    return () => {
-      document.removeEventListener('mousedown', close)
-      document.removeEventListener('keydown', close)
-    }
-  }, [open])
-  return (
-    <div className="menu-root side-project" ref={ref}>
-      <button className={`side-item${open ? ' is-active' : ''}`} onClick={() => setOpen(o => !o)} title={project ?? undefined}>
-        <IconFolder size={14} />
-        <span className="side-project-name">{project ? baseName(project) : 'Choose a project'}</span>
-        <IconChevronDown size={12} className="side-project-chev" />
-      </button>
-      {open && (
-        <div className="menu menu-bottom side-project-menu" role="listbox">
-          {projects.map(p => (
-            <button
-              key={p}
-              role="option"
-              aria-selected={p === project}
-              className={`menu-item${p === project ? ' is-selected' : ''}`}
-              title={p}
-              onClick={() => {
-                setOpen(false)
-                onPick(p)
-              }}
-            >
-              <span className="menu-item-main">{baseName(p)}</span>
-              <span className="menu-item-sub">{p}</span>
-            </button>
-          ))}
-          <button
-            className="menu-item menu-item-action"
-            onClick={() => {
-              setOpen(false)
-              onBrowse()
-            }}
-          >
-            Open folder…
-          </button>
-        </div>
-      )}
-    </div>
-  )
-}
-
 export default function App() {
   const [info, setInfo] = useState<InitInfo | null>(null)
   const [bootError, setBootError] = useState('')
@@ -195,14 +141,7 @@ export default function App() {
   const [hist, setHist] = useState<{ stack: View[]; i: number }>({ stack: [{ kind: 'home' }], i: 0 })
   const [sidebar, setSidebar] = useState(true)
   const [search, setSearch] = useState(false)
-  // folded sidebar groups survive restarts; storage can be unavailable, so it is best-effort
-  const [folded, setFolded] = useState<string[]>(() => { try { const v = JSON.parse(localStorage.getItem('suffice.folded') ?? '[]'); return Array.isArray(v) ? v.filter(x => typeof x === 'string') : [] } catch { return [] } })
-  const toggleFold = (label: string) =>
-    setFolded(f => {
-      const next = f.includes(label) ? f.filter(l => l !== label) : [...f, label]
-      try { localStorage.setItem('suffice.folded', JSON.stringify(next)) } catch {}
-      return next
-    })
+  const [git, setGit] = useState('')
   const [notice, setNotice] = useState('')
   const [env, setEnv] = useState<'local' | 'cloud'>('local')
   const [, tick] = useState(0)
@@ -216,6 +155,7 @@ export default function App() {
     try {
       const i = await api.init()
       setInfo(i)
+      api.gitIdentity().then(setGit, () => setGit('Git not set up'))
       setSettings(i.settings)
       setProjects(i.projects)
       if (i.signedIn) setModels(await api.models())
@@ -347,7 +287,11 @@ export default function App() {
     return () => (window.removeEventListener('keydown', onKey), off())
   }, [view])
 
+  // the newest settings, optimistic patches included, so two quick map edits don't spread the same stale map
+  const liveSettings = useRef(settings)
+  liveSettings.current = settings
   const patchSettings = async (patch: Partial<Settings>) => {
+    liveSettings.current = liveSettings.current && { ...liveSettings.current, ...patch }
     setSettings(s => (s ? { ...s, ...patch } : s))
     setSettings(await api.updateSettings(patch))
   }
@@ -439,15 +383,29 @@ export default function App() {
     locked ? (
       <span className="ghost-btn is-static" title={current ?? undefined}>
         {current ? <ProjectEmblem path={current} size={14} /> : <IconFolder size={14} />}
-        {current ? baseName(current) : ''}
+        {current ? displayName(settings.projectNames ?? {}, current) : ''}
       </span>
     ) : (
       <ProjectPicker project={current} projects={projects} onPick={p => void pickProject(p)} onAdd={() => void browseProject()} />
     )
   const composerProps = { permissions, model: picker }
+  const grouped = threadsByProject(list, projects)
+  const renderThread = (t: Thread & { key: string }) => (
+    <button key={t.key} className={`side-thread${active?.key === t.key ? ' is-active' : ''}`} onClick={() => go({ kind: 'thread', key: t.key })} title={`${t.title} · ${displayName(settings.projectNames ?? {}, t.project)}`}>
+      <span className="side-thread-title">{t.title}</span>
+      {/* one trailing slot: live glyph while running, else age */}
+      {statusOf(t) === 'working' ? (
+        <StatusGlyph status="working" seed={t.key} />
+      ) : (
+        <span className={`side-thread-time${statusOf(t) === 'input' ? ' is-needs' : ''}`}>{statusOf(t) === 'input' ? 'Reply' : ago(t.modified)}</span>
+      )}
+    </button>
+  )
 
   return (
     <ColorsContext.Provider value={settings?.projectColors ?? {}}>
+    <NamesContext.Provider value={settings?.projectNames ?? {}}>
+    <IconsContext.Provider value={settings?.projectIcons ?? {}}>
     <div className={`app${sidebar ? '' : ' no-sidebar'}`}>
       <Titlebar platform={platform}>
         <div className="titlebar-lead">
@@ -531,34 +489,28 @@ export default function App() {
               projects={projects}
               current={project}
               running={new Set(list.filter(t => t.running).map(t => t.project))}
+              byProject={grouped.byProject}
+              renderThread={renderThread}
               onPick={p => (void pickProject(p), go({ kind: 'home' }))}
               onAdd={() => void browseProject()}
-              onTint={(p, c) => void patchSettings({ projectColors: { ...settings?.projectColors, [p]: c } })}
+              onTint={(p, c) => void patchSettings({ projectColors: { ...liveSettings.current?.projectColors, [p]: c } })}
+              onIcon={(p, i) => void patchSettings({ projectIcons: { ...liveSettings.current?.projectIcons, [p]: i } })}
+              onRename={(p, name) => {
+                const { [p]: _gone, ...rest } = liveSettings.current?.projectNames ?? {}
+                void patchSettings({ projectNames: name && name !== baseName(p) ? { ...rest, [p]: name } : rest })
+              }}
             />
           )}
-          <div className="side-label">Threads</div>
-          {list.length === 0 && <div className="side-empty">No threads yet.</div>}
-          {groupThreads(list).map(([label, items]) => (
-            <div key={label} className={`side-group${folded.includes(label) ? ' is-folded' : ''}`} role="group" aria-label={label}>
-              <button className="side-group-label" aria-expanded={!folded.includes(label)} onClick={() => toggleFold(label)}>
-                {label}
-                <IconChevronDown size={11} className="side-group-chev" />
-              </button>
-              {!folded.includes(label) && items.map(t => (
-                <button key={t.key} className={`side-thread${active?.key === t.key ? ' is-active' : ''}`} onClick={() => go({ kind: 'thread', key: t.key })} title={`${t.title} · ${baseName(t.project)}`}>
-                  <span className="side-thread-title">{t.title}</span>
-                  {/* one trailing slot: live glyph while running, else age */}
-                  {statusOf(t) === 'working' ? (
-                    <StatusGlyph status="working" seed={t.key} />
-                  ) : (
-                    <span className={`side-thread-time${statusOf(t) === 'input' ? ' is-needs' : ''}`}>{statusOf(t) === 'input' ? 'Reply' : ago(t.modified)}</span>
-                  )}
-                </button>
-              ))}
-            </div>
-          ))}
+          {projects.length === 0 && list.length === 0 && <div className="side-empty">No threads yet.</div>}
+          {grouped.other.length > 0 && (
+            <>
+              <div className="side-label">Other threads</div>
+              <div className="side-projects">{grouped.other.map(renderThread)}</div>
+            </>
+          )}
         </div>
         <AccountMenu
+          identity={git}
           theme={settings?.theme ?? 'system'}
           onTheme={theme => void patchSettings({ theme })}
           onSignOut={async () => {
@@ -639,6 +591,8 @@ export default function App() {
       </main>
       {search && <SearchPalette threads={list} onClose={() => setSearch(false)} onOpen={key => (setSearch(false), go({ kind: 'thread', key }))} />}
     </div>
+    </IconsContext.Provider>
+    </NamesContext.Provider>
     </ColorsContext.Provider>
   )
 }
@@ -668,7 +622,7 @@ function HomeContinue({ thread, onOpen }: { thread: Thread & { key: string }; on
 
 type Theme = 'system' | 'light' | 'dark'
 
-function AccountMenu({ onSignOut, theme, onTheme }: { onSignOut: () => void; theme: Theme; onTheme: (t: Theme) => void }) {
+function AccountMenu({ identity, onSignOut, theme, onTheme }: { identity: string; onSignOut: () => void; theme: Theme; onTheme: (t: Theme) => void }) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -693,6 +647,10 @@ function AccountMenu({ onSignOut, theme, onTheme }: { onSignOut: () => void; the
               ]}
             />
           </div>
+          <div className="menu-row menu-status">
+            <span>ChatGPT</span>
+            <span className="menu-status-val"><span className="side-user-dot" aria-hidden />Signed in</span>
+          </div>
           <button className="menu-item" onClick={() => (setOpen(false), onSignOut())}>
             Sign out
           </button>
@@ -700,8 +658,7 @@ function AccountMenu({ onSignOut, theme, onTheme }: { onSignOut: () => void; the
       )}
       <button className="side-user" onClick={() => setOpen(o => !o)}>
         <span className="avatar"><Live kind="swarm" seed="account" size={16} status="done" dim={false} label="Account" /></span>
-        <span className="side-user-name">ChatGPT account</span>
-        <span className="side-user-dot" role="img" aria-label="Signed in" title="Signed in" />
+        <span className="side-user-name">{identity || 'Account'}</span>
         <IconSelector size={13} className="side-user-chev" />
       </button>
     </div>

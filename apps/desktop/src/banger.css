@@ -40,7 +40,18 @@
 .side-proj-more { margin-right: 3px; }
 .side-proj-more > .icon-btn { color: var(--text-4); opacity: 0; transition: opacity 150ms var(--ease); }
 .side-proj:hover .side-proj-more > .icon-btn, .side-proj-more > .icon-btn[aria-expanded='true'], .side-proj-more > .icon-btn:focus-visible { opacity: 1; }
-.tint-menu { min-width: 0; flex-direction: row; gap: 2px; padding: 4px; }
+.proj-menu { min-width: 0; width: 232px; padding: 4px; }
+.proj-menu-label { padding: 6px 10px 2px; font-size: 11.5px; color: var(--text-4); }
+.proj-menu-row { display: flex; gap: 0; padding: 0 2px 2px; }
+.proj-icon { display: inline-grid; place-items: center; flex: none; }
+.side-proj-edit { flex: 1; min-width: 0; height: 22px; padding: 0 6px; border-radius: 5px; background: var(--hover); color: var(--text); font: inherit; box-shadow: inset 0 0 0 1px var(--hair); }
+.side-proj-chev { color: var(--text-4); opacity: 0; transition: opacity 150ms var(--ease), transform 150ms var(--ease); }
+.side-proj:hover .side-proj-chev, .side-proj-chev:focus-visible { opacity: 1; }
+.side-proj-chev.is-open { transform: rotate(90deg); }
+.side-proj-threads { display: flex; flex-direction: column; gap: 1px; padding: 1px 0 4px 14px; }
+.side-more { height: 24px; padding: 0 12px; text-align: left; font-size: 11.5px; color: var(--text-4); border-radius: 6px; }
+.side-more:hover { color: var(--text-3); background: var(--hover); }
+.menu-status-val { display: inline-flex; align-items: center; gap: 6px; padding-right: 6px; color: var(--text-3); }
 .tint-swatch { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 5px; transition: background-color 150ms var(--ease); }
 .tint-swatch:hover { background: var(--hover); }
 .tint-swatch.is-selected { background: rgba(var(--wash), calc(0.08 * var(--a))); }
@@ -131,12 +142,6 @@
 .race-dot { border-radius: 50%; }
 
 /* thread group headers fold on click */
-button.side-group-label { display: flex; align-items: center; gap: 4px; width: 100%; text-align: left; border-radius: 6px; }
-button.side-group-label:hover { color: var(--text-3); }
-.side-group-chev { opacity: 0; transition: opacity 150ms var(--ease), transform 150ms var(--ease); }
-button.side-group-label:hover .side-group-chev, button.side-group-label:focus-visible .side-group-chev, .side-group.is-folded .side-group-chev { opacity: 1; }
-.side-group.is-folded .side-group-chev { transform: rotate(-90deg); }
-
 /* account menu: theme row above Sign out */
 .account-menu { left: 8px; right: 8px; min-width: 0; }
 .menu-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 4px 4px 6px 10px; color: var(--text-2); box-shadow: 0 1px 0 var(--hair); margin-bottom: 4px; }
