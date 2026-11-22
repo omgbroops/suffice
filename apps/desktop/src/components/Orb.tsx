@@ -2,8 +2,8 @@ import { useEffect, useRef } from 'react'
 import { hashName, orbPalette, rng } from '../../shared/orb.mjs'
 
 type Draw = (c: CanvasRenderingContext2D, S: number, name: string, cols: string[]) => void
-// The three emblem styles Abhay passed on the round-7 sheet (11-22).
-const STYLES: Record<'marble' | 'swirl' | 'bands', Draw> = {
+// Emblem styles from the round-7 sheet; orbStyle picks the one in use.
+const STYLES: Record<'marble' | 'mesh' | 'swirl' | 'bands', Draw> = {
   // base colour plus two blurred shapes (boring-avatars' marble, MIT, rebuilt)
   marble(c, S, name, cols) {
     const r = rng(hashName(name) ^ 0xa1)
@@ -16,6 +16,18 @@ const STYLES: Record<'marble' | 'swirl' | 'bands', Draw> = {
       c.fill(); c.restore()
     }
     c.filter = 'none'
+  },
+  // three soft pools of light at seeded spots
+  mesh(c, S, name, cols) {
+    const r = rng(hashName(name) ^ 0xb2)
+    c.fillStyle = cols[1]; c.fillRect(0, 0, S, S)
+    const a0 = r() * 6.28
+    for (const k of [0, 2, 1]) {
+      const a = a0 + k * 2.1, x = S / 2 + Math.cos(a) * S * 0.32, y = S / 2 + Math.sin(a) * S * 0.32
+      const g = c.createRadialGradient(x, y, 0, x, y, S * 0.62)
+      g.addColorStop(0, cols[k]); g.addColorStop(1, cols[k].replace(')', ' / 0)'))
+      c.fillStyle = g; c.fillRect(0, 0, S, S)
+    }
   },
   // a conic sweep through the three colours, softened
   swirl(c, S, name, cols) {
@@ -39,9 +51,9 @@ const STYLES: Record<'marble' | 'swirl' | 'bands', Draw> = {
     c.restore(); c.filter = 'none'
   },
 }
-// Abhay 11-22: "marble swirl bands are all good" (mesh not picked); each project gets one of the three from its path
-const PICKED = ['marble', 'swirl', 'bands'] as const
-export const orbStyle = (seed: string) => PICKED[hashName(seed) % PICKED.length]
+// Abhay 11-22 (round 8): bands read "too discrete"; "there was one that was more blended" = mesh, the one he saw in
+// the app in round 7 (logged guess). Marble and swirl stay drawable for a later pick.
+export const orbStyle = (_seed: string): keyof typeof STYLES => 'mesh'
 
 const dark = () => typeof matchMedia !== 'function' || matchMedia('(prefers-color-scheme: dark)').matches
 
