@@ -279,6 +279,7 @@ export function ThreadView({
   project,
   composer,
   onApproval,
+  seed,
 }: {
   title: string
   status: Status
@@ -286,6 +287,8 @@ export function ThreadView({
   project: string
   composer: ReactNode
   onApproval: (id: string, allow: boolean) => void
+  /** the thread's key, so its glyph matches the sidebar row and the tab */
+  seed?: string
 }) {
   const scroller = useRef<HTMLDivElement>(null)
   const stick = useRef(true)
@@ -313,7 +316,7 @@ export function ThreadView({
       <header className="thread-head">
         <span className="thread-crumb">{project.replace(/[\\/]+$/, '').split(/[\\/]/).pop()}</span>
         <span className="thread-sep" aria-hidden>/</span>
-        <StatusGlyph status={status} size={14} />
+        <StatusGlyph status={status} size={14} seed={seed} />
         <span className="thread-title">{title}</span>
         {status === 'input' && <span className="thread-status">{STATUS_LABEL[status]}</span>}
       </header>

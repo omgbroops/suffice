@@ -441,8 +441,17 @@ export default function App() {
             if (!t) return null
             const on = view.kind === 'thread' && view.key === key
             return (
-              <div key={key} className={`tab${on ? ' is-active' : ''}`} onClick={() => go({ kind: 'thread', key })} role="button" tabIndex={0}>
-                <StatusGlyph status={statusOf(t)} />
+              <div
+                key={key}
+                className={`tab${on ? ' is-active' : ''}`}
+                onClick={() => go({ kind: 'thread', key })}
+                onKeyDown={e => { if (e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) (e.preventDefault(), go({ kind: 'thread', key })) }}
+                onAuxClick={e => { if (e.button === 1) (e.preventDefault(), closeTab(key)) }}
+                role="button"
+                tabIndex={0}
+                aria-current={on ? 'page' : undefined}
+              >
+                <StatusGlyph status={statusOf(t)} seed={key} />
                 <span className="tab-label">{t.title}</span>
                 <button
                   className="tab-close"
@@ -531,6 +540,7 @@ export default function App() {
         ) : active ? (
           <ThreadView
             key={active.key}
+            seed={active.key}
             title={active.title}
             status={statusOf(active)}
             transcript={active.transcript}
