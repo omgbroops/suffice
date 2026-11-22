@@ -3,7 +3,7 @@
 // the task's f2p (fail-to-pass) and p2p (pass-to-pass) whitelists — same
 // semantics as the DeepSWE grader, minus the docker frame.
 import { spawn, execFileSync } from 'node:child_process';
-import { readFile, open, unlink } from 'node:fs/promises';
+import { readFile, open, unlink, readdir, lstat } from 'node:fs/promises';
 import { resolve, relative } from 'node:path';
 import { runNodeTests } from './workspace.mjs';
 
@@ -90,6 +90,25 @@ function lastJson(stdout) {
     } catch { /* not a standalone object */ }
   }
   return null;
+}
+
+
+// Newest-first vitest/jest report files under src (reporter configs that
+// write JSON to disk instead of stdout). Skips node_modules.
+async function findReportFiles(dir) {
+  const out = [];
+  const walk = async (d, depth) => {
+    if (depth > 5) return;
+    for (const e of await readdir(d, { withFileTypes: true }).catch(() => [])) {
+      const p = resolve(d, e.name);
+      if (e.isDirectory() && e.name !== 'node_modules' && !e.name.startsWith('.git')) await walk(p, depth + 1);
+      else if (e.isFile() && /output.*\.json|report.*\.json/.test(e.name) && /vitest|jest|test-results|reports/.test(p)) {
+        out.push([p, (await lstat(p)).mtimeMs]);
+      }
+    }
+  };
+  await walk(dir, 0);
+  return out.sort((a, b) => b[1] - a[1]).map(([p]) => p);
 }
 
 // name -> 'passed'|'failed'|'pending' map across runner JSON shapes.
@@ -188,7 +207,18 @@ export async function runDeepSweAcceptance(workspace, task, { timeoutMs = 900_00
       const r = await run(command, src, { timeoutMs: perCmd });
       if (r.timedOut) return { status: 'timeout', detail: `${label} spec timed out` };
       detail[label] = { command, code: r.code, latencyMs: r.latencyMs, tail: (r.stderr + '\n' + r.stdout).slice(-tail) };
-      const map = resultsByName(meta.runner, r.stdout, src);
+      // Some repos' runner configs route --reporter=json to a file instead
+      // of stdout (vitest writes .vitest/json/output.json when configured).
+      // If stdout carried no report, fall back to the freshest report file.
+      let reportText = r.stdout;
+      if (!lastJson(reportText)) {
+        const found = await findReportFiles(src);
+        for (const f of found) {
+          const text = await readFile(f, 'utf8').catch(() => '');
+          if (lastJson(text)) { reportText = text; detail[label].reportFile = f; break; }
+        }
+      }
+      const map = resultsByName(meta.runner, reportText, src);
       // DeepSWE semantics: a suite that produces no report (build fails before
       // the runner starts, spec can't compile against the unfixed API, runner
       // exits early) contributes nothing — its whitelist ids grade as
