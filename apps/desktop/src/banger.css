@@ -73,65 +73,84 @@
 .palette-keys { display: flex; gap: 16px; height: 34px; align-items: center; padding: 0 16px; font-size: 11.5px; color: var(--text-4); box-shadow: inset 0 1px 0 var(--hair); }
 .palette-keys kbd { font: 500 11px/16px var(--sans); min-width: 16px; text-align: center; padding: 0 4px; margin-right: 3px; border-radius: 4px; box-shadow: inset 0 0 0 1px var(--hair); color: var(--text-3); }
 
-/* notes: list · page · local graph */
-.notes { --ob-accent: #7f6df2; --ob-link: #a68af9; --ob-link-line: rgba(166, 138, 249, 0.45); height: 100%; min-height: 0; display: grid; grid-template-columns: 240px minmax(0, 1fr) 340px; }
-.notes-list { min-height: 0; display: flex; flex-direction: column; padding: 10px 6px; box-shadow: inset -1px 0 0 var(--hair); }
-.notes-head { display: flex; align-items: center; gap: 6px; margin: 0 4px 8px; }
-.notes-search { flex: 1; min-width: 0; display: flex; align-items: center; gap: 7px; height: 28px; padding: 0 8px; border-radius: 6px; color: var(--text-4); background: rgba(var(--wash), calc(0.03 * var(--a))); box-shadow: inset 0 0 0 1px var(--hair); }
+/* notes: Obsidian's default theme, values read from Obsidian.app's app.css (2026-11-22), in our three-column layout */
+.notes {
+  --ob-bg: #1c1c1c; --ob-bg2: #282828; --ob-border: #333333; --ob-code: #232323;
+  --ob-text: #dadada; --ob-muted: #b3b3b3; --ob-faint: #666666;
+  --ob-accent: hsl(258 88% 66%); --ob-text-accent: hsl(255 89.76% 75.9%);
+  --ob-hover: color-mix(in oklch, white 6.7%, transparent); --ob-guide: color-mix(in oklch, white 12%, transparent);
+  --graph-line: #3f3f3f; --graph-node: var(--ob-muted); --graph-text: var(--ob-text); --graph-focused: var(--ob-text-accent); --graph-accent: var(--ob-accent);
+  --ob-font: ui-sans-serif, -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", Roboto, "Inter", sans-serif;
+  height: 100%; min-height: 0; display: grid; grid-template-columns: 240px minmax(0, 1fr) 340px;
+  background: var(--ob-bg); color: var(--ob-text); font-family: var(--ob-font);
+}
+@media (prefers-color-scheme: light) {
+  .notes {
+    --ob-bg: #ffffff; --ob-bg2: #f6f6f6; --ob-border: #e4e4e4; --ob-code: #fafafa;
+    --ob-text: #222222; --ob-muted: #5c5c5c; --ob-faint: #ababab;
+    --ob-accent: hsl(257 88.88% 70.95%); --ob-text-accent: hsl(258 88% 66%);
+    --ob-hover: color-mix(in oklch, black 6.7%, transparent); --ob-guide: color-mix(in oklch, black 12%, transparent);
+    --graph-line: #dadada;
+  }
+}
+.notes-list { min-height: 0; display: flex; flex-direction: column; padding: 10px 8px; background: var(--ob-bg2); box-shadow: inset -1px 0 0 var(--ob-border); }
+.notes-head { display: flex; align-items: center; gap: 6px; margin: 0 0 8px; }
+.notes-search { flex: 1; min-width: 0; display: flex; align-items: center; gap: 7px; height: 28px; padding: 0 8px; border-radius: 4px; color: var(--ob-faint); background: var(--ob-bg); box-shadow: inset 0 0 0 1px var(--ob-border); }
 .notes-search:focus-within { box-shadow: inset 0 0 0 1px var(--ob-accent); }
-.notes-search input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: var(--text); font: inherit; font-size: 12.5px; }
-.notes-search input::placeholder { color: var(--text-4); }
-.notes-gen-btn { height: 28px; padding: 0 8px; border-radius: 6px; font-size: 12px; color: var(--text-3); white-space: nowrap; transition: background-color 150ms var(--ease), color 150ms var(--ease); }
-.notes-gen-btn:hover, .notes-gen-btn[aria-expanded="true"] { background: var(--hover); color: var(--text); }
+.notes-search input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: var(--ob-text); font: inherit; font-size: 13px; }
+.notes-search input::placeholder { color: var(--ob-faint); }
+.notes-gen-btn { height: 28px; padding: 0 8px; border-radius: 4px; font-size: 13px; color: var(--ob-muted); white-space: nowrap; transition: background-color 150ms var(--ease), color 150ms var(--ease); }
+.notes-gen-btn:hover, .notes-gen-btn[aria-expanded="true"] { background: var(--ob-hover); color: var(--ob-text); }
 .notes-gen-pop { left: 0; right: auto; width: 360px; padding: 8px; display: flex; flex-direction: column; gap: 8px; }
-.notes-gen-pop textarea { width: 100%; height: 280px; resize: vertical; padding: 8px 10px; border-radius: 6px; background: rgba(var(--wash), calc(0.03 * var(--a))); box-shadow: inset 0 0 0 1px var(--hair); color: var(--text); font: 12px/1.5 var(--sans); outline: 0; }
+.notes-gen-pop textarea { width: 100%; height: 280px; resize: vertical; padding: 8px 10px; border-radius: 4px; background: var(--ob-bg); box-shadow: inset 0 0 0 1px var(--ob-border); color: var(--ob-text); font: 12px/1.5 var(--ob-font); outline: 0; }
 .notes-gen-pop textarea:focus { box-shadow: inset 0 0 0 1px var(--ob-accent); }
 .notes-gen-foot { display: flex; align-items: center; justify-content: space-between; }
 .btn-link { font-size: 12px; color: var(--text-3); }
 .btn-link:hover:not(:disabled) { color: var(--text); }
 .btn-link:disabled { opacity: 0.4; }
-.notes-rows { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; font-size: 13px; }
-.tree-row { width: 100%; height: 26px; display: flex; align-items: center; gap: 4px; padding: 0 8px 0 6px; border-radius: 5px; color: var(--text-2); text-align: left; transition: background-color 120ms var(--ease), color 120ms var(--ease); }
-.tree-row:hover { background: var(--hover); color: var(--text); }
-.tree-note { padding-left: 22px; }
+/* file explorer rows: Obsidian nav items, 13px, 4px 8px 4px 24px, muted until hover or open */
+.notes-rows { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; font-size: 13px; line-height: 1.3; }
+.tree-row { width: 100%; display: flex; align-items: center; gap: 4px; padding: 4px 8px 4px 8px; border-radius: 4px; color: var(--ob-muted); text-align: left; }
+.tree-row:hover { background: var(--ob-hover); color: var(--ob-text); }
+.tree-note { padding-left: 24px; }
 .tree-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.tree-chev { flex: none; color: var(--text-4); transition: transform 150ms var(--ease); }
+.tree-chev { flex: none; color: var(--ob-faint); transition: transform 150ms var(--ease); }
 .tree-chev.is-open { transform: rotate(90deg); }
-.tree-kids { margin-left: 12px; border-left: 1px solid var(--hair); padding-left: 1px; }
-.tree-note.is-active { color: var(--ob-link); background: rgba(127, 109, 242, 0.14); box-shadow: inset 2px 0 0 var(--ob-accent); }
-.notes-page { min-height: 0; overflow-y: auto; padding: 32px 40px 80px; }
+.tree-kids { margin-left: 14px; border-left: 1px solid var(--ob-guide); padding-left: 1px; }
+.tree-note.is-active { background: var(--ob-hover); color: var(--ob-text); }
+/* reading view: 700px line, 16px/1.5, inline title and headings at Obsidian's sizes */
+.notes-page { min-height: 0; overflow-y: auto; padding: 32px 32px 80px; }
 .notes-page > * { max-width: 700px; margin-inline: auto; }
-.notes-crumbs { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 14px; font-size: 12px; color: var(--text-4); }
-.note-title { margin: 0 auto 18px; font-size: 32px; line-height: 1.2; font-weight: 700; letter-spacing: -0.01em; color: var(--text); }
-.notes-page .prose { font-size: 15.5px; line-height: 1.6; }
-.notes-page .prose p { margin: 0 0 12px; }
-.notes-page .prose-h { font-weight: 600; line-height: 1.25; margin: 24px 0 8px; }
-.notes-page .prose-h1 { font-size: 26px; font-weight: 700; }
-.notes-page .prose-h2 { font-size: 22px; padding-bottom: 6px; box-shadow: 0 1px 0 var(--hair); }
-.notes-page .prose-h3 { font-size: 18px; }
-.notes-page .prose-h4 { font-size: 16px; }
+.notes-crumbs { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 14px; font-size: 13px; color: var(--ob-faint); }
+.note-title { margin: 0 auto 0.5em; font-size: 1.618em; line-height: 1.2; font-weight: 700; letter-spacing: -0.015em; color: var(--ob-text); }
+.notes-page .prose { font-size: 16px; line-height: 1.5; color: var(--ob-text); }
+.notes-page .prose p { margin: 0 0 1rem; }
+.notes-page .prose-h { margin: 1rem 0; color: var(--ob-text); }
+.notes-page .prose p + .prose-h, .notes-page .prose ul + .prose-h, .notes-page .prose ol + .prose-h, .notes-page .prose pre + .prose-h { margin-top: 2.5rem; }
+.notes-page .prose-h1 { font-size: 1.618em; font-weight: 700; line-height: 1.2; letter-spacing: -0.015em; }
+.notes-page .prose-h2 { font-size: 1.462em; font-weight: 600; line-height: 1.2; letter-spacing: -0.011em; }
+.notes-page .prose-h3 { font-size: 1.318em; font-weight: 600; line-height: 1.3; letter-spacing: -0.008em; }
+.notes-page .prose-h4 { font-size: 1.188em; font-weight: 600; letter-spacing: -0.005em; }
 .notes-page .prose li { margin: 3px 0; }
-.prose-link { display: inline; padding: 0; color: var(--ob-link); text-decoration: underline; text-decoration-color: var(--ob-link-line); text-underline-offset: 2px; transition: text-decoration-color 150ms var(--ease); }
-.prose-link:hover { text-decoration-color: currentColor; }
-.notes-side { min-height: 0; overflow-y: auto; padding: 12px 12px 24px; box-shadow: inset 1px 0 0 var(--hair); display: flex; flex-direction: column; gap: 14px; }
+.notes-page .prose li::marker { color: var(--ob-faint); }
+.notes-page .prose pre { background: var(--ob-code); border-radius: 4px; }
+.prose-link { display: inline; padding: 0; color: var(--ob-text-accent); text-decoration: underline; text-underline-offset: 2px; transition: opacity 150ms var(--ease); }
+.prose-link:hover { opacity: 0.8; }
+/* right column: local graph, then links */
+.notes-side { min-height: 0; overflow-y: auto; padding: 12px 12px 24px; background: var(--ob-bg2); box-shadow: inset 1px 0 0 var(--ob-border); display: flex; flex-direction: column; gap: 14px; }
+.notes-local { position: relative; height: 300px; flex: none; border-radius: 4px; background: var(--ob-bg); box-shadow: inset 0 0 0 1px var(--ob-border); }
+.notes-local-open { position: absolute; top: 6px; right: 6px; color: var(--ob-faint); }
+.notes-local-open:hover { color: var(--ob-text); background: var(--ob-hover); }
 .notes-links { display: flex; flex-direction: column; gap: 1px; }
-.notes-links .side-group-label { padding-left: 9px; }
+.notes-links .side-group-label { padding-left: 8px; color: var(--ob-faint); }
+.notes-links .tree-row { padding-left: 8px; }
 .notes-empty { height: 100%; display: grid; place-content: center; gap: 4px; text-align: center; color: var(--text-2); }
 .notes-empty p { margin: 0; }
-.graph { width: 100%; height: auto; display: block; overflow: hidden; user-select: none; touch-action: none; cursor: grab; border-radius: 8px; box-shadow: inset 0 0 0 1px var(--hair); }
-.graph:active { cursor: grabbing; }
-.graph-edges line { stroke: rgba(var(--wash), calc(0.16 * var(--a))); stroke-width: 1; vector-effect: non-scaling-stroke; transition: stroke 150ms var(--ease), opacity 150ms var(--ease); }
-.graph-edges line.is-hot { stroke: var(--ob-accent); }
-.graph-edges line.is-dim { opacity: 0.25; }
-.graph-node { cursor: pointer; outline: none; transition: opacity 150ms var(--ease); }
-.graph-node circle { fill: var(--text-3); transition: fill 150ms var(--ease); }
-.graph-node text { font: 10px var(--sans); fill: var(--text-3); pointer-events: none; transition: fill 150ms var(--ease); }
-.graph-node.is-current circle { fill: var(--ob-accent); }
-.graph-node.is-current text { fill: var(--text); }
-.graph-node.is-near circle, .graph-node:hover circle, .graph-node:focus-visible circle { fill: var(--ob-accent); }
-.graph-node.is-near text, .graph-node:hover text { fill: var(--text); }
-.graph-node.is-dim { opacity: 0.3; }
-@media (prefers-color-scheme: light) { .notes { --ob-accent: #705dcf; --ob-link: #705dcf; --ob-link-line: rgba(112, 93, 207, 0.4); } .tree-note.is-active { background: rgba(112, 93, 207, 0.1); } }
+/* graph view: the whole page pane, as Obsidian opens it in a tab */
+.notes-graph-view { position: relative; min-height: 0; background: var(--ob-bg); }
+.notes-graph-close { position: absolute; top: 10px; right: 10px; color: var(--ob-faint); }
+.notes-graph-close:hover { color: var(--ob-text); background: var(--ob-hover); }
+.ob-graph { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; user-select: none; }
 
 /* thread top bar: project / glyph title */
 .thread-crumb { flex: none; color: var(--text-3); white-space: nowrap; }
