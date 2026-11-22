@@ -88,6 +88,8 @@ function LocalGraph({ notes, current, project, onOpen }: { notes: NoteSummary[];
           const bow = side ? Math.max(md * 0.45, len * 0.38 - md) : 0
           const ox = side ? ux * bow : -dy * 0.12, oy = side ? uy * bow : dx * 0.12
           const lit = near?.has(a) && near?.has(b) && (a === hot || b === hot)
+          // links between two side notes crossed the left half at rest; they show only for the hovered note
+          if (side && !lit) return null
           return <path key={`${a}>${b}`} d={`M${p.x},${p.y} Q${mx + ox},${my + oy} ${q.x},${q.y}`} className={lit ? 'is-hot' : near ? 'is-dim' : undefined} />
         })}
       </g>
@@ -209,7 +211,7 @@ export function NotesView({ project }: { project: string }) {
       </article>
       <aside className="notes-side">
         {current && notes && <LocalGraph notes={notes} current={current} project={project} onOpen={p => setCurrent(p)} />}
-        {[['Linked from', backlinks.map(n => n.path)], ['Links to', note?.links ?? []]].map(([label, paths]) => (
+        {[['Linked from', backlinks.map(n => n.path)], ['Links to', note?.links ?? []]].filter(([, paths]) => paths.length).map(([label, paths]) => (
           <section key={label as string} className="notes-links">
             <div className="side-group-label">{label as string} <span className="meta">{(paths as string[]).length}</span></div>
             {(paths as string[]).map(p => (
