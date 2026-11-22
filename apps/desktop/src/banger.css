@@ -2,3 +2,9 @@
 .thread-composer .ask-card { margin: 0 0 8px; animation: ask-in 220ms var(--ease) both; }
 @keyframes ask-in { from { opacity: 0; transform: translateY(6px); } }
 .btn kbd { margin-left: 8px; font: 500 11px/1 var(--sans); opacity: 0.5; letter-spacing: 0; }
+
+/* model picker: relative cost as five ink steps */
+.mp-steps { display: inline-flex; align-items: flex-end; gap: 2px; margin-left: 10px; height: 10px; flex: none; }
+.mp-steps i { width: 3px; background: var(--text-4); opacity: 0.22; }
+.mp-steps i:nth-child(1) { height: 4px; } .mp-steps i:nth-child(2) { height: 5px; } .mp-steps i:nth-child(3) { height: 7px; } .mp-steps i:nth-child(4) { height: 8px; } .mp-steps i:nth-child(5) { height: 10px; }
+.mp-steps i.on { background: var(--text-2); opacity: 1; }

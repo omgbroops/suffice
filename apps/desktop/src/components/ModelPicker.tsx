@@ -43,6 +43,16 @@ function CostMeter({ cost }: { cost: number }) {
   )
 }
 
+/** Relative cost as five steps, ink only; exact prices live in the detail panel. */
+function CostSteps({ cost, title }: { cost: number; title: string }) {
+  const on = 1 + Math.round(Math.max(0, Math.min(1, cost)) * 4)
+  return (
+    <span className="mp-steps" title={title} aria-label={`Cost ${on} of 5`}>
+      {[0, 1, 2, 3, 4].map(i => <i key={i} className={i < on ? 'on' : undefined} />)}
+    </span>
+  )
+}
+
 function Switch({ on, onChange, label }: { on: boolean; onChange: (v: boolean) => void; label: string }) {
   return (
     <button className={`mp-switch${on ? ' is-on' : ''}`} role="switch" aria-checked={on} aria-label={label} onClick={() => onChange(!on)}>
@@ -469,7 +479,7 @@ export function ModelPicker(p: PickerProps) {
                           </span>
                           {fast[m.id] && <span className="mp-tag">Priority</span>}
                           {selectedId === m.id && <IconCheck size={13} className="mp-check" />}
-                          <span className="mp-price-tag">{money(m.cost.input)} / {money(m.cost.output)}</span>
+                          <CostSteps cost={costOf(m)} title={`${money(m.cost.input)} in / ${money(m.cost.output)} out per 1M`} />
                         </button>
                       )
                     })}
