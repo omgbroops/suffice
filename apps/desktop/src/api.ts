@@ -21,6 +21,8 @@ export type Settings = {
   cheapModel: string
   /** project path -> tint name (see PASTELS) */
   projectColors?: Record<string, string>
+  /** prompt behind Notes > Generate notes */
+  notesPrompt?: string
   theme?: 'system' | 'light' | 'dark'
 }
 

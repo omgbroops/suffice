@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { api, type NoteSummary } from '../api'
 import { ago } from '../data'
-import { IconSearch } from '../icons'
+import { buildTree, neighbourhood, DEFAULT_NOTES_PROMPT, type TreeNode } from '../../shared/notes.mjs'
+import { IconChevronRight, IconSearch } from '../icons'
 import { Prose } from './ThreadView'
 import { baseName } from './Pickers'
-import { ProjectEmblem } from './Sidebar'
 
 const stem = (p: string) => p.split('/').pop()!.replace(/\.(md|markdown)$/i, '')
 const dir = (p: string) => (p.includes('/') ? p.slice(0, p.lastIndexOf('/')) : '')
@@ -26,114 +26,231 @@ function resolveHref(href: string, from: string, notes: NoteSummary[]) {
   return notes.find(n => lower(n.path) === lower(out.join('/')))?.path
 }
 
-type Node = { path: string; x: number; y: number; ring: 0 | 1 | 2 }
+type P = { x: number; y: number; vx: number; vy: number; pin?: boolean }
+const radius = (deg: number) => Math.min(8, 3 + 1.6 * Math.sqrt(deg))
 
 /**
- * Local graph: the open note, its direct links on one ring, their links on a second.
- * Text labels, not dots; hubs (over 12 links) are not expanded; edges light up on hover.
+ * Local graph: open note plus links two deep. Force layout settles on its own (rAF runs only while it moves);
+ * drag a node, wheel to zoom, drag the background to pan. Hover lights a node and its neighbours.
  */
-function LocalGraph({ notes, current, project, onOpen }: { notes: NoteSummary[]; current: string; project: string; onOpen: (p: string) => void }) {
+function LocalGraph({ notes, current, onOpen }: { notes: NoteSummary[]; current: string; onOpen: (p: string) => void }) {
+  const hood = useMemo(() => neighbourhood(notes, current), [notes, current])
+  const title = useMemo(() => new Map(notes.map(n => [n.path, n.title])), [notes])
   const [hot, setHot] = useState<string | null>(null)
-  const W = 360, H = 320, cx = W / 2, cy = H / 2
-  const { nodes, edges, title } = useMemo(() => {
-    const adj = new Map<string, Set<string>>()
-    const add = (a: string, b: string) => (adj.get(a) ?? adj.set(a, new Set()).get(a)!).add(b)
-    for (const n of notes) for (const l of n.links) (add(n.path, l), add(l, n.path))
-    const title = new Map(notes.map(n => [n.path, n.title]))
-    const byTitle = (a: string, b: string) => (title.get(a) ?? a).localeCompare(title.get(b) ?? b)
-    const ring1 = [...(adj.get(current) ?? [])].sort(byTitle).slice(0, 12)
-    const seen = new Set([current, ...ring1])
-    const nodes: Node[] = [{ path: current, x: cx, y: cy, ring: 0 }]
-    const edges: [string, string][] = ring1.map(p => [current, p])
-    // ellipses: labels run sideways, so rings are narrower than they are tall
-    const R1 = [62, 96], R2 = [92, 140]
-    const ang = new Map<string, number>()
-    ring1.forEach((p, i) => {
-      const a = (i / ring1.length) * Math.PI * 2 - Math.PI / 2
-      ang.set(p, a)
-      nodes.push({ path: p, x: cx + R1[0] * Math.cos(a), y: cy + R1[1] * Math.sin(a), ring: 1 })
-    })
-    let count = 0
-    for (const p of ring1) {
-      if ((adj.get(p)?.size ?? 0) > 12) continue
-      const kids = [...(adj.get(p) ?? [])].filter(k => !seen.has(k)).sort(byTitle).slice(0, 3)
-      kids.forEach((k, j) => {
-        if (count >= 15) return
-        seen.add(k)
-        count++
-        const spread = 0.62 / Math.max(1, ring1.length / 4)
-        // never straight outward from the parent: that spot is under the parent's label
-        const a = ang.get(p)! + (j - (kids.length - 1) / 2) * spread + (kids.length % 2 ? spread / 2 : 0)
-        nodes.push({ path: k, x: cx + R2[0] * Math.cos(a), y: cy + R2[1] * Math.sin(a), ring: 2 })
-        edges.push([p, k])
-      })
+  const [, tick] = useState(0)
+  const pos = useRef(new Map<string, P>())
+  const view = useRef({ x: 0, y: 0, k: 1 })
+  const alpha = useRef(0)
+  const raf = useRef(0)
+  const svg = useRef<SVGSVGElement>(null)
+  const hoodRef = useRef(hood)
+  hoodRef.current = hood
+  const W = 360, H = 320
+  const touched = useRef(false)
+
+  const step = () => {
+    raf.current = 0
+    const { nodes, edges } = hoodRef.current, P = pos.current, a = alpha.current
+    for (let i = 0; i < nodes.length; i++)
+      for (let j = i + 1; j < nodes.length; j++) {
+        const p = P.get(nodes[i].path)!, q = P.get(nodes[j].path)!
+        const dx = q.x - p.x, dy = q.y - p.y, d2 = Math.max(dx * dx + dy * dy, 36), d = Math.sqrt(d2), f = (7000 * a) / d2
+        p.vx -= (dx / d) * f; p.vy -= (dy / d) * f; q.vx += (dx / d) * f; q.vy += (dy / d) * f
+      }
+    for (const [s, t] of edges) {
+      const p = P.get(s)!, q = P.get(t)!
+      const dx = q.x - p.x, dy = q.y - p.y, d = Math.max(Math.hypot(dx, dy), 1), f = (d - 70) * 0.05 * a
+      p.vx += (dx / d) * f; p.vy += (dy / d) * f; q.vx -= (dx / d) * f; q.vy -= (dy / d) * f
     }
-    // ring-1 notes that link to each other
-    for (let i = 0; i < ring1.length; i++) for (let j = i + 1; j < ring1.length; j++) if (adj.get(ring1[i])?.has(ring1[j])) edges.push([ring1[i], ring1[j]])
-    return { nodes, edges, title }
-  }, [notes, current, cx, cy])
-  const at = new Map(nodes.map(n => [n.path, n]))
-  const near = hot ? new Set([hot, ...edges.filter(e => e.includes(hot)).flat()]) : null
+    for (const p of P.values()) {
+      p.vx -= p.x * 0.008 * a; p.vy -= p.y * 0.008 * a
+      if (p.pin) { p.vx = p.vy = 0; continue }
+      p.vx *= 0.78; p.vy *= 0.78; p.x += p.vx; p.y += p.vy
+    }
+    // keep the cluster centred: forces alone leave the initial offset in place
+    let mx = 0, my = 0
+    for (const p of P.values()) (mx += p.x, my += p.y)
+    mx /= P.size || 1; my /= P.size || 1
+    for (const p of P.values()) if (!p.pin) (p.x -= mx, p.y -= my)
+    alpha.current *= 0.985
+    tick(n => n + 1)
+    if (alpha.current > 0.02) raf.current = requestAnimationFrame(step)
+    if (!touched.current && P.size) {
+      // zoom to fit so every node and label stays in view while it settles
+      let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9
+      for (const p of P.values()) (x0 = Math.min(x0, p.x - 40), x1 = Math.max(x1, p.x + 40), y0 = Math.min(y0, p.y - 12), y1 = Math.max(y1, p.y + 24))
+      const k = Math.min(1.4, (W - 24) / (x1 - x0), (H - 24) / (y1 - y0))
+      view.current = { x: -((x0 + x1) / 2) * k, y: -((y0 + y1) / 2) * k, k }
+      tick(n => n + 1)
+    }
+  }
+  const heat = (a = 1) => { alpha.current = Math.max(alpha.current, a); if (!raf.current) raf.current = requestAnimationFrame(step) }
+
+  useEffect(() => {
+    const P = pos.current, keep = new Set(hood.nodes.map(n => n.path))
+    for (const k of [...P.keys()]) if (!keep.has(k)) P.delete(k)
+    const count = [0, 0, 0]
+    const total = [0, 1, 2].map(r => hood.nodes.filter(n => n.ring === r).length)
+    for (const n of hood.nodes) {
+      const i = count[n.ring]++
+      if (P.has(n.path)) { P.get(n.path)!.pin = false; continue }
+      const a = (i / Math.max(1, total[n.ring])) * Math.PI * 2 - Math.PI / 2 + n.ring * 0.5, r = n.ring * 58
+      P.set(n.path, { x: Math.cos(a) * r, y: Math.sin(a) * r, vx: 0, vy: 0 })
+    }
+    view.current = { x: 0, y: 0, k: 1 }
+    touched.current = false
+    heat(1)
+    return () => { cancelAnimationFrame(raf.current); raf.current = 0 }
+  }, [hood])
+
+  // client pixels -> svg units (the svg scales to its column)
+  const toSvg = (cx: number, cy: number) => {
+    const r = svg.current!.getBoundingClientRect(), s = W / (r.width || W) // a hidden column has width 0
+    return { x: (cx - r.left) * s - W / 2, y: (cy - r.top) * s - H / 2, s }
+  }
+  useEffect(() => {
+    const el = svg.current!
+    const wheel = (e: WheelEvent) => {
+      e.preventDefault()
+      touched.current = true
+      const v = view.current, k = Math.min(3, Math.max(0.4, v.k * Math.exp(-e.deltaY * 0.0015))), p = toSvg(e.clientX, e.clientY)
+      v.x = p.x - ((p.x - v.x) * k) / v.k; v.y = p.y - ((p.y - v.y) * k) / v.k; v.k = k
+      tick(n => n + 1)
+    }
+    el.addEventListener('wheel', wheel, { passive: false })
+    return () => el.removeEventListener('wheel', wheel)
+  }, [])
+
+  const drag = useRef<{ path?: string; sx: number; sy: number; moved: number; vx: number; vy: number } | null>(null)
+  const down = (e: React.PointerEvent, path?: string) => {
+    e.stopPropagation()
+    ;(e.currentTarget as Element).setPointerCapture(e.pointerId)
+    touched.current = true
+    drag.current = { path, sx: e.clientX, sy: e.clientY, moved: 0, vx: view.current.x, vy: view.current.y }
+  }
+  const move = (e: React.PointerEvent) => {
+    const d = drag.current
+    if (!d) return
+    d.moved = Math.max(d.moved, Math.hypot(e.clientX - d.sx, e.clientY - d.sy))
+    if (d.moved < 4) return
+    const v = view.current
+    if (d.path) {
+      const p = toSvg(e.clientX, e.clientY), n = pos.current.get(d.path)!
+      n.x = (p.x - v.x) / v.k; n.y = (p.y - v.y) / v.k; n.pin = true
+      heat(0.4)
+    } else {
+      const s = toSvg(0, 0).s
+      v.x = d.vx + (e.clientX - d.sx) * s; v.y = d.vy + (e.clientY - d.sy) * s
+      tick(n => n + 1)
+    }
+  }
+  const up = () => {
+    const d = drag.current
+    drag.current = null
+    if (!d?.path) return
+    const n = pos.current.get(d.path)
+    if (n) n.pin = false
+    if (d.moved < 4 && d.path !== current) onOpen(d.path)
+    else heat(0.3)
+  }
+
+  const v = view.current
+  const near = hot ? new Set([hot, ...hood.edges.filter(e => e.includes(hot)).flat()]) : null
+  const labelOpacity = Math.min(1, Math.max(0, (v.k - 0.5) * 2))
   return (
-    <svg className="graph" viewBox={`0 0 ${W} ${H}`} role="group" aria-label="Linked notes" onMouseLeave={() => setHot(null)}>
-      <g className="graph-edges">
-        {edges.map(([a, b]) => {
-          const p = at.get(a)!, q = at.get(b)!
-          // edges bow slightly; ones between two side notes bow outward so they never cross the centre title
-          const mx = (p.x + q.x) / 2, my = (p.y + q.y) / 2, dx = q.x - p.x, dy = q.y - p.y
-          const side = p.ring === 1 && q.ring === 1
-          const md = Math.hypot(mx - cx, my - cy), len = Math.hypot(dx, dy)
-          // outward from the centre; an edge through the centre bows sideways by a third of its length
-          const ux = md > 1 ? (mx - cx) / md : -dy / len, uy = md > 1 ? (my - cy) / md : dx / len
-          const bow = side ? Math.max(md * 0.45, len * 0.38 - md) : 0
-          const ox = side ? ux * bow : -dy * 0.12, oy = side ? uy * bow : dx * 0.12
-          const lit = near?.has(a) && near?.has(b) && (a === hot || b === hot)
-          // links between two side notes crossed the left half at rest; they show only for the hovered note
-          if (side && !lit) return null
-          return <path key={`${a}>${b}`} d={`M${p.x},${p.y} Q${mx + ox},${my + oy} ${q.x},${q.y}`} className={lit ? 'is-hot' : near ? 'is-dim' : undefined} />
+    <svg ref={svg} className="graph" viewBox={`${-W / 2} ${-H / 2} ${W} ${H}`} role="group" aria-label="Linked notes" onPointerDown={e => down(e)} onPointerMove={move} onPointerUp={up} onPointerCancel={up} onMouseLeave={() => setHot(null)}>
+      <g transform={`translate(${v.x} ${v.y}) scale(${v.k})`}>
+        <g className="graph-edges">
+          {hood.edges.map(([a, b]) => {
+            const p = pos.current.get(a), q = pos.current.get(b)
+            if (!p || !q) return null
+            const lit = hot && (a === hot || b === hot)
+            return <line key={`${a}>${b}`} x1={p.x} y1={p.y} x2={q.x} y2={q.y} className={lit ? 'is-hot' : near ? 'is-dim' : undefined} />
+          })}
+        </g>
+        {hood.nodes.map(n => {
+          const p = pos.current.get(n.path)
+          if (!p) return null
+          const r = radius(n.deg), on = near?.has(n.path)
+          const label = clip(title.get(n.path) ?? stem(n.path), 22)
+          return (
+            <g key={n.path} className={`graph-node${n.ring === 0 ? ' is-current' : ''}${on ? ' is-near' : ''}${near && !on ? ' is-dim' : ''}`} transform={`translate(${p.x} ${p.y})`}
+              onPointerDown={e => down(e, n.path)} onMouseEnter={() => setHot(n.path)}
+              role="button" tabIndex={0} aria-label={`Open ${title.get(n.path) ?? n.path}`} onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && n.ring && (e.preventDefault(), onOpen(n.path))}>
+              <circle r={r} />
+              <text y={r + 10} textAnchor="middle" style={{ opacity: hot === n.path || n.ring === 0 ? 1 : labelOpacity }}>{label}</text>
+            </g>
+          )
         })}
       </g>
-      {nodes.map(n => {
-        const cos = (n.x - cx) / Math.max(1, Math.hypot(n.x - cx, n.y - cy))
-        // labels sit beside their dot, on the side away from the centre; only the open note is centred
-        const anchor = n.ring === 0 ? 'middle' : n.ring === 2 && Math.abs(cos) < 0.08 ? 'middle' : cos >= 0 ? 'start' : 'end'
-        const dx = anchor === 'start' ? 7 : anchor === 'end' ? -7 : 0
-        const dy = n.ring === 0 ? 22 : anchor === 'middle' ? (n.y < cy ? -9 : 15) : 4
-        const label = clip(title.get(n.path) ?? stem(n.path), n.ring === 2 ? 14 : n.ring === 1 ? 16 : 24)
+    </svg>
+  )
+}
+
+function Tree({ node, depth, open, toggle, current, onOpen, all }: { node: TreeNode; depth: number; open: Set<string>; toggle: (p: string) => void; current: string | null; onOpen: (p: string) => void; all: boolean }) {
+  return (
+    <>
+      {node.folders.map(f => {
+        const isOpen = all || open.has(f.path)
         return (
-          <g
-            key={n.path}
-            className={`graph-node ring-${n.ring}${near && !near.has(n.path) ? ' is-dim' : ''}`}
-            style={{ transform: `translate(${n.x}px, ${n.y}px)` }}
-            onMouseEnter={() => setHot(n.path)}
-            onClick={() => n.ring && onOpen(n.path)}
-            role={n.ring ? 'button' : undefined}
-            tabIndex={n.ring ? 0 : undefined}
-            aria-label={n.ring ? `Open ${title.get(n.path) ?? n.path}` : undefined}
-            onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && n.ring && (e.preventDefault(), onOpen(n.path))}
-          >
-            {n.ring === 0 ? (
-              <foreignObject x={-9} y={-9} width={18} height={18}><ProjectEmblem path={project} size={18} /></foreignObject>
-            ) : (
-              <circle r={n.ring === 1 ? 2.5 : 1.75} />
-            )}
-            <text x={dx} y={dy} textAnchor={anchor}>{label}</text>
-          </g>
+          <div key={f.path}>
+            <button className="tree-row tree-folder" aria-expanded={isOpen} onClick={() => toggle(f.path)}>
+              <IconChevronRight size={12} className={`tree-chev${isOpen ? ' is-open' : ''}`} />
+              <span className="tree-name">{f.name}</span>
+            </button>
+            {isOpen && <div className="tree-kids"><Tree node={f} depth={depth + 1} open={open} toggle={toggle} current={current} onOpen={onOpen} all={all} /></div>}
+          </div>
         )
       })}
-    </svg>
+      {node.notes.map(p => (
+        <button key={p} className={`tree-row tree-note${p === current ? ' is-active' : ''}`} aria-current={p === current} onClick={() => onOpen(p)} title={p}>
+          <span className="tree-name">{stem(p)}</span>
+        </button>
+      ))}
+    </>
   )
 }
 
 // the note last open in each project, so leaving Notes and coming back lands in the same place
 const lastNote = new Map<string, string>()
 
-export function NotesView({ project }: { project: string }) {
+/** Explorer-header popover: the editable generation prompt (saved on blur) and the Generate button. */
+function GenerateMenu({ prompt, onPrompt, onGenerate }: { prompt: string; onPrompt: (p: string) => void; onGenerate: (p: string) => void }) {
+  const [open, setOpen] = useState(false)
+  const [text, setText] = useState(prompt)
+  const root = useRef<HTMLDivElement>(null)
+  // reopening shows the saved prompt, even after the box was cleared and dismissed
+  useEffect(() => { if (open) setText(prompt) }, [prompt, open])
+  useEffect(() => {
+    if (!open) return
+    const off = (e: MouseEvent | KeyboardEvent) => { if (e instanceof KeyboardEvent ? e.key === 'Escape' : !root.current?.contains(e.target as Node)) setOpen(false) }
+    document.addEventListener('mousedown', off); document.addEventListener('keydown', off)
+    return () => { document.removeEventListener('mousedown', off); document.removeEventListener('keydown', off) }
+  }, [open])
+  const save = () => text.trim() && text !== prompt && onPrompt(text)
+  return (
+    <div className="menu-root notes-gen" ref={root}>
+      <button className="notes-gen-btn" aria-expanded={open} aria-label="Generate notes" onClick={() => setOpen(o => !o)}>Generate</button>
+      {open && (
+        <div className="menu menu-bottom notes-gen-pop" role="dialog" aria-label="Generate notes">
+          <textarea value={text} onChange={e => setText(e.target.value)} onBlur={save} spellCheck={false} aria-label="Prompt" />
+          <div className="notes-gen-foot">
+            <button className="btn-link" onClick={() => { setText(DEFAULT_NOTES_PROMPT); onPrompt(DEFAULT_NOTES_PROMPT) }} disabled={text === DEFAULT_NOTES_PROMPT}>Reset</button>
+            <button className="btn btn-primary" disabled={!text.trim()} onClick={() => { save(); setOpen(false); onGenerate(text) }}>Generate</button>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+export function NotesView({ project, prompt, onPrompt, onGenerate }: { project: string; prompt?: string; onPrompt: (p: string) => void; onGenerate: (p: string) => void }) {
   const [notes, setNotes] = useState<NoteSummary[] | null>(null)
   const [current, setCurrentRaw] = useState<string | null>(null)
   const [page, setPage] = useState<{ path: string; text?: string; error?: string } | null>(null)
   const [listError, setListError] = useState('')
   const [q, setQ] = useState('')
+  const [open, setOpen] = useState<Set<string>>(new Set())
   const setCurrent = (p: string) => (lastNote.set(project, p), setCurrentRaw(p))
 
   useEffect(() => {
@@ -167,10 +284,17 @@ export function NotesView({ project }: { project: string }) {
   // a page only shows under its own note, never a slower read for a note already left
   const shown = page?.path === current ? page : null
 
-  const list = useMemo(() => {
+  const tree = useMemo(() => {
     const words = q.toLowerCase().split(/\s+/).filter(Boolean)
-    return (notes ?? []).filter(n => words.every(w => `${n.title} ${n.path}`.toLowerCase().includes(w))).sort((a, b) => b.modified - a.modified)
+    return buildTree((notes ?? []).filter(n => words.every(w => `${n.title} ${n.path}`.toLowerCase().includes(w))).map(n => n.path))
   }, [notes, q])
+  // the open note's folders stay open, so it is always visible in the tree
+  useEffect(() => {
+    if (!current || !current.includes('/')) return
+    const parts = current.split('/').slice(0, -1)
+    setOpen(o => new Set([...o, ...parts.map((_, i) => parts.slice(0, i + 1).join('/'))]))
+  }, [current])
+  const toggle = (p: string) => setOpen(o => { const n = new Set(o); n.has(p) ? n.delete(p) : n.add(p); return n })
   const note = notes?.find(n => n.path === current)
   const backlinks = (notes ?? []).filter(n => current && n.links.includes(current))
   const title = (p: string) => notes?.find(n => n.path === p)?.title ?? stem(p)
@@ -186,37 +310,31 @@ export function NotesView({ project }: { project: string }) {
   return (
     <div className="notes">
       <div className="notes-list">
-        <label className="notes-search">
-          <IconSearch size={13} />
-          <input placeholder="Search notes" value={q} onChange={e => setQ(e.target.value)} />
-        </label>
-        <div className="notes-rows" role="listbox" aria-label="Notes">
-          {list.map(n => (
-            <button key={n.path} role="option" aria-selected={n.path === current} className={`notes-row${n.path === current ? ' is-active' : ''}`} onClick={() => setCurrent(n.path)} title={n.path}>
-              <span className="side-thread-title">{n.title}</span>
-              <span className="notes-row-meta">{dir(n.path) || baseName(project)}</span>
-            </button>
-          ))}
+        <div className="notes-head">
+          <label className="notes-search">
+            <IconSearch size={13} />
+            <input placeholder="Search notes" value={q} onChange={e => setQ(e.target.value)} />
+          </label>
+          <GenerateMenu prompt={prompt || DEFAULT_NOTES_PROMPT} onPrompt={onPrompt} onGenerate={onGenerate} />
+        </div>
+        <div className="notes-rows" role="tree" aria-label="Notes">
+          <Tree node={tree} depth={0} open={open} toggle={toggle} current={current} onOpen={setCurrent} all={!!q.trim()} />
         </div>
       </div>
       <article className="notes-page">
-        {note && (
-          <div className="notes-crumbs">
-            <span>{[baseName(project), ...dir(note.path).split('/').filter(Boolean)].join(' / ')}</span>
-            <span className="meta">{ago(note.modified)}</span>
-          </div>
-        )}
         {listError && <div className="msg-error">{listError}</div>}
-        {shown?.error ? <div className="msg-error">{shown.error}</div> : current && shown?.text != null && <Prose text={linkify(shown.text)} onLink={href => { const p = resolveHref(href, current, notes ?? []); if (p) setCurrent(p) }} />}
+        {note && <div className="notes-crumbs">{[baseName(project), ...dir(note.path).split('/').filter(Boolean)].join(' / ')}<span className="meta">{ago(note.modified)}</span></div>}
+        {note && <h1 className="note-title">{note.title}</h1>}
+        {shown?.error ? <div className="msg-error">{shown.error}</div> : current && shown?.text != null && <Prose text={linkify(shown.text.replace(/^(\s*---\n[\s\S]*?\n---\n)?\s*#\s[^\n]*\n?/, '$1'))} onLink={href => { const p = resolveHref(href, current, notes ?? []); if (p) setCurrent(p) }} />}
       </article>
       <aside className="notes-side">
-        {current && notes && <LocalGraph notes={notes} current={current} project={project} onOpen={p => setCurrent(p)} />}
+        {current && notes && <LocalGraph notes={notes} current={current} onOpen={p => setCurrent(p)} />}
         {[['Linked from', backlinks.map(n => n.path)], ['Links to', note?.links ?? []]].filter(([, paths]) => paths.length).map(([label, paths]) => (
           <section key={label as string} className="notes-links">
             <div className="side-group-label">{label as string} <span className="meta">{(paths as string[]).length}</span></div>
             {(paths as string[]).map(p => (
-              <button key={p} className="notes-row" onClick={() => setCurrent(p)}>
-                <span className="side-thread-title">{title(p)}</span>
+              <button key={p} className="tree-row" onClick={() => setCurrent(p)}>
+                <span className="tree-name">{title(p)}</span>
               </button>
             ))}
           </section>

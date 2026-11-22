@@ -578,7 +578,7 @@ export default function App() {
           </div>
         )}
         {view.kind === 'notes' && project ? (
-          <NotesView project={project} />
+          <NotesView project={project} prompt={settings.notesPrompt} onPrompt={notesPrompt => void patchSettings({ notesPrompt })} onGenerate={startThread} />
         ) : active ? (
           <ThreadView
             key={active.key}

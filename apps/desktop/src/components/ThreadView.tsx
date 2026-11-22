@@ -49,7 +49,7 @@ export function Prose({ text, onLink }: { text: string; onLink?: (href: string) 
         </div>,
       )
     } else if (/^#{1,4}\s/.test(line)) {
-      blocks.push(<p key={blocks.length} className="prose-h">{inline(line.replace(/^#+\s/, ''), onLink)}</p>)
+      blocks.push(<p key={blocks.length} className={`prose-h prose-h${line.indexOf(' ')}`}>{inline(line.replace(/^#+\s/, ''), onLink)}</p>)
       i++
     } else if (/^\s*([-*]|\d+[.)])\s/.test(line)) {
       const ordered = /^\s*\d/.test(line)
