@@ -38,8 +38,8 @@ test('generated spinners: every family and motion is reachable and grid cells st
   const { genPick, GEN_FAMILIES } = await import('data:text/javascript,' + encodeURIComponent(stripTypeScriptTypes(src, { mode: 'transform' })))
   const seen = new Set()
   for (let i = 0; i < 4000; i++) { const p = genPick(hash('t' + i)); seen.add(p.fam + '-' + p.v) }
-  assert.equal(GEN_FAMILIES.length, 4)
-  assert.equal(seen.size, 6 + 3 + 3 + 3, 'all 15 motions occur')
+  assert.equal(GEN_FAMILIES.length, 5)
+  assert.equal(seen.size, 6 + 3 + 3 + 3 + 2, 'all 17 motions occur')
   for (let i = 0; i < 400; i++) {
     const seed = hash('t' + i)
     if (genPick(seed).fam !== 0) continue

@@ -195,13 +195,13 @@ function arc({ c, S, t, s, ink }: G) {
 }
 
 // ---- gen: generated spinners (Abhay 11-22: no meaning; swarm too detailed, plain shapes too bare;
-// a 5x5 grid of squares flowing on and off, and square <-> circle morphs; orbs and blocks "okay") ----
+// a 5x5 grid of squares flowing on and off, and square <-> circle morphs; orbs, blocks and shapes "okay") ----
 // The seed picks a family (grids weighted up), a motion, and small speed/direction changes.
-export const GEN_FAMILIES = ['grid', 'morph', 'orbs', 'blocks'] as const
-const GEN_VARIANTS = [6, 3, 3, 3]
+export const GEN_FAMILIES = ['grid', 'morph', 'orbs', 'blocks', 'shapes'] as const
+const GEN_VARIANTS = [6, 3, 3, 3, 2]
 export function genPick(seed: number) {
   const r = rng(seed ^ 0x5bd1e995)
-  const u = r(), fam = u < 0.5 ? 0 : u < 0.75 ? 1 : u < 0.875 ? 2 : 3
+  const u = r(), fam = u < 0.4 ? 0 : u < 0.6 ? 1 : u < 0.74 ? 2 : u < 0.87 ? 3 : 4
   return { fam, v: Math.floor(r() * GEN_VARIANTS[fam]), speed: 0.85 + r() * 0.35, dir: r() < 0.5 ? 1 : -1, sides: r() < 0.5 ? 3 : 4, salt: Math.floor(r() * 1e9) }
 }
 
@@ -368,6 +368,29 @@ function gen(g: G) {
     }
     return
   }
+  // one basic shape: triangle or square, a stepped turn (v0) or a slow breath (v1)
+  const { c } = g
+  c.fillStyle = g.ink(0.95)
+  c.save()
+  c.translate(cx, cy)
+  const n = p.sides, rad = S * (n === 3 ? 0.42 : 0.4)
+  const step = TAU / n
+  const turn = p.v === 0 ? (Math.floor(T / 0.7) + ease(frac(T / 0.7))) * step * p.dir : 0.15 * Math.sin((TAU * T) / 2.4)
+  const scale = p.v === 1 ? 0.78 + 0.22 * (1 - Math.cos((TAU * T) / 1.2)) / 2 : 1
+  c.rotate(turn - Math.PI / 2 + (n === 4 ? Math.PI / 4 : 0))
+  c.scale(scale, scale)
+  // rounded corners in one fill (a stroke over the fill doubled the alpha into a visible frame)
+  const pt = (i: number) => [Math.cos(i * step) * rad, Math.sin(i * step) * rad]
+  const [sx, sy] = pt(0), [ex, ey] = pt(n - 1)
+  c.beginPath()
+  c.moveTo((sx + ex) / 2, (sy + ey) / 2)
+  for (let i = 0; i < n; i++) {
+    const [ax, ay] = pt(i), [bx, by] = pt(i + 1)
+    c.arcTo(ax, ay, (ax + bx) / 2, (ay + by) / 2, rad * 0.22)
+  }
+  c.closePath()
+  c.fill()
+  c.restore()
 }
 
 const KINDS: Record<GlyphKind, (g: G) => void> = { swarm, orbit, ripple, eclipse, arc, gen }
