@@ -1,5 +1,5 @@
 import { readFile, writeFile, readdir, lstat, realpath, mkdir, cp } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
+import { existsSync, readdirSync, symlinkSync } from 'node:fs';
 import { resolve, relative, sep, dirname, isAbsolute } from 'node:path';
 import { spawn, execFileSync } from 'node:child_process';
 
@@ -15,6 +15,23 @@ export async function materializeWorkspace(task, dest) {
     const target = resolve(dest, 'src', 'node_modules');
     try { execFileSync('cp', ['-al', resolve(task.depsDir, 'node_modules'), target]); }
     catch { await cp(resolve(task.depsDir, 'node_modules'), target, { recursive: true, verbatimSymlinks: true }); }
+    // pnpm keeps transitive deps only inside .pnpm/<pkg@ver>/node_modules/;
+    // specs importing them directly (valid under npm's flat hoisting, which
+    // the upstream env used) fail to load. Link every stored package at top
+    // level when absent, preferring the lexicographically last version.
+    const store = resolve(target, '.pnpm');
+    if (existsSync(store)) {
+      const wanted = new Map();
+      for (const storePkg of readdirSync(store)) {
+        const inner = resolve(store, storePkg, 'node_modules');
+        if (!existsSync(inner)) continue;
+        for (const entry of readdirSync(inner)) wanted.set(entry, resolve(inner, entry));
+      }
+      for (const [name, from] of [...wanted].sort(([a], [b]) => a.localeCompare(b))) {
+        const link = resolve(target, name);
+        if (!existsSync(link)) try { symlinkSync(relative(target, from), link); } catch {}
+      }
+    }
   }
   if (task.prompt && !existsSync(resolve(dest, 'README.md'))) {
     const orientation = task.deepswe
