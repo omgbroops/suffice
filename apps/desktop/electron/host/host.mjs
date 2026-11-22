@@ -90,7 +90,9 @@ async function readJson(path, fallback) {
   try {
     return JSON.parse(await readFile(path, 'utf8'))
   } catch (e) {
-    if (e.code === 'ENOENT' || e instanceof SyntaxError) return fallback
+    if (e.code === 'ENOENT') return fallback
+    // a corrupt file is kept aside, never overwritten by the next save
+    if (e instanceof SyntaxError) return rename(path, `${path}.corrupt-${Date.now()}`).then(() => fallback, () => fallback)
     throw e
   }
 }
@@ -118,7 +120,11 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
   await mkdir(transcriptDir, { recursive: true, mode: 0o700 })
   const settingsPath = resolve(desktopDir, 'settings.json')
   let settings = { project: null, model: DEFAULT_MODEL, efforts: {}, fast: {}, approval: 'ask', recentModels: [], mode: 'balanced', cheapModel: DEFAULT_CHEAP_MODEL, ...(await readJson(settingsPath, {})) }
-  const saveSettings = () => writeJson(settingsPath, settings)
+  // writes run one after another, each with the settings as they are then, so an older snapshot never lands last
+  let settingsWrite = Promise.resolve()
+  const saveSettings = () => (settingsWrite = settingsWrite.catch(() => {}).then(() => writeJson(settingsPath, settings)))
+  // threads between "run asked" and "agent running": a second start is refused, a stop is kept for when it is ready
+  const starting = new Map()
 
   const runtime = givenRuntime ?? (await createSufficeModelRuntime(modelRuntimeOptions(home), { onRefresh: () => emit('models:changed', null) }))
 
@@ -189,7 +195,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
 
   async function persist(thread) {
     if (!thread.path) return
-    thread.saving = (thread.saving ?? Promise.resolve()).then(() => writeJson(transcriptPath(thread.path), thread.transcript)).catch(() => {})
+    thread.saving = (thread.saving ?? Promise.resolve()).then(() => writeJson(transcriptPath(thread.path), thread.transcript)).catch(e => console.error('[suffice] transcript save failed', thread.path, e))
     return thread.saving
   }
 
@@ -284,8 +290,19 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     if (!info) throw new Error(`${model} is not in the model catalog.`)
     const level = effectiveEffort(info, effort)
     const existing = live.get(threadId)
-    if (existing?.running) throw new Error('This thread is already running.')
-    const thread = await ensureAgent(threadId, { path, project, model, effort: level, fast })
+    if (existing?.running || starting.has(threadId)) throw new Error('This thread is already running.')
+    starting.set(threadId, { stop: false }) // set before any await, so a double submit is refused
+    let thread, stopped
+    try {
+      thread = await ensureAgent(threadId, { path, project, model, effort: level, fast })
+    } finally {
+      stopped = starting.get(threadId)?.stop
+      starting.delete(threadId)
+    }
+    if (stopped) {
+      push(threadId, { type: 'end', ok: false, error: 'Stopped.' })
+      return { threadId, effort: level, mode, stopped: true }
+    }
     thread.running = true
     thread.mode = mode
     push(threadId, { type: 'user', id: randomUUID(), text: prompt })
@@ -340,6 +357,8 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
 
   function abort(threadId) {
     const thread = live.get(threadId)
+    const pendingStart = starting.get(threadId)
+    if (pendingStart) return (pendingStart.stop = true)
     if (!thread?.running) return false
     for (const [id, pending] of approvals) if (pending.threadId === threadId) answerApproval(id, false)
     thread.agent.abort()

@@ -178,3 +178,51 @@ test('efficient and fast runs go through the harness commands', async () => {
     await rm(home, { recursive: true, force: true })
   }
 })
+
+test('a second start on a starting thread is refused, and Stop during start is kept', async () => {
+  const home = await mkdtemp(join(tmpdir(), 'suffice-desktop-'))
+  try {
+    const calls = []
+    let release
+    const gate = new Promise(r => (release = r))
+    const slow = fakeCreateSession(calls)
+    const events = []
+    const host = await createHost({
+      home,
+      runtime: fakeRuntime(),
+      createSession: async (...a) => (await gate, slow(...a)),
+      openExternal: () => {},
+      chooseDirectory: async () => home,
+      emit: (channel, payload) => events.push([channel, payload]),
+    })
+    const first = host.run({ threadId: 's', project: home, prompt: 'go', model: 'gpt-6.1-sol', effort: 'low' })
+    await assert.rejects(host.run({ threadId: 's', project: home, prompt: 'again', model: 'gpt-6.1-sol', effort: 'low' }), /already running/)
+    assert.equal(host.abort('s'), true, 'Stop while the agent is still being created is accepted')
+    release()
+    const r = await first
+    assert.equal(r.stopped, true)
+    assert.ok(!calls.some(c => c[0] === 'run'), 'the stopped run never reaches the agent')
+    assert.ok(events.some(([ch, p]) => ch === 'thread:event' && p.event.type === 'end' && p.event.error === 'Stopped.'))
+    await host.dispose()
+  } finally {
+    await rm(home, { recursive: true, force: true })
+  }
+})
+
+test('a corrupt settings file is kept aside, not overwritten', async () => {
+  const home = await mkdtemp(join(tmpdir(), 'suffice-desktop-'))
+  try {
+    const { mkdir, writeFile } = await import('node:fs/promises')
+    await mkdir(join(home, 'desktop'), { recursive: true })
+    await writeFile(join(home, 'desktop', 'settings.json'), '{ "project": "/x", oops')
+    const host = await createHost({ home, runtime: fakeRuntime(), openExternal: () => {}, chooseDirectory: async () => home, emit: () => {} })
+    await host.updateSettings({ approval: 'auto' })
+    const files = await readdir(join(home, 'desktop'))
+    const kept = files.find(f => f.startsWith('settings.json.corrupt-'))
+    assert.ok(kept, `corrupt copy kept (${files})`)
+    assert.equal(await readFile(join(home, 'desktop', kept), 'utf8'), '{ "project": "/x", oops')
+    await host.dispose()
+  } finally {
+    await rm(home, { recursive: true, force: true })
+  }
+})
