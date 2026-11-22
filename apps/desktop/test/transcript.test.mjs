@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { describeTool, emptyTranscript, fromSessionMessages, patchLines, reduce, visibleSteps } from '../shared/transcript.mjs'
+import { compactDiff, describeTool, emptyTranscript, fromSessionMessages, patchLines, reduce, visibleSteps } from '../shared/transcript.mjs'
 
 const fold = events => events.reduce(reduce, emptyTranscript())
 
@@ -103,4 +103,13 @@ test('race events after the run ended are ignored', () => {
   const race = t.messages[0].steps.find(s => s.kind === 'race')
   assert.equal(race.attempts[0].state, 'lost')
   assert.equal(race.attempts[1], undefined)
+})
+
+test('compactDiff keeps two lines around changes and folds the rest', () => {
+  const ctx = n => Array.from({ length: n }, (_, i) => ` c${i}`)
+  const patch = ['--- a', '+++ b', '@@ -1,20 +1,20 @@', ...ctx(6), '-old', '+new', ...ctx(7), '@@ -40,3 +40,3 @@', ' x', '-a', '+b', ''].join('\n')
+  const out = compactDiff(patchLines(patch))
+  assert.deepEqual(out.map(l => l.t + l.s), ['…4', ' c4', ' c5', '-old', '+new', ' c0', ' c1', '…', ' x', '-a', '+b'])
+  // a short run between two changes is never folded
+  assert.deepEqual(compactDiff(patchLines('@@ -1 +1 @@\n-a\n x\n y\n z\n+b')).map(l => l.t), ['-', ' ', ' ', ' ', '+'])
 })

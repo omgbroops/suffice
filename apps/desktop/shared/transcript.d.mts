@@ -14,5 +14,6 @@ export function resultText(content: unknown): string
 export function reduce(t: Transcript, e: any): Transcript
 export function fromSessionMessages(messages: any[]): Transcript
 export function patchLines(patch?: string): { t: ' ' | '+' | '-' | '@'; s: string }[]
+export function compactDiff(lines: { t: ' ' | '+' | '-' | '@'; s: string }[], keep?: number): { t: ' ' | '+' | '-' | '…'; s: string }[]
 export function describeTool(name: string, input?: any): { verb: string; meta: string }
 export function visibleSteps(steps: Step[]): Step[]

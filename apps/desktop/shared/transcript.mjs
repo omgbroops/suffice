@@ -176,8 +176,48 @@ export function patchLines(patch) {
   if (!patch) return []
   return patch
     .split('\n')
-    .filter(l => !/^(---|\+\+\+|diff |index |\\ No newline)/.test(l))
+    .filter(l => l !== '' && !/^(---|\+\+\+|diff |index |\\ No newline)/.test(l))
     .map(l => (l.startsWith('@@') ? { t: '@', s: l } : { t: l[0] === '+' ? '+' : l[0] === '-' ? '-' : ' ', s: l.slice(1) }))
+}
+
+/**
+ * Diff as shown in a thread: hunk headers become gaps and unchanged runs keep `keep` lines
+ * next to each change; the rest folds into one '…' row (s = lines hidden, or '' across hunks).
+ */
+export function compactDiff(lines, keep = 2) {
+  const out = []
+  let run = []
+  let changed = false
+  const fold = s => {
+    const last = out[out.length - 1]
+    if (last?.t === '…') last.s = ''
+    else out.push({ t: '…', s })
+  }
+  const flush = atChange => {
+    const head = changed ? keep : 0
+    const tail = atChange ? keep : 0
+    if (run.length <= head + tail + 1) out.push(...run)
+    else {
+      out.push(...run.slice(0, head))
+      fold(`${run.length - head - tail}`)
+      out.push(...run.slice(run.length - tail))
+    }
+    run = []
+  }
+  for (const l of lines) {
+    if (l.t === ' ') run.push(l)
+    else if (l.t === '@') {
+      flush(false)
+      if (out.length) fold('')
+      changed = false
+    } else {
+      flush(true)
+      out.push(l)
+      changed = true
+    }
+  }
+  flush(false)
+  return out
 }
 
 const str = v => (typeof v === 'string' ? v : '')

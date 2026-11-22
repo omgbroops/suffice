@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
-import { describeTool, patchLines, visibleSteps, type AgentMessage as Agent, type ApprovalStep, type RaceStep, type Step, type ToolStep, type Transcript } from '../../shared/transcript.mjs'
+import { compactDiff, describeTool, patchLines, visibleSteps, type AgentMessage as Agent, type ApprovalStep, type RaceStep, type Step, type ToolStep, type Transcript } from '../../shared/transcript.mjs'
 import type { Status } from '../data'
 import { IconChevronDown } from '../icons'
 import { CopyButton, Elapsed, StatusGlyph } from './ui'
@@ -94,7 +94,7 @@ function ToolView({ step, project }: { step: ToolStep; project: string }) {
   const error = step.status === 'error'
   const rel = meta.startsWith(project.replace(/\\/g, '/')) ? meta.slice(project.length + 1) : meta
   if (step.patch) {
-    const lines = patchLines(step.patch)
+    const lines = compactDiff(patchLines(step.patch))
     return (
       <Row
         verb={verb}
@@ -111,10 +111,14 @@ function ToolView({ step, project }: { step: ToolStep; project: string }) {
         <div className="detail">
           <pre className="code diff">
             {lines.map((d, i) => (
-              <div key={i} className={`dl dl-${d.t === '+' ? 'add' : d.t === '-' ? 'del' : d.t === '@' ? 'hunk' : 'ctx'}`}>
-                {d.t !== '@' && <span className="dl-sign">{d.t}</span>}
-                {d.s}
-              </div>
+              d.t === '…' ? (
+                <div key={i} className="dl dl-fold">{d.s ? `${d.s} unchanged line${d.s === '1' ? '' : 's'}` : '⋯'}</div>
+              ) : (
+                <div key={i} className={`dl dl-${d.t === '+' ? 'add' : d.t === '-' ? 'del' : 'ctx'}`}>
+                  <span className="dl-sign">{d.t}</span>
+                  {d.s}
+                </div>
+              )
             ))}
           </pre>
         </div>

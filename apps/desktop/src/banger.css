@@ -121,3 +121,8 @@
 .side-account > .side-user { width: calc(100% - 16px); }
 /* the search row's bleed made every dropdown scroll sideways */
 .dd { overflow-x: hidden; }
+
+/* diffs: no raw hunk headers; folded context is a quiet one-line gap */
+.dl-fold { color: var(--text-4); font-family: var(--sans); font-size: 11px; line-height: 22px; padding-left: 28px; }
+.dl-fold:first-child { margin-top: -6px; }
+.dl-fold:last-child { margin-bottom: -6px; }
