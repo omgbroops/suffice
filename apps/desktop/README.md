@@ -25,4 +25,13 @@ bun run test:desktop
 4. With Bypass permissions off, the harness's `onApproval` hook becomes an Allow / Deny card in the thread. The codemode wrapper and session naming never ask.
 5. Each event is sent to the renderer as `thread:event` and folded into the saved transcript.
 
+### Efficient and Fast
+
+These follow the harness's `/efficient` and `/fast` strategies but run in the host (`strategyRun` in `electron/host/host.mjs`), so every attempt is visible:
+
+- Each attempt is a fresh in-memory harness session on a workspace copy (no `.git`, `node_modules` linked). Its events arrive as `attempt` events and fold into that attempt's own sub-transcript, which the thread opens as a sub-page.
+- Fast races three low-effort attempts of the selected model (the hints in `RACE_ATTEMPTS`); the first to finish with changes wins and the rest are aborted. Efficient gives the cheap model two rounds, then escalates to the lead model on a fresh copy.
+- Unless the approval mode is Full access, applying the winner's changes is an `apply_changes` approval. The changes are applied with the harness's `applyPatch`.
+- The turn is recorded in the main session (the prompt, plus a `desktop-strategy` custom message with the outcome and the winner's report), so later Balanced turns know what happened.
+
 Settings the desktop owns (selected project, model, effort per model, fast mode per model, approval mode) live in `~/.suffice/desktop/settings.json`.

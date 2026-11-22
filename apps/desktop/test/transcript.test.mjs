@@ -69,3 +69,31 @@ test('describes tools and parses patches', () => {
   assert.deepEqual(describeTool('read', { path: String.raw`C:\a\b.js`, offset: 10, limit: 5 }), { verb: 'Read', meta: 'C:/a/b.js #L10-15' })
   assert.deepEqual(patchLines('--- a\n+++ b\n@@ -1 +1 @@\n-old\n+new\n same').map(l => l.t), ['@', '-', '+', ' '])
 })
+
+test('efficient and fast attempts fold into sub-transcripts', () => {
+  const t = fold([
+    { type: 'user', id: 'u', text: 'go', at: 1 },
+    { type: 'agent_start', id: 'a', model: 'Sol', effort: 'low', mode: 'fast', at: 2 },
+    { type: 'attempt_start', mode: 'fast', aid: 'a1', label: 'Attempt 1', model: 'Sol', effort: 'low', prompt: 'go', at: 3 },
+    { type: 'attempt_start', mode: 'fast', aid: 'a2', label: 'Attempt 2', model: 'Sol', effort: 'low', prompt: 'go', at: 3 },
+    { type: 'attempt', aid: 'a1', event: { type: 'text', delta: 'Editing' }, at: 4 },
+    { type: 'attempt', aid: 'a2', event: { type: 'tool', id: 't', name: 'edit', input: { path: 'x.js' } }, at: 4 },
+    { type: 'attempt_end', aid: 'a2', status: 'won', files: ['x.js'], at: 5 },
+    { type: 'attempts_result', winner: 'a2', applied: true, files: ['x.js'], at: 6 },
+    { type: 'text', delta: 'Fixed.', at: 6 },
+    { type: 'end', ok: true, at: 7 },
+  ])
+  const agent = t.messages[1]
+  assert.equal(agent.mode, 'fast')
+  const group = agent.steps[0]
+  assert.equal(group.kind, 'attempts')
+  assert.deepEqual(group.attempts.map(x => x.status), ['stopped', 'won'])
+  assert.equal(group.winner, 'a2')
+  assert.equal(group.applied, true)
+  const [first, second] = group.attempts
+  assert.equal(first.transcript.messages[1].steps[0].text, 'Editing')
+  assert.equal(first.transcript.messages[1].done, true)
+  assert.equal(second.transcript.messages[1].steps[0].name, 'edit')
+  assert.equal(second.transcript.messages[1].steps[0].status, 'done')
+  assert.equal(agent.steps.at(-1).text, 'Fixed.')
+})

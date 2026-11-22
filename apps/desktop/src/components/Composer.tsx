@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import { useLayoutEffect, useRef, useState, type MouseEvent, type ReactNode } from 'react'
 import { IconArrowUp, IconPlus, IconStop } from '../icons'
 
 type Props = {
@@ -10,6 +10,9 @@ type Props = {
   permissions: ReactNode
   project: ReactNode
   model: ReactNode
+  /** The new-session layout: a one-line box with the pickers on a bar beneath it. */
+  line?: boolean
+  env?: ReactNode
   onSend: (text: string) => void
   onStop?: () => void
 }
@@ -36,24 +39,58 @@ export function Composer(p: Props) {
     setText('')
   }
 
+  const focus = (e: MouseEvent) => e.target === e.currentTarget && (e.preventDefault(), ta.current?.focus())
+  const textarea = (
+    <textarea
+      ref={ta}
+      rows={1}
+      value={text}
+      autoFocus={p.autoFocus}
+      placeholder={p.tip ? '' : p.placeholder}
+      aria-label="Message"
+      onChange={e => setText(e.target.value)}
+      onKeyDown={e => {
+        if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
+          e.preventDefault()
+          send()
+        }
+      }}
+    />
+  )
+  const action = p.working ? (
+    <button className="send-btn is-stop" onClick={p.onStop} aria-label="Stop">
+      <IconStop size={13} />
+    </button>
+  ) : (
+    <button className="send-btn" disabled={!canSend} onClick={send} aria-label="Send" title={p.disabled}>
+      <IconArrowUp size={15} />
+    </button>
+  )
+
+  if (p.line)
+    return (
+      <div className="composer-stack">
+        <div className="composer is-line" onMouseDown={focus}>
+          <button className="icon-btn" aria-label="Attach" title="Attachments are not wired up yet" disabled>
+            <IconPlus size={15} />
+          </button>
+          <div className="composer-input">{textarea}</div>
+          {action}
+        </div>
+        <div className="composer-bar">
+          {p.env}
+          {p.project}
+          {p.permissions}
+          <div className="spacer" />
+          {p.model}
+        </div>
+      </div>
+    )
+
   return (
-    <div className={`composer${p.tip ? ' is-tall' : ''}`} onMouseDown={e => e.target === e.currentTarget && (e.preventDefault(), ta.current?.focus())}>
+    <div className={`composer${p.tip ? ' is-tall' : ''}`} onMouseDown={focus}>
       <div className="composer-input">
-        <textarea
-          ref={ta}
-          rows={1}
-          value={text}
-          autoFocus={p.autoFocus}
-          placeholder={p.tip ? '' : p.placeholder}
-          aria-label="Message"
-          onChange={e => setText(e.target.value)}
-          onKeyDown={e => {
-            if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
-              e.preventDefault()
-              send()
-            }
-          }}
-        />
+        {textarea}
         {p.tip && !text && (
           <div className="composer-tip" aria-hidden>
             Tip: Change the model and capabilities (<kbd>Ctrl</kbd><kbd>/</kbd>)
@@ -68,15 +105,7 @@ export function Composer(p: Props) {
         {p.project}
         <div className="spacer" />
         {p.model}
-        {p.working ? (
-          <button className="send-btn is-stop" onClick={p.onStop} aria-label="Stop">
-            <IconStop size={13} />
-          </button>
-        ) : (
-          <button className="send-btn" disabled={!canSend} onClick={send} aria-label="Send" title={p.disabled}>
-            <IconArrowUp size={15} />
-          </button>
-        )}
+        {action}
       </div>
     </div>
   )

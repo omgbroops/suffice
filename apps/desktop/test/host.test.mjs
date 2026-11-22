@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { mkdtemp, readdir, readFile, rm } from 'node:fs/promises'
+import { mkdir, mkdtemp, readdir, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { createHost, effectiveEffort, effortsFor } from '../electron/host/host.mjs'
@@ -116,30 +116,104 @@ test('runs refuse without a project or with an unknown model', async () => {
   }
 })
 
-test('efficient and fast runs go through the harness commands', async () => {
-  const home = await mkdtemp(join(tmpdir(), 'suffice-desktop-'))
-  try {
-    const prompts = []
-    const ends = []
-    const createSession = async options => {
-      assert.equal(options.extensions.length, 3)
-      return {
-        session: { model: MODELS[0], setModel: async () => {}, setThinkingLevel: () => {}, subscribe: () => {} },
-        totals: {},
-        sessionPath: () => join(home, 's.jsonl'),
-        abort: () => {},
-        dispose: async () => {},
-        run: async prompt => prompts.push(prompt),
-      }
+/** Attempt sessions edit a file in their copy; the main session only records history. */
+function strategySessions(log, { edit = () => true } = {}) {
+  return async (options, _runtime, hooks = {}) => {
+    const subscribers = []
+    let aborted = false
+    const send = []
+    options.extensions[0]({ on: (name, fn) => send.push([name, fn]) })
+    const fire = (name, e) => send.filter(([n]) => n === name).forEach(([, fn]) => fn(e))
+    const isAttempt = !hooks.onApproval
+    return {
+      session: {
+        model: MODELS[0],
+        setModel: async () => {},
+        setThinkingLevel: () => {},
+        subscribe: fn => subscribers.push(fn),
+        sessionManager: { appendMessage: m => log.push(['history', m.role]), appendCustomMessageEntry: (type, text) => log.push(['history', type, text]) },
+      },
+      totals: {},
+      sessionPath: () => join(options.home, 's.jsonl'),
+      abort: () => (aborted = true),
+      dispose: async () => {},
+      async run(task) {
+        if (!isAttempt) throw new Error('the main session should not run a strategy turn')
+        log.push(['attempt', options.model, options.effort, options.desktopSettings['approval-mode']])
+        fire('tool_call', { toolCallId: 'e', toolName: 'edit', input: { path: 'a.txt' } })
+        await new Promise(r => setTimeout(r, 5))
+        if (aborted) throw new Error('Task stopped: cancelled')
+        if (edit(options, task)) await writeFile(join(options.cwd, 'a.txt'), 'changed')
+        fire('tool_result', { toolCallId: 'e', isError: false, content: [] })
+        subscribers.forEach(fn => fn({ type: 'message_update', assistantMessageEvent: { type: 'text_delta', delta: 'report' } }))
+        return 'All done.'
+      },
     }
-    const host = await createHost({ home, runtime: fakeRuntime(), createSession, openExternal: () => {}, chooseDirectory: async () => home, emit: (c, p) => c === 'thread:event' && p.event.type === 'end' && ends.push(p.event) })
-    await host.run({ threadId: 'e', project: home, prompt: 'fix it', model: 'gpt-6.1-sol', effort: 'low', mode: 'efficient', cheapModel: 'gpt-6-luna' })
-    await host.run({ threadId: 'f', project: home, prompt: 'go', model: 'gpt-6.1-sol', effort: 'low', mode: 'fast' })
-    await new Promise(r => setTimeout(r, 50))
-    assert.equal(prompts.length, 3)
-    assert.ok(prompts.includes('/efficient fix it') && prompts.includes('/fast go') && prompts.indexOf('/efficient cheap gpt-6-luna') < prompts.indexOf('/efficient fix it'))
-    assert.equal(ends.length, 2)
-    await assert.rejects(host.run({ threadId: 'g', project: home, prompt: 'x', model: 'gpt-6.1-sol', effort: 'low', mode: 'efficient', cheapModel: 'nope' }), /not in the model catalog/)
+  }
+}
+
+async function strategyHost(createSession, approve = true) {
+  const home = await mkdtemp(join(tmpdir(), 'suffice-desktop-'))
+  const project = join(home, 'project')
+  await mkdir(project)
+  await writeFile(join(project, 'a.txt'), 'original')
+  const events = []
+  const ended = {}
+  const host = await createHost({
+    home,
+    runtime: fakeRuntime(),
+    createSession,
+    openExternal: () => {},
+    chooseDirectory: async () => home,
+    emit: (c, p) => {
+      if (c !== 'thread:event') return
+      events.push(p.event)
+      if (p.event.type === 'approval') host.answerApproval(p.event.id, approve)
+      if (p.event.type === 'end') ended[p.threadId]?.(p.event)
+    },
+  })
+  const runTo = async args => {
+    const end = new Promise(r => (ended[args.threadId] = r))
+    await host.run({ project, model: 'gpt-6.1-sol', effort: 'high', ...args })
+    return end
+  }
+  return { home, project, events, host, runTo }
+}
+
+test('fast races three attempts and applies the winner after approval', async () => {
+  const log = []
+  const { home, project, events, host, runTo } = await strategyHost(strategySessions(log))
+  try {
+    const end = await runTo({ threadId: 'f', prompt: 'change a', mode: 'fast' })
+    assert.equal(end.ok, true)
+    assert.equal(await readFile(join(project, 'a.txt'), 'utf8'), 'changed')
+    const starts = events.filter(e => e.type === 'attempt_start')
+    assert.deepEqual(starts.map(e => e.aid), ['a1', 'a2', 'a3'])
+    assert.ok(log.filter(l => l[0] === 'attempt').every(l => l[2] === 'low' && l[3] === 'Never ask'))
+    const statuses = events.filter(e => e.type === 'attempt_end').map(e => e.status)
+    assert.equal(statuses.filter(s => s === 'won').length, 1)
+    assert.ok(events.some(e => e.type === 'attempt' && e.event.type === 'tool'))
+    assert.equal(events.find(e => e.type === 'approval').name, 'apply_changes')
+    assert.deepEqual(events.find(e => e.type === 'attempts_result'), { ...events.find(e => e.type === 'attempts_result'), applied: true, files: ['a.txt'] })
+    assert.ok(log.some(l => l[1] === 'desktop-strategy' && /fast mode/.test(l[2])))
+    await host.dispose()
+  } finally {
+    await rm(home, { recursive: true, force: true })
+  }
+})
+
+test('efficient escalates to the lead model only when the cheap one makes no changes', async () => {
+  const log = []
+  const { home, project, events, host, runTo } = await strategyHost(strategySessions(log, { edit: o => o.model === 'gpt-6.1-sol' }), false)
+  try {
+    const end = await runTo({ threadId: 'e', prompt: 'change a', mode: 'efficient', cheapModel: 'gpt-6-luna' })
+    assert.equal(end.ok, true)
+    assert.deepEqual(log.filter(l => l[0] === 'attempt').map(l => l[1]), ['gpt-6-luna', 'gpt-6-luna', 'gpt-6.1-sol'])
+    assert.deepEqual(events.filter(e => e.type === 'attempt_end').map(e => e.status), ['empty', 'empty', 'won'])
+    // Approval was refused, so the project is untouched.
+    assert.equal(await readFile(join(project, 'a.txt'), 'utf8'), 'original')
+    assert.equal(events.find(e => e.type === 'attempts_result').applied, false)
+    await assert.rejects(host.run({ threadId: 'g', project, prompt: 'x', model: 'gpt-6.1-sol', effort: 'low', mode: 'efficient', cheapModel: 'nope' }), /not in the model catalog/)
     await host.dispose()
   } finally {
     await rm(home, { recursive: true, force: true })

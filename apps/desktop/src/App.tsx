@@ -3,11 +3,11 @@ import { api, type AuthEvent, type InitInfo, type ModelInfo, type Settings, type
 import { emptyTranscript, reduce, type Transcript } from '../shared/transcript.mjs'
 import { ago, type Status } from './data'
 import { Composer } from './components/Composer'
-import { PermissionPicker, ProjectPicker, baseName } from './components/Pickers'
+import { EnvPicker, PermissionPicker, ProjectPicker, baseName, type Env } from './components/Pickers'
 import { ModelPicker } from './components/ModelPicker'
 import { ThreadView } from './components/ThreadView'
 import { Dither } from './components/Dither'
-import { Segmented, StatusGlyph } from './components/ui'
+import { StatusGlyph } from './components/ui'
 import { IconArrowLeft, IconArrowRight, IconChevronDown, IconClose, IconCompose, IconFolder, IconHome, IconPlus, IconSelector, IconSidebar } from './icons'
 
 type Thread = {
@@ -186,7 +186,7 @@ export default function App() {
   const [hist, setHist] = useState<{ stack: View[]; i: number }>({ stack: [{ kind: 'home' }], i: 0 })
   const [sidebar, setSidebar] = useState(true)
   const [notice, setNotice] = useState('')
-  const [env, setEnv] = useState<'local' | 'cloud'>('local')
+  const [env, setEnv] = useState<Env>('local')
   const [, tick] = useState(0)
   const platform = api.platform()
 
@@ -501,25 +501,22 @@ export default function App() {
         ) : (
           <div className="home">
             <Dither />
-            <div className="home-inner">
-              <div className="home-head">
-                <span className="logo logo-lg">[suffice]</span>
-                <div className="spacer" />
-                <Segmented<'local' | 'cloud'>
-                  value={env}
-                  onChange={setEnv}
-                  options={[
-                    { v: 'cloud', label: 'Cloud' },
-                    { v: 'local', label: 'Local' },
-                  ]}
-                />
-              </div>
-              <Composer {...composerProps} project={projectPicker(project)} autoFocus tip disabled={project ? undefined : 'Choose a project first'} onSend={startThread} />
+            <div className="home-dock thread-col">
               {!project && (
                 <button className="home-hint" onClick={() => void browseProject()}>
                   Choose a project folder to start
                 </button>
               )}
+              <Composer
+                {...composerProps}
+                line
+                env={<EnvPicker value={env} onChange={setEnv} />}
+                project={projectPicker(project)}
+                autoFocus
+                placeholder="Describe a task or ask a question"
+                disabled={project ? undefined : 'Choose a project first'}
+                onSend={startThread}
+              />
             </div>
           </div>
         )}

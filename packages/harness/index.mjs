@@ -5,5 +5,5 @@ export {createSufficeModelRuntime, modelRuntimeOptions, refreshModelCatalog} fro
 export {resolveProject, recentProjects, rememberProject} from '../cli/src/projects.mjs';
 export {installationId} from '../cli/src/installation-id.mjs';
 export {hash} from '../cli/src/workspace.mjs';
-export {sufficeFastCommand} from '../cli/src/fast-command.mjs';
+export {sufficeFastCommand, RACE_ATTEMPTS, applyPatch, diffFiles, workspacePrefill} from '../cli/src/fast-command.mjs';
 export {sufficeEfficientCommand} from '../cli/src/efficient-command.mjs';

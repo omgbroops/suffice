@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react'
 import type { Settings } from '../api'
-import { IconCheck, IconEye, IconFolder, IconLockOpen, IconPlus, IconShield } from '../icons'
+import { IconCheck, IconCloud, IconEye, IconFolder, IconLaptop, IconLockOpen, IconPlus, IconShield } from '../icons'
 import { Dropdown } from './Dropdown'
 
 export const baseName = (path: string) => path.replace(/[\\/]+$/, '').split(/[\\/]/).pop() || path
@@ -104,6 +104,52 @@ export function ProjectPicker({ project, projects, onPick, onAdd }: { project: s
       )}
     >
       {close => <ProjectList project={project} projects={projects} onPick={onPick} onAdd={onAdd} close={close} />}
+    </Dropdown>
+  )
+}
+
+export type Env = 'local' | 'cloud'
+const ENVS: { id: Env; label: string; note: string; icon: ReactNode }[] = [
+  { id: 'local', label: 'Local', note: 'Runs on this machine, in the project folder', icon: <IconLaptop size={14} /> },
+  { id: 'cloud', label: 'Cloud', note: 'A remote sandbox. Not available yet', icon: <IconCloud size={14} /> },
+]
+
+/** Where a session runs. Cloud is listed but changes nothing yet. */
+export function EnvPicker({ value, onChange }: { value: Env; onChange: (e: Env) => void }) {
+  const current = ENVS.find(e => e.id === value) ?? ENVS[0]
+  return (
+    <Dropdown
+      width={260}
+      trigger={({ open, toggle, ref }) => (
+        <button ref={ref} className={`ghost-btn${open ? ' is-open' : ''}`} onClick={toggle} aria-haspopup="menu" aria-expanded={open} title="Environment">
+          {current.icon}
+          {current.label}
+        </button>
+      )}
+    >
+      {close => (
+        <div className="dd-list">
+          {ENVS.map(e => (
+            <button
+              key={e.id}
+              role="menuitemradio"
+              aria-checked={e.id === value}
+              className={`dd-row dd-row-tall${e.id === value ? ' is-selected' : ''}`}
+              onClick={() => {
+                onChange(e.id)
+                close()
+              }}
+            >
+              <span className="dd-icon">{e.icon}</span>
+              <span className="dd-text">
+                <span className="dd-title">{e.label}</span>
+                <span className="dd-note">{e.note}</span>
+              </span>
+              {e.id === value && <IconCheck size={13} className="dd-check" />}
+            </button>
+          ))}
+        </div>
+      )}
     </Dropdown>
   )
 }

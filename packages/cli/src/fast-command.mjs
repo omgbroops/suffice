@@ -9,7 +9,7 @@ import {createSufficeSession} from './session.mjs';
 //   /fast on|off     toggle the low-effort speed profile on the live session
 //   /fast <task>     race the task: 3 attempts on isolated workspace copies,
 //                    first completed patch is applied back to the real worktree
-const RACE_ATTEMPTS=[
+export const RACE_ATTEMPTS=[
   {hint:''},
   {hint:'Prefer the smallest correct change. Do not refactor or reformat unrelated code.'},
   {hint:'Check edge cases and the full contract before finishing.'},

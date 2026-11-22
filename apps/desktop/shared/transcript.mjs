@@ -7,7 +7,9 @@
 /** @typedef {{kind:'tool', id:string, parent?:string, name:string, input:any, status:'running'|'done'|'error', output?:string, patch?:string}} ToolStep */
 /** @typedef {{kind:'approval', id:string, name:string, input:any, state:'pending'|'allowed'|'denied'}} ApprovalStep */
 /** @typedef {{kind:'note', text:string, level:'info'|'warning'|'error'}} NoteStep */
-/** @typedef {TextStep|ThinkingStep|ToolStep|ApprovalStep|NoteStep} Step */
+/** @typedef {{id:string, label:string, hint?:string, model:string, effort:string, status:'running'|'won'|'discarded'|'empty'|'failed'|'stopped', files?:string[], error?:string, startedAt:number, endedAt?:number, transcript:Transcript}} Attempt */
+/** @typedef {{kind:'attempts', mode:'efficient'|'fast', attempts:Attempt[], winner?:string, applied?:boolean, files?:string[]}} AttemptsStep */
+/** @typedef {TextStep|ThinkingStep|ToolStep|ApprovalStep|NoteStep|AttemptsStep} Step */
 /** @typedef {{id:string, role:'user', text:string, at:number}} UserMessage */
 /** @typedef {{id:string, role:'agent', model:string, effort:string, mode?:'balanced'|'efficient'|'fast', cheap?:string, steps:Step[], done:boolean, error?:string, startedAt:number, endedAt?:number}} AgentMessage */
 /** @typedef {{version:1, messages:(UserMessage|AgentMessage)[]}} Transcript */
@@ -52,6 +54,14 @@ export function reduce(t, e) {
     if (s?.kind === 'thinking' && !s.endedAt) a.steps[a.steps.length - 1] = { ...s, endedAt: at }
   }
   const at = e.at ?? Date.now()
+  /** Update the Efficient/Fast attempts of the current reply. */
+  const withAttempts = fn =>
+    withAgent(a => {
+      const i = a.steps.findIndex(s => s.kind === 'attempts')
+      if (i >= 0) a.steps[i] = fn(a.steps[i])
+      return a
+    })
+  const withAttempt = (aid, fn) => withAttempts(g => ({ ...g, attempts: g.attempts.map(x => (x.id === aid ? fn(x) : x)) }))
 
   switch (e.type) {
     case 'user':
@@ -107,10 +117,42 @@ export function reduce(t, e) {
         if (i >= 0) a.steps[i] = { ...a.steps[i], state: e.allow ? 'allowed' : 'denied' }
         return a
       })
+    case 'attempt_start':
+      return withAgent(a => {
+        closeThinking(a, at)
+        let i = a.steps.findIndex(s => s.kind === 'attempts')
+        if (i < 0) i = a.steps.push({ kind: 'attempts', mode: e.mode, attempts: [] }) - 1
+        let tr = reduce(emptyTranscript(), { type: 'user', id: `${e.aid}-u`, text: e.prompt, at })
+        tr = reduce(tr, { type: 'agent_start', id: `${e.aid}-a`, model: e.model, effort: e.effort, at })
+        const attempt = { id: e.aid, label: e.label, ...(e.hint ? { hint: e.hint } : {}), model: e.model, effort: e.effort, status: 'running', startedAt: at, transcript: tr }
+        a.steps[i] = { ...a.steps[i], attempts: [...a.steps[i].attempts.filter(x => x.id !== e.aid), attempt] }
+        return a
+      })
+    case 'attempt':
+      return withAttempt(e.aid, x => ({ ...x, transcript: reduce(x.transcript, { at, ...e.event }) }))
+    case 'attempt_end':
+      return withAttempt(e.aid, x => ({
+        ...x,
+        status: e.status,
+        endedAt: at,
+        ...(e.files ? { files: e.files } : {}),
+        ...(e.error ? { error: e.error } : {}),
+        transcript: reduce(x.transcript, { type: 'end', ok: ['won', 'empty'].includes(e.status), error: e.status === 'discarded' ? 'Discarded: another attempt finished first.' : e.status === 'stopped' ? 'Stopped.' : e.error, at }),
+      }))
+    case 'attempts_result':
+      return withAttempts(g => ({ ...g, ...(e.winner ? { winner: e.winner } : {}), applied: !!e.applied, ...(e.files ? { files: e.files } : {}) }))
     case 'end':
       return withAgent(a => {
         closeThinking(a, at)
-        a.steps = a.steps.map(s => (s.kind === 'tool' && s.status === 'running' ? { ...s, status: e.ok ? 'done' : 'error' } : s.kind === 'approval' && s.state === 'pending' ? { ...s, state: 'denied' } : s))
+        a.steps = a.steps.map(s =>
+          s.kind === 'tool' && s.status === 'running'
+            ? { ...s, status: e.ok ? 'done' : 'error' }
+            : s.kind === 'approval' && s.state === 'pending'
+              ? { ...s, state: 'denied' }
+              : s.kind === 'attempts'
+                ? { ...s, attempts: s.attempts.map(x => (x.status === 'running' ? { ...x, status: 'stopped', endedAt: at, transcript: reduce(x.transcript, { type: 'end', ok: false, error: 'Stopped.', at }) } : x)) }
+                : s,
+        )
         return { ...a, done: true, endedAt: at, ...(e.ok ? {} : { error: e.error || 'The run stopped.' }) }
       })
     default:

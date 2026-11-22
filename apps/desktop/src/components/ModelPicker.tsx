@@ -5,17 +5,22 @@ import { IconBolt as IconLightning, IconCheck, IconChevronDown, IconLayers, Icon
 import { Dropdown } from './Dropdown'
 
 const LIST_W = 300
-const DETAIL_W = 300
-const MAX_H = 460
+const DETAIL_W = 272
+const MAX_H = 420
 
 export const EFFORT_LABEL: Record<string, string> = { off: 'Off', minimal: 'Minimal', low: 'Low', medium: 'Medium', high: 'High', xhigh: 'Extra high' }
-const SHORT: Record<string, string> = { off: 'Off', minimal: 'Min', low: 'Low', medium: 'Med', high: 'High', xhigh: 'XHigh' }
+/** Thin ticks per level in the effort ramp. */
+const TICKS = 5
+const SHORT: Record<string, string> = { off: 'Off', minimal: 'Min', low: 'Low', medium: 'Med', high: 'High', xhigh: 'Max' }
 
 export const MODE_INFO: Record<Mode, { name: string; note: string; icon: ReactNode }> = {
-  balanced: { name: 'Balanced', note: 'Regular Suffice: one model at the effort you pick', icon: <IconLayers size={14} /> },
-  efficient: { name: 'Efficient', note: 'A cheap model tries first; the lead model runs only if it makes no changes', icon: <IconTarget size={14} /> },
-  fast: { name: 'Fast', note: 'Races three low-effort attempts and keeps the first finished patch', icon: <IconLightning size={14} /> },
+  balanced: { name: 'Balanced', note: 'Regular Suffice: one model at the effort you pick.', icon: <IconLayers size={14} /> },
+  efficient: { name: 'Efficient', note: 'A cheap model tries first. The lead model runs only if the cheap one makes no changes.', icon: <IconTarget size={14} /> },
+  fast: { name: 'Fast', note: 'Three low-effort attempts race on copies of the project. The first to finish with changes wins.', icon: <IconLightning size={14} /> },
 }
+
+/** The three Fast attempts differ only by a line of guidance (see the harness's RACE_ATTEMPTS). */
+const FAST_LANES = ['As asked', 'Smallest correct change', 'Checks edge cases first']
 
 type Order = 'default' | 'cost'
 type Section = { title?: string; items: Item[] }
@@ -27,21 +32,7 @@ const money = (n: number) => (n === 0 ? '$0' : `$${n < 1 ? +n.toFixed(3) : +n.to
 const ctx = (n: number) => (n >= 1_000_000 ? `${+(n / 1_000_000).toFixed(2)}M` : `${Math.round(n / 1000)}K`)
 export const shortName = (name: string) => name.replace(/^GPT-[\d.]+\s+/, '') || name
 
-function relativeCost(models: ModelInfo[]) {
-  const values = models.map(blended).filter(v => v > 0)
-  const lo = Math.log(Math.min(...values)), hi = Math.log(Math.max(...values))
-  return (m: ModelInfo) => (blended(m) > 0 && hi > lo ? (Math.log(blended(m)) - lo) / (hi - lo) : 0)
-}
-
 const effortIn = (m: ModelInfo | undefined, wanted?: string) => (!m?.efforts.length ? undefined : m.efforts.includes(wanted ?? '') ? wanted : m.efforts.includes('low') ? 'low' : m.efforts[0])
-
-function CostMeter({ cost }: { cost: number }) {
-  return (
-    <span className="mp-meter" aria-hidden>
-      <span style={{ width: `${Math.max(8, Math.min(1, cost) * 100)}%`, background: cost < 0.34 ? 'var(--green)' : cost < 0.67 ? 'var(--amber)' : 'var(--red)' }} />
-    </span>
-  )
-}
 
 function Switch({ on, onChange, label }: { on: boolean; onChange: (v: boolean) => void; label: string }) {
   return (
@@ -51,7 +42,7 @@ function Switch({ on, onChange, label }: { on: boolean; onChange: (v: boolean) =
   )
 }
 
-/** A model chooser inside the detail panel (the lead or the cheap model). */
+/** A model chooser inside the detail pane (the lead or the cheap model). */
 function ModelSelect({ models, value, onChange, label }: { models: ModelInfo[]; value: string; onChange: (id: string) => void; label: string }) {
   const current = models.find(m => m.id === value)
   return (
@@ -77,7 +68,8 @@ function ModelSelect({ models, value, onChange, label }: { models: ModelInfo[]; 
                 close()
               }}
             >
-              <span className="dd-title">{m.name}</span>
+              <span className="dd-title dd-grow">{m.name}</span>
+              <span className="dd-path" style={{ flex: 'none' }}>{money(m.cost.input)} / {money(m.cost.output)}</span>
               {m.id === value && <IconCheck size={13} className="dd-check" />}
             </button>
           ))}
@@ -87,55 +79,79 @@ function ModelSelect({ models, value, onChange, label }: { models: ModelInfo[]; 
   )
 }
 
-function Effort({ m, value, onChange }: { m: ModelInfo; value?: string; onChange: (e: string) => void }) {
+/**
+ * Reasoning effort as a row of rising bars, one per level the model accepts.
+ * Click or drag across them, or use the arrow keys; hovering previews a level.
+ */
+function Effort({ m, value, onChange, label = 'Reasoning' }: { m: ModelInfo; value?: string; onChange: (e: string) => void; label?: string }) {
   const levels = m.efforts
-  const track = useRef<HTMLDivElement>(null)
+  const bars = useRef<HTMLDivElement>(null)
+  const [hover, setHover] = useState<number | null>(null)
   if (!levels.length) return null
   const i = Math.max(0, levels.indexOf(value ?? ''))
-  const at = levels.length > 1 ? i / (levels.length - 1) : 1
-  const pick = (x: number) => {
-    const r = track.current!.getBoundingClientRect()
-    const t = Math.min(1, Math.max(0, (x - r.left) / r.width))
-    onChange(levels[Math.round(t * (levels.length - 1))])
+  const shown = hover ?? i
+  const at = (x: number) => {
+    const r = bars.current!.getBoundingClientRect()
+    return Math.min(levels.length - 1, Math.max(0, Math.floor(((x - r.left) / r.width) * levels.length)))
   }
+  const step = (d: number) => onChange(levels[Math.min(levels.length - 1, Math.max(0, i + d))])
   return (
-    <div className="mp-effort">
-      <div className="mp-kv"><span>Reasoning</span><span className="mp-kv-v">{EFFORT_LABEL[levels[i]]}</span></div>
+    <div className="eff">
+      <div className="eff-head">
+        <span>{label}</span>
+        <span className={`eff-value${hover !== null && hover !== i ? ' is-preview' : ''}`}>{EFFORT_LABEL[levels[shown]]}</span>
+      </div>
       <div
-        ref={track}
-        className="mp-slider"
+        ref={bars}
+        className="eff-bars"
         role="slider"
         tabIndex={0}
-        aria-label="Reasoning effort"
+        aria-label={`${label} effort`}
+        aria-valuemin={0}
+        aria-valuemax={levels.length - 1}
+        aria-valuenow={i}
         aria-valuetext={EFFORT_LABEL[levels[i]]}
-        onPointerDown={e => { e.currentTarget.setPointerCapture(e.pointerId); pick(e.clientX) }}
-        onPointerMove={e => e.buttons & 1 && pick(e.clientX)}
+        onPointerDown={e => {
+          e.currentTarget.setPointerCapture(e.pointerId)
+          onChange(levels[at(e.clientX)])
+        }}
+        onPointerMove={e => {
+          const j = at(e.clientX)
+          setHover(j)
+          if (e.buttons & 1 && j !== i) onChange(levels[j])
+        }}
+        onPointerLeave={() => setHover(null)}
         onKeyDown={e => {
-          if (e.key === 'ArrowRight' || e.key === 'ArrowUp') onChange(levels[Math.min(levels.length - 1, i + 1)])
-          if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') onChange(levels[Math.max(0, i - 1)])
+          if (e.key === 'ArrowRight' || e.key === 'ArrowUp') (e.preventDefault(), step(1))
+          if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') (e.preventDefault(), step(-1))
         }}
       >
-        <span className="mp-slider-fill" style={{ width: `calc(${at * 100}% - ${at * 14}px + 14px)` }} />
-        {levels.map((l, j) => j > i && <span key={l} className="mp-slider-tick" style={{ left: `calc(${(j / (levels.length - 1)) * 100}% - ${(j / (levels.length - 1)) * 14}px + 7px)` }} />)}
-        <span className="mp-slider-thumb" style={{ left: `calc(${at * 100}% - ${at * 14}px)` }} />
+        {levels.map((l, j) => (
+          <span key={l} className={`eff-bar${j <= i ? ' is-on' : ''}${hover !== null && j <= hover && j > i ? ' is-ghost' : ''}${hover !== null && j > hover && j <= i ? ' is-dim' : ''}`}>
+            {Array.from({ length: TICKS }, (_, k) => (
+              <i key={k} style={{ height: `${Math.round(18 + (82 * (j * TICKS + k + 1)) / (levels.length * TICKS))}%` }} />
+            ))}
+          </span>
+        ))}
+      </div>
+      <div className="eff-ticks" aria-hidden>
+        {levels.map((l, j) => (
+          <span key={l} className={j === i ? 'is-on' : undefined}>{SHORT[l]}</span>
+        ))}
       </div>
     </div>
   )
 }
 
-function Prices({ m }: { m: ModelInfo }) {
+function Prices({ m, title }: { m: ModelInfo; title?: string }) {
   return (
-    <div className="mp-kvs">
-      <div className="mp-kv"><span>Context</span><span className="mp-kv-v">{ctx(m.contextWindow)}</span></div>
-      <div className="mp-kv"><span>Input</span><span className="mp-kv-v">{money(m.cost.input)}<span className="mp-faint"> / 1M</span></span></div>
-      <div className="mp-kv"><span>Cached</span><span className="mp-kv-v">{money(m.cost.cacheRead)}<span className="mp-faint"> / 1M</span></span></div>
-      <div className="mp-kv"><span>Output</span><span className="mp-kv-v">{money(m.cost.output)}<span className="mp-faint"> / 1M</span></span></div>
+    <div className="mp-prices">
+      {title && <div className="mp-prices-title">{title}</div>}
+      <div className="mp-kv"><span>Input</span><span className="mp-kv-v">{money(m.cost.input)}</span></div>
+      <div className="mp-kv"><span>Cached</span><span className="mp-kv-v">{money(m.cost.cacheRead)}</span></div>
+      <div className="mp-kv"><span>Output</span><span className="mp-kv-v">{money(m.cost.output)}</span></div>
     </div>
   )
-}
-
-function Scale(_: { cost: number; label?: string }) {
-  return null
 }
 
 type PickerProps = {
@@ -153,81 +169,79 @@ type PickerProps = {
   onFast: (id: string, on: boolean) => void
 }
 
-function ModeDetail({ mode, p, costOf, maxHeight }: { mode: Mode; p: PickerProps; costOf: (m: ModelInfo) => number; maxHeight?: CSSProperties['maxHeight'] }) {
+function ModeDetail({ mode, p }: { mode: Mode; p: PickerProps }) {
   const lead = p.models.find(m => m.id === p.value)
   const cheap = p.models.find(m => m.id === p.cheap)
   const info = MODE_INFO[mode]
   return (
-    <div className="mp-detail" style={{ width: DETAIL_W, maxHeight }}>
-      <div className="mp-detail-head">
-        <span className="mp-detail-name">{info.name}</span>
-      </div>
-      <div className="mp-detail-sub">{info.note}</div>
-      <div className="mp-field">
-        <span>{mode === 'efficient' ? 'Lead' : 'Model'}</span>
-        <ModelSelect models={p.models} value={p.value} onChange={p.onChange} label={mode === 'efficient' ? 'Lead model' : 'Model'} />
-      </div>
-      {lead && mode !== 'fast' && <Effort m={lead} value={effortIn(lead, p.efforts[lead.id])} onChange={e => p.onEffort(lead.id, e)} />}
-      {mode === 'fast' && (
-        <div className="mp-field">
-          <span>Effort</span>
-          <span className="mp-faint">Low, three attempts</span>
+    <div className="mp-detail" style={{ width: DETAIL_W }}>
+      <div className="mp-d-head">
+        <div className="mp-d-name">
+          <span className="mp-d-icon">{info.icon}</span>
+          {info.name}
         </div>
-      )}
+        <div className="mp-d-sub">{info.note}</div>
+      </div>
       {mode === 'efficient' && (
         <div className="mp-field">
           <span>Cheap model</span>
           <ModelSelect models={p.models} value={p.cheap} onChange={p.onCheap} label="Cheap model" />
         </div>
       )}
-      {mode === 'efficient' && p.cheap === p.value && <div className="mp-detail-sub mp-warn">The lead and cheap model are the same, so escalating changes nothing. Pick a stronger lead.</div>}
-      {lead && (
+      <div className="mp-field">
+        <span>{mode === 'efficient' ? 'Lead model' : 'Model'}</span>
+        <ModelSelect models={p.models} value={p.value} onChange={p.onChange} label={mode === 'efficient' ? 'Lead model' : 'Model'} />
+      </div>
+      {mode === 'efficient' && p.cheap === p.value && <div className="mp-d-sub mp-warn">The lead and cheap model are the same, so escalating changes nothing.</div>}
+      {lead && mode !== 'fast' && <Effort m={lead} label={mode === 'efficient' ? 'Lead reasoning' : 'Reasoning'} value={effortIn(lead, p.efforts[lead.id])} onChange={e => p.onEffort(lead.id, e)} />}
+      {mode === 'fast' && (
+        <div className="mp-lanes">
+          {FAST_LANES.map((l, i) => (
+            <div key={l} className="mp-lane">
+              <span className="mp-lane-n">{i + 1}</span>
+              <span className="mp-lane-t">{l}</span>
+              <span className="mp-faint">Low</span>
+            </div>
+          ))}
+        </div>
+      )}
+      {lead && mode === 'balanced' && (
         <div className="mp-field">
           <span>Priority tier</span>
           <Switch on={!!p.fast[lead.id]} onChange={v => p.onFast(lead.id, v)} label="Priority tier" />
         </div>
       )}
-      <div className="mp-rule" />
-      <div className="mp-cost-head">
-        <span>Cost</span>
-        <span className="mp-faint">{mode === 'efficient' ? 'Lead runs only on a miss' : mode === 'fast' ? 'About three low-effort runs' : 'Per million tokens'}</span>
-      </div>
-      {mode === 'efficient' && cheap && lead ? (
-        <>
-          <Scale cost={costOf(cheap)} label={shortName(cheap.name)} />
-          <Prices m={cheap} />
-          <div className="mp-detail-sub mp-escalate">
-            If it escalates: {shortName(lead.name)} at {money(lead.cost.input)} in, {money(lead.cost.output)} out per 1M
+      <div className="mp-d-foot">
+        {mode !== 'balanced' && <div className="mp-d-sub">Attempts work on copies. You approve the winner’s changes unless you’re on Full access.</div>}
+        {mode === 'efficient' && cheap && lead ? (
+          <div className="mp-prices-2">
+            <Prices m={cheap} title={shortName(cheap.name)} />
+            <Prices m={lead} title={`${shortName(lead.name)}, on a miss`} />
           </div>
-        </>
-      ) : lead ? (
-        <>
-          <Scale cost={mode === 'fast' ? Math.min(1, costOf(lead) + 0.25) : costOf(lead)} label={mode === 'fast' ? `${shortName(lead.name)} ×3` : undefined} />
-          <Prices m={lead} />
-        </>
-      ) : null}
-      {mode !== 'balanced' && <div className="mp-detail-sub mp-escalate">Attempts run on a copy of the project. The winning changes are applied back without asking.</div>}
+        ) : lead ? (
+          <Prices m={lead} title={mode === 'fast' ? `${shortName(lead.name)}, per attempt` : undefined} />
+        ) : null}
+      </div>
     </div>
   )
 }
 
-function ModelDetail({ m, p, cost, maxHeight }: { m: ModelInfo; p: PickerProps; cost: number; maxHeight?: CSSProperties['maxHeight'] }) {
+function ModelDetail({ m, p }: { m: ModelInfo; p: PickerProps }) {
   const effort = effortIn(m, p.efforts[m.id])
   return (
-    <div className="mp-detail" style={{ width: DETAIL_W, maxHeight }}>
-      <div className="mp-detail-head">
-        <span className="mp-detail-name">{m.name}</span>
-        {effort && <span className="mp-faint">{EFFORT_LABEL[effort] ?? effort}</span>}
+    <div className="mp-detail" style={{ width: DETAIL_W }}>
+      <div className="mp-d-head">
+        <div className="mp-d-name">{m.name}</div>
+        <div className="mp-d-sub">{ctx(m.contextWindow)} context{m.efforts.length ? '' : ' · no reasoning'}</div>
       </div>
-      
       <Effort m={m} value={effort} onChange={e => p.onEffort(m.id, e)} />
       <div className="mp-field">
         <span>Priority tier</span>
         <Switch on={!!p.fast[m.id]} onChange={v => p.onFast(m.id, v)} label="Priority tier" />
       </div>
-      <div className="mp-rule" />
-      <Scale cost={cost} />
-      <Prices m={m} />
+      <div className="mp-d-foot">
+        <Prices m={m} title="Per million tokens" />
+      </div>
     </div>
   )
 }
@@ -247,7 +261,6 @@ export function ModelPicker(p: PickerProps) {
   const pop = useRef<HTMLDivElement>(null)
   const listRef = useRef<HTMLDivElement>(null)
   const byId = useMemo(() => new Map(models.map(m => [m.id, m])), [models])
-  const costOf = useMemo(() => relativeCost(models), [models])
   const current = byId.get(value)
   const cheapModel = byId.get(p.cheap)
   const selectedId = mode === 'balanced' ? value : `mode:${mode}`
@@ -375,7 +388,7 @@ export function ModelPicker(p: PickerProps) {
           <div
             ref={pop}
             className={`mp${pos.up ? ' is-up' : ''}`}
-            style={{ right: pos.right, top: pos.top, bottom: pos.bottom }}
+            style={{ right: pos.right, top: pos.top, bottom: pos.bottom, height: pos.maxHeight }}
             onKeyDown={e => {
               // A model menu open inside the detail panel takes Escape for itself.
               if (e.key !== 'Escape' || document.querySelector('.dd')) return
@@ -387,8 +400,8 @@ export function ModelPicker(p: PickerProps) {
               }
             }}
           >
-            {shownMode ? <ModeDetail mode={shownMode} p={p} costOf={costOf} maxHeight={pos.maxHeight} /> : shownModel ? <ModelDetail m={shownModel} p={p} cost={costOf(shownModel)} maxHeight={pos.maxHeight} /> : null}
-            <div className="mp-list" style={{ width: LIST_W, maxHeight: pos.maxHeight }}>
+            {shownMode ? <ModeDetail mode={shownMode} p={p} /> : shownModel ? <ModelDetail m={shownModel} p={p} /> : <div className="mp-detail" style={{ width: DETAIL_W }} />}
+            <div className="mp-list" style={{ width: LIST_W }}>
               <div className="mp-search">
                 <IconSearch size={14} />
                 <input
