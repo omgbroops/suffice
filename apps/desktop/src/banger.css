@@ -112,3 +112,10 @@
 .prose-code-wrap:hover > .icon-btn, .prose-code-wrap > .icon-btn:focus-visible { opacity: 1; }
 /* text fades under the top bar instead of slicing */
 .thread-scroll { -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 18px); mask-image: linear-gradient(to bottom, transparent 0, #000 18px); }
+
+/* account footer: one line, one 6px status dot, chevron at the edge */
+.side-user-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; color: var(--text-2); }
+.side-user-dot { width: 6px; height: 6px; flex: none; border-radius: 50%; background: var(--green); }
+.side-user-chev { margin-left: auto; flex: none; color: var(--text-4); }
+.side-user .avatar { color: var(--text-2); }
+.side-account > .side-user { width: calc(100% - 16px); }

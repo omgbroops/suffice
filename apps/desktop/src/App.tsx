@@ -11,6 +11,7 @@ import { Segmented, StatusGlyph } from './components/ui'
 import { IconArrowLeft, IconArrowRight, IconChevronDown, IconClose, IconCompose, IconFolder, IconHome, IconNotes, IconPlus, IconSearch, IconSelector, IconSidebar } from './icons'
 import { ColorsContext, SearchPalette, SideProjects, groupByDate } from './components/Sidebar'
 import { NotesView } from './components/NotesView'
+import { Live } from './components/Live'
 
 type Thread = {
   key: string
@@ -633,12 +634,10 @@ function AccountMenu({ onSignOut }: { onSignOut: () => void }) {
         </div>
       )}
       <button className="side-user" onClick={() => setOpen(o => !o)}>
-        <span className="avatar">s</span>
-        <span className="side-user-text">
-          <span>ChatGPT account</span>
-          <span className="meta">Signed in</span>
-        </span>
-        <IconSelector size={13} />
+        <span className="avatar"><Live kind="swarm" seed="account" size={16} status="done" dim={false} label="Account" /></span>
+        <span className="side-user-name">ChatGPT account</span>
+        <span className="side-user-dot" role="img" aria-label="Signed in" title="Signed in" />
+        <IconSelector size={13} className="side-user-chev" />
       </button>
     </div>
   )
