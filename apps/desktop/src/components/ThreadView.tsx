@@ -42,7 +42,12 @@ export function Prose({ text, onLink }: { text: string; onLink?: (href: string) 
       i++
       while (i < lines.length && !/^```/.test(lines[i])) body.push(lines[i++])
       i++
-      blocks.push(<pre key={blocks.length} className="code prose-code">{body.join('\n')}</pre>)
+      blocks.push(
+        <div key={blocks.length} className="prose-code-wrap">
+          <pre className="code prose-code">{body.join('\n')}</pre>
+          <CopyButton text={body.join('\n')} />
+        </div>,
+      )
     } else if (/^#{1,4}\s/.test(line)) {
       blocks.push(<p key={blocks.length} className="prose-h">{inline(line.replace(/^#+\s/, ''), onLink)}</p>)
       i++
@@ -303,6 +308,8 @@ export function ThreadView({
   return (
     <div className="thread">
       <header className="thread-head">
+        <span className="thread-crumb">{project.replace(/[\\/]+$/, '').split(/[\\/]/).pop()}</span>
+        <span className="thread-sep" aria-hidden>/</span>
         <StatusGlyph status={status} size={14} />
         <span className="thread-title">{title}</span>
         {status === 'input' && <span className="thread-status">{STATUS_LABEL[status]}</span>}

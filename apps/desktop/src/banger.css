@@ -101,3 +101,14 @@
 @media (prefers-reduced-motion: reduce) { .graph-node { transition: none; animation: none; } }
 
 .notes-page .prose > .prose-h:first-child { font-size: 20px; line-height: 28px; font-weight: 560; letter-spacing: -0.01em; color: var(--text); margin-bottom: 6px; }
+
+/* thread top bar: project / glyph title */
+.thread-crumb { flex: none; color: var(--text-3); white-space: nowrap; }
+.thread-sep { flex: none; color: var(--text-4); margin: 0 -2px; }
+/* reply code: grows to fit before it scrolls; copy on hover */
+.prose-code-wrap { position: relative; }
+.prose-code-wrap .prose-code { max-height: 480px; }
+.prose-code-wrap > .icon-btn { position: absolute; top: 6px; right: 6px; color: var(--text-3); background: var(--well); opacity: 0; transition: opacity 150ms var(--ease); }
+.prose-code-wrap:hover > .icon-btn, .prose-code-wrap > .icon-btn:focus-visible { opacity: 1; }
+/* text fades under the top bar instead of slicing */
+.thread-scroll { -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 18px); mask-image: linear-gradient(to bottom, transparent 0, #000 18px); }
