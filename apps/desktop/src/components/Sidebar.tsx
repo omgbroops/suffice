@@ -51,8 +51,51 @@ function useDismiss(open: boolean, close: () => void, ref: RefObject<HTMLElement
 
 const cap = (c: string) => c[0].toUpperCase() + c.slice(1)
 
+/**
+ * The name box at the top of the ⋯ menu. It holds the current name; clearing it and leaving the box (blur,
+ * Enter, clicking out) brings back the default name (Abhay 11-22). Esc puts the saved name back.
+ */
+function NameField({ path, onRename }: { path: string; onRename: (name: string) => void }) {
+  const names = useContext(NamesContext)
+  const fallback = baseName(path)
+  const [text, setText] = useState(displayName(names, path))
+  // Esc closes the menu, and the unmount fires a blur; this keeps that blur from saving
+  const skip = useRef(false)
+  const save = (t: string) => onRename(t === fallback ? '' : t)
+  const commit = () => {
+    if (skip.current) return
+    const t = text.trim()
+    save(t)
+    setText(t || fallback)
+  }
+  // clicking outside closes the menu before the box blurs, so the last text is saved when the box goes away
+  const last = useRef({ text, save })
+  last.current = { text, save }
+  useEffect(() => () => { if (!skip.current) last.current.save(last.current.text.trim()) }, [])
+  // the menu's own Esc handler (document, capture) stops the key before the box sees it, so listen one level up
+  const box = useRef<HTMLInputElement>(null)
+  useEffect(() => {
+    const esc = (e: KeyboardEvent) => { if (e.key === 'Escape' && document.activeElement === box.current) skip.current = true }
+    window.addEventListener('keydown', esc, true)
+    return () => window.removeEventListener('keydown', esc, true)
+  }, [])
+  return (
+    <label className="proj-name">
+      <input
+        aria-label="Project name"
+        value={text}
+        spellCheck={false}
+        onChange={e => setText(e.target.value)}
+        onBlur={commit}
+        ref={box}
+        onKeyDown={e => { if (e.key === 'Enter') (e.preventDefault(), commit(), e.currentTarget.select()) }}
+      />
+    </label>
+  )
+}
+
 /** ⋯ menu: name, colour, and the generated emblem or an icon (Abhay 11-22: "pick name, color, emblem, that's it"; Icon opens a picker). */
-function ProjectMenu({ path, onTint, onIcon, onRename }: { path: string; onTint: (c: string) => void; onIcon: (i: string) => void; onRename: () => void }) {
+function ProjectMenu({ path, onTint, onIcon, onRename }: { path: string; onTint: (c: string) => void; onIcon: (i: string) => void; onRename: (name: string) => void }) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const colors = useContext(ColorsContext)
@@ -74,7 +117,7 @@ function ProjectMenu({ path, onTint, onIcon, onRename }: { path: string; onTint:
       </button>
       {open && (
         <div className="menu menu-bottom menu-right proj-menu" role="menu" aria-label="Project" onClick={e => e.stopPropagation()}>
-          <button className="menu-item" role="menuitem" onClick={() => (setOpen(false), onRename())}>Rename</button>
+          <NameField path={path} onRename={onRename} />
           <div className="proj-menu-label">Colour</div>
           <div className="proj-menu-row" role="group" aria-label="Colour">
             {PASTELS.map(c => (
@@ -121,46 +164,21 @@ function ProjectRow({ path, current, working, open, onToggle, threads, renderThr
 }) {
   const names = useContext(NamesContext)
   const name = displayName(names, path)
-  const [editing, setEditing] = useState(false)
-  const [draft, setDraft] = useState('')
   const [all, setAll] = useState(false)
   const shown = all ? threads : threads.slice(0, SHOWN)
-  // Esc unmounts the focused input, which can fire blur; the ref keeps that blur from saving
-  const closed = useRef(false)
-  const done = (save: boolean) => { if (closed.current) return; closed.current = true; setEditing(false); if (save) onRename(draft.trim()) }
   return (
     <div className="side-proj-block">
       <div className={`side-proj${current ? ' is-active' : ''}`}>
-        {editing ? (
-          <div className="side-proj-main">
-            <ProjectEmblem path={path} working={working} />
-            <input
-              className="side-proj-edit"
-              autoFocus
-              aria-label="Project name"
-              placeholder={baseName(path)}
-              value={draft}
-              onFocus={e => e.currentTarget.select()}
-              onChange={e => setDraft(e.target.value)}
-              onBlur={() => done(true)}
-              onKeyDown={e => {
-                if (e.key === 'Enter') (e.preventDefault(), done(true))
-                else if (e.key === 'Escape') (e.stopPropagation(), done(false))
-              }}
-            />
-          </div>
-        ) : (
           <button className="side-proj-main" onClick={onPick} title={path} aria-expanded={open}>
             <ProjectEmblem path={path} working={working} />
             <span className="side-thread-title">{name}</span>
           </button>
-        )}
-        {threads.length > 0 && !editing && (
+        {threads.length > 0 && (
           <button className={`icon-btn sm side-proj-chev${open ? ' is-open' : ''}`} onClick={onToggle} aria-label={`${open ? 'Collapse' : 'Expand'} ${name}`} aria-expanded={open}>
             <IconChevronRight size={11} />
           </button>
         )}
-        <ProjectMenu path={path} onTint={onTint} onIcon={onIcon} onRename={() => ((closed.current = false), setDraft(names[path] ?? ''), setEditing(true))} />
+        <ProjectMenu path={path} onTint={onTint} onIcon={onIcon} onRename={onRename} />
       </div>
       {open && threads.length > 0 && (
         <div className="side-proj-threads">
@@ -225,6 +243,15 @@ export function SearchPalette({ threads, onOpen, onClose }: { threads: Row[]; on
   const [i, setI] = useState(0)
   const names = useContext(NamesContext)
   const ref = useRef<HTMLDivElement>(null)
+  // centred over the chat pane, not the window: the scrim's content box starts where the pane starts (Abhay 11-22)
+  const [edge, setEdge] = useState({ left: 0, right: 0 })
+  useEffect(() => {
+    const pane = document.querySelector('main.panel')
+    const fit = () => { const r = pane?.getBoundingClientRect(); setEdge(r ? { left: r.left, right: window.innerWidth - r.right } : { left: 0, right: 0 }) }
+    fit()
+    window.addEventListener('resize', fit)
+    return () => window.removeEventListener('resize', fit)
+  }, [])
   useDismiss(true, onClose, ref)
   // hand focus back to wherever ⌘K was pressed (usually the composer)
   useEffect(() => {
@@ -238,7 +265,7 @@ export function SearchPalette({ threads, onOpen, onClose }: { threads: Row[]; on
   useEffect(() => setI(0), [q])
   useEffect(() => { ref.current?.querySelector('.is-cursor')?.scrollIntoView({ block: 'nearest' }) }, [i])
   return (
-    <div className="palette-scrim">
+    <div className="palette-scrim" style={{ paddingLeft: edge.left, paddingRight: edge.right }}>
       <div className="palette" role="dialog" aria-label="Search threads" ref={ref}>
         <div className="palette-input">
           <IconSearch size={14} />
