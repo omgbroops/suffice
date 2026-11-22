@@ -14,7 +14,7 @@ function Toggle({ on, onChange, label }: { on: boolean; onChange: (v: boolean) =
   return (
     <label className="gc-row">
       <span>{label}</span>
-      <button role="switch" aria-checked={on} aria-label={label} className={`gc-toggle${on ? ' is-on' : ''}`} onClick={() => onChange(!on)} />
+      <button role="switch" aria-checked={on} aria-label={label} className={`mp-switch${on ? ' is-on' : ''}`} onClick={() => onChange(!on)}><span /></button>
     </label>
   )
 }
@@ -111,14 +111,14 @@ export function GraphView({ nodes, links, modified, onOpen, onClose }: {
                   <button className="icon-btn sm" aria-label="Delete group" onClick={() => setGroups(gs => gs.filter((_, j) => j !== i))}><IconClose size={11} /></button>
                 </div>
               ))}
-              <button className="gc-cta" onClick={() => setGroups(gs => [...gs, { query: '', color: GROUP_COLORS[gs.length % GROUP_COLORS.length] }])}>New group</button>
+              <button className="btn gc-cta" onClick={() => setGroups(gs => [...gs, { query: '', color: GROUP_COLORS[gs.length % GROUP_COLORS.length] }])}>New group</button>
             </Section>
             <Section title="Display" open={!!open.display} onToggle={() => toggle('display')}>
               <Toggle label="Arrows" on={display.arrows} onChange={v => setDisplay(d => ({ ...d, arrows: v }))} />
               <Slider label="Text fade threshold" min={-3} max={3} step={0.1} value={display.textFade} onChange={v => setDisplay(d => ({ ...d, textFade: v }))} />
               <Slider label="Node size" min={0.1} max={5} step={0.01} value={display.nodeSize} onChange={v => setDisplay(d => ({ ...d, nodeSize: v }))} />
               <Slider label="Link thickness" min={0.1} max={5} step={0.01} value={display.lineSize} onChange={v => setDisplay(d => ({ ...d, lineSize: v }))} />
-              <button className="gc-cta" onClick={() => setReveal(0)} disabled={reveal != null}>Animate</button>
+              <button className="btn gc-cta" onClick={() => setReveal(0)} disabled={reveal != null}>Animate</button>
             </Section>
             <Section title="Forces" open={!!open.forces} onToggle={() => toggle('forces')}>
               <Slider label="Center force" min={0} max={1} step={0.01} value={forces.center} onChange={v => setForces(f => ({ ...f, center: v }))} />

@@ -2,7 +2,7 @@ import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { api, type NoteSummary } from '../api'
 import { ago } from '../data'
 import { buildTree, DEFAULT_NOTES_PROMPT, type TreeNode } from '../../shared/notes.mjs'
-import { EnterFullScreenIcon } from '@radix-ui/react-icons'
+import { ChevronRightIcon, EnterFullScreenIcon } from '@radix-ui/react-icons'
 import { IconChevronRight, IconClose, IconSearch } from '../icons'
 import { GraphView } from './GraphView'
 import { ObsidianGraph } from './ObsidianGraph'
@@ -112,6 +112,9 @@ export function NotesView({ project, prompt, onPrompt, onGenerate }: { project: 
   const [q, setQ] = useState('')
   const [open, setOpen] = useState<Set<string>>(new Set())
   const [graphView, setGraphView] = useState(false)
+  // Abhay 11-22: the graph is opened by choice, never forced; the side graph starts closed and the choice is remembered
+  const [localGraph, setLocalGraphRaw] = useState(() => { try { return localStorage.getItem('notes.localGraph') === '1' } catch { return false } })
+  const setLocalGraph = (v: boolean) => { setLocalGraphRaw(v); try { localStorage.setItem('notes.localGraph', v ? '1' : '0') } catch {} }
   const modified = useMemo(() => new Map((notes ?? []).map(n => [n.path, n.modified])), [notes])
   const all = useMemo(() => linkGraph(notes ?? []), [notes])
   const allNodes = useMemo(() => (notes ?? []).map(n => ({ id: n.path, label: n.title, weight: all.weight.get(n.path) ?? 0 })), [notes, all])
@@ -209,9 +212,16 @@ export function NotesView({ project, prompt, onPrompt, onGenerate }: { project: 
       )}
       <aside className="notes-side">
         {current && notes && (
+          <div className="notes-graph-head">
+            <button className="notes-graph-toggle" aria-expanded={localGraph} onClick={() => setLocalGraph(!localGraph)}>
+              <ChevronRightIcon width={12} height={12} className={`gc-chev${localGraph ? ' is-open' : ''}`} />Graph
+            </button>
+            <button className="icon-btn sm" aria-label="Open graph view" title="Open graph view" onClick={() => setGraphView(true)}><EnterFullScreenIcon width={13} height={13} /></button>
+          </div>
+        )}
+        {current && notes && localGraph && (
           <div className="notes-local">
             <ObsidianGraph nodes={local.nodes} links={local.links} focus={current} onOpen={setCurrent} forces={LOCAL_FORCES} maxFit={0.85} label={`Notes linked with ${note?.title ?? current}`} />
-            <button className="icon-btn sm notes-local-open" aria-label="Open graph view" title="Open graph view" onClick={() => setGraphView(true)}><EnterFullScreenIcon width={13} height={13} /></button>
           </div>
         )}
         {[['Linked from', backlinks.map(n => n.path)], ['Links to', note?.links ?? []]].filter(([, paths]) => paths.length).map(([label, paths]) => (
