@@ -194,12 +194,106 @@ function arc({ c, S, t, s, ink }: G) {
   c.stroke()
 }
 
-// ---- gen: simple generated spinners (Abhay 11-22: orbs, blocks or basic shapes; few, large parts; no meaning) ----
-// The seed picks a family and a motion, plus small speed/direction changes, so every thread gets its own.
-export const GEN_FAMILIES = ['orbs', 'blocks', 'shapes'] as const
+// ---- gen: generated spinners (Abhay 11-22: no meaning; swarm too detailed, plain shapes too bare;
+// a 5x5 grid of squares flowing on and off, and square <-> circle morphs; orbs and blocks "okay") ----
+// The seed picks a family (grids weighted up), a motion, and small speed/direction changes.
+export const GEN_FAMILIES = ['grid', 'morph', 'orbs', 'blocks'] as const
+const GEN_VARIANTS = [6, 3, 3, 3]
 export function genPick(seed: number) {
   const r = rng(seed ^ 0x5bd1e995)
-  return { fam: Math.floor(r() * 3), v: Math.floor(r() * 3), speed: 0.85 + r() * 0.35, dir: r() < 0.5 ? 1 : -1, sides: r() < 0.5 ? 3 : 4 }
+  const u = r(), fam = u < 0.5 ? 0 : u < 0.75 ? 1 : u < 0.875 ? 2 : 3
+  return { fam, v: Math.floor(r() * GEN_VARIANTS[fam]), speed: 0.85 + r() * 0.35, dir: r() < 0.5 ? 1 : -1, sides: r() < 0.5 ? 3 : 4, salt: Math.floor(r() * 1e9) }
+}
+
+// a cell's light along a travelling front: a soft on, a softer off (0..1)
+function pulse(x: number, width = 0.34) {
+  const u = frac(x)
+  return u < width ? Math.sin((Math.PI * u) / width) ** 2 : 0
+}
+
+// cells in snake (boustrophedon) and spiral order, for the travelling-tail grids
+function snakeOrder(n: number) {
+  const o: number[] = []
+  for (let y = 0; y < n; y++) for (let k = 0; k < n; k++) o.push(y * n + (y % 2 ? n - 1 - k : k))
+  return o
+}
+function spiralOrder(n: number) {
+  const o: number[] = []
+  let [x0, y0, x1, y1] = [0, 0, n - 1, n - 1]
+  while (x0 <= x1 && y0 <= y1) {
+    for (let x = x0; x <= x1; x++) o.push(y0 * n + x)
+    for (let y = y0 + 1; y <= y1; y++) o.push(y * n + x1)
+    if (y0 < y1) for (let x = x1 - 1; x >= x0; x--) o.push(y1 * n + x)
+    if (x0 < x1) for (let y = y1 - 1; y > y0; y--) o.push(y * n + x0)
+    ;[x0, y0, x1, y1] = [x0 + 1, y0 + 1, x1 - 1, y1 - 1]
+  }
+  return o
+}
+
+function grid(g: G, p: ReturnType<typeof genPick>, T: number) {
+  // v0-v4: 5x5; v5: 3x3 flicker, which stays legible at 12 px
+  const n = p.v === 5 ? 3 : 5, pitch = g.S / n, b = pitch * (n === 3 ? 0.78 : 0.8)
+  const order = p.v === 2 ? snakeOrder(n) : p.v === 3 ? spiralOrder(n) : null
+  const rank = order ? Object.fromEntries(order.map((c, i) => [c, i])) : null
+  const salt = rng(p.salt)
+  const phase = Array.from({ length: n * n }, () => salt())
+  for (let y = 0; y < n; y++)
+    for (let x = 0; x < n; x++) {
+      const i = y * n + x
+      let k: number
+      if (p.v === 0) k = pulse(T / 1.4 - (p.dir > 0 ? x + y : n - 1 - x + y) / (2 * n), 0.45) // diagonal wave
+      else if (p.v === 1) k = pulse(T / 1.3 - (p.dir * Math.hypot(x - (n - 1) / 2, y - (n - 1) / 2)) / (n * 0.75), 0.45) // ripple from the centre
+      else if (rank) {
+        // a lit tail travelling the path (snake or spiral), fading behind its head
+        const head = (T / 1.8) * n * n, d = (((head - rank[i]) % (n * n)) + n * n) % (n * n)
+        k = d < n * 2.2 ? (1 - d / (n * 2.2)) ** 1.3 : 0
+      } else if (p.v === 4) k = pulse(T / 1.6 + phase[i], 0.36) // twinkle: each cell on its own seeded beat
+      else k = pulse(T / 1.1 + phase[i], 0.4) // 3x3 flicker
+      const cx = (x + 0.5) * pitch, cy = (y + 0.5) * pitch, w = b * (0.82 + 0.18 * k)
+      g.c.fillStyle = g.ink(0.22 + 0.76 * k)
+      g.c.beginPath()
+      g.c.roundRect(cx - w / 2, cy - w / 2, w, w, w * 0.24)
+      g.c.fill()
+    }
+}
+
+// a rounded square whose corners open to a circle and close again (f: 0 square, 1 circle)
+function morphCell(g: G, x: number, y: number, side: number, f: number, turn: number, a = 0.95) {
+  const { c } = g
+  c.save()
+  c.translate(x, y)
+  c.rotate(turn)
+  c.fillStyle = g.ink(a)
+  c.beginPath()
+  c.roundRect(-side / 2, -side / 2, side, side, side * (0.14 + 0.36 * f))
+  c.fill()
+  c.restore()
+}
+
+function morph(g: G, p: ReturnType<typeof genPick>, T: number) {
+  const { S } = g, cx = S / 2, cy = S / 2
+  if (p.v === 0) {
+    // one shape: square to circle and back, a quarter turn while it closes
+    const f = (1 - Math.cos((TAU * T) / 1.6)) / 2
+    morphCell(g, cx, cy, S * 0.66, f, (p.dir * Math.PI * ease(frac(T / 1.6))) / 2)
+  } else if (p.v === 1) {
+    // 2x2: each cell morphs in turn, so a circle walks around the square
+    const b = S * 0.4, o = S * 0.235
+    const cells = [[-o, -o], [o, -o], [o, o], [-o, o]]
+    cells.forEach(([dx, dy], i) => {
+      const j = p.dir > 0 ? i : 3 - i
+      const f = Math.max(0, Math.cos(TAU * (T / 1.4 - j / 4))) ** 2
+      morphCell(g, cx + dx, cy + dy, b * (0.9 + 0.1 * f), f, 0, 0.45 + 0.5 * f)
+    })
+  } else {
+    // 3x3: a wave of circles crossing a grid of squares
+    const n = 3, pitch = S / n, b = pitch * 0.76
+    for (let y = 0; y < n; y++)
+      for (let x = 0; x < n; x++) {
+        const f = pulse(T / 1.5 - (p.dir > 0 ? x + y : n - 1 - x + y) / 6, 0.5)
+        morphCell(g, (x + 0.5) * pitch, (y + 0.5) * pitch, b, f, 0, 0.35 + 0.6 * f)
+      }
+  }
 }
 
 function orb(g: G, x: number, y: number, rad: number) {
@@ -223,11 +317,12 @@ function block(g: G, x: number, y: number, b: number, a = 0.95) {
 }
 
 function gen(g: G) {
-  const { c, S, s } = g
   const p = genPick(g.seed)
-  const T = s === 'working' ? g.t * p.speed : 0.2
-  const cx = S / 2, cy = S / 2
-  if (p.fam === 0) {
+  const T = g.s === 'working' ? g.t * p.speed : 0.2
+  const { S } = g, cx = S / 2, cy = S / 2
+  if (p.fam === 0) return grid(g, p, T)
+  if (p.fam === 1) return morph(g, p, T)
+  if (p.fam === 2) {
     if (p.v === 0) {
       // two or three orbs circling
       const n = p.sides === 3 ? 3 : 2, R = S * 0.24, rad = S * (n === 2 ? 0.19 : 0.155)
@@ -249,7 +344,7 @@ function gen(g: G) {
     }
     return
   }
-  if (p.fam === 1) {
+  if (p.fam === 3) {
     const b = S * 0.34, o = (b + S * 0.09) / 2
     const cells = [[-o, -o], [o, -o], [o, o], [-o, o]]
     if (p.v === 0) {
@@ -273,38 +368,6 @@ function gen(g: G) {
     }
     return
   }
-  // one basic shape
-  c.fillStyle = g.ink(0.95)
-  c.save()
-  c.translate(cx, cy)
-  if (p.v === 2) {
-    // square easing into a circle and back while it turns
-    const f = (1 - Math.cos((TAU * T) / 1.6)) / 2, side = S * 0.64
-    c.rotate((p.dir * Math.PI * ease(frac(T / 1.6))) / 2)
-    c.beginPath()
-    c.roundRect(-side / 2, -side / 2, side, side, side * (0.16 + 0.34 * f))
-    c.fill()
-  } else {
-    // triangle or square: a stepped turn (v0) or a slow breath (v1)
-    const n = p.sides, rad = S * (n === 3 ? 0.42 : 0.4)
-    const step = TAU / n
-    const turn = p.v === 0 ? (Math.floor(T / 0.7) + ease(frac(T / 0.7))) * step * p.dir : 0.15 * Math.sin((TAU * T) / 2.4)
-    const scale = p.v === 1 ? 0.78 + 0.22 * (1 - Math.cos((TAU * T) / 1.2)) / 2 : 1
-    c.rotate(turn - Math.PI / 2 + (n === 4 ? Math.PI / 4 : 0))
-    c.scale(scale, scale)
-    // rounded corners in one fill (a stroke over the fill doubled the alpha into a visible frame)
-    const pt = (i: number) => [Math.cos(i * step) * rad, Math.sin(i * step) * rad]
-    const [sx, sy] = pt(0), [ex, ey] = pt(n - 1)
-    c.beginPath()
-    c.moveTo((sx + ex) / 2, (sy + ey) / 2)
-    for (let i = 0; i < n; i++) {
-      const [ax, ay] = pt(i), [bx, by] = pt(i + 1)
-      c.arcTo(ax, ay, (ax + bx) / 2, (ay + by) / 2, rad * 0.22)
-    }
-    c.closePath()
-    c.fill()
-  }
-  c.restore()
 }
 
 const KINDS: Record<GlyphKind, (g: G) => void> = { swarm, orbit, ripple, eclipse, arc, gen }
