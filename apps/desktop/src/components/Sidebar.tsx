@@ -10,6 +10,8 @@ export const PASTELS = ['auto', 'rose', 'peach', 'butter', 'mint', 'sky', 'lilac
 export const ColorsContext = createContext<Record<string, string>>({})
 /** project path -> display name; the folder on disk is never renamed */
 export const NamesContext = createContext<Record<string, string>>({})
+/** the model's suggested name per project: what a cleared name box falls back to */
+export const AutoNamesContext = createContext<Record<string, string>>({})
 /** project path -> Radix icon name (e.g. RocketIcon); absent = the project's generated emblem */
 export const IconsContext = createContext<Record<string, string>>({})
 
@@ -57,7 +59,7 @@ const cap = (c: string) => c[0].toUpperCase() + c.slice(1)
  */
 function NameField({ path, onRename }: { path: string; onRename: (name: string) => void }) {
   const names = useContext(NamesContext)
-  const fallback = baseName(path)
+  const fallback = useContext(AutoNamesContext)[path] || baseName(path)
   const [text, setText] = useState(displayName(names, path))
   // Esc closes the menu, and the unmount fires a blur; this keeps that blur from saving
   const skip = useRef(false)

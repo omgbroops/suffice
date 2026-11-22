@@ -22,6 +22,8 @@ export type Settings = {
   /** project path -> tint name (see PASTELS) */
   projectColors?: Record<string, string>
   projectNames?: Record<string, string>
+  /** the model's suggested name per project: the default a cleared rename falls back to */
+  projectAutoNames?: Record<string, string>
   projectIcons?: Record<string, string>
   /** prompt behind Notes > Generate notes */
   notesPrompt?: string
@@ -69,6 +71,7 @@ export const api = {
   pickFiles: (project: string | null) => bridge().invoke<string[]>('files:pick', { project }),
   notes: (project: string) => bridge().invoke<NoteSummary[]>('notes:list', { project }),
   readNote: (project: string, path: string) => bridge().invoke<string>('notes:read', { project, path }),
+  nameProject: (project: string) => bridge().invoke<Settings>('projects:name', { project }),
   openThread: (threadId: string, path: string) => bridge().invoke<Transcript>('threads:open', { threadId, path }),
   run: (args: { threadId: string; path?: string; project: string; prompt: string; model: string; effort: string; fast: boolean; mode: Mode; cheapModel: string }) => bridge().invoke<{ threadId: string; effort: string; mode: Mode }>('run:start', args),
   abort: (threadId: string) => bridge().invoke('run:abort', { threadId }),

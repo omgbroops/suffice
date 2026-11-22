@@ -9,7 +9,7 @@ import { ThreadView } from './components/ThreadView'
 import { Dither } from './components/Dither'
 import { Segmented, StatusGlyph } from './components/ui'
 import { IconArrowLeft, IconArrowRight, IconClose, IconCompose, IconFolder, IconHome, IconNotes, IconPlus, IconSearch, IconSelector, IconSidebar } from './icons'
-import { ColorsContext, IconsContext, NamesContext, ProjectEmblem, SearchPalette, SideProjects } from './components/Sidebar'
+import { AutoNamesContext, ColorsContext, IconsContext, NamesContext, ProjectEmblem, SearchPalette, SideProjects } from './components/Sidebar'
 import { baseName, displayName, threadsByProject } from './components/groups'
 import { NotesView } from './components/NotesView'
 import { Live } from './components/Live'
@@ -347,6 +347,18 @@ export default function App() {
 
   const list = useMemo(() => Object.values(threads).sort((a, b) => b.modified - a.modified), [threads])
 
+  // ask the model once per project for a default name (cached in settings; the folder name stands in until then)
+  const naming = useRef(new Set<string>())
+  useEffect(() => {
+    if (!info?.signedIn || !settings) return
+    for (const p of projects)
+      if (!settings.projectAutoNames?.[p] && !naming.current.has(p)) {
+        naming.current.add(p)
+        api.nameProject(p).then(s => setSettings(cur => (cur ? { ...cur, projectAutoNames: s.projectAutoNames } : cur)), () => {})
+      }
+  }, [projects, info?.signedIn, settings?.projectAutoNames])
+  const names = useMemo(() => ({ ...settings?.projectAutoNames, ...settings?.projectNames }), [settings?.projectAutoNames, settings?.projectNames])
+
   if (bootError)
     return (
       <div className="app is-bare">
@@ -383,7 +395,7 @@ export default function App() {
     locked ? (
       <span className="ghost-btn is-static" title={current ?? undefined}>
         {current ? <ProjectEmblem path={current} size={14} /> : <IconFolder size={14} />}
-        {current ? displayName(settings.projectNames ?? {}, current) : ''}
+        {current ? displayName(names, current) : ''}
       </span>
     ) : (
       <ProjectPicker project={current} projects={projects} onPick={p => void pickProject(p)} onAdd={() => void browseProject()} />
@@ -391,7 +403,7 @@ export default function App() {
   const composerProps = { permissions, model: picker }
   const grouped = threadsByProject(list, projects)
   const renderThread = (t: Thread & { key: string }) => (
-    <button key={t.key} className={`side-thread${active?.key === t.key ? ' is-active' : ''}`} onClick={() => go({ kind: 'thread', key: t.key })} title={`${t.title} · ${displayName(settings.projectNames ?? {}, t.project)}`}>
+    <button key={t.key} className={`side-thread${active?.key === t.key ? ' is-active' : ''}`} onClick={() => go({ kind: 'thread', key: t.key })} title={`${t.title} · ${displayName(names, t.project)}`}>
       <span className="side-thread-title">{t.title}</span>
       {/* one trailing slot: live glyph while running, else age */}
       {statusOf(t) === 'working' ? (
@@ -404,7 +416,8 @@ export default function App() {
 
   return (
     <ColorsContext.Provider value={settings?.projectColors ?? {}}>
-    <NamesContext.Provider value={settings?.projectNames ?? {}}>
+    <AutoNamesContext.Provider value={settings?.projectAutoNames ?? {}}>
+    <NamesContext.Provider value={names}>
     <IconsContext.Provider value={settings?.projectIcons ?? {}}>
     <div className={`app${sidebar ? '' : ' no-sidebar'}`}>
       <Titlebar platform={platform}>
@@ -497,7 +510,8 @@ export default function App() {
               onIcon={(p, i) => void patchSettings({ projectIcons: { ...liveSettings.current?.projectIcons, [p]: i } })}
               onRename={(p, name) => {
                 const { [p]: _gone, ...rest } = liveSettings.current?.projectNames ?? {}
-                void patchSettings({ projectNames: name && name !== baseName(p) ? { ...rest, [p]: name } : rest })
+                const fallback = liveSettings.current?.projectAutoNames?.[p] || baseName(p)
+                void patchSettings({ projectNames: name && name !== fallback ? { ...rest, [p]: name } : rest })
               }}
             />
           )}
@@ -593,6 +607,7 @@ export default function App() {
     </div>
     </IconsContext.Provider>
     </NamesContext.Provider>
+    </AutoNamesContext.Provider>
     </ColorsContext.Provider>
   )
 }

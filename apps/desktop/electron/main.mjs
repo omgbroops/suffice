@@ -77,6 +77,7 @@ const handlers = {
     return r.filePaths.map(f => (typeof project === 'string' && project && inside(project, f) ? relative(project, f).split(sep).join('/') : f))
   },
   'notes:read': args => host.readNote(args),
+  'projects:name': args => host.nameProject(args),
   'threads:open': args => host.openThread(args),
   'run:start': args => host.run(args),
   'run:abort': ({ threadId }) => host.abort(threadId),

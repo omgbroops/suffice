@@ -22,6 +22,7 @@ import {
 } from '@suffice/harness'
 import { emptyTranscript, fromSessionMessages, reduce, resultText } from '../../shared/transcript.mjs'
 import { readNote, scanNotes } from './notes.mjs'
+import { suggestName } from './project-name.mjs'
 
 export const PROVIDER = 'openai'
 export const DEFAULT_MODEL = 'gpt-6.1-sol'
@@ -432,6 +433,18 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     listThreads,
     // notes are read only from a project the user has opened
     listNotes: async ({ project }) => ((await recentProjects(home)).includes(project) ? scanNotes(project) : []),
+    // the model's suggested name, kept in settings.projectAutoNames; the rename box falls back to it
+    nameProject: async ({ project }) => {
+      if (!(await recentProjects(home)).includes(project) || !signedIn()) return settings
+      if (settings.projectAutoNames?.[project]) return settings
+      const model = runtime.getModel(PROVIDER, settings.cheapModel ?? DEFAULT_CHEAP_MODEL)
+      if (!model) return settings
+      const name = await suggestName(project, async (systemPrompt, text) => {
+        const reply = await runtime.completeSimple(model, { systemPrompt, messages: [{ role: 'user', content: text, timestamp: Date.now() }] })
+        return reply.content.filter(c => c.type === 'text').map(c => c.text).join('')
+      })
+      return name ? updateSettings({ projectAutoNames: { ...settings.projectAutoNames, [project]: name } }) : settings
+    },
     readNote: async ({ project, path }) => {
       if (!(await recentProjects(home)).includes(project)) throw new Error('Open that project first.')
       return readNote(project, path)
