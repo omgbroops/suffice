@@ -70,12 +70,14 @@ function draw(g: Inst, t: number) {
   g.buf.fill(0)
   FILLS[g.kind](g.n, t + g.phase, g.status, g.buf)
   const cs = S / g.n
+  // ink follows the theme: the canvas's CSS color, as "r,g,b"
+  const ink = (getComputedStyle(g.cv).color.match(/\d+(\.\d+)?/g) ?? ['255', '255', '255']).slice(0, 3).join(',')
   for (let j = 0; j < g.n; j++)
     for (let i = 0; i < g.n; i++) {
       let a = g.buf[j * g.n + i]
       if (!a) continue
       if (g.status === 'idle' || g.status === 'done') a *= 0.55
-      ctx.fillStyle = `rgba(255,255,255,${a})`
+      ctx.fillStyle = `rgba(${ink},${a})`
       const x0 = Math.round(i * cs), y0 = Math.round(j * cs)
       ctx.fillRect(x0, y0, Math.round((i + 1) * cs) - x0, Math.round((j + 1) * cs) - y0)
     }
