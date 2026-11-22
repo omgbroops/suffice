@@ -19,8 +19,8 @@ import {verifyDir} from './verify.mjs';
 //   /efficient lead <id>       override the escalation model (default: session
 //                              model — the one /model picks)
 //   /efficient <task>          sidekick attempts adaptively (cheap rounds
-//                              continue while each failure signature changes,
-//                              then one medium-effort round); a miss escalates
+//                              continue while each failure signature changes);
+//                              a miss escalates
 //                              to a seeded lead-model race. Every candidate is
 //                              gated on the workspace's own tests when they
 //                              exist.
@@ -29,9 +29,9 @@ const SKIP_COPY=new Set(['.git','node_modules']);
 // Sidekick budget: low-effort rounds continue while each round's failure
 // signature CHANGES (progress — a new failure digest means the last nudge
 // moved something); an identical signature twice means the model is stuck
-// and further cheap rounds just burn tokens. One medium-effort round then
-// fires before the lead escalation — still ~5-10x cheaper than the lead.
-const CHEAP_MAX_ROUNDS=4;
+// and further cheap rounds just burn tokens. Capped at 2: the mid-suite
+// benchmark showed rounds 3+ convert nothing before the escalation would.
+const CHEAP_MAX_ROUNDS=2;
 
 export function sufficeEfficientCommand(options,runtime){
   let cheapOn=false,priorModel=null,running=false,sidekickId='gpt-6-luna',leadId=null;
@@ -164,10 +164,9 @@ export function sufficeEfficientCommand(options,runtime){
           await cp(worktree,snapshot,{recursive:true,filter:src=>!SKIP_COPY.has(basename(src)),dereference:true});
           const prefill=await workspacePrefill(worktree);
           const prompt=`${input}\n\n${prefill}`;
-          // Phase A: sidekick model — adaptive low-effort rounds, then one
-          // medium-effort round before escalation. A round only passes its
-          // verdict when the session completed: a crashed run's leftover
-          // edits are partial work for the next round to finish.
+          // Phase A: sidekick model — adaptive low-effort rounds. A round
+          // only passes its verdict when the session completed: a crashed
+          // run's leftover edits are partial work for the next round.
           let changes=0,errored=false,failedDetail=null,prevSig=null;
           const cheapDir=join(runDir,'sidekick');
           // One sidekick round at the given effort. Returns the round's
@@ -195,9 +194,6 @@ export function sufficeEfficientCommand(options,runtime){
             if(sig===prevSig) break; // same failure signature twice — stuck
             prevSig=sig;
           }
-          // One medium-effort round before paying for the lead — a stuck
-          // low-effort signature can still move when the model thinks harder.
-          if(changes===0) await sidekickRound(CHEAP_MAX_ROUNDS,'medium');
           let outcome=null;
           if(changes>0) outcome={dir:cheapDir,path:`${sidekickId} solved it (${changes} change(s)) — lead cost skipped`};
           else{

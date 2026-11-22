@@ -98,10 +98,10 @@ export const variants = Object.freeze([
   // paying its price only on misses — unlike review-on-success.
   { id: 'eco-luna-sol', core: true, effort: 'low', fast: { speculativeTest: true }, eco: { cheapModel: 'gpt-6-luna', cheapEffort: 'low', prefill: true, cheapRetries: 2 } },
   // Eco-adaptive: same cheap-first shape but retries continue while each
-  // round's failure signature changes (a repeated signature = stuck), and one
-  // medium-effort sidekick round fires before the escalation — squeezes solo
-  // wins out of misses without paying lead cost up front. The /efficient shape.
-  { id: 'eco-adaptive', core: true, effort: 'low', fast: { speculativeTest: true }, eco: { cheapModel: 'gpt-6-luna', cheapEffort: 'low', prefill: true, adaptive: true, lowRounds: 4, mediumRounds: 1 } },
+  // round's failure signature changes (a repeated signature = stuck), capped at
+  // 2 rounds — mid-suite data showed rounds 3+ and medium effort convert nothing.
+  // Squeezes solo wins out of misses without paying lead cost up front.
+  { id: 'eco-adaptive', core: true, effort: 'low', fast: { speculativeTest: true }, eco: { cheapModel: 'gpt-6-luna', cheapEffort: 'low', prefill: true, adaptive: true, lowRounds: 2 } },
   // Auto mode: one Luna classify call routes the task — repairs go cheap-first
   // (eco), features go to the strong model directly, the rest get the race.
   { id: 'auto', core: true, effort: 'low', fast: { speculativeTest: true }, auto: {} },
