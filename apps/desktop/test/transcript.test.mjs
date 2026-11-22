@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { compactDiff, describeTool, emptyTranscript, fromSessionMessages, patchLines, reduce, visibleSteps } from '../shared/transcript.mjs'
+import { compactDiff, describeTool, groupSteps, summarizeCommand, emptyTranscript, fromSessionMessages, patchLines, reduce, visibleSteps } from '../shared/transcript.mjs'
 
 const fold = events => events.reduce(reduce, emptyTranscript())
 
@@ -66,7 +66,7 @@ test('rebuilds a transcript from harness session messages', () => {
 })
 
 test('describes tools and parses patches', () => {
-  assert.deepEqual(describeTool('bash', { command: 'npm test\nmore' }), { verb: 'Ran', meta: 'npm test' })
+  assert.deepEqual(describeTool('bash', { command: 'npm test\nmore' }), { verb: 'Ran tests', present: 'Running tests', meta: '' })
   assert.deepEqual(describeTool('read', { path: String.raw`C:\a\b.js`, offset: 10, limit: 5 }), { verb: 'Read', meta: 'C:/a/b.js #L10-15' })
   assert.deepEqual(patchLines('--- a\n+++ b\n@@ -1 +1 @@\n-old\n+new\n same').map(l => l.t), ['@', '-', '+', ' '])
 })
@@ -123,4 +123,37 @@ test('tool_update fills a running tool and never revives a finished one', () => 
   t = reduce(t, { type: 'tool_result', id: 'b', output: 'done', at: 2 })
   t = reduce(t, { type: 'tool_update', id: 'b', output: 'late', at: 3 })
   assert.equal(step().output, 'done')
+})
+
+test('summarizeCommand says what a command is for', () => {
+  const v = c => summarizeCommand(c).verb
+  assert.equal(v('cd api && npm test -- --reporter=dot'), 'Ran tests')
+  assert.equal(v('CI=1 pnpm run test:unit'), 'Ran tests')
+  assert.equal(v('cargo test -p core'), 'Ran tests')
+  assert.equal(v('npx vitest run src/retry.test.ts'), 'Ran tests')
+  assert.equal(v('npm i zod'), 'Installed dependencies')
+  assert.equal(v('npm run lint'), 'Checked for lint')
+  assert.equal(v('npx tsc --noEmit'), 'Built the project')
+  assert.equal(v('git status --short'), 'Checked changes')
+  assert.equal(v('git commit -m x'), 'Committed')
+  assert.equal(v('rg -n "withRetry" src'), 'Searched code')
+  assert.equal(v("sed -n '1,40p' src/retry.ts"), 'Read files')
+  assert.equal(v('ls -la'), 'Listed files')
+  assert.equal(v('python3 scripts/seed.py'), 'Ran a script')
+  assert.equal(v('./deploy.sh --prod'), 'Ran a command')
+  assert.equal(summarizeCommand('npm test').present, 'Running tests')
+})
+
+test('groupSteps folds runs of reads and searches into one line', () => {
+  const t = (id, name, input, status = 'done') => ({ kind: 'tool', id, name, input, status })
+  const steps = [
+    t('1', 'read', { path: 'a.ts' }), t('2', 'grep', { pattern: 'x' }), t('3', 'read', { path: 'b.ts' }), t('4', 'read', { path: 'a.ts' }),
+    t('5', 'bash', { command: 'npm test' }),
+    t('6', 'bash', { command: 'git diff' }), t('7', 'bash', { command: 'cat c.ts' }, 'running'),
+    t('9', 'edit', { path: 'a.ts' }), t('8', 'read', { path: 'lonely.ts' }),
+  ]
+  const g = groupSteps(steps)
+  assert.deepEqual(g.map(s => s.kind === 'group' ? `${s.verb}: ${s.meta} [${s.steps.map(x => x.id)}]` : s.id), [
+    'Investigated: 2 files, 1 search [1,2,3,4]', '5', 'Investigating: 1 file, 1 search [6,7]', '9', '8',
+  ])
 })

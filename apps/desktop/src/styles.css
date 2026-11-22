@@ -530,7 +530,7 @@ button.tab { padding-right: 10px; flex: none; }
 .step-verb { flex: none; white-space: nowrap; }
 .step-meta { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text-3); transition: color 150ms var(--ease); }
 .step-chev { margin-left: auto; flex: none; color: var(--text-4); transform: rotate(-90deg); transition: transform 150ms var(--ease), color 150ms var(--ease); }
-.step.is-open .step-chev { transform: none; }
+.step.is-open > .step-row .step-chev { transform: none; }
 .step-body { padding: 2px 0 8px; }
 .step-text { padding: 4px 0; }
 .step-time { margin-left: auto; font-size: 12px; color: var(--text-4); }

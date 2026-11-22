@@ -13,6 +13,9 @@ export function emptyTranscript(): Transcript
 export function resultText(content: unknown): string
 export function reduce(t: Transcript, e: any): Transcript
 export function fromSessionMessages(messages: any[]): Transcript
+export function summarizeCommand(command: string): { verb: string; present: string; kind?: 'look' }
+export type StepGroup = { kind: 'group'; id: string; steps: ToolStep[]; verb: string; meta: string; live: boolean }
+export function groupSteps(steps: Step[]): (Step | StepGroup)[]
 export function patchLines(patch?: string): { t: ' ' | '+' | '-' | '@'; s: string }[]
 export function compactDiff(lines: { t: ' ' | '+' | '-' | '@'; s: string }[], keep?: number): { t: ' ' | '+' | '-' | '…'; s: string }[]
 export function describeTool(name: string, input?: any): { verb: string; meta: string }

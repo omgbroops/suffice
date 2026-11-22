@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
-import { compactDiff, describeTool, patchLines, visibleSteps, type AgentMessage as Agent, type ApprovalStep, type RaceStep, type Step, type ToolStep, type Transcript } from '../../shared/transcript.mjs'
+import { compactDiff, describeTool, groupSteps, patchLines, visibleSteps, type StepGroup, type AgentMessage as Agent, type ApprovalStep, type RaceStep, type Step, type ToolStep, type Transcript } from '../../shared/transcript.mjs'
 import type { Status } from '../data'
 import { IconChevronDown } from '../icons'
 import { CopyButton, Elapsed, StatusGlyph } from './ui'
@@ -89,7 +89,7 @@ const PRESENT: Record<string, string> = { Read: 'Reading', Edited: 'Editing', Wr
 function ToolView({ step, project }: { step: ToolStep; project: string }) {
   const live = step.status === 'running'
   const described = describeTool(step.name, step.input)
-  const verb = live ? PRESENT[described.verb] ?? described.verb : described.verb
+  const verb = live ? described.present ?? PRESENT[described.verb] ?? described.verb : described.verb
   const meta = described.meta
   const [since] = useState(() => Date.now())
   const error = step.status === 'error'
@@ -188,6 +188,17 @@ function StepView({ step, project, live }: { step: Step; project: string; live: 
   return <ToolView step={step} project={project} />
 }
 
+/** Reads and searches in a row read as one line, like "Investigated 3 files, 2 searches"; open it for each step. */
+function GroupView({ group, project }: { group: StepGroup; project: string }) {
+  return (
+    <Row verb={group.verb} meta={group.meta} live={group.live}>
+      <div className="group-steps">
+        {group.steps.map(s => <ToolView key={s.id} step={s} project={project} />)}
+      </div>
+    </Row>
+  )
+}
+
 const MAC = typeof navigator !== 'undefined' && /Mac/.test(navigator.platform)
 
 /** Docked above the composer. The first pending card owns the keys: Cmd/Ctrl+Enter allows, Esc denies. */
@@ -248,9 +259,13 @@ function AgentMessageView({ msg, project, onApproval }: { msg: Agent; project: s
           </button>
           {open && (
             <div className="work-body">
-              {work.map((s, i) => (
-                <StepView key={s.kind === 'tool' || s.kind === 'approval' ? s.id : i} step={s} project={project} live={live && i === work.length - 1} />
-              ))}
+              {groupSteps(work).map((s, i, all) =>
+                s.kind === 'group' ? (
+                  <GroupView key={s.id} group={s} project={project} />
+                ) : (
+                  <StepView key={s.kind === 'tool' || s.kind === 'approval' ? s.id : i} step={s} project={project} live={live && i === all.length - 1} />
+                ),
+              )}
             </div>
           )}
         </div>

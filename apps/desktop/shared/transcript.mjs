@@ -242,7 +242,8 @@ export function describeTool(name, input = {}) {
       return { verb: 'Wrote', meta: short(path) }
     case 'bash':
     case 'powershell':
-      return { verb: 'Ran', meta: str(input.command).split('\n')[0] }
+      // say what the command is for; the command itself is in the row's detail
+      return { ...summarizeCommand(str(input.command)), meta: '' }
     case 'grep':
     case 'search':
       return { verb: 'Searched', meta: str(input.pattern) || str(input.query) }
@@ -266,6 +267,65 @@ export function describeTool(name, input = {}) {
     default:
       return { verb: name.replace(/_/g, ' ').replace(/^./, c => c.toUpperCase()), meta: '' }
   }
+}
+
+// [test, past, present, kind]; kind 'look' marks read-only exploration, which groups with reads and searches
+const COMMANDS = [
+  [/\b(vitest|jest|mocha|pytest|rspec|phpunit|ava|tap)\b|\b(cargo|go|deno|bun|dotnet|mix|swift) test\b|^(npm|pnpm|yarn|bun)( run)? test\b|\btest(:[\w-]+)?$/, 'Ran tests', 'Running tests'],
+  [/^(npm|pnpm|yarn|bun) (i|install|add|ci)\b|^pip3? install|^(brew|apt(-get)?|cargo) (install|add)\b|^poetry (add|install)|^uv (add|pip|sync)/, 'Installed dependencies', 'Installing dependencies'],
+  [/\b(eslint|ruff|clippy|golangci-lint|stylelint|biome lint)\b|^(npm|pnpm|yarn|bun)( run)? lint\b/, 'Checked for lint', 'Checking for lint'],
+  [/\b(prettier|black|gofmt|rustfmt|biome format)\b|\bcargo fmt\b|^(npm|pnpm|yarn|bun)( run)? (format|fmt)\b/, 'Formatted code', 'Formatting code'],
+  [/\btsc\b|\b(cargo|go|swift|dotnet) build\b|^make\b|\b(vite|next|webpack|esbuild|rollup)\b.*\bbuild\b|^(npm|pnpm|yarn|bun)( run)? build\b/, 'Built the project', 'Building the project'],
+  [/^(npm|pnpm|yarn|bun)( run)? (dev|start|serve|preview)\b/, 'Started the app', 'Starting the app'],
+  [/^git (status|diff|log|show|blame)\b/, 'Checked changes', 'Checking changes', 'look'],
+  [/^git commit\b/, 'Committed', 'Committing'],
+  [/^git (checkout|switch|branch)\b/, 'Switched branches', 'Switching branches'],
+  [/^git (push|pull|fetch)\b/, 'Synced with the remote', 'Syncing with the remote'],
+  [/^git\b/, 'Used git', 'Using git'],
+  [/^(rg|grep|ag|ack|git grep)\b/, 'Searched code', 'Searching code', 'look'],
+  [/^(cat|head|tail|less|bat|wc|nl)\b|^sed -n\b/, 'Read files', 'Reading files', 'look'],
+  [/^(ls|tree|find|fd|du|pwd|stat)\b/, 'Listed files', 'Listing files', 'look'],
+  [/^(mkdir|mv|cp|rm|touch|chmod|ln|rmdir)\b/, 'Moved files around', 'Moving files around'],
+  [/^(curl|wget|http)\b/, 'Fetched a URL', 'Fetching a URL'],
+  [/^(python3?|node|deno|ruby|bun|tsx|ts-node)\s+\S+\.(py|m?js|ts|rb)\b/, 'Ran a script', 'Running a script'],
+]
+
+/** A plain description of a shell command, from its first real step (cd, env and sudo prefixes skipped). */
+export function summarizeCommand(command) {
+  const steps = command.split(/\n|&&|\|\||;|\|/).map(s => s.trim().replace(/^(sudo|time|env)\s+/, '').replace(/^([A-Z_][A-Z0-9_]*=\S*\s+)+/, '').replace(/^npx\s+/, ''))
+  const main = steps.find(s => s && !/^(cd|export|set|source|\.)\b/.test(s)) ?? ''
+  for (const [re, verb, present, kind] of COMMANDS) if (re.test(main)) return { verb, present, ...(kind ? { kind } : {}) }
+  return { verb: 'Ran a command', present: 'Running a command' }
+}
+
+const LOOK = new Set(['read', 'grep', 'search', 'find', 'glob', 'ls', 'list', 'symbols', 'symbol_read', 'symbol_references'])
+const isLook = s => s.kind === 'tool' && (LOOK.has(s.name) || ((s.name === 'bash' || s.name === 'powershell') && summarizeCommand(str(s.input?.command)).kind === 'look'))
+
+/**
+ * Runs of two or more read-only exploration steps become one group; everything else passes through.
+ * The group's label counts distinct files read and searches made.
+ */
+export function groupSteps(steps) {
+  const out = []
+  let run = []
+  const flush = () => {
+    if (run.length > 1) {
+      // a shell cat/head/sed -n counts as a file read, like the read tool
+      const reads = run.filter(s => s.name === 'read' || summarizeCommand(str(s.input?.command)).verb === 'Read files')
+      const files = new Set(reads.map(s => str(s.input?.path) || str(s.input?.file) || str(s.input?.command)))
+      const searches = run.length - reads.length
+      const parts = [files.size && `${files.size} file${files.size === 1 ? '' : 's'}`, searches && `${searches} search${searches === 1 ? '' : 'es'}`].filter(Boolean)
+      const live = run.some(s => s.status === 'running')
+      out.push({ kind: 'group', id: run[0].id, steps: run, verb: live ? 'Investigating' : 'Investigated', meta: parts.join(', '), live })
+    } else out.push(...run)
+    run = []
+  }
+  for (const s of steps) {
+    if (isLook(s)) run.push(s)
+    else (flush(), out.push(s))
+  }
+  flush()
+  return out
 }
 
 /** Steps worth showing: codemode wrappers with nested calls are left out, as is session naming. */
