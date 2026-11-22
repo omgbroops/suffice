@@ -4,44 +4,35 @@ import {tmpdir} from 'node:os';
 import {join,basename} from 'node:path';
 import {clampThinkingLevel} from '@earendil-works/pi-ai';
 import {createSufficeSession} from './session.mjs';
-import {applyPatch,diffFiles,workspacePrefill,RACE_ATTEMPTS} from './fast-command.mjs';
+import {applyPatch,diffFiles,workspacePrefill} from './fast-command.mjs';
 import {verifyDir} from './verify.mjs';
 
-// /efficient — the cheap-first mode that won the benchmarks: a weaker
-// "sidekick" model attempts the task on a workspace copy; only when it misses
-// does the real "lead" machinery run — a 3-attempt race where lane 0 inherits
-// the sidekick's failed workspace plus the test-failure digest (the seeded
-// escalation that cracked tasks neither cheap nor strong solo runs could).
-//   /efficient                 show state
-//   /efficient on|off          switch the live session's model to the sidekick
-//                              and back
-//   /efficient sidekick <id>   pick the sidekick model (default gpt-6-luna)
-//   /efficient lead <id>       override the escalation model (default: session
-//                              model — the one /model picks)
-//   /efficient <task>          sidekick attempts the task on a workspace
-//                              copy (up to 3 test-gated rounds); a miss
-//                              escalates
-//                              to a seeded lead-model race. Every candidate is
-//                              gated on the workspace's own tests when they
-//                              exist.
-//   /balanced                  restore regular Suffice: default model + effort
+// /efficient — the eco arm (cheap-first, escalate on failure) as an in-session
+// command. The benchmark version gates Luna on acceptance tests; in-session
+// there is no verifier, so "produced a real diff" is the success proxy — the
+// same verdict /fast applies to its race winner.
+//   /efficient            show state
+//   /efficient on|off     switch the live session's model to the cheap one and back
+//   /efficient cheap <id> pick the cheap model (default gpt-6-luna)
+//   /balanced             restore regular Suffice: default model + effort
+//   /efficient <task>     the cheap model attempts the task on a workspace
+//                         copy; if it completes with changes, they are applied
+//                         back. Only when it fails (error, or no changes after
+//                         a retry
+//                         nudge) does the session's strong model run, on a
+//                         fresh copy — escalate-on-failure, never review-on-
+//                         success, so Sol's cost is paid only on real misses.
 const SKIP_COPY=new Set(['.git','node_modules']);
-// Sidekick budget: the auto-v1 shape — a fixed 3 test-gated rounds
-// (cheapRetries=2 in the benchmark arm). Mid-suite data showed adaptive
-// signature-looping and a medium round added latency without converting.
-const CHEAP_MAX_ROUNDS=3;
+const CHEAP_ROUNDS=2; // initial attempt + one "keep fixing" retry
 
 export function sufficeEfficientCommand(options,runtime){
-  let cheapOn=false,priorModel=null,running=false,sidekickId='gpt-6-luna',leadId=null;
-  // Sidekick is user-selectable; the lead defaults to the session model —
-  // either the live one or the model the session had before '/efficient on'
-  // swapped it to the sidekick.
-  const sidekick=()=>runtime.getModel('openai',sidekickId);
-  const lead=ctx=>{
-    if(leadId) return runtime.getModel('openai',leadId);
-    return (cheapOn&&priorModel)?priorModel:ctx.model;
-  };
+  let cheapOn=false,priorModel=null,running=false,cheapId='gpt-6-luna';
+  // Cheap model is user-selectable (`/efficient cheap <id>`); the strong side
+  // is always whatever model the session itself is running.
+  const cheapModel=()=>runtime.getModel('openai',cheapId);
   const spawn=(dir,task,modelObject,effort)=>createSufficeSession({...options,cwd:dir,sessionManager:undefined,continue:false,effort,speed:'standard',browser:false,desktop:false,modelObject,extensions:[],timeout:options.timeout??600},runtime);
+  // One phase of eco: run the given model on `dir`, resolve with a diff count.
+  // Escalation decisions are the caller's — a 0-diff completion is a miss.
   const attempt=async(dir,task,modelObject,effort,snapshot)=>{
     const control=await spawn(dir,task,modelObject,effort);
     try{ await control.run(task); }finally{ await control.dispose(); }
@@ -53,44 +44,6 @@ export function sufficeEfficientCommand(options,runtime){
     // node_modules is shared read-mostly for speed: attempts get a link to
     // the real tree (a full copy of deps would dominate startup).
     if(existsSync(join(worktree,'node_modules'))) await symlink(join(worktree,'node_modules'),join(dir,'node_modules'),'junction').catch(()=>{});
-  };
-  // Escalation ladder: 3-attempt race on the lead model. Lane 0 continues
-  // from the sidekick's failed workspace (the losing diff is a lossless
-  // handoff, not a summary) with the test-failure digest; lanes 1-2 race
-  // clean for trajectory diversity. First verified diff wins.
-  const escalate=async(worktree,snapshot,runDir,input,prefill,ctx,seedDir,seedDigest)=>{
-    const strong=lead(ctx);
-    if(!strong) return {failed:'no lead model available'};
-    const controls=[],verifyCtl=[];
-    let winner=-1,sawVerifyRun=false;
-    const jobs=RACE_ATTEMPTS.map(async(spec,i)=>{
-      const dir=join(runDir,`escalate-${i}`);
-      await copyTree(i===0&&seedDir?seedDir:worktree,dir);
-      const seeded=i===0&&seedDir;
-      const hint=(spec.hint?'\n\n'+spec.hint:'')+(seeded?`\n\nA previous attempt already edited this workspace and failed verification${seedDigest?` — the tests report:\n${seedDigest}`:'.'} Continue from the existing edits, or discard them and take a different approach.`:'');
-      // Lead effort = the session's thinking level (Pi's effort setting) —
-      // the benchmark's low lanes won, but the user-facing lead honors the
-      // effort the user picked for the session.
-      const control=await spawn(dir,input,strong,clampThinkingLevel(strong,ctx.thinkingLevel??'low'));
-      controls[i]=control;
-      try{
-        await control.run(input+'\n\n'+prefill+hint);
-        const {changed,deleted}=await diffFiles(snapshot,dir);
-        if(winner<0&&(changed.length||deleted.length)){
-          const verify=(verifyCtl[i]=new AbortController()).signal;
-          const verdict=await verifyDir(dir,{access:options.access,signal:verify});
-          if(verdict.ranTests){ sawVerifyRun=true; if(!verdict.passed) return; }
-          if(winner<0){
-            winner=i;
-            for(let j=0;j<controls.length;j++) if(j!==i){ controls[j]?.abort(); verifyCtl[j]?.abort(); }
-          }
-        }
-      }catch{ /* losing or failed attempt */ }
-    });
-    await Promise.allSettled(jobs);
-    await Promise.allSettled(controls.filter(Boolean).map(c=>c.dispose()));
-    if(winner<0) return {failed:sawVerifyRun?'escalation attempts produced changes but failed the workspace tests':'all escalation attempts failed or produced no changes'};
-    return {dir:join(runDir,`escalate-${winner}`),path:`escalated to ${strong?.id??'lead'} — race lane ${winner+1}${winner===0&&seedDir?' (continued the sidekick workspace)':''} finished first`};
   };
   return pi=>{
     pi.registerCommand('balanced',{
@@ -104,45 +57,31 @@ export function sufficeEfficientCommand(options,runtime){
       }
     });
     pi.registerCommand('efficient',{
-      description:'Efficient mode: /efficient <task> runs the sidekick model first and escalates to a seeded lead-model race only on failure; /efficient on|off switches the session model to the sidekick',
+      description:'Efficient mode: /efficient <task> runs the cheap model first and escalates only on failure; /efficient on|off switches session model to the cheap one',
       handler:async(args,ctx)=>{
         const input=args.trim();
         if(!input||input==='status'){
-          ctx.ui.notify(`Efficient mode ${cheapOn?'on':'off'} · sidekick=${sidekickId} · lead=${leadId??'session model'} · /efficient <task> runs sidekick-first with seeded-race escalation`,'info');
+          ctx.ui.notify(`Efficient mode ${cheapOn?'on':'off'} · cheap=${cheapId} · /efficient <task> runs cheap first, escalates on failure · /efficient cheap <id> picks the cheap model`,'info');
           return;
         }
-        const pick=(name)=>{
-          const id=input.slice(name.length).trim();
-          if(!runtime.getModel('openai',id)){ctx.ui.notify(`Model ${id||'(empty)'} is absent from the catalog`,'error');return false;}
-          return id;
-        };
-        if(input==='sidekick'||input.startsWith('sidekick ')||input==='cheap'||input.startsWith('cheap ')){
-          const name=input.startsWith('sidekick')?'sidekick':'cheap';
-          const id=input.slice(name.length).trim();
-          if(!id){ctx.ui.notify(`Sidekick model is ${sidekickId} — /efficient sidekick <model-id> to change`,'info');return;}
-          const ok=pick(name);if(!ok)return;
-          sidekickId=ok;
-          ctx.ui.notify(`Sidekick model set to ${sidekickId}`,'info');
-          return;
-        }
-        if(input==='lead'||input.startsWith('lead ')){
-          const id=input.slice(4).trim();
-          if(!id){leadId=null;ctx.ui.notify('Lead model reset to the session model','info');return;}
-          const ok=pick('lead');if(!ok)return;
-          leadId=ok;
-          ctx.ui.notify(`Lead model set to ${leadId}`,'info');
+        if(input==='cheap'||input.startsWith('cheap ')){
+          const id=input.slice(5).trim();
+          if(!id){ctx.ui.notify(`Cheap model is ${cheapId} — /efficient cheap <model-id> to change`,'info');return;}
+          if(!runtime.getModel('openai',id)){ctx.ui.notify(`Model ${id} is absent from the catalog`,'error');return;}
+          cheapId=id;
+          ctx.ui.notify(`Cheap model set to ${cheapId}`,'info');
           return;
         }
         if(input==='on'||input==='off'){
           const want=input==='on';
           if(want===cheapOn){ctx.ui.notify(`Efficient mode already ${want?'on':'off'}`,'info');return;}
           if(want){
-            const sk=sidekick();
-            if(!sk){ctx.ui.notify(`Model ${sidekickId} is absent from the catalog`,'error');return;}
+            const luna=cheapModel();
+            if(!luna){ctx.ui.notify(`Model ${cheapId} is absent from the catalog`,'error');return;}
             priorModel=ctx.model;
-            if(!(await pi.setModel(sk))){priorModel=null;ctx.ui.notify('Could not switch session model','error');return;}
+            if(!(await pi.setModel(luna))){priorModel=null;ctx.ui.notify('Could not switch session model','error');return;}
             cheapOn=true;
-            ctx.ui.notify(`Efficient mode on — session model is ${sidekickId}; /efficient <task> escalates on failure`,'info');
+            ctx.ui.notify(`Efficient mode on — session model is ${cheapId}; /efficient <task> escalates on failure`,'info');
           } else {
             if(priorModel) await pi.setModel(priorModel);
             priorModel=null;cheapOn=false;
@@ -151,8 +90,8 @@ export function sufficeEfficientCommand(options,runtime){
           return;
         }
         if(running){ctx.ui.notify('An efficient run is already in progress','warning');return;}
-        const sk=sidekick();
-        if(!sk){ctx.ui.notify(`Model ${sidekickId} is absent from the catalog`,'error');return;}
+        const luna=cheapModel();
+        if(!luna){ctx.ui.notify(`Model ${cheapId} is absent from the catalog`,'error');return;}
         running=true;
         const worktree=ctx.cwd;
         const runDir=await mkdtemp(join(tmpdir(),'suffice-efficient-'));
@@ -162,44 +101,50 @@ export function sufficeEfficientCommand(options,runtime){
           await cp(worktree,snapshot,{recursive:true,filter:src=>!SKIP_COPY.has(basename(src)),dereference:true});
           const prefill=await workspacePrefill(worktree);
           const prompt=`${input}\n\n${prefill}`;
-          // Phase A: sidekick model — low-effort rounds gated on the
-          // workspace's tests. A round only passes its verdict when the
-          // session completed: a crashed run's leftover edits are partial
-          // work for the next round.
+          // Phase A: cheap model, retry nudged once on a miss. A round only
+          // passes its verdict when the session completed — a crashed run's
+          // leftover edits are partial work for the next round to finish,
+          // never an accepted patch.
           let changes=0,errored=false,failedDetail=null;
-          const cheapDir=join(runDir,'sidekick');
-          // One sidekick round at the given effort; `changes` accumulates
-          // the passing diff count.
-          const sidekickRound=async(round,effort)=>{
-            if(!existsSync(cheapDir)) await copyTree(worktree,cheapDir);
-            ctx.ui.notify(`Efficient: ${sidekickId} attempt${round?' retry':''} (${effort} effort) on a workspace copy`,'info');
+          const cheapEffort=clampThinkingLevel(luna,'low');
+          for(let round=0;round<CHEAP_ROUNDS&&changes===0;round++){
+            const dir=join(runDir,'cheap');
+            if(!existsSync(dir)) await copyTree(worktree,dir);
+            ctx.ui.notify(`Efficient: ${cheapId} attempt${round?' retry':''} on a workspace copy`,'info');
             const nudge=errored?'\n\nYour previous attempt errored before finishing — the files may hold partial edits. Inspect the state and finish the task.':failedDetail?`\n\nYour previous attempt's changes fail the project's tests:\n${failedDetail}\nKeep fixing until the tests pass.`:'\n\nYour previous attempt made no changes — the task is not done. Keep fixing the actual files.';
             errored=false;failedDetail=null;
-            try{ changes=await attempt(cheapDir,round?prompt+nudge:prompt,sk,clampThinkingLevel(sk,effort),snapshot); }
+            try{ changes=await attempt(dir,round?prompt+nudge:prompt,luna,cheapEffort,snapshot); }
             catch{ errored=true;changes=0; }
             // Verify on the copy: a diff that fails the project's tests is a
             // miss, and its failure digest nudges the next round.
             if(changes>0){
-              const verdict=await verifyDir(cheapDir,{access:options.access});
+              const verdict=await verifyDir(dir,{access:options.access});
               if(verdict.ranTests&&!verdict.passed){ failedDetail=verdict.detail; changes=0; }
             }
-          };
-          for(let round=0;round<CHEAP_MAX_ROUNDS&&changes===0;round++)
-            await sidekickRound(round,'low');
-          let outcome=null;
-          if(changes>0) outcome={dir:cheapDir,path:`${sidekickId} solved it (${changes} change(s)) — lead cost skipped`};
+          }
+          let winnerDir=null,path='';
+          if(changes>0){ winnerDir=join(runDir,'cheap'); path=`${cheapId} solved it (${changes} change(s)) — no escalation, strong-model cost skipped`; }
           else{
-            // Phase B: seeded-race escalation on the lead model.
-            const seedDir=existsSync(cheapDir)?cheapDir:null;
-            ctx.ui.notify(`Efficient: ${sidekickId} missed — escalating to a ${lead(ctx)?.id??'lead'} race${seedDir?' seeded with the failed workspace':''}`,'info');
-            outcome=await escalate(worktree,snapshot,runDir,input,prefill,ctx,seedDir,failedDetail);
+            // Phase B: escalate — fresh copy, fresh session, session model.
+            const strongDir=join(runDir,'strong');
+            await copyTree(worktree,strongDir);
+            ctx.ui.notify(`Efficient: ${cheapId} failed — escalating to session model`,'info');
+            // '/efficient on' swapped ctx.model to the cheap one — escalate to
+            // the model the session had before the switch.
+            const strongModel=(cheapOn&&priorModel)?priorModel:ctx.model;
+            const strongEffort=clampThinkingLevel(strongModel,ctx.thinkingLevel??'low');
+            try{
+              const strongChanges=await attempt(strongDir,prompt,strongModel,strongEffort,snapshot);
+              if(strongChanges>0){
+                const verdict=await verifyDir(strongDir,{access:options.access});
+                if(verdict.ranTests&&!verdict.passed){ ctx.ui.notify(`Escalation produced changes but they fail the workspace tests:\n${verdict.detail}`,'warning'); }
+                else{ winnerDir=strongDir; path=`escalated to ${strongModel?.id??'session model'} after ${cheapId} missed (${strongChanges} change(s))`; }
+              }
+            }catch{ /* fall through to the failure notice */ }
           }
-          if(!outcome?.dir){
-            ctx.ui.notify(`Efficient: ${outcome?.failed??'no path produced verified changes'}`,'error');
-            return;
-          }
-          const n=await applyPatch(worktree,snapshot,outcome.dir);
-          const text=`/efficient applied ${n} change(s) — ${outcome.path}`;
+          if(!winnerDir){ctx.ui.notify('Efficient: cheap and the escalation both produced no changes','error');return;}
+          const n=await applyPatch(worktree,snapshot,winnerDir);
+          const text=`/efficient applied ${n} change(s) — ${path}`;
           pi.sendMessage({customType:'efficient-run',content:text,display:true});
           ctx.ui.notify(text,'info');
         } finally {

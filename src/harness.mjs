@@ -97,10 +97,6 @@ export const variants = Object.freeze([
   // verifier. Escalate-on-failure keeps the strong model's ceiling while
   // paying its price only on misses — unlike review-on-success.
   { id: 'eco-luna-sol', core: true, effort: 'low', fast: { speculativeTest: true }, eco: { cheapModel: 'gpt-6-luna', cheapEffort: 'low', prefill: true, cheapRetries: 2 } },
-  // Eco-adaptive → reverted to the auto-v1 shape: fixed 3 test-gated cheap
-  // rounds, escalate on miss. Adaptive signature-looping and medium effort
-  // added latency without converting on the mid suite.
-  { id: 'eco-adaptive', core: true, effort: 'low', fast: { speculativeTest: true }, eco: { cheapModel: 'gpt-6-luna', cheapEffort: 'low', prefill: true, cheapRetries: 2 } },
   // Auto mode: one Luna classify call routes the task — repairs go cheap-first
   // (eco), features go to the strong model directly, the rest get the race.
   { id: 'auto', core: true, effort: 'low', fast: { speculativeTest: true }, auto: {} },

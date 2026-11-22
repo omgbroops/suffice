@@ -38,36 +38,20 @@ export async function runEco({ runtime, task, variant, runDir, thinkingLevel = '
     const cheapTask = eco.prefill ? { ...task, prompt: `${task.prompt}\n\n${await workspacePrefill(task.workspaceDir)}` } : task;
     const cheapVariant = { ...variant, model: eco.cheapModel ?? 'gpt-6-luna' };
     const retries = eco.cheapRetries ?? 0;
-    // Adaptive: `lowRounds` rounds at cheapEffort continue only while each
-    // round's failure signature changes (progress); an identical signature
-    // twice means the model is stuck. `mediumRounds` then fire at medium
-    // effort before paying for the strong model. Non-adaptive keeps the old
-    // fixed `cheapRetries` shape.
-    const lowRounds = eco.lowRounds ?? retries + 1;
-    const totalRounds = eco.adaptive ? lowRounds + (eco.mediumRounds ?? 0) : retries + 1;
     const cheapRuns = [];
-    let cheapPassed = false, lastDetail = '', prevSig = null;
-    for (let attempt = 0; attempt < totalRounds && !cheapPassed; attempt++) {
+    let cheapPassed = false, lastDetail = '';
+    for (let attempt = 0; attempt <= retries && !cheapPassed; attempt++) {
       const attemptDir = attempt === 0 ? cheapDir : resolve(runDir, `cheap-retry-${attempt}`);
-      const effort = eco.adaptive && attempt >= lowRounds ? 'medium' : (eco.cheapEffort ?? 'low');
       const promptTask = attempt === 0 ? cheapTask : { ...cheapTask, prompt: `${cheapTask.prompt}\n\nPrevious attempt failed verification — ${lastDetail}\nKeep fixing until the acceptance tests pass.` };
       const run = await runAgentImpl({
         runtime, workspace: cheapWorkspace, runDir: attemptDir, task: promptTask,
         variant: cheapVariant,
-        thinkingLevel: effort, maxTurns: eco.cheapTurns,
+        thinkingLevel: eco.cheapEffort ?? 'low', maxTurns: eco.cheapTurns,
         timeoutMs: eco.cheapTimeoutMs ?? 120_000, signal: controller.signal });
       cheapRuns.push(run);
-      let sig;
-      if (run.status !== 'completed') sig = `run:${run.status}`;
-      else {
-        const verdict = await check(cheapWorkspace, task, task.workspaceDir, controller.signal);
-        cheapPassed = verdict.passed; lastDetail = verdict.detail ?? '';
-        sig = cheapPassed ? null : (verdict.detail ?? 'miss');
-      }
-      if (eco.adaptive) {
-        if (sig !== null && sig === prevSig) break; // same failure signature twice — stuck
-        prevSig = sig;
-      } else if (run.status !== 'completed') break;
+      if (run.status !== 'completed') break;
+      const verdict = await check(cheapWorkspace, task, task.workspaceDir, controller.signal);
+      cheapPassed = verdict.passed; lastDetail = verdict.detail ?? '';
     }
     const cheap = { status: cheapRuns.at(-1).status,
       turns: cheapRuns.reduce((s, r) => s + (r.turns ?? 0), 0),
