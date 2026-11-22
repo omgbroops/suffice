@@ -17,9 +17,11 @@ const taskFixture = async () => {
 
 const fakeAgent = passes => {
   let i = 0;
-  return async ({ signal }) => {
-  // Each call claims the next outcome in order.
-  const outcome = passes[i++ % passes.length];
+  return async ({ signal, runDir }) => {
+  // The outcome follows the attempt number (runDir ends in attempt-<n>), not call order: workspace copies finish in
+  // any order, so call order made "attempt 0 hangs, attempt 1 passes" flip (failed 3 of 4 runs on 4ee663f too).
+  const n = /attempt-(\d+)$/.exec(runDir ?? '')?.[1];
+  const outcome = passes[(n == null ? i++ : +n) % passes.length];
   if (!outcome) await new Promise(r => { signal.addEventListener('abort', r, { once: true }); });
   return { status: 'completed', usage: { input: 1 }, turns: 1, latencyMs: 1 };
   };
