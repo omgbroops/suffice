@@ -61,6 +61,8 @@ Write:
 
 Rules:
 - Link related notes with [[wikilinks]] using the note's file name without .md. Every note links to at least one other note.
+- Links mean real relations: a module note links to the notes for what it depends on and what calls it; a decision note links to the modules it shaped. Do not add links for decoration; the notes view draws them as a graph.
+- Markdown docs already in the repo (README, docs/) are notes too: link to them by file name instead of repeating what they say.
 - Cite the file path (and function or section name) behind each claim, in backticks.
 - Do not invent facts. If something is unclear or missing, write "unknown" or leave it out.
 - Keep each note short: a title heading, then under 40 lines.
