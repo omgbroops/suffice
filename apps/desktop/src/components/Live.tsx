@@ -35,7 +35,10 @@ function tick(now: number) {
 }
 const wake = () => { if (!raf) raf = requestAnimationFrame(tick) }
 document.addEventListener('visibilitychange', wake)
-reduce?.addEventListener('change', () => { for (const g of live) g.drawn = false; wake() })
+// still glyphs redraw when motion preference or theme (and so the ink) changes
+const redrawAll = () => { for (const g of live) g.drawn = false; wake() }
+reduce?.addEventListener('change', redrawAll)
+if (typeof matchMedia === 'function') matchMedia('(prefers-color-scheme: dark)').addEventListener('change', redrawAll)
 
 /**
  * phase (seconds) offsets the animation so sibling glyphs don't move in lockstep.

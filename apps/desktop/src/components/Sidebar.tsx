@@ -8,10 +8,10 @@ import { baseName } from './Pickers'
 export const PASTELS = ['auto', 'rose', 'peach', 'butter', 'mint', 'sky', 'lilac'] as const
 export const ColorsContext = createContext<Record<string, string>>({})
 
-export function ProjectEmblem({ path, size = 16, working = false, tint }: { path: string; size?: number; working?: boolean; tint?: string }) {
+export function ProjectEmblem({ path, size = 16, working = false, tint, label }: { path: string; size?: number; working?: boolean; tint?: string; label?: string }) {
   const colors = useContext(ColorsContext)
   const c = tint ?? colors[path] ?? 'auto'
-  return <Live kind="swarm" seed={path} size={size} status={working ? 'working' : 'done'} dim={false} color={`var(--pastel-${c})`} label={baseName(path)} />
+  return <Live kind="swarm" seed={path} size={size} status={working ? 'working' : 'done'} dim={false} color={`var(--pastel-${c})`} label={label ?? baseName(path)} />
 }
 
 type Row = { key: string; title: string; project: string; modified: number }
@@ -54,7 +54,7 @@ function TintMenu({ path, onTint }: { path: string; onTint: (c: string) => void 
         <div className="menu menu-bottom menu-right tint-menu" role="menu" aria-label="Colour">
           {PASTELS.map(c => (
             <button key={c} role="menuitemradio" aria-checked={c === current} className={`tint-swatch${c === current ? ' is-selected' : ''}`} title={c[0].toUpperCase() + c.slice(1)} onClick={e => (e.stopPropagation(), onTint(c), setOpen(false))}>
-              <ProjectEmblem path={path} size={18} tint={c} />
+              <ProjectEmblem path={path} size={18} tint={c} label={c[0].toUpperCase() + c.slice(1)} />
             </button>
           ))}
         </div>
@@ -93,6 +93,11 @@ export function SearchPalette({ threads, onOpen, onClose }: { threads: Row[]; on
   const [i, setI] = useState(0)
   const ref = useRef<HTMLDivElement>(null)
   useDismiss(true, onClose, ref)
+  // hand focus back to wherever ⌘K was pressed (usually the composer)
+  useEffect(() => {
+    const from = document.activeElement as HTMLElement | null
+    return () => { if (from?.isConnected) from.focus() }
+  }, [])
   const hits = useMemo(() => {
     const words = q.toLowerCase().split(/\s+/).filter(Boolean)
     return threads.filter(t => words.every(w => `${t.title} ${baseName(t.project)}`.toLowerCase().includes(w))).slice(0, 50)

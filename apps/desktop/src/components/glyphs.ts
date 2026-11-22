@@ -44,7 +44,7 @@ const dot = (c: CanvasRenderingContext2D, x: number, y: number, r: number) => {
 }
 
 // all sizes in fractions of the glyph's side S; the outer edge stays inside 0.46 S
-type Ring = { k: number; r: number; size: number; cap: number; w: number; off: number }
+type Ring = { k: number; r: number; size: number; w: number; off: number }
 const swarmCache = new Map<number, { rings: Ring[]; core: number }>()
 function layout(seed: number) {
   let m = swarmCache.get(seed)
@@ -64,8 +64,8 @@ function layout(seed: number) {
   m = {
     core,
     rings: [
-      { k, r: r1, size: s1, cap: Math.min((r1 * Math.sin(Math.PI / k)) / 1.3, r1 - core - 0.02), w: dir * 0.5, off: 0 },
-      { k: k2, r: r2, size: fit(k2, r2, s2), cap: Math.min((r2 * Math.sin(Math.PI / k2)) / 1.3, 0.5 - r2), w: -dir * 0.3, off: r() < 0.5 ? 0 : Math.PI / k2 },
+      { k, r: r1, size: s1, w: dir * 0.5, off: 0 },
+      { k: k2, r: r2, size: fit(k2, r2, s2), w: -dir * 0.3, off: r() < 0.5 ? 0 : Math.PI / k2 },
     ],
   }
   swarmCache.set(seed, m)
@@ -73,25 +73,34 @@ function layout(seed: number) {
 }
 
 // Seeded k-fold swarm: a core and two rings of motes that counter-rotate while working, with fading tails.
+// Final pixel radii are clamped after boosts and floors, so motes never touch each other, the core or the edge.
 function swarm({ c, S, t, s, ink, seed }: G) {
   const cx = S / 2, cy = S / 2
   const moving = s === 'working'
   const { rings, core } = layout(seed)
-  // tiny marks need heavier motes to read; fit() still caps them below touching
-  const boost = S < 24 ? 1.45 : 1
-  for (const g of rings) {
+  const small = S < 24, gap = Math.max(0.5, S * 0.03)
+  const coreR = Math.max(1, S * core * (small ? 1.2 : 1))
+  const pulse = moving ? 1 + 0.1 * Math.sin(t * TAU * 0.8) : 1
+  let inside = coreR * 1.1 // furthest edge already used, core at its largest pulse
+  const radii = rings.map(g => {
+    const rr = S * g.r
+    const want = Math.max(0.6, S * g.size * (small ? 1.45 : 1))
+    const d = Math.max(0.35, Math.min(want, (rr * Math.sin(Math.PI / g.k)) / 1.3, rr - inside - gap, S / 2 - rr))
+    inside = rr + d
+    return d
+  })
+  rings.forEach((g, n) => {
     for (let q = moving ? 3 : 0; q >= 0; q--) {
       const tt = t - q * 0.035
       c.fillStyle = ink(q ? 0.28 * (1 - q / 4) : 0.92)
       for (let i = 0; i < g.k; i++) {
         const th = g.off + (i / g.k) * TAU + (moving ? g.w * TAU * tt : 0) - Math.PI / 2
-        const rr = S * g.r * (moving ? 1 + 0.05 * Math.sin(tt * TAU * 0.7 + i) : 1)
-        dot(c, cx + rr * Math.cos(th), cy + rr * Math.sin(th), Math.max(0.6, S * Math.min(g.size * boost, g.cap) * (q ? 0.75 : 1)))
+        dot(c, cx + S * g.r * Math.cos(th), cy + S * g.r * Math.sin(th), radii[n] * (q ? 0.75 : 1))
       }
     }
-  }
+  })
   c.fillStyle = ink(0.95)
-  dot(c, cx, cy, Math.max(1, S * core * (S < 24 ? 1.2 : 1) * (moving ? 1 + 0.1 * Math.sin(t * TAU * 0.8) : 1)))
+  dot(c, cx, cy, coreR * pulse)
 }
 
 // ldrs chaoticOrbit: two dots swinging through the centre of a slowly turning axis
