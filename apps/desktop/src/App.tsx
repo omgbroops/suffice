@@ -141,7 +141,7 @@ export default function App() {
   const [hist, setHist] = useState<{ stack: View[]; i: number }>({ stack: [{ kind: 'home' }], i: 0 })
   const [sidebar, setSidebar] = useState(true)
   const [search, setSearch] = useState(false)
-  const [git, setGit] = useState('')
+  const [git, setGit] = useState({ name: '', avatar: '' })
   const [notice, setNotice] = useState('')
   const [env, setEnv] = useState<'local' | 'cloud'>('local')
   const [, tick] = useState(0)
@@ -155,7 +155,7 @@ export default function App() {
     try {
       const i = await api.init()
       setInfo(i)
-      api.gitIdentity().then(setGit, () => setGit('Git not set up'))
+      api.gitIdentity().then(setGit, () => setGit({ name: 'Git not set up', avatar: '' }))
       setSettings(i.settings)
       setProjects(i.projects)
       if (i.signedIn) setModels(await api.models())
@@ -622,7 +622,7 @@ function HomeContinue({ thread, onOpen }: { thread: Thread & { key: string }; on
 
 type Theme = 'system' | 'light' | 'dark'
 
-function AccountMenu({ identity, onSignOut, theme, onTheme }: { identity: string; onSignOut: () => void; theme: Theme; onTheme: (t: Theme) => void }) {
+function AccountMenu({ identity, onSignOut, theme, onTheme }: { identity: { name: string; avatar: string }; onSignOut: () => void; theme: Theme; onTheme: (t: Theme) => void }) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -657,8 +657,8 @@ function AccountMenu({ identity, onSignOut, theme, onTheme }: { identity: string
         </div>
       )}
       <button className="side-user" onClick={() => setOpen(o => !o)}>
-        <span className="avatar"><Live seed="account" size={16} status="done" dim={false} label="Account" /></span>
-        <span className="side-user-name">{identity || 'Account'}</span>
+        <span className="avatar">{identity.avatar ? <img src={identity.avatar} alt="" /> : <Live seed="account" size={16} status="done" dim={false} label="Account" />}</span>
+        <span className="side-user-name">{identity.name || 'Account'}</span>
         <IconSelector size={13} className="side-user-chev" />
       </button>
     </div>

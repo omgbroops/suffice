@@ -57,7 +57,7 @@ const bridge = () => window.suffice
 export const api = {
   platform: () => bridge().platform,
   init: () => bridge().invoke<InitInfo>('app:init'),
-  gitIdentity: () => bridge().invoke<string>('git:identity'),
+  gitIdentity: () => bridge().invoke<{ name: string; avatar: string }>('git:identity'),
   login: () => bridge().invoke<{ ok: boolean; error?: string }>('auth:login'),
   answerLogin: (id: string, value: string) => bridge().invoke('auth:answer', { id, value }),
   cancelLogin: () => bridge().invoke('auth:cancel'),
