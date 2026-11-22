@@ -60,25 +60,16 @@ export function PermissionPicker({ value, onChange }: { value: Mode; onChange: (
   )
 }
 
-const TINTS = ['#6f8f7a', '#7d7aa8', '#a07f62', '#6f8aa3', '#a06f86', '#8a9a62']
-function Tile({ name }: { name: string }) {
-  const letters = name.replace(/[^a-z0-9]/gi, '').slice(0, 2).toUpperCase() || '?'
-  let h = 0
-  for (const c of name) h = (h * 31 + c.charCodeAt(0)) >>> 0
-  const tint = TINTS[h % TINTS.length]
-  return <span className="dd-tile" style={{ color: tint, background: `color-mix(in srgb, ${tint} 18%, transparent)` }}>{letters}</span>
-}
-
 function ProjectList({ project, projects, onPick, onAdd, close }: { project: string | null; projects: string[]; onPick: (p: string) => void; onAdd: () => void; close: () => void }) {
   const [q, setQ] = useState('')
   const list = projects.filter(p => p.toLowerCase().includes(q.trim().toLowerCase()))
   return (
     <div className="dd-list">
-      <input className="dd-search" autoFocus placeholder="Search projects" value={q} onChange={e => setQ(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && list[0]) { onPick(list[0]); close() } }} />
+      <input className="dd-search" spellCheck={false} autoFocus placeholder="Search projects" value={q} onChange={e => setQ(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && list[0]) { onPick(list[0]); close() } }} />
       {list.map(p => (
         <button key={p} role="menuitemradio" aria-checked={p === project} className={`dd-row${p === project ? ' is-selected' : ''}`} title={p} onClick={() => { onPick(p); close() }}>
-          <Tile name={baseName(p)} />
-          <span className="dd-title dd-grow">{baseName(p)}</span>
+          <span className="dd-icon"><IconFolder size={14} /></span>
+          <span className="dd-title dd-grow pii">{baseName(p)}</span>
           {p === project && <IconCheck size={13} className="dd-check" />}
         </button>
       ))}
@@ -99,7 +90,7 @@ export function ProjectPicker({ project, projects, onPick, onAdd }: { project: s
       trigger={({ open, toggle, ref }) => (
         <button ref={ref} className={`ghost-btn${open ? ' is-open' : ''}`} onClick={toggle} aria-haspopup="menu" aria-expanded={open} title={project ?? 'Choose a project'}>
           <IconFolder size={14} />
-          {project ? baseName(project) : 'Choose a project'}
+          <span className={project ? 'pii' : undefined}>{project ? baseName(project) : 'Choose a project'}</span>
         </button>
       )}
     >

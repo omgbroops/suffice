@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import { Fragment, createContext, useContext, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { describeTool, patchLines, visibleSteps, type AgentMessage as Agent, type ApprovalStep, type Attempt, type AttemptsStep, type Step, type ToolStep, type Transcript } from '../../shared/transcript.mjs'
 import type { Status } from '../data'
 import { IconArrowLeft, IconChevronDown } from '../icons'
@@ -6,6 +6,10 @@ import { CopyButton, StatusGlyph } from './ui'
 import { EFFORT_LABEL } from './ModelPicker'
 
 const duration = (s: number) => (s < 60 ? `${s}s` : s < 3600 ? `${Math.floor(s / 60)}m ${s % 60}s` : `${Math.floor(s / 3600)}h ${Math.floor((s % 3600) / 60)}m`)
+
+/** Transcript preferences: collapse finished work, show reasoning, render Markdown while streaming. */
+type ViewPrefs = { collapse: boolean; reasoning: boolean; streamMarkdown: boolean }
+const ViewPrefsContext = createContext<ViewPrefs>({ collapse: true, reasoning: true, streamMarkdown: true })
 
 const STATUS_LABEL: Record<Status, string> = { working: 'Working', done: 'Completed', input: 'Needs input', idle: 'Idle' }
 
@@ -66,7 +70,7 @@ function Row({ verb, meta, stat, children, defaultOpen = false, live, error }: {
     <div className={`step${open ? ' is-open' : ''}${error ? ' is-error' : ''}`}>
       <button className={`step-row${live ? ' is-live' : ''}`} onClick={() => children && setOpen(o => !o)} aria-expanded={children ? open : undefined} disabled={!children}>
         <span className="step-verb">{verb}</span>
-        {meta && <span className="step-meta">{meta}</span>}
+        {meta && <span className="step-meta pii">{meta}</span>}
         {stat}
         {children && <IconChevronDown size={12} className="step-chev" />}
       </button>
@@ -115,7 +119,7 @@ function ToolView({ step, project }: { step: ToolStep; project: string }) {
     <Row verb={verb} meta={rel} live={live} error={error}>
       {body && (
         <div className="detail">
-          {command && <div className="detail-head"><span className="detail-title">Command in {project.split(/[\\/]/).pop()}</span></div>}
+          {command && <div className="detail-head"><span className="detail-title pii">Command in {project.split(/[\\/]/).pop()}</span></div>}
           <pre className="code">{body}</pre>
         </div>
       )}
@@ -124,8 +128,10 @@ function ToolView({ step, project }: { step: ToolStep; project: string }) {
 }
 
 function StepView({ step, project, live }: { step: Step; project: string; live: boolean }) {
-  if (step.kind === 'text') return <div className="step-text"><Prose text={step.text} /></div>
+  const prefs = useContext(ViewPrefsContext)
+  if (step.kind === 'text') return <div className="step-text">{live && !prefs.streamMarkdown ? <div className="prose is-plain">{step.text}</div> : <Prose text={step.text} />}</div>
   if (step.kind === 'thinking') {
+    if (!prefs.reasoning) return null
     const secs = Math.max(1, Math.round(((step.endedAt ?? Date.now()) - step.startedAt) / 1000))
     return (
       <Row verb={step.endedAt ? `Thought for ${secs}s` : 'Thinking'} live={live && !step.endedAt}>
@@ -158,7 +164,7 @@ function ApprovalCard({ step, onAnswer }: { step: ApprovalStep; onAnswer: (allow
   return (
     <div className="ask-card" role="group" aria-label="Permission request">
       <div className="ask-head">{title}</div>
-      {body && <pre className="code ask-code">{body}</pre>}
+      {body && <pre className="code ask-code pii">{body}</pre>}
       <div className="ask-foot">
         <span className="ask-hint">{apply ? 'The attempt ran on a copy; nothing has changed yet' : 'Switch to Full access to skip this'}</span>
         <button className="btn" onClick={() => onAnswer(false)}>{apply ? 'Discard' : 'Deny'}</button>
@@ -223,7 +229,8 @@ function AgentMessageView({ msg, project, onApproval, onOpenAttempt }: { msg: Ag
   // Efficient and Fast runs report through notes; the last one is the result.
   const final = last?.kind === 'text' || (last?.kind === 'note' && msg.done) ? last : undefined
   const work = steps.filter(s => s !== final && !(s.kind === 'approval' && s.state === 'pending'))
-  const [open, setOpen] = useState(!msg.done)
+  const prefs = useContext(ViewPrefsContext)
+  const [open, setOpen] = useState(!msg.done || !prefs.collapse)
   const live = !msg.done
   const secs = Math.max(1, Math.round(((msg.endedAt ?? Date.now()) - msg.startedAt) / 1000))
   return (
@@ -244,9 +251,9 @@ function AgentMessageView({ msg, project, onApproval, onOpenAttempt }: { msg: Ag
         </div>
       )}
       {groups.map((g, i) => <AttemptsCard key={i} group={g} onOpen={aid => onOpenAttempt?.(aid)} />)}
-      {live && all.length === 0 && <div className="pending">Thinking</div>}
+      {live && (all.length === 0 || (!prefs.reasoning && all.every(s => s.kind === 'thinking'))) && <div className="pending">Thinking</div>}
       {pendingApprovals.map(s => <ApprovalCard key={s.id} step={s} onAnswer={allow => onApproval(s.id, allow)} />)}
-      {final && (final.kind === 'note' ? <div className={`msg-note${final.level === 'error' ? ' is-error' : ''}`}>{final.text}</div> : <Prose text={final.text} />)}
+      {final && (final.kind === 'note' ? <div className={`msg-note${final.level === 'error' ? ' is-error' : ''}`}>{final.text}</div> : live && !prefs.streamMarkdown ? <div className="prose is-plain">{final.text}</div> : <Prose text={final.text} />)}
       {msg.error && <div className="msg-error">{msg.error}</div>}
       {msg.done && (
         <div className="msg-foot">
@@ -292,7 +299,9 @@ export function ThreadView({
   project,
   composer,
   onApproval,
+  prefs,
 }: {
+  prefs: Record<string, any>
   title: string
   status: Status
   transcript: Transcript | undefined
@@ -329,7 +338,9 @@ export function ThreadView({
     return () => window.removeEventListener('keydown', onKey)
   }, [!!attempt])
 
+  const viewPrefs = { collapse: prefs['collapse-work'] !== false, reasoning: prefs['show-reasoning'] !== false, streamMarkdown: prefs['stream-markdown'] !== false }
   return (
+    <ViewPrefsContext.Provider value={viewPrefs}>
     <div className="thread">
       {attempt ? (
         <header className="thread-head">
@@ -360,7 +371,7 @@ export function ThreadView({
           {!transcript && <div className="pending">Loading</div>}
           {attempt ? (
             <>
-              <div className="attempt-note">
+              <div className="attempt-note pii">
                 {attempt.model} · {EFFORT_LABEL[attempt.effort] ?? attempt.effort} · ran on a copy of the project
                 {attempt.files?.length ? ` · changed ${attempt.files.map(slash).join(', ')}` : ''}
               </div>
@@ -384,5 +395,6 @@ export function ThreadView({
         </div>
       </div>
     </div>
+    </ViewPrefsContext.Provider>
   )
 }

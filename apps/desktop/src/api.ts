@@ -1,4 +1,5 @@
 import type { Transcript } from '../shared/transcript.mjs'
+import type { Prefs } from '../shared/prefs.mjs'
 
 export type { Transcript }
 
@@ -19,7 +20,12 @@ export type Settings = {
   recentModels: string[]
   mode: Mode
   cheapModel: string
+  prefs: Prefs
 }
+
+export type Resource = { name: string; detail: string; path?: string | null; enabled?: boolean }
+export type Resources = { mcps: Resource[]; skills: Resource[]; templates: Resource[]; extensions: Resource[]; folders: Record<string, string> }
+export type About = { version: string; home: string; node: string; electron: string | null; chrome: string | null }
 
 export type Mode = 'balanced' | 'efficient' | 'fast'
 
@@ -59,6 +65,12 @@ export const api = {
   threads: (project: string) => bridge().invoke<ThreadSummary[]>('threads:list', { project }),
   openThread: (threadId: string, path: string) => bridge().invoke<Transcript>('threads:open', { threadId, path }),
   run: (args: { threadId: string; path?: string; project: string; prompt: string; model: string; effort: string; fast: boolean; mode: Mode; cheapModel: string }) => bridge().invoke<{ threadId: string; effort: string; mode: Mode }>('run:start', args),
+  steer: (threadId: string, text: string, how: 'steer' | 'queue') => bridge().invoke('run:steer', { threadId, text, how }),
+  resources: () => bridge().invoke<Resources>('resources:list'),
+  toggleResource: (kind: string, name: string, enabled: boolean) => bridge().invoke<Resources>('resources:toggle', { kind, name, enabled }),
+  openResources: (kind: string) => bridge().invoke('resources:open', { kind }),
+  exportSessions: () => bridge().invoke<{ directory: string; count: number } | null>('data:export'),
+  about: () => bridge().invoke<About>('app:about'),
   abort: (threadId: string) => bridge().invoke('run:abort', { threadId }),
   answerApproval: (id: string, allow: boolean) => bridge().invoke('approval:answer', { id, allow }),
   updateSettings: (patch: Partial<Settings>) => bridge().invoke<Settings>('settings:update', patch),

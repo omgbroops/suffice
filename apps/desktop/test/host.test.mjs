@@ -3,6 +3,8 @@ import assert from 'node:assert/strict'
 import { mkdir, mkdtemp, readdir, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
+import { existsSync } from 'node:fs'
+import { execFileSync } from 'node:child_process'
 import { createHost, effectiveEffort, effortsFor } from '../electron/host/host.mjs'
 
 const MODELS = [
@@ -214,6 +216,70 @@ test('efficient escalates to the lead model only when the cheap one makes no cha
     assert.equal(await readFile(join(project, 'a.txt'), 'utf8'), 'original')
     assert.equal(events.find(e => e.type === 'attempts_result').applied, false)
     await assert.rejects(host.run({ threadId: 'g', project, prompt: 'x', model: 'gpt-6.1-sol', effort: 'low', mode: 'efficient', cheapModel: 'nope' }), /not in the model catalog/)
+    await host.dispose()
+  } finally {
+    await rm(home, { recursive: true, force: true })
+  }
+})
+
+test('attempt copies of a git project leave ignored folders behind but keep loose ignored files', async () => {
+  const log = []
+  const seen = []
+  const sessions = strategySessions(log, {
+    edit: o => {
+      seen.push({ build: existsSync(join(o.cwd, 'build')), env: existsSync(join(o.cwd, '.env')), git: existsSync(join(o.cwd, '.git')) })
+      return true
+    },
+  })
+  const { home, project, host, runTo } = await strategyHost(sessions)
+  try {
+    execFileSync('git', ['init', '-q'], { cwd: project })
+    await writeFile(join(project, '.gitignore'), 'build/\n.env\n')
+    await mkdir(join(project, 'build'))
+    await writeFile(join(project, 'build', 'out.bin'), 'x')
+    await writeFile(join(project, '.env'), 'KEY=1')
+    const end = await runTo({ threadId: 'g', prompt: 'change a', mode: 'efficient', cheapModel: 'gpt-6-luna' })
+    assert.equal(end.ok, true)
+    assert.deepEqual(seen[0], { build: false, env: true, git: false })
+    assert.equal(await readFile(join(project, 'a.txt'), 'utf8'), 'changed')
+    assert.ok(existsSync(join(project, 'build', 'out.bin')))
+    await host.dispose()
+  } finally {
+    await rm(home, { recursive: true, force: true })
+  }
+})
+
+test('preferences carry over from the old desktop app and reach new sessions', async () => {
+  const home = await mkdtemp(join(tmpdir(), 'suffice-desktop-'))
+  try {
+    await writeFile(join(home, 'desktop-settings.json'), JSON.stringify({ mode: 'Light', 'disabled-models': ['openai|gpt-4o'], naming: 'Untitled', 'compact-at': '90%', bogus: 1 }))
+    const seen = []
+    const titles = []
+    const createSession = async options => {
+      seen.push(options)
+      return {
+        session: { model: MODELS[0], setModel: async () => {}, setThinkingLevel: () => {}, subscribe: () => {}, setSessionName: () => {} },
+        totals: {},
+        sessionPath: () => join(home, 's.jsonl'),
+        abort: () => {},
+        dispose: async () => {},
+        run: async () => 'ok',
+      }
+    }
+    let done
+    const ended = new Promise(r => (done = r))
+    const host = await createHost({ home, runtime: fakeRuntime(), createSession, openExternal: () => {}, chooseDirectory: async () => home, emit: (c, p) => (c === 'thread:title' && titles.push(p.title), c === 'threads:changed' && done()) })
+    const { settings } = await host.init()
+    assert.equal(settings.prefs.theme, 'Light')
+    assert.deepEqual(settings.prefs['disabled-models'], ['gpt-4o'])
+    assert.equal(settings.prefs.bogus, undefined)
+    await host.updateSettings({ prefs: { ...settings.prefs, 'allow-network': false } })
+    await host.run({ threadId: 'p', project: home, prompt: 'hello there', model: 'gpt-6.1-sol', effort: 'low' })
+    await ended
+    assert.equal(seen[0].desktopSettings.naming, 'Manual')
+    assert.equal(seen[0].desktopSettings['compact-at'], '90%')
+    assert.equal(seen[0].browser, false)
+    assert.deepEqual(titles, ['Untitled thread'])
     await host.dispose()
   } finally {
     await rm(home, { recursive: true, force: true })

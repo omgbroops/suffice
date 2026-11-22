@@ -60,7 +60,35 @@ const handlers = {
   'run:start': args => host.run(args),
   'run:abort': ({ threadId }) => host.abort(threadId),
   'approval:answer': ({ id, allow }) => host.answerApproval(id, allow),
-  'settings:update': patch => host.updateSettings(patch),
+  'settings:update': async patch => {
+    const settings = await host.updateSettings(patch)
+    applyStartup(settings)
+    return settings
+  },
+  'run:steer': ({ threadId, text, how }) => host.steer(threadId, text, how),
+  'resources:list': () => host.resources(),
+  'resources:toggle': args => host.toggleResource(args),
+  'resources:open': async ({ kind }) => {
+    // Only the folders the resources list names, never an arbitrary path.
+    const path = (await host.resources()).folders[kind]
+    if (!path) throw new Error('Unknown resource folder.')
+    return kind === 'mcps' ? shell.openPath(path) : shell.openPath(path).then(error => (error ? shell.showItemInFolder(path) : ''))
+  },
+  'data:export': async () => {
+    const result = await dialog.showOpenDialog(win, { title: 'Export conversations to…', properties: ['openDirectory', 'createDirectory'] })
+    if (result.canceled) return null
+    const done = await host.exportSessions(result.filePaths[0])
+    shell.showItemInFolder(done.directory)
+    return done
+  },
+  'app:about': () => ({ ...host.about(), version: app.getVersion() }),
+}
+
+/** Launch at startup follows the preference. Only for the installed app, not dev runs. */
+function applyStartup(settings) {
+  if (!app.isPackaged) return
+  const want = !!settings?.prefs?.startup
+  if (app.getLoginItemSettings().openAtLogin !== want) app.setLoginItemSettings({ openAtLogin: want })
 }
 
 app.whenReady().then(async () => {
@@ -81,6 +109,9 @@ app.whenReady().then(async () => {
       }
     })
   }
+  const info = await host.init()
+  applyStartup(info.settings)
+  void host.expireHistory(path => shell.trashItem(path)).catch(() => {})
   createWindow()
   app.on('activate', () => {
     if (!BrowserWindow.getAllWindows().length) createWindow()

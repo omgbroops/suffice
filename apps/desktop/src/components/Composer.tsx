@@ -13,6 +13,10 @@ type Props = {
   /** The new-session layout: a one-line box with the pickers on a bar beneath it. */
   line?: boolean
   env?: ReactNode
+  /** 'Enter' sends with Enter; 'Ctrl + Enter' keeps Enter for new lines. */
+  sendKey?: string
+  /** While the agent works, a message steers or queues; `other` is true for Ctrl + Enter. */
+  onSteer?: (text: string, other: boolean) => void
   onSend: (text: string) => void
   onStop?: () => void
 }
@@ -32,10 +36,12 @@ export function Composer(p: Props) {
     el.style.overflowY = h === MAX ? 'auto' : 'hidden'
   }, [text])
 
-  const canSend = text.trim().length > 0 && !p.working && !p.disabled
-  const send = () => {
+  const steering = !!p.working && !!p.onSteer
+  const canSend = text.trim().length > 0 && (!p.working || steering) && !p.disabled
+  const send = (other = false) => {
     if (!canSend) return
-    p.onSend(text.trim())
+    if (steering) p.onSteer!(text.trim(), other)
+    else p.onSend(text.trim())
     setText('')
   }
 
@@ -50,19 +56,20 @@ export function Composer(p: Props) {
       aria-label="Message"
       onChange={e => setText(e.target.value)}
       onKeyDown={e => {
-        if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
-          e.preventDefault()
-          send()
-        }
+        if (e.key !== 'Enter' || e.shiftKey || e.nativeEvent.isComposing) return
+        const mod = e.ctrlKey || e.metaKey
+        if (p.sendKey === 'Ctrl + Enter' && !mod) return
+        e.preventDefault()
+        send(mod && p.sendKey !== 'Ctrl + Enter')
       }}
     />
   )
-  const action = p.working ? (
+  const action = p.working && !(steering && text.trim()) ? (
     <button className="send-btn is-stop" onClick={p.onStop} aria-label="Stop">
       <IconStop size={13} />
     </button>
   ) : (
-    <button className="send-btn" disabled={!canSend} onClick={send} aria-label="Send" title={p.disabled}>
+    <button className="send-btn" disabled={!canSend} onClick={() => send()} aria-label={steering ? 'Steer' : 'Send'} title={p.disabled ?? (steering ? 'Send to the running agent' : undefined)}>
       <IconArrowUp size={15} />
     </button>
   )

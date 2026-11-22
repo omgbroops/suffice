@@ -7,8 +7,11 @@ import { EnvPicker, PermissionPicker, ProjectPicker, baseName, type Env } from '
 import { ModelPicker } from './components/ModelPicker'
 import { ThreadView } from './components/ThreadView'
 import { Dither } from './components/Dither'
+import { SettingsPage } from './components/Settings'
+import { applyPrefs, notify, watchSystemTheme } from './prefs'
+import { PREF_DEFAULTS, type Prefs } from '../shared/prefs.mjs'
 import { StatusGlyph } from './components/ui'
-import { IconArrowLeft, IconArrowRight, IconChevronDown, IconClose, IconCompose, IconFolder, IconHome, IconPlus, IconSelector, IconSidebar } from './icons'
+import { IconArchive, IconArrowLeft, IconArrowRight, IconChevronDown, IconClose, IconCompose, IconFolder, IconGear, IconHome, IconPlus, IconSelector, IconSidebar } from './icons'
 
 type Thread = {
   key: string
@@ -21,8 +24,8 @@ type Thread = {
   loading?: boolean
 }
 
-type View = { kind: 'home' } | { kind: 'thread'; key: string }
-const same = (a: View, b: View) => a.kind === b.kind && (a.kind === 'home' || a.key === (b as { key: string }).key)
+type View = { kind: 'home' } | { kind: 'settings' } | { kind: 'thread'; key: string }
+const same = (a: View, b: View) => a.kind === b.kind && (a.kind !== 'thread' || a.key === (b as { key: string }).key)
 
 function statusOf(t: Thread): Status {
   const last = t.transcript?.messages.at(-1)
@@ -188,6 +191,14 @@ export default function App() {
   const [notice, setNotice] = useState('')
   const [env, setEnv] = useState<Env>('local')
   const [, tick] = useState(0)
+  const [section, setSection] = useState('general')
+  const prefs: Prefs = settings?.prefs ?? PREF_DEFAULTS
+  // Event handlers registered once read the latest preferences and threads through refs.
+  const prefsRef = useRef(prefs)
+  prefsRef.current = prefs
+  const threadsRef = useRef(threads)
+  threadsRef.current = threads
+  const goRef = useRef<(v: View) => void>(() => {})
   const platform = api.platform()
 
   const view = hist.stack[hist.i]
@@ -209,6 +220,9 @@ export default function App() {
   useEffect(() => {
     void boot()
   }, [boot])
+
+  useEffect(() => applyPrefs(prefs), [prefs])
+  useEffect(() => watchSystemTheme(() => prefsRef.current), [])
 
   const refreshThreads = useCallback(async (p: string | null) => {
     if (!p) return
@@ -233,7 +247,12 @@ export default function App() {
 
   useEffect(() => {
     const offs = [
-      api.on('thread:event', ({ threadId, event }) =>
+      api.on('thread:event', ({ threadId, event }) => {
+        const title = threadsRef.current[threadId]?.title ?? 'Suffice'
+        const open = () => goRef.current({ kind: 'thread', key: threadId })
+        if (event.type === 'approval') notify(prefsRef.current, 'approval', 'Approval needed', title, open)
+        else if (event.type === 'end' && event.ok) notify(prefsRef.current, 'finished', 'Agent finished', title, open)
+        else if (event.type === 'end' && !/^Stopped/.test(event.error ?? '')) notify(prefsRef.current, 'failed', 'Agent ran into an error', `${title}: ${event.error ?? 'The run failed.'}`, open)
         setThreads(prev => {
           const t = prev[threadId]
           if (!t) return prev
@@ -246,8 +265,8 @@ export default function App() {
               modified: Date.now(),
             },
           }
-        }),
-      ),
+        })
+      }),
       api.on('thread:session', ({ threadId, path }) => setThreads(prev => (prev[threadId] ? { ...prev, [threadId]: { ...prev[threadId], path } } : prev))),
       api.on('thread:title', ({ threadId, title }) => setThreads(prev => (prev[threadId] ? { ...prev, [threadId]: { ...prev[threadId], title } } : prev))),
       api.on('threads:changed', ({ project: p }) => void refreshThreads(p)),
@@ -262,10 +281,17 @@ export default function App() {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'b') {
+      const mod = e.metaKey || e.ctrlKey
+      if (mod && e.key.toLowerCase() === 'b') {
         e.preventDefault()
         setSidebar(s => !s)
-      }
+      } else if (mod && e.key.toLowerCase() === 'n') {
+        e.preventDefault()
+        newSessionRef.current()
+      } else if (mod && e.key === ',') {
+        e.preventDefault()
+        goRef.current({ kind: 'settings' })
+      } else if (e.key === 'Escape' && !e.defaultPrevented) stopRef.current()
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
@@ -275,6 +301,21 @@ export default function App() {
     setHist(h => (same(h.stack[h.i], v) ? h : { stack: [...h.stack.slice(0, h.i + 1), v], i: h.i + 1 }))
     if (v.kind === 'thread') setTabs(t => (t.includes(v.key) ? t : [...t, v.key]))
   }, [])
+  goRef.current = go
+
+  /** Home, with the project cleared first when new threads should ask for one. */
+  const newSession = () => {
+    if (prefs['new-project'] === 'Ask each time') setSettings(s => (s ? { ...s, project: null } : s))
+    go({ kind: 'home' })
+  }
+  const newSessionRef = useRef(newSession)
+  newSessionRef.current = newSession
+  // Escape stops the open thread's run, when that preference is on and nothing else wants the key.
+  const stopRef = useRef(() => {})
+  stopRef.current = () => {
+    if (!prefs.escape || !active?.running || document.querySelector('.dd, .mp, .crumb-back')) return
+    void api.abort(active.key)
+  }
 
   // Load a thread's transcript the first time it is shown.
   useEffect(() => {
@@ -317,7 +358,13 @@ export default function App() {
   }
 
   const modelInfo = models.find(m => m.id === settings?.model)
-  const effortFor = (m?: ModelInfo) => (m?.efforts.length ? (m.efforts.includes(settings?.efforts[m.id] ?? '') ? settings!.efforts[m.id] : m.efforts.includes('low') ? 'low' : m.efforts[0]) : 'off')
+  const fallbackEffort = ({ Low: 'low', Medium: 'medium', High: 'high', 'Extra high': 'xhigh' } as Record<string, string>)[prefs['default-effort']] ?? 'low'
+  const effortFor = (m?: ModelInfo) =>
+    m?.efforts.length ? (m.efforts.includes(settings?.efforts[m.id] ?? '') ? settings!.efforts[m.id] : m.efforts.includes(fallbackEffort) ? fallbackEffort : m.efforts.includes('low') ? 'low' : m.efforts[0]) : 'off'
+  const hidden = new Set<string>(prefs['disabled-models'] ?? [])
+  const pickable = models.filter(m => !hidden.has(m.id) || m.id === settings?.model || m.id === settings?.cheapModel)
+  const archived = new Set<string>(prefs.archived ?? [])
+  const setPrefs = (patch: Prefs) => void patchSettings({ prefs: { ...prefs, ...patch } })
 
   const failLocally = (key: string, text: string, error: string) =>
     setThreads(prev => {
@@ -349,7 +396,11 @@ export default function App() {
     void send(key, text)
   }
 
-  const list = useMemo(() => Object.values(threads).sort((a, b) => b.modified - a.modified), [threads])
+  const signOut = async () => {
+    await api.logout()
+    await boot()
+  }
+  const list = useMemo(() => Object.values(threads).filter(t => !t.path || !archived.has(t.path)).sort((a, b) => b.modified - a.modified), [threads, prefs.archived])
 
   if (bootError)
     return (
@@ -368,7 +419,7 @@ export default function App() {
 
   const picker = (
     <ModelPicker
-      models={models}
+      models={pickable}
       value={settings.model}
       mode={settings.mode ?? 'balanced'}
       cheap={settings.cheapModel ?? 'gpt-6-luna'}
@@ -387,7 +438,7 @@ export default function App() {
     locked ? (
       <span className="ghost-btn is-static" title={current ?? undefined}>
         <IconFolder size={14} />
-        {current ? baseName(current) : ''}
+        <span className="pii">{current ? baseName(current) : ''}</span>
       </span>
     ) : (
       <ProjectPicker project={current} projects={projects} onPick={p => void pickProject(p)} onAdd={() => void browseProject()} />
@@ -444,7 +495,7 @@ export default function App() {
 
       <aside className="sidebar">
         <div className="side-nav">
-          <button className={`side-item is-primary${view.kind === 'home' ? ' is-active' : ''}`} onClick={() => go({ kind: 'home' })}>
+          <button className={`side-item is-primary${view.kind === 'home' ? ' is-active' : ''}`} onClick={newSession} title="New thread (Ctrl+N)">
             <IconCompose size={14} />
             New thread
           </button>
@@ -453,19 +504,33 @@ export default function App() {
         <div className="side-list">
           {list.length === 0 && <div className="side-empty">No threads yet.</div>}
           {list.map(t => (
-            <button key={t.key} className={`side-thread${active?.key === t.key ? ' is-active' : ''}`} onClick={() => go({ kind: 'thread', key: t.key })} title={t.title}>
+            <div key={t.key} role="button" tabIndex={0} className={`side-thread${active?.key === t.key ? ' is-active' : ''}`} onClick={() => go({ kind: 'thread', key: t.key })} onKeyDown={e => e.key === 'Enter' && go({ kind: 'thread', key: t.key })} title={t.title}>
               <StatusGlyph status={statusOf(t)} />
               <span className="side-thread-title">{t.title}</span>
               <span className="side-thread-time">{statusOf(t) === 'input' ? 'Reply' : ago(t.modified)}</span>
-            </button>
+              {t.path && !t.running && (
+                <button
+                  className="side-thread-archive"
+                  aria-label="Archive thread"
+                  title="Archive"
+                  onClick={e => {
+                    e.stopPropagation()
+                    setPrefs({ archived: [...(prefs.archived ?? []), t.path!] })
+                    closeTab(t.key)
+                  }}
+                >
+                  <IconArchive size={12} />
+                </button>
+              )}
+            </div>
           ))}
         </div>
-        <AccountMenu
-          onSignOut={async () => {
-            await api.logout()
-            await boot()
-          }}
-        />
+        <div className="side-foot">
+          <AccountMenu onSignOut={signOut} />
+          <button className={`icon-btn${view.kind === 'settings' ? ' is-on' : ''}`} onClick={() => go({ kind: 'settings' })} aria-label="Settings" title="Settings (Ctrl+,)">
+            <IconGear size={14} />
+          </button>
+        </div>
       </aside>
 
       <main className="panel">
@@ -477,8 +542,20 @@ export default function App() {
             </button>
           </div>
         )}
-        {active ? (
+        {view.kind === 'settings' ? (
+          <SettingsPage
+            prefs={prefs}
+            models={models}
+            section={section}
+            onSection={setSection}
+            archived={Object.values(threads).filter(t => t.path && archived.has(t.path)).map(t => ({ path: t.path!, title: t.title, project: t.project }))}
+            onChange={setPrefs}
+            onSignOut={() => void signOut()}
+            onNotice={setNotice}
+          />
+        ) : active ? (
           <ThreadView
+            prefs={prefs}
             key={active.key}
             title={active.title}
             status={statusOf(active)}
@@ -491,8 +568,10 @@ export default function App() {
                 key={active.key}
                 project={projectPicker(active.project, true)}
                 autoFocus
-                placeholder={statusOf(active) === 'input' ? 'Answer the request above first' : 'Ask for a follow-up…'}
+                placeholder={statusOf(active) === 'input' ? 'Answer the request above first' : active.running ? (prefs['working-send'] === 'Queue' ? 'Queue a message for after this turn…' : 'Steer the agent…') : 'Ask for a follow-up…'}
                 working={active.running}
+                sendKey={prefs.send}
+                onSteer={active.running ? (text, other) => void api.steer(active.key, text, (prefs['working-send'] === 'Queue') !== other ? 'queue' : 'steer').catch(e => setNotice(e.message)) : undefined}
                 onSend={text => void send(active.key, text)}
                 onStop={() => void api.abort(active.key)}
               />
@@ -500,7 +579,7 @@ export default function App() {
           />
         ) : (
           <div className="home">
-            <Dither />
+            {prefs.wallpaper !== 'None' && <Dither />}
             <div className="home-dock thread-col">
               {!project && (
                 <button className="home-hint" onClick={() => void browseProject()}>
@@ -514,6 +593,7 @@ export default function App() {
                 project={projectPicker(project)}
                 autoFocus
                 placeholder="Describe a task or ask a question"
+                sendKey={prefs.send}
                 disabled={project ? undefined : 'Choose a project first'}
                 onSend={startThread}
               />

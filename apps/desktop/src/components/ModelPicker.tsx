@@ -1,34 +1,31 @@
 import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import type { Mode, ModelInfo } from '../api'
-import { IconBolt as IconLightning, IconCheck, IconChevronDown, IconLayers, IconMixer, IconSearch, IconTarget } from '../icons'
+import { IconBolt, IconCheck, IconChevronDown, IconLayers, IconMixer, IconSearch, IconTarget, IconTimer } from '../icons'
 import { Dropdown } from './Dropdown'
+import { PROVIDER_NAME, ProviderIcon, providerOf } from './ProviderIcon'
 
 const LIST_W = 300
-const DETAIL_W = 272
-const MAX_H = 420
+const DETAIL_W = 280
+const MAX_H = 400
 
 export const EFFORT_LABEL: Record<string, string> = { off: 'Off', minimal: 'Minimal', low: 'Low', medium: 'Medium', high: 'High', xhigh: 'Extra high' }
-/** Thin ticks per level in the effort ramp. */
-const TICKS = 5
-const SHORT: Record<string, string> = { off: 'Off', minimal: 'Min', low: 'Low', medium: 'Med', high: 'High', xhigh: 'Max' }
 
-export const MODE_INFO: Record<Mode, { name: string; note: string; icon: ReactNode }> = {
-  balanced: { name: 'Balanced', note: 'Regular Suffice: one model at the effort you pick.', icon: <IconLayers size={14} /> },
-  efficient: { name: 'Efficient', note: 'A cheap model tries first. The lead model runs only if the cheap one makes no changes.', icon: <IconTarget size={14} /> },
-  fast: { name: 'Fast', note: 'Three low-effort attempts race on copies of the project. The first to finish with changes wins.', icon: <IconLightning size={14} /> },
-}
+const MODES: { id: Mode; name: string; note: string; icon: ReactNode }[] = [
+  { id: 'balanced', name: 'Balanced', note: 'One model', icon: <IconLayers size={14} /> },
+  { id: 'efficient', name: 'Efficient', note: 'Cheap model first, lead on a miss', icon: <IconTarget size={14} /> },
+  { id: 'fast', name: 'Fast', note: 'Three low-effort attempts race', icon: <IconBolt size={14} /> },
+]
 
-/** The three Fast attempts differ only by a line of guidance (see the harness's RACE_ATTEMPTS). */
-const FAST_LANES = ['As asked', 'Smallest correct change', 'Checks edge cases first']
-
-type Order = 'default' | 'cost'
-type Section = { title?: string; items: Item[] }
+type Order = 'provider' | 'price'
+type Section = { title?: string; icon?: ReactNode; items: Item[] }
 type Item = { kind: 'mode'; id: Mode } | { kind: 'model'; m: ModelInfo }
 const itemId = (it: Item) => (it.kind === 'mode' ? `mode:${it.id}` : it.m.id)
 
+/** Newest GPT models first, then older GPTs, then everything else. */
+const rank = (m: ModelInfo) => (/^gpt-6/.test(m.id) ? 0 : /^gpt/.test(m.id) ? 1 : 2)
 const blended = (m: ModelInfo) => m.cost.input * 0.75 + m.cost.output * 0.25
-const money = (n: number) => (n === 0 ? '$0' : `$${n < 1 ? +n.toFixed(3) : +n.toFixed(2)}`)
+const money = (n: number) => (n === 0 ? '$0' : `$${n < 1 ? n.toFixed(2) : +n.toFixed(2)}`)
 const ctx = (n: number) => (n >= 1_000_000 ? `${+(n / 1_000_000).toFixed(2)}M` : `${Math.round(n / 1000)}K`)
 export const shortName = (name: string) => name.replace(/^GPT-[\d.]+\s+/, '') || name
 
@@ -42,14 +39,14 @@ function Switch({ on, onChange, label }: { on: boolean; onChange: (v: boolean) =
   )
 }
 
-/** A model chooser inside the detail pane (the lead or the cheap model). */
+/** A model chooser inside the detail card (the lead or the cheap model). */
 function ModelSelect({ models, value, onChange, label }: { models: ModelInfo[]; value: string; onChange: (id: string) => void; label: string }) {
   const current = models.find(m => m.id === value)
   return (
     <Dropdown
-      width={240}
+      width={220}
       align="right"
-      maxHeight={320}
+      maxHeight={300}
       trigger={({ open, toggle, ref }) => (
         <button ref={ref} className={`mp-select${open ? ' is-open' : ''}`} onClick={toggle} aria-label={label} aria-expanded={open}>
           {current?.name ?? value}
@@ -68,8 +65,8 @@ function ModelSelect({ models, value, onChange, label }: { models: ModelInfo[]; 
                 close()
               }}
             >
+              <ProviderIcon id={m.id} />
               <span className="dd-title dd-grow">{m.name}</span>
-              <span className="dd-path" style={{ flex: 'none' }}>{money(m.cost.input)} / {money(m.cost.output)}</span>
               {m.id === value && <IconCheck size={13} className="dd-check" />}
             </button>
           ))}
@@ -79,78 +76,88 @@ function ModelSelect({ models, value, onChange, label }: { models: ModelInfo[]; 
   )
 }
 
-/**
- * Reasoning effort as a row of rising bars, one per level the model accepts.
- * Click or drag across them, or use the arrow keys; hovering previews a level.
- */
-function Effort({ m, value, onChange, label = 'Reasoning' }: { m: ModelInfo; value?: string; onChange: (e: string) => void; label?: string }) {
+const THUMB = 14
+const INSET = 3
+const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5]
+
+/** The dithered fill: sparse at the left, dense up against the handle. */
+function DitherFill({ width, height }: { width: number; height: number }) {
+  const ref = useRef<HTMLCanvasElement>(null)
+  useLayoutEffect(() => {
+    const c = ref.current
+    if (!c || width <= 0) return
+    const dpr = window.devicePixelRatio || 1
+    const px = Math.max(1, Math.round(2 * dpr))
+    c.width = Math.round(width * dpr)
+    c.height = Math.round(height * dpr)
+    const g = c.getContext('2d')!
+    g.clearRect(0, 0, c.width, c.height)
+    g.fillStyle = '#5b7cfa'
+    const cols = Math.ceil(c.width / px)
+    const rows = Math.ceil(c.height / px)
+    for (let x = 0; x < cols; x++) {
+      const t = Math.pow((x + 0.5) / cols, 1.35)
+      for (let y = 0; y < rows; y++) if (t * 16 > BAYER[(y % 4) * 4 + (x % 4)] + 0.5) g.fillRect(x * px, y * px, px, px)
+    }
+  }, [width, height])
+  return <canvas ref={ref} className="eff-fill" style={{ width, height }} aria-hidden />
+}
+
+/** Reasoning effort: a track with a dithered fill up to a handle, a tick for each level above it. */
+function Effort({ m, value, onChange }: { m: ModelInfo; value?: string; onChange: (e: string) => void }) {
   const levels = m.efforts
-  const bars = useRef<HTMLDivElement>(null)
-  const [hover, setHover] = useState<number | null>(null)
+  const track = useRef<HTMLDivElement>(null)
+  const [w, setW] = useState(0)
+  useLayoutEffect(() => {
+    const el = track.current
+    if (!el) return
+    const ro = new ResizeObserver(() => setW(el.clientWidth))
+    ro.observe(el)
+    setW(el.clientWidth)
+    return () => ro.disconnect()
+  }, [levels.length])
   if (!levels.length) return null
   const i = Math.max(0, levels.indexOf(value ?? ''))
-  const shown = hover ?? i
-  const at = (x: number) => {
-    const r = bars.current!.getBoundingClientRect()
-    return Math.min(levels.length - 1, Math.max(0, Math.floor(((x - r.left) / r.width) * levels.length)))
+  const span = Math.max(0, w - INSET * 2 - THUMB)
+  const leftOf = (j: number) => INSET + (levels.length > 1 ? (span * j) / (levels.length - 1) : span)
+  const pick = (x: number) => {
+    const r = track.current!.getBoundingClientRect()
+    const t = (x - r.left - INSET - THUMB / 2) / (span || 1)
+    onChange(levels[Math.round(Math.min(1, Math.max(0, t)) * (levels.length - 1))])
   }
-  const step = (d: number) => onChange(levels[Math.min(levels.length - 1, Math.max(0, i + d))])
   return (
-    <div className="eff">
-      <div className="eff-head">
-        <span>{label}</span>
-        <span className={`eff-value${hover !== null && hover !== i ? ' is-preview' : ''}`}>{EFFORT_LABEL[levels[shown]]}</span>
+    <>
+      <div className="mp-kv">
+        <span>Reasoning</span>
+        <span className="mp-kv-v">{EFFORT_LABEL[levels[i]]}</span>
       </div>
       <div
-        ref={bars}
-        className="eff-bars"
+        ref={track}
+        className="eff-track"
         role="slider"
         tabIndex={0}
-        aria-label={`${label} effort`}
+        aria-label="Reasoning effort"
         aria-valuemin={0}
         aria-valuemax={levels.length - 1}
         aria-valuenow={i}
         aria-valuetext={EFFORT_LABEL[levels[i]]}
         onPointerDown={e => {
           e.currentTarget.setPointerCapture(e.pointerId)
-          onChange(levels[at(e.clientX)])
+          pick(e.clientX)
         }}
-        onPointerMove={e => {
-          const j = at(e.clientX)
-          setHover(j)
-          if (e.buttons & 1 && j !== i) onChange(levels[j])
-        }}
-        onPointerLeave={() => setHover(null)}
+        onPointerMove={e => e.buttons & 1 && pick(e.clientX)}
         onKeyDown={e => {
-          if (e.key === 'ArrowRight' || e.key === 'ArrowUp') (e.preventDefault(), step(1))
-          if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') (e.preventDefault(), step(-1))
+          const d = e.key === 'ArrowRight' || e.key === 'ArrowUp' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowDown' ? -1 : 0
+          if (!d) return
+          e.preventDefault()
+          onChange(levels[Math.min(levels.length - 1, Math.max(0, i + d))])
         }}
       >
-        {levels.map((l, j) => (
-          <span key={l} className={`eff-bar${j <= i ? ' is-on' : ''}${hover !== null && j <= hover && j > i ? ' is-ghost' : ''}${hover !== null && j > hover && j <= i ? ' is-dim' : ''}`}>
-            {Array.from({ length: TICKS }, (_, k) => (
-              <i key={k} style={{ height: `${Math.round(18 + (82 * (j * TICKS + k + 1)) / (levels.length * TICKS))}%` }} />
-            ))}
-          </span>
-        ))}
+        {w > 0 && <DitherFill width={Math.round(leftOf(i) - INSET + THUMB / 2)} height={22} />}
+        {levels.map((l, j) => j > i && <span key={l} className="eff-tick" style={{ left: Math.round(leftOf(j) + THUMB / 2) }} />)}
+        <span className="eff-thumb" style={{ left: Math.round(leftOf(i)) }} />
       </div>
-      <div className="eff-ticks" aria-hidden>
-        {levels.map((l, j) => (
-          <span key={l} className={j === i ? 'is-on' : undefined}>{SHORT[l]}</span>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function Prices({ m, title }: { m: ModelInfo; title?: string }) {
-  return (
-    <div className="mp-prices">
-      {title && <div className="mp-prices-title">{title}</div>}
-      <div className="mp-kv"><span>Input</span><span className="mp-kv-v">{money(m.cost.input)}</span></div>
-      <div className="mp-kv"><span>Cached</span><span className="mp-kv-v">{money(m.cost.cacheRead)}</span></div>
-      <div className="mp-kv"><span>Output</span><span className="mp-kv-v">{money(m.cost.output)}</span></div>
-    </div>
+    </>
   )
 }
 
@@ -169,93 +176,74 @@ type PickerProps = {
   onFast: (id: string, on: boolean) => void
 }
 
-function ModeDetail({ mode, p }: { mode: Mode; p: PickerProps }) {
+function Priority({ m, p }: { m: ModelInfo; p: PickerProps }) {
+  return (
+    <div className="mp-toggle">
+      <IconTimer size={13} />
+      <span>Priority tier</span>
+      <Switch on={!!p.fast[m.id]} onChange={v => p.onFast(m.id, v)} label="Priority tier" />
+    </div>
+  )
+}
+
+function ModelCard({ m, p }: { m: ModelInfo; p: PickerProps }) {
+  return (
+    <div className="mp-card" style={{ width: DETAIL_W }}>
+      <div className="mp-card-sec">
+        <div className="mp-card-name">
+          <ProviderIcon id={m.id} />
+          {m.name}
+        </div>
+        <div className="mp-kv"><span>Context</span><span className="mp-kv-v">{ctx(m.contextWindow)}</span></div>
+        <div className="mp-kv"><span>Input per 1M</span><span className="mp-kv-v">{money(m.cost.input)}</span></div>
+        <div className="mp-kv"><span>Output per 1M</span><span className="mp-kv-v">{money(m.cost.output)}</span></div>
+      </div>
+      <div className="mp-card-sec">
+        <Effort m={m} value={effortIn(m, p.efforts[m.id])} onChange={e => p.onEffort(m.id, e)} />
+        <Priority m={m} p={p} />
+      </div>
+    </div>
+  )
+}
+
+function ModeCard({ mode, p }: { mode: Mode; p: PickerProps }) {
+  const info = MODES.find(x => x.id === mode)!
   const lead = p.models.find(m => m.id === p.value)
-  const cheap = p.models.find(m => m.id === p.cheap)
-  const info = MODE_INFO[mode]
   return (
-    <div className="mp-detail" style={{ width: DETAIL_W }}>
-      <div className="mp-d-head">
-        <div className="mp-d-name">
-          <span className="mp-d-icon">{info.icon}</span>
+    <div className="mp-card" style={{ width: DETAIL_W }}>
+      <div className="mp-card-sec">
+        <div className="mp-card-name">
+          <span className="mp-card-icon">{info.icon}</span>
           {info.name}
+          <span className="mp-faint">{info.note}</span>
         </div>
-        <div className="mp-d-sub">{info.note}</div>
-      </div>
-      {mode === 'efficient' && (
-        <div className="mp-field">
-          <span>Cheap model</span>
-          <ModelSelect models={p.models} value={p.cheap} onChange={p.onCheap} label="Cheap model" />
-        </div>
-      )}
-      <div className="mp-field">
-        <span>{mode === 'efficient' ? 'Lead model' : 'Model'}</span>
-        <ModelSelect models={p.models} value={p.value} onChange={p.onChange} label={mode === 'efficient' ? 'Lead model' : 'Model'} />
-      </div>
-      {mode === 'efficient' && p.cheap === p.value && <div className="mp-d-sub mp-warn">The lead and cheap model are the same, so escalating changes nothing.</div>}
-      {lead && mode !== 'fast' && <Effort m={lead} label={mode === 'efficient' ? 'Lead reasoning' : 'Reasoning'} value={effortIn(lead, p.efforts[lead.id])} onChange={e => p.onEffort(lead.id, e)} />}
-      {mode === 'fast' && (
-        <div className="mp-lanes">
-          {FAST_LANES.map((l, i) => (
-            <div key={l} className="mp-lane">
-              <span className="mp-lane-n">{i + 1}</span>
-              <span className="mp-lane-t">{l}</span>
-              <span className="mp-faint">Low</span>
-            </div>
-          ))}
-        </div>
-      )}
-      {lead && mode === 'balanced' && (
-        <div className="mp-field">
-          <span>Priority tier</span>
-          <Switch on={!!p.fast[lead.id]} onChange={v => p.onFast(lead.id, v)} label="Priority tier" />
-        </div>
-      )}
-      <div className="mp-d-foot">
-        {mode !== 'balanced' && <div className="mp-d-sub">Attempts work on copies. You approve the winner’s changes unless you’re on Full access.</div>}
-        {mode === 'efficient' && cheap && lead ? (
-          <div className="mp-prices-2">
-            <Prices m={cheap} title={shortName(cheap.name)} />
-            <Prices m={lead} title={`${shortName(lead.name)}, on a miss`} />
+        {mode === 'efficient' && (
+          <div className="mp-kv">
+            <span>Cheap</span>
+            <ModelSelect models={p.models} value={p.cheap} onChange={p.onCheap} label="Cheap model" />
           </div>
-        ) : lead ? (
-          <Prices m={lead} title={mode === 'fast' ? `${shortName(lead.name)}, per attempt` : undefined} />
-        ) : null}
+        )}
+        <div className="mp-kv">
+          <span>{mode === 'efficient' ? 'Lead' : 'Model'}</span>
+          <ModelSelect models={p.models} value={p.value} onChange={p.onChange} label={mode === 'efficient' ? 'Lead model' : 'Model'} />
+        </div>
       </div>
+      {lead && mode !== 'fast' && (
+        <div className="mp-card-sec">
+          <Effort m={lead} value={effortIn(lead, p.efforts[lead.id])} onChange={e => p.onEffort(lead.id, e)} />
+          {mode === 'balanced' && <Priority m={lead} p={p} />}
+        </div>
+      )}
     </div>
   )
 }
-
-function ModelDetail({ m, p }: { m: ModelInfo; p: PickerProps }) {
-  const effort = effortIn(m, p.efforts[m.id])
-  return (
-    <div className="mp-detail" style={{ width: DETAIL_W }}>
-      <div className="mp-d-head">
-        <div className="mp-d-name">{m.name}</div>
-        <div className="mp-d-sub">{ctx(m.contextWindow)} context{m.efforts.length ? '' : ' · no reasoning'}</div>
-      </div>
-      <Effort m={m} value={effort} onChange={e => p.onEffort(m.id, e)} />
-      <div className="mp-field">
-        <span>Priority tier</span>
-        <Switch on={!!p.fast[m.id]} onChange={v => p.onFast(m.id, v)} label="Priority tier" />
-      </div>
-      <div className="mp-d-foot">
-        <Prices m={m} title="Per million tokens" />
-      </div>
-    </div>
-  )
-}
-
-const RECOMMENDED = /^gpt-6/
 
 export function ModelPicker(p: PickerProps) {
-  const { models, value, mode, efforts, fast, recent } = p
+  const { models, value, mode } = p
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
-  const [order, setOrder] = useState<Order>('default')
-  const [sortOpen, setSortOpen] = useState(false)
+  const [order, setOrder] = useState<Order>('provider')
   const [hi, setHi] = useState('')
-  const [hiKey, setHiKey] = useState('')
   const [pos, setPos] = useState<CSSProperties & { up?: boolean }>({})
   const trigger = useRef<HTMLButtonElement>(null)
   const pop = useRef<HTMLDivElement>(null)
@@ -267,22 +255,22 @@ export function ModelPicker(p: PickerProps) {
 
   const sections = useMemo<Section[]>(() => {
     const q = query.trim().toLowerCase()
-    const modes: Item[] = (['balanced', 'efficient', 'fast'] as Mode[]).filter(id => !q || id.includes(q)).map(id => ({ kind: 'mode', id }))
+    const modes: Item[] = MODES.filter(x => !q || x.id.includes(q)).map(x => ({ kind: 'mode', id: x.id }))
+    const found = models.filter(m => !q || `${m.name} ${m.id}`.toLowerCase().includes(q))
     const asItems = (ms: ModelInfo[]): Item[] => ms.map(m => ({ kind: 'model', m }))
-    if (q) return [{ items: [...modes, ...asItems(models.filter(m => `${m.name} ${m.id}`.toLowerCase().includes(q)))] }]
-    if (order === 'cost') return [{ items: modes }, { title: 'By cost', items: asItems([...models].sort((a, b) => blended(a) - blended(b))) }]
-    const rec = recent.map(id => byId.get(id)).filter((m): m is ModelInfo => !!m)
-    const recommended = models.filter(m => RECOMMENDED.test(m.id)).sort((a, b) => b.id.localeCompare(a.id))
-    const rest = models.filter(m => !RECOMMENDED.test(m.id)).sort((a, b) => b.id.localeCompare(a.id, undefined, { numeric: true }))
+    if (order === 'price') return [{ title: 'Modes', items: modes }, { title: 'By price', items: asItems([...found].sort((a, b) => blended(a) - blended(b))) }].filter(s => s.items.length)
+    const groups = new Map<string, ModelInfo[]>()
+    for (const m of [...found].sort((a, b) => rank(a) - rank(b) || b.id.localeCompare(a.id, undefined, { numeric: true }))) {
+      const key = providerOf(m.id) ?? 'other'
+      groups.set(key, [...(groups.get(key) ?? []), m])
+    }
     return [
-      { items: modes },
-      ...(rec.length ? [{ title: 'Recently used', items: asItems(rec) }] : []),
-      { title: 'Recommended', items: asItems(recommended) },
-      { title: 'More models', items: asItems(rest) },
+      { title: 'Modes', items: modes },
+      ...[...groups].map(([key, ms]) => ({ title: PROVIDER_NAME[key] ?? 'Other', icon: <ProviderIcon id={ms[0].id} size={12} />, items: asItems(ms) })),
     ].filter(s => s.items.length)
-  }, [query, order, recent, models, byId])
+  }, [query, order, models])
 
-  const flat = useMemo(() => sections.flatMap((s, si) => s.items.map(it => ({ it, key: `${si}:${itemId(it)}` }))), [sections])
+  const flat = useMemo(() => sections.flatMap(s => s.items), [sections])
 
   const place = () => {
     const r = trigger.current?.getBoundingClientRect()
@@ -291,7 +279,7 @@ export function ModelPicker(p: PickerProps) {
     const above = r.top - 12
     const up = above >= Math.min(MAX_H, below) || above > below
     const right = Math.max(8, window.innerWidth - r.right)
-    setPos(up ? { up, right, bottom: window.innerHeight - r.top + 8, maxHeight: Math.min(MAX_H, above - 8) } : { up, right, top: r.bottom + 8, maxHeight: Math.min(MAX_H, below - 8) })
+    setPos(up ? { up, right, bottom: window.innerHeight - r.top + 6, maxHeight: Math.min(MAX_H, above - 6) } : { up, right, top: r.bottom + 6, maxHeight: Math.min(MAX_H, below - 6) })
   }
 
   useLayoutEffect(() => {
@@ -304,9 +292,7 @@ export function ModelPicker(p: PickerProps) {
   }, [open])
 
   useEffect(() => {
-    const first = flat.find(f => itemId(f.it) === hi) ?? flat[0]
-    setHiKey(first?.key ?? '')
-    if (first && itemId(first.it) !== hi) setHi(itemId(first.it))
+    if (open && flat.length && !flat.some(it => itemId(it) === hi)) setHi(itemId(flat[0]))
   }, [flat, open])
 
   useEffect(() => {
@@ -324,7 +310,7 @@ export function ModelPicker(p: PickerProps) {
     if (!open) return
     const close = (e: MouseEvent) => {
       const t = e.target as Element
-      // Menus opened from the detail panel live in their own portal.
+      // Menus opened from the detail card live in their own portal.
       if (!pop.current?.contains(t) && !trigger.current?.contains(t) && !t.closest?.('.dd')) setOpen(false)
     }
     document.addEventListener('mousedown', close)
@@ -332,8 +318,8 @@ export function ModelPicker(p: PickerProps) {
   }, [open])
 
   useEffect(() => {
-    listRef.current?.querySelector(`[data-key="${CSS.escape(hiKey)}"]`)?.scrollIntoView({ block: 'nearest' })
-  }, [hiKey])
+    listRef.current?.querySelector(`[data-id="${CSS.escape(hi)}"]`)?.scrollIntoView({ block: 'nearest' })
+  }, [hi])
 
   const choose = (it: Item) => {
     if (it.kind === 'mode') p.onMode(it.id)
@@ -347,67 +333,46 @@ export function ModelPicker(p: PickerProps) {
 
   const move = (d: number) => {
     if (!flat.length) return
-    const i = flat.findIndex(f => f.key === hiKey)
-    const next = flat[(i + d + flat.length) % flat.length]
-    setHiKey(next.key)
-    setHi(itemId(next.it))
+    const i = flat.findIndex(it => itemId(it) === hi)
+    setHi(itemId(flat[(i + d + flat.length) % flat.length]))
   }
 
   const shownModel = byId.get(hi)
   const shownMode = hi.startsWith('mode:') ? (hi.slice(5) as Mode) : null
-  const label =
-    mode === 'efficient' ? (
-      <>
-        Efficient<span className="mp-faint">{cheapModel ? shortName(cheapModel.name) : p.cheap} → {current ? shortName(current.name) : value}</span>
-      </>
-    ) : mode === 'fast' ? (
-      <>
-        Fast<span className="mp-faint">{current ? shortName(current.name) : value} ×3</span>
-      </>
-    ) : (
-      <>
-        {current?.name ?? value}
-        {current && effortIn(current, efforts[current.id]) && <span className="mp-faint">{EFFORT_LABEL[effortIn(current, efforts[current.id])!]}</span>}
-      </>
-    )
-
-  const modeSub = (id: Mode) => {
-    const lead = current ? shortName(current.name) : value
-    if (id === 'efficient') return `${cheapModel ? shortName(cheapModel.name) : p.cheap} → ${lead}`
-    if (id === 'fast') return `${lead} ×3`
-    return current?.name ?? value
-  }
+  const lead = current ? shortName(current.name) : value
+  const modeSub = (id: Mode) => (id === 'efficient' ? `${cheapModel ? shortName(cheapModel.name) : p.cheap} → ${lead}` : id === 'fast' ? `${lead} ×3` : lead)
+  const effort = current && effortIn(current, p.efforts[current.id])
 
   return (
     <>
       <button ref={trigger} className={`ghost-btn mp-trigger${open ? ' is-open' : ''}`} onClick={() => setOpen(o => !o)} aria-haspopup="listbox" aria-expanded={open} disabled={!models.length}>
-        {label}
+        {mode === 'balanced' ? <ProviderIcon id={value} /> : <span className="mp-trigger-icon">{MODES.find(x => x.id === mode)!.icon}</span>}
+        {mode === 'balanced' ? current?.name ?? value : MODES.find(x => x.id === mode)!.name}
+        <span className="mp-faint">{mode === 'balanced' ? (effort ? EFFORT_LABEL[effort] : '') : modeSub(mode)}</span>
+        <IconChevronDown size={12} className="mp-trigger-chev" />
       </button>
       {open &&
         createPortal(
           <div
             ref={pop}
             className={`mp${pos.up ? ' is-up' : ''}`}
-            style={{ right: pos.right, top: pos.top, bottom: pos.bottom, height: pos.maxHeight }}
+            style={{ right: pos.right, top: pos.top, bottom: pos.bottom }}
             onKeyDown={e => {
-              // A model menu open inside the detail panel takes Escape for itself.
+              // A model menu open inside the detail card takes Escape for itself.
               if (e.key !== 'Escape' || document.querySelector('.dd')) return
               e.preventDefault()
-              if (sortOpen) setSortOpen(false)
-              else {
-                setOpen(false)
-                trigger.current?.focus()
-              }
+              setOpen(false)
+              trigger.current?.focus()
             }}
           >
-            {shownMode ? <ModeDetail mode={shownMode} p={p} /> : shownModel ? <ModelDetail m={shownModel} p={p} /> : <div className="mp-detail" style={{ width: DETAIL_W }} />}
-            <div className="mp-list" style={{ width: LIST_W }}>
+            {shownMode ? <ModeCard mode={shownMode} p={p} /> : shownModel ? <ModelCard m={shownModel} p={p} /> : null}
+            <div className="mp-list" style={{ width: LIST_W, maxHeight: pos.maxHeight }}>
               <div className="mp-search">
-                <IconSearch size={14} />
+                <IconSearch size={13} />
                 <input
                   autoFocus
                   value={query}
-                  placeholder="Search models and modes"
+                  placeholder="Search models"
                   aria-label="Search models"
                   onChange={e => setQuery(e.target.value)}
                   onKeyDown={e => {
@@ -416,73 +381,49 @@ export function ModelPicker(p: PickerProps) {
                       move(e.key === 'ArrowDown' ? 1 : -1)
                     } else if (e.key === 'Enter') {
                       e.preventDefault()
-                      const f = flat.find(x => x.key === hiKey)
-                      if (f) choose(f.it)
+                      const it = flat.find(x => itemId(x) === hi)
+                      if (it) choose(it)
                     }
                   }}
                 />
-                <div className="mp-sort">
-                  <button className={`icon-btn sm${sortOpen ? ' is-open' : ''}`} aria-label="Order models" title="Order by" onClick={() => setSortOpen(o => !o)}>
-                    <IconMixer size={13} />
-                  </button>
-                  {sortOpen && (
-                    <div className="mp-sort-menu">
-                      <div className="mp-sort-title">Order by</div>
-                      {(['default', 'cost'] as Order[]).map(o => (
-                        <button
-                          key={o}
-                          className={`menu-item${order === o ? ' is-selected' : ''}`}
-                          onClick={() => {
-                            setOrder(o)
-                            setSortOpen(false)
-                          }}
-                        >
-                          {o === 'default' ? 'Recommended' : 'Cost'}
-                        </button>
-                      ))}
-                      <div className="mp-sort-foot">Prices are per million tokens, at API rates</div>
-                    </div>
-                  )}
-                </div>
+                <button className="mp-order" onClick={() => setOrder(o => (o === 'provider' ? 'price' : 'provider'))} title="Change the order">
+                  <IconMixer size={12} />
+                  {order === 'provider' ? 'By provider' : 'By price'}
+                </button>
               </div>
               <div className="mp-scroll" ref={listRef} role="listbox" aria-label="Models">
                 {flat.length === 0 && <div className="mp-empty">No models match “{query}”</div>}
                 {sections.map((s, si) => (
                   <Fragment key={si}>
-                    {s.title && <div className="mp-section">{s.title}</div>}
-                    {si > 0 && !s.title && <div className="mp-divider" />}
+                    {si > 0 && <div className="mp-divider" />}
+                    {s.title && (
+                      <div className="mp-section">
+                        {s.icon}
+                        {s.title}
+                      </div>
+                    )}
                     {s.items.map(it => {
-                      const key = `${si}:${itemId(it)}`
-                      const hover = () => {
-                        if (key !== hiKey) {
-                          setHiKey(key)
-                          setHi(itemId(it))
-                        }
-                      }
+                      const id = itemId(it)
+                      const row = { 'data-id': id, role: 'option', 'aria-selected': selectedId === id, className: `mp-row${id === hi ? ' is-hi' : ''}`, onMouseMove: () => id !== hi && setHi(id), onClick: () => choose(it) }
                       if (it.kind === 'mode') {
-                        const info = MODE_INFO[it.id]
+                        const info = MODES.find(x => x.id === it.id)!
                         return (
-                          <button key={key} data-key={key} role="option" aria-selected={selectedId === itemId(it)} className={`mp-row${key === hiKey ? ' is-hi' : ''}`} onMouseMove={hover} onClick={() => choose(it)}>
-                            <span className="mp-mode-icon">{info.icon}</span>
-                            <span className="mp-row-name">
-                              {info.name}
-                              <span className="mp-faint"> {modeSub(it.id)}</span>
-                            </span>
-                            {selectedId === itemId(it) && <IconCheck size={13} className="mp-check" />}
+                          <button key={id} {...row}>
+                            <span className="mp-row-icon">{info.icon}</span>
+                            <span className="mp-row-name">{info.name}</span>
+                            <span className="mp-row-sub">{modeSub(it.id)}</span>
+                            {selectedId === id && <IconCheck size={13} className="mp-check" />}
                           </button>
                         )
                       }
-                      const m = it.m
-                      const e = effortIn(m, efforts[m.id])
                       return (
-                        <button key={key} data-key={key} role="option" aria-selected={selectedId === m.id} className={`mp-row${key === hiKey ? ' is-hi' : ''}`} onMouseMove={hover} onClick={() => choose(it)}>
-                          <span className="mp-row-name">
-                            {m.name}
-                            {e && <span className="mp-faint"> {EFFORT_LABEL[e]}</span>}
+                        <button key={id} {...row}>
+                          <ProviderIcon id={it.m.id} />
+                          <span className="mp-row-name">{it.m.name}</span>
+                          <span className="mp-row-sub">
+                            {money(it.m.cost.input)} / {money(it.m.cost.output)}
                           </span>
-                          {fast[m.id] && <span className="mp-tag">Priority</span>}
-                          {selectedId === m.id && <IconCheck size={13} className="mp-check" />}
-                          <span className="mp-price-tag">{money(m.cost.input)} / {money(m.cost.output)}</span>
+                          {selectedId === id && <IconCheck size={13} className="mp-check" />}
                         </button>
                       )
                     })}
