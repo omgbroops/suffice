@@ -368,40 +368,43 @@ const squircle = (n: number) => (th: number) => Math.pow(Math.abs(Math.cos(th)) 
 const sharp = (n: number) => (th: number) => { const st = TAU / n, a = (((th % st) + st) % st) - st / 2; return Math.cos(Math.PI / n) / Math.cos(a) }
 const poly = (n: number, w = 0.22) => { const f = sharp(n); return (th: number) => { let t = 0; for (let i = -4; i <= 4; i++) t += f(th + (i / 4) * w); return t / 9 } }
 
-// rubik face: 3x3 stickers in three inks; moves alternate slice turns (a row or column slides one cell and new
-// stickers come in from the hidden side) with quarter turns of the whole face. Replayed from the seed, so it never repeats a loop.
+// rubik face (Abhay 11-22: pieces must turn, not shift; the whole face never turns). Every move is one row or
+// column turning a quarter round the cube: its front stickers foreshorten away round the edge while the side face's
+// stickers turn into view. Moves and colours are replayed from the seed.
 function rubik(g: G, p: ReturnType<typeof genPick>, T: number) {
-  const { c, S } = g, P = 0.55, k = Math.floor(T / P), t = ease(seg(frac(T / P), 0.12, 0.78))
+  const { c, S } = g, P = 0.6, k = Math.floor(T / P), t = ease(seg(frac(T / P), 0.12, 0.8))
+  const h = S * 0.4, A = [0.95, 0.55, 0.25], GAP = 0.11 // cube half-size in px, sticker inks, gap per side
   const r0 = rng(p.salt)
-  let grid = [0, 1, 2].map(() => [0, 1, 2].map(() => Math.floor(r0() * 3)))
+  const grid = [0, 1, 2].map(() => [0, 1, 2].map(() => Math.floor(r0() * 3)))
   const move = (i: number) => {
     const r = rng(p.salt ^ Math.imul(i + 1, 0x9e3779b1))
-    return { face: i % 3 === 2, line: Math.floor(r() * 3), dir: r() < 0.5 ? 1 : -1, col: r() < 0.5, fresh: Math.floor(r() * 3) }
+    return { line: Math.floor(r() * 3), dir: r() < 0.5 ? 1 : -1, col: r() < 0.5, side: [0, 1, 2].map(() => Math.floor(r() * 3)) }
   }
-  const apply = (m: ReturnType<typeof move>) => {
-    if (m.face) { grid = [0, 1, 2].map(y => [0, 1, 2].map(x => (m.dir > 0 ? grid[2 - x][y] : grid[x][2 - y]))); return }
-    const get = (j: number) => (m.col ? grid[j][m.line] : grid[m.line][j]), set = (j: number, v: number) => (m.col ? (grid[j][m.line] = v) : (grid[m.line][j] = v))
-    const v = [get(0), get(1), get(2)], next = m.dir > 0 ? [m.fresh, v[0], v[1]] : [v[1], v[2], m.fresh]
-    next.forEach((x, j) => set(j, x))
-  }
+  // after a quarter turn the side face's stickers sit where the front ones were
+  const apply = (m: ReturnType<typeof move>) => m.side.forEach((v, j) => (m.col ? (grid[j][m.line] = v) : (grid[m.line][j] = v)))
   for (let i = Math.max(0, k - 24); i < k; i++) apply(move(i))
-  const m = move(k), pitch = S / 3, b = pitch * 0.78, A = [0.95, 0.55, 0.25]
-  const cell = (px: number, py: number, v: number) => { c.fillStyle = g.ink(A[v]); c.beginPath(); c.roundRect(px - b / 2, py - b / 2, b, b, b * 0.24); c.fill() }
-  c.save()
-  if (m.face) {
-    const a = (m.dir * t * TAU) / 4, k = 1 / (Math.abs(Math.cos(a)) + Math.abs(Math.sin(a))) // a turned square fits the box
-    c.translate(S / 2, S / 2); c.rotate(a); c.scale(k, k); c.translate(-S / 2, -S / 2)
-    for (let y = 0; y < 3; y++) for (let x = 0; x < 3; x++) cell((x + 0.5) * pitch, (y + 0.5) * pitch, grid[y][x])
-  } else {
-    c.beginPath(); c.rect(0, 0, S, S); c.clip()
-    for (let y = 0; y < 3; y++)
-      for (let x = 0; x < 3; x++) {
-        const moving = m.col ? x === m.line : y === m.line, d = moving ? m.dir * t * pitch : 0
-        cell((x + 0.5) * pitch + (m.col ? 0 : d), (y + 0.5) * pitch + (m.col ? d : 0), grid[y][x])
-      }
-    // the sticker coming in from the hidden side
-    const j = m.dir > 0 ? -1 : 3, d = m.dir * t * pitch
-    cell(m.col ? (m.line + 0.5) * pitch : (j + 0.5) * pitch + d, m.col ? (j + 0.5) * pitch + d : (m.line + 0.5) * pitch, m.fresh)
+  const m = move(k), a = (m.dir * t * Math.PI) / 2, ca = Math.cos(a), sa = Math.sin(a)
+  // one sticker: [u0, u1] along the turning axis (cube units, -1..1), v = its centre across it, f = how square-on it faces us
+  const sticker = (u0: number, u1: number, v: number, val: number, f: number) => {
+    const w = u1 - u0, x0 = u0 + w * GAP, x1 = u1 - w * GAP, y0 = v - (1 / 3) * (1 - 2 * GAP), y1 = v + (1 / 3) * (1 - 2 * GAP)
+    const [X0, X1, Y0, Y1] = [x0, x1, y0, y1].map(q => S / 2 + q * h)
+    const [px, py, pw, ph] = m.col ? [Y0, X0, Y1 - Y0, X1 - X0] : [X0, Y0, X1 - X0, Y1 - Y0]
+    if (pw < 0.3 || ph < 0.3) return
+    c.fillStyle = g.ink(A[val] * (0.55 + 0.45 * f)); c.beginPath(); c.roundRect(px, py, pw, ph, Math.min(pw, ph) * 0.24); c.fill()
+  }
+  const centre = (j: number) => -2 / 3 + (j * 2) / 3
+  c.save(); c.beginPath(); c.rect(0, 0, S, S); c.clip()
+  for (let y = 0; y < 3; y++) for (let x = 0; x < 3; x++) if ((m.col ? x : y) !== m.line) {
+    const u = centre(m.col ? y : x), v = centre(m.col ? x : y)
+    sticker(u - 1 / 3, u + 1 / 3, v, grid[y][x], 1)
+  }
+  const v = centre(m.line), at = (j: number) => (m.col ? grid[j][m.line] : grid[m.line][j])
+  // front stickers on the turning layer: x' = x cos a + sin a (front face at z = 1)
+  if (ca > 0.02) for (let j = 0; j < 3; j++) { const u = centre(j); sticker((u - 1 / 3) * ca + sa, (u + 1 / 3) * ca + sa, v, at(j), ca) }
+  // the side face turning in: x' = -/+cos a + w sin a (left face when a > 0, right face when a < 0)
+  if (Math.abs(sa) > 0.02) for (let j = 0; j < 3; j++) {
+    const w = centre(j), e = a > 0 ? -ca : ca, q0 = e + (w - 1 / 3) * sa, q1 = e + (w + 1 / 3) * sa
+    sticker(Math.min(q0, q1), Math.max(q0, q1), v, m.side[a > 0 ? j : 2 - j], Math.abs(sa))
   }
   c.restore()
 }
