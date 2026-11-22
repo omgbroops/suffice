@@ -23,6 +23,8 @@ import {
 import { emptyTranscript, fromSessionMessages, reduce, resultText } from '../../shared/transcript.mjs'
 import { readNote, scanNotes } from './notes.mjs'
 import { suggestName } from './project-name.mjs'
+import { createErrorLog } from './errorlog.mjs'
+import { bool, cleanSettingsPatch, object, oneOf, sessionPath, str } from './validate.mjs'
 
 export const PROVIDER = 'openai'
 export const DEFAULT_MODEL = 'gpt-6.1-sol'
@@ -86,6 +88,9 @@ export function updateForwarder(send, delay = 250) {
   }
 }
 
+// a settings file holding a string, array or null must not be spread into the settings
+const plain = v => (v && typeof v === 'object' && !Array.isArray(v) ? v : {})
+
 async function readJson(path, fallback) {
   try {
     return JSON.parse(await readFile(path, 'utf8'))
@@ -119,12 +124,14 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
   const transcriptDir = resolve(desktopDir, 'transcripts')
   await mkdir(transcriptDir, { recursive: true, mode: 0o700 })
   const settingsPath = resolve(desktopDir, 'settings.json')
-  let settings = { project: null, model: DEFAULT_MODEL, efforts: {}, fast: {}, approval: 'ask', recentModels: [], mode: 'balanced', cheapModel: DEFAULT_CHEAP_MODEL, ...(await readJson(settingsPath, {})) }
+  let settings = { project: null, model: DEFAULT_MODEL, efforts: {}, fast: {}, approval: 'ask', recentModels: [], mode: 'balanced', cheapModel: DEFAULT_CHEAP_MODEL, ...plain(await readJson(settingsPath, {})) }
   // writes run one after another, each with the settings as they are then, so an older snapshot never lands last
   let settingsWrite = Promise.resolve()
   const saveSettings = () => (settingsWrite = settingsWrite.catch(() => {}).then(() => writeJson(settingsPath, settings)))
   // threads between "run asked" and "agent running": a second start is refused, a stop is kept for when it is ready
   const starting = new Map()
+  const errorLog = createErrorLog(home)
+  let disposed = false
 
   const runtime = givenRuntime ?? (await createSufficeModelRuntime(modelRuntimeOptions(home), { onRefresh: () => emit('models:changed', null) }))
 
@@ -136,6 +143,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     if (login) return { ok: false, error: 'Sign-in is already in progress.' }
     const controller = new AbortController()
     const prompts = new Map()
+    const cleanups = new Set() // abort listeners of prompts still waiting
     login = { controller, prompts }
     const timer = setTimeout(() => controller.abort(), 15 * 60_000)
     try {
@@ -155,8 +163,11 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
             const id = randomUUID()
             emit('auth:event', { type: 'prompt', id, message: request?.message ?? 'Paste the sign-in response' })
             return new Promise((resolvePrompt, reject) => {
-              prompts.set(id, resolvePrompt)
-              controller.signal.addEventListener('abort', () => reject(new Error('Sign-in cancelled')), { once: true })
+              const onAbort = () => reject(new Error('Sign-in cancelled'))
+              const cleanup = () => controller.signal.removeEventListener('abort', onAbort)
+              cleanups.add(cleanup)
+              prompts.set(id, value => (cleanup(), cleanups.delete(cleanup), resolvePrompt(value)))
+              controller.signal.addEventListener('abort', onAbort, { once: true })
             })
           },
         },
@@ -171,6 +182,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
       return { ok: false, error }
     } finally {
       clearTimeout(timer)
+      for (const cleanup of cleanups) cleanup()
       login = null
     }
   }
@@ -181,6 +193,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
   /** approval id -> resolver */
   const approvals = new Map()
 
+  const knownPaths = () => [...live.values()].map(t => t.path).filter(Boolean)
   const transcriptPath = path => resolve(transcriptDir, `${hash(path).slice(0, 24)}.json`)
 
   function push(threadId, event) {
@@ -224,6 +237,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
   }
 
   function answerApproval(id, allow) {
+    str(id, 'approval'); bool(allow, 'answer')
     const pending = approvals.get(id)
     if (!pending) return false
     approvals.delete(id)
@@ -271,7 +285,13 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     // no title changes leaking back into this thread.
     const commandOptions = { ...options, desktopSettings: { ...desktopSettings, naming: 'Manual' }, onTitleChanged: undefined, extensionBindings: undefined, onRace: e => push(threadId, { type: 'race', attempt: e.attempt, state: e.state, changes: e.changes }) }
     options.extensions.push(sufficeFastCommand(commandOptions, runtime), sufficeEfficientCommand(commandOptions, runtime))
-    thread.agent = await createSession(options, runtime, { onApproval: (name, input) => approve(threadId, name, input) })
+    const agent = await createSession(options, runtime, { onApproval: (name, input) => approve(threadId, name, input) })
+    if (disposed) {
+      await agent.dispose().catch(() => {}) // app closed while the agent was being created
+      live.delete(threadId)
+      throw new Error('The app is closing.')
+    }
+    thread.agent = agent
     thread.agent.session.subscribe(e => {
       if (e.type !== 'message_update') return
       const d = e.assistantMessageEvent
@@ -281,13 +301,20 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     return thread
   }
 
-  async function run({ threadId, path, project, prompt, model, effort, fast = false, mode = 'balanced', cheapModel = DEFAULT_CHEAP_MODEL }) {
-    if (!MODES.includes(mode)) throw new Error(`Unknown mode ${mode}`)
+  async function run(args) {
+    let { threadId, path, project, prompt, model, effort, fast = false, mode = 'balanced', cheapModel = DEFAULT_CHEAP_MODEL } = object(args, 'run')
+    str(threadId, 'thread'); str(prompt, 'prompt'); str(model, 'model'); str(cheapModel, 'model'); bool(fast, 'fast')
+    if (effort !== undefined && typeof effort !== 'string') throw new Error('Invalid effort.')
+    if (project !== null && project !== undefined) str(project, 'project')
+    oneOf(mode, MODES, 'mode')
+    if (disposed) throw new Error('The app is closing.')
     if (mode === 'efficient' && !runtime.getModel(PROVIDER, cheapModel)) throw new Error(`${cheapModel} is not in the model catalog.`)
     if (!signedIn()) throw new Error('Sign in to start a task.')
     if (!project) throw new Error('Choose a project first.')
     const info = runtime.getModel(PROVIDER, model)
     if (!info) throw new Error(`${model} is not in the model catalog.`)
+    if (path !== undefined && path !== null) path = sessionPath(path, [sessionDir(home, project)], knownPaths())
+    else path = undefined
     const level = effectiveEffort(info, effort)
     const existing = live.get(threadId)
     if (existing?.running || starting.has(threadId)) throw new Error('This thread is already running.')
@@ -343,8 +370,10 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
 
   /** Mid-run input: steer reaches the agent before its next step; queue waits until it finishes. */
   async function guide({ threadId, text, queue = false }) {
+    str(threadId, 'thread'); bool(queue, 'queue')
+    if (typeof text !== 'string') throw new Error('Invalid text.')
     const thread = live.get(threadId)
-    const body = String(text ?? '').trim()
+    const body = text.trim()
     if (!body) throw new Error('Nothing to send.')
     if (!thread?.running) throw new Error('Nothing is running in this thread.')
     // Efficient and Fast runs drive their own attempts; mid-run input would land in the wrong one.
@@ -356,6 +385,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
   }
 
   function abort(threadId) {
+    str(threadId, 'thread')
     const thread = live.get(threadId)
     const pendingStart = starting.get(threadId)
     if (pendingStart) return (pendingStart.stop = true)
@@ -378,6 +408,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
 
   async function listThreads(project) {
     if (!project) return []
+    str(project, 'project')
     const sessions = await SessionManager.list(project, sessionDir(home, project)).catch(() => [])
     return sessions
       .filter(s => s.messageCount > 0)
@@ -392,6 +423,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
 
   // ---- projects, models, settings -----------------------------------------
   async function setProject(path) {
+    str(path, 'path')
     const project = await resolveProject(path)
     await rememberProject(home, project)
     settings = { ...settings, project }
@@ -407,13 +439,15 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
   }
 
   async function updateSettings(patch) {
-    settings = { ...settings, ...patch }
+    settings = { ...settings, ...cleanSettingsPatch(patch) }
     for (const t of live.values()) if (t.desktopSettings) t.desktopSettings['approval-mode'] = APPROVAL[settings.approval] ?? APPROVAL.ask
     await saveSettings()
     return settings
   }
 
   async function dispose() {
+    disposed = true
+    login?.controller.abort()
     for (const [id] of approvals) answerApproval(id, false)
     await Promise.all([...live.values()].map(async t => {
       t.agent?.abort()
@@ -428,6 +462,8 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     init: async () => ({ signedIn: signedIn(), home, settings, projects: await recentProjects(home), platform: process.platform }),
     login: startLogin,
     answerLogin: (id, value) => {
+      str(id, 'prompt')
+      if (typeof value !== 'string') throw new Error('Invalid answer.')
       const resolver = login?.prompts.get(id)
       if (!resolver) return false
       login.prompts.delete(id)
@@ -451,9 +487,10 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     recentProjects: () => recentProjects(home),
     listThreads,
     // notes are read only from a project the user has opened
-    listNotes: async ({ project }) => ((await recentProjects(home)).includes(project) ? scanNotes(project) : []),
+    listNotes: async ({ project }) => (typeof project === 'string' && (await recentProjects(home)).includes(project) ? scanNotes(project) : []),
     // the model's suggested name, kept in settings.projectAutoNames; the rename box falls back to it
     nameProject: async ({ project }) => {
+      str(project, 'project')
       if (!(await recentProjects(home)).includes(project) || !signedIn()) return settings
       if (settings.projectAutoNames?.[project]) return settings
       const model = runtime.getModel(PROVIDER, settings.cheapModel ?? DEFAULT_CHEAP_MODEL)
@@ -465,10 +502,18 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
       return name ? updateSettings({ projectAutoNames: { ...settings.projectAutoNames, [project]: name } }) : settings
     },
     readNote: async ({ project, path }) => {
+      str(project, 'project'); str(path, 'path')
       if (!(await recentProjects(home)).includes(project)) throw new Error('Open that project first.')
       return readNote(project, path)
     },
-    openThread: async ({ threadId, path }) => live.get(threadId)?.transcript ?? (await openTranscript(path)),
+    openThread: async ({ threadId, path, project }) => {
+      str(threadId, 'thread')
+      const known = live.get(threadId)?.transcript
+      if (known) return known
+      str(project, 'project', { optional: true })
+      return openTranscript(sessionPath(path, [project ? sessionDir(home, project) : resolve(home, 'sessions')], knownPaths()))
+    },
+    logError: (source, error) => errorLog.write(source, error),
     run,
     abort,
     guide,
