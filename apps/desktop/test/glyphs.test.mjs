@@ -80,3 +80,9 @@ test('shapeshifters stay inside their box at every size and moment', async () =>
   }
   assert.ok(checked > 50, `checked ${checked} frames`)
 })
+
+test('rubik moves alternate row and column, so no move undoes the last one', () => {
+  const body = src.slice(src.indexOf('function rubik('), src.indexOf('/** waiting on the user'))
+  assert.match(body, /col: \(i \+ p\.salt\) % 2 === 1/)
+  assert.match(body, /P = 1\.1/)
+})

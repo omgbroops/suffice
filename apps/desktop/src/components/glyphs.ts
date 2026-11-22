@@ -372,13 +372,15 @@ const poly = (n: number, w = 0.22) => { const f = sharp(n); return (th: number) 
 // column turning a quarter round the cube: its front stickers foreshorten away round the edge while the side face's
 // stickers turn into view. Moves and colours are replayed from the seed.
 function rubik(g: G, p: ReturnType<typeof genPick>, T: number) {
-  const { c, S } = g, P = 0.6, k = Math.floor(T / P), t = ease(seg(frac(T / P), 0.12, 0.8))
+  // Abhay 11-22: 0.6 s per move was too fast; now a 0.75 s turn and a short rest
+  const { c, S } = g, P = 1.1, k = Math.floor(T / P), t = ease(seg(frac(T / P), 0.15, 0.85))
   const h = S * 0.4, A = [0.95, 0.55, 0.25], GAP = 0.11 // cube half-size in px, sticker inks, gap per side
   const r0 = rng(p.salt)
   const grid = [0, 1, 2].map(() => [0, 1, 2].map(() => Math.floor(r0() * 3)))
   const move = (i: number) => {
     const r = rng(p.salt ^ Math.imul(i + 1, 0x9e3779b1))
-    return { line: Math.floor(r() * 3), dir: r() < 0.5 ? 1 : -1, col: r() < 0.5, side: [0, 1, 2].map(() => Math.floor(r() * 3)) }
+    // moves alternate row / column, so a move never undoes the one before it (Abhay: "switching the same one back and forth")
+    return { line: Math.floor(r() * 3), dir: r() < 0.5 ? 1 : -1, col: (i + p.salt) % 2 === 1, side: [0, 1, 2].map(() => Math.floor(r() * 3)) }
   }
   // after a quarter turn the side face's stickers sit where the front ones were
   const apply = (m: ReturnType<typeof move>) => m.side.forEach((v, j) => (m.col ? (grid[j][m.line] = v) : (grid[m.line][j] = v)))
