@@ -18,5 +18,5 @@ export type StepGroup = { kind: 'group'; id: string; steps: ToolStep[]; verb: st
 export function groupSteps(steps: Step[]): (Step | StepGroup)[]
 export function patchLines(patch?: string): { t: ' ' | '+' | '-' | '@'; s: string }[]
 export function compactDiff(lines: { t: ' ' | '+' | '-' | '@'; s: string }[], keep?: number): { t: ' ' | '+' | '-' | '…'; s: string }[]
-export function describeTool(name: string, input?: any): { verb: string; meta: string }
+export function describeTool(name: string, input?: any): { verb: string; present?: string; kind?: 'look'; meta: string }
 export function visibleSteps(steps: Step[]): Step[]
