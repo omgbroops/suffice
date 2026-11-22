@@ -71,7 +71,7 @@ test('shapeshifters stay inside their box at every size and moment', async () =>
     if (genPick(seed).fam !== 4) continue
     for (const S of [12, 16, 24]) for (const t of [0.05, 0.3, 0.6, 0.9, 1.2, 1.5, 2.1, 3.3]) {
       const pts = []
-      const c = { save() {}, restore() {}, clip() {}, rect() {}, set fillStyle(v) {}, beginPath() {}, closePath() {}, fill() {}, clearRect() {},
+      const c = { save() {}, restore() {}, clip() {}, rect() {}, translate() {}, rotate() {}, scale() {}, set fillStyle(v) {}, beginPath() {}, closePath() {}, fill() {}, clearRect() {},
         moveTo(x, y) { pts.push([x, y]) }, lineTo(x, y) { pts.push([x, y]) }, roundRect() {} }
       drawGlyph(c, S, 'gen', t, 'working', seed, '255,255,255', 1)
       for (const [x, y] of pts) assert.ok(x >= -1e-6 && y >= -1e-6 && x <= S + 1e-6 && y <= S + 1e-6, `outline inside the box (seed ${i}, S ${S}, t ${t})`)

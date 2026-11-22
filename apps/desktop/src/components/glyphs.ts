@@ -195,8 +195,8 @@ function arc({ c, S, t, s, ink }: G) {
 }
 
 // ---- gen: generated spinners (Abhay 11-22: grids A-F "I like a-f"; square <-> circle morphs; blocks and
-// shapes "okay"; the shaded 3D orbs dropped; shapeshifters added 11-22: turn+breath+squircle, rubik face, orb,
-// breathing squircle) ----
+// shapes "okay"; the shaded 3D orbs dropped; shapeshifters 11-22: rubik face, orb ("sick"), triangle-square-circle,
+// squircle quartet; the breathing squircle marks a thread waiting on the user) ----
 // The seed picks a family (grids weighted up), a motion, and small speed/direction changes.
 export const GEN_FAMILIES = ['grid', 'morph', 'blocks', 'shapes', 'shift'] as const
 const GEN_VARIANTS = [6, 3, 3, 2, 4]
@@ -364,46 +364,77 @@ function polar(c: CanvasRenderingContext2D, cx: number, cy: number, R: number, r
 // superellipse |x|^n + |y|^n = 1: n 2 is a circle, 4-5 a squircle
 const squircle = (n: number) => (th: number) => Math.pow(Math.abs(Math.cos(th)) ** n + Math.abs(Math.sin(th)) ** n, -1 / n)
 
+// regular polygon (circumradius 1) with corners rounded by averaging the radius over a small arc
+const sharp = (n: number) => (th: number) => { const st = TAU / n, a = (((th % st) + st) % st) - st / 2; return Math.cos(Math.PI / n) / Math.cos(a) }
+const poly = (n: number, w = 0.22) => { const f = sharp(n); return (th: number) => { let t = 0; for (let i = -4; i <= 4; i++) t += f(th + (i / 4) * w); return t / 9 } }
+
+// rubik face: 3x3 stickers in three inks; moves alternate slice turns (a row or column slides one cell and new
+// stickers come in from the hidden side) with quarter turns of the whole face. Replayed from the seed, so it never repeats a loop.
+function rubik(g: G, p: ReturnType<typeof genPick>, T: number) {
+  const { c, S } = g, P = 0.55, k = Math.floor(T / P), t = ease(seg(frac(T / P), 0.12, 0.78))
+  const r0 = rng(p.salt)
+  let grid = [0, 1, 2].map(() => [0, 1, 2].map(() => Math.floor(r0() * 3)))
+  const move = (i: number) => {
+    const r = rng(p.salt ^ Math.imul(i + 1, 0x9e3779b1))
+    return { face: i % 3 === 2, line: Math.floor(r() * 3), dir: r() < 0.5 ? 1 : -1, col: r() < 0.5, fresh: Math.floor(r() * 3) }
+  }
+  const apply = (m: ReturnType<typeof move>) => {
+    if (m.face) { grid = [0, 1, 2].map(y => [0, 1, 2].map(x => (m.dir > 0 ? grid[2 - x][y] : grid[x][2 - y]))); return }
+    const get = (j: number) => (m.col ? grid[j][m.line] : grid[m.line][j]), set = (j: number, v: number) => (m.col ? (grid[j][m.line] = v) : (grid[m.line][j] = v))
+    const v = [get(0), get(1), get(2)], next = m.dir > 0 ? [m.fresh, v[0], v[1]] : [v[1], v[2], m.fresh]
+    next.forEach((x, j) => set(j, x))
+  }
+  for (let i = Math.max(0, k - 24); i < k; i++) apply(move(i))
+  const m = move(k), pitch = S / 3, b = pitch * 0.78, A = [0.95, 0.55, 0.25]
+  const cell = (px: number, py: number, v: number) => { c.fillStyle = g.ink(A[v]); c.beginPath(); c.roundRect(px - b / 2, py - b / 2, b, b, b * 0.24); c.fill() }
+  c.save()
+  if (m.face) {
+    const a = (m.dir * t * TAU) / 4, k = 1 / (Math.abs(Math.cos(a)) + Math.abs(Math.sin(a))) // a turned square fits the box
+    c.translate(S / 2, S / 2); c.rotate(a); c.scale(k, k); c.translate(-S / 2, -S / 2)
+    for (let y = 0; y < 3; y++) for (let x = 0; x < 3; x++) cell((x + 0.5) * pitch, (y + 0.5) * pitch, grid[y][x])
+  } else {
+    c.beginPath(); c.rect(0, 0, S, S); c.clip()
+    for (let y = 0; y < 3; y++)
+      for (let x = 0; x < 3; x++) {
+        const moving = m.col ? x === m.line : y === m.line, d = moving ? m.dir * t * pitch : 0
+        cell((x + 0.5) * pitch + (m.col ? 0 : d), (y + 0.5) * pitch + (m.col ? d : 0), grid[y][x])
+      }
+    // the sticker coming in from the hidden side
+    const j = m.dir > 0 ? -1 : 3, d = m.dir * t * pitch
+    cell(m.col ? (m.line + 0.5) * pitch : (j + 0.5) * pitch + d, m.col ? (j + 0.5) * pitch + d : (m.line + 0.5) * pitch, m.fresh)
+  }
+  c.restore()
+}
+
+/** waiting on the user: corners breathe between circle and squircle with the size (Abhay 11-22) */
+function waiting(g: G, T: number) {
+  const m = (1 - Math.cos((TAU * T) / 1.5)) / 2
+  g.c.fillStyle = g.ink(0.95)
+  polar(g.c, g.S / 2, g.S / 2, g.S * 0.36 * (0.84 + 0.16 * m), 0, squircle(2 + 3.5 * m))
+}
+
 function shift(g: G, p: ReturnType<typeof genPick>, T: number) {
   const { c, S } = g, cx = S / 2, cy = S / 2
   c.fillStyle = g.ink(0.95)
-  if (p.v === 0) {
-    // turn + breath + squircle: a quarter turn opens the square to a circle, it breathes once, then closes
-    const k = Math.floor(T / 1.8), t = frac(T / 1.8), open = ease(seg(t, 0, 0.32)), shut = ease(seg(t, 0.7, 1))
-    const breath = 1 - 0.16 * Math.sin(Math.PI * seg(t, 0.36, 0.7))
-    return polar(c, cx, cy, S * 0.34 * breath, (k + open) * (TAU / 4) * p.dir, squircle(4.5 - 2.5 * open + 2.5 * shut))
-  }
+  if (p.v === 0) return rubik(g, p, T)
   if (p.v === 1) {
-    // rubik face: 3x3, one row or column slides a cell and wraps round
-    const k = Math.floor(T / 0.62), t = ease(seg(frac(T / 0.62), 0.15, 0.85))
-    const grid = [[0, 1, 2], [1, 2, 0], [2, 0, 1]]
-    const move = (i: number) => [(i * 7) % 3, (i * 5 + 1) % 2 ? 1 : -1, i % 2] as const
-    const apply = ([l, d, col]: readonly [number, number, number]) => {
-      if (!col) grid[l] = d > 0 ? [grid[l][2], grid[l][0], grid[l][1]] : [grid[l][1], grid[l][2], grid[l][0]]
-      else { const v = [grid[0][l], grid[1][l], grid[2][l]], w = d > 0 ? [v[2], v[0], v[1]] : [v[1], v[2], v[0]]; w.forEach((x, y) => (grid[y][l] = x)) }
-    }
-    for (let i = 0; i < k % 24; i++) apply(move(i))
-    const [line, dir, col] = move(k % 24), pitch = S / 3, b = pitch * 0.78, A = [0.95, 0.55, 0.25]
-    c.save(); c.beginPath(); c.rect(0, 0, S, S); c.clip()
-    for (let y = 0; y < 3; y++)
-      for (let x = 0; x < 3; x++) {
-        const moving = col ? x === line : y === line
-        for (const wrap of moving ? [-3, 0, 3] : [0]) {
-          let px = (x + 0.5) * pitch, py = (y + 0.5) * pitch
-          if (moving) col ? (py += (dir * t + wrap) * pitch) : (px += (dir * t + wrap) * pitch)
-          c.fillStyle = g.ink(A[grid[y][x]]); c.beginPath(); c.roundRect(px - b / 2, py - b / 2, b, b, b * 0.24); c.fill()
-        }
-      }
-    return c.restore()
-  }
-  if (p.v === 2) {
     // shapeshifting orb: a soft blob whose lobes drift between three and four
     const m = (1 - Math.cos((TAU * T) / 2.4)) / 2, a = 0.07 + 0.03 * Math.sin((TAU * T) / 1.6)
     return polar(c, cx, cy, S * 0.36, T * 0.9 * p.dir, th => 1 + a * ((1 - m) * Math.cos(3 * th) + m * Math.cos(4 * th + 0.6)))
   }
-  // breathing squircle: corners breathe between circle and squircle with the size
-  const m = (1 - Math.cos((TAU * T) / 1.5)) / 2
-  polar(c, cx, cy, S * 0.36 * (0.84 + 0.16 * m), 0, squircle(2 + 3.5 * m))
+  if (p.v === 2) {
+    // three shapes at most (Abhay 11-22): triangle, square, circle, each change a stepped turn
+    const shapes = [poly(3), poly(4), () => 0.94], P = 0.8, k = Math.floor(T / P), t = ease(seg(frac(T / P), 0.3, 1))
+    const a = shapes[k % 3], b = shapes[(k + 1) % 3]
+    return polar(c, cx, cy + S * 0.02, S * 0.4, -Math.PI / 2 + ((k + t) * TAU * p.dir) / 6, th => a(th) * (1 - t) + b(th) * t)
+  }
+  // squircle quartet: four squircles turn a quarter step as a group, each breathes in turn
+  const P = 1.2, k = Math.floor(T / P), turn = ((k + ease(seg(frac(T / P), 0.55, 1))) * TAU * p.dir) / 4, o = S * 0.22
+  for (let i = 0; i < 4; i++) {
+    const a = turn + (i * TAU) / 4 + Math.PI / 4, f = Math.max(0, Math.cos(TAU * (T / P - i / 4))) ** 2
+    c.fillStyle = g.ink(0.4 + 0.55 * f)
+    polar(c, cx + Math.cos(a) * o * Math.SQRT2, cy + Math.sin(a) * o * Math.SQRT2, S * 0.17 * (0.85 + 0.15 * f), turn, squircle(2 + 3 * (1 - f)))
+  }
 }
 
 const KINDS: Record<GlyphKind, (g: G) => void> = { swarm, orbit, ripple, eclipse, arc, gen }
@@ -412,7 +443,10 @@ const KINDS: Record<GlyphKind, (g: G) => void> = { swarm, orbit, ripple, eclipse
 export function drawGlyph(c: CanvasRenderingContext2D, S: number, kind: GlyphKind, t: number, s: Status, seed: number, rgb: string, alpha: number) {
   c.clearRect(0, 0, S, S)
   const [r, gr, b] = rgb.split(',').map(Number)
-  KINDS[kind]({ c, S, t, s, seed, ink: a => `rgba(${rgb},${a * alpha})`, darkInk: 0.2126 * r + 0.7152 * gr + 0.0722 * b < 128 })
+  const g: G = { c, S, t, s, seed, ink: a => `rgba(${rgb},${a * alpha})`, darkInk: 0.2126 * r + 0.7152 * gr + 0.0722 * b < 128 }
+  // a thread waiting on the user breathes a squircle, whatever its spinner is (Abhay 11-22)
+  if (s === 'input' && kind === 'gen') return waiting(g, t)
+  KINDS[kind](g)
   if (s === 'input') {
     c.fillStyle = '#d4a160'
     dot(c, S * 0.84, S * 0.16, Math.max(1.5, S * 0.13))
