@@ -149,7 +149,6 @@ function RaceView({ step }: { step: RaceStep }) {
   return (
     <div className="race">
       <div className="race-head">
-        <Live status={racing ? 'working' : 'done'} kind="orbit" size={14} />
         {racing ? <span><span className="shimmer">Racing</span> 3 attempts</span> : <span>Raced 3 attempts</span>}
       </div>
       {LANES.map((name, i) => {
@@ -157,7 +156,7 @@ function RaceView({ step }: { step: RaceStep }) {
         const state = r?.state ?? 'starting'
         return (
           <div key={name} className={`race-lane is-${state}`}>
-            {state === 'running' ? <Live status="working" size={12} phase={i * 0.6} /> : <span className="race-dot" />}
+            {state === 'running' ? <Live status="working" size={12} seed={name} phase={i * 0.6} /> : <span className="race-dot" />}
             <span className="race-name">{name}</span>
             <span className="race-state">
               {state === 'running' && r ? <Elapsed from={r.startedAt} /> : state === 'won' ? `Won · ${r?.changes ?? 0} change${r?.changes === 1 ? '' : 's'}` : LANE_STATE[state] ?? 'Starting'}
