@@ -61,6 +61,30 @@ const samePath = path => (path ? resolve(path) : path)
 
 const sessionDir = (home, project) => resolve(home, 'sessions', hash(project).slice(0, 20))
 
+/**
+ * Partial output of running tools (bash streams it): forwards the latest snapshot per tool at most
+ * every `delay` ms, trailing, so a command that goes quiet still shows its last lines; done() drops
+ * anything pending once the result lands.
+ */
+export function updateForwarder(send, delay = 250) {
+  const pending = new Map()
+  return {
+    update(id, output) {
+      if (!output) return
+      const p = pending.get(id)
+      if (p) return void (p.output = output)
+      const entry = { output }
+      pending.set(id, entry)
+      setTimeout(() => {
+        if (pending.get(id) !== entry) return
+        pending.delete(id)
+        send({ id, output: entry.output })
+      }, delay)
+    },
+    done: id => void pending.delete(id),
+  }
+}
+
 async function readJson(path, fallback) {
   try {
     return JSON.parse(await readFile(path, 'utf8'))
@@ -173,24 +197,10 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
       pi.on('tool_call', e => {
         push(threadId, { type: 'tool', id: e.toolCallId, parent: e.parentToolCallId, name: e.toolName, input: e.input })
       })
-      // partial output of a running tool (bash streams it): the latest snapshot at most every 250 ms,
-      // trailing, so a command that goes quiet still shows its last lines; dropped once the result lands
-      const pending = new Map()
-      pi.on('tool_execution_update', e => {
-        const output = resultText(e.partialResult?.content)
-        if (!output) return
-        const p = pending.get(e.toolCallId)
-        if (p) return void (p.output = output)
-        const entry = { output }
-        pending.set(e.toolCallId, entry)
-        setTimeout(() => {
-          if (pending.get(e.toolCallId) !== entry) return
-          pending.delete(e.toolCallId)
-          push(threadId, { type: 'tool_update', id: e.toolCallId, output: entry.output })
-        }, 250)
-      })
+      const updates = updateForwarder(u => push(threadId, { type: 'tool_update', ...u }))
+      pi.on('tool_execution_update', e => updates.update(e.toolCallId, resultText(e.partialResult?.content)))
       pi.on('tool_result', e => {
-        pending.delete(e.toolCallId)
+        updates.done(e.toolCallId)
         push(threadId, { type: 'tool_result', id: e.toolCallId, isError: !!e.isError, output: resultText(e.content), patch: typeof e.details?.patch === 'string' ? e.details.patch : undefined })
       })
     }
