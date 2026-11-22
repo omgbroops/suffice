@@ -582,7 +582,6 @@ export default function App() {
         ) : active ? (
           <ThreadView
             key={active.key}
-            seed={active.key}
             title={active.title}
             status={statusOf(active)}
             transcript={active.transcript}
