@@ -27,6 +27,8 @@
     "report": "node scripts/report.mjs",
     "privacy-check": "node scripts/privacy-check.mjs",
     "test": "node --test tests/*.test.mjs",
+    "typecheck": "bun run --cwd apps/desktop tsc -p tsconfig.json",
+    "check-imports": "node scripts/check-imports.mjs",
     "desktop": "bun run apps/desktop/electron/dev.mjs",
     "desktop:build": "bun run --cwd apps/desktop build",
     "test:desktop": "node --test --test-concurrency=1 apps/desktop/test/*.test.mjs",
