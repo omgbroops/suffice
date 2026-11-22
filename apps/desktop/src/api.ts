@@ -23,6 +23,8 @@ export type Settings = {
   projectColors?: Record<string, string>
   projectNames?: Record<string, string>
   projectIcons?: Record<string, string>
+  /** prompt behind Notes > Generate notes */
+  notesPrompt?: string
   theme?: 'system' | 'light' | 'dark'
 }
 
