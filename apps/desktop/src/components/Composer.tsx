@@ -16,12 +16,19 @@ type Props = {
   onGuide?: (text: string, queue: boolean) => void
   /** Picks files; they are inserted at the cursor as @mentions the agent can read. */
   onAttach?: () => Promise<string[]>
+  /** Keeps the unsent text when the composer unmounts (switching tabs or views) and restores it on return. */
+  draftKey?: string
 }
 
 const MAX = 260
+const drafts = new Map<string, string>()
 
 export function Composer(p: Props) {
-  const [text, setText] = useState('')
+  const [text, setTextRaw] = useState(() => (p.draftKey && drafts.get(p.draftKey)) || '')
+  const setText = (t: string) => {
+    setTextRaw(t)
+    if (p.draftKey) t ? drafts.set(p.draftKey, t) : drafts.delete(p.draftKey)
+  }
   const ta = useRef<HTMLTextAreaElement>(null)
 
   useLayoutEffect(() => {

@@ -260,6 +260,22 @@ export function ModelPicker(p: PickerProps) {
   const [pos, setPos] = useState<CSSProperties & { up?: boolean }>({})
   const trigger = useRef<HTMLButtonElement>(null)
   const pop = useRef<HTMLDivElement>(null)
+  // Escape closes the picker wherever focus is (a click on a non-focusable part used to leave Escape dead)
+  useEffect(() => {
+    if (!open) return
+    const esc = (e: KeyboardEvent) => {
+      // a model menu open inside the detail panel takes Escape for itself
+      if (e.key !== 'Escape' || document.querySelector('.dd')) return
+      e.preventDefault()
+      if (sortOpen) setSortOpen(false)
+      else {
+        setOpen(false)
+        trigger.current?.focus()
+      }
+    }
+    document.addEventListener('keydown', esc)
+    return () => document.removeEventListener('keydown', esc)
+  }, [open, sortOpen])
   const listRef = useRef<HTMLDivElement>(null)
   const byId = useMemo(() => new Map(models.map(m => [m.id, m])), [models])
   const costOf = useMemo(() => relativeCost(models), [models])
@@ -391,16 +407,6 @@ export function ModelPicker(p: PickerProps) {
             ref={pop}
             className={`mp${pos.up ? ' is-up' : ''}`}
             style={{ right: pos.right, top: pos.top, bottom: pos.bottom }}
-            onKeyDown={e => {
-              // A model menu open inside the detail panel takes Escape for itself.
-              if (e.key !== 'Escape' || document.querySelector('.dd')) return
-              e.preventDefault()
-              if (sortOpen) setSortOpen(false)
-              else {
-                setOpen(false)
-                trigger.current?.focus()
-              }
-            }}
           >
             {shownMode ? <ModeDetail mode={shownMode} p={p} costOf={costOf} maxHeight={pos.maxHeight} /> : shownModel ? <ModelDetail m={shownModel} p={p} cost={costOf(shownModel)} maxHeight={pos.maxHeight} /> : null}
             <div className="mp-list" style={{ width: LIST_W, maxHeight: pos.maxHeight }}>

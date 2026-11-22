@@ -254,6 +254,14 @@ export default function App() {
 
   const closeTab = (key: string) => {
     setTabs(t => t.filter(x => x !== key))
+    // drop the closed thread from Back/Forward too, so history never reopens a thread with no tab
+    setHist(h => {
+      const keep = h.stack.map((v, j) => [v, j] as const).filter(([v]) => !(v.kind === 'thread' && v.key === key))
+      const stack = keep.map(([v]) => v).filter((v, j, a) => j === 0 || !same(a[j - 1], v))
+      if (!stack.length) return { stack: [{ kind: 'home' }], i: 0 }
+      const i = Math.min(stack.length - 1, Math.max(0, keep.filter(([, j]) => j <= h.i).length - 1))
+      return { stack, i }
+    })
     if (view.kind === 'thread' && view.key === key) go({ kind: 'home' })
   }
 
@@ -292,8 +300,16 @@ export default function App() {
   liveSettings.current = settings
   const patchSettings = async (patch: Partial<Settings>) => {
     liveSettings.current = liveSettings.current && { ...liveSettings.current, ...patch }
+    const before = settings
     setSettings(s => (s ? { ...s, ...patch } : s))
-    setSettings(await api.updateSettings(patch))
+    try {
+      setSettings(await api.updateSettings(patch))
+    } catch (e) {
+      // the change was not saved: show the saved state again and say so
+      liveSettings.current = before
+      setSettings(before)
+      setNotice(`Couldn't save that setting: ${(e as Error).message}`)
+    }
   }
 
   const pickProject = async (path: string) => {
@@ -558,6 +574,7 @@ export default function App() {
                 {...composerProps}
                 onAttach={() => api.pickFiles(active.project)}
                 key={active.key}
+                draftKey={active.key}
                 project={projectPicker(active.project, true)}
                 autoFocus
                 placeholder={
@@ -592,7 +609,7 @@ export default function App() {
                   ]}
                 />
               </div>
-              <Composer {...composerProps} onAttach={project ? () => api.pickFiles(project) : undefined} project={projectPicker(project)} autoFocus tip disabled={project ? undefined : 'Choose a project first'} onSend={startThread} />
+              <Composer {...composerProps} draftKey="home" onAttach={project ? () => api.pickFiles(project) : undefined} project={projectPicker(project)} autoFocus tip disabled={project ? undefined : 'Choose a project first'} onSend={startThread} />
               {project && list[0] && <HomeContinue thread={list[0]} onOpen={() => go({ kind: 'thread', key: list[0].key })} />}
               {!project && (
                 <button className="home-hint" onClick={() => void browseProject()}>
@@ -643,8 +660,10 @@ function AccountMenu({ identity, onSignOut, theme, onTheme }: { identity: { name
   useEffect(() => {
     if (!open) return
     const close = (e: MouseEvent) => !ref.current?.contains(e.target as Node) && setOpen(false)
+    const esc = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false)
     document.addEventListener('mousedown', close)
-    return () => document.removeEventListener('mousedown', close)
+    document.addEventListener('keydown', esc)
+    return () => (document.removeEventListener('mousedown', close), document.removeEventListener('keydown', esc))
   }, [open])
   return (
     <div className="menu-root side-account" ref={ref}>
