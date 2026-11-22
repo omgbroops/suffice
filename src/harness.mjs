@@ -103,7 +103,10 @@ export const variants = Object.freeze([
   // Stock Pi: default tools, default prompt, no Suffice mechanisms — the true
   // upstream baseline. Model stays on the subscription default.
   { id: 'base-pi', basePi: true },
-  { id: 'base-pi-luna-xhigh', basePi: true, basePiModel: 'gpt-6-luna', effort: 'xhigh' },
+  // Auto-ladder: classify like auto, but a failed solo attempt escalates to a
+  // stronger harness shape — race-3 seeded with the losing attempt's diff —
+  // instead of another solo try. Mid-run mode routing at the attempt boundary.
+  { id: 'auto-ladder', core: true, effort: 'low', fast: { speculativeTest: true }, autoLadder: {} },
   // Per-call effort routing: medium thinking while exploring/planning, low for
   // the edit turns that follow.
   { id: 'effort-route', core: true, effort: 'medium', effortRoute: { to: 'low', afterTurns: 2 } },

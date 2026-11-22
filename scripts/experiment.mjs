@@ -5,13 +5,14 @@ import { tasks } from '../benchmarks/tasks.mjs';
 import { realTasks } from '../benchmarks/real/tasks.mjs';
 import { hardTasks } from '../benchmarks/real-hard/tasks.mjs';
 import { deepTasks } from '../benchmarks/real-deepswe/tasks.mjs';
+import { midTasks } from '../benchmarks/real-deepswe/mid-tasks.mjs';
 import { longTasks } from '../benchmarks/real-long/tasks.mjs';
 import { createRuntime, loadEnvironment, root, stateDir } from '../src/runtime.mjs';
 import { variants, runAgent, runBasePi } from '../src/harness.mjs';
 import { runRace } from '../src/race.mjs';
 import { runSpecAgent } from '../src/spec-agent.mjs';
 import { runEco } from '../src/eco.mjs';
-import { runAuto } from '../src/auto.mjs';
+import { runAuto, runAutoLadder } from '../src/auto.mjs';
 import { filesIn, readText, hash, materializeWorkspace } from '../src/workspace.mjs';
 import { runTaskAcceptance } from '../src/deepswe-verify.mjs';
 import { freezeSources } from './freeze-sources.mjs';
@@ -26,8 +27,8 @@ function syncWinner(source, destination) {
 }
 if (!['low', 'medium', 'high'].includes(thinkingLevel)) throw new Error('Supported experiment efforts: low, medium, high.');
 const suite = args['--suite'] ?? 'synthetic';
-if (!['synthetic', 'real', 'real-hard', 'real-long', 'real-deepswe'].includes(suite)) throw new Error('Supported suites: synthetic, real, real-hard, real-long, real-deepswe.');
-const taskPool = suite === 'real' ? realTasks.map(t => ({ ...t, split: 'real' })) : suite === 'real-hard' ? hardTasks.map(t => ({ ...t, split: 'real-hard' })) : suite === 'real-long' ? longTasks.map(t => ({ ...t, split: 'real-long' })) : suite === 'real-deepswe' ? deepTasks.map(t => ({ ...t, split: 'real-deepswe' })) : tasks;
+if (!['synthetic', 'real', 'real-hard', 'real-long', 'real-deepswe', 'real-deepswe-mid'].includes(suite)) throw new Error('Supported suites: synthetic, real, real-hard, real-long, real-deepswe, real-deepswe-mid.');
+const taskPool = suite === 'real' ? realTasks.map(t => ({ ...t, split: 'real' })) : suite === 'real-hard' ? hardTasks.map(t => ({ ...t, split: 'real-hard' })) : suite === 'real-long' ? longTasks.map(t => ({ ...t, split: 'real-long' })) : suite === 'real-deepswe' ? deepTasks.map(t => ({ ...t, split: 'real-deepswe' })) : suite === 'real-deepswe-mid' ? midTasks.map(t => ({ ...t, split: 'real-deepswe-mid' })) : tasks;
 const selectedTasks = taskPool.filter(t => (suite !== 'synthetic' || t.split === split) && (!args['--task'] || t.id === args['--task']) && t.id !== args['--exclude-task']);
 const modelOverride = args['--model'];
 const selectedVariants = variants.filter(v => !args['--variants'] || args['--variants'].split(',').includes(v.id)).map(v => modelOverride ? { ...v, model: modelOverride } : v);
@@ -44,7 +45,7 @@ const runtime = await createRuntime();
 if (!runtime.isUsingSubscription('openai')) throw new Error('Run node scripts/login.mjs first.');
 const inputs = {};
 const inputPaths = {};
-for (const file of ['package.json', 'bun.lock', 'scripts/experiment.mjs', 'scripts/run-pilot.mjs', 'scripts/freeze-sources.mjs', 'benchmarks/tasks.mjs', 'benchmarks/manifest.json', 'docs/EXPERIMENT.md', ...(suite === 'real' ? ['benchmarks/real/tasks.mjs'] : suite === 'real-hard' ? ['benchmarks/real-hard/tasks.mjs'] : suite === 'real-long' ? ['benchmarks/real-long/tasks.mjs'] : suite === 'real-deepswe' ? ['benchmarks/real-deepswe/tasks.mjs'] : []), ...(await filesIn(resolve(root, 'src'))).map(f => `src/${f}`)]) inputs[file] = hash(await readFile(resolve(root, file)));
+for (const file of ['package.json', 'bun.lock', 'scripts/experiment.mjs', 'scripts/run-pilot.mjs', 'scripts/freeze-sources.mjs', 'benchmarks/tasks.mjs', 'benchmarks/manifest.json', 'docs/EXPERIMENT.md', ...(suite === 'real' ? ['benchmarks/real/tasks.mjs'] : suite === 'real-hard' ? ['benchmarks/real-hard/tasks.mjs'] : suite === 'real-long' ? ['benchmarks/real-long/tasks.mjs'] : suite === 'real-deepswe' ? ['benchmarks/real-deepswe/tasks.mjs'] : suite === 'real-deepswe-mid' ? ['benchmarks/real-deepswe/mid-tasks.mjs'] : []), ...(await filesIn(resolve(root, 'src'))).map(f => `src/${f}`)]) inputs[file] = hash(await readFile(resolve(root, file)));
 for (const task of selectedTasks) {
   inputs[`acceptance:${task.id}`] = hash(await readFile(task.acceptancePath));
   inputPaths[`acceptance:${task.id}`] = relative(root, task.acceptancePath);
@@ -107,6 +108,11 @@ for (const [index, item] of schedule.entries()) {
     const autoed = await runAuto({ runtime, task, variant: inner, workspace, runDir, thinkingLevel: effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000), maxTurns });
     if (autoed.winnerWorkspace && autoed.winnerWorkspace !== workspace) syncWinner(autoed.winnerWorkspace, workspace);
     agent = { ...autoed, decisions: [], watcherCalls: 0 };
+  } else if (variant.autoLadder !== undefined) {
+    const { autoLadder, effort, ...inner } = variant;
+    const laddered = await runAutoLadder({ runtime, task, variant: inner, workspace, runDir, thinkingLevel: effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000), maxTurns });
+    if (laddered.winnerWorkspace && laddered.winnerWorkspace !== workspace) syncWinner(laddered.winnerWorkspace, workspace);
+    agent = { ...laddered, decisions: [], watcherCalls: 0 };
   } else if (variant.basePi) {
     agent = await runBasePi({ runtime, workspace, runDir, task, thinkingLevel: variant.effort ?? thinkingLevel, model: variant.basePiModel, timeoutMs: Number(args['--timeout-ms'] ?? 240000), maxTurns });
   } else {

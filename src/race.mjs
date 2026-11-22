@@ -1,6 +1,6 @@
 // Race N identical trajectories in isolated workspace copies. Wall clock is
 // max-of-N, not sum-of-N; the first verified winner can stop the rest.
-import { cp, mkdir, rm, writeFile, readFile } from 'node:fs/promises';
+import { cp, mkdir, rename, rm, writeFile, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { runAgent } from './harness.mjs';
 import { filesIn, readText, hash, materializeWorkspace } from './workspace.mjs';
@@ -14,7 +14,7 @@ async function attemptDiff(workspace, baseline) {
   return { patch, diffLines };
 }
 
-async function immutableIntact(workspace, baseline) {
+export async function immutableIntact(workspace, baseline) {
   for (const path of (await filesIn(baseline)).filter(p => !p.startsWith('src/'))) {
     if (hash(await readFile(resolve(workspace, path))) !== hash(await readFile(resolve(baseline, path)))) return false;
   }
@@ -53,7 +53,14 @@ export async function runRace({ runtime, task, variant, n = 3, runDir, thinkingL
       const attemptDir = resolve(runDir, `attempt-${index}`);
       const workspace = resolve(attemptDir, 'workspace');
       await mkdir(attemptDir, { recursive: true, verbatimSymlinks: true });
-      await materializeWorkspace(task, workspace);
+      // seedWorkspace: a prior failed attempt's workspace becomes this lane's
+      // starting point (rename, not copy — preserves hardlinked deps).
+      if (spec.seedWorkspace) {
+        try { await rm(workspace, { recursive: true, force: true }); await rename(spec.seedWorkspace, workspace); }
+        catch { await materializeWorkspace(task, workspace); }
+      } else {
+        await materializeWorkspace(task, workspace);
+      }
       // Cost cap: a straggler attempt is killed at attemptDeadlineMs — a
       // loser that far behind the pack almost never wins anyway.
       const attemptCtl = new AbortController();

@@ -48,7 +48,7 @@ function extractTestShCommands(testSh) {
     return cmds.map(c => c.replace(/\\\s+/g, ' ').trim()).filter(Boolean);
   };
   const grab = mode => {
-    const m = testSh.match(new RegExp(`^\\s*${mode}\\)\\s*\\n([\\s\\S]*?);;`, 'm'));
+    const m = testSh.match(new RegExp(`^\\s*${mode}\\)([\\s\\S]*?);;`, 'm'));
     if (!m) return null;
     const cmds = splitCmds(m[1]);
     return cmds.length ? cmds : null;
