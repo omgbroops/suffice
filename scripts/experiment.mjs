@@ -6,6 +6,7 @@ import { realTasks } from '../benchmarks/real/tasks.mjs';
 import { hardTasks } from '../benchmarks/real-hard/tasks.mjs';
 import { deepTasks } from '../benchmarks/real-deepswe/tasks.mjs';
 import { midTasks } from '../benchmarks/real-deepswe/mid-tasks.mjs';
+import { diffTasks } from '../benchmarks/real-deepswe/diff-tasks.mjs';
 import { longTasks } from '../benchmarks/real-long/tasks.mjs';
 import { createRuntime, loadEnvironment, root, stateDir } from '../src/runtime.mjs';
 import { variants, runAgent, runBasePi } from '../src/harness.mjs';
@@ -27,8 +28,8 @@ function syncWinner(source, destination) {
 }
 if (!['low', 'medium', 'high'].includes(thinkingLevel)) throw new Error('Supported experiment efforts: low, medium, high.');
 const suite = args['--suite'] ?? 'synthetic';
-if (!['synthetic', 'real', 'real-hard', 'real-long', 'real-deepswe', 'real-deepswe-mid'].includes(suite)) throw new Error('Supported suites: synthetic, real, real-hard, real-long, real-deepswe, real-deepswe-mid.');
-const taskPool = suite === 'real' ? realTasks.map(t => ({ ...t, split: 'real' })) : suite === 'real-hard' ? hardTasks.map(t => ({ ...t, split: 'real-hard' })) : suite === 'real-long' ? longTasks.map(t => ({ ...t, split: 'real-long' })) : suite === 'real-deepswe' ? deepTasks.map(t => ({ ...t, split: 'real-deepswe' })) : suite === 'real-deepswe-mid' ? midTasks.map(t => ({ ...t, split: 'real-deepswe-mid' })) : tasks;
+if (!['synthetic', 'real', 'real-hard', 'real-long', 'real-deepswe', 'real-deepswe-mid','real-deepswe-diff'].includes(suite)) throw new Error('Supported suites: synthetic, real, real-hard, real-long, real-deepswe, real-deepswe-mid, real-deepswe-diff.');
+const taskPool = suite === 'real' ? realTasks.map(t => ({ ...t, split: 'real' })) : suite === 'real-hard' ? hardTasks.map(t => ({ ...t, split: 'real-hard' })) : suite === 'real-long' ? longTasks.map(t => ({ ...t, split: 'real-long' })) : suite === 'real-deepswe' ? deepTasks.map(t => ({ ...t, split: 'real-deepswe' })) : suite === 'real-deepswe-mid' ? midTasks.map(t => ({ ...t, split: 'real-deepswe-mid' })) : suite === 'real-deepswe-diff' ? diffTasks.map(t => ({ ...t, split: 'real-deepswe-diff' })) : tasks;
 const selectedTasks = taskPool.filter(t => (suite !== 'synthetic' || t.split === split) && (!args['--task'] || t.id === args['--task']) && t.id !== args['--exclude-task']);
 const modelOverride = args['--model'];
 const selectedVariants = variants.filter(v => !args['--variants'] || args['--variants'].split(',').includes(v.id)).map(v => modelOverride ? { ...v, model: modelOverride } : v);
@@ -45,7 +46,7 @@ const runtime = await createRuntime();
 if (!runtime.isUsingSubscription('openai')) throw new Error('Run node scripts/login.mjs first.');
 const inputs = {};
 const inputPaths = {};
-for (const file of ['package.json', 'bun.lock', 'scripts/experiment.mjs', 'scripts/run-pilot.mjs', 'scripts/freeze-sources.mjs', 'benchmarks/tasks.mjs', 'benchmarks/manifest.json', 'docs/EXPERIMENT.md', ...(suite === 'real' ? ['benchmarks/real/tasks.mjs'] : suite === 'real-hard' ? ['benchmarks/real-hard/tasks.mjs'] : suite === 'real-long' ? ['benchmarks/real-long/tasks.mjs'] : suite === 'real-deepswe' ? ['benchmarks/real-deepswe/tasks.mjs'] : suite === 'real-deepswe-mid' ? ['benchmarks/real-deepswe/mid-tasks.mjs'] : []), ...(await filesIn(resolve(root, 'src'))).map(f => `src/${f}`)]) inputs[file] = hash(await readFile(resolve(root, file)));
+for (const file of ['package.json', 'bun.lock', 'scripts/experiment.mjs', 'scripts/run-pilot.mjs', 'scripts/freeze-sources.mjs', 'benchmarks/tasks.mjs', 'benchmarks/manifest.json', 'docs/EXPERIMENT.md', ...(suite === 'real' ? ['benchmarks/real/tasks.mjs'] : suite === 'real-hard' ? ['benchmarks/real-hard/tasks.mjs'] : suite === 'real-long' ? ['benchmarks/real-long/tasks.mjs'] : suite === 'real-deepswe' ? ['benchmarks/real-deepswe/tasks.mjs'] : suite === 'real-deepswe-mid' ? ['benchmarks/real-deepswe/mid-tasks.mjs'] : suite === 'real-deepswe-diff' ? ['benchmarks/real-deepswe/diff-tasks.mjs'] : []), ...(await filesIn(resolve(root, 'src'))).map(f => `src/${f}`)]) inputs[file] = hash(await readFile(resolve(root, file)));
 for (const task of selectedTasks) {
   inputs[`acceptance:${task.id}`] = hash(await readFile(task.acceptancePath));
   inputPaths[`acceptance:${task.id}`] = relative(root, task.acceptancePath);

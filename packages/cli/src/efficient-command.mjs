@@ -4,35 +4,33 @@ import {tmpdir} from 'node:os';
 import {join,basename} from 'node:path';
 import {clampThinkingLevel} from '@earendil-works/pi-ai';
 import {createSufficeSession} from './session.mjs';
-import {applyPatch,diffFiles,workspacePrefill} from './fast-command.mjs';
+import {applyPatch,diffFiles,workspacePrefill,RACE_ATTEMPTS} from './fast-command.mjs';
 import {verifyDir} from './verify.mjs';
 
-// /efficient — the eco arm (cheap-first, escalate on failure) as an in-session
-// command. The benchmark version gates Luna on acceptance tests; in-session
-// there is no verifier, so "produced a real diff" is the success proxy — the
-// same verdict /fast applies to its race winner.
-//   /efficient            show state
-//   /efficient on|off     switch the live session's model to the cheap one and back
-//   /efficient cheap <id> pick the cheap model (default gpt-6-luna)
-//   /balanced             restore regular Suffice: default model + effort
-//   /efficient <task>     the cheap model attempts the task on a workspace
-//                         copy; if it completes with changes, they are applied
-//                         back. Only when it fails (error, or no changes after
-//                         a retry
-//                         nudge) does the session's strong model run, on a
-//                         fresh copy — escalate-on-failure, never review-on-
-//                         success, so Sol's cost is paid only on real misses.
+// /efficient — one cheap Luna call classifies the task, then dispatches to the
+// mode that fits: repairs go cheap-first with escalation (the /efficient
+// path), features go straight to the session model, ambiguous work gets the
+// 3-attempt race (the /fast path). The classify call costs ~$0.0002 and picks
+// the ~$0.03 decision. Every path gates on workspace tests when they exist.
+//   /efficient          show state
+//   /efficient <task>   classify + dispatch
 const SKIP_COPY=new Set(['.git','node_modules']);
-const CHEAP_ROUNDS=2; // initial attempt + one "keep fixing" retry
+const CHEAP_ROUNDS=2; // initial attempt + one verdict-retry
+const CHEAP_ID='gpt-6-luna';
+const ROUTES=new Set(['repair','feature','other']);
+
+// Pure for tests: pull a route out of the classifier's reply text.
+export function parseRoute(text){
+  try{
+    const parsed=JSON.parse(text);
+    return ROUTES.has(parsed?.route)?parsed.route:'other';
+  }catch{ return 'other'; }
+}
 
 export function sufficeEfficientCommand(options,runtime){
-  let cheapOn=false,priorModel=null,running=false,cheapId='gpt-6-luna';
-  // Cheap model is user-selectable (`/efficient cheap <id>`); the strong side
-  // is always whatever model the session itself is running.
-  const cheapModel=()=>runtime.getModel('openai',cheapId);
+  let running=false;
+  const cheap=()=>runtime.getModel('openai',CHEAP_ID);
   const spawn=(dir,task,modelObject,effort)=>createSufficeSession({...options,cwd:dir,sessionManager:undefined,continue:false,effort,speed:'standard',browser:false,desktop:false,modelObject,extensions:[],timeout:options.timeout??600},runtime);
-  // One phase of eco: run the given model on `dir`, resolve with a diff count.
-  // Escalation decisions are the caller's — a 0-diff completion is a miss.
   const attempt=async(dir,task,modelObject,effort,snapshot)=>{
     const control=await spawn(dir,task,modelObject,effort);
     try{ await control.run(task); }finally{ await control.dispose(); }
@@ -41,111 +39,132 @@ export function sufficeEfficientCommand(options,runtime){
   };
   const copyTree=async(worktree,dir)=>{
     await cp(worktree,dir,{recursive:true,filter:src=>!SKIP_COPY.has(basename(src)),dereference:true});
-    // node_modules is shared read-mostly for speed: attempts get a link to
-    // the real tree (a full copy of deps would dominate startup).
     if(existsSync(join(worktree,'node_modules'))) await symlink(join(worktree,'node_modules'),join(dir,'node_modules'),'junction').catch(()=>{});
   };
-  return pi=>{
-    pi.registerCommand('balanced',{
-      description:'Balanced mode: restore regular Suffice — default model and effort',
-      handler:async(_args,ctx)=>{
-        const target=runtime.getModel('openai',options.model);
-        if(target&&ctx.model?.id!==target.id) await pi.setModel(target);
-        if(ctx.thinkingLevel!==options.effort) pi.setThinkingLevel(options.effort);
-        cheapOn=false;priorModel=null;
-        ctx.ui.notify(`Balanced — regular Suffice: ${target?.id??options.model} · ${options.effort} effort`,'info');
+  // One cheap classify call; anything unparseable lands on 'other' (race),
+  // the most conservative dispatch.
+  const classify=async(input,prefill)=>{
+    const luna=cheap();
+    if(!luna) return 'other';
+    try{
+      const response=await runtime.completeSimple(luna,{
+        systemPrompt:'You classify coding tasks. Reply with exactly one JSON object: {"route":"repair"}, {"route":"feature"}, or {"route":"other"}. repair = fixing existing behavior: tasks phrased as fix/repair/bug/regression, or describing incorrect behavior to correct — even when the fix adds a parameter or new code path. feature = a purely new capability not framed as a fix. other = ambiguous, refactor, docs, or analysis. When unsure between repair and feature, choose repair; when unsure otherwise, choose other.',
+        messages:[{role:'user',content:`Task:\n${input}\n\n${prefill}`.slice(0,8000),timestamp:Date.now()}],
+      },{maxTokens:64,reasoning:'low'});
+      return parseRoute((response.content??[]).filter(c=>c.type==='text').map(c=>c.text).join(''));
+    }catch{ return 'other'; }
+  };
+  // repair → cheap model first, verdict-retry once, escalate to session model.
+  const runRepair=async(worktree,snapshot,runDir,prompt,ctx)=>{
+    const luna=cheap();
+    if(!luna) return null;
+    let changes=0,errored=false,failedDetail=null;
+    const cheapEffort=clampThinkingLevel(luna,'low');
+    for(let round=0;round<CHEAP_ROUNDS&&changes===0;round++){
+      const dir=join(runDir,'cheap');
+      if(!existsSync(dir)) await copyTree(worktree,dir);
+      ctx.ui.notify(`Auto(repair): ${CHEAP_ID} attempt${round?' retry':''}`,'info');
+      const nudge=errored?'\n\nYour previous attempt errored before finishing — the files may hold partial edits. Inspect the state and finish the task.':failedDetail?`\n\nYour previous attempt's changes fail the project's tests:\n${failedDetail}\nKeep fixing until the tests pass.`:'\n\nYour previous attempt made no changes — the task is not done. Keep fixing the actual files.';
+      errored=false;failedDetail=null;
+      try{ changes=await attempt(dir,round?prompt+nudge:prompt,luna,cheapEffort,snapshot); }
+      catch{ errored=true;changes=0; }
+      if(changes>0){
+        const verdict=await verifyDir(dir,{access:options.access});
+        if(verdict.ranTests&&!verdict.passed){ failedDetail=verdict.detail; changes=0; }
       }
+    }
+    if(changes>0) return {dir:join(runDir,'cheap'),path:`${CHEAP_ID} solved it (${changes} change(s))`};
+    // Escalate on failure only — same shape as /efficient.
+    const strongDir=join(runDir,'strong');
+    await copyTree(worktree,strongDir);
+    ctx.ui.notify(`Auto(repair): ${CHEAP_ID} failed — escalating to session model`,'info');
+    const strongEffort=clampThinkingLevel(ctx.model,ctx.thinkingLevel??'low');
+    try{
+      const strongChanges=await attempt(strongDir,prompt,ctx.model,strongEffort,snapshot);
+      if(strongChanges>0){
+        const verdict=await verifyDir(strongDir,{access:options.access});
+        if(verdict.ranTests&&!verdict.passed) ctx.ui.notify(`Escalation produced changes but they fail the workspace tests:\n${verdict.detail}`,'warning');
+        else return {dir:strongDir,path:`escalated to ${ctx.model?.id??'session model'} (${strongChanges} change(s))`};
+      }
+    }catch{ /* miss */ }
+    return null;
+  };
+  // feature → session model directly on a copy; verification gates the diff.
+  const runFeature=async(worktree,snapshot,runDir,prompt,ctx)=>{
+    const dir=join(runDir,'feature');
+    await copyTree(worktree,dir);
+    ctx.ui.notify(`Auto(feature): ${ctx.model?.id??'session model'} on a workspace copy`,'info');
+    const effort=clampThinkingLevel(ctx.model,ctx.thinkingLevel??'low');
+    try{
+      const changes=await attempt(dir,prompt,ctx.model,effort,snapshot);
+      if(changes>0){
+        const verdict=await verifyDir(dir,{access:options.access});
+        if(verdict.ranTests&&!verdict.passed){ ctx.ui.notify(`Feature attempt produced changes but they fail the workspace tests:\n${verdict.detail}`,'warning'); return null; }
+        return {dir,path:`${ctx.model?.id??'session model'} (${changes} change(s))`};
+      }
+    }catch{ /* miss */ }
+    return null;
+  };
+  // other → 3-attempt race at low effort; first verified diff wins.
+  const runRace=async(worktree,snapshot,runDir,input,prefill,ctx)=>{
+    const controls=[],verifyCtl=[];
+    let winner=-1,sawVerifyRun=false;
+    const jobs=RACE_ATTEMPTS.map(async(spec,i)=>{
+      const dir=join(runDir,`attempt-${i}`);
+      await copyTree(worktree,dir);
+      const control=await spawn(dir,input,ctx.model,'low');
+      controls[i]=control;
+      try{
+        await control.run(input+'\n\n'+prefill+(spec.hint?'\n\n'+spec.hint:''));
+        const {changed,deleted}=await diffFiles(snapshot,dir);
+        if(winner<0&&(changed.length||deleted.length)){
+          const verify=(verifyCtl[i]=new AbortController()).signal;
+          const verdict=await verifyDir(dir,{access:options.access,signal:verify});
+          if(verdict.ranTests){ sawVerifyRun=true; if(!verdict.passed) return; }
+          if(winner<0){
+            winner=i;
+            for(let j=0;j<controls.length;j++) if(j!==i){ controls[j]?.abort(); verifyCtl[j]?.abort(); }
+          }
+        }
+      }catch{ /* losing or failed attempt */ }
     });
+    await Promise.allSettled(jobs);
+    await Promise.allSettled(controls.filter(Boolean).map(c=>c.dispose()));
+    if(winner<0) return {failed:sawVerifyRun?'attempts produced changes but failed the workspace tests':'all attempts failed or produced no changes'};
+    return {dir:join(runDir,`attempt-${winner}`),path:`race attempt ${winner+1} finished first`};
+  };
+  return pi=>{
     pi.registerCommand('efficient',{
-      description:'Efficient mode: /efficient <task> runs the cheap model first and escalates only on failure; /efficient on|off switches session model to the cheap one',
+      description:'Efficient mode: /efficient <task> classifies the task (one cheap call) then dispatches — repairs to the cheap path, features to the session model, ambiguous to the race',
       handler:async(args,ctx)=>{
         const input=args.trim();
         if(!input||input==='status'){
-          ctx.ui.notify(`Efficient mode ${cheapOn?'on':'off'} · cheap=${cheapId} · /efficient <task> runs cheap first, escalates on failure · /efficient cheap <id> picks the cheap model`,'info');
+          ctx.ui.notify('Efficient mode — /efficient <task>: cheap classify → repair goes cheap-first+escalate, feature goes to the session model, ambiguous races 3 attempts','info');
           return;
         }
-        if(input==='cheap'||input.startsWith('cheap ')){
-          const id=input.slice(5).trim();
-          if(!id){ctx.ui.notify(`Cheap model is ${cheapId} — /efficient cheap <model-id> to change`,'info');return;}
-          if(!runtime.getModel('openai',id)){ctx.ui.notify(`Model ${id} is absent from the catalog`,'error');return;}
-          cheapId=id;
-          ctx.ui.notify(`Cheap model set to ${cheapId}`,'info');
-          return;
-        }
-        if(input==='on'||input==='off'){
-          const want=input==='on';
-          if(want===cheapOn){ctx.ui.notify(`Efficient mode already ${want?'on':'off'}`,'info');return;}
-          if(want){
-            const luna=cheapModel();
-            if(!luna){ctx.ui.notify(`Model ${cheapId} is absent from the catalog`,'error');return;}
-            priorModel=ctx.model;
-            if(!(await pi.setModel(luna))){priorModel=null;ctx.ui.notify('Could not switch session model','error');return;}
-            cheapOn=true;
-            ctx.ui.notify(`Efficient mode on — session model is ${cheapId}; /efficient <task> escalates on failure`,'info');
-          } else {
-            if(priorModel) await pi.setModel(priorModel);
-            priorModel=null;cheapOn=false;
-            ctx.ui.notify('Efficient mode off — model restored','info');
-          }
-          return;
-        }
-        if(running){ctx.ui.notify('An efficient run is already in progress','warning');return;}
-        const luna=cheapModel();
-        if(!luna){ctx.ui.notify(`Model ${cheapId} is absent from the catalog`,'error');return;}
+        if(running){ctx.ui.notify('An auto run is already in progress','warning');return;}
         running=true;
         const worktree=ctx.cwd;
-        const runDir=await mkdtemp(join(tmpdir(),'suffice-efficient-'));
+        const runDir=await mkdtemp(join(tmpdir(),'suffice-auto-'));
         try{
           await ctx.waitForIdle();
           const snapshot=join(runDir,'base');
           await cp(worktree,snapshot,{recursive:true,filter:src=>!SKIP_COPY.has(basename(src)),dereference:true});
           const prefill=await workspacePrefill(worktree);
+          const route=await classify(input,prefill);
+          ctx.ui.notify(`Auto: classified as ${route} → ${route==='repair'?'cheap-first with escalation':route==='feature'?'session model':'3-attempt race'}`,'info');
           const prompt=`${input}\n\n${prefill}`;
-          // Phase A: cheap model, retry nudged once on a miss. A round only
-          // passes its verdict when the session completed — a crashed run's
-          // leftover edits are partial work for the next round to finish,
-          // never an accepted patch.
-          let changes=0,errored=false,failedDetail=null;
-          const cheapEffort=clampThinkingLevel(luna,'low');
-          for(let round=0;round<CHEAP_ROUNDS&&changes===0;round++){
-            const dir=join(runDir,'cheap');
-            if(!existsSync(dir)) await copyTree(worktree,dir);
-            ctx.ui.notify(`Efficient: ${cheapId} attempt${round?' retry':''} on a workspace copy`,'info');
-            const nudge=errored?'\n\nYour previous attempt errored before finishing — the files may hold partial edits. Inspect the state and finish the task.':failedDetail?`\n\nYour previous attempt's changes fail the project's tests:\n${failedDetail}\nKeep fixing until the tests pass.`:'\n\nYour previous attempt made no changes — the task is not done. Keep fixing the actual files.';
-            errored=false;failedDetail=null;
-            try{ changes=await attempt(dir,round?prompt+nudge:prompt,luna,cheapEffort,snapshot); }
-            catch{ errored=true;changes=0; }
-            // Verify on the copy: a diff that fails the project's tests is a
-            // miss, and its failure digest nudges the next round.
-            if(changes>0){
-              const verdict=await verifyDir(dir,{access:options.access});
-              if(verdict.ranTests&&!verdict.passed){ failedDetail=verdict.detail; changes=0; }
-            }
+          let outcome;
+          if(route==='repair') outcome=await runRepair(worktree,snapshot,runDir,prompt,ctx);
+          else if(route==='feature') outcome=await runFeature(worktree,snapshot,runDir,prompt,ctx);
+          else outcome=await runRace(worktree,snapshot,runDir,input,prefill,ctx);
+          if(!outcome?.dir){
+            ctx.ui.notify(`Auto: ${outcome?.failed??'no path produced verified changes'}`,'error');
+            return;
           }
-          let winnerDir=null,path='';
-          if(changes>0){ winnerDir=join(runDir,'cheap'); path=`${cheapId} solved it (${changes} change(s)) — no escalation, strong-model cost skipped`; }
-          else{
-            // Phase B: escalate — fresh copy, fresh session, session model.
-            const strongDir=join(runDir,'strong');
-            await copyTree(worktree,strongDir);
-            ctx.ui.notify(`Efficient: ${cheapId} failed — escalating to session model`,'info');
-            // '/efficient on' swapped ctx.model to the cheap one — escalate to
-            // the model the session had before the switch.
-            const strongModel=(cheapOn&&priorModel)?priorModel:ctx.model;
-            const strongEffort=clampThinkingLevel(strongModel,ctx.thinkingLevel??'low');
-            try{
-              const strongChanges=await attempt(strongDir,prompt,strongModel,strongEffort,snapshot);
-              if(strongChanges>0){
-                const verdict=await verifyDir(strongDir,{access:options.access});
-                if(verdict.ranTests&&!verdict.passed){ ctx.ui.notify(`Escalation produced changes but they fail the workspace tests:\n${verdict.detail}`,'warning'); }
-                else{ winnerDir=strongDir; path=`escalated to ${strongModel?.id??'session model'} after ${cheapId} missed (${strongChanges} change(s))`; }
-              }
-            }catch{ /* fall through to the failure notice */ }
-          }
-          if(!winnerDir){ctx.ui.notify('Efficient: cheap and the escalation both produced no changes','error');return;}
-          const n=await applyPatch(worktree,snapshot,winnerDir);
-          const text=`/efficient applied ${n} change(s) — ${path}`;
-          pi.sendMessage({customType:'efficient-run',content:text,display:true});
+          const n=await applyPatch(worktree,snapshot,outcome.dir);
+          const text=`/efficient applied ${n} change(s) — ${route} route · ${outcome.path}`;
+          pi.sendMessage({customType:'auto-run',content:text,display:true});
           ctx.ui.notify(text,'info');
         } finally {
           running=false;
