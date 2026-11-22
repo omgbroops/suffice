@@ -534,6 +534,7 @@ export default function App() {
                 />
               </div>
               <Composer {...composerProps} project={projectPicker(project)} autoFocus tip disabled={project ? undefined : 'Choose a project first'} onSend={startThread} />
+              {project && list[0] && <HomeContinue thread={list[0]} onOpen={() => go({ kind: 'thread', key: list[0].key })} />}
               {!project && (
                 <button className="home-hint" onClick={() => void browseProject()}>
                   Choose a project folder to start
@@ -544,6 +545,29 @@ export default function App() {
         )}
       </main>
     </div>
+  )
+}
+
+/** One way back into the last thread: click it, or Tab from an empty composer. */
+function HomeContinue({ thread, onOpen }: { thread: Thread & { key: string }; onOpen: () => void }) {
+  const open = useRef(onOpen)
+  open.current = onOpen
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const el = document.activeElement
+      if (e.key === 'Tab' && !e.shiftKey && el instanceof HTMLTextAreaElement && el.closest('.home') && !el.value) (e.preventDefault(), open.current())
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [])
+  const status = statusOf(thread)
+  return (
+    <button className="home-continue" onClick={onOpen}>
+      <span className="home-continue-verb">Continue</span>
+      <span className="home-continue-title">{thread.title}</span>
+      {status === 'working' || status === 'input' ? <StatusGlyph status={status} /> : <span className="home-continue-age">{ago(thread.modified)}</span>}
+      <kbd>Tab</kbd>
+    </button>
   )
 }
 

@@ -63,7 +63,7 @@ export function Composer(p: Props) {
         />
         {p.tip && !text && (
           <div className="composer-tip" aria-hidden>
-            Tip: Change the model and capabilities (<kbd>Ctrl</kbd><kbd>/</kbd>)
+            Tip: Change the model and capabilities (<kbd>{/Mac/.test(navigator.platform) ? '⌘' : 'Ctrl'}</kbd><kbd>/</kbd>)
           </div>
         )}
       </div>
