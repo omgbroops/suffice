@@ -114,6 +114,21 @@ function resultsByName(runner, stdout, cwd) {
       put(chain.join(' > '), t.status);
       if (fileRel) put(`${fileRel}: ${chain.join(' > ')}`, t.status);
       if (fileRel) put(`${fileRel}: ${t.title}`, t.status);
+      // Monorepo commands run inside a package dir (`cd packages/core && vitest`)
+      // while whitelist ids are package-relative (`tests/x.test.ts: ...`).
+      const rels = new Set([fileRel].filter(Boolean));
+      // Monorepo commands run inside a package dir (`cd packages/core && vitest`)
+      // while whitelist ids are package-relative (`tests/x.test.ts: ...`).
+      const pkgRel = fileRel?.replace(/^(?:packages|apps|libs)\/[^/]+\//, '');
+      if (pkgRel) rels.add(pkgRel);
+      // Repos whose package dir is a bare first segment (e.g. `drizzle-orm/`):
+      // strip it when the remainder still looks like a spec path.
+      const segRel = fileRel?.replace(/^[^/]+\//, '');
+      if (segRel && /^(?:tests?|__tests__|src|spec)\//.test(segRel)) rels.add(segRel);
+      for (const rel of rels) {
+        put(`${rel}: ${chain.join(' > ')}`, t.status);
+        put(`${rel}: ${t.title}`, t.status);
+      }
       if (t.title) put(t.title, t.status);
     }
   }
