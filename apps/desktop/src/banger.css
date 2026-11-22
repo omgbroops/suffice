@@ -5,7 +5,7 @@
 
 /* model picker: relative cost as five ink steps */
 .mp-bar { position: relative; width: 44px; height: 4px; margin-left: 10px; flex: none; border-radius: 2px; background: rgba(var(--wash), calc(0.09 * var(--a))); }
-.mp-bar-range { position: absolute; top: 0; height: 4px; border-radius: 2px; background: linear-gradient(90deg, #2f9e55, #e8913f 50%, #a66bd8) 0 0 / 44px 4px no-repeat; }
+.mp-bar-range { position: absolute; top: 0; height: 4px; border-radius: 2px; background: linear-gradient(90deg, #2f9e55, #e8913f 50%, #a66bd8) 0 0 / 44px 4px no-repeat; } /* taste-skill-ignore: Devin cost bar, asked 11-20 */
 .mp-bar-dot { position: absolute; top: 0; width: 4px; height: 4px; margin-left: -2px; border-radius: 2px; background: #fff; box-shadow: 0 0 0 0.5px rgba(0,0,0,.25); }
 
 /* home: one way back into the last thread */
@@ -173,7 +173,7 @@
 .gc-clear { display: grid; place-items: center; width: 16px; height: 16px; border-radius: 8px; color: var(--overlay); background: var(--text-4); }
 .gc-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 28px; }
 .gc-slider { display: flex; flex-direction: column; gap: 8px; padding: 4px 0 6px; }
-.gc-slider input { -webkit-appearance: none; appearance: none; width: 100%; height: 4px; border-radius: 2px; background: linear-gradient(90deg, var(--text-3) var(--p), rgba(var(--wash), calc(0.1 * var(--a))) var(--p)); outline: 0; }
+.gc-slider input { -webkit-appearance: none; appearance: none; width: 100%; height: 4px; border-radius: 2px; background: linear-gradient(90deg, var(--text-3) var(--p), rgba(var(--wash), calc(0.1 * var(--a))) var(--p)); outline: 0; } /* taste-skill-ignore: slider fill, hard stop */
 .gc-slider input::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--thumb); box-shadow: 0 0 0 1px rgba(var(--shade), calc(0.15 * var(--s))), 0 1px 2px rgba(var(--shade), calc(0.4 * var(--s))); cursor: grab; }
 .gc-slider input:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 2px var(--edge-focus); }
 .gc-group { display: flex; align-items: center; gap: 8px; height: 28px; }
@@ -191,7 +191,7 @@
 .prose-code-wrap > .icon-btn { position: absolute; top: 6px; right: 6px; color: var(--text-3); background: var(--well); opacity: 0; transition: opacity 150ms var(--ease); }
 .prose-code-wrap:hover > .icon-btn, .prose-code-wrap > .icon-btn:focus-visible { opacity: 1; }
 /* text fades under the top bar instead of slicing */
-.thread-scroll { -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 18px); mask-image: linear-gradient(to bottom, transparent 0, #000 18px); }
+.thread-scroll { -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 18px); mask-image: linear-gradient(to bottom, transparent 0, #000 18px); } /* taste-skill-ignore: scroll fade mask */
 
 /* account footer: one line, one 6px status dot, chevron at the edge */
 .side-user-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; color: var(--text-2); }
