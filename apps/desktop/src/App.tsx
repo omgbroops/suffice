@@ -538,17 +538,13 @@ export default function App() {
           )}
           <div className="side-label">Threads</div>
           {list.length === 0 && <div className="side-empty">No threads yet.</div>}
-          {groupThreads(list, t => statusOf(t) !== 'idle' && statusOf(t) !== 'done').map(([label, items]) => (
+          {groupThreads(list).map(([label, items]) => (
             <div key={label} className={`side-group${folded.includes(label) ? ' is-folded' : ''}`} role="group" aria-label={label}>
-              {label === 'In progress' ? (
-                <div className="side-group-label">{label}</div>
-              ) : (
-                <button className="side-group-label" aria-expanded={!folded.includes(label)} onClick={() => toggleFold(label)}>
-                  {label}
-                  <IconChevronDown size={11} className="side-group-chev" />
-                </button>
-              )}
-              {!(label !== 'In progress' && folded.includes(label)) && items.map(t => (
+              <button className="side-group-label" aria-expanded={!folded.includes(label)} onClick={() => toggleFold(label)}>
+                {label}
+                <IconChevronDown size={11} className="side-group-chev" />
+              </button>
+              {!folded.includes(label) && items.map(t => (
                 <button key={t.key} className={`side-thread${active?.key === t.key ? ' is-active' : ''}`} onClick={() => go({ kind: 'thread', key: t.key })} title={`${t.title} · ${baseName(t.project)}`}>
                   <span className="side-thread-title">{t.title}</span>
                   {/* one trailing slot: live glyph while running, else age */}
