@@ -38,17 +38,27 @@ test('generated spinners: every family and motion is reachable and grid cells st
   const { genPick, GEN_FAMILIES } = await import('data:text/javascript,' + encodeURIComponent(stripTypeScriptTypes(src, { mode: 'transform' })))
   const seen = new Set()
   for (let i = 0; i < 4000; i++) { const p = genPick(hash('t' + i)); seen.add(p.fam + '-' + p.v) }
-  assert.equal(GEN_FAMILIES.length, 5)
-  assert.equal(seen.size, 6 + 3 + 3 + 3 + 2, 'all 17 motions occur')
+  assert.equal(GEN_FAMILIES.length, 4)
+  assert.equal(seen.size, 6 + 3 + 3 + 2, 'all 14 motions occur')
   for (let i = 0; i < 400; i++) {
     const seed = hash('t' + i)
     if (genPick(seed).fam !== 0) continue
     for (const S of [12, 16, 24]) {
-      const rects = []
-      const c = { set fillStyle(v) {}, beginPath() {}, fill() {}, clearRect() {}, roundRect(x, y, w, h) { rects.push({ x, y, w, h }) } }
-      drawGlyph(c, S, 'gen', 0.7, 'working', seed, '255,255,255', 1)
-      assert.ok(rects.length === 25 || rects.length === 9, `a 5x5 or 3x3 grid (seed ${i})`)
-      for (const r of rects) assert.ok(r.x >= 0 && r.y >= 0 && r.x + r.w <= S + 1e-9 && r.y + r.h <= S + 1e-9, `inside the box (seed ${i}, S ${S})`)
+      // A-F flow by size: over a cycle the drawn area must swing (cells shrink away and return), never leave the box
+      const size = new Map() // cell centre -> sizes seen (0 when the cell is gone)
+      const frames = []
+      for (const t of [0.1, 0.4, 0.7, 1.0, 1.3, 1.6]) {
+        const rects = []
+        const c = { set fillStyle(v) {}, beginPath() {}, fill() {}, clearRect() {}, roundRect(x, y, w, h) { rects.push({ x, y, w, h }) } }
+        drawGlyph(c, S, 'gen', t, 'working', seed, '255,255,255', 1)
+        assert.ok(rects.length <= 25, `at most a 5x5 grid (seed ${i})`)
+        for (const r of rects) assert.ok(r.x >= 0 && r.y >= 0 && r.x + r.w <= S + 1e-9 && r.y + r.h <= S + 1e-9, `inside the box (seed ${i}, S ${S})`)
+        frames.push(new Map(rects.map(r => [`${Math.round((r.x + r.w / 2) * 10)},${Math.round((r.y + r.h / 2) * 10)}`, r.w])))
+      }
+      for (const f of frames) for (const k of f.keys()) size.set(k, [])
+      for (const f of frames) for (const k of size.keys()) size.get(k).push(f.get(k) ?? 0)
+      const swings = [...size.values()].filter(v => Math.min(...v) < 0.5 * Math.max(...v)).length
+      assert.ok(swings >= size.size / 2, `most cells shrink and grow back (seed ${i}, S ${S}: ${swings}/${size.size})`)
     }
   }
 })

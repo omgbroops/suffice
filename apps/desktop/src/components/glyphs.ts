@@ -194,14 +194,14 @@ function arc({ c, S, t, s, ink }: G) {
   c.stroke()
 }
 
-// ---- gen: generated spinners (Abhay 11-22: no meaning; swarm too detailed, plain shapes too bare;
-// a 5x5 grid of squares flowing on and off, and square <-> circle morphs; orbs, blocks and shapes "okay") ----
+// ---- gen: generated spinners (Abhay 11-22: grids A-F "I like a-f"; square <-> circle morphs; blocks and
+// shapes "okay"; the shaded 3D orbs dropped) ----
 // The seed picks a family (grids weighted up), a motion, and small speed/direction changes.
-export const GEN_FAMILIES = ['grid', 'morph', 'orbs', 'blocks', 'shapes'] as const
-const GEN_VARIANTS = [6, 3, 3, 3, 2]
+export const GEN_FAMILIES = ['grid', 'morph', 'blocks', 'shapes'] as const
+const GEN_VARIANTS = [6, 3, 3, 2]
 export function genPick(seed: number) {
   const r = rng(seed ^ 0x5bd1e995)
-  const u = r(), fam = u < 0.4 ? 0 : u < 0.6 ? 1 : u < 0.74 ? 2 : u < 0.87 ? 3 : 4
+  const u = r(), fam = u < 0.45 ? 0 : u < 0.67 ? 1 : u < 0.84 ? 2 : 3
   return { fam, v: Math.floor(r() * GEN_VARIANTS[fam]), speed: 0.85 + r() * 0.35, dir: r() < 0.5 ? 1 : -1, sides: r() < 0.5 ? 3 : 4, salt: Math.floor(r() * 1e9) }
 }
 
@@ -211,48 +211,39 @@ function pulse(x: number, width = 0.34) {
   return u < width ? Math.sin((Math.PI * u) / width) ** 2 : 0
 }
 
-// cells in snake (boustrophedon) and spiral order, for the travelling-tail grids
+// cells in snake (boustrophedon) order
 function snakeOrder(n: number) {
   const o: number[] = []
   for (let y = 0; y < n; y++) for (let k = 0; k < n; k++) o.push(y * n + (y % 2 ? n - 1 - k : k))
   return o
 }
-function spiralOrder(n: number) {
-  const o: number[] = []
-  let [x0, y0, x1, y1] = [0, 0, n - 1, n - 1]
-  while (x0 <= x1 && y0 <= y1) {
-    for (let x = x0; x <= x1; x++) o.push(y0 * n + x)
-    for (let y = y0 + 1; y <= y1; y++) o.push(y * n + x1)
-    if (y0 < y1) for (let x = x1 - 1; x >= x0; x--) o.push(y1 * n + x)
-    if (x0 < x1) for (let y = y1 - 1; y > y0; y--) o.push(y * n + x0)
-    ;[x0, y0, x1, y1] = [x0 + 1, y0 + 1, x1 - 1, y1 - 1]
-  }
-  return o
-}
-
+/**
+ * Grids A-F (picked 11-22 from a sheet beside svg-spinners blocks-wave and SpinKit grid): cells flow off and on
+ * by SIZE, not by dimming, so the outline changes and reads at 14-16 px. B, C, E, F round into circles as they shrink.
+ * v0 A 5x5 diagonal squares · v1 B 5x5 diagonal round · v2 C 5x5 ripple round · v3 D 5x5 snake squares
+ * v4 E 4x4 diagonal round · v5 F 3x3 diagonal round
+ */
 function grid(g: G, p: ReturnType<typeof genPick>, T: number) {
-  // v0-v4: 5x5; v5: 3x3 flicker, which stays legible at 12 px
-  const n = p.v === 5 ? 3 : 5, pitch = g.S / n, b = pitch * (n === 3 ? 0.78 : 0.8)
-  const order = p.v === 2 ? snakeOrder(n) : p.v === 3 ? spiralOrder(n) : null
-  const rank = order ? Object.fromEntries(order.map((c, i) => [c, i])) : null
-  const salt = rng(p.salt)
-  const phase = Array.from({ length: n * n }, () => salt())
+  const n = p.v === 4 ? 4 : p.v === 5 ? 3 : 5
+  const round = p.v !== 0 && p.v !== 3
+  const period = p.v === 3 ? 1.8 : 1.4, spread = p.v === 2 ? 0.5 : p.v === 3 ? 0.9 : 0.6
+  const snake = p.v === 3 ? snakeOrder(n) : null
+  const rank = snake ? Object.fromEntries(snake.map((c, i) => [c, i])) : null
+  const pad = g.S * 0.04, pitch = (g.S - 2 * pad) / n, full = pitch * 0.82
+  g.c.fillStyle = g.ink(0.95)
   for (let y = 0; y < n; y++)
     for (let x = 0; x < n; x++) {
-      const i = y * n + x
-      let k: number
-      if (p.v === 0) k = pulse(T / 1.4 - (p.dir > 0 ? x + y : n - 1 - x + y) / (2 * n), 0.45) // diagonal wave
-      else if (p.v === 1) k = pulse(T / 1.3 - (p.dir * Math.hypot(x - (n - 1) / 2, y - (n - 1) / 2)) / (n * 0.75), 0.45) // ripple from the centre
-      else if (rank) {
-        // a lit tail travelling the path (snake or spiral), fading behind its head
-        const head = (T / 1.8) * n * n, d = (((head - rank[i]) % (n * n)) + n * n) % (n * n)
-        k = d < n * 2.2 ? (1 - d / (n * 2.2)) ** 1.3 : 0
-      } else if (p.v === 4) k = pulse(T / 1.6 + phase[i], 0.36) // twinkle: each cell on its own seeded beat
-      else k = pulse(T / 1.1 + phase[i], 0.4) // 3x3 flicker
-      const cx = (x + 0.5) * pitch, cy = (y + 0.5) * pitch, w = b * (0.82 + 0.18 * k)
-      g.c.fillStyle = g.ink(0.22 + 0.76 * k)
+      const delay = rank ? rank[y * n + x] / (n * n)
+        : p.v === 2 ? Math.hypot(x - (n - 1) / 2, y - (n - 1) / 2) / Math.hypot((n - 1) / 2, (n - 1) / 2)
+        : (p.dir > 0 ? x + y : n - 1 - x + y) / (2 * (n - 1))
+      // full, then shrinks away and comes back as the wave passes (70% of the cycle), then rests full
+      const u = frac(T / period - delay * spread)
+      const k = 0.5 + 0.5 * Math.cos(TAU * Math.min(1, u / 0.7))
+      const side = full * k
+      if (side < 0.35) continue
+      const cx = pad + pitch * (x + 0.5), cy = pad + pitch * (y + 0.5)
       g.c.beginPath()
-      g.c.roundRect(cx - w / 2, cy - w / 2, w, w, w * 0.24)
+      g.c.roundRect(cx - side / 2, cy - side / 2, side, side, side * (round ? 0.12 + 0.38 * (1 - k) : 0.12))
       g.c.fill()
     }
 }
@@ -296,19 +287,6 @@ function morph(g: G, p: ReturnType<typeof genPick>, T: number) {
   }
 }
 
-function orb(g: G, x: number, y: number, rad: number) {
-  const { c, ink } = g
-  // a lit sphere: brighter toward the upper left, so it reads as an orb rather than a flat dot
-  const grad = c.createRadialGradient(x - rad * 0.35, y - rad * 0.35, rad * 0.1, x, y, rad)
-  // the lit side is the paler one: less ink on a dark theme's light ink is dimmer, so flip for dark ink
-  grad.addColorStop(0, ink(g.darkInk ? 0.5 : 1))
-  grad.addColorStop(1, ink(g.darkInk ? 1 : 0.62))
-  c.fillStyle = grad
-  c.beginPath()
-  c.arc(x, y, Math.max(0.6, rad), 0, TAU)
-  c.fill()
-}
-
 function block(g: G, x: number, y: number, b: number, a = 0.95) {
   g.c.fillStyle = g.ink(a)
   g.c.beginPath()
@@ -323,28 +301,6 @@ function gen(g: G) {
   if (p.fam === 0) return grid(g, p, T)
   if (p.fam === 1) return morph(g, p, T)
   if (p.fam === 2) {
-    if (p.v === 0) {
-      // two or three orbs circling
-      const n = p.sides === 3 ? 3 : 2, R = S * 0.24, rad = S * (n === 2 ? 0.19 : 0.155)
-      for (let i = 0; i < n; i++) {
-        const a = (p.dir * TAU * T) / 1.5 + (i * TAU) / n
-        orb(g, cx + Math.cos(a) * R, cy + Math.sin(a) * R, rad * (0.88 + 0.12 * Math.sin((TAU * T) / 0.75 + i)))
-      }
-    } else if (p.v === 1) {
-      // three orbs swelling in a wave
-      for (let i = 0; i < 3; i++) {
-        const k = Math.max(0, Math.sin(TAU * (T / 1.2 - (p.dir * i) / 6)))
-        orb(g, cx + (i - 1) * S * 0.34, cy, S * (0.1 + 0.06 * k))
-      }
-    } else {
-      // a planet and its moon
-      const a = (p.dir * TAU * T) / 1.3
-      orb(g, cx, cy, S * (0.2 + 0.02 * Math.sin((TAU * T) / 1.3)))
-      orb(g, cx + Math.cos(a) * S * 0.34, cy + Math.sin(a) * S * 0.34, S * 0.13)
-    }
-    return
-  }
-  if (p.fam === 3) {
     const b = S * 0.34, o = (b + S * 0.09) / 2
     const cells = [[-o, -o], [o, -o], [o, o], [-o, o]]
     if (p.v === 0) {
