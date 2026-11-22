@@ -505,7 +505,7 @@ export default function App() {
             <div key={label} className="side-group" role="group" aria-label={label}>
               <div className="side-group-label">{label}</div>
               {items.map(t => (
-                <button key={t.key} className={`side-thread${active?.key === t.key ? ' is-active' : ''}`} onClick={() => go({ kind: 'thread', key: t.key })} title={t.title}>
+                <button key={t.key} className={`side-thread${active?.key === t.key ? ' is-active' : ''}`} onClick={() => go({ kind: 'thread', key: t.key })} title={`${t.title} · ${baseName(t.project)}`}>
                   <span className="side-thread-title">{t.title}</span>
                   {/* one trailing slot: live glyph while running, else age */}
                   {statusOf(t) === 'working' ? (
