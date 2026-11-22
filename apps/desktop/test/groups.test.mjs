@@ -1,20 +1,26 @@
-import { test } from 'node:test'
+import test from 'node:test'
 import assert from 'node:assert/strict'
-import { readFile } from 'node:fs/promises'
-import { stripTypeScriptTypes } from 'node:module'
+import { baseName, displayName, threadsByProject } from '../src/components/groups.ts'
 
-const src = await readFile(new URL('../src/components/groups.ts', import.meta.url), 'utf8')
-const { groupThreads } = await import('data:text/javascript,' + encodeURIComponent(stripTypeScriptTypes(src, { mode: 'transform' })))
-
-test('threads fall into date buckets; running ones stay in theirs (no In progress group)', () => {
-  const now = new Date(2026, 10, 22, 15).getTime(), H = 3_600_000
+test('threads nest under their project, newest first; unknown projects fall to other', () => {
   const list = [
-    { id: 'today', modified: now - 2 * H },
-    { id: 'week', modified: now - 3 * 24 * H },
-    { id: 'month', modified: now - 20 * 24 * H },
-    { id: 'run', modified: now - 40 * 24 * H, live: true },
-    { id: 'old', modified: now - 90 * 24 * H },
+    { id: 'a', project: '/p/one', modified: 1 },
+    { id: 'b', project: '/p/two', modified: 5 },
+    { id: 'c', project: '/p/one', modified: 9 },
+    { id: 'd', project: '/gone', modified: 3 },
   ]
-  assert.deepEqual(groupThreads(list, now).map(([l, items]) => [l, items.map(t => t.id)]), [['Today', ['today']], ['Last week', ['week']], ['Last month', ['month']], ['Older', ['run', 'old']]])
-  assert.deepEqual(groupThreads([], now), [])
+  const { byProject, other } = threadsByProject(list, ['/p/one', '/p/two', '/p/empty'])
+  assert.deepEqual(byProject.get('/p/one').map(t => t.id), ['c', 'a'])
+  assert.deepEqual(byProject.get('/p/two').map(t => t.id), ['b'])
+  assert.deepEqual(byProject.get('/p/empty'), [])
+  assert.deepEqual(other.map(t => t.id), ['d'])
+  assert.deepEqual(threadsByProject([], []).other, [])
+})
+
+test('display name falls back to the folder name when unset or blank', () => {
+  assert.equal(baseName('/a/b/site/'), 'site')
+  assert.equal(displayName(undefined, '/a/b/site'), 'site')
+  assert.equal(displayName({ '/a/b/site': 'Marketing' }, '/a/b/site'), 'Marketing')
+  assert.equal(displayName({ '/a/b/site': '  ' }, '/a/b/site'), 'site')
+  assert.equal(displayName({ '/other': 'x' }, '/a/b/site'), 'site')
 })

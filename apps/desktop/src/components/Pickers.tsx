@@ -1,10 +1,11 @@
-import { useState, type ReactNode } from 'react'
+import { useContext, useState, type ReactNode } from 'react'
 import type { Settings } from '../api'
 import { IconCheck, IconEye, IconFolder, IconLockOpen, IconPlus, IconShield } from '../icons'
 import { Dropdown } from './Dropdown'
-import { ProjectEmblem } from './Sidebar'
+import { NamesContext, ProjectEmblem } from './Sidebar'
+import { baseName, displayName } from './groups'
 
-export const baseName = (path: string) => path.replace(/[\\/]+$/, '').split(/[\\/]/).pop() || path
+export { baseName }
 
 /** "C:\Users\me\…\project": the start and the folder name, the middle elided. */
 export function shortPath(path: string, max = 34) {
@@ -63,14 +64,15 @@ export function PermissionPicker({ value, onChange }: { value: Mode; onChange: (
 
 function ProjectList({ project, projects, onPick, onAdd, close }: { project: string | null; projects: string[]; onPick: (p: string) => void; onAdd: () => void; close: () => void }) {
   const [q, setQ] = useState('')
-  const list = projects.filter(p => p.toLowerCase().includes(q.trim().toLowerCase()))
+  const names = useContext(NamesContext)
+  const list = projects.filter(p => `${p} ${displayName(names, p)}`.toLowerCase().includes(q.trim().toLowerCase()))
   return (
     <div className="dd-list">
       <input className="dd-search" autoFocus placeholder="Search projects" value={q} onChange={e => setQ(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && list[0]) { onPick(list[0]); close() } }} />
       {list.map(p => (
         <button key={p} role="menuitemradio" aria-checked={p === project} className={`dd-row${p === project ? ' is-selected' : ''}`} title={p} onClick={() => { onPick(p); close() }}>
           <ProjectEmblem path={p} />
-          <span className="dd-title dd-grow">{baseName(p)}</span>
+          <span className="dd-title dd-grow">{displayName(names, p)}</span>
           {p === project && <IconCheck size={13} className="dd-check" />}
         </button>
       ))}
@@ -85,13 +87,14 @@ function ProjectList({ project, projects, onPick, onAdd, close }: { project: str
 }
 
 export function ProjectPicker({ project, projects, onPick, onAdd }: { project: string | null; projects: string[]; onPick: (p: string) => void; onAdd: () => void }) {
+  const names = useContext(NamesContext)
   return (
     <Dropdown
       width={260}
       trigger={({ open, toggle, ref }) => (
         <button ref={ref} className={`ghost-btn${open ? ' is-open' : ''}`} onClick={toggle} aria-haspopup="menu" aria-expanded={open} title={project ?? 'Choose a project'}>
           {project ? <ProjectEmblem path={project} size={14} /> : <IconFolder size={14} />}
-          {project ? baseName(project) : 'Choose a project'}
+          {project ? displayName(names, project) : 'Choose a project'}
         </button>
       )}
     >

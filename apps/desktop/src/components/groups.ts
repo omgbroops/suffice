@@ -1,12 +1,13 @@
-const DAY = 86_400_000
+/** Last path segment: a project's folder name. */
+export const baseName = (path: string) => path.replace(/[\\/]+$/, '').split(/[\\/]/).pop() || path
 
-/**
- * Sidebar thread groups: Today / Last week / Last month / Older, newest first; empty groups dropped.
- * No In progress group (Abhay 11-20: remove it); a running thread shows its spinner in place.
- */
-export function groupThreads<T extends { modified: number }>(list: T[], now = Date.now()) {
-  const midnight = new Date(now).setHours(0, 0, 0, 0)
-  const groups: [string, T[]][] = [['Today', []], ['Last week', []], ['Last month', []], ['Older', []]]
-  for (const t of list) groups[t.modified >= midnight ? 0 : t.modified >= now - 7 * DAY ? 1 : t.modified >= now - 30 * DAY ? 2 : 3][1].push(t)
-  return groups.filter(([, items]) => items.length)
+/** The name shown for a project: the saved display name, else the folder name. A blank name means "use the folder". */
+export const displayName = (names: Record<string, string> | undefined, path: string) => names?.[path]?.trim() || baseName(path)
+
+/** Threads under their project, newest first; `other` holds threads whose project is not in the list. */
+export function threadsByProject<T extends { project: string; modified: number }>(threads: T[], projects: string[]) {
+  const byProject = new Map<string, T[]>(projects.map(p => [p, []]))
+  const other: T[] = []
+  for (const t of [...threads].sort((a, b) => b.modified - a.modified)) (byProject.get(t.project) ?? other).push(t)
+  return { byProject, other }
 }

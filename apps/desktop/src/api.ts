@@ -21,6 +21,8 @@ export type Settings = {
   cheapModel: string
   /** project path -> tint name (see PASTELS) */
   projectColors?: Record<string, string>
+  projectNames?: Record<string, string>
+  projectIcons?: Record<string, string>
   theme?: 'system' | 'light' | 'dark'
 }
 
@@ -53,6 +55,7 @@ const bridge = () => window.suffice
 export const api = {
   platform: () => bridge().platform,
   init: () => bridge().invoke<InitInfo>('app:init'),
+  gitIdentity: () => bridge().invoke<string>('git:identity'),
   login: () => bridge().invoke<{ ok: boolean; error?: string }>('auth:login'),
   answerLogin: (id: string, value: string) => bridge().invoke('auth:answer', { id, value }),
   cancelLogin: () => bridge().invoke('auth:cancel'),

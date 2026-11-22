@@ -1,10 +1,12 @@
-import { Fragment, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import { Fragment, useContext, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { compactDiff, describeTool, groupSteps, patchLines, visibleSteps, type StepGroup, type AgentMessage as Agent, type ApprovalStep, type RaceStep, type Step, type ToolStep, type Transcript } from '../../shared/transcript.mjs'
 import type { Status } from '../data'
 import { IconChevronDown } from '../icons'
 import { CopyButton, Elapsed, StatusGlyph } from './ui'
 import { Live } from './Live'
 import { EFFORT_LABEL } from './ModelPicker'
+import { NamesContext } from './Sidebar'
+import { displayName } from './groups'
 
 const duration = (s: number) => (s < 60 ? `${s}s` : s < 3600 ? `${Math.floor(s / 60)}m ${s % 60}s` : `${Math.floor(s / 3600)}h ${Math.floor((s % 3600) / 60)}m`)
 
@@ -304,6 +306,7 @@ export function ThreadView({
   composer: ReactNode
   onApproval: (id: string, allow: boolean) => void
 }) {
+  const names = useContext(NamesContext)
   const scroller = useRef<HTMLDivElement>(null)
   const stick = useRef(true)
   // Permission requests dock above the composer, where the eyes already are.
@@ -328,7 +331,7 @@ export function ThreadView({
   return (
     <div className="thread">
       <header className="thread-head">
-        <span className="thread-crumb">{project.replace(/[\\/]+$/, '').split(/[\\/]/).pop()}</span>
+        <span className="thread-crumb">{displayName(names, project)}</span>
         <span className="thread-sep" aria-hidden>/</span>
         {/* no glyph here: the tab and the sidebar row already show this thread's state */}
         <span className="thread-title">{title}</span>
