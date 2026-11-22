@@ -18,13 +18,20 @@ import {verifyDir} from './verify.mjs';
 //   /efficient sidekick <id>   pick the sidekick model (default gpt-6-luna)
 //   /efficient lead <id>       override the escalation model (default: session
 //                              model — the one /model picks)
-//   /efficient <task>          sidekick attempts with one verdict-retry; a miss
-//                              escalates to the seeded race on the lead model.
-//                              Every candidate is gated on the workspace's own
-//                              tests when they exist.
+//   /efficient <task>          sidekick attempts adaptively (cheap rounds
+//                              continue while each failure signature changes,
+//                              then one medium-effort round); a miss escalates
+//                              to a seeded lead-model race. Every candidate is
+//                              gated on the workspace's own tests when they
+//                              exist.
 //   /balanced                  restore regular Suffice: default model + effort
 const SKIP_COPY=new Set(['.git','node_modules']);
-const CHEAP_ROUNDS=2; // initial sidekick attempt + one "keep fixing" retry
+// Sidekick budget: low-effort rounds continue while each round's failure
+// signature CHANGES (progress — a new failure digest means the last nudge
+// moved something); an identical signature twice means the model is stuck
+// and further cheap rounds just burn tokens. One medium-effort round then
+// fires before the lead escalation — still ~5-10x cheaper than the lead.
+const CHEAP_MAX_ROUNDS=4;
 
 export function sufficeEfficientCommand(options,runtime){
   let cheapOn=false,priorModel=null,running=false,sidekickId='gpt-6-luna',leadId=null;
@@ -63,7 +70,10 @@ export function sufficeEfficientCommand(options,runtime){
       await copyTree(i===0&&seedDir?seedDir:worktree,dir);
       const seeded=i===0&&seedDir;
       const hint=(spec.hint?'\n\n'+spec.hint:'')+(seeded?`\n\nA previous attempt already edited this workspace and failed verification${seedDigest?` — the tests report:\n${seedDigest}`:'.'} Continue from the existing edits, or discard them and take a different approach.`:'');
-      const control=await spawn(dir,input,strong,'low');
+      // Lead effort = the session's thinking level (Pi's effort setting) —
+      // the benchmark's low lanes won, but the user-facing lead honors the
+      // effort the user picked for the session.
+      const control=await spawn(dir,input,strong,clampThinkingLevel(strong,ctx.thinkingLevel??'low'));
       controls[i]=control;
       try{
         await control.run(input+'\n\n'+prefill+hint);
@@ -154,18 +164,22 @@ export function sufficeEfficientCommand(options,runtime){
           await cp(worktree,snapshot,{recursive:true,filter:src=>!SKIP_COPY.has(basename(src)),dereference:true});
           const prefill=await workspacePrefill(worktree);
           const prompt=`${input}\n\n${prefill}`;
-          // Phase A: sidekick model, retry nudged once on a miss. A round only
-          // passes its verdict when the session completed — a crashed run's
-          // leftover edits are partial work for the next round to finish.
-          let changes=0,errored=false,failedDetail=null;
-          const cheapEffort=clampThinkingLevel(sk,'low');
+          // Phase A: sidekick model — adaptive low-effort rounds, then one
+          // medium-effort round before escalation. A round only passes its
+          // verdict when the session completed: a crashed run's leftover
+          // edits are partial work for the next round to finish.
+          let changes=0,errored=false,failedDetail=null,prevSig=null;
           const cheapDir=join(runDir,'sidekick');
-          for(let round=0;round<CHEAP_ROUNDS&&changes===0;round++){
+          // One sidekick round at the given effort. Returns the round's
+          // failure signature ('error', the failure digest, or 'nochange');
+          // `changes` accumulates the passing diff count. Identical
+          // signatures twice in a row mean the model is stuck.
+          const sidekickRound=async(round,effort)=>{
             if(!existsSync(cheapDir)) await copyTree(worktree,cheapDir);
-            ctx.ui.notify(`Efficient: ${sidekickId} attempt${round?' retry':''} on a workspace copy`,'info');
+            ctx.ui.notify(`Efficient: ${sidekickId} attempt${round?' retry':''} (${effort} effort) on a workspace copy`,'info');
             const nudge=errored?'\n\nYour previous attempt errored before finishing — the files may hold partial edits. Inspect the state and finish the task.':failedDetail?`\n\nYour previous attempt's changes fail the project's tests:\n${failedDetail}\nKeep fixing until the tests pass.`:'\n\nYour previous attempt made no changes — the task is not done. Keep fixing the actual files.';
             errored=false;failedDetail=null;
-            try{ changes=await attempt(cheapDir,round?prompt+nudge:prompt,sk,cheapEffort,snapshot); }
+            try{ changes=await attempt(cheapDir,round?prompt+nudge:prompt,sk,clampThinkingLevel(sk,effort),snapshot); }
             catch{ errored=true;changes=0; }
             // Verify on the copy: a diff that fails the project's tests is a
             // miss, and its failure digest nudges the next round.
@@ -173,7 +187,17 @@ export function sufficeEfficientCommand(options,runtime){
               const verdict=await verifyDir(cheapDir,{access:options.access});
               if(verdict.ranTests&&!verdict.passed){ failedDetail=verdict.detail; changes=0; }
             }
+            return changes>0?null:(errored?'error':(failedDetail??'nochange'));
+          };
+          for(let round=0;round<CHEAP_MAX_ROUNDS&&changes===0;round++){
+            const sig=await sidekickRound(round,'low');
+            if(sig===null) break;
+            if(sig===prevSig) break; // same failure signature twice — stuck
+            prevSig=sig;
           }
+          // One medium-effort round before paying for the lead — a stuck
+          // low-effort signature can still move when the model thinks harder.
+          if(changes===0) await sidekickRound(CHEAP_MAX_ROUNDS,'medium');
           let outcome=null;
           if(changes>0) outcome={dir:cheapDir,path:`${sidekickId} solved it (${changes} change(s)) — lead cost skipped`};
           else{
