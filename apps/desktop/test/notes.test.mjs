@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { mkdtemp, mkdir, writeFile, symlink, rm, realpath } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { linksOf, readNote, scanNotes } from '../electron/host/notes.mjs'
+import { inside, linksOf, readNote, scanNotes } from '../electron/host/notes.mjs'
 
 test('links: wikilinks with alias and heading, relative md links, nothing from code or the web', () => {
   const raw = linksOf('See [[Queue worker|the worker]] and [[retry#backoff]].\n[spec](../docs/spec.md) [site](https://x.dev/a.md)\n```\n[[not a link]]\n```\n`[[nor this]]`')
@@ -50,4 +50,13 @@ test('readNote refuses paths and symlinks that leave the project, and non-markdo
     await rm(root, { recursive: true, force: true })
     await rm(outside, { recursive: true, force: true })
   }
+})
+
+test('containment holds when the project is the filesystem root', () => {
+  // the old startsWith(base + sep) check rejected everything under '/'
+  assert.equal(inside('/', '/notes/a.md'), true)
+  assert.equal(inside('/proj', '/proj/a.md'), true)
+  assert.equal(inside('/proj', '/proj2/a.md'), false)
+  assert.equal(inside('/proj', '/proj'), false)
+  assert.equal(inside('/proj', '/proj/..notes.md'), true)
 })

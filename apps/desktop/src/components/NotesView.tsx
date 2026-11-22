@@ -11,7 +11,7 @@ const dir = (p: string) => (p.includes('/') ? p.slice(0, p.lastIndexOf('/')) : '
 const clip = (s: string, n: number) => (s.length > n ? `${s.slice(0, n - 1).trimEnd()}…` : s)
 
 /** Wikilinks become ordinary links with a note: scheme, so Prose can render them. */
-const linkify = (text: string) => text.replace(/\[\[([^\]|#\n]+)(#[^\]|\n]*)?(?:\|([^\]\n]*))?\]\]/g, (_, t: string, _h, alias?: string) => `[${(alias ?? t).trim()}](note:${encodeURIComponent(t.trim())})`)
+const linkify = (text: string) => text.replace(/\[\[([^\]|#\n]+)(#[^\]|\n]*)?(?:\|([^\]\n]*))?\]\]/g, (_, t: string, _h, alias?: string) => `[${(alias ?? t).trim()}](note:${encodeURIComponent(t.trim()).replace(/[()]/g, c => `%${c.charCodeAt(0).toString(16)}`)})`)
 
 function resolveHref(href: string, from: string, notes: NoteSummary[]) {
   const lower = (s: string) => s.toLowerCase()
@@ -123,28 +123,47 @@ function LocalGraph({ notes, current, project, onOpen }: { notes: NoteSummary[];
   )
 }
 
+// the note last open in each project, so leaving Notes and coming back lands in the same place
+const lastNote = new Map<string, string>()
+
 export function NotesView({ project }: { project: string }) {
   const [notes, setNotes] = useState<NoteSummary[] | null>(null)
-  const [current, setCurrent] = useState<string | null>(null)
-  const [text, setText] = useState('')
-  const [error, setError] = useState('')
+  const [current, setCurrentRaw] = useState<string | null>(null)
+  const [page, setPage] = useState<{ path: string; text?: string; error?: string } | null>(null)
+  const [listError, setListError] = useState('')
   const [q, setQ] = useState('')
+  const setCurrent = (p: string) => (lastNote.set(project, p), setCurrentRaw(p))
 
   useEffect(() => {
+    let live = true
     setNotes(null)
-    api.notes(project).then(list => {
-      setNotes(list)
-      // start on the README if there is one, else the most connected note
-      const deg = (n: NoteSummary) => n.links.length + list.filter(m => m.links.includes(n.path)).length
-      setCurrent(c => (c && list.some(n => n.path === c) ? c : (list.find(n => /^readme\.md$/i.test(n.path)) ?? [...list].sort((a, b) => deg(b) - deg(a))[0])?.path ?? null))
-    }, e => setError(e instanceof Error ? e.message : String(e)))
+    setCurrentRaw(null)
+    setListError('')
+    api.notes(project).then(
+      list => {
+        if (!live) return
+        setNotes(list)
+        // the last note open here, else the README, else the most connected note
+        const deg = (n: NoteSummary) => n.links.length + list.filter(m => m.links.includes(n.path)).length
+        const last = lastNote.get(project)
+        setCurrentRaw((last && list.some(n => n.path === last) ? last : (list.find(n => /^readme\.md$/i.test(n.path)) ?? [...list].sort((a, b) => deg(b) - deg(a))[0])?.path) ?? null)
+      },
+      e => live && setListError(e instanceof Error ? e.message : String(e)),
+    )
+    return () => { live = false }
   }, [project])
 
   useEffect(() => {
     if (!current) return
-    setError('')
-    api.readNote(project, current).then(setText, e => setError(e instanceof Error ? e.message : String(e)))
+    let live = true
+    api.readNote(project, current).then(
+      text => live && setPage({ path: current, text }),
+      e => live && setPage({ path: current, error: e instanceof Error ? e.message : String(e) }),
+    )
+    return () => { live = false }
   }, [project, current])
+  // a page only shows under its own note, never a slower read for a note already left
+  const shown = page?.path === current ? page : null
 
   const list = useMemo(() => {
     const words = q.toLowerCase().split(/\s+/).filter(Boolean)
@@ -185,10 +204,11 @@ export function NotesView({ project }: { project: string }) {
             <span className="meta">{ago(note.modified)}</span>
           </div>
         )}
-        {error ? <div className="msg-error">{error}</div> : current && <Prose text={linkify(text)} onLink={href => { const p = resolveHref(href, current, notes ?? []); if (p) setCurrent(p) }} />}
+        {listError && <div className="msg-error">{listError}</div>}
+        {shown?.error ? <div className="msg-error">{shown.error}</div> : current && shown?.text != null && <Prose text={linkify(shown.text)} onLink={href => { const p = resolveHref(href, current, notes ?? []); if (p) setCurrent(p) }} />}
       </article>
       <aside className="notes-side">
-        {current && notes && <LocalGraph notes={notes} current={current} project={project} onOpen={setCurrent} />}
+        {current && notes && <LocalGraph notes={notes} current={current} project={project} onOpen={p => setCurrent(p)} />}
         {[['Linked from', backlinks.map(n => n.path)], ['Links to', note?.links ?? []]].map(([label, paths]) => (
           <section key={label as string} className="notes-links">
             <div className="side-group-label">{label as string} <span className="meta">{(paths as string[]).length}</span></div>

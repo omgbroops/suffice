@@ -1,9 +1,10 @@
 // Markdown notes inside a project folder: titles, [[wikilinks]] and relative .md links, read-only.
 import { readdir, readFile, realpath, stat } from 'node:fs/promises'
-import { join, relative, resolve, sep, posix } from 'node:path'
+import { isAbsolute, join, relative, resolve, sep, posix } from 'node:path'
 
 const SKIP = new Set(['node_modules', 'dist', 'build', 'out', 'target', 'vendor', '__pycache__'])
 const MAX_FILES = 2000
+const MAX_DIRS = 5000
 const MAX_BYTES = 512 * 1024
 const NOTE = /\.(md|markdown)$/i
 
@@ -42,8 +43,10 @@ export function resolveLinks(notes) {
 
 export async function scanNotes(root) {
   const files = []
+  let dirs = 0
   async function walk(dir, depth) {
-    if (files.length >= MAX_FILES || depth > 8) return
+    // bounded by notes found and by folders visited, so a huge tree with few notes stops too
+    if (files.length >= MAX_FILES || depth > 8 || ++dirs > MAX_DIRS) return
     const entries = await readdir(dir, { withFileTypes: true }).catch(() => [])
     for (const e of entries) {
       if (files.length >= MAX_FILES) return
@@ -66,12 +69,18 @@ export async function scanNotes(root) {
   return resolveLinks(notes)
 }
 
+/** True when file is strictly inside base (both already realpath'd); works when base is a filesystem root. */
+export function inside(base, file) {
+  const rel = relative(base, file)
+  return !!rel && rel !== '..' && !rel.startsWith('..' + sep) && !isAbsolute(rel)
+}
+
 /** Reads one note; the resolved file must stay inside the project (symlinks included) and be markdown. */
 export async function readNote(root, path) {
   if (typeof path !== 'string' || !NOTE.test(path)) throw new Error('Not a markdown note.')
   const base = await realpath(root)
   const file = await realpath(resolve(base, path))
-  if (!file.startsWith(base + sep)) throw new Error('That note is outside the project.')
+  if (!inside(base, file)) throw new Error('That note is outside the project.')
   const s = await stat(file)
   if (s.size > MAX_BYTES) throw new Error('That note is too large to open.')
   return readFile(file, 'utf8')
