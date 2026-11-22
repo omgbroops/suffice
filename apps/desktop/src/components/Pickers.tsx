@@ -90,7 +90,7 @@ export function ProjectPicker({ project, projects, onPick, onAdd }: { project: s
       width={260}
       trigger={({ open, toggle, ref }) => (
         <button ref={ref} className={`ghost-btn${open ? ' is-open' : ''}`} onClick={toggle} aria-haspopup="menu" aria-expanded={open} title={project ?? 'Choose a project'}>
-          <IconFolder size={14} />
+          {project ? <ProjectEmblem path={project} size={14} /> : <IconFolder size={14} />}
           {project ? baseName(project) : 'Choose a project'}
         </button>
       )}
