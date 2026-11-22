@@ -8,7 +8,8 @@ import { ModelPicker } from './components/ModelPicker'
 import { ThreadView } from './components/ThreadView'
 import { Dither } from './components/Dither'
 import { Segmented, StatusGlyph } from './components/ui'
-import { IconArrowLeft, IconArrowRight, IconChevronDown, IconClose, IconCompose, IconFolder, IconHome, IconPlus, IconSelector, IconSidebar } from './icons'
+import { IconArrowLeft, IconArrowRight, IconChevronDown, IconClose, IconCompose, IconFolder, IconHome, IconPlus, IconSearch, IconSelector, IconSidebar } from './icons'
+import { ColorsContext, SearchPalette, SideProjects, groupByDate } from './components/Sidebar'
 
 type Thread = {
   key: string
@@ -191,6 +192,7 @@ export default function App() {
   const [tabs, setTabs] = useState<string[]>([])
   const [hist, setHist] = useState<{ stack: View[]; i: number }>({ stack: [{ kind: 'home' }], i: 0 })
   const [sidebar, setSidebar] = useState(true)
+  const [search, setSearch] = useState(false)
   const [notice, setNotice] = useState('')
   const [env, setEnv] = useState<'local' | 'cloud'>('local')
   const [, tick] = useState(0)
@@ -271,6 +273,10 @@ export default function App() {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'b') {
         e.preventDefault()
         setSidebar(s => !s)
+      }
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault()
+        setSearch(s => !s)
       }
     }
     window.addEventListener('keydown', onKey)
@@ -401,6 +407,7 @@ export default function App() {
   const composerProps = { permissions, model: picker }
 
   return (
+    <ColorsContext.Provider value={settings?.projectColors ?? {}}>
     <div className={`app${sidebar ? '' : ' no-sidebar'}`}>
       <Titlebar platform={platform}>
         <div className="titlebar-lead">
@@ -454,20 +461,40 @@ export default function App() {
             <IconCompose size={14} />
             New thread
           </button>
+          <button className={`side-item${search ? ' is-active' : ''}`} onClick={() => setSearch(true)}>
+            <IconSearch size={14} />
+            Search
+            <kbd className="side-key">{platform === 'darwin' ? '⌘K' : 'Ctrl K'}</kbd>
+          </button>
         </div>
-        <div className="side-label">Threads</div>
         <div className="side-list">
+          {projects.length > 0 && (
+            <SideProjects
+              projects={projects}
+              current={project}
+              running={new Set(list.filter(t => t.running).map(t => t.project))}
+              onPick={p => (void pickProject(p), go({ kind: 'home' }))}
+              onAdd={() => void browseProject()}
+              onTint={(p, c) => void patchSettings({ projectColors: { ...settings?.projectColors, [p]: c } })}
+            />
+          )}
+          <div className="side-label">Threads</div>
           {list.length === 0 && <div className="side-empty">No threads yet.</div>}
-          {list.map(t => (
-            <button key={t.key} className={`side-thread${active?.key === t.key ? ' is-active' : ''}`} onClick={() => go({ kind: 'thread', key: t.key })} title={t.title}>
-              <span className="side-thread-title">{t.title}</span>
-              {/* one trailing slot: live glyph while running, else age */}
-              {statusOf(t) === 'working' ? (
-                <StatusGlyph status="working" />
-              ) : (
-                <span className={`side-thread-time${statusOf(t) === 'input' ? ' is-needs' : ''}`}>{statusOf(t) === 'input' ? 'Reply' : ago(t.modified)}</span>
-              )}
-            </button>
+          {groupByDate(list).map(([label, items]) => (
+            <div key={label} className="side-group" role="group" aria-label={label}>
+              <div className="side-group-label">{label}</div>
+              {items.map(t => (
+                <button key={t.key} className={`side-thread${active?.key === t.key ? ' is-active' : ''}`} onClick={() => go({ kind: 'thread', key: t.key })} title={t.title}>
+                  <span className="side-thread-title">{t.title}</span>
+                  {/* one trailing slot: live glyph while running, else age */}
+                  {statusOf(t) === 'working' ? (
+                    <StatusGlyph status="working" seed={t.key} />
+                  ) : (
+                    <span className={`side-thread-time${statusOf(t) === 'input' ? ' is-needs' : ''}`}>{statusOf(t) === 'input' ? 'Reply' : ago(t.modified)}</span>
+                  )}
+                </button>
+              ))}
+            </div>
           ))}
         </div>
         <AccountMenu
@@ -544,7 +571,9 @@ export default function App() {
           </div>
         )}
       </main>
+      {search && <SearchPalette threads={list} onClose={() => setSearch(false)} onOpen={key => (setSearch(false), go({ kind: 'thread', key }))} />}
     </div>
+    </ColorsContext.Provider>
   )
 }
 

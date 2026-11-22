@@ -19,6 +19,8 @@ export type Settings = {
   recentModels: string[]
   mode: Mode
   cheapModel: string
+  /** project path -> tint name (see PASTELS) */
+  projectColors?: Record<string, string>
 }
 
 export type Mode = 'balanced' | 'efficient' | 'fast'

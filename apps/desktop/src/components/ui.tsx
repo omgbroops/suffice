@@ -3,8 +3,8 @@ import type { Status } from '../data'
 import { IconCheck, IconCopy } from '../icons'
 import { Live } from './Live'
 
-export function StatusGlyph({ status, size = 12 }: { status: Status; size?: number }) {
-  return <Live status={status} size={size} />
+export function StatusGlyph({ status, size = 12, seed }: { status: Status; size?: number; seed?: string }) {
+  return <Live status={status} size={size} seed={seed} />
 }
 
 /** Seconds since `from`, re-rendered once a second while mounted. */
