@@ -14,6 +14,8 @@ type Props = {
   onStop?: () => void
   /** While working: Enter steers the run, queue=true (Cmd/Ctrl+Enter) waits for it to finish. */
   onGuide?: (text: string, queue: boolean) => void
+  /** Picks files; they are inserted at the cursor as @mentions the agent can read. */
+  onAttach?: () => Promise<string[]>
 }
 
 const MAX = 260
@@ -68,7 +70,27 @@ export function Composer(p: Props) {
         )}
       </div>
       <div className="composer-row">
-        <button className="icon-btn" aria-label="Attach" title="Attachments are not wired up yet" disabled>
+        <button
+          className="icon-btn"
+          aria-label="Mention files"
+          title="Mention files"
+          disabled={!p.onAttach}
+          onClick={async () => {
+            const el = ta.current
+            const at = el?.selectionStart ?? text.length
+            const paths = (await p.onAttach?.().catch(() => [])) ?? []
+            if (!paths.length) return
+            const tokens = paths.map(f => (/\s/.test(f) ? `@"${f}"` : `@${f}`)).join(' ')
+            const before = text.slice(0, at), after = text.slice(at)
+            const next = `${before}${before && !/\s$/.test(before) ? ' ' : ''}${tokens} ${after.replace(/^\s+/, '')}`
+            setText(next)
+            requestAnimationFrame(() => {
+              const pos = next.length - after.replace(/^\s+/, '').length
+              el?.focus()
+              el?.setSelectionRange(pos, pos)
+            })
+          }}
+        >
           <IconPlus size={15} />
         </button>
         {p.permissions}

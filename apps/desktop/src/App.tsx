@@ -538,6 +538,7 @@ export default function App() {
             composer={
               <Composer
                 {...composerProps}
+                onAttach={() => api.pickFiles(active.project)}
                 key={active.key}
                 project={projectPicker(active.project, true)}
                 autoFocus
@@ -573,7 +574,7 @@ export default function App() {
                   ]}
                 />
               </div>
-              <Composer {...composerProps} project={projectPicker(project)} autoFocus tip disabled={project ? undefined : 'Choose a project first'} onSend={startThread} />
+              <Composer {...composerProps} onAttach={project ? () => api.pickFiles(project) : undefined} project={projectPicker(project)} autoFocus tip disabled={project ? undefined : 'Choose a project first'} onSend={startThread} />
               {project && list[0] && <HomeContinue thread={list[0]} onOpen={() => go({ kind: 'thread', key: list[0].key })} />}
               {!project && (
                 <button className="home-hint" onClick={() => void browseProject()}>

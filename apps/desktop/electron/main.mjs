@@ -1,7 +1,8 @@
 import { app, BrowserWindow, dialog, ipcMain, shell } from 'electron'
 import { fileURLToPath } from 'node:url'
-import { dirname, resolve } from 'node:path'
+import { dirname, relative, resolve, sep } from 'node:path'
 import { createHost } from './host/host.mjs'
+import { inside } from './host/notes.mjs'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const devUrl = process.env.SUFFICE_DESKTOP_DEV_URL
@@ -57,6 +58,12 @@ const handlers = {
   'projects:recent': () => host.recentProjects(),
   'threads:list': ({ project }) => host.listThreads(project),
   'notes:list': args => host.listNotes(args),
+  // files chosen to mention in a prompt: project-relative when inside the project, absolute otherwise
+  'files:pick': async ({ project }) => {
+    const r = await dialog.showOpenDialog(win, { title: 'Mention files', defaultPath: project || undefined, properties: ['openFile', 'multiSelections'] })
+    if (r.canceled) return []
+    return r.filePaths.map(f => (project && inside(project, f) ? relative(project, f).split(sep).join('/') : f))
+  },
   'notes:read': args => host.readNote(args),
   'threads:open': args => host.openThread(args),
   'run:start': args => host.run(args),

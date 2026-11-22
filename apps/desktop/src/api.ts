@@ -60,6 +60,7 @@ export const api = {
   chooseProject: () => bridge().invoke<{ project: string; projects: string[] } | null>('projects:choose'),
   setProject: (path: string) => bridge().invoke<{ project: string; projects: string[] }>('projects:set', { path }),
   threads: (project: string) => bridge().invoke<ThreadSummary[]>('threads:list', { project }),
+  pickFiles: (project: string | null) => bridge().invoke<string[]>('files:pick', { project }),
   notes: (project: string) => bridge().invoke<NoteSummary[]>('notes:list', { project }),
   readNote: (project: string, path: string) => bridge().invoke<string>('notes:read', { project, path }),
   openThread: (threadId: string, path: string) => bridge().invoke<Transcript>('threads:open', { threadId, path }),

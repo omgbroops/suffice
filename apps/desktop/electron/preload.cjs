@@ -1,6 +1,6 @@
 const { contextBridge, ipcRenderer } = require('electron')
 
-const INVOKE = new Set(['app:init', 'auth:login', 'auth:answer', 'auth:cancel', 'auth:logout', 'models:list', 'projects:choose', 'projects:set', 'projects:recent', 'threads:list', 'threads:open', 'notes:list', 'notes:read', 'run:start', 'run:abort', 'run:guide', 'approval:answer', 'settings:update'])
+const INVOKE = new Set(['app:init', 'auth:login', 'auth:answer', 'auth:cancel', 'auth:logout', 'models:list', 'projects:choose', 'projects:set', 'projects:recent', 'threads:list', 'threads:open', 'notes:list', 'notes:read', 'files:pick', 'run:start', 'run:abort', 'run:guide', 'approval:answer', 'settings:update'])
 const EVENTS = new Set(['auth:event', 'models:changed', 'thread:event', 'thread:session', 'thread:title', 'threads:changed'])
 
 contextBridge.exposeInMainWorld('suffice', {
