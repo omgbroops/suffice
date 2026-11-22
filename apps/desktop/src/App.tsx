@@ -657,7 +657,7 @@ function AccountMenu({ identity, onSignOut, theme, onTheme }: { identity: string
         </div>
       )}
       <button className="side-user" onClick={() => setOpen(o => !o)}>
-        <span className="avatar"><Live kind="swarm" seed="account" size={16} status="done" dim={false} label="Account" /></span>
+        <span className="avatar"><Live seed="account" size={16} status="done" dim={false} label="Account" /></span>
         <span className="side-user-name">{identity || 'Account'}</span>
         <IconSelector size={13} className="side-user-chev" />
       </button>

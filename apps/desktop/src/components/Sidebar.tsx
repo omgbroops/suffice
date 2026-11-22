@@ -29,7 +29,7 @@ export function ProjectEmblem({ path, size = 16, working = false, tint, icon, la
   const c = tint ?? colors[path] ?? 'auto'
   const Icon = PROJECT_ICONS[icon ?? icons[path] ?? '']
   if (Icon) return <span className="proj-icon" style={{ color: `var(--pastel-${c})` }} role="img" aria-label={label ?? displayName(names, path)}><Icon size={size} /></span>
-  return <Live kind="swarm" seed={path} size={size} status={working ? 'working' : 'done'} dim={false} color={`var(--pastel-${c})`} label={label ?? displayName(names, path)} />
+  return <Live seed={path} size={size} status={working ? 'working' : 'done'} dim={false} color={`var(--pastel-${c})`} label={label ?? displayName(names, path)} />
 }
 
 type Row = { key: string; title: string; project: string; modified: number }
