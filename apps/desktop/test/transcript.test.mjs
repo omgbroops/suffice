@@ -149,6 +149,11 @@ test('summarizeCommand says what a command is for', () => {
   assert.equal(m('python3 scripts/seed.py --n 3'), 'scripts/seed.py')
   assert.equal(m('npm test'), undefined)
   assert.equal(summarizeCommand('').verb, 'Ran a command')
+  assert.deepEqual(summarizeCommand('cat src/retry.ts | grep -n backoff'), { verb: 'Searched code', present: 'Searching code', kind: 'look', meta: 'backoff' })
+  assert.equal(m('rg -n "retry|backoff" src | head -20'), 'retry|backoff')
+  assert.equal(v('git log --oneline | rg fix'), 'Searched code')
+  assert.equal(v('ls | wc -l'), 'Listed files')
+  assert.equal(v('npm test | tail -5'), 'Ran tests')
   assert.equal(summarizeCommand('npm test').present, 'Running tests')
 })
 

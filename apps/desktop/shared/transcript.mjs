@@ -292,8 +292,18 @@ const COMMANDS = [
 
 /** A plain description of a shell command, from its first real step (cd, env and sudo prefixes skipped). */
 export function summarizeCommand(command) {
-  const steps = command.split(/\n|&&|\|\||;|\|/).map(s => s.trim().replace(/^(sudo|time|env)\s+/, '').replace(/^([A-Z_][A-Z0-9_]*=\S*\s+)+/, '').replace(/^npx\s+/, ''))
-  const main = steps.find(s => s && !/^(cd|export|set|source|\.)\b/.test(s)) ?? ''
+  // split on && || ; | and newlines, but not inside quotes (rg "a|b" is one step)
+  const quoted = []
+  const masked = command.replace(/'[^']*'|"[^"]*"/g, q => `\0${quoted.push(q) - 1}\0`)
+  const steps = masked.split(/\n|&&|\|\||;|\|/).map(s => s.replace(/\0(\d+)\0/g, (_, i) => quoted[i]).trim().replace(/^(sudo|time|env)\s+/, '').replace(/^([A-Z_][A-Z0-9_]*=\S*\s+)+/, '').replace(/^npx\s+/, ''))
+  const at = steps.findIndex(s => s && !/^(cd|export|set|source|\.)\b/.test(s))
+  const first = one(steps[at] ?? '')
+  // cat x | grep y and git log | rg fix are searches: a later search step names the work
+  if (first.kind === 'look') for (const s of steps.slice(at + 1)) { const r = one(s); if (r.verb === 'Searched code') return r }
+  return first
+}
+
+function one(main) {
   // the one argument worth showing: what was searched, read, listed or run
   const words = (main.match(/'[^']*'|"[^"]*"|\S+/g) ?? []).map(w => w.replace(/^(['"])(.*)\1$/, '$2'))
   const args = words.slice(words[0] === 'git' ? 2 : 1).filter(w => !w.startsWith('-'))
