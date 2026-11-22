@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from 'react'
 import { ago } from '../data'
-import { IconBolt, IconChevronRight, IconCloud, IconCube, IconDots, IconFolder, IconLayers, IconPlus, IconSearch, IconTarget, IconTerminal } from '../icons'
+import * as Radix from '@radix-ui/react-icons'
+import { IconChevronRight, IconDots, IconPlus, IconSearch } from '../icons'
 import { Live } from './Live'
 import { baseName, displayName } from './groups'
 
@@ -9,26 +10,26 @@ export const PASTELS = ['auto', 'rose', 'peach', 'butter', 'mint', 'sky', 'lilac
 export const ColorsContext = createContext<Record<string, string>>({})
 /** project path -> display name; the folder on disk is never renamed */
 export const NamesContext = createContext<Record<string, string>>({})
-/** project path -> icon id (see PROJECT_ICONS); absent = the generated emblem */
+/** project path -> Radix icon name (e.g. RocketIcon); absent = the project's generated emblem */
 export const IconsContext = createContext<Record<string, string>>({})
 
-export const PROJECT_ICONS: Record<string, (p: { size?: number }) => ReactNode> = {
-  folder: IconFolder,
-  cube: IconCube,
-  terminal: IconTerminal,
-  bolt: IconBolt,
-  cloud: IconCloud,
-  target: IconTarget,
-  layers: IconLayers,
-}
+type RadixIcon = (p: { width?: number; height?: number }) => ReactNode
+const RADIX = Radix as unknown as Record<string, RadixIcon>
+// icons that read as a project lead the picker; the alignment and border glyphs that open the alphabet come after
+const FIRST = 'Rocket Cube Code Component1 Desktop Laptop Mobile Globe Star Heart Home Gear Camera Calendar Reader Layers Stack Mix Target Sun Moon Timer Person Backpack Archive Tokens Bookmark Dashboard Bell Pencil1 Video Image File Commit Cookie Table BarChart PieChart Keyboard Box'.split(' ').map(n => n + 'Icon')
+/** every icon the picker offers: the app's Radix set, searchable by its words ("RocketIcon" -> "rocket") */
+export const PICKER_ICONS = [...FIRST, ...Object.keys(Radix).filter(k => !FIRST.includes(k))]
+  .filter(k => k.endsWith('Icon') && typeof RADIX[k] !== 'undefined')
+  .map(k => ({ id: k, words: k.replace(/Icon$/, '').replace(/([a-z0-9])([A-Z])/g, '$1 $2').toLowerCase() }))
+const iconOf = (id?: string) => (id && id.endsWith('Icon') ? RADIX[id] : undefined)
 
 export function ProjectEmblem({ path, size = 16, working = false, tint, icon, label }: { path: string; size?: number; working?: boolean; tint?: string; icon?: string; label?: string }) {
   const colors = useContext(ColorsContext)
   const icons = useContext(IconsContext)
   const names = useContext(NamesContext)
   const c = tint ?? colors[path] ?? 'auto'
-  const Icon = PROJECT_ICONS[icon ?? icons[path] ?? '']
-  if (Icon) return <span className="proj-icon" style={{ color: `var(--pastel-${c})` }} role="img" aria-label={label ?? displayName(names, path)}><Icon size={size} /></span>
+  const Icon = iconOf(icon ?? icons[path])
+  if (Icon) return <span className="proj-icon" style={{ color: `var(--pastel-${c})` }} role="img" aria-label={label ?? displayName(names, path)}><Icon width={size} height={size} /></span>
   return <Live seed={path} size={size} status={working ? 'working' : 'done'} dim={false} color={`var(--pastel-${c})`} label={label ?? displayName(names, path)} />
 }
 
@@ -50,6 +51,7 @@ function useDismiss(open: boolean, close: () => void, ref: RefObject<HTMLElement
 
 const cap = (c: string) => c[0].toUpperCase() + c.slice(1)
 
+/** ⋯ menu: name, colour, and the generated emblem or an icon (Abhay 11-22: "pick name, color, emblem, that's it"; Icon opens a picker). */
 function ProjectMenu({ path, onTint, onIcon, onRename }: { path: string; onTint: (c: string) => void; onIcon: (i: string) => void; onRename: () => void }) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
@@ -57,32 +59,54 @@ function ProjectMenu({ path, onTint, onIcon, onRename }: { path: string; onTint:
   const icons = useContext(IconsContext)
   const names = useContext(NamesContext)
   const current = colors[path] ?? 'auto'
-  const icon = PROJECT_ICONS[icons[path]] ? icons[path] : 'auto'
+  const icon = iconOf(icons[path]) ? icons[path] : ''
+  const [picking, setPicking] = useState(false)
+  const [q, setQ] = useState('')
   useDismiss(open, () => setOpen(false), ref)
+  useEffect(() => { if (!open) (setPicking(false), setQ('')) }, [open])
+  const words = q.trim().toLowerCase()
+  const found = useMemo(() => (picking ? PICKER_ICONS.filter(i => !words || i.words.includes(words)) : []), [picking, words])
+  const iconMode = picking || !!icon
   return (
     <div className="menu-root side-proj-more" ref={ref}>
       <button className="icon-btn sm" aria-label={`Options for ${displayName(names, path)}`} aria-haspopup="menu" aria-expanded={open} onClick={e => (e.stopPropagation(), setOpen(o => !o))}>
         <IconDots size={13} />
       </button>
       {open && (
-        <div className="menu menu-bottom menu-right proj-menu" role="menu" aria-label="Project">
-          <button className="menu-item" role="menuitem" onClick={e => (e.stopPropagation(), setOpen(false), onRename())}>Rename</button>
+        <div className="menu menu-bottom menu-right proj-menu" role="menu" aria-label="Project" onClick={e => e.stopPropagation()}>
+          <button className="menu-item" role="menuitem" onClick={() => (setOpen(false), onRename())}>Rename</button>
           <div className="proj-menu-label">Colour</div>
           <div className="proj-menu-row" role="group" aria-label="Colour">
             {PASTELS.map(c => (
-              <button key={c} role="menuitemradio" aria-checked={c === current} className={`tint-swatch${c === current ? ' is-selected' : ''}`} title={cap(c)} onClick={e => (e.stopPropagation(), onTint(c))}>
+              <button key={c} role="menuitemradio" aria-checked={c === current} className={`tint-swatch${c === current ? ' is-selected' : ''}`} title={cap(c)} onClick={() => onTint(c)}>
                 <ProjectEmblem path={path} size={18} tint={c} icon={icon} label={cap(c)} />
               </button>
             ))}
           </div>
-          <div className="proj-menu-label">Icon</div>
-          <div className="proj-menu-row" role="group" aria-label="Icon">
-            {['auto', ...Object.keys(PROJECT_ICONS)].map(i => (
-              <button key={i} role="menuitemradio" aria-checked={i === icon} className={`tint-swatch${i === icon ? ' is-selected' : ''}`} title={cap(i)} onClick={e => (e.stopPropagation(), onIcon(i))}>
-                <ProjectEmblem path={path} size={18} tint={current} icon={i} label={cap(i)} />
-              </button>
-            ))}
+          <div className="proj-seg" role="radiogroup" aria-label="Emblem or icon">
+            <button role="radio" aria-checked={!iconMode} className={!iconMode ? 'is-on' : ''} onClick={() => (setPicking(false), icon && onIcon(''))}>
+              <ProjectEmblem path={path} size={14} tint={current} icon="" label="Emblem" /> Emblem
+            </button>
+            <button role="radio" aria-checked={iconMode} className={iconMode ? 'is-on' : ''} onClick={() => setPicking(true)}>
+              {icon ? <ProjectEmblem path={path} size={14} tint={current} icon={icon} label="Icon" /> : null} Icon
+            </button>
           </div>
+          {picking && (
+            <div className="proj-picker">
+              <label className="proj-picker-search">
+                <IconSearch size={12} />
+                <input autoFocus placeholder="Search icons" value={q} onChange={e => setQ(e.target.value)} aria-label="Search icons" />
+              </label>
+              <div className="proj-picker-grid" role="listbox" aria-label="Icons">
+                {found.map(i => (
+                  <button key={i.id} role="option" aria-selected={i.id === icon} className={`tint-swatch${i.id === icon ? ' is-selected' : ''}`} title={i.words} onClick={() => onIcon(i.id)}>
+                    <ProjectEmblem path={path} size={15} tint={current} icon={i.id} label={i.words} />
+                  </button>
+                ))}
+                {found.length === 0 && <div className="proj-picker-none">No icons match.</div>}
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
