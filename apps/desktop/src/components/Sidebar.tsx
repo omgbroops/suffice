@@ -1,3 +1,4 @@
+import { ProjectOrb } from './Orb'
 import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from 'react'
 import { ago } from '../data'
 import * as Radix from '@radix-ui/react-icons'
@@ -25,14 +26,15 @@ export const PICKER_ICONS = [...FIRST, ...Object.keys(Radix).filter(k => !FIRST.
   .map(k => ({ id: k, words: k.replace(/Icon$/, '').replace(/([a-z0-9])([A-Z])/g, '$1 $2').toLowerCase() }))
 const iconOf = (id?: string) => (id && id.endsWith('Icon') ? RADIX[id] : undefined)
 
-export function ProjectEmblem({ path, size = 16, working = false, tint, icon, label }: { path: string; size?: number; working?: boolean; tint?: string; icon?: string; label?: string }) {
+export function ProjectEmblem({ path, size = 16, tint, icon, label }: { path: string; size?: number; tint?: string; icon?: string; label?: string }) {
   const colors = useContext(ColorsContext)
   const icons = useContext(IconsContext)
   const names = useContext(NamesContext)
   const c = tint ?? colors[path] ?? 'auto'
   const Icon = iconOf(icon ?? icons[path])
   if (Icon) return <span className="proj-icon" style={{ color: `var(--pastel-${c})` }} role="img" aria-label={label ?? displayName(names, path)}><Icon width={size} height={size} /></span>
-  return <Live seed={path} size={size} status={working ? 'working' : 'done'} dim={false} color={`var(--pastel-${c})`} label={label ?? displayName(names, path)} />
+  // static orb; a running thread shows its own spinner in its row (Abhay 11-22)
+  return <ProjectOrb seed={path} size={size} tint={c} label={label ?? displayName(names, path)} />
 }
 
 type Row = { key: string; title: string; project: string; modified: number }
@@ -172,8 +174,10 @@ function ProjectRow({ path, current, working, open, onToggle, threads, renderThr
     <div className="side-proj-block">
       <div className={`side-proj${current ? ' is-active' : ''}`}>
           <button className="side-proj-main" onClick={onPick} title={path} aria-expanded={open}>
-            <ProjectEmblem path={path} working={working} />
+            <ProjectEmblem path={path} />
             <span className="side-thread-title">{name}</span>
+            {/* the emblem never moves; a collapsed project lifts its running thread's spinner into its row */}
+            {working && !open && <Live status="working" seed={path} size={12} label={`${name}: a thread is running`} />}
           </button>
         {threads.length > 0 && (
           <button className={`icon-btn sm side-proj-chev${open ? ' is-open' : ''}`} onClick={onToggle} aria-label={`${open ? 'Collapse' : 'Expand'} ${name}`} aria-expanded={open}>

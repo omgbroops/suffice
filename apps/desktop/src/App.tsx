@@ -9,10 +9,10 @@ import { ThreadView } from './components/ThreadView'
 import { Dither } from './components/Dither'
 import { Segmented, StatusGlyph } from './components/ui'
 import { IconArrowLeft, IconArrowRight, IconClose, IconCompose, IconFolder, IconHome, IconNotes, IconPlus, IconSearch, IconSelector, IconSidebar } from './icons'
+import { ProjectOrb } from './components/Orb'
 import { AutoNamesContext, ColorsContext, IconsContext, NamesContext, ProjectEmblem, SearchPalette, SideProjects } from './components/Sidebar'
 import { baseName, displayName, threadsByProject } from './components/groups'
 import { NotesView } from './components/NotesView'
-import { Live } from './components/Live'
 
 type Thread = {
   key: string
@@ -672,7 +672,7 @@ function AccountMenu({ identity, onSignOut, theme, onTheme }: { identity: { name
         </div>
       )}
       <button className="side-user" onClick={() => setOpen(o => !o)}>
-        <span className="avatar">{identity.avatar ? <img src={identity.avatar} alt="" /> : <Live seed="account" size={16} status="done" dim={false} label="Account" />}</span>
+        <span className="avatar">{identity.avatar ? <img src={identity.avatar} alt="" /> : <ProjectOrb seed={identity.name || 'account'} size={16} label="Account" />}</span>
         <span className="side-user-name">{identity.name || 'Account'}</span>
         <IconSelector size={13} className="side-user-chev" />
       </button>
