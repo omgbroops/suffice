@@ -1,5 +1,5 @@
 import { readFile, writeFile, readdir, lstat, realpath, mkdir, cp } from 'node:fs/promises';
-import { existsSync, readdirSync, symlinkSync } from 'node:fs';
+import { existsSync, readdirSync, symlinkSync, mkdirSync } from 'node:fs';
 import { resolve, relative, sep, dirname, isAbsolute } from 'node:path';
 import { spawn, execFileSync } from 'node:child_process';
 
@@ -17,20 +17,41 @@ export async function materializeWorkspace(task, dest) {
     catch { await cp(resolve(task.depsDir, 'node_modules'), target, { recursive: true, verbatimSymlinks: true }); }
     // pnpm keeps transitive deps only inside .pnpm/<pkg@ver>/node_modules/;
     // specs importing them directly (valid under npm's flat hoisting, which
-    // the upstream env used) fail to load. Link every stored package at top
-    // level when absent, preferring the lexicographically last version.
+    // the upstream env used) fail to load. Link store packages at top level,
+    // preferring the canonical .pnpm/<name>@<ver> entry at its max version.
     const store = resolve(target, '.pnpm');
     if (existsSync(store)) {
-      const wanted = new Map();
+      const cand = new Map(); // name -> {from, ver, canonical}
+      const offer = (name, from, storePkg) => {
+        const canon = storePkg.startsWith(`${name.replace('/', '+')}@`);
+        const ver = canon ? storePkg.slice(name.replace('/', '+').length + 1) : '';
+        const cmpVer = (a, b) => { const pa = a.split(/[.-]/), pb = b.split(/[.-]/);
+          for (let i = 0; i < Math.max(pa.length, pb.length); i++) { const d = (parseInt(pa[i] ?? 0, 10) || 0) - (parseInt(pb[i] ?? 0, 10) || 0); if (d) return d; }
+          return 0; };
+        const prev = cand.get(name);
+        if (!prev || (canon && !prev.canonical) || (canon === prev.canonical && cmpVer(ver, prev.ver) > 0)) cand.set(name, { from, ver, canonical: canon });
+      };
       for (const storePkg of readdirSync(store)) {
         const inner = resolve(store, storePkg, 'node_modules');
         if (!existsSync(inner)) continue;
-        for (const entry of readdirSync(inner)) wanted.set(entry, resolve(inner, entry));
+        for (const entry of readdirSync(inner)) {
+          const from = resolve(inner, entry);
+          if (entry.startsWith('@')) for (const sub of readdirSync(from)) offer(`${entry}/${sub}`, resolve(from, sub), storePkg);
+          else offer(entry, from, storePkg);
+        }
       }
-      for (const [name, from] of [...wanted].sort(([a], [b]) => a.localeCompare(b))) {
+      const linkPkg = (name, from) => {
         const link = resolve(target, name);
-        if (!existsSync(link)) try { symlinkSync(relative(target, from), link); } catch {}
-      }
+        if (existsSync(link)) return;
+        if (name.includes('/')) {
+          // Scoped package: materialize the scope as a real dir so siblings
+          // from different store entries can coexist.
+          const scopeDir = resolve(target, name.split('/')[0]);
+          try { mkdirSync(scopeDir, { recursive: true }); } catch {}
+        }
+        try { symlinkSync(relative(dirname(link), from), link); } catch {}
+      };
+      for (const [name, c] of cand) linkPkg(name, c.from);
     }
   }
   if (task.prompt && !existsSync(resolve(dest, 'README.md'))) {
