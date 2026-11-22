@@ -178,8 +178,23 @@ function StepView({ step, project, live }: { step: Step; project: string; live: 
   return <ToolView step={step} project={project} />
 }
 
-function ApprovalCard({ step, onAnswer }: { step: ApprovalStep; onAnswer: (allow: boolean) => void }) {
+const MAC = typeof navigator !== 'undefined' && /Mac/.test(navigator.platform)
+
+/** Docked above the composer. The first pending card owns the keys: Cmd/Ctrl+Enter allows, Esc denies. */
+function ApprovalCard({ step, onAnswer, keys }: { step: ApprovalStep; onAnswer: (allow: boolean) => void; keys: boolean }) {
   const { verb, meta } = describeTool(step.name, step.input)
+  const answer = useRef(onAnswer)
+  answer.current = onAnswer
+  useEffect(() => {
+    if (!keys) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) (e.preventDefault(), answer.current(true))
+      // Esc closes an open menu first; it denies only when nothing else is open
+      else if (e.key === 'Escape' && !e.defaultPrevented && !document.querySelector('[role=listbox],[role=menu],[role=dialog]')) (e.preventDefault(), answer.current(false))
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [keys])
   const command = step.name === 'bash' || step.name === 'powershell'
   const title = step.name === 'Trust project resources' ? 'Trust this project’s Suffice resources?' : command ? 'Run this command?' : `Allow ${verb.toLowerCase()}${meta ? '' : ` (${step.name})`}?`
   const body = command ? `$ ${step.input?.command ?? ''}` : step.input?.detail ?? meta
@@ -189,8 +204,8 @@ function ApprovalCard({ step, onAnswer }: { step: ApprovalStep; onAnswer: (allow
       {body && <pre className="code ask-code">{body}</pre>}
       <div className="ask-foot">
         <span className="ask-hint">Switch to Full access to skip this</span>
-        <button className="btn" onClick={() => onAnswer(false)}>Deny</button>
-        <button className="btn btn-primary" onClick={() => onAnswer(true)} autoFocus>Allow</button>
+        <button className="btn" onClick={() => onAnswer(false)}>Deny{keys && <kbd>Esc</kbd>}</button>
+        <button className="btn btn-primary" onClick={() => onAnswer(true)} autoFocus>Allow{keys && <kbd>{MAC ? '⌘↵' : 'Ctrl+Enter'}</kbd>}</button>
       </div>
     </div>
   )
@@ -233,7 +248,6 @@ function AgentMessageView({ msg, project, onApproval }: { msg: Agent; project: s
       {live && steps.length === 0 && (
         <div className="pending"><StatusGlyph status="working" /><span className="shimmer">Thinking</span></div>
       )}
-      {pendingApprovals.map(s => <ApprovalCard key={s.id} step={s} onAnswer={allow => onApproval(s.id, allow)} />)}
       {final && (final.kind === 'note' ? <div className={`msg-note${final.level === 'error' ? ' is-error' : ''}`}>{final.text}</div> : <Prose text={final.text} />)}
       {msg.error && <div className="msg-error">{msg.error}</div>}
       {msg.done && (
@@ -266,6 +280,9 @@ export function ThreadView({
 }) {
   const scroller = useRef<HTMLDivElement>(null)
   const stick = useRef(true)
+  // Permission requests dock above the composer, where the eyes already are.
+  const last = transcript?.messages.at(-1)
+  const pending = last?.role === 'agent' && !last.done ? visibleSteps(last.steps).filter((s): s is ApprovalStep => s.kind === 'approval' && s.state === 'pending') : []
 
   useLayoutEffect(() => {
     stick.current = true
@@ -311,7 +328,10 @@ export function ThreadView({
         </div>
       </div>
       <div className="thread-composer">
-        <div className="thread-col">{composer}</div>
+        <div className="thread-col">
+          {pending.map((s, i) => <ApprovalCard key={s.id} step={s} keys={i === 0} onAnswer={allow => onApproval(s.id, allow)} />)}
+          {composer}
+        </div>
       </div>
     </div>
   )
