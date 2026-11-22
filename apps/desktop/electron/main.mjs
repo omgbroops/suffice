@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, ipcMain, shell } from 'electron'
+import { app, BrowserWindow, dialog, ipcMain, nativeTheme, shell } from 'electron'
 import { fileURLToPath } from 'node:url'
 import { dirname, relative, resolve, sep } from 'node:path'
 import { createHost } from './host/host.mjs'
@@ -46,6 +46,9 @@ function createWindow() {
   else void win.loadFile(resolve(here, '..', 'dist', 'index.html'))
 }
 
+// the CSS follows prefers-color-scheme, which Electron derives from themeSource
+const applyTheme = s => { if (['system', 'light', 'dark'].includes(s?.theme)) nativeTheme.themeSource = s.theme }
+
 const handlers = {
   'app:init': () => host.init(),
   'auth:login': () => host.login(),
@@ -70,7 +73,7 @@ const handlers = {
   'run:abort': ({ threadId }) => host.abort(threadId),
   'run:guide': args => host.guide(args),
   'approval:answer': ({ id, allow }) => host.answerApproval(id, allow),
-  'settings:update': patch => host.updateSettings(patch),
+  'settings:update': async patch => { const s = await host.updateSettings(patch); applyTheme(s); return s },
 }
 
 app.whenReady().then(async () => {
@@ -91,6 +94,8 @@ app.whenReady().then(async () => {
       }
     })
   }
+  // before the first paint, so a saved Light or Dark never flashes the system theme
+  applyTheme((await host.init().catch(() => null))?.settings)
   createWindow()
   app.on('activate', () => {
     if (!BrowserWindow.getAllWindows().length) createWindow()

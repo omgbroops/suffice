@@ -21,6 +21,7 @@ export type Settings = {
   cheapModel: string
   /** project path -> tint name (see PASTELS) */
   projectColors?: Record<string, string>
+  theme?: 'system' | 'light' | 'dark'
 }
 
 export type Mode = 'balanced' | 'efficient' | 'fast'

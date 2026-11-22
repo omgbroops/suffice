@@ -530,6 +530,8 @@ export default function App() {
           ))}
         </div>
         <AccountMenu
+          theme={settings?.theme ?? 'system'}
+          onTheme={theme => void patchSettings({ theme })}
           onSignOut={async () => {
             await api.logout()
             await boot()
@@ -636,7 +638,9 @@ function HomeContinue({ thread, onOpen }: { thread: Thread & { key: string }; on
   )
 }
 
-function AccountMenu({ onSignOut }: { onSignOut: () => void }) {
+type Theme = 'system' | 'light' | 'dark'
+
+function AccountMenu({ onSignOut, theme, onTheme }: { onSignOut: () => void; theme: Theme; onTheme: (t: Theme) => void }) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -648,7 +652,19 @@ function AccountMenu({ onSignOut }: { onSignOut: () => void }) {
   return (
     <div className="menu-root side-account" ref={ref}>
       {open && (
-        <div className="menu menu-top">
+        <div className="menu menu-top account-menu">
+          <div className="menu-row">
+            <span>Theme</span>
+            <Segmented<Theme>
+              value={theme}
+              onChange={onTheme}
+              options={[
+                { v: 'system', label: 'Auto' },
+                { v: 'light', label: 'Light' },
+                { v: 'dark', label: 'Dark' },
+              ]}
+            />
+          </div>
           <button className="menu-item" onClick={() => (setOpen(false), onSignOut())}>
             Sign out
           </button>
