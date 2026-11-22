@@ -76,9 +76,15 @@ function Row({ verb, meta, stat, children, defaultOpen = false, live, error }: {
   )
 }
 
+// Present tense while a tool runs, past tense once it is done.
+const PRESENT: Record<string, string> = { Read: 'Reading', Edited: 'Editing', Wrote: 'Writing', Ran: 'Running', Searched: 'Searching', Found: 'Finding', Listed: 'Listing', 'Looked up': 'Looking up', 'Searched the web': 'Searching the web', Fetched: 'Fetching', 'Ran code': 'Running code' }
+
 function ToolView({ step, project }: { step: ToolStep; project: string }) {
-  const { verb, meta } = describeTool(step.name, step.input)
   const live = step.status === 'running'
+  const described = describeTool(step.name, step.input)
+  const verb = live ? PRESENT[described.verb] ?? described.verb : described.verb
+  const meta = described.meta
+  const [since] = useState(() => Date.now())
   const error = step.status === 'error'
   const rel = meta.startsWith(project.replace(/\\/g, '/')) ? meta.slice(project.length + 1) : meta
   if (step.patch) {
@@ -113,7 +119,7 @@ function ToolView({ step, project }: { step: ToolStep; project: string }) {
   const code = step.name === 'codemode' && typeof step.input?.code === 'string' ? step.input.code : null
   const body = command ? `$ ${step.input?.command ?? ''}${step.output ? `\n${step.output}` : ''}` : code ? `${code}${step.output ? `\n\n${step.output}` : ''}` : step.output
   return (
-    <Row verb={verb} meta={rel} live={live} error={error}>
+    <Row verb={verb} meta={rel} live={live} error={error} stat={live && command ? <span className="step-time"><Elapsed from={since} /></span> : undefined}>
       {body && (
         <div className="detail">
           {command && <div className="detail-head"><span className="detail-title">Command in {project.split(/[\\/]/).pop()}</span></div>}
