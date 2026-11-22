@@ -3,7 +3,8 @@ import type { Status } from '../data'
 import { drawGlyph, hash, type GlyphKind } from './glyphs'
 
 export type { GlyphKind }
-export const GLYPH_KIND: GlyphKind = 'swarm'
+// generated orbs / blocks / shapes, one per seed (Abhay 11-22: the detailed swarm was too small and busy)
+export const GLYPH_KIND: GlyphKind = 'gen'
 
 type Inst = { cv: HTMLCanvasElement; status: Status; kind: GlyphKind; size: number; dpr: number; seed: number; dim: boolean; visible: boolean; drawn: boolean; phase: number }
 const live = new Set<Inst>()

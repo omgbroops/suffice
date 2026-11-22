@@ -1,7 +1,7 @@
 // Smooth liveness glyphs and seeded emblems, drawn with vector arcs on canvas.
 // Motion references (MIT): ldrs `ripples` / `chaoticOrbit`, svg-spinners `eclipse`; arc timing from Material Web (Apache-2.0).
 // working = moving, input = still + one amber signal, done/idle = still and dimmer.
-export type GlyphKind = 'swarm' | 'orbit' | 'ripple' | 'eclipse' | 'arc'
+export type GlyphKind = 'swarm' | 'orbit' | 'ripple' | 'eclipse' | 'arc' | 'gen'
 export type GlyphStatus = 'working' | 'done' | 'input' | 'idle'
 
 const TAU = Math.PI * 2
@@ -34,7 +34,7 @@ function ease(x: number) {
   return 3 * (1 - u) * u * u + u ** 3
 }
 
-type G = { c: CanvasRenderingContext2D; S: number; t: number; s: Status; ink: (a: number) => string; seed: number }
+type G = { c: CanvasRenderingContext2D; S: number; t: number; s: Status; ink: (a: number) => string; seed: number; darkInk?: boolean }
 type Status = GlyphStatus
 
 const dot = (c: CanvasRenderingContext2D, x: number, y: number, r: number) => {
@@ -194,12 +194,126 @@ function arc({ c, S, t, s, ink }: G) {
   c.stroke()
 }
 
-const KINDS: Record<GlyphKind, (g: G) => void> = { swarm, orbit, ripple, eclipse, arc }
+// ---- gen: simple generated spinners (Abhay 11-22: orbs, blocks or basic shapes; few, large parts; no meaning) ----
+// The seed picks a family and a motion, plus small speed/direction changes, so every thread gets its own.
+export const GEN_FAMILIES = ['orbs', 'blocks', 'shapes'] as const
+export function genPick(seed: number) {
+  const r = rng(seed ^ 0x5bd1e995)
+  return { fam: Math.floor(r() * 3), v: Math.floor(r() * 3), speed: 0.85 + r() * 0.35, dir: r() < 0.5 ? 1 : -1, sides: r() < 0.5 ? 3 : 4 }
+}
+
+function orb(g: G, x: number, y: number, rad: number) {
+  const { c, ink } = g
+  // a lit sphere: brighter toward the upper left, so it reads as an orb rather than a flat dot
+  const grad = c.createRadialGradient(x - rad * 0.35, y - rad * 0.35, rad * 0.1, x, y, rad)
+  // the lit side is the paler one: less ink on a dark theme's light ink is dimmer, so flip for dark ink
+  grad.addColorStop(0, ink(g.darkInk ? 0.5 : 1))
+  grad.addColorStop(1, ink(g.darkInk ? 1 : 0.62))
+  c.fillStyle = grad
+  c.beginPath()
+  c.arc(x, y, Math.max(0.6, rad), 0, TAU)
+  c.fill()
+}
+
+function block(g: G, x: number, y: number, b: number, a = 0.95) {
+  g.c.fillStyle = g.ink(a)
+  g.c.beginPath()
+  g.c.roundRect(x - b / 2, y - b / 2, b, b, b * 0.28)
+  g.c.fill()
+}
+
+function gen(g: G) {
+  const { c, S, s } = g
+  const p = genPick(g.seed)
+  const T = s === 'working' ? g.t * p.speed : 0.2
+  const cx = S / 2, cy = S / 2
+  if (p.fam === 0) {
+    if (p.v === 0) {
+      // two or three orbs circling
+      const n = p.sides === 3 ? 3 : 2, R = S * 0.24, rad = S * (n === 2 ? 0.19 : 0.155)
+      for (let i = 0; i < n; i++) {
+        const a = (p.dir * TAU * T) / 1.5 + (i * TAU) / n
+        orb(g, cx + Math.cos(a) * R, cy + Math.sin(a) * R, rad * (0.88 + 0.12 * Math.sin((TAU * T) / 0.75 + i)))
+      }
+    } else if (p.v === 1) {
+      // three orbs swelling in a wave
+      for (let i = 0; i < 3; i++) {
+        const k = Math.max(0, Math.sin(TAU * (T / 1.2 - (p.dir * i) / 6)))
+        orb(g, cx + (i - 1) * S * 0.34, cy, S * (0.1 + 0.06 * k))
+      }
+    } else {
+      // a planet and its moon
+      const a = (p.dir * TAU * T) / 1.3
+      orb(g, cx, cy, S * (0.2 + 0.02 * Math.sin((TAU * T) / 1.3)))
+      orb(g, cx + Math.cos(a) * S * 0.34, cy + Math.sin(a) * S * 0.34, S * 0.13)
+    }
+    return
+  }
+  if (p.fam === 1) {
+    const b = S * 0.34, o = (b + S * 0.09) / 2
+    const cells = [[-o, -o], [o, -o], [o, o], [-o, o]]
+    if (p.v === 0) {
+      // sliding puzzle: three blocks, one hole, the neighbour slides in
+      const k = Math.floor(T / 0.5), f = Math.min(1, Math.max(0, (frac(T / 0.5) - 0.3) / 0.7))
+      const hole = (((k * p.dir) % 4) + 4) % 4, next = (((hole + p.dir) % 4) + 4) % 4
+      for (let i = 0; i < 4; i++) if (i !== hole && i !== next) block(g, cx + cells[i][0], cy + cells[i][1], b)
+      const e = ease(f)
+      block(g, cx + cells[next][0] + (cells[hole][0] - cells[next][0]) * e, cy + cells[next][1] + (cells[hole][1] - cells[next][1]) * e, b)
+    } else if (p.v === 1) {
+      // four blocks lighting in turn
+      for (let i = 0; i < 4; i++) {
+        const j = p.dir > 0 ? i : 3 - i
+        const k = Math.max(0, Math.cos(TAU * (T / 1.2 - j / 4)))
+        block(g, cx + cells[i][0], cy + cells[i][1], b, 0.3 + 0.65 * k ** 2)
+      }
+    } else {
+      // two blocks trading corners a quarter turn at a time
+      const k = Math.floor(T / 0.6), a = (k + ease(frac(T / 0.6))) * (TAU / 4) * p.dir + Math.PI / 4
+      for (const off of [0, Math.PI]) block(g, cx + Math.cos(a + off) * o * Math.SQRT2, cy + Math.sin(a + off) * o * Math.SQRT2, b * 1.05)
+    }
+    return
+  }
+  // one basic shape
+  c.fillStyle = g.ink(0.95)
+  c.save()
+  c.translate(cx, cy)
+  if (p.v === 2) {
+    // square easing into a circle and back while it turns
+    const f = (1 - Math.cos((TAU * T) / 1.6)) / 2, side = S * 0.64
+    c.rotate((p.dir * Math.PI * ease(frac(T / 1.6))) / 2)
+    c.beginPath()
+    c.roundRect(-side / 2, -side / 2, side, side, side * (0.16 + 0.34 * f))
+    c.fill()
+  } else {
+    // triangle or square: a stepped turn (v0) or a slow breath (v1)
+    const n = p.sides, rad = S * (n === 3 ? 0.42 : 0.4)
+    const step = TAU / n
+    const turn = p.v === 0 ? (Math.floor(T / 0.7) + ease(frac(T / 0.7))) * step * p.dir : 0.15 * Math.sin((TAU * T) / 2.4)
+    const scale = p.v === 1 ? 0.78 + 0.22 * (1 - Math.cos((TAU * T) / 1.2)) / 2 : 1
+    c.rotate(turn - Math.PI / 2 + (n === 4 ? Math.PI / 4 : 0))
+    c.scale(scale, scale)
+    // rounded corners in one fill (a stroke over the fill doubled the alpha into a visible frame)
+    const pt = (i: number) => [Math.cos(i * step) * rad, Math.sin(i * step) * rad]
+    const [sx, sy] = pt(0), [ex, ey] = pt(n - 1)
+    c.beginPath()
+    c.moveTo((sx + ex) / 2, (sy + ey) / 2)
+    for (let i = 0; i < n; i++) {
+      const [ax, ay] = pt(i), [bx, by] = pt(i + 1)
+      c.arcTo(ax, ay, (ax + bx) / 2, (ay + by) / 2, rad * 0.22)
+    }
+    c.closePath()
+    c.fill()
+  }
+  c.restore()
+}
+
+const KINDS: Record<GlyphKind, (g: G) => void> = { swarm, orbit, ripple, eclipse, arc, gen }
 
 /** Draws one frame in CSS pixels; the caller scales the context for device pixels. */
 export function drawGlyph(c: CanvasRenderingContext2D, S: number, kind: GlyphKind, t: number, s: Status, seed: number, rgb: string, alpha: number) {
   c.clearRect(0, 0, S, S)
-  KINDS[kind]({ c, S, t, s, seed, ink: a => `rgba(${rgb},${a * alpha})` })
+  const [r, gr, b] = rgb.split(',').map(Number)
+  KINDS[kind]({ c, S, t, s, seed, ink: a => `rgba(${rgb},${a * alpha})`, darkInk: 0.2126 * r + 0.7152 * gr + 0.0722 * b < 128 })
   if (s === 'input') {
     c.fillStyle = '#d4a160'
     dot(c, S * 0.84, S * 0.16, Math.max(1.5, S * 0.13))
