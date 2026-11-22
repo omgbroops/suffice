@@ -1,6 +1,6 @@
 export type TextStep = { kind: 'text'; text: string }
 export type ThinkingStep = { kind: 'thinking'; text: string; startedAt: number; endedAt?: number }
-export type ToolStep = { kind: 'tool'; id: string; parent?: string; name: string; input: any; status: 'running' | 'done' | 'error'; output?: string; patch?: string }
+export type ToolStep = { kind: 'tool'; id: string; parent?: string; name: string; input: any; status: 'running' | 'done' | 'error'; output?: string; patch?: string; startedAt?: number }
 export type ApprovalStep = { kind: 'approval'; id: string; name: string; input: any; state: 'pending' | 'allowed' | 'denied' }
 export type NoteStep = { kind: 'note'; text: string; level: 'info' | 'warning' | 'error' }
 export type RaceStep = { kind: 'race'; attempts: { state: 'running' | 'won' | 'lost' | 'empty' | 'failed'; startedAt: number; endedAt?: number; changes?: number }[] }

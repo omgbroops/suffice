@@ -119,7 +119,7 @@ function ToolView({ step, project }: { step: ToolStep; project: string }) {
   const code = step.name === 'codemode' && typeof step.input?.code === 'string' ? step.input.code : null
   const body = command ? `$ ${step.input?.command ?? ''}${step.output ? `\n${step.output}` : ''}` : code ? `${code}${step.output ? `\n\n${step.output}` : ''}` : step.output
   return (
-    <Row verb={verb} meta={rel} live={live} error={error} stat={live && command ? <span className="step-time"><Elapsed from={since} /></span> : undefined}>
+    <Row verb={verb} meta={rel} live={live} error={error} stat={live && command ? <span className="step-time"><Elapsed from={step.startedAt ?? since} /></span> : undefined}>
       {body && (
         <div className="detail">
           {command && <div className="detail-head"><span className="detail-title">Command in {project.split(/[\\/]/).pop()}</span></div>}

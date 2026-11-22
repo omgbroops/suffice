@@ -4,7 +4,7 @@
 
 /** @typedef {{kind:'text', text:string}} TextStep */
 /** @typedef {{kind:'thinking', text:string, startedAt:number, endedAt?:number}} ThinkingStep */
-/** @typedef {{kind:'tool', id:string, parent?:string, name:string, input:any, status:'running'|'done'|'error', output?:string, patch?:string}} ToolStep */
+/** @typedef {{kind:'tool', id:string, parent?:string, name:string, input:any, status:'running'|'done'|'error', output?:string, patch?:string, startedAt?:number}} ToolStep */
 /** @typedef {{kind:'approval', id:string, name:string, input:any, state:'pending'|'allowed'|'denied'}} ApprovalStep */
 /** @typedef {{kind:'note', text:string, level:'info'|'warning'|'error'}} NoteStep */
 /** @typedef {{kind:'race', attempts:{state:'running'|'won'|'lost'|'empty'|'failed', startedAt:number, endedAt?:number, changes?:number}[]}} RaceStep */
@@ -80,7 +80,7 @@ export function reduce(t, e) {
       return withAgent(a => {
         closeThinking(a, at)
         if (a.steps.some(s => s.kind === 'tool' && s.id === e.id)) return a
-        a.steps.push({ kind: 'tool', id: e.id, parent: e.parent || undefined, name: e.name, input: e.input, status: 'running' })
+        a.steps.push({ kind: 'tool', id: e.id, parent: e.parent || undefined, name: e.name, input: e.input, status: 'running', startedAt: at })
         return a
       })
     case 'tool_result':

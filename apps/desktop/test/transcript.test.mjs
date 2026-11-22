@@ -24,6 +24,7 @@ test('streams text, thinking and tools into one agent message', () => {
   assert.equal(agent.steps[0].text, 'Look first')
   assert.equal(agent.steps[0].endedAt, 5)
   assert.equal(agent.steps[3].status, 'done')
+  assert.equal(agent.steps[2].startedAt, 6, 'tool timers count from the tool event, not from when the row mounts')
   assert.equal(agent.steps.at(-1).text, 'Done.')
   assert.equal(agent.done, true)
   assert.deepEqual(visibleSteps(agent.steps).map(s => s.kind === 'tool' ? s.name : s.kind), ['thinking', 'text', 'read', 'text'])
