@@ -237,6 +237,19 @@ button.tab { padding-right: 10px; flex: none; }
 .elapsed { font-variant-numeric: tabular-nums; }
 .work-label.is-needs { color: var(--text); font-weight: 500; }
 
+/* fast-mode race: one lane per attempt */
+.race { margin: 4px 0 6px; display: grid; gap: 2px; }
+.race-head { height: 28px; display: flex; align-items: center; gap: 8px; color: var(--text-2); }
+.race-lane { height: 26px; display: grid; grid-template-columns: 12px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 0 10px 0 1px; color: var(--text-3); font-size: 12px; transition: color 200ms var(--ease), opacity 300ms var(--ease); }
+.race-lane.is-running { color: var(--text-2); }
+.race-lane.is-won { color: var(--text); }
+.race-lane.is-lost, .race-lane.is-empty, .race-lane.is-starting { opacity: 0.55; }
+.race-lane.is-failed .race-state { color: var(--red); }
+.race-dot { width: 4px; height: 4px; justify-self: center; background: currentColor; opacity: 0.5; }
+.race-lane.is-won .race-dot { width: 6px; height: 6px; opacity: 1; }
+.race-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.race-state { font-variant-numeric: tabular-nums; }
+
 /* home */
 .home { position: relative; height: 100%; display: grid; place-items: center; padding: 20px; overflow: auto; isolation: isolate; }
 .dither {

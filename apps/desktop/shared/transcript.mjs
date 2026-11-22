@@ -7,7 +7,8 @@
 /** @typedef {{kind:'tool', id:string, parent?:string, name:string, input:any, status:'running'|'done'|'error', output?:string, patch?:string}} ToolStep */
 /** @typedef {{kind:'approval', id:string, name:string, input:any, state:'pending'|'allowed'|'denied'}} ApprovalStep */
 /** @typedef {{kind:'note', text:string, level:'info'|'warning'|'error'}} NoteStep */
-/** @typedef {TextStep|ThinkingStep|ToolStep|ApprovalStep|NoteStep} Step */
+/** @typedef {{kind:'race', attempts:{state:'running'|'won'|'lost'|'empty'|'failed', startedAt:number, endedAt?:number, changes?:number}[]}} RaceStep */
+/** @typedef {TextStep|ThinkingStep|ToolStep|ApprovalStep|NoteStep|RaceStep} Step */
 /** @typedef {{id:string, role:'user', text:string, at:number}} UserMessage */
 /** @typedef {{id:string, role:'agent', model:string, effort:string, mode?:'balanced'|'efficient'|'fast', cheap?:string, steps:Step[], done:boolean, error?:string, startedAt:number, endedAt?:number}} AgentMessage */
 /** @typedef {{version:1, messages:(UserMessage|AgentMessage)[]}} Transcript */
@@ -95,6 +96,17 @@ export function reduce(t, e) {
         a.steps.push({ kind: 'note', text: e.text, level: e.level ?? 'info' })
         return a
       })
+    case 'race':
+      return withAgent(a => {
+        closeThinking(a, at)
+        let i = a.steps.findIndex(s => s.kind === 'race')
+        if (i < 0) i = a.steps.push({ kind: 'race', attempts: [] }) - 1
+        const attempts = a.steps[i].attempts.slice()
+        const prev = attempts[e.attempt]
+        attempts[e.attempt] = e.state === 'running' ? { state: 'running', startedAt: at } : { ...prev, startedAt: prev?.startedAt ?? at, state: e.state, endedAt: at, ...(e.changes != null ? { changes: e.changes } : {}) }
+        a.steps[i] = { ...a.steps[i], attempts }
+        return a
+      })
     case 'approval':
       return withAgent(a => {
         closeThinking(a, at)
@@ -110,7 +122,15 @@ export function reduce(t, e) {
     case 'end':
       return withAgent(a => {
         closeThinking(a, at)
-        a.steps = a.steps.map(s => (s.kind === 'tool' && s.status === 'running' ? { ...s, status: e.ok ? 'done' : 'error' } : s.kind === 'approval' && s.state === 'pending' ? { ...s, state: 'denied' } : s))
+        a.steps = a.steps.map(s =>
+          s.kind === 'tool' && s.status === 'running'
+            ? { ...s, status: e.ok ? 'done' : 'error' }
+            : s.kind === 'approval' && s.state === 'pending'
+              ? { ...s, state: 'denied' }
+              : s.kind === 'race'
+                ? { ...s, attempts: s.attempts.map(r => (r?.state === 'running' ? { ...r, state: 'lost', endedAt: at } : r)) }
+                : s,
+        )
         return { ...a, done: true, endedAt: at, ...(e.ok ? {} : { error: e.error || 'The run stopped.' }) }
       })
     default:

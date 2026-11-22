@@ -1,8 +1,9 @@
 import { Fragment, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
-import { describeTool, patchLines, visibleSteps, type AgentMessage as Agent, type ApprovalStep, type Step, type ToolStep, type Transcript } from '../../shared/transcript.mjs'
+import { describeTool, patchLines, visibleSteps, type AgentMessage as Agent, type ApprovalStep, type RaceStep, type Step, type ToolStep, type Transcript } from '../../shared/transcript.mjs'
 import type { Status } from '../data'
 import { IconChevronDown } from '../icons'
 import { CopyButton, Elapsed, StatusGlyph } from './ui'
+import { Live } from './Live'
 import { EFFORT_LABEL } from './ModelPicker'
 
 const duration = (s: number) => (s < 60 ? `${s}s` : s < 3600 ? `${Math.floor(s / 60)}m ${s % 60}s` : `${Math.floor(s / 3600)}h ${Math.floor((s % 3600) / 60)}m`)
@@ -123,7 +124,37 @@ function ToolView({ step, project }: { step: ToolStep; project: string }) {
   )
 }
 
+// Fast mode races three attempts on copies of the project; these are their briefs in fast-command.mjs.
+const LANES = ['Direct', 'Smallest change', 'Edge cases']
+const LANE_STATE: Record<string, string> = { lost: 'Stopped', empty: 'No changes', failed: 'Failed' }
+
+function RaceView({ step }: { step: RaceStep }) {
+  const racing = step.attempts.some(r => r?.state === 'running')
+  return (
+    <div className="race">
+      <div className="race-head">
+        <Live status={racing ? 'working' : 'done'} kind="orbit" size={14} />
+        {racing ? <span><span className="shimmer">Racing</span> 3 attempts</span> : <span>Raced 3 attempts</span>}
+      </div>
+      {LANES.map((name, i) => {
+        const r = step.attempts[i]
+        const state = r?.state ?? 'starting'
+        return (
+          <div key={name} className={`race-lane is-${state}`}>
+            {state === 'running' ? <Live status="working" size={12} phase={i * 0.6} /> : <span className="race-dot" />}
+            <span className="race-name">{name}</span>
+            <span className="race-state">
+              {state === 'running' && r ? <Elapsed from={r.startedAt} /> : state === 'won' ? `Won · ${r?.changes ?? 0} change${r?.changes === 1 ? '' : 's'}` : LANE_STATE[state] ?? 'Starting'}
+            </span>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
 function StepView({ step, project, live }: { step: Step; project: string; live: boolean }) {
+  if (step.kind === 'race') return <RaceView step={step} />
   if (step.kind === 'text') return <div className="step-text"><Prose text={step.text} /></div>
   if (step.kind === 'thinking') {
     const secs = Math.max(1, Math.round(((step.endedAt ?? Date.now()) - step.startedAt) / 1000))
@@ -165,7 +196,9 @@ function AgentMessageView({ msg, project, onApproval }: { msg: Agent; project: s
   const pendingApprovals = steps.filter((s): s is ApprovalStep => s.kind === 'approval' && s.state === 'pending')
   // Efficient and Fast runs report through notes; the last one is the result.
   const final = last?.kind === 'text' || (last?.kind === 'note' && msg.done) ? last : undefined
-  const work = steps.filter(s => s !== final && !(s.kind === 'approval' && s.state === 'pending'))
+  // the race lanes already say a race started
+  const raced = steps.some(s => s.kind === 'race')
+  const work = steps.filter(s => s !== final && !(s.kind === 'approval' && s.state === 'pending') && !(raced && s.kind === 'note' && /^Fast race started/.test(s.text)))
   const [open, setOpen] = useState(!msg.done)
   const live = !msg.done
   const secs = Math.max(1, Math.round(((msg.endedAt ?? Date.now()) - msg.startedAt) / 1000))

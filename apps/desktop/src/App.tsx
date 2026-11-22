@@ -33,6 +33,12 @@ function statusOf(t: Thread): Status {
   return 'done'
 }
 
+/** Balanced runs take mid-run guidance; Fast and Efficient runs work in copies. */
+const guidable = (t: { transcript?: { messages: { role: string; mode?: string }[] } }) => {
+  const last = t.transcript?.messages.at(-1)
+  return !(last?.role === 'agent' && last.mode && last.mode !== 'balanced')
+}
+
 function Titlebar({ platform, children }: { platform: string; children?: ReactNode }) {
   return <header className={`titlebar is-${platform}`}>{children}</header>
 }
@@ -499,13 +505,15 @@ export default function App() {
                   statusOf(active) === 'input'
                     ? 'Answer the request above first'
                     : active.running
-                      ? `Guide Suffice while it works, or ${platform === 'darwin' ? '⌘↵' : 'Ctrl+Enter'} to queue`
+                      ? guidable(active)
+                        ? `Guide Suffice while it works, or ${platform === 'darwin' ? '⌘↵' : 'Ctrl+Enter'} to queue`
+                        : 'Fast and Efficient runs can’t take guidance mid-run'
                       : 'Ask for a follow-up…'
                 }
                 working={active.running}
                 onSend={text => void send(active.key, text)}
                 onStop={() => void api.abort(active.key)}
-                onGuide={(text, queue) => void api.guide(active.key, text, queue).catch(e => setNotice(e instanceof Error ? e.message : String(e)))}
+                onGuide={guidable(active) ? (text, queue) => void api.guide(active.key, text, queue).catch(e => setNotice(e instanceof Error ? e.message : String(e))) : undefined}
               />
             }
           />

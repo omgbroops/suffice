@@ -57,7 +57,7 @@ const orbit: Fill = (n, t, s, buf) => {
 
 const FILLS: Record<GlyphKind, Fill> = { moon, ripple, orbit }
 
-type Inst = { cv: HTMLCanvasElement; status: Status; kind: GlyphKind; n: number; buf: Float32Array; visible: boolean; drawn: boolean }
+type Inst = { cv: HTMLCanvasElement; status: Status; kind: GlyphKind; n: number; buf: Float32Array; visible: boolean; drawn: boolean; phase: number }
 const live = new Set<Inst>()
 let raf = 0
 const reduce = typeof matchMedia === 'function' ? matchMedia('(prefers-reduced-motion: reduce)') : null
@@ -68,7 +68,7 @@ function draw(g: Inst, t: number) {
   const S = g.cv.width
   ctx.clearRect(0, 0, S, S)
   g.buf.fill(0)
-  FILLS[g.kind](g.n, t, g.status, g.buf)
+  FILLS[g.kind](g.n, t + g.phase, g.status, g.buf)
   const cs = S / g.n
   for (let j = 0; j < g.n; j++)
     for (let i = 0; i < g.n; i++) {
@@ -103,7 +103,8 @@ function tick(now: number) {
 const wake = () => { if (!raf) raf = requestAnimationFrame(tick) }
 document.addEventListener('visibilitychange', wake)
 
-export function Live({ status, size = 12, kind = GLYPH_KIND, label }: { status: Status; size?: number; kind?: GlyphKind; label?: string }) {
+/** phase (seconds) offsets the animation so sibling glyphs don't move in lockstep. */
+export function Live({ status, size = 12, kind = GLYPH_KIND, label, phase = 0 }: { status: Status; size?: number; kind?: GlyphKind; label?: string; phase?: number }) {
   const ref = useRef<HTMLCanvasElement>(null)
   const inst = useRef<Inst | null>(null)
   useEffect(() => {
@@ -113,14 +114,14 @@ export function Live({ status, size = 12, kind = GLYPH_KIND, label }: { status: 
     cv.width = cv.height = Math.round(size * dpr)
     // ~1 css px per cell keeps the pixels crisp at any size
     const n = Math.max(9, Math.round(size * (dpr >= 2 ? 1 : 0.75)))
-    const g: Inst = { cv, status, kind, n, buf: new Float32Array(n * n), visible: true, drawn: false }
+    const g: Inst = { cv, status, kind, n, buf: new Float32Array(n * n), visible: true, drawn: false, phase }
     inst.current = g
     live.add(g)
     const io = new IntersectionObserver(([e]) => { g.visible = e.isIntersecting; if (g.visible) wake() })
     io.observe(cv)
     wake()
     return () => { io.disconnect(); live.delete(g); inst.current = null }
-  }, [size, kind])
+  }, [size, kind, phase])
   useEffect(() => {
     const g = inst.current
     if (!g) return

@@ -148,6 +148,8 @@ export function sufficeFastCommand(options,runtime){
         ctx.ui.notify('Fast race started — 3 attempts on workspace copies','info');
         const controls=[];
         let winner=-1;
+        // Optional progress hook for UIs (the desktop draws one lane per attempt); never breaks the race.
+        const report=(attempt,state,changes)=>{try{options.onRace?.({attempt,state,changes})}catch{}};
         try{
           await ctx.waitForIdle();
           // Pristine copy of the worktree: diffs are measured against this snapshot
@@ -165,14 +167,16 @@ export function sufficeFastCommand(options,runtime){
             if(existsSync(join(base,'node_modules'))) await symlink(join(base,'node_modules'),join(dir,'node_modules'),'junction').catch(()=>{});
             const control=await createSufficeSession({...options,cwd:dir,sessionManager:undefined,continue:false,effort:'low',speed:'standard',browser:false,desktop:false,modelObject:ctx.model,extensions:[],timeout:options.timeout??600},runtime);
             controls[i]=control;
+            report(i,'running');
             try{
               await control.run(input+'\n\n'+prefill+(spec.hint?'\n\n'+spec.hint:''));
               const {changed,deleted}=await diffFiles(snapshot,dir);
               if(winner<0&&(changed.length||deleted.length)){
                 winner=i;control.appliedChanges=changed.length+deleted.length;
                 for(let j=0;j<controls.length;j++) if(j!==i) controls[j]?.abort();
-              }
-            }catch{ /* losing or failed attempt */ }
+                report(i,'won',control.appliedChanges);
+              }else report(i,changed.length||deleted.length?'lost':'empty');
+            }catch{ /* losing or failed attempt */ report(i,winner>=0&&winner!==i?'lost':'failed'); }
           });
           await Promise.allSettled(jobs);
           if(winner<0){ctx.ui.notify('Fast race: all attempts failed or produced no changes','error');return;}

@@ -69,3 +69,25 @@ test('describes tools and parses patches', () => {
   assert.deepEqual(describeTool('read', { path: String.raw`C:\a\b.js`, offset: 10, limit: 5 }), { verb: 'Read', meta: 'C:/a/b.js #L10-15' })
   assert.deepEqual(patchLines('--- a\n+++ b\n@@ -1 +1 @@\n-old\n+new\n same').map(l => l.t), ['@', '-', '+', ' '])
 })
+
+test('fast-race lanes track each attempt and settle on end', () => {
+  let t = emptyTranscript()
+  for (const e of [
+    { type: 'user', id: 'u', text: 'go', at: 1 },
+    { type: 'agent_start', id: 'a', model: 'm', effort: 'low', mode: 'fast', at: 1 },
+    { type: 'race', attempt: 0, state: 'running', at: 2 },
+    { type: 'race', attempt: 1, state: 'running', at: 3 },
+    { type: 'race', attempt: 2, state: 'running', at: 3 },
+    { type: 'race', attempt: 1, state: 'won', changes: 2, at: 9 },
+    { type: 'race', attempt: 0, state: 'lost', at: 10 },
+    { type: 'end', ok: true, at: 11 },
+  ]) t = reduce(t, e)
+  const steps = t.messages[1].steps.filter(s => s.kind === 'race')
+  assert.equal(steps.length, 1)
+  const [a0, a1, a2] = steps[0].attempts
+  assert.deepEqual([a0.state, a1.state, a2.state], ['lost', 'won', 'lost'])
+  assert.equal(a1.changes, 2)
+  assert.equal(a1.startedAt, 3)
+  assert.equal(a1.endedAt, 9)
+  assert.equal(a2.endedAt, 11)
+})

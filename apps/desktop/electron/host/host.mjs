@@ -234,7 +234,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     }
     // Their attempts run in workspace copies as fresh sessions: no naming, and
     // no title changes leaking back into this thread.
-    const commandOptions = { ...options, desktopSettings: { ...desktopSettings, naming: 'Manual' }, onTitleChanged: undefined, extensionBindings: undefined }
+    const commandOptions = { ...options, desktopSettings: { ...desktopSettings, naming: 'Manual' }, onTitleChanged: undefined, extensionBindings: undefined, onRace: e => push(threadId, { type: 'race', attempt: e.attempt, state: e.state, changes: e.changes }) }
     options.extensions.push(sufficeFastCommand(commandOptions, runtime), sufficeEfficientCommand(commandOptions, runtime))
     thread.agent = await createSession(options, runtime, { onApproval: (name, input) => approve(threadId, name, input) })
     thread.agent.session.subscribe(e => {
