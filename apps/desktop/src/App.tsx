@@ -9,7 +9,7 @@ import { ThreadView } from './components/ThreadView'
 import { Dither } from './components/Dither'
 import { Segmented, StatusGlyph } from './components/ui'
 import { IconArrowLeft, IconArrowRight, IconChevronDown, IconClose, IconCompose, IconFolder, IconHome, IconNotes, IconPlus, IconSearch, IconSelector, IconSidebar } from './icons'
-import { ColorsContext, SearchPalette, SideProjects, groupByDate } from './components/Sidebar'
+import { ColorsContext, ProjectEmblem, SearchPalette, SideProjects, groupByDate } from './components/Sidebar'
 import { NotesView } from './components/NotesView'
 import { Live } from './components/Live'
 
@@ -400,7 +400,7 @@ export default function App() {
   const projectPicker = (current: string | null, locked = false) =>
     locked ? (
       <span className="ghost-btn is-static" title={current ?? undefined}>
-        <IconFolder size={14} />
+        {current ? <ProjectEmblem path={current} size={14} /> : <IconFolder size={14} />}
         {current ? baseName(current) : ''}
       </span>
     ) : (

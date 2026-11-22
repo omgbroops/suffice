@@ -60,9 +60,9 @@ const handlers = {
   'notes:list': args => host.listNotes(args),
   // files chosen to mention in a prompt: project-relative when inside the project, absolute otherwise
   'files:pick': async ({ project }) => {
-    const r = await dialog.showOpenDialog(win, { title: 'Mention files', defaultPath: project || undefined, properties: ['openFile', 'multiSelections'] })
+    const r = await dialog.showOpenDialog(win, { title: 'Mention files', defaultPath: typeof project === 'string' && project ? project : undefined, properties: ['openFile', 'multiSelections'] })
     if (r.canceled) return []
-    return r.filePaths.map(f => (project && inside(project, f) ? relative(project, f).split(sep).join('/') : f))
+    return r.filePaths.map(f => (typeof project === 'string' && project && inside(project, f) ? relative(project, f).split(sep).join('/') : f))
   },
   'notes:read': args => host.readNote(args),
   'threads:open': args => host.openThread(args),

@@ -77,11 +77,12 @@ export function Composer(p: Props) {
           disabled={!p.onAttach}
           onClick={async () => {
             const el = ta.current
-            const at = el?.selectionStart ?? text.length
             const paths = (await p.onAttach?.().catch(() => [])) ?? []
-            if (!paths.length) return
+            if (!paths.length || !el) return
+            // read the box after the dialog closes, so nothing typed or cleared meanwhile is lost
+            const cur = el.value, at = el.selectionStart ?? cur.length
             const tokens = paths.map(f => (/\s/.test(f) ? `@"${f}"` : `@${f}`)).join(' ')
-            const before = text.slice(0, at), after = text.slice(at)
+            const before = cur.slice(0, at), after = cur.slice(at)
             const next = `${before}${before && !/\s$/.test(before) ? ' ' : ''}${tokens} ${after.replace(/^\s+/, '')}`
             setText(next)
             requestAnimationFrame(() => {
