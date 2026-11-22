@@ -129,3 +129,10 @@
 
 /* race: the turn's own glyph already says it is working; lanes carry one seeded swarm each */
 .race-dot { border-radius: 50%; }
+
+/* thread group headers fold on click */
+button.side-group-label { display: flex; align-items: center; gap: 4px; width: 100%; text-align: left; border-radius: 6px; }
+button.side-group-label:hover { color: var(--text-3); }
+.side-group-chev { opacity: 0; transition: opacity 150ms var(--ease), transform 150ms var(--ease); }
+button.side-group-label:hover .side-group-chev, button.side-group-label:focus-visible .side-group-chev, .side-group.is-folded .side-group-chev { opacity: 1; }
+.side-group.is-folded .side-group-chev { transform: rotate(-90deg); }

@@ -9,7 +9,7 @@ import { ThreadView } from './components/ThreadView'
 import { Dither } from './components/Dither'
 import { Segmented, StatusGlyph } from './components/ui'
 import { IconArrowLeft, IconArrowRight, IconChevronDown, IconClose, IconCompose, IconFolder, IconHome, IconNotes, IconPlus, IconSearch, IconSelector, IconSidebar } from './icons'
-import { ColorsContext, ProjectEmblem, SearchPalette, SideProjects, groupByDate } from './components/Sidebar'
+import { ColorsContext, ProjectEmblem, SearchPalette, SideProjects, groupThreads } from './components/Sidebar'
 import { NotesView } from './components/NotesView'
 import { Live } from './components/Live'
 
@@ -195,6 +195,14 @@ export default function App() {
   const [hist, setHist] = useState<{ stack: View[]; i: number }>({ stack: [{ kind: 'home' }], i: 0 })
   const [sidebar, setSidebar] = useState(true)
   const [search, setSearch] = useState(false)
+  // folded sidebar groups survive restarts; storage can be unavailable, so it is best-effort
+  const [folded, setFolded] = useState<string[]>(() => { try { return JSON.parse(localStorage.getItem('suffice.folded') ?? '[]') } catch { return [] } })
+  const toggleFold = (label: string) =>
+    setFolded(f => {
+      const next = f.includes(label) ? f.filter(l => l !== label) : [...f, label]
+      try { localStorage.setItem('suffice.folded', JSON.stringify(next)) } catch {}
+      return next
+    })
   const [notice, setNotice] = useState('')
   const [env, setEnv] = useState<'local' | 'cloud'>('local')
   const [, tick] = useState(0)
@@ -501,10 +509,13 @@ export default function App() {
           )}
           <div className="side-label">Threads</div>
           {list.length === 0 && <div className="side-empty">No threads yet.</div>}
-          {groupByDate(list).map(([label, items]) => (
-            <div key={label} className="side-group" role="group" aria-label={label}>
-              <div className="side-group-label">{label}</div>
-              {items.map(t => (
+          {groupThreads(list, t => statusOf(t) !== 'idle' && statusOf(t) !== 'done').map(([label, items]) => (
+            <div key={label} className={`side-group${folded.includes(label) ? ' is-folded' : ''}`} role="group" aria-label={label}>
+              <button className="side-group-label" aria-expanded={!folded.includes(label)} onClick={() => toggleFold(label)}>
+                {label}
+                <IconChevronDown size={11} className="side-group-chev" />
+              </button>
+              {!folded.includes(label) && items.map(t => (
                 <button key={t.key} className={`side-thread${active?.key === t.key ? ' is-active' : ''}`} onClick={() => go({ kind: 'thread', key: t.key })} title={`${t.title} · ${baseName(t.project)}`}>
                   <span className="side-thread-title">{t.title}</span>
                   {/* one trailing slot: live glyph while running, else age */}

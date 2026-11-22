@@ -16,14 +16,7 @@ export function ProjectEmblem({ path, size = 16, working = false, tint, label }:
 
 type Row = { key: string; title: string; project: string; modified: number }
 
-const DAY = 86_400_000
-/** Today / Last week / Last month / Older, newest first, empty groups dropped. */
-export function groupByDate<T extends { modified: number }>(list: T[], now = Date.now()) {
-  const midnight = new Date(now).setHours(0, 0, 0, 0)
-  const groups: [string, T[]][] = [['Today', []], ['Last week', []], ['Last month', []], ['Older', []]]
-  for (const t of list) groups[t.modified >= midnight ? 0 : t.modified >= now - 7 * DAY ? 1 : t.modified >= now - 30 * DAY ? 2 : 3][1].push(t)
-  return groups.filter(([, items]) => items.length)
-}
+export { groupThreads } from './groups'
 
 function useDismiss(open: boolean, close: () => void, ref: RefObject<HTMLElement | null>) {
   useEffect(() => {
