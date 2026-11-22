@@ -96,14 +96,15 @@ function tick(now: number) {
   let again = false
   for (const g of live) {
     if (g.status === 'working' && !reduce?.matches) {
-      if (g.visible && !document.hidden) draw(g, t)
-      again = true
+      // offscreen or hidden glyphs stop the loop; the observer and visibilitychange wake it
+      if (g.visible && !document.hidden) (draw(g, t), (again = true))
     } else if (!g.drawn) draw(g, t)
   }
   if (again) raf = requestAnimationFrame(tick)
 }
 const wake = () => { if (!raf) raf = requestAnimationFrame(tick) }
 document.addEventListener('visibilitychange', wake)
+reduce?.addEventListener('change', () => { for (const g of live) g.drawn = false; wake() })
 
 /** phase (seconds) offsets the animation so sibling glyphs don't move in lockstep. */
 export function Live({ status, size = 12, kind = GLYPH_KIND, label, phase = 0 }: { status: Status; size?: number; kind?: GlyphKind; label?: string; phase?: number }) {

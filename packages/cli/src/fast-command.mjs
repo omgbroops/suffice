@@ -175,7 +175,7 @@ export function sufficeFastCommand(options,runtime){
                 winner=i;control.appliedChanges=changed.length+deleted.length;
                 for(let j=0;j<controls.length;j++) if(j!==i) controls[j]?.abort();
                 report(i,'won',control.appliedChanges);
-              }else report(i,changed.length||deleted.length?'lost':'empty');
+              }else report(i,winner>=0||changed.length||deleted.length?'lost':'empty');
             }catch{ /* losing or failed attempt */ report(i,winner>=0&&winner!==i?'lost':'failed'); }
           });
           await Promise.allSettled(jobs);

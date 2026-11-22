@@ -91,3 +91,15 @@ test('fast-race lanes track each attempt and settle on end', () => {
   assert.equal(a1.endedAt, 9)
   assert.equal(a2.endedAt, 11)
 })
+
+test('race events after the run ended are ignored', () => {
+  const t = fold([
+    { type: 'agent_start', id: 'a', model: 'm', effort: 'low', at: 1 },
+    { type: 'race', attempt: 0, state: 'running', at: 2 },
+    { type: 'end', ok: false, error: 'stopped', at: 3 },
+    { type: 'race', attempt: 1, state: 'running', at: 4 },
+  ])
+  const race = t.messages[0].steps.find(s => s.kind === 'race')
+  assert.equal(race.attempts[0].state, 'lost')
+  assert.equal(race.attempts[1], undefined)
+})

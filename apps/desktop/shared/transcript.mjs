@@ -98,6 +98,7 @@ export function reduce(t, e) {
       })
     case 'race':
       return withAgent(a => {
+        if (a.done) return a // a stopped race can still report late
         closeThinking(a, at)
         let i = a.steps.findIndex(s => s.kind === 'race')
         if (i < 0) i = a.steps.push({ kind: 'race', attempts: [] }) - 1
