@@ -34,8 +34,8 @@ Options:
   --version, -v       Show version
 
 Interactive: Pi's terminal UI, with /project, /login, /model, /settings, /resume,
-/fast (raced task), /efficient (cheap-first task), /balanced (restore defaults),
-/auto (classify then dispatch: repair→cheap, feature→strong, ambiguous→race).
+/efficient (sidekick-first task, seeded-race escalation; /efficient sidekick|lead
+<id> picks models), /balanced (restore defaults).
 Ctrl+C cancels a running task. Ctrl+D exits at an empty prompt.
 Commands run with your user permissions. Use a trusted repository.
 Pi's interface and engine, with Suffice's tools, prompt and codemode setup.
