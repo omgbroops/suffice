@@ -2,7 +2,7 @@ import { Fragment, useEffect, useLayoutEffect, useRef, useState, type ReactNode 
 import { describeTool, patchLines, visibleSteps, type AgentMessage as Agent, type ApprovalStep, type Step, type ToolStep, type Transcript } from '../../shared/transcript.mjs'
 import type { Status } from '../data'
 import { IconChevronDown } from '../icons'
-import { CopyButton, StatusGlyph } from './ui'
+import { CopyButton, Elapsed, StatusGlyph } from './ui'
 import { EFFORT_LABEL } from './ModelPicker'
 
 const duration = (s: number) => (s < 60 ? `${s}s` : s < 3600 ? `${Math.floor(s / 60)}m ${s % 60}s` : `${Math.floor(s / 3600)}h ${Math.floor((s % 3600) / 60)}m`)
@@ -175,7 +175,12 @@ function AgentMessageView({ msg, project, onApproval }: { msg: Agent; project: s
         <div className={`work${open ? ' is-open' : ''}`}>
           <button className="work-head" onClick={() => setOpen(o => !o)} aria-expanded={open}>
             <IconChevronDown size={12} className="work-chev" />
-            <span className={live && !pendingApprovals.length ? 'is-live' : undefined}>{live ? (pendingApprovals.length ? 'Waiting for you' : 'Working') : `Worked for ${duration(secs)}`}</span>
+            {live && <StatusGlyph status={pendingApprovals.length ? 'input' : 'working'} />}
+            {live ? (
+              pendingApprovals.length ? <span className="work-label is-needs">Waiting for you</span> : <span className="work-label"><span className="shimmer">Working</span> for <Elapsed from={msg.startedAt} /></span>
+            ) : (
+              <span className="work-label">{`Worked for ${duration(secs)}`}</span>
+            )}
           </button>
           {open && (
             <div className="work-body">
@@ -186,7 +191,9 @@ function AgentMessageView({ msg, project, onApproval }: { msg: Agent; project: s
           )}
         </div>
       )}
-      {live && steps.length === 0 && <div className="pending">Thinking</div>}
+      {live && steps.length === 0 && (
+        <div className="pending"><StatusGlyph status="working" /><span className="shimmer">Thinking</span></div>
+      )}
       {pendingApprovals.map(s => <ApprovalCard key={s.id} step={s} onAnswer={allow => onApproval(s.id, allow)} />)}
       {final && (final.kind === 'note' ? <div className={`msg-note${final.level === 'error' ? ' is-error' : ''}`}>{final.text}</div> : <Prose text={final.text} />)}
       {msg.error && <div className="msg-error">{msg.error}</div>}
@@ -239,9 +246,9 @@ export function ThreadView({
   return (
     <div className="thread">
       <header className="thread-head">
-        <StatusGlyph status={status} />
+        <StatusGlyph status={status} size={14} />
         <span className="thread-title">{title}</span>
-        <span className="thread-status">{STATUS_LABEL[status]}</span>
+        {status === 'input' && <span className="thread-status">{STATUS_LABEL[status]}</span>}
       </header>
       <div
         className="thread-scroll"

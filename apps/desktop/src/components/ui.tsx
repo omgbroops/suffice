@@ -1,30 +1,21 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import type { Status } from '../data'
 import { IconCheck, IconCopy } from '../icons'
+import { Live } from './Live'
 
-const RING = [0, 1, 2, 5, 8, 7, 6, 3]
-const PATTERN: Record<Exclude<Status, 'working'>, number[]> = {
-  done: [2, 3, 5, 7],
-  input: [1, 4, 7],
-  idle: [4],
+export function StatusGlyph({ status, size = 12 }: { status: Status; size?: number }) {
+  return <Live status={status} size={size} />
 }
 
-export function StatusGlyph({ status }: { status: Status }) {
-  return (
-    <span className={`glyph glyph-${status}`} aria-label={status}>
-      {Array.from({ length: 9 }, (_, i) => {
-        const ringIndex = RING.indexOf(i)
-        const on = status === 'working' ? ringIndex >= 0 : PATTERN[status].includes(i)
-        return (
-          <i
-            key={i}
-            className={on ? 'on' : ''}
-            style={status === 'working' && ringIndex >= 0 ? { animationDelay: `${ringIndex * 110}ms` } : undefined}
-          />
-        )
-      })}
-    </span>
-  )
+/** Seconds since `from`, re-rendered once a second while mounted. */
+export function Elapsed({ from }: { from: number }) {
+  const [, tick] = useState(0)
+  useEffect(() => {
+    const id = window.setInterval(() => tick(n => n + 1), 1000)
+    return () => window.clearInterval(id)
+  }, [])
+  const s = Math.max(0, Math.floor((Date.now() - from) / 1000))
+  return <span className="elapsed">{s < 60 ? `${s}s` : `${Math.floor(s / 60)}m ${s % 60}s`}</span>
 }
 
 export function Menu({

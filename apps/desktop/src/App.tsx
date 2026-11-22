@@ -454,9 +454,13 @@ export default function App() {
           {list.length === 0 && <div className="side-empty">No threads yet.</div>}
           {list.map(t => (
             <button key={t.key} className={`side-thread${active?.key === t.key ? ' is-active' : ''}`} onClick={() => go({ kind: 'thread', key: t.key })} title={t.title}>
-              <StatusGlyph status={statusOf(t)} />
               <span className="side-thread-title">{t.title}</span>
-              <span className="side-thread-time">{statusOf(t) === 'input' ? 'Reply' : ago(t.modified)}</span>
+              {/* one trailing slot: live glyph while running, else age */}
+              {statusOf(t) === 'working' ? (
+                <StatusGlyph status="working" />
+              ) : (
+                <span className={`side-thread-time${statusOf(t) === 'input' ? ' is-needs' : ''}`}>{statusOf(t) === 'input' ? 'Reply' : ago(t.modified)}</span>
+              )}
             </button>
           ))}
         </div>
