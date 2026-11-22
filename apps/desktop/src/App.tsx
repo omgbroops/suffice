@@ -317,6 +317,36 @@ export default function App() {
     if (view.kind === 'thread' && view.key === key) go({ kind: 'home' })
   }
 
+  // tab and history keys read the latest view and tabs, so the handler is refreshed every render
+  const shortcuts = useRef<(e: KeyboardEvent) => void>(() => {})
+  shortcuts.current = e => {
+    if (!(e.metaKey || e.ctrlKey) || e.altKey) return
+    const k = e.key.toLowerCase()
+    if (k === 'n' && !e.shiftKey) {
+      e.preventDefault()
+      go({ kind: 'home' })
+      requestAnimationFrame(() => document.querySelector<HTMLTextAreaElement>('.home textarea')?.focus())
+    } else if (/^[1-9]$/.test(k)) {
+      e.preventDefault()
+      // 1 is Home, 2-8 the tabs in order, 9 the last tab (browser convention)
+      const key = k === '1' ? null : k === '9' ? tabs[tabs.length - 1] : tabs[+k - 2]
+      if (k === '1') go({ kind: 'home' })
+      else if (key) go({ kind: 'thread', key })
+    } else if (k === '[' && hist.i > 0) {
+      e.preventDefault()
+      setHist(h => ({ ...h, i: h.i - 1 }))
+    } else if (k === ']' && hist.i < hist.stack.length - 1) {
+      e.preventDefault()
+      setHist(h => ({ ...h, i: h.i + 1 }))
+    }
+  }
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => shortcuts.current(e)
+    window.addEventListener('keydown', onKey)
+    const off = api.on('app:close-tab', () => { if (view.kind === 'thread') closeTab(view.key) })
+    return () => (window.removeEventListener('keydown', onKey), off())
+  }, [view])
+
   const patchSettings = async (patch: Partial<Settings>) => {
     setSettings(s => (s ? { ...s, ...patch } : s))
     setSettings(await api.updateSettings(patch))
@@ -426,10 +456,10 @@ export default function App() {
           </button>
           <span className="logo">[suffice]</span>
           <div className="spacer" />
-          <button className="icon-btn" disabled={hist.i === 0} onClick={() => setHist(h => ({ ...h, i: h.i - 1 }))} aria-label="Back">
+          <button className="icon-btn" disabled={hist.i === 0} onClick={() => setHist(h => ({ ...h, i: h.i - 1 }))} aria-label="Back" title="Back (⌘[)">
             <IconArrowLeft size={14} />
           </button>
-          <button className="icon-btn" disabled={hist.i === hist.stack.length - 1} onClick={() => setHist(h => ({ ...h, i: h.i + 1 }))} aria-label="Forward">
+          <button className="icon-btn" disabled={hist.i === hist.stack.length - 1} onClick={() => setHist(h => ({ ...h, i: h.i + 1 }))} aria-label="Forward" title="Forward (⌘])">
             <IconArrowRight size={14} />
           </button>
         </div>
@@ -482,7 +512,7 @@ export default function App() {
 
       <aside className="sidebar">
         <div className="side-nav">
-          <button className={`side-item is-primary${view.kind === 'home' ? ' is-active' : ''}`} onClick={() => go({ kind: 'home' })}>
+          <button className={`side-item is-primary${view.kind === 'home' ? ' is-active' : ''}`} onClick={() => go({ kind: 'home' })} title="New thread (⌘N)">
             <IconCompose size={14} />
             New thread
           </button>

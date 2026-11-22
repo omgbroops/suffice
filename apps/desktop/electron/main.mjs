@@ -33,6 +33,13 @@ function createWindow() {
     },
   })
   win.once('ready-to-show', () => win.show())
+  // Cmd/Ctrl+W closes the open tab; the default menu would close the whole window
+  win.webContents.on('before-input-event', (event, i) => {
+    if (i.type === 'keyDown' && (i.meta || i.control) && !i.shift && !i.alt && i.key.toLowerCase() === 'w') {
+      event.preventDefault()
+      send('app:close-tab')
+    }
+  })
   win.on('closed', () => (win = null))
   // Links open in the browser, never in the app window.
   win.webContents.setWindowOpenHandler(({ url }) => {
