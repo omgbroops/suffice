@@ -33,9 +33,9 @@ function createWindow() {
     },
   })
   win.once('ready-to-show', () => win.show())
-  // Cmd/Ctrl+W closes the open tab; the default menu would close the whole window
+  // Cmd/Ctrl+W closes the open tab (the default menu would close the window); on Home the page closes the window itself
   win.webContents.on('before-input-event', (event, i) => {
-    if (i.type === 'keyDown' && (i.meta || i.control) && !i.shift && !i.alt && i.key.toLowerCase() === 'w') {
+    if (i.type === 'keyDown' && (process.platform === 'darwin' ? i.meta : i.control) && !i.shift && !i.alt && i.key.toLowerCase() === 'w') {
       event.preventDefault()
       send('app:close-tab')
     }
@@ -102,7 +102,7 @@ app.whenReady().then(async () => {
     })
   }
   // before the first paint, so a saved Light or Dark never flashes the system theme
-  applyTheme((await host.init().catch(() => null))?.settings)
+  applyTheme(host.getSettings())
   createWindow()
   app.on('activate', () => {
     if (!BrowserWindow.getAllWindows().length) createWindow()

@@ -196,7 +196,7 @@ export default function App() {
   const [sidebar, setSidebar] = useState(true)
   const [search, setSearch] = useState(false)
   // folded sidebar groups survive restarts; storage can be unavailable, so it is best-effort
-  const [folded, setFolded] = useState<string[]>(() => { try { return JSON.parse(localStorage.getItem('suffice.folded') ?? '[]') } catch { return [] } })
+  const [folded, setFolded] = useState<string[]>(() => { try { const v = JSON.parse(localStorage.getItem('suffice.folded') ?? '[]'); return Array.isArray(v) ? v.filter(x => typeof x === 'string') : [] } catch { return [] } })
   const toggleFold = (label: string) =>
     setFolded(f => {
       const next = f.includes(label) ? f.filter(l => l !== label) : [...f, label]
@@ -280,11 +280,11 @@ export default function App() {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'b') {
+      if ((platform === 'darwin' ? e.metaKey : e.ctrlKey) && e.key.toLowerCase() === 'b') {
         e.preventDefault()
         setSidebar(s => !s)
       }
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      if ((platform === 'darwin' ? e.metaKey : e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault()
         setSearch(s => !s)
       }
@@ -320,18 +320,18 @@ export default function App() {
   // tab and history keys read the latest view and tabs, so the handler is refreshed every render
   const shortcuts = useRef<(e: KeyboardEvent) => void>(() => {})
   shortcuts.current = e => {
-    if (!(e.metaKey || e.ctrlKey) || e.altKey) return
+    // Cmd on macOS (Ctrl there is emacs keys in text fields), Ctrl elsewhere
+    if (!(platform === 'darwin' ? e.metaKey : e.ctrlKey) || e.altKey) return
     const k = e.key.toLowerCase()
     if (k === 'n' && !e.shiftKey) {
       e.preventDefault()
       go({ kind: 'home' })
       requestAnimationFrame(() => document.querySelector<HTMLTextAreaElement>('.home textarea')?.focus())
     } else if (/^[1-9]$/.test(k)) {
-      e.preventDefault()
       // 1 is Home, 2-8 the tabs in order, 9 the last tab (browser convention)
       const key = k === '1' ? null : k === '9' ? tabs[tabs.length - 1] : tabs[+k - 2]
-      if (k === '1') go({ kind: 'home' })
-      else if (key) go({ kind: 'thread', key })
+      if (k === '1') (e.preventDefault(), go({ kind: 'home' }))
+      else if (key) (e.preventDefault(), go({ kind: 'thread', key }))
     } else if (k === '[' && hist.i > 0) {
       e.preventDefault()
       setHist(h => ({ ...h, i: h.i - 1 }))
@@ -343,7 +343,7 @@ export default function App() {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => shortcuts.current(e)
     window.addEventListener('keydown', onKey)
-    const off = api.on('app:close-tab', () => { if (view.kind === 'thread') closeTab(view.key) })
+    const off = api.on('app:close-tab', () => (view.kind === 'thread' ? closeTab(view.key) : window.close()))
     return () => (window.removeEventListener('keydown', onKey), off())
   }, [view])
 
@@ -483,14 +483,13 @@ export default function App() {
                 key={key}
                 className={`tab${on ? ' is-active' : ''}`}
                 onClick={() => go({ kind: 'thread', key })}
-                onKeyDown={e => { if (e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) (e.preventDefault(), go({ kind: 'thread', key })) }}
                 onAuxClick={e => { if (e.button === 1) (e.preventDefault(), closeTab(key)) }}
-                role="button"
-                tabIndex={0}
-                aria-current={on ? 'page' : undefined}
               >
-                <StatusGlyph status={statusOf(t)} seed={key} />
-                <span className="tab-label">{t.title}</span>
+                {/* the label is the focusable control; its click bubbles to the tab */}
+                <button className="tab-open" aria-current={on ? 'page' : undefined}>
+                  <StatusGlyph status={statusOf(t)} seed={key} />
+                  <span className="tab-label">{t.title}</span>
+                </button>
                 <button
                   className="tab-close"
                   aria-label="Close tab"
@@ -541,11 +540,15 @@ export default function App() {
           {list.length === 0 && <div className="side-empty">No threads yet.</div>}
           {groupThreads(list, t => statusOf(t) !== 'idle' && statusOf(t) !== 'done').map(([label, items]) => (
             <div key={label} className={`side-group${folded.includes(label) ? ' is-folded' : ''}`} role="group" aria-label={label}>
-              <button className="side-group-label" aria-expanded={!folded.includes(label)} onClick={() => toggleFold(label)}>
-                {label}
-                <IconChevronDown size={11} className="side-group-chev" />
-              </button>
-              {!folded.includes(label) && items.map(t => (
+              {label === 'In progress' ? (
+                <div className="side-group-label">{label}</div>
+              ) : (
+                <button className="side-group-label" aria-expanded={!folded.includes(label)} onClick={() => toggleFold(label)}>
+                  {label}
+                  <IconChevronDown size={11} className="side-group-chev" />
+                </button>
+              )}
+              {!(label !== 'In progress' && folded.includes(label)) && items.map(t => (
                 <button key={t.key} className={`side-thread${active?.key === t.key ? ' is-active' : ''}`} onClick={() => go({ kind: 'thread', key: t.key })} title={`${t.title} · ${baseName(t.project)}`}>
                   <span className="side-thread-title">{t.title}</span>
                   {/* one trailing slot: live glyph while running, else age */}

@@ -377,6 +377,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
   }
 
   return {
+    getSettings: () => settings,
     init: async () => ({ signedIn: signedIn(), home, settings, projects: await recentProjects(home), platform: process.platform }),
     login: startLogin,
     answerLogin: (id, value) => {
