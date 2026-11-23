@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { DURATION, MOON, offsetAt, tiltAt } from './camera'
+import { DURATION, MOON, tiltAt, viewAt } from './camera'
 
 const BAYER = [
   0, 32, 8, 40, 2, 34, 10, 42, 48, 16, 56, 24, 50, 18, 58, 26, 12, 44, 4, 36, 14, 46, 6, 38, 60, 28, 52, 20, 62, 30, 54, 22,
@@ -76,7 +76,7 @@ function scene(u: number, v: number, aspect: number, ox = 0, oy = 0) {
   return 0.03 + smooth(0.0, 0.7, v) * 0.42 + glow + star
 }
 
-/** look: the camera tilts up until the moon is centred, and eases back when it turns false. */
+/** look: the camera looks up and closes in until the moon sits centred above the composer; eases back when false. */
 export function Dither({ cell = 2, look = false }: { cell?: number; look?: boolean }) {
   const ref = useRef<HTMLCanvasElement>(null)
   const tilt = useRef(look ? 1 : 0)
@@ -94,10 +94,11 @@ export function Dither({ cell = 2, look = false }: { cell?: number; look?: boole
       const ctx = canvas.getContext('2d')!
       const img = ctx.createImageData(w, h)
       const aspect = w / h
-      const o = offsetAt(tilt.current, aspect)
+      const t = tilt.current
       for (let y = 0; y < h; y++) {
         for (let x = 0; x < w; x++) {
-          const l = scene(x / w, y / h, aspect, o.x, o.y)
+          const p = t ? viewAt(t, x / w, y / h) : { u: x / w, v: y / h }
+          const l = scene(p.u, p.v, aspect)
           if (l > BAYER[(y & 7) * 8 + (x & 7)]) {
             const p = (y * w + x) * 4
             img.data[p] = img.data[p + 1] = img.data[p + 2] = 255

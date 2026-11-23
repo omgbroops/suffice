@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { DURATION, MOON, easeOut, offsetAt, tiltAt } from '../src/components/camera.ts'
+import { DURATION, MOON, VIEW, easeOut, tiltAt, viewAt } from '../src/components/camera.ts'
 
 test('the tilt eases out: fast first, settled at the end, monotonic', () => {
   const xs = [0, 200, 400, 800, 1200, DURATION].map(ms => tiltAt(0, true, ms))
@@ -16,9 +16,13 @@ test('it eases back from where it is, not from the end', () => {
   assert.equal(tiltAt(0.6, false, DURATION), 0)
 })
 
-test('fully tilted puts the moon at the screen centre', () => {
-  const aspect = 1.6, o = offsetAt(1, aspect)
-  assert.ok(Math.abs(MOON.x * aspect - o.x - 0.5 * aspect) < 1e-9)
-  assert.ok(Math.abs(MOON.y - o.y - 0.5) < 1e-9)
-  assert.ok(offsetAt(0, aspect).x === 0 && offsetAt(0, aspect).y === 0)
+test('looking up puts the moon centred above the composer, zoomed in; resting view is untouched', () => {
+  const m = viewAt(1, VIEW.x, VIEW.y)
+  assert.ok(Math.abs(m.u - MOON.x) < 1e-9 && Math.abs(m.v - MOON.y) < 1e-9)
+  assert.ok(VIEW.x === 0.5 && VIEW.y < 0.35, 'above the composer, centred')
+  const r = viewAt(0, 0.3, 0.8)
+  assert.ok(Math.abs(r.u - 0.3) < 1e-9 && Math.abs(r.v - 0.8) < 1e-9)
+  // the resting horizon row (scene v = 0.6) drops lower on screen: the camera reads as looking up
+  const rowOf = v => { let lo = 0, hi = 2; for (let i = 0; i < 50; i++) { const m = (lo + hi) / 2; viewAt(1, 0.5, m).v < v ? (lo = m) : (hi = m) } return lo }
+  assert.ok(rowOf(0.6) > 0.64, "resting horizon row 0.6 must drop visibly")
 })

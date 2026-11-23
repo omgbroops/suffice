@@ -9,5 +9,12 @@ export function tiltAt(from: number, up: boolean, ms: number): number {
   return from + (to - from) * easeOut(ms / DURATION)
 }
 
-/** How far the scene shifts so the moon sits at the screen centre when tilt is 1. */
-export const offsetAt = (tilt: number, aspect: number) => ({ x: (MOON.x - 0.5) * aspect * tilt, y: (MOON.y - 0.5) * tilt })
+/** Where the moon ends up on screen when the camera has looked up at it: centred, above the composer, closer. */
+export const VIEW = { x: 0.5, y: 0.2, zoom: 1.4 }
+
+/** Screen point (px, py in 0..1) -> scene point at `tilt`. 0 = resting view; 1 = zoomed on the moon at VIEW, so the
+ *  horizon drops out of frame and the camera reads as looking up. */
+export function viewAt(tilt: number, px: number, py: number) {
+  const tx = MOON.x + (VIEW.x - MOON.x) * tilt, ty = MOON.y + (VIEW.y - MOON.y) * tilt, z = 1 + (VIEW.zoom - 1) * tilt
+  return { u: MOON.x + (px - tx) / z, v: MOON.y + (py - ty) / z }
+}
