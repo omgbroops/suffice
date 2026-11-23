@@ -177,7 +177,10 @@ test('stress: 20 threads run at once and all finish', async () => {
     release()
     await until(() => ended(events).length === 20)
     assert.ok(ended(events).every(([, p]) => p.event.ok))
-    assert.equal((await readdir(join(home, 'desktop', 'transcripts'))).filter(f => f.endsWith('.json')).length, 20)
+    // the end event can land before its transcript write finishes; wait for the files, then require all 20
+    const saved = async () => (await readdir(join(home, 'desktop', 'transcripts'))).filter(f => f.endsWith('.json')).length
+    for (let t = Date.now(); (await saved()) < 20 && Date.now() - t < 5000; ) await new Promise(r => setTimeout(r, 20))
+    assert.equal(await saved(), 20)
   } finally { await host.dispose(); await done() }
 })
 
