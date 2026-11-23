@@ -283,3 +283,14 @@ test('stress: dispose() with active runs leaves no unhandled rejections or live 
     assert.deepEqual(bad, [])
   } finally { process.off('unhandledRejection', onBad); await done() }
 })
+
+test('every channel the main process handles is in the preload allowlist (a missing one fails as "Unknown channel")', async () => {
+  const { readFile } = await import('node:fs/promises')
+  const here = new URL('..', import.meta.url)
+  const pre = await readFile(new URL('electron/preload.cjs', here), 'utf8')
+  const allow = new Set([...pre.match(/INVOKE = new Set\(\[([^\]]*)/)[1].matchAll(/'([^']+)'/g)].map(m => m[1]))
+  const main = await readFile(new URL('electron/main.mjs', here), 'utf8')
+  const handled = [...main.matchAll(/^\s+'([a-z-]+:[a-z-]+)':/gm)].map(m => m[1])
+  assert.ok(handled.length > 30, 'parsed the handler table')
+  assert.deepEqual(handled.filter(h => !allow.has(h)), [])
+})

@@ -8,7 +8,7 @@
 // Credentials are never read here: the CLI finds its own login. Only `claude auth status` is called.
 
 import { spawn as nodeSpawn, execFile } from 'node:child_process'
-import { accessSync, constants, statSync } from 'node:fs'
+import { accessSync, constants, readFileSync, statSync } from 'node:fs'
 import { homedir, userInfo } from 'node:os'
 import { delimiter, isAbsolute, join } from 'node:path'
 import { randomUUID } from 'node:crypto'
@@ -41,8 +41,9 @@ const isDir = p => { try { return isAbsolute(p) && statSync(p).isDirectory() } c
 
 /**
  * CLI flags for the Suffice settings. Isolation (useClaudeConfig false) loads only project and local settings, so the
- * user's ~/.claude CLAUDE.md, settings, hooks, plugins and skills stay out; the login (keychain) is untouched.
- * User-scope MCP servers live outside settings, so isolation also makes MCP strict.
+ * user's ~/.claude settings, hooks, plugins and skills stay out; the login (keychain) is untouched.
+ * User-scope MCP servers live outside settings, so isolation also makes MCP strict. CLAUDE.md files are handled by
+ * isolationEnv + projectMemory below.
  */
 export function settingsArgs({ useClaudeConfig = false, instructions, appendPrompt, folderAccess = [], capabilities = {}, mcpConfigs = [] } = {}) {
   // Claude Code takes one --append-system-prompt: the user's instructions and the caller's block share it
@@ -59,6 +60,22 @@ export function settingsArgs({ useClaudeConfig = false, instructions, appendProm
   ]
 }
 export const CLAUDE_EFFORTS = ['low', 'medium', 'high', 'xhigh', 'max']
+
+// --setting-sources does not stop CLAUDE.md discovery: walking up from a project under the home folder, the CLI reads
+// ~/.claude/CLAUDE.md as an ancestor's project memory (measured 2026-11-23, CLI 2.1.330). Isolation turns discovery and
+// auto-memory off and hands the model only the project folder's own CLAUDE.md files.
+export const isolationEnv = useClaudeConfig => (useClaudeConfig ? {} : { CLAUDE_CODE_DISABLE_CLAUDE_MDS: '1', CLAUDE_CODE_DISABLE_AUTO_MEMORY: '1' })
+const MEMORY_FILES = ['CLAUDE.md', join('.claude', 'CLAUDE.md'), 'CLAUDE.local.md']
+const MEMORY_CAP = 40_000
+/** The project folder's own CLAUDE.md files (never its parents'), as one block for the appended prompt. */
+export function projectMemory(project) {
+  return MEMORY_FILES.map(f => {
+    try {
+      const text = readFileSync(join(project, f), 'utf8').slice(0, MEMORY_CAP).trim()
+      return text && `Project instructions from ${f}:\n${text}`
+    } catch { return '' }
+  }).filter(Boolean).join('\n\n')
+}
 
 /** The user's env minus anything that would make the CLI bill an API key instead of the subscription. */
 export function childEnv(base = process.env) {
@@ -124,10 +141,10 @@ export function createClaudeEngine({ push, spawn = nodeSpawn }) {
         '--model', model, '--permission-mode', PERMISSION_MODE[approval] ?? 'manual', '--permission-prompts', 'host', '--permission-prompt-tool', 'stdio',
         ...(approval === 'never' ? ['--allow-dangerously-skip-permissions'] : []),
         ...(effort ? ['--effort', effort] : []),
-        ...settingsArgs(rest),
+        ...settingsArgs(rest.useClaudeConfig ? rest : { ...rest, appendPrompt: [projectMemory(project), rest.appendPrompt].filter(Boolean).join('\n\n') }),
         ...(addDirs?.length ? ['--add-dir', ...addDirs] : []),
         ...(forkOf ? ['--resume', forkOf, '--fork-session', '--session-id', sessionId] : resume ? ['--resume', sessionId] : ['--session-id', sessionId])]
-      const child = spawn(claudePath, args, { cwd: project, env: childEnv(), stdio: ['pipe', 'pipe', 'pipe'] })
+      const child = spawn(claudePath, args, { cwd: project, env: { ...childEnv(), ...isolationEnv(rest.useClaudeConfig) }, stdio: ['pipe', 'pipe', 'pipe'] })
       const state = { child, aborted: false, result: null, killTimer: null }
       runs.set(threadId, state)
       let buffer = ''

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { mkdtemp, writeFile, readFile, rm, chmod, readdir } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { createClaudeEngine, childEnv, findClaude, INSTALL_HINT, LOGIN_HINT } from '../electron/host/claude-engine.mjs'
+import { createClaudeEngine, childEnv, findClaude, INSTALL_HINT, LOGIN_HINT, isolationEnv, projectMemory } from '../electron/host/claude-engine.mjs'
 import { createHost } from '../electron/host/host.mjs'
 
 // A fake `claude`: speaks the stream-json wire format, scripted by FAKE_SCENARIO, logs argv/env to FAKE_LOG.
@@ -296,4 +296,24 @@ test('claude engine: forkOf resumes the old session as a fork under the new id',
     assert.ok(argv.includes('--fork-session'))
     assert.deepEqual(argv.slice(argv.indexOf('--session-id'), argv.indexOf('--session-id') + 2), ['--session-id', 'sid-1'])
   } finally { await t.cleanup() }
+})
+
+test('isolation: CLAUDE.md discovery and auto-memory off; only the project folder\'s own CLAUDE.md files reach the prompt', async () => {
+  assert.deepEqual(isolationEnv(false), { CLAUDE_CODE_DISABLE_CLAUDE_MDS: '1', CLAUDE_CODE_DISABLE_AUTO_MEMORY: '1' })
+  assert.deepEqual(isolationEnv(true), {})
+  const parent = await mkdtemp(join(tmpdir(), 'suffice-mem-'))
+  try {
+    const { mkdir } = await import('node:fs/promises')
+    const proj = join(parent, 'proj')
+    await mkdir(join(proj, '.claude'), { recursive: true })
+    await writeFile(join(parent, 'CLAUDE.md'), 'PARENT RULE')
+    assert.equal(projectMemory(proj), '')
+    await writeFile(join(proj, 'CLAUDE.md'), 'Use tabs.')
+    await writeFile(join(proj, '.claude', 'CLAUDE.md'), 'Run bun test.')
+    await writeFile(join(proj, 'CLAUDE.local.md'), 'My local note.')
+    const m = projectMemory(proj)
+    for (const s of ['Use tabs.', 'Run bun test.', 'My local note.']) assert.ok(m.includes(s), s)
+    assert.ok(!m.includes('PARENT RULE'))
+    assert.equal(projectMemory(join(parent, 'missing')), '')
+  } finally { await rm(parent, { recursive: true, force: true }) }
 })
