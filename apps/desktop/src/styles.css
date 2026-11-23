@@ -1100,13 +1100,9 @@ html.is-intro, html.is-intro body, html.is-intro #root { background: transparent
 .intro-progress { position: absolute; top: 18px; left: 40px; right: 40px; height: 3px; border-radius: 3px; background: var(--fill-track); overflow: hidden; z-index: 1; }
 .intro-progress i { display: block; height: 100%; border-radius: 3px; background: linear-gradient(90deg, #ff8a3d, #ff4f8b 35%, #9b5cff 70%, #3d8bff); background-size: 840px 100%; /* the track width: the window does not resize */ transition: width 520ms var(--ease); }
 .intro-copy { display: flex; flex-direction: column; gap: 14px; padding: 64px 40px 32px; min-height: 0; animation: intro-in 360ms var(--ease) both; }
-.intro-copy h1 { margin: 0; font-size: 26px; line-height: 1.15; font-weight: 500; letter-spacing: -0.015em; color: var(--text); }
+.intro-copy h1 { margin: 0; font-family: var(--pixel); font-size: 28px; line-height: 1.15; font-weight: 400; letter-spacing: 0; color: var(--text); }
+.intro-copy h1.intro-hello { font-size: 56px; }
 .intro-lede { margin: 0; font-size: 14px; color: var(--text-2); }
-.intro-points { margin: 6px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; color: var(--text-2); font-size: 13.5px; }
-.intro-points li { padding-left: 16px; position: relative; }
-.intro-points li::before { content: ''; position: absolute; left: 2px; top: 0.6em; width: 4px; height: 4px; border-radius: 50%; background: var(--text-3); }
-.intro-points b, .intro-grant b { font-weight: 500; color: var(--text); }
-.intro-note { margin: 0; color: var(--text-3); font-size: 12.5px; }
 .intro-foot { margin-top: auto; display: flex; align-items: center; gap: 14px; }
 .intro-go { height: 34px; padding: 0 14px; gap: 10px; border-radius: 8px; }
 .intro-go kbd { font: inherit; font-size: 12px; opacity: 0.55; }
@@ -1120,8 +1116,7 @@ html.is-intro, html.is-intro body, html.is-intro #root { background: transparent
 .intro-accounts .accounts-key input { width: 130px; }
 .intro-grants { display: grid; margin-top: 4px; }
 .intro-grant { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 56px; box-shadow: 0 1px 0 var(--hair); }
-.intro-grant > span:first-child { display: grid; gap: 2px; }
-.intro-grant small { color: var(--text-3); font-size: 12.5px; }
+.intro-grant b { font-weight: 500; color: var(--text); }
 .intro-ok { display: inline-flex; align-items: center; gap: 6px; color: var(--text-2); }
 .intro-field { display: grid; gap: 8px; color: var(--text-2); }
 .intro-field input { height: 32px; padding: 0 10px; border: 0; outline: 0; border-radius: 7px; background: var(--fill-input); box-shadow: 0 0 0 1px rgba(var(--wash), calc(0.08 * var(--a))); color: var(--text); font: inherit; }

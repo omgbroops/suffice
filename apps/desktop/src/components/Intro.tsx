@@ -80,18 +80,7 @@ export function Intro() {
       <div className="intro-card">
         <div className="intro-progress" aria-hidden><i style={{ width: `${((step + 1) / STEPS.length) * 100}%` }} /></div>
         <section className="intro-copy" key={step}>
-          {step === 0 && (
-            <>
-              <h1>Welcome to Suffice</h1>
-              <p className="intro-lede">Claude Code, Codex and your API keys, in one window.</p>
-              <ul className="intro-points">
-                <li><b>Run</b> tasks on the plan you already pay for.</li>
-                <li><b>Watch</b> every step and command as it happens.</li>
-                <li><b>Hand over the screen</b> when a task needs a browser or an app.</li>
-              </ul>
-              <p className="intro-note">Runs on your Mac. Nothing leaves it except calls to the model you connect.</p>
-            </>
-          )}
+          {step === 0 && <h1 className="intro-hello">Welcome</h1>}
           {step === 1 && info && (
             <>
               <h1>Connect your models</h1>
@@ -105,16 +94,14 @@ export function Intro() {
           {step === 2 && (
             <>
               <h1>Let Suffice use your screen</h1>
-              <p className="intro-lede">For tasks that need a browser or another app. macOS asks once for each.</p>
               <div className="intro-grants">
-                {([['accessibility', 'Accessibility', 'Click and type for you'], ['screen', 'Screen Recording', 'See what is on screen']] as const).map(([k, name, what]) => (
+                {([['accessibility', 'Accessibility'], ['screen', 'Screen Recording']] as const).map(([k, name]) => (
                   <div className="intro-grant" key={k}>
-                    <span><b>{name}</b><small>{what}</small></span>
+                    <b>{name}</b>
                     {screen[k] ? <span className="intro-ok"><IconCheck size={13} /> Allowed</span> : <button className="btn" onClick={() => void api.screenRequest(k).then(setScreen, () => {})}>Allow</button>}
                   </div>
                 ))}
               </div>
-              <p className="intro-note">Suffice asks before each action unless you turn that off.</p>
             </>
           )}
           {step === 3 && (
