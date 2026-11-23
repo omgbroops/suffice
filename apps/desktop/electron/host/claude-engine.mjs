@@ -82,13 +82,13 @@ export function createClaudeEngine({ push, spawn = nodeSpawn }) {
    * Runs one prompt to its result. Resolves with totals; rejects with the error text
    * ('cancelled' when stopped). `sessionId` is reused with --resume once the thread has one.
    */
-  function run({ threadId, claudePath, project, prompt, model, effort, approval, sessionId, resume, onApproval }) {
+  function run({ threadId, claudePath, project, prompt, model, effort, approval, sessionId, resume, forkOf, onApproval }) {
     return new Promise((resolve, reject) => {
       const args = ['-p', '--input-format', 'stream-json', '--output-format', 'stream-json', '--verbose', '--include-partial-messages',
         '--model', model, '--permission-mode', PERMISSION_MODE[approval] ?? 'manual', '--permission-prompts', 'host', '--permission-prompt-tool', 'stdio',
         ...(approval === 'never' ? ['--allow-dangerously-skip-permissions'] : []),
         ...(effort ? ['--effort', effort] : []),
-        ...(resume ? ['--resume', sessionId] : ['--session-id', sessionId])]
+        ...(forkOf ? ['--resume', forkOf, '--fork-session', '--session-id', sessionId] : resume ? ['--resume', sessionId] : ['--session-id', sessionId])]
       const child = spawn(claudePath, args, { cwd: project, env: childEnv(), stdio: ['pipe', 'pipe', 'pipe'] })
       const state = { child, aborted: false, result: null, killTimer: null }
       runs.set(threadId, state)

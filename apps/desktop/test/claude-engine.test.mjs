@@ -222,3 +222,15 @@ test('the child env always carries USER, which the CLI needs to find its login',
   assert.equal(childEnv({ PATH: '/bin', HOME: '/h' }).USER, userInfo().username)
   assert.equal(childEnv({ USER: 'someone' }).USER, 'someone')
 })
+
+test('claude engine: forkOf resumes the old session as a fork under the new id', async () => {
+  const t = await runFake('text', { resume: true, forkOf: 'old-id' })
+  try {
+    await t.engine.run(t.args)
+    const [{ argv }] = await argvLog(t.s.log)
+    const i = argv.indexOf('--resume')
+    assert.deepEqual(argv.slice(i, i + 2), ['--resume', 'old-id'])
+    assert.ok(argv.includes('--fork-session'))
+    assert.deepEqual(argv.slice(argv.indexOf('--session-id'), argv.indexOf('--session-id') + 2), ['--session-id', 'sid-1'])
+  } finally { await t.cleanup() }
+})

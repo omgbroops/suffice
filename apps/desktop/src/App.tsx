@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
-import { api, type AccountRow, type InitInfo, type ModelInfo, type Settings, type ThreadSummary } from './api'
+import { api, type AccountRow, type InitInfo, type ModelInfo, type Settings, type ThreadAction, type ThreadSummary } from './api'
 import { emptyTranscript, reduce, type Transcript } from '../shared/transcript.mjs'
 import { ago, type Status } from './data'
 import { Composer } from './components/Composer'
@@ -12,6 +12,7 @@ import { IconArrowLeft, IconArrowRight, IconClose, IconCompose, IconFolder, Icon
 import { ProjectOrb } from './components/Orb'
 import { AutoNamesContext, ColorsContext, IconsContext, NamesContext, ProjectEmblem, SearchPalette, SideProjects } from './components/Sidebar'
 import { baseName, displayName, threadsByProject } from './components/groups'
+import { ArchivedList, ThreadRow, pinnedFirst } from './components/ThreadMenu'
 import { NotesView } from './components/NotesView'
 
 export type Thread = {
@@ -23,6 +24,10 @@ export type Thread = {
   running: boolean
   transcript?: Transcript
   loading?: boolean
+  pinned?: boolean
+  unread?: boolean
+  archived?: boolean
+  section?: string
 }
 
 type View = { kind: 'home' } | { kind: 'notes' } | { kind: 'thread'; key: string }
@@ -231,7 +236,7 @@ export default function App() {
       for (const s of list) {
         const existing = byPath.get(s.path)
         const key = existing?.key ?? s.path
-        next[key] = { ...(existing ?? { key, project: p, running: s.running }), path: s.path, project: p, title: existing?.title && existing.title !== 'Untitled' ? existing.title : s.title, modified: Math.max(existing?.modified ?? 0, s.modified) }
+        next[key] = { ...(existing ?? { key, project: p, running: s.running }), path: s.path, project: p, title: existing?.title && existing.title !== 'Untitled' ? existing.title : s.title, modified: Math.max(existing?.modified ?? 0, s.modified), pinned: s.pinned, unread: s.unread, archived: s.archived, section: s.section }
       }
       // Keep threads from other projects and ones that have not been saved yet.
       for (const t of Object.values(prev)) if (!next[t.key] && (t.project !== p || !t.path || t.running)) next[t.key] = t
@@ -478,10 +483,21 @@ export default function App() {
       <ProjectPicker project={current} projects={projects} onPick={p => void pickProject(p)} onAdd={() => void browseProject()} />
     )
   const composerProps = { permissions, model: picker }
-  const grouped = threadsByProject(list, projects)
+  const archived = list.filter(t => t.archived)
+  const grouped = threadsByProject(list.filter(t => !t.archived), projects)
+  for (const [p, rows] of grouped.byProject) grouped.byProject.set(p, pinnedFirst(rows))
+  grouped.other = pinnedFirst(grouped.other)
+  const actOn = async (t: Thread, a: ThreadAction, v?: string | boolean) => {
+    if (!t.path) return
+    try { await api.threadAct(a, t.path, t.project, v) } catch (e) { window.alert(e instanceof Error ? e.message : String(e)) }
+    if (a === 'delete') closeTab(t.key)
+    await refreshThreads(t.project)
+  }
   const renderThread = (t: Thread & { key: string }) => (
-    <button key={t.key} className={`side-thread${active?.key === t.key ? ' is-active' : ''}`} onClick={() => go({ kind: 'thread', key: t.key })} title={`${t.title} · ${displayName(names, t.project)}`}>
+    <ThreadRow key={t.key} t={t} sections={[...new Set(list.filter(x => x.project === t.project && x.section).map(x => x.section!))]} onAct={(a, v) => void actOn(t, a, v)}>
+    <button className={`side-thread${active?.key === t.key ? ' is-active' : ''}`} onClick={() => { if (t.unread) void actOn(t, 'unread', false); go({ kind: 'thread', key: t.key }) }} title={`${t.title} · ${displayName(names, t.project)}`}>
       <span className="side-thread-title">{t.title}</span>
+      {t.unread && <span className="side-user-dot" aria-label="Unread" />}
       {/* one trailing slot: live glyph while running, else age */}
       {statusOf(t) === 'working' ? (
         <StatusGlyph status="working" seed={t.key} />
@@ -489,6 +505,7 @@ export default function App() {
         <span className={`side-thread-time${statusOf(t) === 'input' ? ' is-needs' : ''}`}>{statusOf(t) === 'input' ? 'Reply' : ago(t.modified)}</span>
       )}
     </button>
+    </ThreadRow>
   )
 
   return (
@@ -592,6 +609,7 @@ export default function App() {
               }}
             />
           )}
+          <ArchivedList rows={archived} render={renderThread} />
           {projects.length === 0 && list.length === 0 && <div className="side-empty">No threads yet.</div>}
           {grouped.other.length > 0 && (
             <>

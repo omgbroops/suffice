@@ -52,3 +52,14 @@ export function cleanSettingsPatch(patch) {
   object(patch, 'settings')
   return Object.fromEntries(Object.entries(patch).filter(([k, v]) => Object.hasOwn(SETTINGS, k) && SETTINGS[k](v)))
 }
+
+/** A thread menu action: known verb, a session path, and a short text value only where one is needed. */
+export function threadAction(a, actions) {
+  object(a, 'action')
+  const action = oneOf(a.action, actions, 'action')
+  let value = a.value
+  if (action === 'rename') value = str(value, 'value', { max: 120 }).trim() || str('', 'value')
+  else if (action === 'section') value = typeof value === 'string' && value.length <= 120 && !value.includes('\0') ? value.trim() : str(null, 'value')
+  else if (['pin', 'unread', 'archive'].includes(action)) bool(value, 'value')
+  return { action, path: str(a.path, 'path'), project: str(a.project, 'project'), value }
+}
