@@ -569,6 +569,12 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
       return path ? setProject(path) : null
     },
     setProject,
+    /** sending with no project chosen uses <home>/default (never <home> itself: it holds credentials) */
+    defaultProject: async () => {
+      const dir = resolve(home, 'default')
+      await mkdir(dir, { recursive: true, mode: 0o700 })
+      return setProject(dir)
+    },
     recentProjects: () => recentProjects(home),
     listThreads,
     // notes are read only from a project the user has opened

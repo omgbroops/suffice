@@ -72,6 +72,7 @@ const handlers = {
   'models:list': () => host.models(),
   'projects:choose': () => host.chooseProject(),
   'projects:set': ({ path }) => host.setProject(path),
+  'projects:default': () => host.defaultProject(),
   'projects:recent': () => host.recentProjects(),
   'threads:list': ({ project }) => host.listThreads(project),
   'notes:list': args => host.listNotes(args),

@@ -170,3 +170,11 @@ test('groupSteps folds runs of reads and searches into one line', () => {
     'Investigated: 2 files, 1 search [1,2,3,4]', '5', 'Investigating: 1 file, 1 check [6,7]', '9', '8',
   ])
 })
+
+test('a shell step is named by the real work: Claude Code description first, then the chain step that ran something', async () => {
+  const { describeTool, summarizeCommand } = await import('../shared/transcript.mjs')
+  assert.equal(describeTool('bash', { command: 'mkdir -p x && python3 x/t.py', description: 'Run Dijkstra tests' }).verb, 'Run Dijkstra tests')
+  const r = summarizeCommand("mkdir -p ~/d && cat > ~/d/t.py << 'PY'\nimport a; b | c\nPY\ncd ~/d && python3 t.py")
+  assert.equal(r.verb, 'Ran a script'); assert.equal(r.meta, 't.py')
+  assert.equal(summarizeCommand('mkdir -p a && mv b a').verb, 'Moved files around')
+})

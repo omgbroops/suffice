@@ -19,7 +19,7 @@ export function titleOf(text, path) {
 export function linksOf(text) {
   const prose = text.replace(/```[\s\S]*?```/g, '').replace(/`[^`\n]*`/g, '')
   const out = []
-  for (const m of prose.matchAll(/\[\[([^\]|#\n]+)(?:#[^\]|\n]*)?(?:\|[^\]\n]*)?\]\]/g)) out.push({ wiki: m[1].trim() })
+  for (const m of prose.matchAll(/\[\[([^\]|#\n]+)(?:#[^\]|\n]*)?(?:\|[^\]\n]*)?\]\]/g)) if (m[1].trim()) out.push({ wiki: m[1].trim() })
   for (const m of prose.matchAll(/\]\(([^)\s]+?\.(?:md|markdown))(?:#[^)]*)?\)/gi)) if (!/^[a-z]+:/i.test(m[1])) out.push({ rel: decodeURI(m[1]) })
   return out
 }
@@ -52,7 +52,8 @@ export async function scanNotes(root) {
       if (files.length >= MAX_FILES) return
       if (e.name.startsWith('.')) continue
       const p = join(dir, e.name)
-      if (e.isDirectory()) { if (!SKIP.has(e.name)) await walk(p, depth + 1) }
+      // .app/.framework bundles are programs, not notes
+      if (e.isDirectory()) { if (!SKIP.has(e.name) && !/\.(app|framework|bundle|xcarchive|photoslibrary)$/i.test(e.name)) await walk(p, depth + 1) }
       else if (e.isFile() && NOTE.test(e.name)) files.push(p)
     }
   }

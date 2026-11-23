@@ -356,9 +356,9 @@ export default function App() {
       return { ...prev, [key]: { ...t, transcript: tr, running: false } }
     })
 
-  const send = async (key: string, text: string) => {
+  const send = async (key: string, text: string, proj?: string) => {
     const t = threads[key] ?? null
-    const p = t?.project ?? project
+    const p = t?.project ?? proj ?? project
     if (!p || !settings) return
     try {
       await api.run({ threadId: key, path: t?.path, project: p, prompt: text, model: settings.model, effort: effortFor(modelInfo), fast: !!settings.fast[settings.model], mode: settings.mode ?? 'balanced', cheapModel: settings.cheapModel ?? 'gpt-6-luna' })
@@ -367,13 +367,20 @@ export default function App() {
     }
   }
 
-  const startThread = (text: string) => {
-    if (!project) return
+  const startThread = async (text: string) => {
+    let project = settings?.project ?? null
+    if (!project) {
+      const r = await api.defaultProject().catch(e => (setNotice(e.message), null))
+      if (!r) return
+      project = r.project
+      setProjects(r.projects)
+      setSettings(s => (s ? { ...s, project: r.project } : s))
+    }
     const key = crypto.randomUUID()
     const title = text.length > 60 ? `${text.slice(0, 60).trimEnd()}…` : text
     setThreads(prev => ({ ...prev, [key]: { key, project, title, modified: Date.now(), running: true, transcript: emptyTranscript() } }))
     go({ kind: 'thread', key })
-    void send(key, text)
+    void send(key, text, project)
   }
 
   const list = useMemo(() => Object.values(threads).sort((a, b) => b.modified - a.modified), [threads])
@@ -624,7 +631,7 @@ export default function App() {
                   ]}
                 />
               </div>
-              <Composer {...composerProps} draftKey="home" onAttach={project ? () => api.pickFiles(project) : undefined} project={projectPicker(project)} autoFocus tip disabled={project ? undefined : 'Choose a project first'} onSend={startThread} />
+              <Composer {...composerProps} draftKey="home" onAttach={project ? () => api.pickFiles(project) : undefined} project={projectPicker(project)} autoFocus tip onSend={startThread} />
               {project && list[0] && <HomeContinue thread={list[0]} onOpen={() => go({ kind: 'thread', key: list[0].key })} />}
               {!project && (
                 <button className="home-hint" onClick={() => void browseProject()}>

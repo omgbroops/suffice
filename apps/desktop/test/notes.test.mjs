@@ -60,3 +60,14 @@ test('containment holds when the project is the filesystem root', () => {
   assert.equal(inside('/proj', '/proj'), false)
   assert.equal(inside('/proj', '/proj/..notes.md'), true)
 })
+
+test('an empty wikilink and app bundles never break or pollute the scan', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'notes-empty-'))
+  await writeFile(join(root, 'a.md'), '# A\n[[ ]] and [[b]]')
+  await writeFile(join(root, 'b.md'), '# B')
+  await mkdir(join(root, 'X.app', 'Contents'), { recursive: true })
+  await writeFile(join(root, 'X.app', 'Contents', 'c.md'), '# C')
+  const notes = await scanNotes(root)
+  assert.deepEqual(notes.map(n => n.path).sort(), ['a.md', 'b.md'])
+  assert.deepEqual(notes.find(n => n.path === 'a.md').links, ['b.md'])
+})
