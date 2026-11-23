@@ -114,6 +114,7 @@ const handlers = {
   'settings:update': async patch => { const s = await host.updateSettings(patch); applyTheme(s); applyLoginItem(app, s); return s },
   'privacy:clear': () => host.clearHistory(),
   'app:info': () => ({ version: app.getVersion(), openAtLogin: app.getLoginItemSettings().openAtLogin }),
+  'usage:summary': args => host.usageSummary(args),
 }
 
 app.whenReady().then(async () => {

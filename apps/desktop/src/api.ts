@@ -60,6 +60,13 @@ export type Usage = {
 
 export type Mode = 'balanced' | 'efficient' | 'fast'
 
+export type UsageSummary = {
+  total: { runs: number; inputTokens: number; outputTokens: number; cacheReadTokens: number; cacheWriteTokens: number; apiCostUsd: number }
+  days: { date: string; runs: number; apiCostUsd: number }[]
+  plan: { kind: 'subscription' | 'api'; name: string }
+  savedUsd: number
+}
+
 export type AccountRow = { id: string; name: string; kind: 'cli' | 'key'; installed: boolean; connected: boolean; runnable: boolean; detail: string; howTo: string; install?: string; last4?: string }
 export type InitInfo = { accounts?: AccountRow[]; defaultLabel?: string | null; signedIn: boolean; home: string; settings: Settings; projects: string[]; projectList?: Project[]; platform: string }
 export type NoteSummary = { path: string; title: string; modified: number; links: string[] }
@@ -122,5 +129,6 @@ export const api = {
   usage: () => bridge().invoke<Usage>('usage:summary'),
   appInfo: () => bridge().invoke<{ version: string; openAtLogin: boolean }>('app:info'),
   clearHistory: () => bridge().invoke('privacy:clear'),
+  usageSummary: (days?: number) => bridge().invoke<UsageSummary>('usage:summary', { days }),
   on: (channel: string, listener: (payload: any) => void) => bridge().on(channel, listener),
 }

@@ -11,6 +11,11 @@ export const bool = (v, name) => {
   if (typeof v !== 'boolean') throw new Error(`Invalid ${name}.`)
   return v
 }
+export const int = (v, name, { optional = false, min, max } = {}) => {
+  if (optional && (v === undefined || v === null)) return undefined
+  if (!Number.isInteger(v) || (min !== undefined && v < min) || (max !== undefined && v > max)) throw new Error(`Invalid ${name}.`)
+  return v
+}
 export const oneOf = (v, list, name) => {
   if (!list.includes(v)) throw new Error(`Invalid ${name}.`)
   return v
