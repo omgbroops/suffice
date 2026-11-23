@@ -222,3 +222,12 @@ test('the child env always carries USER, which the CLI needs to find its login',
   assert.equal(childEnv({ PATH: '/bin', HOME: '/h' }).USER, userInfo().username)
   assert.equal(childEnv({ USER: 'someone' }).USER, 'someone')
 })
+
+test('claude engine: each mcp config becomes a --mcp-config flag', async () => {
+  const t = await runFake('text', { mcpConfigs: ['/a/mcp.json', '/b/mcp.json'] })
+  try {
+    await t.engine.run(t.args)
+    const [{ argv }] = await argvLog(t.s.log)
+    assert.deepEqual(argv.filter((a, i) => argv[i - 1] === '--mcp-config'), ['/a/mcp.json', '/b/mcp.json'])
+  } finally { await t.cleanup() }
+})
