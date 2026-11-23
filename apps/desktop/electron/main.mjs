@@ -74,6 +74,8 @@ const handlers = {
   'projects:set': ({ path }) => host.setProject(path),
   'projects:default': () => host.defaultProject(),
   'projects:recent': () => host.recentProjects(),
+  'projects:list': () => host.projectsList(),
+  'projects:add-folder': args => host.addFolder(args),
   'threads:list': ({ project }) => host.listThreads(project),
   'notes:list': args => host.listNotes(args),
   // files chosen to mention in a prompt: project-relative when inside the project, absolute otherwise

@@ -26,6 +26,9 @@ import { suggestName } from './project-name.mjs'
 import { createErrorLog } from './errorlog.mjs'
 import { CLAUDE_EFFORTS, CLAUDE_MODELS, INSTALL_HINT, LOGIN_HINT, authStatus, childEnv, createClaudeEngine, findClaude } from './claude-engine.mjs'
 import { DEFAULTS, createAccounts } from './accounts.mjs'
+import { buildInput, claudeAsk, createTitler } from './thread-meta.mjs'
+import { categorize } from './categories.mjs'
+import { addFolder as addProjectFolder, extraFolders, sync as syncProjects } from './projects-store.mjs'
 import { bool, cleanSettingsPatch, object, oneOf, sessionPath, str } from './validate.mjs'
 
 export const PROVIDER = 'openai'
@@ -162,6 +165,46 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
   // claudePath comes from the settings file or the host, never from the renderer (cleanSettingsPatch drops it)
   const claudePath = () => givenClaudePath ?? settings.claudePath ?? findClaude()
   const claudeEngine = createClaudeEngine({ push: (id, e) => push(id, e), spawn: claudeSpawn })
+
+  // ---- projects (one or more folders) and thread titles ----------------------
+  const projectsPath = resolve(desktopDir, 'projects.json')
+  const categoriesPath = resolve(desktopDir, 'categories.json')
+  let projectList = null
+  const loadProjects = async () => {
+    const saved = await readJson(projectsPath, [])
+    projectList = syncProjects(Array.isArray(saved) ? saved : [], await recentProjects(home), settings.projectAutoNames)
+    if (projectList.length !== (Array.isArray(saved) ? saved.length : -1)) await writeJson(projectsPath, projectList)
+    return projectList
+  }
+  /** project cwd -> {n, labels: {threadPath: label}, sections: {threadPath: label}}; sections are manual and win over labels */
+  const readCats = async () => plain(await readJson(categoriesPath, {}))
+  const cheapAsk = async (system, text) => {
+    if (isClaude()) return claudeAsk(claudePath())(system, text)
+    const model = runtime?.getModel(PROVIDER, settings.cheapModel ?? DEFAULT_CHEAP_MODEL)
+    if (!model || !signedIn()) throw new Error('No model')
+    const reply = await runtime.completeSimple(model, { systemPrompt: system, messages: [{ role: 'user', content: text, timestamp: Date.now() }] })
+    return reply.content.filter(c => c.type === 'text').map(c => c.text).join('')
+  }
+  const titler = createTitler({
+    ask: cheapAsk,
+    done: async (id, meta) => {
+      const thread = live.get(id)
+      if (!thread?.path || disposed) return
+      thread.transcript = { ...thread.transcript, title: meta.title, description: meta.description }
+      if (thread.claude) await writeJson(thread.path, { ...(await readJson(thread.path, {})), ...meta })
+      await persist(thread)
+      emit('threads:changed', { project: thread.project })
+      // categories: at most one recompute per new thread (categorize checks the count)
+      const rows = await listThreads(thread.project)
+      const cats = await readCats()
+      const next = await categorize(rows, cats[thread.project], cheapAsk)
+      if (next && next !== cats[thread.project]) {
+        await writeJson(categoriesPath, { ...cats, [thread.project]: { ...cats[thread.project], ...next } })
+        emit('threads:changed', { project: thread.project })
+      }
+    },
+  })
+  const scheduleTitle = id => { const t = live.get(id); if (t) titler.schedule(id, () => buildInput(live.get(id).transcript), t.transcript.messages.find(m => m.role === 'user')?.text ?? '') }
 
   // ---- sign-in -----------------------------------------------------------
   let login = null
@@ -392,6 +435,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
         }
         await persist(thread)
         emit('threads:changed', { project })
+        scheduleTitle(threadId)
       }
     })()
     return { threadId, effort: level, mode }
@@ -424,11 +468,11 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     push(threadId, { type: 'user', id: randomUUID(), text: prompt })
     push(threadId, { type: 'agent_start', id: randomUUID(), model: info.name, effort: level, mode })
     await mkdir(sessionDir(home, project), { recursive: true, mode: 0o700 })
-    if (!resume) await writeJson(filePath, { sessionId, project, title: prompt.replace(/\s+/g, ' ').trim().slice(0, 120) })
+    if (!resume) await writeJson(filePath, { sessionId, project })
     emit('thread:session', { threadId, path: filePath })
     void (async () => {
       try {
-        const totals = await claudeEngine.run({ threadId, claudePath: bin, project, prompt, model, effort: level, approval: settings.approval, sessionId, resume, onApproval: (name, input) => approve(threadId, name, input) })
+        const totals = await claudeEngine.run({ threadId, claudePath: bin, project, prompt, model, effort: level, approval: settings.approval, sessionId, resume, addDirs: extraFolders(projectList ?? await loadProjects(), project), onApproval: (name, input) => approve(threadId, name, input) })
         push(threadId, { type: 'end', ok: true, totals })
       } catch (e) {
         push(threadId, { type: 'end', ok: false, error: /cancelled/.test(e?.message ?? '') ? 'Stopped.' : e?.message || 'The run failed.' })
@@ -436,6 +480,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
         thread.running = false
         await persist(thread)
         emit('threads:changed', { project })
+        scheduleTitle(threadId)
       }
     })()
     return { threadId, effort: level, mode }
@@ -496,20 +541,31 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
         const path = resolve(dir, f)
         const [meta, st] = await Promise.all([readJson(path, null).catch(() => null), stat(path).catch(() => null)])
         if (!meta || !st) return null
-        return { path, title: String(meta.title || 'Untitled'), modified: +st.mtime, running: [...live.values()].some(t => t.path === path && t.running) }
+        // a thread saved before titles existed keeps its first-message title until its next run writes a real one
+        return { path, title: String(meta.title || 'New thread'), description: meta.description, modified: +st.mtime, running: [...live.values()].some(t => t.path === path && t.running) }
       }))
-      return rows.filter(Boolean).sort((a, b) => b.modified - a.modified)
+      return withCategories(project, rows.filter(Boolean).sort((a, b) => b.modified - a.modified))
     }
     const sessions = await SessionManager.list(project, sessionDir(home, project)).catch(() => [])
-    return sessions
+    const rows = await Promise.all(sessions
       .filter(s => s.messageCount > 0)
       .sort((a, b) => +new Date(b.modified) - +new Date(a.modified))
-      .map(s => ({
-        path: samePath(s.path),
-        title: (s.name || s.firstMessage || 'Untitled').replace(/\s+/g, ' ').trim().slice(0, 120),
-        modified: +new Date(s.modified),
-        running: [...live.values()].some(t => t.path === samePath(s.path) && t.running),
+      .map(async s => {
+        const meta = await readJson(transcriptPath(samePath(s.path)), null).catch(() => null)
+        return {
+          path: samePath(s.path),
+          title: String(meta?.title || s.name || 'New thread').replace(/\s+/g, ' ').trim().slice(0, 120),
+          description: meta?.description,
+          modified: +new Date(s.modified),
+          running: [...live.values()].some(t => t.path === samePath(s.path) && t.running),
+        }
       }))
+    return withCategories(project, rows)
+  }
+
+  async function withCategories(project, rows) {
+    const c = (await readCats())[project]
+    return rows.map(r => { const category = c?.sections?.[r.path] ?? c?.labels?.[r.path]; return category ? { ...r, category } : r })
   }
 
   // ---- projects, models, settings -----------------------------------------
@@ -543,6 +599,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
 
   async function dispose() {
     disposed = true
+    titler.cancel()
     claudeEngine.dispose()
     login?.controller.abort()
     for (const [id] of approvals) answerApproval(id, false)
@@ -574,7 +631,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
       }
       const claude = isClaude() ? await authStatus(claudePath(), childEnv()) : null
       const connected = rows ? rows.some(r => r.connected) || (!isClaude() && signedIn()) : null
-      return { signedIn: connected ?? (claude ? claude.loggedIn : signedIn()), accounts: rows, defaultLabel: accounts ? accounts.label(settings.defaultProvider ?? accounts.pick(rows)?.id) : null, engine: settings.engine, modes: modesFor(settings.engine), claude, home, settings, projects: await recentProjects(home), platform: process.platform }
+      return { signedIn: connected ?? (claude ? claude.loggedIn : signedIn()), accounts: rows, defaultLabel: accounts ? accounts.label(settings.defaultProvider ?? accounts.pick(rows)?.id) : null, engine: settings.engine, modes: modesFor(settings.engine), claude, home, settings, projects: await recentProjects(home), projectList: await loadProjects(), platform: process.platform }
     },
     login: () => (isClaude() ? Promise.resolve({ ok: false, error: claudePath() ? LOGIN_HINT : INSTALL_HINT }) : startLogin()),
     answerLogin: (id, value) => {
@@ -608,6 +665,15 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
       return setProject(dir)
     },
     recentProjects: () => recentProjects(home),
+    projectsList: loadProjects,
+    addFolder: async ({ id }) => {
+      str(id, 'project')
+      const folder = await chooseDirectory()
+      if (!folder) return projectList ?? loadProjects()
+      projectList = addProjectFolder(projectList ?? (await loadProjects()), id, await resolveProject(folder))
+      await writeJson(projectsPath, projectList)
+      return projectList
+    },
     listThreads,
     // notes are read only from a project the user has opened
     listNotes: async ({ project }) => (typeof project === 'string' && (await recentProjects(home)).includes(project) ? scanNotes(project) : []),

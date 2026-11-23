@@ -39,9 +39,10 @@ export type Settings = {
 export type Mode = 'balanced' | 'efficient' | 'fast'
 
 export type AccountRow = { id: string; name: string; kind: 'cli' | 'key'; installed: boolean; connected: boolean; runnable: boolean; detail: string; howTo: string; install?: string; last4?: string }
-export type InitInfo = { accounts?: AccountRow[]; defaultLabel?: string | null; signedIn: boolean; home: string; settings: Settings; projects: string[]; platform: string }
+export type InitInfo = { accounts?: AccountRow[]; defaultLabel?: string | null; signedIn: boolean; home: string; settings: Settings; projects: string[]; projectList?: Project[]; platform: string }
 export type NoteSummary = { path: string; title: string; modified: number; links: string[] }
-export type ThreadSummary = { path: string; title: string; modified: number; running: boolean }
+export type Project = { id: string; name: string; folders: string[] }
+export type ThreadSummary = { path: string; title: string; description?: string; category?: string; modified: number; running: boolean }
 export type AuthEvent =
   | { type: 'url'; url: string }
   | { type: 'progress'; message: string }
@@ -79,6 +80,7 @@ export const api = {
   chooseProject: () => bridge().invoke<{ project: string; projects: string[] } | null>('projects:choose'),
   defaultProject: () => bridge().invoke<{ project: string; projects: string[] }>('projects:default'),
   setProject: (path: string) => bridge().invoke<{ project: string; projects: string[] }>('projects:set', { path }),
+  addFolder: (id: string) => bridge().invoke<Project[]>('projects:add-folder', { id }),
   threads: (project: string) => bridge().invoke<ThreadSummary[]>('threads:list', { project }),
   pickFiles: (project: string | null) => bridge().invoke<string[]>('files:pick', { project }),
   notes: (project: string) => bridge().invoke<NoteSummary[]>('notes:list', { project }),

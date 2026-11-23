@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
-import { api, type AccountRow, type InitInfo, type ModelInfo, type Settings, type ThreadSummary } from './api'
+import { api, type AccountRow, type Project, type InitInfo, type ModelInfo, type Settings, type ThreadSummary } from './api'
 import { emptyTranscript, reduce, type Transcript } from '../shared/transcript.mjs'
 import { ago, type Status } from './data'
 import { Composer } from './components/Composer'
@@ -19,6 +19,8 @@ export type Thread = {
   path?: string
   project: string
   title: string
+  description?: string
+  category?: string
   modified: number
   running: boolean
   transcript?: Transcript
@@ -189,6 +191,7 @@ export default function App() {
   const [showAccounts, setShowAccounts] = useState(false)
   const [settings, setSettings] = useState<Settings | null>(null)
   const [projects, setProjects] = useState<string[]>([])
+  const [projectList, setProjectList] = useState<Project[]>([])
   const [models, setModels] = useState<ModelInfo[]>([])
   const [threads, setThreads] = useState<Record<string, Thread>>({})
   const [tabs, setTabs] = useState<string[]>([])
@@ -212,6 +215,7 @@ export default function App() {
       api.gitIdentity().then(setGit, () => setGit({ name: 'Git not set up', avatar: '' }))
       setSettings(i.settings)
       setProjects(i.projects)
+      setProjectList(i.projectList ?? [])
       if (i.signedIn) setModels(await api.models())
     } catch (e) {
       setBootError(e instanceof Error ? e.message : String(e))
@@ -231,7 +235,7 @@ export default function App() {
       for (const s of list) {
         const existing = byPath.get(s.path)
         const key = existing?.key ?? s.path
-        next[key] = { ...(existing ?? { key, project: p, running: s.running }), path: s.path, project: p, title: existing?.title && existing.title !== 'Untitled' ? existing.title : s.title, modified: Math.max(existing?.modified ?? 0, s.modified) }
+        next[key] = { ...(existing ?? { key, project: p, running: s.running }), path: s.path, project: p, title: s.title !== 'New thread' ? s.title : existing?.title && existing.title !== 'Untitled' ? existing.title : s.title, description: s.description, category: s.category, modified: Math.max(existing?.modified ?? 0, s.modified) }
       }
       // Keep threads from other projects and ones that have not been saved yet.
       for (const t of Object.values(prev)) if (!next[t.key] && (t.project !== p || !t.path || t.running)) next[t.key] = t
@@ -416,7 +420,7 @@ export default function App() {
       setSettings(s => (s ? { ...s, project: r.project } : s))
     }
     const key = crypto.randomUUID()
-    const title = text.length > 60 ? `${text.slice(0, 60).trimEnd()}…` : text
+    const title = 'New thread' // the model names it after the first run; never the first message
     setThreads(prev => ({ ...prev, [key]: { key, project, title, modified: Date.now(), running: true, transcript: emptyTranscript() } }))
     go({ kind: 'thread', key })
     void send(key, text, project)
@@ -434,7 +438,7 @@ export default function App() {
         api.nameProject(p).then(s => setSettings(cur => (cur ? { ...cur, projectAutoNames: s.projectAutoNames } : cur)), () => {})
       }
   }, [projects, info?.signedIn, settings?.projectAutoNames])
-  const names = useMemo(() => ({ ...settings?.projectAutoNames, ...settings?.projectNames }), [settings?.projectAutoNames, settings?.projectNames])
+  const names = useMemo(() => ({ ...Object.fromEntries(projectList.map(p => [p.folders[0], p.name])), ...settings?.projectAutoNames, ...settings?.projectNames }), [projectList, settings?.projectAutoNames, settings?.projectNames])
 
   if (bootError)
     return (
@@ -583,6 +587,7 @@ export default function App() {
               renderThread={renderThread}
               onPick={p => (void pickProject(p), go({ kind: 'home' }))}
               onAdd={() => void browseProject()}
+              onAddFolder={p => { const id = projectList.find(x => x.folders[0] === p)?.id; if (id) void api.addFolder(id).then(setProjectList, e => setNotice(e.message)) }}
               onTint={(p, c) => void patchSettings({ projectColors: { ...liveSettings.current?.projectColors, [p]: c } })}
               onIcon={(p, i) => void patchSettings({ projectIcons: { ...liveSettings.current?.projectIcons, [p]: i } })}
               onRename={(p, name) => {
