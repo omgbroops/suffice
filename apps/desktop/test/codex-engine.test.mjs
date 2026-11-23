@@ -109,3 +109,66 @@ test('codex: missing CLI rejects with the install hint; status and exports', asy
   try { assert.equal((await codexStatus(t.bin)).loggedIn, true) } finally { await t.cleanup() }
   assert.ok(CODEX_MODELS.length && CODEX_EFFORTS.includes('high'))
 })
+
+test('codex: runs on the ChatGPT sign-in without the user\'s MCP servers; app instructions go in as a TOML string', async () => {
+  const instructions = 'Line one.\nSay "hi" \\ bye.'
+  const t = await go('text', { instructions })
+  try {
+    await t.engine.run(t.args)
+    const [{ argv }] = await t.calls()
+    const cs = argv.filter((a, i) => argv[i - 1] === '-c')
+    assert.ok(cs.includes('model_provider="openai"'))
+    assert.ok(cs.includes('mcp_servers={}'))
+    const di = cs.find(c => c.startsWith('developer_instructions='))
+    // a JSON string literal is a valid TOML basic string: it must parse back to the exact text
+    assert.equal(JSON.parse(di.slice('developer_instructions='.length)), instructions)
+  } finally { await t.cleanup() }
+})
+
+test('codex: the model list comes from the CLI\'s own catalog (visibility "list"), with a fallback', async () => {
+  const { mkdtemp, writeFile, rm } = await import('node:fs/promises')
+  const { join } = await import('node:path')
+  const { codexModels } = await import('../electron/host/codex-engine.mjs')
+  const dir = await mkdtemp(join(tmpdir(), 'codex-home-'))
+  try {
+    await writeFile(join(dir, 'models_cache.json'), JSON.stringify({ models: [{ slug: 'a-1', display_name: 'A 1', visibility: 'list' }, { slug: 'hidden', visibility: 'hide' }] }))
+    assert.deepEqual(codexModels({ CODEX_HOME: dir }), [{ id: 'a-1', name: 'A 1' }])
+    assert.deepEqual(codexModels({ CODEX_HOME: join(dir, 'none') }), CODEX_MODELS)
+  } finally { await rm(dir, { recursive: true, force: true }) }
+})
+
+test('host: picking a Codex model runs the thread through Codex and keeps its session for the next turn', async () => {
+  const { mkdtemp, rm, readdir, readFile } = await import('node:fs/promises')
+  const { join } = await import('node:path')
+  const { createHost } = await import('../electron/host/host.mjs')
+  const t = await go('text')
+  const home = await mkdtemp(join(tmpdir(), 'suffice-codex-host-'))
+  const savedHome = process.env.CODEX_HOME
+  process.env.CODEX_HOME = join(home, 'no-codex-home') // fallback model list, never the real ~/.codex
+  try {
+    const events = []
+    let done
+    const finished = new Promise(r => (done = r))
+    const host = await createHost({
+      home, claudePath: '/nonexistent/claude', codexPath: t.bin, openExternal: () => {}, chooseDirectory: async () => home,
+      emit: (c, p) => { events.push([c, p]); if (c === 'threads:changed') done() },
+    })
+    const codex = host.models().filter(m => m.engine === 'codex')
+    assert.deepEqual(codex.map(m => m.id), CODEX_MODELS.map(m => m.id))
+    assert.deepEqual(codex[0].efforts, CODEX_EFFORTS)
+    await host.run({ threadId: 'c1', project: home, prompt: 'hi', model: CODEX_MODELS[0].id, effort: 'low', mode: 'balanced' })
+    await finished
+    const types = events.filter(([c]) => c === 'thread:event').map(([, p]) => p.event.type)
+    assert.deepEqual(types, ['user', 'agent_start', 'text', 'end'])
+    assert.equal(events.find(([c, p]) => c === 'thread:event' && p.event.type === 'end')[1].event.ok, true)
+    const dir = join(home, 'sessions'), [sub] = await readdir(dir), [file] = (await readdir(join(dir, sub))).filter(f => f.endsWith('.claude.json'))
+    const meta = JSON.parse(await readFile(join(dir, sub, file), 'utf8'))
+    assert.equal(meta.engine, 'codex'); assert.equal(meta.codexSession, 'thr-9')
+    const [{ argv }] = (await t.calls()).filter(c => c.argv[0] === 'exec')
+    assert.ok(argv.includes('model_provider="openai"') && argv.some(a => a.startsWith('developer_instructions=')))
+    await host.dispose()
+  } finally {
+    savedHome === undefined ? delete process.env.CODEX_HOME : (process.env.CODEX_HOME = savedHome)
+    await t.cleanup(); await rm(home, { recursive: true, force: true })
+  }
+})

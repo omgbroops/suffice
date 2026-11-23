@@ -12,16 +12,31 @@
 // Approval: exec never prompts. 'ask'/'every' -> read-only sandbox (edits and commands that write are refused by the sandbox,
 // the host cannot be asked); 'never' -> workspace-write (the documented replacement for the removed --full-auto), not full access.
 
+import { readFileSync } from 'node:fs'
+import { homedir } from 'node:os'
+import { join } from 'node:path'
 import { cliStatus, createCliEngine, findOnPath } from './cli-engine.mjs'
 
 export const INSTALL_HINT = 'Codex is not installed. Install it, then run `codex login` once in a terminal.'
 export const LOGIN_HINT = 'Run `codex login` once in a terminal to sign in with ChatGPT, then come back.'
 export const SANDBOX = { ask: 'read-only', every: 'read-only', never: 'workspace-write' }
-// ASSUMED ids: the CLI accepts any -m string; these are the ones the app offers.
+// Fallback only: the list shown is the CLI's own catalog (codexModels below). These are the "list" models in
+// ~/.codex/models_cache.json on codex-cli 0.159.0 (read 2026-11-23).
 export const CODEX_MODELS = [
-  { id: 'gpt-5.5', name: 'GPT-5.5' },
-  { id: 'gpt-5.5-codex', name: 'GPT-5.5 Codex' },
+  { id: 'gpt-6-luna', name: 'GPT-6-Luna' },
+  { id: 'gpt-5.6-terra', name: 'GPT-5.6-Terra' },
+  { id: 'gpt-5.6-luna', name: 'GPT-5.6-Luna' },
 ]
+/** The models the Codex CLI itself lists for a ChatGPT sign-in (its models_cache.json), or the fallback above. */
+export function codexModels(env = process.env) {
+  try {
+    const raw = JSON.parse(readFileSync(join(env.CODEX_HOME || join(homedir(), '.codex'), 'models_cache.json'), 'utf8'))
+    const list = (Array.isArray(raw) ? raw : raw?.models ?? [])
+      .filter(m => m && typeof m.slug === 'string' && m.visibility === 'list')
+      .map(m => ({ id: m.slug, name: String(m.display_name || m.slug) }))
+    return list.length ? list : CODEX_MODELS
+  } catch { return CODEX_MODELS }
+}
 export const CODEX_EFFORTS = ['low', 'medium', 'high', 'xhigh'] // -c model_reasoning_effort
 
 export const findCodex = (override, env) => findOnPath('codex', override, env)
@@ -30,10 +45,14 @@ export const findCodex = (override, env) => findOnPath('codex', override, env)
 export const codexStatus = (path, env) =>
   cliStatus(path, ['login', 'status'], (out, code) => ({ loggedIn: code === 0 && /logged in/i.test(out), detail: out.trim().split('\n')[0] }), env)
 
-function build({ prompt, model, effort, approval, sessionId, resume }) {
+function build({ prompt, model, effort, approval, sessionId, resume, instructions }) {
   const sandbox = SANDBOX[approval] ?? 'read-only'
+  // Suffice runs on the ChatGPT sign-in whatever provider the user's config.toml names (a custom provider would bill
+  // its own API), without the user's MCP servers; the app's instructions ride as developer instructions (TOML string).
   const common = ['--json', '--skip-git-repo-check', ...(model ? ['-m', model] : []),
-    ...(effort ? ['-c', `model_reasoning_effort="${effort}"`] : []), '-c', 'approval_policy="never"']
+    ...(effort ? ['-c', `model_reasoning_effort="${effort}"`] : []), '-c', 'approval_policy="never"',
+    '-c', 'model_provider="openai"', '-c', 'mcp_servers={}',
+    ...(instructions ? ['-c', `developer_instructions=${JSON.stringify(instructions)}`] : [])]
   const args = resume && sessionId
     ? ['exec', 'resume', ...common, '-c', `sandbox_mode="${sandbox}"`, sessionId, '-']
     : ['exec', ...common, '-s', sandbox, '-']

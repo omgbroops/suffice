@@ -141,6 +141,7 @@ function Effort({ m, value, onChange }: { m: ModelInfo; value?: string; onChange
 }
 
 function Prices({ m }: { m: ModelInfo }) {
+  if (m.engine === 'codex') return <div className="mp-kvs"><div className="mp-kv"><span>Runs on</span><span className="mp-kv-v">Codex · ChatGPT plan</span></div></div>
   return (
     <div className="mp-kvs">
       {m.contextWindow > 0 && <div className="mp-kv"><span>Context</span><span className="mp-kv-v">{ctx(m.contextWindow)}</span></div>}
@@ -504,7 +505,7 @@ export function ModelPicker(p: PickerProps) {
                           </span>
                           {fast[m.id] && <span className="mp-tag">Priority</span>}
                           {selectedId === m.id && <IconCheck size={13} className="mp-check" />}
-                          <CostBar m={m} cost={costOf(m)} />
+                          {m.engine !== 'codex' && <CostBar m={m} cost={costOf(m)} />}
                         </button>
                       )
                     })}

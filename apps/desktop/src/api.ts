@@ -10,6 +10,8 @@ export type ModelInfo = {
   efforts: string[]
   /** modes this engine can run; absent means all */
   modes?: string[]
+  /** 'codex': runs through the user's Codex CLI on their ChatGPT plan (no per-token price) */
+  engine?: 'codex'
 }
 
 export type Settings = {

@@ -184,7 +184,7 @@ test('host on the claude engine: models, modes, mode refusal, login hint and a f
     let done
     const finished = new Promise(r => (done = r))
     const host = await createHost({
-      home, claudePath: t.s.bin, openExternal: () => {}, chooseDirectory: async () => home,
+      home, claudePath: t.s.bin, codexPath: null, openExternal: () => {}, chooseDirectory: async () => home,
       emit: (c, p) => {
         events.push([c, p])
         if (c === 'thread:event' && p.event.type === 'approval') host.answerApproval(p.event.id, false)

@@ -25,8 +25,9 @@ import { emptyTranscript, fromSessionMessages, reduce, resultText } from '../../
 import { readNote, scanNotes } from './notes.mjs'
 import { suggestName } from './project-name.mjs'
 import { createErrorLog } from './errorlog.mjs'
-import { CLAUDE_EFFORTS, CLAUDE_MODELS, INSTALL_HINT, LOGIN_HINT, authStatus, childEnv, createClaudeEngine, findClaude, withCacheCost } from './claude-engine.mjs'
+import { CLAUDE_EFFORTS, CLAUDE_MODELS, INSTALL_HINT, LOGIN_HINT, authStatus, childEnv, createClaudeEngine, findClaude, sufficePrompt, withCacheCost } from './claude-engine.mjs'
 import { writeMcpConfig } from './suffice-mcp.mjs'
+import { CODEX_EFFORTS, INSTALL_HINT as CODEX_INSTALL_HINT, LOGIN_HINT as CODEX_LOGIN_HINT, codexModels, codexStatus, createCodexEngine, findCodex } from './codex-engine.mjs'
 import { clearDirs, pruneOld } from './desktop.mjs'
 import { ARTIFACT_PROMPT } from './artifact-prompt.mjs'
 import { DEFAULTS, createAccounts } from './accounts.mjs'
@@ -135,7 +136,7 @@ async function writeJson(path, value) {
  *   claudeSpawn?: typeof import('node:child_process').spawn,
  * }} deps
  */
-export async function createHost({ home = parseOptions([]).home, emit, openExternal, chooseDirectory, openPath, openApp, exists = existsSync, runtime: givenRuntime, createSession = createSufficeSession, engine: givenEngine, claudePath: givenClaudePath, claudeSpawn, mcpConfigs = [], accounts: givenAccounts, safeStorage }) {
+export async function createHost({ home = parseOptions([]).home, emit, openExternal, chooseDirectory, openPath, openApp, exists = existsSync, runtime: givenRuntime, createSession = createSufficeSession, engine: givenEngine, claudePath: givenClaudePath, claudeSpawn, codexPath: givenCodexPath, codexSpawn, mcpConfigs = [], accounts: givenAccounts, safeStorage }) {
   process.env.PI_CODING_AGENT_DIR = home
   const desktopDir = resolve(home, 'desktop')
   const accounts = givenAccounts ?? (safeStorage ? createAccounts({ desktopDir, safeStorage }) : null)
@@ -149,9 +150,11 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
   if (givenEngine) settings.engine = givenEngine
   // the model must be one the active engine offers: a Claude engine never shows a GPT default, nor the reverse
   const CLAUDE_DEFAULT = 'claude-opus-5-5'
+  // null turns Codex off (tests); undefined finds it on PATH
+  const codexPath = () => (givenCodexPath !== undefined ? givenCodexPath : findCodex())
   const fixModel = () => {
     if (settings.engine === 'openai') { if (CLAUDE_MODELS.some(m => m.id === settings.model)) settings.model = DEFAULT_MODEL }
-    else if (!CLAUDE_MODELS.some(m => m.id === settings.model)) settings.model = CLAUDE_DEFAULT
+    else if (!CLAUDE_MODELS.some(m => m.id === settings.model) && !(codexPath() ? codexModels() : []).some(m => m.id === settings.model)) settings.model = CLAUDE_DEFAULT
   }
   fixModel()
   const historyDirs = [transcriptDir, resolve(home, 'sessions')]
@@ -183,6 +186,9 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
   // claudePath comes from the settings file or the host, never from the renderer (cleanSettingsPatch drops it)
   const claudePath = () => givenClaudePath ?? settings.claudePath ?? findClaude()
   const claudeEngine = createClaudeEngine({ push: (id, e) => push(id, e), spawn: claudeSpawn })
+  // Codex runs beside Claude Code: picking a Codex model sends the thread through the user's Codex CLI (ChatGPT sign-in)
+  const codexEngine = createCodexEngine({ push: (id, e) => push(id, e), spawn: codexSpawn })
+  const codexList = () => (codexPath() ? codexModels() : [])
 
   // ---- projects (one or more folders) and thread titles ----------------------
   const projectsPath = resolve(desktopDir, 'projects.json')
@@ -422,6 +428,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     if (project !== null && project !== undefined) str(project, 'project')
     oneOf(mode, MODES, 'mode')
     if (disposed) throw new Error('The app is closing.')
+    if (isClaude() && codexList().some(m => m.id === model)) return runCodex({ threadId, path, project, prompt, model, effort })
     if (isClaude()) return runClaude({ threadId, path, project, prompt, model: CLAUDE_MODELS.some(m => m.id === model) ? model : settings.model, effort, mode })
     if (mode === 'efficient' && !runtime.getModel(PROVIDER, cheapModel)) throw new Error(`${cheapModel} is not in the model catalog.`)
     if (!signedIn()) throw new Error('Sign in to start a task.')
@@ -549,6 +556,61 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     return { threadId, effort: level, mode }
   }
 
+  // A Codex thread is stored like a Claude one (<id>.claude.json meta + saved transcript), so the sidebar, titles and
+  // thread menu work unchanged; the meta file keeps Codex's own session id for `codex exec resume`.
+  async function runCodex({ threadId, path, project, prompt, model, effort }) {
+    if (!project) throw new Error('Choose a project first.')
+    const info = codexList().find(m => m.id === model)
+    const level = CODEX_EFFORTS.includes(effort) ? effort : 'medium'
+    const bin = codexPath()
+    if (!bin) throw new Error(CODEX_INSTALL_HINT)
+    if (path !== undefined && path !== null) path = sessionPath(path, [sessionDir(home, project)], knownPaths())
+    else path = undefined
+    let thread = live.get(threadId)
+    if (thread?.running || starting.has(threadId)) throw new Error('This thread is already running.')
+    starting.set(threadId, { stop: false })
+    const filePath = thread?.path ?? samePath(path) ?? resolve(sessionDir(home, project), `${randomUUID()}.claude.json`)
+    let transcript, meta, stopped
+    try {
+      if (!(await codexStatus(bin)).loggedIn) throw new Error(CODEX_LOGIN_HINT)
+      transcript = thread?.transcript ?? (path ? await openTranscript(path) : emptyTranscript())
+      await mkdir(sessionDir(home, project), { recursive: true, mode: 0o700 })
+      meta = (await readJson(filePath, null).catch(() => null)) ?? { sessionId: basename(filePath, '.claude.json'), project }
+      await writeJson(filePath, { ...meta, engine: 'codex' })
+    } finally {
+      stopped = starting.get(threadId)?.stop
+      starting.delete(threadId)
+    }
+    if (stopped) {
+      push(threadId, { type: 'end', ok: false, error: 'Stopped.' })
+      return { threadId, effort: level, mode: 'balanced', stopped: true }
+    }
+    thread = { ...thread, project, path: filePath, transcript, running: true, mode: 'balanced', claude: true, codex: true }
+    live.set(threadId, thread)
+    push(threadId, { type: 'user', id: randomUUID(), text: prompt })
+    push(threadId, { type: 'agent_start', id: randomUUID(), model: info.name, effort: level, mode: 'balanced' })
+    emit('thread:session', { threadId, path: filePath })
+    if (!thread.transcript.title) scheduleTitle(threadId)
+    void (async () => {
+      try {
+        const instructions = [sufficePrompt(settings), ARTIFACT_PROMPT].filter(Boolean).join('\n\n')
+        const r = await codexEngine.run({ threadId, codexPath: bin, project, prompt, model, effort: level, approval: settings.approval, sessionId: meta.codexSession, resume: !!meta.codexSession, instructions })
+        const { sessionId: codexSession, ...totals } = r
+        if (codexSession && codexSession !== meta.codexSession) await writeJson(filePath, { ...(await readJson(filePath, {})), engine: 'codex', codexSession })
+        push(threadId, { type: 'end', ok: true, totals })
+        void ledger.record({ threadId, project, engine: 'codex', model, effort: level, totals })
+      } catch (e) {
+        push(threadId, { type: 'end', ok: false, error: /cancelled/.test(e?.message ?? '') ? 'Stopped.' : e?.message || 'The run failed.' })
+      } finally {
+        thread.running = false
+        await persist(thread)
+        emit('threads:changed', { project })
+        scheduleTitle(threadId)
+      }
+    })()
+    return { threadId, effort: level, mode: 'balanced' }
+  }
+
   /** Mid-run input: steer reaches the agent before its next step; queue waits until it finishes. */
   async function guide(args) {
     const { threadId, text, queue = false } = object(args, 'guide')
@@ -558,6 +620,10 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     const body = text.trim()
     if (!body) throw new Error('Nothing to send.')
     if (!thread?.running) throw new Error('Nothing is running in this thread.')
+    if (thread.codex) {
+      // codex exec reads one prompt per run: the text waits for the next turn
+      throw new Error('Codex takes your next message after this run finishes.')
+    }
     if (thread.claude) {
       // the CLI takes the message on stdin; queue is steer here, it has one input line per run
       if (!claudeEngine.guide(threadId, body)) throw new Error('Nothing is running in this thread.')
@@ -579,6 +645,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     if (pendingStart) return (pendingStart.stop = true)
     if (!thread?.running) return false
     denyPending(threadId)
+    if (thread.codex) return codexEngine.abort(threadId)
     if (thread.claude) return claudeEngine.abort(threadId)
     thread.agent.abort()
     return true
@@ -676,7 +743,11 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
 
   function models() {
     // Claude ids and prices (USD per million tokens) are OWNER TO VERIFY; see claude-engine.mjs
-    if (isClaude()) return CLAUDE_MODELS.map(m => ({ ...m, contextWindow: 0, cost: withCacheCost(m.cost), efforts: CLAUDE_EFFORTS, modes: modesFor('claude') }))
+    if (isClaude()) return [
+      ...CLAUDE_MODELS.map(m => ({ ...m, contextWindow: 0, cost: withCacheCost(m.cost), efforts: CLAUDE_EFFORTS, modes: modesFor('claude') })),
+      // ChatGPT-plan models: no per-token price to show
+      ...codexList().map(m => ({ ...m, contextWindow: 0, cost: { input: 0, output: 0, cacheRead: 0 }, efforts: CODEX_EFFORTS, modes: modesFor('claude'), engine: 'codex' })),
+    ]
     return runtime
       .getModels(PROVIDER)
       .filter(m => !m.type || m.type === 'chat')
@@ -697,6 +768,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     disposed = true
     titler.cancel()
     claudeEngine.dispose()
+    codexEngine.dispose?.()
     login?.controller.abort()
     for (const [id] of approvals) answerApproval(id, false)
     await Promise.all([...live.values()].map(async t => {
