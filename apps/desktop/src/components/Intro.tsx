@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { flushSync } from 'react-dom'
 import { api, type GitHubProfile, type InitInfo, type ScreenStatus, type Settings } from '../api'
 import { AccountsList } from './Accounts'
 import { Segmented } from './ui'
@@ -28,6 +29,13 @@ export function Intro() {
   const [code, setCode] = useState<string | null>(null)
   const [profile, setProfile] = useState<GitHubProfile | null>(null)
   const [ghError, setGhError] = useState('')
+  // a step change slides the copy out and the next one in, from the side it is heading to
+  const go = (n: number) => {
+    const root = document.documentElement
+    root.dataset.introDir = n < step ? 'back' : 'fwd'
+    if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) return setStep(n)
+    document.startViewTransition(() => flushSync(() => setStep(n)))
+  }
 
   useEffect(() => {
     document.documentElement.classList.add('is-intro')
@@ -49,14 +57,14 @@ export function Intro() {
     if (!code) return
     const t = setInterval(() => api.githubStatus().then(g => {
       setGh({ ...g, known: true })
-      if (g.login) (setCode(null), setStep(1))
+      if (g.login) (setCode(null), go(1))
       else if (!g.waiting) (setCode(null), setGhError('GitHub sign-in stopped. Try again.'))
     }, () => {}), 1500)
     return () => clearInterval(t)
   }, [code])
   const signIn = async () => {
     if (!gh.known) return
-    if (gh.login) return setStep(1)
+    if (gh.login) return go(1)
     setGhError('')
     try {
       const r = await api.githubLogin()
@@ -99,7 +107,7 @@ export function Intro() {
     if (step === 0) return void signIn()
     if (step === 2 && both && info) await api.updateSettings({ capabilities: { ...info.settings.capabilities, browser: true, computer: true } }).catch(() => {})
     if (step === STEPS.length - 1) return void finish()
-    setStep(s => s + 1)
+    go(step + 1)
   }
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
@@ -136,7 +144,7 @@ export function Intro() {
                     <button className="btn btn-primary intro-gh" onClick={() => void signIn()} disabled={!gh.known}>
                       <IconGitHub size={16} />{gh.login ? `Continue as ${gh.login}` : gh.known ? 'Sign in with GitHub' : 'GitHub'}<kbd>↩</kbd>
                     </button>
-                    <button className="intro-link" onClick={() => setStep(1)}>Continue without an account</button>
+                    <button className="intro-link" onClick={() => go(1)}>Continue without an account</button>
                   </>
                 )}
                 {ghError && <p className="intro-error">{ghError}</p>}
@@ -188,13 +196,13 @@ export function Intro() {
             <button className="btn btn-primary intro-go" onClick={() => void next()} disabled={!canNext || busy}>
               {label} <kbd>↩</kbd>
             </button>
-            {step === 2 && !both && <button className="intro-link" onClick={() => setStep(3)}>Skip for now</button>}
-            <button className="intro-link intro-back" onClick={() => setStep(s => s - 1)}>Back</button>
+            {step === 2 && !both && <button className="intro-link" onClick={() => go(3)}>Skip for now</button>}
+            <button className="intro-link intro-back" onClick={() => go(step - 1)}>Back</button>
           </footer>}
         </section>
-        <aside className="intro-stage" aria-hidden key={`s${step}`}>
+        <aside className="intro-stage" aria-hidden>
           {step === 0 ? (
-            <div className={`intro-pass${profile ? ' is-live' : ''}`}>
+            <div className={`intro-pass${profile ? ' is-live' : ''}`} key="pass" style={{ viewTransitionName: 'intro-hero-0' }}>
               <div className="intro-pass-grid">
                 {days.map((c, i) => <i key={i} data-l={c ? Math.min(4, Math.ceil((4 * c) / peak)) : 0} style={{ animationDelay: `${Math.floor(i / 7) * 14}ms` }} />)}
               </div>
@@ -208,7 +216,7 @@ export function Intro() {
               </div>
             </div>
           ) : (
-          <div className="intro-mock">
+          <div className="intro-mock" key={step} style={{ viewTransitionName: `intro-hero-${step}` }}>
             <div className="intro-mock-bar"><i /><i /><i /></div>
             {step === 1 && (
               <div className="intro-mock-pick">
