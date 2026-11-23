@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, ipcMain, nativeTheme, safeStorage, shell } from 'electron'
+import { app, BrowserWindow, dialog, ipcMain, nativeTheme, Notification, safeStorage, shell } from 'electron'
 import { fileURLToPath } from 'node:url'
 import { dirname, relative, resolve, sep } from 'node:path'
 import { createHost } from './host/host.mjs'
@@ -7,6 +7,7 @@ import { account } from './host/git.mjs'
 import { createInstaller } from './install.mjs'
 import { execFile } from 'node:child_process'
 import { promisify } from 'node:util'
+import { applyLoginItem, createNotifier } from './host/desktop.mjs'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const devUrl = process.env.SUFFICE_DESKTOP_DEV_URL
@@ -19,6 +20,11 @@ process.on('uncaughtException', e => logError('main', e))
 process.on('unhandledRejection', e => logError('main-rejection', e))
 
 const send = (channel, payload) => win?.webContents.send(channel, payload)
+const notifier = createNotifier({
+  getSettings: () => host?.getSettings() ?? {},
+  isFocused: () => !!win?.isFocused(),
+  show: o => { if (Notification.isSupported()) new Notification(o).show() },
+})
 
 function createWindow() {
   win = new BrowserWindow({
@@ -100,7 +106,9 @@ const handlers = {
   'accounts:key-set': args => host.setKey(args),
   'accounts:key-test': args => host.testKey(args),
   'accounts:key-remove': args => host.removeKey(args),
-  'settings:update': async patch => { const s = await host.updateSettings(patch); applyTheme(s); return s },
+  'settings:update': async patch => { const s = await host.updateSettings(patch); applyTheme(s); applyLoginItem(app, s); return s },
+  'privacy:clear': () => host.clearHistory(),
+  'app:info': () => ({ version: app.getVersion(), openAtLogin: app.getLoginItemSettings().openAtLogin }),
 }
 
 app.whenReady().then(async () => {
@@ -109,7 +117,7 @@ app.whenReady().then(async () => {
   void installer.ejectSource()
   host = await createHost({
     safeStorage,
-    emit: send,
+    emit: (channel, payload) => (send(channel, payload), notifier(channel, payload)),
     openExternal: url => void shell.openExternal(url),
     chooseDirectory: async () => {
       const result = await dialog.showOpenDialog(win, { title: 'Choose a project', properties: ['openDirectory'] })
