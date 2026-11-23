@@ -653,7 +653,7 @@ export default function App() {
           />
         ) : (
           <div className="home">
-            <Dither />
+            <Dither look={env === 'cloud'} />
             <div className="home-inner">
               <div className="home-head">
                 <span className="logo logo-lg">[suffice]</span>
@@ -687,14 +687,14 @@ export default function App() {
   )
 }
 
-/** One way back into the last thread: click it, or Tab from an empty composer. */
+/** One way back into the last thread: click it, or Tab from an empty composer or an unfocused Home. */
 function HomeContinue({ thread, onOpen }: { thread: Thread & { key: string }; onOpen: () => void }) {
   const open = useRef(onOpen)
   open.current = onOpen
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const el = document.activeElement
-      if (e.key === 'Tab' && !e.shiftKey && el instanceof HTMLTextAreaElement && el.closest('.home') && !el.value) (e.preventDefault(), open.current())
+      if (e.key === 'Tab' && !e.shiftKey && (el === document.body || (el instanceof HTMLTextAreaElement && el.closest('.home') && !el.value))) (e.preventDefault(), open.current())
     }
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)

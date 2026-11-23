@@ -481,7 +481,7 @@ button.tab { padding-right: 10px; flex: none; }
 
 .msg-user { display: flex; justify-content: flex-end; margin: 0 0 20px; }
 .bubble { max-width: 80%; padding: 8px 12px; border-radius: 8px; line-height: 20px; white-space: pre-wrap; overflow-wrap: anywhere; }
-.msg-agent { display: flex; flex-direction: column; gap: 4px; margin-bottom: 32px; }
+.msg-agent { display: flex; flex-direction: column; gap: 4px; padding-bottom: 28px; margin-bottom: 4px; } /* the padding is the hover zone for the footer */
 
 .prose { color: var(--text); line-height: 22px; padding: 2px 0; }
 .prose p { margin: 0 0 8px; }
@@ -578,6 +578,8 @@ button.tab { padding-right: 10px; flex: none; }
 
 /* hover, fine pointers only */
 @media (hover: hover) and (pointer: fine) {
+  .msg-foot { opacity: 0; transition: opacity 120ms var(--ease); }
+  .msg-agent:hover .msg-foot, .msg-agent:focus-within .msg-foot { opacity: 1; }
   .icon-btn:not(:disabled):hover,
   .ghost-btn:hover { background: var(--raised-bg); color: var(--text); }
   .foot-btn:hover { background: var(--raised-bg); color: var(--text); }
