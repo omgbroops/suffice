@@ -6,7 +6,7 @@ export type ModelInfo = {
   id: string
   name: string
   contextWindow: number
-  cost: { input: number; output: number; cacheRead: number }
+  cost: { input: number; output: number; cacheRead: number; cacheWrite?: number }
   efforts: string[]
   /** modes this engine can run; absent means all */
   modes?: string[]
@@ -32,6 +32,16 @@ export type Settings = {
   /** prompt behind Notes > Generate notes */
   notesPrompt?: string
   theme?: 'system' | 'light' | 'dark'
+  /** false (default): Claude Code ignores the user's ~/.claude CLAUDE.md, settings, hooks, plugins, skills and MCP servers */
+  useClaudeConfig?: boolean
+  callMe?: string
+  customInstructions?: string
+  responseStyle?: 'concise' | 'normal' | 'explanatory'
+  /** UI only */
+  verbosity?: string
+  /** extra directories the agent may read and write */
+  folderAccess?: string[]
+  capabilities?: { web?: boolean; browser?: boolean; computer?: boolean; mcp?: boolean }
   engineAuto?: boolean
   defaultProvider?: string
 }

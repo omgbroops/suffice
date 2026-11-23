@@ -45,6 +45,13 @@ const SETTINGS = {
   projectAutoNames: v => isMap(v, isStr),
   projectIcons: v => isMap(v, isStr),
   notesPrompt: isStr,
+  useClaudeConfig: v => typeof v === 'boolean',
+  callMe: v => isStr(v) && v.length <= 200,
+  customInstructions: v => isStr(v) && v.length <= 20_000,
+  responseStyle: v => ['concise', 'normal', 'explanatory'].includes(v),
+  verbosity: isStr, // UI only; never sent to the model
+  folderAccess: v => Array.isArray(v) && v.length <= 100 && v.every(x => isStr(x) && x && !x.includes('\0')),
+  capabilities: v => isMap(v, x => typeof x === 'boolean') && Object.keys(v).every(k => ['web', 'browser', 'computer', 'mcp'].includes(k)),
   theme: v => ['system', 'light', 'dark'].includes(v),
 }
 /** Known keys with well-typed values only; anything else is dropped. */

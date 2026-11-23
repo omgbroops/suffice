@@ -24,7 +24,7 @@ import { emptyTranscript, fromSessionMessages, reduce, resultText } from '../../
 import { readNote, scanNotes } from './notes.mjs'
 import { suggestName } from './project-name.mjs'
 import { createErrorLog } from './errorlog.mjs'
-import { CLAUDE_EFFORTS, CLAUDE_MODELS, INSTALL_HINT, LOGIN_HINT, authStatus, childEnv, createClaudeEngine, findClaude } from './claude-engine.mjs'
+import { CLAUDE_EFFORTS, CLAUDE_MODELS, INSTALL_HINT, LOGIN_HINT, authStatus, childEnv, createClaudeEngine, findClaude, withCacheCost } from './claude-engine.mjs'
 import { DEFAULTS, createAccounts } from './accounts.mjs'
 import { bool, cleanSettingsPatch, object, oneOf, sessionPath, str } from './validate.mjs'
 
@@ -126,7 +126,7 @@ async function writeJson(path, value) {
  *   claudeSpawn?: typeof import('node:child_process').spawn,
  * }} deps
  */
-export async function createHost({ home = parseOptions([]).home, emit, openExternal, chooseDirectory, runtime: givenRuntime, createSession = createSufficeSession, engine: givenEngine, claudePath: givenClaudePath, claudeSpawn, accounts: givenAccounts, safeStorage }) {
+export async function createHost({ home = parseOptions([]).home, emit, openExternal, chooseDirectory, runtime: givenRuntime, createSession = createSufficeSession, engine: givenEngine, claudePath: givenClaudePath, claudeSpawn, mcpConfigs = [], accounts: givenAccounts, safeStorage }) {
   process.env.PI_CODING_AGENT_DIR = home
   const desktopDir = resolve(home, 'desktop')
   const accounts = givenAccounts ?? (safeStorage ? createAccounts({ desktopDir, safeStorage }) : null)
@@ -426,9 +426,10 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     await mkdir(sessionDir(home, project), { recursive: true, mode: 0o700 })
     if (!resume) await writeJson(filePath, { sessionId, project, title: prompt.replace(/\s+/g, ' ').trim().slice(0, 120) })
     emit('thread:session', { threadId, path: filePath })
+    const capabilities = { web: true, browser: false, computer: false, mcp: true, ...settings.capabilities }
     void (async () => {
       try {
-        const totals = await claudeEngine.run({ threadId, claudePath: bin, project, prompt, model, effort: level, approval: settings.approval, sessionId, resume, onApproval: (name, input) => approve(threadId, name, input) })
+        const totals = await claudeEngine.run({ threadId, claudePath: bin, project, prompt, model, effort: level, approval: settings.approval, sessionId, resume, useClaudeConfig: settings.useClaudeConfig === true, instructions: settings, folderAccess: settings.folderAccess, capabilities, mcpConfigs: capabilities.browser || capabilities.computer ? mcpConfigs : [], onApproval: (name, input) => approve(threadId, name, input) })
         push(threadId, { type: 'end', ok: true, totals })
       } catch (e) {
         push(threadId, { type: 'end', ok: false, error: /cancelled/.test(e?.message ?? '') ? 'Stopped.' : e?.message || 'The run failed.' })
@@ -524,7 +525,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
 
   function models() {
     // Claude ids and prices (USD per million tokens) are OWNER TO VERIFY; see claude-engine.mjs
-    if (isClaude()) return CLAUDE_MODELS.map(m => ({ ...m, contextWindow: 0, cost: { ...m.cost, cacheRead: 0 }, efforts: CLAUDE_EFFORTS, modes: modesFor('claude') }))
+    if (isClaude()) return CLAUDE_MODELS.map(m => ({ ...m, contextWindow: 0, cost: withCacheCost(m.cost), efforts: CLAUDE_EFFORTS, modes: modesFor('claude') }))
     return runtime
       .getModels(PROVIDER)
       .filter(m => !m.type || m.type === 'chat')
