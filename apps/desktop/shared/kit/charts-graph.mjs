@@ -2,105 +2,254 @@
 // self-contained, only `sx`, `host`, `spec` and globals.
 /* eslint-disable no-var */
 
-/** {kind:'network', nodes:[{id, label?, group?, size?}], edges:[{from, to, weight?}], title?, height?} */
+/** {kind:'network', nodes:[{id, label?, group?, size?}], edges:[{from, to, weight?}], directed?, title?, height?} */
+// Drawn like the app's Obsidian-style notes graph (shared/graph.mjs): same forces, small nodes, hairline links,
+// labels under the nodes; hover lights a node's links and fades the rest to 20%; nodes drag and the graph settles live.
 export function network(sx, host, spec) {
   var nodes = spec.nodes, edges = spec.edges || []
   sx.need(Array.isArray(nodes) && nodes.length, 'Network needs a nodes array of {id, label?, group?, size?}.')
   sx.need(Array.isArray(edges), 'Network edges must be an array of {from, to, weight?}.')
   var n = nodes.length, ix = {}
   nodes.forEach(function (nd, i) { sx.need(nd && nd.id != null, 'Every network node needs an id.'); ix[nd.id] = i })
-  var E = edges.map(function (e) {
-    sx.need(ix[e.from] != null && ix[e.to] != null, 'Network edge ' + e.from + ' -> ' + e.to + ' points at an id that is not in nodes.')
-    return { a: ix[e.from], b: ix[e.to], w: sx.num(e.weight) ? e.weight : 1 }
+  var E = []
+  edges.forEach(function (e) {
+    sx.need(e && ix[e.from] != null && ix[e.to] != null, 'Network edge ' + (e && e.from) + ' -> ' + (e && e.to) + ' points at an id that is not in nodes.')
+    if (ix[e.from] !== ix[e.to]) E.push({ a: ix[e.from], b: ix[e.to], w: sx.num(e.weight) ? e.weight : 1 })
   })
   var deg = nodes.map(function () { return 0 }), nb = nodes.map(function () { return {} })
   E.forEach(function (e) { deg[e.a]++; deg[e.b]++; nb[e.a][e.b] = 1; nb[e.b][e.a] = 1 })
-  var size = nodes.map(function (nd, i) { return sx.num(nd.size) && nd.size > 0 ? nd.size : 1 + deg[i] })
-  var maxS = Math.max.apply(null, size), maxW = Math.max.apply(null, E.map(function (e) { return e.w }).concat(1))
-  var R = size.map(function (s) { return 5 + 9 * Math.sqrt(s / maxS) })
-  // groups: first appearance order, past the 8 slots they fold into the last slot, named "Other"
+  var wt = nodes.map(function (nd, i) { return sx.num(nd.size) && nd.size > 0 ? nd.size : deg[i] })
+  var maxW = Math.max.apply(null, E.map(function (e) { return e.w }).concat(1))
+  // groups: first appearance order; past 8 they fold into the last slot, named "Other"
   var gl = [], gi = nodes.map(function (nd) {
-    if (nd.group == null) return 0
+    if (nd.group == null) return -1
     var k = gl.indexOf(String(nd.group)); if (k < 0) { gl.push(String(nd.group)); k = gl.length - 1 }
     return Math.min(k, 7)
   })
   var gnames = gl.slice(0, 8); if (gl.length > 8) gnames[7] = 'Other'
-  var col = function (i) { return gl.length ? sx.color(gi[i]) : 'var(--c1)' }
+  var label = function (i) { return String(nodes[i].label != null ? nodes[i].label : nodes[i].id) }
 
-  var W = sx.W || 640, H = spec.height || (W < 420 ? 320 : 400), M = 22
-  // deterministic force layout: seeded start, fixed 300 iterations with cooling
-  var seed = 7, rnd = function () { seed = (seed * 16807) % 2147483647; return seed / 2147483647 }
-  var px = [], py = []
-  nodes.forEach(function (_, i) { var a = (i / n) * 6.2832, r = 0.3 * Math.min(W, H); px[i] = W / 2 + r * Math.cos(a) + rnd() * 6; py[i] = H / 2 + r * Math.sin(a) + rnd() * 6 })
-  var k = 0.75 * Math.sqrt((W * H) / n), N = 300
-  for (var it = 0; it < N; it++) {
-    var t = (W / 8) * (1 - it / N) + 0.5, dx = [], dy = []
-    for (var i = 0; i < n; i++) { dx[i] = 0; dy[i] = 0 }
-    for (i = 0; i < n; i++) for (var j = i + 1; j < n; j++) {
-      var ex = px[i] - px[j], ey = py[i] - py[j], d = Math.sqrt(ex * ex + ey * ey) || 0.01, f = (k * k) / d / d
-      dx[i] += ex * f; dy[i] += ey * f; dx[j] -= ex * f; dy[j] -= ey * f
-    }
-    E.forEach(function (e) {
-      var ex = px[e.a] - px[e.b], ey = py[e.a] - py[e.b], d = Math.sqrt(ex * ex + ey * ey) || 0.01, f = (d / k) * (0.6 + 0.4 * (e.w / maxW))
-      dx[e.a] -= ex * f; dy[e.a] -= ey * f; dx[e.b] += ex * f; dy[e.b] += ey * f
+  // ---- physics: Obsidian's d3 forces (repel 10, link 1 at distance 250, collide 60), in graph units
+  var P = nodes.map(function (_, i) {
+    var r = 10 * Math.sqrt(0.5 + i), a = i * Math.PI * (3 - Math.sqrt(5))
+    return { x: r * Math.cos(a), y: r * Math.sin(a), vx: 0, vy: 0, fx: null, fy: null }
+  })
+  var L = E.map(function (e) {
+    var cs = deg[e.a], ct = deg[e.b]
+    return { s: P[e.a], t: P[e.b], bias: cs / (cs + ct), k: 1 / Math.min(cs, ct) }
+  })
+  // centre pull weaker than Obsidian's 0.1, which crushes small graphs into crossed shapes; twice as strong
+  // vertically on wide cards so the layout matches the card
+  var cx = 0.02, cy = (sx.W || 640) < 420 ? 0.02 : 0.04
+  var sim = { alpha: 1, target: 0 }, DECAY = 1 - Math.pow(0.001, 1 / 300)
+  var tick = function () {
+    var a = (sim.alpha += (sim.target - sim.alpha) * DECAY), i, j, p, q, dx, dy, d2, l
+    for (i = 0; i < n; i++) { P[i].vx -= P[i].x * cx * a; P[i].vy -= P[i].y * cy * a }
+    L.forEach(function (k) {
+      var x = k.t.x + k.t.vx - k.s.x - k.s.vx, y = k.t.y + k.t.vy - k.s.y - k.s.vy
+      var l0 = Math.hypot(x, y) || 1e-3, m = ((l0 - 250) / l0) * a * k.k
+      x *= m; y *= m
+      k.t.vx -= x * k.bias; k.t.vy -= y * k.bias; k.s.vx += x * (1 - k.bias); k.s.vy += y * (1 - k.bias)
     })
+    for (i = 0; i < n; i++) for (j = i + 1; j < n; j++) {
+      p = P[i]; q = P[j]; dx = q.x - p.x; dy = q.y - p.y
+      if (!dx && !dy) { dx = (i - j) * 1e-3; dy = 1e-3 }
+      d2 = dx * dx + dy * dy; if (d2 < 900) d2 = Math.sqrt(900 * d2)
+      l = (-1000 * a) / d2
+      p.vx += dx * l; p.vy += dy * l; q.vx -= dx * l; q.vy -= dy * l
+    }
     for (i = 0; i < n; i++) {
-      dx[i] -= (px[i] - W / 2) * 0.04; dy[i] -= (py[i] - H / 2) * 0.04
-      var m = Math.sqrt(dx[i] * dx[i] + dy[i] * dy[i]) || 0.01, s = Math.min(m, t) / m
-      px[i] += dx[i] * s; py[i] += dy[i] * s
+      p = P[i]; var px = p.x + p.vx, py = p.y + p.vy
+      for (j = i + 1; j < n; j++) {
+        q = P[j]; dx = px - q.x - q.vx; dy = py - q.y - q.vy; d2 = dx * dx + dy * dy
+        if (d2 >= 14400) continue
+        if (!dx && !dy) { dx = 1e-3; d2 = 1e-6 }
+        var d = Math.sqrt(d2); l = ((120 - d) / d) * 0.25
+        p.vx += dx * l; p.vy += dy * l; q.vx -= dx * l; q.vy -= dy * l
+      }
     }
+    P.forEach(function (p) {
+      if (p.fx != null) { p.x = p.fx; p.y = p.fy; p.vx = p.vy = 0 } else { p.vx *= 0.6; p.vy *= 0.6; p.x += p.vx; p.y += p.vy }
+    })
   }
-  // fit the settled layout into the box
-  var x0 = Math.min.apply(null, px), x1 = Math.max.apply(null, px), y0 = Math.min.apply(null, py), y1 = Math.max.apply(null, py)
-  var fx = sx.lin(x0, x1, M + 14, W - M - 14), fy = sx.lin(y0, y1, M, H - M)
-  for (i = 0; i < n; i++) { px[i] = n === 1 ? W / 2 : fx(px[i]); py[i] = n === 1 ? H / 2 : fy(py[i]) }
+  // settle before the first frame from a few start orders and keep the one whose links cross least
+  // (one spiral start can lock a cycle into a bowtie)
+  var place = function (order) {
+    order.forEach(function (i, k) {
+      var r = 10 * Math.sqrt(0.5 + k), a = k * Math.PI * (3 - Math.sqrt(5))
+      P[i].x = r * Math.cos(a); P[i].y = r * Math.sin(a); P[i].vx = P[i].vy = 0
+    })
+    sim.alpha = 1
+    for (var t = 0; t < 300; t++) tick()
+    var c = 0
+    for (var u = 0; u < E.length; u++) for (var v = u + 1; v < E.length; v++) {
+      var e = E[u], f = E[v]
+      if (e.a === f.a || e.a === f.b || e.b === f.a || e.b === f.b) continue
+      var A = P[e.a], B = P[e.b], C2 = P[f.a], D = P[f.b]
+      var o = function (p, q, r) { return (q.x - p.x) * (r.y - p.y) - (q.y - p.y) * (r.x - p.x) }
+      if (o(A, B, C2) * o(A, B, D) < 0 && o(C2, D, A) * o(C2, D, B) < 0) c++
+    }
+    return c
+  }
+  var ids = nodes.map(function (_, i) { return i })
+  var hub = ids.slice().sort(function (a, b) { return deg[b] - deg[a] })
+  var bfs = [hub[0]], seen = {}; seen[hub[0]] = 1
+  for (var h0 = 0; bfs.length < n; h0++) {
+    if (h0 >= bfs.length) { var rest = ids.filter(function (i) { return !seen[i] }); bfs.push(rest[0]); seen[rest[0]] = 1 }
+    Object.keys(nb[bfs[h0]]).forEach(function (k) { if (!seen[k]) { seen[k] = 1; bfs.push(+k) } })
+  }
+  var seed = 7, shuffle = function () { return ids.slice().sort(function () { seed = (seed * 9301 + 49297) % 233280; return seed / 233280 - 0.5 }) }
+  var starts = n * E.length > 6000 ? [ids] : [ids, bfs, hub, ids.slice().reverse(), shuffle(), shuffle()]
+  var best = null, bestC = Infinity
+  starts.forEach(function (o) { var c = place(o); if (c < bestC) { bestC = c; best = o } })
+  if (best !== starts[starts.length - 1]) place(best)
+  sim.alpha = 0
 
-  var s0 = sx.svg(host, W, H, spec.title), svg = s0.svg
-  var eg = sx.el('g', {}, svg), ng = sx.el('g', {}, svg), lg = sx.el('g', { 'pointer-events': 'none' }, svg)
-  var lines = E.map(function (e) { return sx.el('line', { style: 'stroke:var(--faint);stroke-width:' + (1 + 2 * (e.w / maxW)).toFixed(2) + ';stroke-linecap:round' }, eg) })
-  var order = size.map(function (_, i) { return i }).sort(function (a, b) { return size[b] - size[a] || a - b })
-  var nLab = n <= 14 ? n : W < 420 ? 6 : 10, labelled = {}
-  order.slice(0, nLab).forEach(function (i) { labelled[i] = 1 })
-  var circles = [], texts = []
-  nodes.forEach(function (nd, i) {
-    var c = sx.el('circle', { r: R[i], style: 'fill:' + col(i) + ';stroke:var(--surface);stroke-width:2;cursor:grab;touch-action:none' }, ng)
-    circles.push(c)
-    if (labelled[i]) { var tx = sx.el('text', { class: 'sx-label', style: 'paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round' }, lg); tx.textContent = String(nd.label != null ? nd.label : nd.id); texts[i] = tx }
-    sx.hover(c, function () {
-      return sx.tipRows(nd.label != null ? nd.label : nd.id, [].concat(nd.group != null ? [['Group', String(nd.group), col(i)]] : [], [['Connections', String(deg[i])]], nd.size != null ? [['Size', sx.fmt(+nd.size, spec.unit)]] : []))
-    })
-  })
-  var refresh = function () {
-    circles.forEach(function (c, i) { c.setAttribute('cx', px[i].toFixed(1)); c.setAttribute('cy', py[i].toFixed(1)) })
-    E.forEach(function (e, q) { var l = lines[q]; l.setAttribute('x1', px[e.a].toFixed(1)); l.setAttribute('y1', py[e.a].toFixed(1)); l.setAttribute('x2', px[e.b].toFixed(1)); l.setAttribute('y2', py[e.b].toFixed(1)) })
-    texts.forEach(function (tx, i) {
-      if (!tx) return
-      var right = px[i] < W - 90
-      tx.setAttribute('x', (px[i] + (right ? R[i] + 5 : -R[i] - 5)).toFixed(1)); tx.setAttribute('y', (py[i] + 4).toFixed(1)); tx.setAttribute('text-anchor', right ? 'start' : 'end')
-    })
+  // ---- canvas at real pixels
+  var W = sx.W || 640, H = spec.height || Math.min(460, Math.max(W < 420 ? 300 : 340, 120 + n * 14))
+  var fig = sx.h('figure', 'sx-fig', host)
+  var cv = sx.h('canvas', 'sx-net', fig)
+  cv.setAttribute('role', 'img')
+  cv.setAttribute('aria-label', (spec.title || 'Network') + ': ' + n + ' nodes, ' + E.length + ' links')
+  cv.style.cssText = 'display:block;width:100%;height:' + H + 'px;touch-action:none'
+  var dpr = Math.min(3, window.devicePixelRatio || 1)
+  cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr)
+  var ctx = cv.getContext('2d')
+  var cs = getComputedStyle(host), tok = function (v) { return cs.getPropertyValue(v).trim() }
+  var probe = function (v) { var s = sx.h('i', '', fig); s.style.color = v; var c = getComputedStyle(s).color; s.remove(); return c }
+  var C = { line: tok('--line2'), lit: tok('--muted'), node: tok('--muted'), text: tok('--muted'), hot: tok('--fg'), ring: tok('--surface') }
+  var fills = nodes.map(function (_, i) { return gi[i] < 0 ? C.node : probe(sx.color(gi[i])) })
+  var font = '11.5px ' + getComputedStyle(cv).fontFamily
+  // labels go best-linked first; one that would overlap a drawn label or node waits for hover
+  var rank = deg.map(function (d, i) { return [d, i] }).sort(function (a, b) { return b[0] - a[0] }).map(function (x) { return x[1] })
+
+  var view = { s: 1, x: W / 2, y: H / 2 }
+  var fit = function () {
+    var x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity
+    P.forEach(function (p) { x0 = Math.min(x0, p.x); x1 = Math.max(x1, p.x); y0 = Math.min(y0, p.y); y1 = Math.max(y1, p.y) })
+    var s = Math.min(1, (W - 96) / Math.max(x1 - x0, 1), (H - 64) / Math.max(y1 - y0, 1))
+    var g = 0.88 + 0.12 * (1 - Math.pow(1 - born, 3))
+    s *= g
+    view.s = s; view.x = W / 2 - ((x0 + x1) / 2) * s; view.y = H / 2 - ((y0 + y1) / 2) * s - 8
   }
-  refresh()
-  var focus = function (f) {
-    circles.forEach(function (c, i) { c.style.opacity = f == null || i === f || nb[f][i] ? 1 : 0.2; if (texts[i]) texts[i].style.opacity = f == null || i === f || nb[f][i] ? 1 : 0.2 })
-    E.forEach(function (e, q) { var on = f != null && (e.a === f || e.b === f); lines[q].style.opacity = f == null ? 1 : on ? 1 : 0.08; lines[q].style.stroke = on ? 'var(--muted)' : 'var(--faint)' })
-  }
-  var dragging = -1
-  circles.forEach(function (c, i) {
-    c.addEventListener('pointerenter', function () { if (dragging < 0) focus(i) })
-    c.addEventListener('pointerleave', function () { if (dragging < 0) focus(null) })
-    c.addEventListener('pointerdown', function (ev) { dragging = i; c.setPointerCapture(ev.pointerId); c.style.cursor = 'grabbing'; focus(i); ev.preventDefault() })
-    c.addEventListener('pointermove', function (ev) {
-      if (dragging !== i) return
-      var r = svg.getBoundingClientRect()
-      px[i] = Math.max(R[i], Math.min(W - R[i], ((ev.clientX - r.left) / r.width) * W)); py[i] = Math.max(R[i], Math.min(H - R[i], ((ev.clientY - r.top) / r.height) * H))
-      refresh()
+  // node radius grows with sqrt(links) like Obsidian's, in screen px so hubs read at any zoom: 3.5 to 10 px
+  var rad = function (i) { return Math.max(3.5, Math.min(10, 3 + 1.4 * Math.sqrt(wt[i]))) }
+  var X = function (p) { return p.x * view.s + view.x }, Y = function (p) { return p.y * view.s + view.y }
+  var hot = -1, fade = nodes.map(function () { return 0 }), lift = nodes.map(function () { return 0 }), born = sx.reduce ? 1 : 0
+  var touched = false, raf = 0
+
+  var frame = function () {
+    raf = 0
+    if (!cv.isConnected) return
+    var busy = false
+    if (sim.alpha > 0.002 || sim.target > 0) { tick(); busy = true }
+    if (born < 1) { born = Math.min(1, born + 1 / 30); busy = true }
+    if (!touched) fit()
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+    ctx.clearRect(0, 0, W, H)
+    ctx.globalAlpha = born
+    var on = function (i) { return hot < 0 || i === hot || nb[hot][i] }
+    nodes.forEach(function (_, i) {
+      var to = on(i) ? 1 : 0.2
+      fade[i] = fade[i] ? fade[i] * 0.8 + to * 0.2 : to
+      lift[i] = lift[i] * 0.8 + (i === hot ? 4 : 0) * 0.2
+      if (Math.abs(fade[i] - to) > 0.003 || Math.abs(lift[i] - (i === hot ? 4 : 0)) > 0.05) busy = true
     })
-    var up = function () { if (dragging !== i) return; dragging = -1; c.style.cursor = 'grab' }
-    c.addEventListener('pointerup', up); c.addEventListener('pointercancel', up)
+    // links: hairlines from node edge to node edge; a lit link takes the hovered node's ink
+    E.forEach(function (e, k) {
+      var s = P[e.a], t = P[e.b], dx = t.x - s.x, dy = t.y - s.y, m = Math.hypot(dx, dy) * view.s
+      var rs = rad(e.a), rt = rad(e.b)
+      if (m <= rs + rt + 2) return
+      var lit = hot >= 0 && (e.a === hot || e.b === hot)
+      var ux = (dx * view.s) / m, uy = (dy * view.s) / m
+      ctx.globalAlpha = born * (lit ? 1 : Math.min(fade[e.a], fade[e.b]))
+      ctx.strokeStyle = lit ? C.lit : C.line
+      ctx.lineWidth = 1 + 1.5 * ((e.w - 1) / Math.max(1, maxW - 1))
+      ctx.beginPath()
+      ctx.moveTo(X(s) + ux * rs, Y(s) + uy * rs)
+      var tx = X(t) - ux * (rt + 1), ty = Y(t) - uy * (rt + 1)
+      ctx.lineTo(tx, ty)
+      ctx.stroke()
+      if (spec.directed) {
+        // Obsidian's arrow head: (0,0) (-4,-2) (-3,0) (-4,2), at 2x
+        ctx.fillStyle = ctx.strokeStyle
+        ctx.beginPath()
+        ;[[0, 0], [-4, -2], [-3, 0], [-4, 2]].forEach(function (pt, z) {
+          var px = tx + (pt[0] * ux - pt[1] * uy) * 2, py = ty + (pt[0] * uy + pt[1] * ux) * 2
+          z ? ctx.lineTo(px, py) : ctx.moveTo(px, py)
+        })
+        ctx.fill()
+      }
+    })
+    // nodes, each with a 2px surface ring so overlaps stay apart
+    nodes.forEach(function (_, i) {
+      var r = rad(i) * (i === hot ? 1.25 : 1)
+      ctx.globalAlpha = born * fade[i]
+      ctx.beginPath(); ctx.arc(X(P[i]), Y(P[i]), r + 2, 0, Math.PI * 2); ctx.fillStyle = C.ring; ctx.fill()
+      ctx.beginPath(); ctx.arc(X(P[i]), Y(P[i]), r, 0, Math.PI * 2)
+      ctx.fillStyle = i === hot && gi[i] < 0 ? C.hot : fills[i]; ctx.fill()
+    })
+    // labels under the nodes, over everything
+    ctx.font = font; ctx.textAlign = 'center'; ctx.textBaseline = 'top'
+    var boxes = P.map(function (p, i) { var r = rad(i); return [X(p) - r, Y(p) - r, X(p) + r, Y(p) + r, i] })
+    // hovering: the hovered label first, then its neighbours', then the faded rest
+    var order = hot < 0 ? rank : [hot].concat(rank.filter(function (i) { return nb[hot][i] }), rank.filter(function (i) { return i !== hot && !nb[hot][i] }))
+    order.forEach(function (i) {
+      var t = label(i), tw = ctx.measureText(t).width
+      var tx = Math.max(tw / 2 + 4, Math.min(W - tw / 2 - 4, X(P[i]))), ty = Y(P[i]) + rad(i) + 4 + lift[i]
+      var b = [tx - tw / 2 - 2, ty, tx + tw / 2 + 2, ty + 14]
+      var clash = boxes.some(function (q) { return q[4] !== i && q[0] < b[2] && b[0] < q[2] && q[1] < b[3] && b[1] < q[3] })
+      if (clash && i !== hot) return
+      boxes.push(b.concat(-1))
+      ctx.globalAlpha = born * fade[i]
+      ctx.fillStyle = i === hot ? C.hot : C.text
+      ctx.fillText(t, tx, ty)
+    })
+    ctx.globalAlpha = 1
+    if (busy || drag) raf = requestAnimationFrame(frame)
+  }
+  var wake = function () { if (!raf) raf = requestAnimationFrame(frame) }
+
+  var pos = function (e) { var r = cv.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top } }
+  var hit = function (p) {
+    var best = -1, bd = Infinity
+    P.forEach(function (q, i) { var d = Math.hypot(X(q) - p.x, Y(q) - p.y); if (d <= Math.max(rad(i) + 4, 10) && d < bd) { best = i; bd = d } })
+    return best
+  }
+  var drag = null
+  cv.addEventListener('pointerdown', function (e) {
+    if (e.button !== 0) return
+    var p = pos(e), i = hit(p)
+    if (i < 0) return
+    cv.setPointerCapture(e.pointerId)
+    drag = { i: i, sx: p.x, sy: p.y, moved: false }
   })
-  sx.enter(lines, 'sx-fade', 4)
-  sx.enter(circles, 'sx-pop', 10)
-  if (gl.length) sx.legend(host, gnames)
+  cv.addEventListener('pointermove', function (e) {
+    var p = pos(e)
+    if (drag) {
+      if (!drag.moved && (p.x - drag.sx) * (p.x - drag.sx) + (p.y - drag.sy) * (p.y - drag.sy) < 25) return
+      drag.moved = true; touched = true
+      var q = P[drag.i]; q.fx = (p.x - view.x) / view.s; q.fy = (p.y - view.y) / view.s
+      sim.alpha = Math.max(sim.alpha, 0.3); sim.target = 0.3
+      sx.tip(null); wake(); return
+    }
+    var i = hit(p)
+    if (i !== hot) { hot = i; cv.style.cursor = i >= 0 ? 'grab' : ''; wake() }
+    if (i >= 0) {
+      var rows = [['Links', String(deg[i])]]
+      if (gi[i] >= 0) rows.unshift(['Group', gnames[gi[i]], sx.color(gi[i])])
+      sx.tip(sx.tipRows(label(i), rows), e.clientX, e.clientY)
+    } else sx.tip(null)
+  })
+  var up = function () {
+    if (!drag) return
+    var q = P[drag.i]; q.fx = q.fy = null; sim.target = 0; drag = null; wake()
+  }
+  cv.addEventListener('pointerup', up)
+  cv.addEventListener('pointercancel', up)
+  cv.addEventListener('pointerleave', function () { if (!drag) { hot = -1; cv.style.cursor = ''; sx.tip(null); wake() } })
+  if (gnames.length > 1) sx.legend(host, gnames)
+  frame()
 }
 
 /** {kind:'flow', direction?:'LR'|'TB', nodes:[{id, label, shape?:'box'|'pill'|'diamond'}], edges:[{from, to, label?}], title?} */
