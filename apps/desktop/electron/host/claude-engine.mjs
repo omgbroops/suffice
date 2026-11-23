@@ -8,9 +8,9 @@
 // Credentials are never read here: the CLI finds its own login. Only `claude auth status` is called.
 
 import { spawn as nodeSpawn, execFile } from 'node:child_process'
-import { accessSync, constants } from 'node:fs'
+import { accessSync, constants, statSync } from 'node:fs'
 import { homedir, userInfo } from 'node:os'
-import { delimiter, join } from 'node:path'
+import { delimiter, isAbsolute, join } from 'node:path'
 import { randomUUID } from 'node:crypto'
 
 export const INSTALL_HINT = 'Claude Code is not installed. Install it, then run `claude` once in a terminal to sign in.'
@@ -28,6 +28,35 @@ export const CLAUDE_MODELS = [
   { id: 'claude-haiku-5-5', name: 'Haiku 5.5', cost: { input: 0.1, output: 0.5 } },
   { id: 'claude-fable-5-2', name: 'Fable 5.2', cost: { input: 8, output: 40 } },
 ]
+// Anthropic bills cache reads at 0.1x the input price and 5-minute cache writes at 1.25x (claude-api skill, cost-optimization.md)
+export const withCacheCost = ({ input, output }) => ({ input, output, cacheRead: input * 0.1, cacheWrite: input * 1.25 })
+const STYLE = { concise: 'Keep replies short and to the point.', explanatory: 'Explain your reasoning and what you are doing in plain language.' }
+
+/** The one short block Suffice appends to Claude Code's system prompt; empty settings add nothing. */
+export function sufficePrompt({ callMe, customInstructions, responseStyle } = {}) {
+  return [callMe?.trim() && `Call the user ${callMe.trim()}.`, STYLE[responseStyle], customInstructions?.trim()].filter(Boolean).join('\n')
+}
+
+const isDir = p => { try { return isAbsolute(p) && statSync(p).isDirectory() } catch { return false } }
+
+/**
+ * CLI flags for the Suffice settings. Isolation (useClaudeConfig false) loads only project and local settings, so the
+ * user's ~/.claude CLAUDE.md, settings, hooks, plugins and skills stay out; the login (keychain) is untouched.
+ * User-scope MCP servers live outside settings, so isolation also makes MCP strict.
+ */
+export function settingsArgs({ useClaudeConfig = false, instructions, folderAccess = [], capabilities = {}, mcpConfigs = [] } = {}) {
+  const prompt = sufficePrompt(instructions)
+  const off = [...(capabilities.web === false ? ['WebFetch', 'WebSearch'] : [])]
+  const dirs = [...new Set(folderAccess.filter(d => typeof d === 'string' && isDir(d)))]
+  return [
+    ...(useClaudeConfig ? [] : ['--setting-sources', 'project,local']),
+    ...(prompt ? ['--append-system-prompt', prompt] : []),
+    ...dirs.flatMap(d => ['--add-dir', d]),
+    ...(off.length ? ['--disallowedTools', ...off] : []),
+    ...(!useClaudeConfig || capabilities.mcp === false ? ['--strict-mcp-config'] : []),
+    ...mcpConfigs.flatMap(c => ['--mcp-config', c]),
+  ]
+}
 export const CLAUDE_EFFORTS = ['low', 'medium', 'high', 'xhigh', 'max']
 
 /** The user's env minus anything that would make the CLI bill an API key instead of the subscription. */
@@ -82,12 +111,13 @@ export function createClaudeEngine({ push, spawn = nodeSpawn }) {
    * Runs one prompt to its result. Resolves with totals; rejects with the error text
    * ('cancelled' when stopped). `sessionId` is reused with --resume once the thread has one.
    */
-  function run({ threadId, claudePath, project, prompt, model, effort, approval, sessionId, resume, onApproval }) {
+  function run({ threadId, claudePath, project, prompt, model, effort, approval, sessionId, resume, onApproval, ...rest }) {
     return new Promise((resolve, reject) => {
       const args = ['-p', '--input-format', 'stream-json', '--output-format', 'stream-json', '--verbose', '--include-partial-messages',
         '--model', model, '--permission-mode', PERMISSION_MODE[approval] ?? 'manual', '--permission-prompts', 'host', '--permission-prompt-tool', 'stdio',
         ...(approval === 'never' ? ['--allow-dangerously-skip-permissions'] : []),
         ...(effort ? ['--effort', effort] : []),
+        ...settingsArgs(rest),
         ...(resume ? ['--resume', sessionId] : ['--session-id', sessionId])]
       const child = spawn(claudePath, args, { cwd: project, env: childEnv(), stdio: ['pipe', 'pipe', 'pipe'] })
       const state = { child, aborted: false, result: null, killTimer: null }
