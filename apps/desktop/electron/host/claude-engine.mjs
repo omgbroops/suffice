@@ -20,12 +20,13 @@ const GRACE_MS = 3000
 /** app approval setting -> claude --permission-mode ('ask' and 'every' both prompt the host via can_use_tool) */
 export const PERMISSION_MODE = { ask: 'manual', every: 'manual', never: 'bypassPermissions' }
 
-// Prices are USD per million tokens. OWNER TO VERIFY every number and id below.
+// Prices are USD per million tokens, first-party API rates from the claude-api skill's model table (cached
+// 2026-11-03). On a Claude subscription they show relative cost only; the plan is not billed per token.
 export const CLAUDE_MODELS = [
-  { id: 'claude-opus-5-5', name: 'Opus 5.5', cost: { input: 5, output: 25 } },
-  { id: 'claude-sonnet-5-5', name: 'Sonnet 5.5', cost: { input: 3, output: 15 } },
-  { id: 'claude-haiku-5-5', name: 'Haiku 5.5', cost: { input: 1, output: 5 } },
-  { id: 'claude-fable-5-2', name: 'Fable 5.2', cost: { input: 15, output: 75 } },
+  { id: 'claude-opus-5-5', name: 'Opus 5.5', cost: { input: 4, output: 20 } },
+  { id: 'claude-sonnet-5-5', name: 'Sonnet 5.5', cost: { input: 2, output: 10 } },
+  { id: 'claude-haiku-5-5', name: 'Haiku 5.5', cost: { input: 0.1, output: 0.5 } },
+  { id: 'claude-fable-5-2', name: 'Fable 5.2', cost: { input: 8, output: 40 } },
 ]
 export const CLAUDE_EFFORTS = ['low', 'medium', 'high', 'xhigh', 'max']
 
