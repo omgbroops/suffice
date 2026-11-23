@@ -254,7 +254,8 @@ export function describeTool(name, input = {}) {
     // another server's tool: its own name in words, never the mcp__ plumbing
     return own ? own(input ?? {}) : { verb: mcp[2].replace(/_/g, ' ').replace(/^./, c => c.toUpperCase()), meta: mcp[1] }
   }
-  const path = str(input.path) || str(input.file)
+  // Claude Code's raw tool input (approvals) names the file file_path; normalized tool steps use path
+  const path = str(input.path) || str(input.file) || str(input.file_path) || str(input.notebook_path)
   const short = p => p.replace(/\\/g, '/')
   switch (name) {
     case 'toolsearch':

@@ -202,8 +202,9 @@ function StepView({ step, project, live }: { step: Step; project: string; live: 
   }
   if (step.kind === 'note') return <Row verb={step.text} error={step.level === 'error'} />
   if (step.kind === 'approval') {
-    const { verb, meta } = describeTool(step.name, step.input)
-    return <Row verb={step.state === 'denied' ? `Denied: ${verb.toLowerCase()}` : `Allowed: ${verb.toLowerCase()}`} meta={meta} />
+    const { verb, meta: full } = describeTool(step.name, step.input)
+    const meta = inProject(full, project)
+    return <Row verb={step.state === 'denied' ? `Denied: ${present(verb).toLowerCase()}` : `Allowed: ${present(verb).toLowerCase()}`} meta={meta} />
   }
   return <ToolView step={step} project={project} />
 }
@@ -222,8 +223,15 @@ function GroupView({ group, project }: { group: StepGroup; project: string }) {
 const MAC = typeof navigator !== 'undefined' && /Mac/.test(navigator.platform)
 
 /** Docked above the composer. The first pending card owns the keys: Cmd/Ctrl+Enter allows, Esc denies. */
-function ApprovalCard({ step, onAnswer, keys }: { step: ApprovalStep; onAnswer: (allow: boolean) => void; keys: boolean }) {
-  const { verb, meta } = describeTool(step.name, step.input)
+// approvals ask before the work happens, so they read in the present tense
+const ASK: Record<string, string> = { Wrote: 'Write', Edited: 'Edit', Read: 'Read', Searched: 'Search', Found: 'Find', Listed: 'List', 'Looked up': 'Look up', 'Searched the web': 'Search the web', Fetched: 'Fetch', 'Ran code': 'Run code' }
+const present = (verb: string) => ASK[verb] ?? verb
+// a file inside the project reads by its project path, not the absolute one
+const inProject = (path: string, project: string) => { const root = project.replace(/\/$/, '') + '/'; return project && path.startsWith(root) ? path.slice(root.length) : path }
+
+function ApprovalCard({ step, onAnswer, keys, project }: { step: ApprovalStep; onAnswer: (allow: boolean) => void; keys: boolean; project: string }) {
+  const { verb, meta: full } = describeTool(step.name, step.input)
+  const meta = inProject(full, project)
   const answer = useRef(onAnswer)
   answer.current = onAnswer
   useEffect(() => {
@@ -237,8 +245,8 @@ function ApprovalCard({ step, onAnswer, keys }: { step: ApprovalStep; onAnswer: 
     return () => document.removeEventListener('keydown', onKey)
   }, [keys])
   const command = step.name === 'bash' || step.name === 'powershell'
-  const title = step.name === 'Trust project resources' ? 'Trust this project’s Suffice resources?' : command ? 'Run this command?' : `Allow ${verb.toLowerCase()}${meta ? '' : ` (${step.name})`}?`
-  const body = command ? `$ ${step.input?.command ?? ''}` : step.input?.detail ?? meta
+  const title = step.name === 'Trust project resources' ? 'Trust this project’s Suffice resources?' : command ? 'Run this command?' : meta ? `${present(verb)} ${meta}?` : `Allow ${present(verb).toLowerCase()}?`
+  const body = command ? `$ ${step.input?.command ?? ''}` : step.input?.detail
   return (
     <div className="ask-card" role="group" aria-label="Permission request">
       <div className="ask-head">{title}</div>
@@ -384,7 +392,7 @@ export function ThreadView({
       </div>
       <div className="thread-composer">
         <div className="thread-col">
-          {pending.map((s, i) => <ApprovalCard key={s.id} step={s} keys={i === 0} onAnswer={allow => onApproval(s.id, allow)} />)}
+          {pending.map((s, i) => <ApprovalCard key={s.id} step={s} keys={i === 0} project={project} onAnswer={allow => onApproval(s.id, allow)} />)}
           {composer}
         </div>
       </div>

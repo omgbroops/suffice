@@ -186,3 +186,8 @@ test('MCP tool steps read as actions, not mcp__ names', async () => {
   assert.deepEqual(describeTool('mcp__github__create_issue', {}), { verb: 'Create issue', meta: 'github' })
   assert.equal(describeTool('toolsearch', { query: 'select:x' }).verb, 'Loaded tools')
 })
+
+test('describeTool reads Claude raw input: file_path names the file', () => {
+  assert.deepEqual(describeTool('write', { file_path: 'notes.md', content: 'hello' }), { verb: 'Wrote', meta: 'notes.md' })
+  assert.equal(describeTool('edit', { file_path: 'src/a.ts' }).meta, 'src/a.ts')
+})

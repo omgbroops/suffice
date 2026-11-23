@@ -8,7 +8,7 @@ import { ModelPicker } from './components/ModelPicker'
 import { ThreadView } from './components/ThreadView'
 import { Dither } from './components/Dither'
 import { Segmented, StatusGlyph } from './components/ui'
-import { IconArrowLeft, IconArrowRight, IconClose, IconCompose, IconFolder, IconHome, IconNotes, IconPlus, IconSearch, IconSelector, IconSidebar } from './icons'
+import { IconArrowLeft, IconArrowRight, IconClose, IconCompose, IconFolder, IconHome, IconNotes, IconPin, IconPlus, IconSearch, IconSelector, IconSidebar } from './icons'
 import { ProjectOrb } from './components/Orb'
 import { AutoNamesContext, ColorsContext, IconsContext, NamesContext, ProjectEmblem, SearchPalette, SideProjects } from './components/Sidebar'
 import { baseName, displayName, threadsByProject } from './components/groups'
@@ -419,7 +419,7 @@ export default function App() {
       {statusOf(t) === 'working' ? (
         <StatusGlyph status="working" seed={t.key} />
       ) : (
-        <span className={`side-thread-time${statusOf(t) === 'input' ? ' is-needs' : ''}`}>{statusOf(t) === 'input' ? 'Reply' : ago(t.modified)}</span>
+        <span className={`side-thread-time${statusOf(t) === 'input' ? ' is-needs' : ''}`}>{statusOf(t) === 'input' ? 'Reply' : t.pinned ? <span role="img" aria-label="Pinned"><IconPin size={12} /></span> : ago(t.modified)}</span>
       )}
     </button>
     </ThreadRow>
