@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, ipcMain, nativeTheme, shell } from 'electron'
+import { app, BrowserWindow, dialog, ipcMain, nativeTheme, safeStorage, shell } from 'electron'
 import { fileURLToPath } from 'node:url'
 import { dirname, relative, resolve, sep } from 'node:path'
 import { createHost } from './host/host.mjs'
@@ -92,11 +92,16 @@ const handlers = {
     const text = v => (typeof v === 'string' ? v.slice(0, 4000) : '')
     return void logError('renderer', `${text(message)}\n${text(stack)} ${text(source)}`)
   },
+  'accounts:list': () => host.accountsList(),
+  'accounts:key-set': args => host.setKey(args),
+  'accounts:key-test': args => host.testKey(args),
+  'accounts:key-remove': args => host.removeKey(args),
   'settings:update': async patch => { const s = await host.updateSettings(patch); applyTheme(s); return s },
 }
 
 app.whenReady().then(async () => {
   host = await createHost({
+    safeStorage,
     emit: send,
     openExternal: url => void shell.openExternal(url),
     chooseDirectory: async () => {
