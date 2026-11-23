@@ -66,6 +66,7 @@ test('a run streams events, waits for approval and saves its transcript', async 
     let done
     const finished = new Promise(r => (done = r))
     const host = await createHost({
+      engine: 'openai',
       home,
       runtime: fakeRuntime(),
       createSession: fakeCreateSession(calls),
@@ -118,7 +119,7 @@ test('guide steers or queues a running thread and refuses otherwise', async () =
       run: () => gate,
     })
     const notes = []
-    const host = await createHost({ home, runtime: fakeRuntime(), createSession, openExternal: () => {}, chooseDirectory: async () => home, emit: (c, p) => c === 'thread:event' && p.event.type === 'note' && notes.push(p.event.text) })
+    const host = await createHost({ engine: 'openai', home, runtime: fakeRuntime(), createSession, openExternal: () => {}, chooseDirectory: async () => home, emit: (c, p) => c === 'thread:event' && p.event.type === 'note' && notes.push(p.event.text) })
     await assert.rejects(host.guide({ threadId: 'g', text: 'x' }), /Nothing is running/)
     await host.run({ threadId: 'g', project: home, prompt: 'go', model: 'gpt-6.1-sol', effort: 'low' })
     await host.guide({ threadId: 'g', text: ' use the fake clock ' })
@@ -139,7 +140,7 @@ test('guide steers or queues a running thread and refuses otherwise', async () =
 test('runs refuse without a project or with an unknown model', async () => {
   const home = await mkdtemp(join(tmpdir(), 'suffice-desktop-'))
   try {
-    const host = await createHost({ home, runtime: fakeRuntime(), createSession: fakeCreateSession([]), openExternal: () => {}, chooseDirectory: async () => undefined, emit: () => {} })
+    const host = await createHost({ engine: 'openai', home, runtime: fakeRuntime(), createSession: fakeCreateSession([]), openExternal: () => {}, chooseDirectory: async () => undefined, emit: () => {} })
     await assert.rejects(host.run({ threadId: 'a', project: null, prompt: 'x', model: 'gpt-6.1-sol', effort: 'low' }), /Choose a project/)
     await assert.rejects(host.run({ threadId: 'a', project: home, prompt: 'x', model: 'nope', effort: 'low' }), /not in the model catalog/)
     assert.equal(await host.chooseProject(), null)
@@ -165,7 +166,7 @@ test('efficient and fast runs go through the harness commands', async () => {
         run: async prompt => prompts.push(prompt),
       }
     }
-    const host = await createHost({ home, runtime: fakeRuntime(), createSession, openExternal: () => {}, chooseDirectory: async () => home, emit: (c, p) => c === 'thread:event' && p.event.type === 'end' && ends.push(p.event) })
+    const host = await createHost({ engine: 'openai', home, runtime: fakeRuntime(), createSession, openExternal: () => {}, chooseDirectory: async () => home, emit: (c, p) => c === 'thread:event' && p.event.type === 'end' && ends.push(p.event) })
     await host.run({ threadId: 'e', project: home, prompt: 'fix it', model: 'gpt-6.1-sol', effort: 'low', mode: 'efficient', cheapModel: 'gpt-6-luna' })
     await host.run({ threadId: 'f', project: home, prompt: 'go', model: 'gpt-6.1-sol', effort: 'low', mode: 'fast' })
     await new Promise(r => setTimeout(r, 50))
@@ -188,6 +189,7 @@ test('a second start on a starting thread is refused, and Stop during start is k
     const slow = fakeCreateSession(calls)
     const events = []
     const host = await createHost({
+      engine: 'openai',
       home,
       runtime: fakeRuntime(),
       createSession: async (...a) => (await gate, slow(...a)),
@@ -215,7 +217,7 @@ test('a corrupt settings file is kept aside, not overwritten', async () => {
     const { mkdir, writeFile } = await import('node:fs/promises')
     await mkdir(join(home, 'desktop'), { recursive: true })
     await writeFile(join(home, 'desktop', 'settings.json'), '{ "project": "/x", oops')
-    const host = await createHost({ home, runtime: fakeRuntime(), openExternal: () => {}, chooseDirectory: async () => home, emit: () => {} })
+    const host = await createHost({ engine: 'openai', home, runtime: fakeRuntime(), openExternal: () => {}, chooseDirectory: async () => home, emit: () => {} })
     await host.updateSettings({ approval: 'auto' })
     const files = await readdir(join(home, 'desktop'))
     const kept = files.find(f => f.startsWith('settings.json.corrupt-'))

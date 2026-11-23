@@ -8,6 +8,8 @@ export type ModelInfo = {
   contextWindow: number
   cost: { input: number; output: number; cacheRead: number }
   efforts: string[]
+  /** modes this engine can run; absent means all */
+  modes?: string[]
 }
 
 export type Settings = {

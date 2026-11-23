@@ -37,6 +37,7 @@ const SETTINGS = {
   approval: v => ['ask', 'every', 'never'].includes(v),
   recentModels: v => Array.isArray(v) && v.every(isStr),
   mode: v => ['balanced', 'efficient', 'fast'].includes(v),
+  engine: v => ['claude', 'openai'].includes(v),
   cheapModel: isStr,
   projectColors: v => isMap(v, isStr),
   projectNames: v => isMap(v, isStr),
