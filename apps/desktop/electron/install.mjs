@@ -16,7 +16,7 @@ export function createInstaller({ app, dialog, exec, platform = process.platform
   return {
     // Returns true when the app is being moved and relaunched: the caller must not keep starting up.
     async offerMove() {
-      if (!active() || asked || app.isInApplicationsFolder()) return false
+      if (!active() || asked || !volumeOf(execPath) || app.isInApplicationsFolder()) return false // only offered from a disk image
       asked = true
       const { response } = await dialog.showMessageBox({
         type: 'question', message: 'Move Suffice to Applications?',

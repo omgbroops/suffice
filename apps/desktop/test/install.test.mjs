@@ -42,8 +42,8 @@ test('Not now: no move and not asked again this launch', async () => {
   assert.deepEqual([t.calls.dialog, t.calls.move, t.files.size], [1, 0, 0])
 })
 
-test('unpackaged or non-mac: nothing happens', async () => {
-  for (const o of [{ packaged: false }, { platform: 'win32' }]) {
+test('unpackaged, non-mac or not on a disk image: nothing happens', async () => {
+  for (const o of [{ packaged: false }, { platform: 'win32' }, { execPath: '/Users/x/Suffice.app/Contents/MacOS/Suffice' }]) {
     const t = setup(o)
     assert.equal(await t.installer.offerMove(), false)
     await t.installer.ejectSource()

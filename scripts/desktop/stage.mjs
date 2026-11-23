@@ -15,7 +15,7 @@ function prune(file,path,name){
  if(/\.(?:map|d\.[cm]?ts)$/.test(base))return false;
  if(/\.(?:md|markdown)$/i.test(base)&&!/^(?:license|licence)/i.test(base)&&!keepDocs(name)&&base.toLowerCase()!=='skill.md')return false;
  if(/\.[cm]?ts$/.test(base)&&['js','mjs','cjs'].some(x=>existsSync(file.slice(0,-/\.[cm]?ts$/.exec(base)[0].length)+'.'+x)))return false;
- if(!keepDocs(name)&&/^(?:docs?|examples?|__tests__|\.github)$/.test(base))return false;
+ if(!keepDocs(name)&&/^(?:docs|examples|__tests__|\.github)$/.test(base))return false;
  const parts=path.split('/'),i=parts.indexOf('prebuilds');if(i>=0&&parts[i+1]&&parts[i+1]!==platformTag)return false;
  const n=parts.indexOf('native');if(n>=0&&parts[n+1]&&['darwin','linux','win32'].includes(parts[n+1])&&parts[n+1]!==process.platform)return false;
  return true;
