@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
-import { api, type AuthEvent, type InitInfo, type ModelInfo, type Settings, type ThreadSummary } from './api'
+import { api, type AccountRow, type InitInfo, type ModelInfo, type Settings, type ThreadSummary } from './api'
 import { emptyTranscript, reduce, type Transcript } from '../shared/transcript.mjs'
 import { ago, type Status } from './data'
 import { Composer } from './components/Composer'
@@ -47,50 +47,72 @@ function Titlebar({ platform, children }: { platform: string; children?: ReactNo
   return <header className={`titlebar is-${platform}`}>{children}</header>
 }
 
-function SignIn({ platform, engine, onDone }: { platform: string; engine: 'claude' | 'openai'; onDone: () => void }) {
-  const [state, setState] = useState<'idle' | 'waiting' | 'error'>('idle')
-  const [message, setMessage] = useState('')
-  const [url, setUrl] = useState('')
-  const [prompt, setPrompt] = useState<{ id: string; message: string } | null>(null)
-  const [answer, setAnswer] = useState('')
+type Row = AccountRow
 
-  useEffect(
-    () =>
-      api.on('auth:event', (e: AuthEvent) => {
-        if (e.type === 'url') setUrl(e.url)
-        else if (e.type === 'progress') setMessage(e.message)
-        else if (e.type === 'prompt') setPrompt({ id: e.id, message: e.message })
-        else if (e.type === 'error') {
-          setState('error')
-          setMessage(e.message)
-        }
-      }),
-    [],
-  )
+const STATUS = (r: Row) => (r.connected ? (r.kind === 'key' ? r.detail : 'Signed in') : r.installed ? 'Installed, not signed in' : 'Not installed')
 
-  // Claude engine: the app uses the user's own Claude Code login and never handles credentials itself;
-  // signing in happens in Claude Code, and this button only checks again
-  const check = async () => {
-    setState('waiting')
-    setMessage('Checking Claude Code…')
-    if ((await api.init()).signedIn) return onDone()
-    const r = await api.login()
-    setState('error')
-    setMessage(r.error ?? 'Claude Code is not signed in yet.')
-  }
-
-  const start = async () => {
-    setState('waiting')
-    setMessage('Finish signing in from your browser.')
-    setUrl('')
-    setPrompt(null)
-    const result = await api.login()
-    if (result.ok) onDone()
-    else {
-      setState('error')
-      setMessage(result.error ?? 'Sign-in did not complete.')
+function ConnectAccounts({ platform, info, onDone, onBack }: { platform: string; info: InitInfo; onDone: () => void; onBack?: () => void }) {
+  const [rows, setRows] = useState<Row[]>(info.accounts ?? [])
+  const [busy, setBusy] = useState(false)
+  const [drafts, setDrafts] = useState<Record<string, string>>({})
+  const [msg, setMsg] = useState<Record<string, string>>({})
+  const [copied, setCopied] = useState('')
+  const refresh = async () => {
+    setBusy(true)
+    try {
+      setRows(await api.accounts())
+    } finally {
+      setBusy(false)
     }
   }
+  useEffect(() => {
+    void refresh()
+  }, [])
+  useEffect(() => {
+    if (!onBack) return
+    const esc = (e: KeyboardEvent) => e.key === 'Escape' && onBack()
+    document.addEventListener('keydown', esc)
+    return () => document.removeEventListener('keydown', esc)
+  }, [onBack])
+  const clis = rows.filter(r => r.kind === 'cli')
+  const keys = rows.filter(r => r.kind === 'key')
+  const any = rows.some(r => r.connected)
+  const say = (id: string, m: string) => setMsg(x => ({ ...x, [id]: m }))
+  const save = async (r: Row) => {
+    const v = (drafts[r.id] ?? '').trim()
+    if (!v) return
+    try {
+      await api.setKey(r.id.slice(4), v)
+      setDrafts(d => ({ ...d, [r.id]: '' }))
+      say(r.id, '')
+      await refresh()
+    } catch (e) {
+      say(r.id, (e as Error).message)
+    }
+  }
+  const test = async (r: Row) => {
+    say(r.id, 'Testing…')
+    try {
+      say(r.id, (await api.testKey(r.id.slice(4))).message)
+    } catch (e) {
+      say(r.id, (e as Error).message)
+    }
+  }
+  const remove = async (r: Row) => {
+    try {
+      await api.removeKey(r.id.slice(4))
+      say(r.id, '')
+      await refresh()
+    } catch (e) {
+      say(r.id, (e as Error).message)
+    }
+  }
+  const copy = (r: Row) => {
+    const cmd = r.howTo.replace(/^Run /, '').replace(/ in a terminal$/, '')
+    void navigator.clipboard?.writeText(cmd)
+    setCopied(r.id)
+  }
+  const Dot = ({ on }: { on: boolean }) => <span className={`side-user-dot${on ? '' : ' is-off'}`} aria-hidden />
 
   return (
     <div className="app is-bare">
@@ -99,46 +121,62 @@ function SignIn({ platform, engine, onDone }: { platform: string; engine: 'claud
       </Titlebar>
       <main className="signin">
         <Dither />
-        <div className="signin-card">
+        <div className="signin-card accounts-card">
           <span className="logo logo-lg">[suffice]</span>
-          <p className="signin-copy">
-            {engine === 'claude'
-              ? 'Suffice runs tasks with your own Claude Code. Run claude once in a terminal and sign in with your Claude account, then check again here.'
-              : 'Sign in with your ChatGPT account to run tasks. Credentials stay on this machine, shared with the Suffice CLI.'}
-          </p>
-          {state === 'waiting' ? (
-            <>
-              <div className="signin-status is-live">{message}</div>
-              {url && (
-                <a className="signin-link" href={url} target="_blank" rel="noreferrer">
-                  Open the sign-in page again
-                </a>
-              )}
-              {prompt && (
-                <form
-                  className="signin-prompt"
-                  onSubmit={e => {
-                    e.preventDefault()
-                    void api.answerLogin(prompt.id, answer.trim())
-                    setPrompt(null)
-                    setAnswer('')
-                  }}
-                >
-                  <label htmlFor="signin-answer">{prompt.message}</label>
-                  <input id="signin-answer" autoFocus value={answer} onChange={e => setAnswer(e.target.value)} />
-                  <button className="btn btn-primary" disabled={!answer.trim()}>Continue</button>
-                </form>
-              )}
-              <button className="btn" onClick={() => void api.cancelLogin()}>Cancel</button>
-            </>
-          ) : (
-            <>
-              {state === 'error' && <div className="signin-error">{message}</div>}
-              <button className="btn btn-primary btn-lg" onClick={engine === 'claude' ? check : start} autoFocus>
-                {engine === 'claude' ? 'Check again' : state === 'error' ? 'Try again' : 'Sign in with ChatGPT'}
-              </button>
-            </>
-          )}
+          <p className="signin-copy">Connect an account to run tasks.</p>
+          <div className="menu accounts-list" role="list">
+            {clis.map(r => (
+              <div className="menu-row" role="listitem" key={r.id}>
+                <span>{r.name}</span>
+                <span className="menu-status-val">
+                  <Dot on={r.connected} />
+                  {STATUS(r)}
+                  {r.connected ? (
+                    <button className="btn" onClick={() => void refresh()} disabled={busy}>Refresh</button>
+                  ) : r.installed ? (
+                    <button className="btn" onClick={() => copy(r)}>{copied === r.id ? 'Copied' : 'Copy login command'}</button>
+                  ) : (
+                    <a className="btn" href={r.install} target="_blank" rel="noreferrer">Install</a>
+                  )}
+                </span>
+              </div>
+            ))}
+          </div>
+          <div className="signin-copy accounts-head">API keys</div>
+          <div className="menu accounts-list">
+            {keys.map(r => (
+              <form
+                className="menu-row accounts-key"
+                key={r.id}
+                onSubmit={e => {
+                  e.preventDefault()
+                  void save(r)
+                }}
+              >
+                <span>{r.name.replace(' key', '')}</span>
+                {r.connected ? (
+                  <span className="menu-status-val">
+                    <Dot on />
+                    {msg[r.id] || r.detail}
+                    <button type="button" className="btn" onClick={() => void test(r)}>Test</button>
+                    <button type="button" className="btn" onClick={() => void remove(r)}>Remove</button>
+                  </span>
+                ) : (
+                  <span className="menu-status-val">
+                    <input type="password" autoComplete="off" spellCheck={false} placeholder={msg[r.id] || 'Paste key'} aria-label={`${r.name}`} value={drafts[r.id] ?? ''} onChange={e => setDrafts(d => ({ ...d, [r.id]: e.target.value }))} />
+                    <button className="btn" disabled={!(drafts[r.id] ?? '').trim()}>Add key</button>
+                  </span>
+                )}
+              </form>
+            ))}
+          </div>
+          <div className="accounts-foot">
+            <button className="btn btn-primary btn-lg" disabled={!any} onClick={onDone} autoFocus>
+              Continue
+            </button>
+            {any && info.defaultLabel && <span className="signin-link">Default: {info.defaultLabel}</span>}
+            {onBack && <button className="btn" onClick={onBack}>Back</button>}
+          </div>
         </div>
       </main>
     </div>
@@ -148,6 +186,7 @@ function SignIn({ platform, engine, onDone }: { platform: string; engine: 'claud
 export default function App() {
   const [info, setInfo] = useState<InitInfo | null>(null)
   const [bootError, setBootError] = useState('')
+  const [showAccounts, setShowAccounts] = useState(false)
   const [settings, setSettings] = useState<Settings | null>(null)
   const [projects, setProjects] = useState<string[]>([])
   const [models, setModels] = useState<ModelInfo[]>([])
@@ -410,7 +449,7 @@ export default function App() {
       </div>
     )
   if (!info || !settings) return <div className="app is-bare"><Titlebar platform={platform} /></div>
-  if (!info.signedIn) return <SignIn platform={platform} engine={info.settings.engine ?? 'claude'} onDone={() => void boot()} />
+  if (!info.signedIn || showAccounts) return <ConnectAccounts platform={platform} info={info} onDone={() => (setShowAccounts(false), void boot())} onBack={info.signedIn ? () => setShowAccounts(false) : undefined} />
 
   const picker = (
     <ModelPicker
@@ -565,10 +604,7 @@ export default function App() {
           identity={git}
           theme={settings?.theme ?? 'system'}
           onTheme={theme => void patchSettings({ theme })}
-          onSignOut={async () => {
-            await api.logout()
-            await boot()
-          }}
+          onAccounts={() => setShowAccounts(true)}
         />
       </aside>
 
@@ -676,7 +712,7 @@ function HomeContinue({ thread, onOpen }: { thread: Thread & { key: string }; on
 
 type Theme = 'system' | 'light' | 'dark'
 
-function AccountMenu({ identity, onSignOut, theme, onTheme }: { identity: { name: string; avatar: string }; onSignOut: () => void; theme: Theme; onTheme: (t: Theme) => void }) {
+function AccountMenu({ identity, onAccounts, theme, onTheme }: { identity: { name: string; avatar: string }; onAccounts: () => void; theme: Theme; onTheme: (t: Theme) => void }) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -703,12 +739,8 @@ function AccountMenu({ identity, onSignOut, theme, onTheme }: { identity: { name
               ]}
             />
           </div>
-          <div className="menu-row menu-status">
-            <span>ChatGPT</span>
-            <span className="menu-status-val"><span className="side-user-dot" aria-hidden />Signed in</span>
-          </div>
-          <button className="menu-item" onClick={() => (setOpen(false), onSignOut())}>
-            Sign out
+          <button className="menu-item" onClick={() => (setOpen(false), onAccounts())}>
+            Accounts
           </button>
         </div>
       )}

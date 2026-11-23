@@ -32,11 +32,14 @@ export type Settings = {
   /** prompt behind Notes > Generate notes */
   notesPrompt?: string
   theme?: 'system' | 'light' | 'dark'
+  engineAuto?: boolean
+  defaultProvider?: string
 }
 
 export type Mode = 'balanced' | 'efficient' | 'fast'
 
-export type InitInfo = { signedIn: boolean; home: string; settings: Settings; projects: string[]; platform: string }
+export type AccountRow = { id: string; name: string; kind: 'cli' | 'key'; installed: boolean; connected: boolean; runnable: boolean; detail: string; howTo: string; install?: string; last4?: string }
+export type InitInfo = { accounts?: AccountRow[]; defaultLabel?: string | null; signedIn: boolean; home: string; settings: Settings; projects: string[]; platform: string }
 export type NoteSummary = { path: string; title: string; modified: number; links: string[] }
 export type ThreadSummary = { path: string; title: string; modified: number; running: boolean }
 export type AuthEvent =
@@ -68,6 +71,10 @@ export const api = {
   answerLogin: (id: string, value: string) => bridge().invoke('auth:answer', { id, value }),
   cancelLogin: () => bridge().invoke('auth:cancel'),
   logout: () => bridge().invoke<{ signedIn: boolean }>('auth:logout'),
+  accounts: () => bridge().invoke<AccountRow[]>('accounts:list'),
+  setKey: (provider: string, key: string) => bridge().invoke<{ last4: string }>('accounts:key-set', { provider, key }),
+  testKey: (provider: string) => bridge().invoke<{ ok: boolean; message: string }>('accounts:key-test', { provider }),
+  removeKey: (provider: string) => bridge().invoke('accounts:key-remove', { provider }),
   models: () => bridge().invoke<ModelInfo[]>('models:list'),
   chooseProject: () => bridge().invoke<{ project: string; projects: string[] } | null>('projects:choose'),
   defaultProject: () => bridge().invoke<{ project: string; projects: string[] }>('projects:default'),

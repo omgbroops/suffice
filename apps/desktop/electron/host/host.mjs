@@ -25,9 +25,11 @@ import { readNote, scanNotes } from './notes.mjs'
 import { suggestName } from './project-name.mjs'
 import { createErrorLog } from './errorlog.mjs'
 import { CLAUDE_EFFORTS, CLAUDE_MODELS, INSTALL_HINT, LOGIN_HINT, authStatus, childEnv, createClaudeEngine, findClaude } from './claude-engine.mjs'
+import { DEFAULTS, createAccounts } from './accounts.mjs'
 import { bool, cleanSettingsPatch, object, oneOf, sessionPath, str } from './validate.mjs'
 
 export const PROVIDER = 'openai'
+
 export const DEFAULT_MODEL = 'gpt-6.1-sol'
 export const DEFAULT_CHEAP_MODEL = 'gpt-6-luna'
 export const MODES = ['balanced', 'efficient', 'fast']
@@ -124,14 +126,26 @@ async function writeJson(path, value) {
  *   claudeSpawn?: typeof import('node:child_process').spawn,
  * }} deps
  */
-export async function createHost({ home = parseOptions([]).home, emit, openExternal, chooseDirectory, runtime: givenRuntime, createSession = createSufficeSession, engine: givenEngine, claudePath: givenClaudePath, claudeSpawn }) {
+export async function createHost({ home = parseOptions([]).home, emit, openExternal, chooseDirectory, runtime: givenRuntime, createSession = createSufficeSession, engine: givenEngine, claudePath: givenClaudePath, claudeSpawn, accounts: givenAccounts, safeStorage }) {
   process.env.PI_CODING_AGENT_DIR = home
   const desktopDir = resolve(home, 'desktop')
+  const accounts = givenAccounts ?? (safeStorage ? createAccounts({ desktopDir, safeStorage }) : null)
+  const need = () => accounts ?? (() => { throw new Error('Accounts are not available.') })()
   const transcriptDir = resolve(desktopDir, 'transcripts')
   await mkdir(transcriptDir, { recursive: true, mode: 0o700 })
   const settingsPath = resolve(desktopDir, 'settings.json')
-  let settings = { project: null, model: DEFAULT_MODEL, efforts: {}, fast: {}, approval: 'ask', recentModels: [], mode: 'balanced', cheapModel: DEFAULT_CHEAP_MODEL, engine: 'claude', ...plain(await readJson(settingsPath, {})) }
+  const savedSettings = plain(await readJson(settingsPath, {}))
+  let settings = { project: null, model: DEFAULT_MODEL, efforts: {}, fast: {}, approval: 'ask', recentModels: [], mode: 'balanced', cheapModel: DEFAULT_CHEAP_MODEL, engine: 'claude', ...savedSettings }
   if (givenEngine) settings.engine = givenEngine
+  // the model must be one the active engine offers: a Claude engine never shows a GPT default, nor the reverse
+  const CLAUDE_DEFAULT = 'claude-opus-5-5'
+  const fixModel = () => {
+    if (settings.engine === 'openai') { if (CLAUDE_MODELS.some(m => m.id === settings.model)) settings.model = DEFAULT_MODEL }
+    else if (!CLAUDE_MODELS.some(m => m.id === settings.model)) settings.model = CLAUDE_DEFAULT
+  }
+  fixModel()
+  let accountRows = null
+  let firstRunDone = false
   const isClaude = () => settings.engine !== 'openai'
   // writes run one after another, each with the settings as they are then, so an older snapshot never lands last
   let settingsWrite = Promise.resolve()
@@ -322,7 +336,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     if (project !== null && project !== undefined) str(project, 'project')
     oneOf(mode, MODES, 'mode')
     if (disposed) throw new Error('The app is closing.')
-    if (isClaude()) return runClaude({ threadId, path, project, prompt, model, effort, mode })
+    if (isClaude()) return runClaude({ threadId, path, project, prompt, model: CLAUDE_MODELS.some(m => m.id === model) ? model : settings.model, effort, mode })
     if (mode === 'efficient' && !runtime.getModel(PROVIDER, cheapModel)) throw new Error(`${cheapModel} is not in the model catalog.`)
     if (!signedIn()) throw new Error('Sign in to start a task.')
     if (!project) throw new Error('Choose a project first.')
@@ -518,7 +532,9 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
   }
 
   async function updateSettings(patch) {
-    settings = { ...settings, ...cleanSettingsPatch(patch) }
+    const clean = cleanSettingsPatch(patch)
+    settings = { ...settings, ...clean, ...(clean.engine ? { engineAuto: false } : {}) }
+    fixModel()
     if (!isClaude()) await ensureRuntime()
     for (const t of live.values()) if (t.desktopSettings) t.desktopSettings['approval-mode'] = APPROVAL[settings.approval] ?? APPROVAL.ask
     await saveSettings()
@@ -541,8 +557,24 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
   return {
     getSettings: () => settings,
     init: async () => {
+      let rows = null
+      if (accounts) {
+        rows = await accounts.list()
+        // first run only: no engine was ever chosen, so use the best connected account; a manual choice is never touched
+        if (!firstRunDone && !givenEngine && !Object.hasOwn(savedSettings, 'engine') && settings.engineAuto !== false) {
+          const best = accounts.pick(rows)
+          if (best) {
+            const d = DEFAULTS[best.id]
+            settings = { ...settings, ...(d ? { engine: d.engine, model: d.model, efforts: { ...settings.efforts, ...d.efforts } } : {}), engineAuto: true, defaultProvider: best.id }
+            fixModel()
+            await saveSettings()
+          }
+        }
+        firstRunDone = true
+      }
       const claude = isClaude() ? await authStatus(claudePath(), childEnv()) : null
-      return { signedIn: claude ? claude.loggedIn : signedIn(), engine: settings.engine, modes: modesFor(settings.engine), claude, home, settings, projects: await recentProjects(home), platform: process.platform }
+      const connected = rows ? rows.some(r => r.connected) || (!isClaude() && signedIn()) : null
+      return { signedIn: connected ?? (claude ? claude.loggedIn : signedIn()), accounts: rows, defaultLabel: accounts ? accounts.label(settings.defaultProvider ?? accounts.pick(rows)?.id) : null, engine: settings.engine, modes: modesFor(settings.engine), claude, home, settings, projects: await recentProjects(home), platform: process.platform }
     },
     login: () => (isClaude() ? Promise.resolve({ ok: false, error: claudePath() ? LOGIN_HINT : INSTALL_HINT }) : startLogin()),
     answerLogin: (id, value) => {
@@ -610,6 +642,10 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     guide,
     answerApproval,
     updateSettings,
+    accountsList: () => accounts?.list() ?? [],
+    setKey: ({ provider, key }) => need().setKey(str(provider, 'provider', { max: 40 }), str(key, 'key', { max: 500 })),
+    testKey: ({ provider }) => need().testKey(str(provider, 'provider', { max: 40 })),
+    removeKey: ({ provider }) => need().removeKey(str(provider, 'provider', { max: 40 })),
     dispose,
   }
 }

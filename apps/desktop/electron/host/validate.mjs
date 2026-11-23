@@ -39,6 +39,7 @@ const SETTINGS = {
   mode: v => ['balanced', 'efficient', 'fast'].includes(v),
   engine: v => ['claude', 'openai'].includes(v),
   cheapModel: isStr,
+  engineAuto: v => typeof v === 'boolean',
   projectColors: v => isMap(v, isStr),
   projectNames: v => isMap(v, isStr),
   projectAutoNames: v => isMap(v, isStr),
