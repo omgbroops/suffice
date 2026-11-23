@@ -28,6 +28,7 @@ import { createErrorLog } from './errorlog.mjs'
 import { CLAUDE_EFFORTS, CLAUDE_MODELS, INSTALL_HINT, LOGIN_HINT, authStatus, childEnv, createClaudeEngine, findClaude, withCacheCost } from './claude-engine.mjs'
 import { writeMcpConfig } from './suffice-mcp.mjs'
 import { clearDirs, pruneOld } from './desktop.mjs'
+import { ARTIFACT_PROMPT } from './artifact-prompt.mjs'
 import { DEFAULTS, createAccounts } from './accounts.mjs'
 import { buildInput, claudeAsk, createTitler } from './thread-meta.mjs'
 import { categorize } from './categories.mjs'
@@ -496,7 +497,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     const capabilities = { web: true, browser: false, computer: false, mcp: true, ...settings.capabilities }
     void (async () => {
       try {
-        const totals = await claudeEngine.run({ threadId, claudePath: bin, project, prompt, model, effort: level, approval: settings.approval, sessionId, resume, forkOf, addDirs: extraFolders(projectList ?? await loadProjects(), project), useClaudeConfig: settings.useClaudeConfig === true, instructions: settings, folderAccess: settings.folderAccess, capabilities, mcpConfigs: capabilities.browser || capabilities.computer ? [...mcpConfigs, ...(mcpConfig ? [mcpConfig] : [])] : [], onApproval: (name, input) => approve(threadId, name, input) })
+        const totals = await claudeEngine.run({ threadId, claudePath: bin, project, prompt, model, effort: level, approval: settings.approval, sessionId, resume, forkOf, addDirs: extraFolders(projectList ?? await loadProjects(), project), useClaudeConfig: settings.useClaudeConfig === true, instructions: settings, appendPrompt: ARTIFACT_PROMPT, folderAccess: settings.folderAccess, capabilities, mcpConfigs: capabilities.browser || capabilities.computer ? [...mcpConfigs, ...(mcpConfig ? [mcpConfig] : [])] : [], onApproval: (name, input) => approve(threadId, name, input) })
         if (forkOf) await writeJson(filePath, { ...forkMeta, forkOf: undefined })
         push(threadId, { type: 'end', ok: true, totals })
         void ledger.record({ threadId, project, engine: 'claude', model, effort: level, totals })

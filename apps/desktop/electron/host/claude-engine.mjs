@@ -44,8 +44,9 @@ const isDir = p => { try { return isAbsolute(p) && statSync(p).isDirectory() } c
  * user's ~/.claude CLAUDE.md, settings, hooks, plugins and skills stay out; the login (keychain) is untouched.
  * User-scope MCP servers live outside settings, so isolation also makes MCP strict.
  */
-export function settingsArgs({ useClaudeConfig = false, instructions, folderAccess = [], capabilities = {}, mcpConfigs = [] } = {}) {
-  const prompt = sufficePrompt(instructions)
+export function settingsArgs({ useClaudeConfig = false, instructions, appendPrompt, folderAccess = [], capabilities = {}, mcpConfigs = [] } = {}) {
+  // Claude Code takes one --append-system-prompt: the user's instructions and the caller's block share it
+  const prompt = [sufficePrompt(instructions), appendPrompt].filter(Boolean).join('\n\n')
   const off = [...(capabilities.web === false ? ['WebFetch', 'WebSearch'] : [])]
   const dirs = [...new Set(folderAccess.filter(d => typeof d === 'string' && isDir(d)))]
   return [

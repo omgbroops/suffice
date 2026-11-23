@@ -223,6 +223,22 @@ test('the child env always carries USER, which the CLI needs to find its login',
   assert.equal(childEnv({ USER: 'someone' }).USER, 'someone')
 })
 
+test('claude engine: appendPrompt reaches --append-system-prompt, and is absent when not given', async () => {
+  const t = await runFake('text')
+  try {
+    await t.engine.run({ ...t.args, appendPrompt: 'be brief' })
+    await t.engine.run(t.args)
+    const [first, second] = (await argvLog(t.s.log)).map(l => l.argv)
+    assert.deepEqual(first.slice(first.indexOf('--append-system-prompt'), first.indexOf('--append-system-prompt') + 2), ['--append-system-prompt', 'be brief'])
+    assert.ok(!second.includes('--append-system-prompt'))
+    // with user instructions too, still exactly one flag carrying both
+    await t.engine.run({ ...t.args, appendPrompt: 'be brief', instructions: { callMe: 'Abhay' } })
+    const third = (await argvLog(t.s.log))[2].argv
+    assert.equal(third.filter(x => x === '--append-system-prompt').length, 1)
+    assert.equal(third[third.indexOf('--append-system-prompt') + 1], 'Call the user Abhay.\n\nbe brief')
+  } finally { await t.cleanup() }
+})
+
 const flag = (argv, f) => { const i = argv.indexOf(f); return i < 0 ? null : argv.slice(i + 1) }
 
 test('settings args: isolation, instructions, folders, capabilities, mcp configs reach argv exactly', async () => {

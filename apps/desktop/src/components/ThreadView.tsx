@@ -1,7 +1,9 @@
-import { Fragment, useContext, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import { Fragment, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { compactDiff, describeTool, groupSteps, patchLines, visibleSteps, type StepGroup, type AgentMessage as Agent, type ApprovalStep, type RaceStep, type Step, type ToolStep, type Transcript } from '../../shared/transcript.mjs'
 import type { Status } from '../data'
 import { IconChevronDown } from '../icons'
+import { classify, readFence, wrappedArtifact } from '../../shared/artifacts.mjs'
+import { ArtifactCard, ArtifactCtx } from './Artifact'
 import { CopyButton, Elapsed, StatusGlyph } from './ui'
 import { Live } from './Live'
 import { EFFORT_LABEL } from './ModelPicker'
@@ -34,21 +36,29 @@ function inline(s: string, onLink?: (href: string) => void): ReactNode[] {
 
 /** Enough markdown for agent replies and notes: paragraphs, lists, headings, fences, inline code, bold, links. onLink handles non-web links. */
 export function Prose({ text, onLink }: { text: string; onLink?: (href: string) => void }) {
+  const artifacts = useContext(ArtifactCtx) !== null
   const blocks: ReactNode[] = []
   const lines = text.replace(/\r\n/g, '\n').split('\n')
   let i = 0
   while (i < lines.length) {
     const line = lines[i]
     if (/^```/.test(line)) {
-      const body: string[] = []
-      i++
-      while (i < lines.length && !/^```/.test(lines[i])) body.push(lines[i++])
-      i++
+      const inner = artifacts ? wrappedArtifact(lines, i) : -1
+      const f = readFence(lines, inner >= 0 ? inner : i)
+      i = f.next
+      // the outer wrapper's closing fence, if the model added one, is not a new code block
+      if (inner >= 0 && /^`{3,}\s*$/.test(lines[i] ?? '')) i++
+      const code = f.body.join('\n')
+      const art = artifacts ? classify(f.info, code, f.complete) : null
       blocks.push(
-        <div key={blocks.length} className="prose-code-wrap">
-          <pre className="code prose-code">{body.join('\n')}</pre>
-          <CopyButton text={body.join('\n')} />
-        </div>,
+        art ? (
+          <ArtifactCard key={blocks.length} spec={art} />
+        ) : (
+          <div key={blocks.length} className="prose-code-wrap">
+            <pre className="code prose-code">{code}</pre>
+            <CopyButton text={code} />
+          </div>
+        ),
       )
     } else if (/^#{1,4}\s/.test(line)) {
       blocks.push(<p key={blocks.length} className={`prose-h prose-h${line.indexOf(' ')}`}>{inline(line.replace(/^#+\s/, ''), onLink)}</p>)
@@ -338,8 +348,12 @@ export function ThreadView({
     return () => obs.disconnect()
   }, [])
 
+  const [pane, setPane] = useState<HTMLElement | null>(null)
+  const ctx = useMemo(() => ({ project, pane }), [project, pane])
+
   return (
-    <div className="thread">
+    <ArtifactCtx.Provider value={ctx}>
+    <div className="thread" ref={setPane}>
       <header className="thread-head">
         <span className="thread-crumb">{displayName(names, project)}</span>
         <span className="thread-sep" aria-hidden>/</span>
@@ -375,5 +389,6 @@ export function ThreadView({
         </div>
       </div>
     </div>
+    </ArtifactCtx.Provider>
   )
 }

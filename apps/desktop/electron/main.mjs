@@ -1,9 +1,15 @@
-import { app, BrowserWindow, dialog, ipcMain, nativeTheme, Notification, safeStorage, shell } from 'electron'
+import { app, BrowserWindow, dialog, ipcMain, nativeTheme, Notification, protocol, safeStorage, shell } from 'electron'
 import { fileURLToPath } from 'node:url'
-import { dirname, relative, resolve, sep } from 'node:path'
+import { writeFile } from 'node:fs/promises'
+import { dirname, join, relative, resolve, sep } from 'node:path'
 import { createHost } from './host/host.mjs'
 import { inside } from './host/notes.mjs'
 import { account } from './host/git.mjs'
+import { cleanArtifactSave } from './host/validate.mjs'
+import { CSP, decodeArtifactUrl } from '../shared/artifacts.mjs'
+
+// Artifacts are served from their own scheme, so the iframe gets a CSP of its own instead of the app's and a separate origin.
+protocol.registerSchemesAsPrivileged([{ scheme: 'suffice-artifact', privileges: { standard: true, secure: true } }])
 import { createInstaller } from './install.mjs'
 import { execFile } from 'node:child_process'
 import { promisify } from 'node:util'
@@ -96,6 +102,16 @@ const handlers = {
     if (r.canceled) return []
     return r.filePaths.map(f => (typeof project === 'string' && project && inside(project, f) ? relative(project, f).split(sep).join('/') : f))
   },
+  // writes an artifact into the project folder, at a place the person picks inside it
+  'artifacts:save': async a => {
+    const { project, name, content } = cleanArtifactSave(a)
+    if (!(await host.recentProjects()).includes(project)) throw new Error('Open that project first.')
+    const r = await dialog.showSaveDialog(win, { title: 'Save artifact', defaultPath: join(project, name) })
+    if (r.canceled || !r.filePath) return null
+    if (!inside(project, r.filePath)) throw new Error('Save inside the project folder.')
+    await writeFile(r.filePath, content, 'utf8')
+    return relative(project, r.filePath).split(sep).join('/')
+  },
   'notes:read': args => host.readNote(args),
   'projects:name': args => host.nameProject(args),
   'threads:open': args => host.openThread(args),
@@ -131,6 +147,11 @@ app.whenReady().then(async () => {
       const result = await dialog.showOpenDialog(win, { title: 'Choose a project', properties: ['openDirectory'] })
       return result.canceled ? undefined : result.filePaths[0]
     },
+  })
+  protocol.handle('suffice-artifact', req => {
+    let html
+    try { html = decodeArtifactUrl(req.url) } catch { return new Response('Bad artifact', { status: 400 }) }
+    return new Response(html, { headers: { 'content-type': 'text/html; charset=utf-8', 'content-security-policy': CSP } })
   })
   for (const [channel, handler] of Object.entries(handlers)) {
     ipcMain.handle(channel, async (_event, args) => {

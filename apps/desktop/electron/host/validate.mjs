@@ -73,6 +73,13 @@ export function cleanSettingsPatch(patch) {
   return Object.fromEntries(Object.entries(patch).filter(([k, v]) => Object.hasOwn(SETTINGS, k) && SETTINGS[k](v)))
 }
 
+/** An artifact save request: a known-shaped project, a bare file name, and text content. */
+export function cleanArtifactSave(a) {
+  object(a, 'artifact')
+  const name = str(a.name, 'name', { max: 120 }).replace(/[\\/:*?"<>|\0]+/g, '-').replace(/^\.+/, '') || 'artifact'
+  return { project: str(a.project, 'project', { max: 4096 }), name, content: str(a.content, 'content', { max: 5_000_000 }) }
+}
+
 /** A thread menu action: known verb, a session path, and a short text value only where one is needed. */
 export function threadAction(a, actions) {
   object(a, 'action')

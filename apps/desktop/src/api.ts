@@ -117,6 +117,7 @@ export const api = {
   openTargets: () => bridge().invoke<OpenTarget[]>('threads:targets'),
   openIn: (project: string, target: string) => bridge().invoke('threads:open-in', { project, target }),
   pickFiles: (project: string | null) => bridge().invoke<string[]>('files:pick', { project }),
+  saveArtifact: (project: string, name: string, content: string) => bridge().invoke<string | null>('artifacts:save', { project, name, content }),
   notes: (project: string) => bridge().invoke<NoteSummary[]>('notes:list', { project }),
   readNote: (project: string, path: string) => bridge().invoke<string>('notes:read', { project, path }),
   nameProject: (project: string) => bridge().invoke<Settings>('projects:name', { project }),
