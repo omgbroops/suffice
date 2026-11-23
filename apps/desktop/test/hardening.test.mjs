@@ -34,7 +34,7 @@ function gatedSession({ gate = new Promise(() => {}), counts = { disposed: 0, ab
 async function setup(opts = {}) {
   const home = await mkdtemp(join(tmpdir(), 'suffice-hard-'))
   const events = []
-  const host = await createHost({ home, runtime: runtime(opts.runtime), createSession: opts.createSession ?? gatedSession(), openExternal: () => {}, chooseDirectory: async () => home, emit: (c, p) => { events.push([c, p]); opts.onEmit?.(c, p, host) } })
+  const host = await createHost({ engine: 'openai', home, runtime: runtime(opts.runtime), createSession: opts.createSession ?? gatedSession(), openExternal: () => {}, chooseDirectory: async () => home, emit: (c, p) => { events.push([c, p]); opts.onEmit?.(c, p, host) } })
   return { home, host, events, done: () => rm(home, { recursive: true, force: true }) }
 }
 const ended = events => events.filter(([c, p]) => c === 'thread:event' && p.event.type === 'end')
@@ -211,10 +211,10 @@ test('stress: empty, truncated and non-object settings files fall back to defaul
     try {
       await mkdir(join(home, 'desktop'), { recursive: true })
       await writeFile(join(home, 'desktop', 'settings.json'), body)
-      const host = await createHost({ home, runtime: runtime(), openExternal: () => {}, chooseDirectory: async () => home, emit: () => {} })
+      const host = await createHost({ engine: 'openai', home, runtime: runtime(), openExternal: () => {}, chooseDirectory: async () => home, emit: () => {} })
       const s = host.getSettings()
       assert.equal(s.approval, 'ask', JSON.stringify(body))
-      assert.deepEqual(Object.keys(s).sort(), ['approval', 'cheapModel', 'efforts', 'fast', 'mode', 'model', 'project', 'recentModels'], JSON.stringify(body))
+      assert.deepEqual(Object.keys(s).sort(), ['approval', 'cheapModel', 'efforts', 'engine', 'fast', 'mode', 'model', 'project', 'recentModels'], JSON.stringify(body))
       await host.updateSettings({ theme: 'dark' })
       await host.dispose()
     } finally { await rm(home, { recursive: true, force: true }) }

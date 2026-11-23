@@ -2,8 +2,8 @@
 // runs. No Electron imports, so it can be driven from tests with plain Node.
 // Everything the renderer sees comes through `emit(channel, payload)`.
 
-import { mkdir, readFile, writeFile, rename } from 'node:fs/promises'
-import { resolve } from 'node:path'
+import { mkdir, readFile, readdir, stat, writeFile, rename } from 'node:fs/promises'
+import { basename, resolve } from 'node:path'
 import { randomUUID } from 'node:crypto'
 import { SessionManager } from '@earendil-works/pi-coding-agent'
 import {
@@ -24,12 +24,15 @@ import { emptyTranscript, fromSessionMessages, reduce, resultText } from '../../
 import { readNote, scanNotes } from './notes.mjs'
 import { suggestName } from './project-name.mjs'
 import { createErrorLog } from './errorlog.mjs'
+import { CLAUDE_EFFORTS, CLAUDE_MODELS, INSTALL_HINT, LOGIN_HINT, authStatus, childEnv, createClaudeEngine, findClaude } from './claude-engine.mjs'
 import { bool, cleanSettingsPatch, object, oneOf, sessionPath, str } from './validate.mjs'
 
 export const PROVIDER = 'openai'
 export const DEFAULT_MODEL = 'gpt-6.1-sol'
 export const DEFAULT_CHEAP_MODEL = 'gpt-6-luna'
 export const MODES = ['balanced', 'efficient', 'fast']
+// the Claude engine drives one agent loop; the other modes need the OpenAI engine's own attempts
+const modesFor = engine => (engine === 'claude' ? ['balanced'] : MODES)
 const LEVELS = ['off', 'minimal', 'low', 'medium', 'high', 'xhigh']
 const APPROVAL = { ask: 'Ask when needed', every: 'Ask before every action', never: 'Never ask' }
 
@@ -116,15 +119,20 @@ async function writeJson(path, value) {
  *   chooseDirectory: () => Promise<string | undefined>,
  *   runtime?: any,
  *   createSession?: typeof createSufficeSession,
+ *   engine?: 'claude' | 'openai',
+ *   claudePath?: string,
+ *   claudeSpawn?: typeof import('node:child_process').spawn,
  * }} deps
  */
-export async function createHost({ home = parseOptions([]).home, emit, openExternal, chooseDirectory, runtime: givenRuntime, createSession = createSufficeSession }) {
+export async function createHost({ home = parseOptions([]).home, emit, openExternal, chooseDirectory, runtime: givenRuntime, createSession = createSufficeSession, engine: givenEngine, claudePath: givenClaudePath, claudeSpawn }) {
   process.env.PI_CODING_AGENT_DIR = home
   const desktopDir = resolve(home, 'desktop')
   const transcriptDir = resolve(desktopDir, 'transcripts')
   await mkdir(transcriptDir, { recursive: true, mode: 0o700 })
   const settingsPath = resolve(desktopDir, 'settings.json')
-  let settings = { project: null, model: DEFAULT_MODEL, efforts: {}, fast: {}, approval: 'ask', recentModels: [], mode: 'balanced', cheapModel: DEFAULT_CHEAP_MODEL, ...plain(await readJson(settingsPath, {})) }
+  let settings = { project: null, model: DEFAULT_MODEL, efforts: {}, fast: {}, approval: 'ask', recentModels: [], mode: 'balanced', cheapModel: DEFAULT_CHEAP_MODEL, engine: 'claude', ...plain(await readJson(settingsPath, {})) }
+  if (givenEngine) settings.engine = givenEngine
+  const isClaude = () => settings.engine !== 'openai'
   // writes run one after another, each with the settings as they are then, so an older snapshot never lands last
   let settingsWrite = Promise.resolve()
   const saveSettings = () => (settingsWrite = settingsWrite.catch(() => {}).then(() => writeJson(settingsPath, settings)))
@@ -133,11 +141,17 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
   const errorLog = createErrorLog(home)
   let disposed = false
 
-  const runtime = givenRuntime ?? (await createSufficeModelRuntime(modelRuntimeOptions(home), { onRefresh: () => emit('models:changed', null) }))
+  // the pi runtime is only built for the OpenAI engine
+  let runtime = givenRuntime ?? null
+  const ensureRuntime = async () => (runtime ??= await createSufficeModelRuntime(modelRuntimeOptions(home), { onRefresh: () => emit('models:changed', null) }))
+  if (!isClaude()) await ensureRuntime()
+  // claudePath comes from the settings file or the host, never from the renderer (cleanSettingsPatch drops it)
+  const claudePath = () => givenClaudePath ?? settings.claudePath ?? findClaude()
+  const claudeEngine = createClaudeEngine({ push: (id, e) => push(id, e), spawn: claudeSpawn })
 
   // ---- sign-in -----------------------------------------------------------
   let login = null
-  const signedIn = () => runtime.isUsingSubscription(PROVIDER) || runtime.hasConfiguredAuth(PROVIDER)
+  const signedIn = () => !!runtime && (runtime.isUsingSubscription(PROVIDER) || runtime.hasConfiguredAuth(PROVIDER))
 
   async function startLogin() {
     if (login) return { ok: false, error: 'Sign-in is already in progress.' }
@@ -308,6 +322,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     if (project !== null && project !== undefined) str(project, 'project')
     oneOf(mode, MODES, 'mode')
     if (disposed) throw new Error('The app is closing.')
+    if (isClaude()) return runClaude({ threadId, path, project, prompt, model, effort, mode })
     if (mode === 'efficient' && !runtime.getModel(PROVIDER, cheapModel)) throw new Error(`${cheapModel} is not in the model catalog.`)
     if (!signedIn()) throw new Error('Sign in to start a task.')
     if (!project) throw new Error('Choose a project first.')
@@ -368,6 +383,50 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     return { threadId, effort: level, mode }
   }
 
+  async function runClaude({ threadId, path, project, prompt, model, effort, mode }) {
+    if (!modesFor('claude').includes(mode)) throw new Error('Needs the OpenAI engine.')
+    if (!project) throw new Error('Choose a project first.')
+    const info = CLAUDE_MODELS.find(m => m.id === model)
+    if (!info) throw new Error(`${model} is not a Claude model.`)
+    const level = CLAUDE_EFFORTS.includes(effort) ? effort : 'medium'
+    const bin = claudePath()
+    if (!bin) throw new Error(INSTALL_HINT)
+    if (path !== undefined && path !== null) path = sessionPath(path, [sessionDir(home, project)], knownPaths())
+    else path = undefined
+    let thread = live.get(threadId)
+    if (thread?.running || starting.has(threadId)) throw new Error('This thread is already running.')
+    starting.set(threadId, { stop: false })
+    try {
+      if (!(await authStatus(bin, childEnv())).loggedIn) throw new Error(LOGIN_HINT)
+    } finally {
+      starting.delete(threadId)
+    }
+    const resume = !!(thread?.path || path)
+    const filePath = thread?.path ?? samePath(path) ?? resolve(sessionDir(home, project), `${randomUUID()}.claude.json`)
+    const sessionId = basename(filePath, '.claude.json')
+    const transcript = thread?.transcript ?? (path ? await openTranscript(path) : emptyTranscript())
+    thread = { ...thread, project, path: filePath, transcript, running: true, mode, claude: true }
+    live.set(threadId, thread)
+    push(threadId, { type: 'user', id: randomUUID(), text: prompt })
+    push(threadId, { type: 'agent_start', id: randomUUID(), model: info.name, effort: level, mode })
+    await mkdir(sessionDir(home, project), { recursive: true, mode: 0o700 })
+    if (!resume) await writeJson(filePath, { sessionId, project, title: prompt.replace(/\s+/g, ' ').trim().slice(0, 120) })
+    emit('thread:session', { threadId, path: filePath })
+    void (async () => {
+      try {
+        const totals = await claudeEngine.run({ threadId, claudePath: bin, project, prompt, model, effort: level, approval: settings.approval, sessionId, resume, onApproval: (name, input) => approve(threadId, name, input) })
+        push(threadId, { type: 'end', ok: true, totals })
+      } catch (e) {
+        push(threadId, { type: 'end', ok: false, error: /cancelled/.test(e?.message ?? '') ? 'Stopped.' : e?.message || 'The run failed.' })
+      } finally {
+        thread.running = false
+        await persist(thread)
+        emit('threads:changed', { project })
+      }
+    })()
+    return { threadId, effort: level, mode }
+  }
+
   /** Mid-run input: steer reaches the agent before its next step; queue waits until it finishes. */
   async function guide({ threadId, text, queue = false }) {
     str(threadId, 'thread'); bool(queue, 'queue')
@@ -376,6 +435,12 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     const body = text.trim()
     if (!body) throw new Error('Nothing to send.')
     if (!thread?.running) throw new Error('Nothing is running in this thread.')
+    if (thread.claude) {
+      // the CLI takes the message on stdin; queue is steer here, it has one input line per run
+      if (!claudeEngine.guide(threadId, body)) throw new Error('Nothing is running in this thread.')
+      push(threadId, { type: 'note', text: queue ? `Queued: ${body}` : `You: ${body}`, level: 'info' })
+      return true
+    }
     // Efficient and Fast runs drive their own attempts; mid-run input would land in the wrong one.
     if (thread.mode && thread.mode !== 'balanced') throw new Error('Guiding works in Balanced mode only.')
     const session = thread.agent.session
@@ -391,6 +456,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     if (pendingStart) return (pendingStart.stop = true)
     if (!thread?.running) return false
     for (const [id, pending] of approvals) if (pending.threadId === threadId) answerApproval(id, false)
+    if (thread.claude) return claudeEngine.abort(threadId)
     thread.agent.abort()
     return true
   }
@@ -409,6 +475,17 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
   async function listThreads(project) {
     if (!project) return []
     str(project, 'project')
+    if (isClaude()) {
+      const dir = sessionDir(home, project)
+      const files = (await readdir(dir).catch(() => [])).filter(f => f.endsWith('.claude.json'))
+      const rows = await Promise.all(files.map(async f => {
+        const path = resolve(dir, f)
+        const [meta, st] = await Promise.all([readJson(path, null).catch(() => null), stat(path).catch(() => null)])
+        if (!meta || !st) return null
+        return { path, title: String(meta.title || 'Untitled'), modified: +st.mtime, running: [...live.values()].some(t => t.path === path && t.running) }
+      }))
+      return rows.filter(Boolean).sort((a, b) => b.modified - a.modified)
+    }
     const sessions = await SessionManager.list(project, sessionDir(home, project)).catch(() => [])
     return sessions
       .filter(s => s.messageCount > 0)
@@ -432,6 +509,8 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
   }
 
   function models() {
+    // Claude ids and prices (USD per million tokens) are OWNER TO VERIFY; see claude-engine.mjs
+    if (isClaude()) return CLAUDE_MODELS.map(m => ({ ...m, contextWindow: 0, cost: { ...m.cost, cacheRead: 0 }, efforts: CLAUDE_EFFORTS, modes: modesFor('claude') }))
     return runtime
       .getModels(PROVIDER)
       .filter(m => !m.type || m.type === 'chat')
@@ -440,6 +519,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
 
   async function updateSettings(patch) {
     settings = { ...settings, ...cleanSettingsPatch(patch) }
+    if (!isClaude()) await ensureRuntime()
     for (const t of live.values()) if (t.desktopSettings) t.desktopSettings['approval-mode'] = APPROVAL[settings.approval] ?? APPROVAL.ask
     await saveSettings()
     return settings
@@ -447,6 +527,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
 
   async function dispose() {
     disposed = true
+    claudeEngine.dispose()
     login?.controller.abort()
     for (const [id] of approvals) answerApproval(id, false)
     await Promise.all([...live.values()].map(async t => {
@@ -459,8 +540,11 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
 
   return {
     getSettings: () => settings,
-    init: async () => ({ signedIn: signedIn(), home, settings, projects: await recentProjects(home), platform: process.platform }),
-    login: startLogin,
+    init: async () => {
+      const claude = isClaude() ? await authStatus(claudePath(), childEnv()) : null
+      return { signedIn: claude ? claude.loggedIn : signedIn(), engine: settings.engine, modes: modesFor(settings.engine), claude, home, settings, projects: await recentProjects(home), platform: process.platform }
+    },
+    login: () => (isClaude() ? Promise.resolve({ ok: false, error: claudePath() ? LOGIN_HINT : INSTALL_HINT }) : startLogin()),
     answerLogin: (id, value) => {
       str(id, 'prompt')
       if (typeof value !== 'string') throw new Error('Invalid answer.')
@@ -475,6 +559,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
       return true
     },
     logout: async () => {
+      if (isClaude()) return { signedIn: (await authStatus(claudePath(), childEnv())).loggedIn }
       await runtime.logout(PROVIDER)
       return { signedIn: signedIn() }
     },
@@ -491,7 +576,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     // the model's suggested name, kept in settings.projectAutoNames; the rename box falls back to it
     nameProject: async ({ project }) => {
       str(project, 'project')
-      if (!(await recentProjects(home)).includes(project) || !signedIn()) return settings
+      if (isClaude() || !(await recentProjects(home)).includes(project) || !signedIn()) return settings
       if (settings.projectAutoNames?.[project]) return settings
       const model = runtime.getModel(PROVIDER, settings.cheapModel ?? DEFAULT_CHEAP_MODEL)
       if (!model) return settings

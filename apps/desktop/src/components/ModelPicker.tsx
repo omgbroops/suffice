@@ -353,7 +353,9 @@ export function ModelPicker(p: PickerProps) {
     listRef.current?.querySelector(`[data-key="${CSS.escape(hiKey)}"]`)?.scrollIntoView({ block: 'nearest' })
   }, [hiKey])
 
+  const modeOff = (id: string) => !!models[0]?.modes && !models[0].modes.includes(id)
   const choose = (it: Item) => {
+    if (it.kind === 'mode' && modeOff(it.id)) return
     if (it.kind === 'mode') p.onMode(it.id)
     else {
       p.onMode('balanced')
@@ -470,11 +472,11 @@ export function ModelPicker(p: PickerProps) {
                       if (it.kind === 'mode') {
                         const info = MODE_INFO[it.id]
                         return (
-                          <button key={key} data-key={key} role="option" aria-selected={selectedId === itemId(it)} className={`mp-row${key === hiKey ? ' is-hi' : ''}`} onMouseMove={hover} onClick={() => choose(it)}>
+                          <button key={key} data-key={key} role="option" aria-selected={selectedId === itemId(it)} className={`mp-row${key === hiKey ? ' is-hi' : ''}`} onMouseMove={hover} onClick={() => choose(it)} aria-disabled={modeOff(it.id)} style={modeOff(it.id) ? { opacity: 0.5 } : undefined}>
                             <span className="mp-mode-icon">{info.icon}</span>
                             <span className="mp-row-name">
                               {info.name}
-                              <span className="mp-faint"> {modeSub(it.id)}</span>
+                              <span className="mp-faint"> {modeOff(it.id) ? 'Needs the OpenAI engine' : modeSub(it.id)}</span>
                             </span>
                             {selectedId === itemId(it) && <IconCheck size={13} className="mp-check" />}
                           </button>
