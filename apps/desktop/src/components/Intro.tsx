@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
-import { api, type InitInfo, type ScreenStatus, type Settings } from '../api'
+import { api, type GitHubProfile, type InitInfo, type ScreenStatus, type Settings } from '../api'
 import { AccountsList } from './Accounts'
 import { Segmented } from './ui'
 import { IconCheck, IconGitHub } from '../icons'
-import { Dither } from './Dither'
 
 type Style = NonNullable<Settings['responseStyle']>
 const STEPS = ['Welcome', 'Models', 'Screen', 'You'] as const
@@ -27,6 +26,7 @@ export function Intro() {
   const [busy, setBusy] = useState(false)
   const [gh, setGh] = useState<{ installed: boolean; login: string | null; avatar: string }>({ installed: true, login: null, avatar: '' })
   const [code, setCode] = useState<string | null>(null)
+  const [profile, setProfile] = useState<GitHubProfile | null>(null)
   const [ghError, setGhError] = useState('')
 
   useEffect(() => {
@@ -39,6 +39,10 @@ export function Intro() {
     }, () => {})
     api.githubStatus().then(setGh, () => {})
   }, [])
+
+  useEffect(() => {
+    if (gh.login) api.githubProfile().then(setProfile, () => {})
+  }, [gh.login])
 
   // gh finishes the device flow on its own; watch for the account while the code is up
   useEffect(() => {
@@ -73,8 +77,10 @@ export function Intro() {
   }, [step])
 
   const first = (info?.settings.profileName ?? '').trim().split(/\s+/)[0] ?? ''
-  const holder = info?.settings.profileName?.trim() || gh.login || 'You'
-  const avatar = gh.avatar
+  const holder = info?.settings.profileName?.trim() || profile?.name || gh.login || 'You'
+  const avatar = profile?.avatar || gh.avatar
+  const days = profile?.days ?? Array<number>(182).fill(0)
+  const peak = Math.max(1, ...days)
   const both = screen.accessibility && screen.screen
   const canNext = step !== 1 || connected
   const finish = async () => {
@@ -187,11 +193,16 @@ export function Intro() {
         </section>
         <aside className="intro-stage" aria-hidden key={`s${step}`}>
           {step === 0 ? (
-            <div className="intro-pass">
-              <div className="intro-pass-art"><Dither /></div>
+            <div className={`intro-pass${profile ? ' is-live' : ''}`}>
+              <div className="intro-pass-grid">
+                {days.map((c, i) => <i key={i} data-l={c ? Math.min(4, Math.ceil((4 * c) / peak)) : 0} style={{ animationDelay: `${Math.floor(i / 7) * 14}ms` }} />)}
+              </div>
               <div className="intro-pass-body">
-                <div className="intro-pass-name">{avatar && <img src={avatar} alt="" />}{holder}</div>
-                <div className="intro-pass-meta">{info?.defaultLabel ?? 'No model yet'}</div>
+                <div className="intro-pass-name">
+                  {avatar && <img src={avatar} alt="" />}
+                  <span><b>{holder}</b>{profile && profile.name && <small>@{profile.login}</small>}</span>
+                </div>
+                <div className="intro-pass-meta">{profile ? `${profile.total.toLocaleString()} contributions this year · ${profile.repos} repos · since ${profile.since}` : info?.defaultLabel ?? ''}</div>
                 <div className="intro-pass-foot"><span className="logo">[suffice]</span><span>{new Date().toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span></div>
               </div>
             </div>

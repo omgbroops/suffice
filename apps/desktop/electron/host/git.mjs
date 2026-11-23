@@ -74,3 +74,30 @@ export function githubLogin(done, start = (bin, args) => spawn(bin, args, { stdi
   })
   return { code, cancel: () => child.kill() }
 }
+
+const PROFILE_QUERY = 'query{viewer{login name avatarUrl createdAt repositories(ownerAffiliations:OWNER){totalCount} followers{totalCount} contributionsCollection{contributionCalendar{totalContributions weeks{contributionDays{contributionCount}}}}}}'
+const ghJson = args => new Promise(res => execFile(findBin('gh') ?? 'gh', args, { timeout: 15000, maxBuffer: 4 << 20 }, (err, out) => {
+  try { res(err ? null : JSON.parse(String(out))) } catch { res(null) }
+}))
+
+/**
+ * The signed-in GitHub profile for the welcome card: name, counts, and the last 26 weeks of daily
+ * contributions (oldest first). Null when gh is missing, signed out, or GitHub answers in another shape.
+ */
+export async function githubProfile(get = ghJson, load = avatarData) {
+  const v = (await get(['api', 'graphql', '-f', `query=${PROFILE_QUERY}`]))?.data?.viewer
+  const cal = v?.contributionsCollection?.contributionCalendar
+  if (!v || !/^[A-Za-z0-9-]{1,39}$/.test(v.login ?? '') || !Array.isArray(cal?.weeks)) return null
+  const days = cal.weeks.flatMap(w => (Array.isArray(w?.contributionDays) ? w.contributionDays : [])).map(d => Math.max(0, Number(d?.contributionCount) || 0))
+  const num = x => (Number.isFinite(Number(x)) ? Number(x) : 0)
+  return {
+    login: v.login,
+    name: typeof v.name === 'string' ? v.name.slice(0, 80) : '',
+    avatar: v.avatarUrl ? await load(v.avatarUrl) : '',
+    since: /^\d{4}/.exec(v.createdAt ?? '')?.[0] ?? '',
+    repos: num(v.repositories?.totalCount),
+    followers: num(v.followers?.totalCount),
+    total: num(cal.totalContributions),
+    days: days.slice(-182),
+  }
+}

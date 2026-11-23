@@ -4,7 +4,7 @@ import { writeFile } from 'node:fs/promises'
 import { dirname, join, relative, resolve, sep } from 'node:path'
 import { createHost } from './host/host.mjs'
 import { inside } from './host/notes.mjs'
-import { account, githubLogin } from './host/git.mjs'
+import { account, githubLogin, githubProfile } from './host/git.mjs'
 import { findBin } from './host/accounts.mjs'
 import { cleanArtifactSave } from './host/validate.mjs'
 import { CSP, decodeArtifactUrl } from '../shared/artifacts.mjs'
@@ -195,6 +195,7 @@ const handlers = {
     await shell.openExternal('https://github.com/login/device')
     return { installed: true, code }
   },
+  'github:profile': () => githubProfile(),
   'github:cancel': () => void (ghLogin?.cancel(), (ghLogin = null)),
   'intro:done': async () => {
     await host.updateSettings({ onboarded: true })

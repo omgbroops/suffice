@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { EventEmitter } from 'node:events'
-import { account, githubAccount, githubLogin, gitIdentity } from '../electron/host/git.mjs'
+import { account, githubAccount, githubLogin, githubProfile, gitIdentity } from '../electron/host/git.mjs'
 import { findBin } from '../electron/host/accounts.mjs'
 
 const cfg = c => async k => c[k] ?? ''
@@ -43,4 +43,15 @@ test('github login: reads the one-time code from gh output, reports the exit, ca
   assert.equal(child.killed, true)
   assert.equal(result, false)
   await assert.rejects(two.code)
+})
+
+test('github profile: counts and the last 182 days from the GraphQL answer; null on junk', async () => {
+  const weeks = Array.from({ length: 53 }, (_, w) => ({ contributionDays: Array.from({ length: 7 }, (_, d) => ({ contributionCount: w * 7 + d })) }))
+  const viewer = { login: 'octocat', name: 'Mona', avatarUrl: 'https://avatars.githubusercontent.com/u/1', createdAt: '2011-01-25T18:44:36Z', repositories: { totalCount: 8 }, followers: { totalCount: 9 }, contributionsCollection: { contributionCalendar: { totalContributions: 963, weeks } } }
+  const p = await githubProfile(async () => ({ data: { viewer } }), async () => 'data:img')
+  assert.deepEqual({ ...p, days: undefined }, { login: 'octocat', name: 'Mona', avatar: 'data:img', since: '2011', repos: 8, followers: 9, total: 963, days: undefined })
+  assert.equal(p.days.length, 182)
+  assert.equal(p.days.at(-1), 53 * 7 - 1)
+  assert.equal(await githubProfile(async () => null), null)
+  assert.equal(await githubProfile(async () => ({ data: { viewer: { ...viewer, login: 'bad login!' } } })), null)
 })
