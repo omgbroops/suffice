@@ -10,6 +10,11 @@ const devUrl = process.env.SUFFICE_DESKTOP_DEV_URL
 let win = null
 let host = null
 
+// errors go to <home>/desktop/logs/app.log once the host exists, console before that
+const logError = (source, e) => (host ? host.logError(source, e) : void console.error(`[suffice] ${source}`, e))
+process.on('uncaughtException', e => logError('main', e))
+process.on('unhandledRejection', e => logError('main-rejection', e))
+
 const send = (channel, payload) => win?.webContents.send(channel, payload)
 
 function createWindow() {
@@ -83,6 +88,10 @@ const handlers = {
   'run:abort': ({ threadId }) => host.abort(threadId),
   'run:guide': args => host.guide(args),
   'approval:answer': ({ id, allow }) => host.answerApproval(id, allow),
+  'app:error': ({ message, stack, source }) => {
+    const text = v => (typeof v === 'string' ? v.slice(0, 4000) : '')
+    return void logError('renderer', `${text(message)}\n${text(stack)} ${text(source)}`)
+  },
   'settings:update': async patch => { const s = await host.updateSettings(patch); applyTheme(s); return s },
 }
 
