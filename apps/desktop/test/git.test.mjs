@@ -19,9 +19,11 @@ test('github account: login + avatar from gh, null when gh is missing or prints 
   assert.equal(await githubAccount(gh('not a login!\nx')), null)
 })
 
-test('footer account: GitHub first, else the git name', async () => {
-  // account() caches per app run, so only the first call is observed here
+test('footer account: GitHub first, else the git name; only a GitHub answer is cached', async () => {
   assert.deepEqual(await account(async () => null, async () => 'Ada L'), { name: 'Ada L', avatar: '' })
+  // the miss above was not cached, so a later GitHub sign-in shows up; that answer then sticks
+  assert.deepEqual(await account(async () => ({ login: 'ada', avatar: '' }), async () => 'Ada L'), { name: '@ada', avatar: '' })
+  assert.deepEqual(await account(async () => null, async () => 'other'), { name: '@ada', avatar: '' })
 })
 
 test('github login: reads the one-time code from gh output, reports the exit, cancels the child', { skip: !findBin('gh') && 'gh not installed' }, async () => {

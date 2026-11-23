@@ -12,7 +12,7 @@ export async function gitIdentity(get = gitGet) {
 }
 
 // Finder-launched apps get only the system PATH, so CLIs resolve through findBin's extra dirs
-const run = (cmd, args) => new Promise(res => execFile(findBin(cmd) ?? cmd, args, { timeout: 5000 }, (err, out) => res(err ? '' : String(out).trim())))
+const run = (cmd, args) => new Promise(res => execFile(findBin(cmd) ?? cmd, args, { timeout: 15000 }, (err, out) => res(err ? '' : String(out).trim())))
 
 /** GitHub avatars as a data URL: the page's CSP only allows self and data: images. Only GitHub's avatar host is fetched. */
 async function avatarData(url) {
@@ -41,7 +41,9 @@ let cached
 export function account(gh = githubAccount, git = gitIdentity) {
   return (cached ??= (async () => {
     const a = await gh()
-    return a ? { name: '@' + a.login, avatar: a.avatar } : { name: await git(), avatar: '' }
+    if (a) return { name: '@' + a.login, avatar: a.avatar }
+    cached = undefined // a missed GitHub read (slow network, signed out) is asked again next time
+    return { name: await git(), avatar: '' }
   })())
 }
 

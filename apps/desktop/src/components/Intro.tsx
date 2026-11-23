@@ -24,7 +24,7 @@ export function Intro() {
   const [style, setStyle] = useState<Style>('normal')
   const [theme, setTheme] = useState<'system' | 'light' | 'dark'>('system')
   const [busy, setBusy] = useState(false)
-  const [gh, setGh] = useState<{ installed: boolean; login: string | null; avatar: string }>({ installed: true, login: null, avatar: '' })
+  const [gh, setGh] = useState<{ installed: boolean; login: string | null; avatar: string; known?: boolean }>({ installed: true, login: null, avatar: '' })
   const [code, setCode] = useState<string | null>(null)
   const [profile, setProfile] = useState<GitHubProfile | null>(null)
   const [ghError, setGhError] = useState('')
@@ -37,7 +37,7 @@ export function Intro() {
       setStyle(i.settings.responseStyle ?? 'normal')
       setTheme(i.settings.theme ?? 'system')
     }, () => {})
-    api.githubStatus().then(setGh, () => {})
+    api.githubStatus().then(g => setGh({ ...g, known: true }), () => setGh(g => ({ ...g, known: true })))
   }, [])
 
   useEffect(() => {
@@ -48,13 +48,14 @@ export function Intro() {
   useEffect(() => {
     if (!code) return
     const t = setInterval(() => api.githubStatus().then(g => {
-      setGh(g)
+      setGh({ ...g, known: true })
       if (g.login) (setCode(null), setStep(1))
       else if (!g.waiting) (setCode(null), setGhError('GitHub sign-in stopped. Try again.'))
     }, () => {}), 1500)
     return () => clearInterval(t)
   }, [code])
   const signIn = async () => {
+    if (!gh.known) return
     if (gh.login) return setStep(1)
     setGhError('')
     try {
@@ -132,8 +133,8 @@ export function Intro() {
                   </>
                 ) : (
                   <>
-                    <button className="btn btn-primary intro-gh" onClick={() => void signIn()}>
-                      <IconGitHub size={16} />{gh.login ? `Continue as ${gh.login}` : 'Sign in with GitHub'}<kbd>↩</kbd>
+                    <button className="btn btn-primary intro-gh" onClick={() => void signIn()} disabled={!gh.known}>
+                      <IconGitHub size={16} />{gh.login ? `Continue as ${gh.login}` : gh.known ? 'Sign in with GitHub' : 'GitHub'}<kbd>↩</kbd>
                     </button>
                     <button className="intro-link" onClick={() => setStep(1)}>Continue without an account</button>
                   </>
@@ -221,7 +222,7 @@ export function Intro() {
                 <div>Opened Safari</div>
                 <div>Clicked “Sign in”</div>
                 <div>Typed the email</div>
-                <div className="is-live">Reading the page</div>
+                <div><span className="shimmer">Reading the page</span></div>
               </div>
             )}
             {step === 3 && (
