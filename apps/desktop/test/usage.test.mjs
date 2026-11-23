@@ -89,8 +89,8 @@ test('a finished openai run appends one priced 0600 ledger line; failed runs app
     assert.equal(entry.outputTokens, 20)
     assert.equal(entry.cacheReadTokens, 3)
     assert.equal(entry.cacheWriteTokens, 4)
-    // gpt-6.1-sol: input 2, output 10, cacheRead .1, cacheWrite falls back to 1.25 x input = 2.5
-    assert.ok(close(entry.apiCostUsd, (10 * 2 + 20 * 10 + 3 * 0.1 + 4 * 2.5) / 1e6))
+    // the engine reported its own cost, so that is the API-equivalent figure
+    assert.equal(entry.apiCostUsd, 0.007)
     assert.equal(entry.reportedCostUsd, 0.007)
     assert.ok(entry.durationMs >= 0)
     assert.equal((await stat(path)).mode & 0o777, 0o600)
@@ -121,7 +121,7 @@ test('a finished claude run records reportedCostUsd and the subscription summary
     assert.equal(entry.model, 'claude-haiku-5-5')
     assert.equal(entry.reportedCostUsd, 0.01)
     assert.equal(entry.durationMs, 5)
-    assert.ok(close(entry.apiCostUsd, (10 * 0.1 + 20 * 0.5 + 3 * 0.01 + 4 * 0.125) / 1e6))
+    assert.equal(entry.apiCostUsd, 0.01) // Claude Code's own total_cost_usd
     const s = await host.usageSummary({})
     assert.deepEqual(s.plan, { kind: 'subscription', name: 'Claude Code' })
     assert.equal(s.total.runs, 1)
@@ -222,5 +222,20 @@ test('usage:summary rejects bad days and bad args', async () => {
     await host.dispose()
   } finally {
     await rm(home, { recursive: true, force: true })
+  }
+})
+
+test('without a reported cost the ledger prices tokens itself', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'suffice-ledger-'))
+  try {
+    const { createUsageLedger } = await import('../electron/host/usage.mjs')
+    const ledger = createUsageLedger({ desktopDir: dir, priceOf: () => ({ input: 2, output: 10 }) })
+    await ledger.record({ threadId: 't', project: dir, engine: 'openai', model: 'm', effort: 'low', totals: { input: 10, output: 20, cacheRead: 3, cacheWrite: 4 } })
+    const [entry] = await lines(join(dir, 'usage.jsonl'))
+    // cacheRead falls back to 0.1 x input, cacheWrite to 1.25 x input
+    assert.ok(close(entry.apiCostUsd, (10 * 2 + 20 * 10 + 3 * 0.2 + 4 * 2.5) / 1e6))
+    assert.equal(entry.reportedCostUsd, undefined)
+  } finally {
+    await rm(dir, { recursive: true, force: true })
   }
 })

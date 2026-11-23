@@ -19,7 +19,7 @@ const Row = ({ label, children }: { label: string; children: ReactNode }) => (
   <div className="set-row"><span className="set-label">{label}</span><div className="set-ctl">{children}</div></div>
 )
 
-const money = (n: number) => `$${n.toFixed(2)}`
+const money = (n: number) => (n > 0 && n < 0.01 ? '<$0.01' : `$${n.toFixed(2)}`)
 const tok = (n: number) => (n >= 1e6 ? `${(n / 1e6).toFixed(1)}M` : n >= 1e3 ? `${(n / 1e3).toFixed(1)}k` : String(n))
 
 function UsageRows({ rows }: { rows: (l: string, c: ReactNode) => ReactNode }) {
@@ -131,15 +131,15 @@ export function SettingsPage({ platform, info, settings, models, patch, onClose 
       )],
     ],
     Capabilities: [
-      sw('Web', !!cap.web, web => patch({ capabilities: { ...cap, web } })),
-      sw('Browser', !!cap.browser, browser => patch({ capabilities: { ...cap, browser } })),
-      sw('Computer', !!cap.computer, computer => patch({ capabilities: { ...cap, computer } })),
-      sw('MCP', !!cap.mcp, mcp => patch({ capabilities: { ...cap, mcp } })),
+      sw('Web', cap.web !== false, web => patch({ capabilities: { ...cap, web } })),
+      sw('Browser', cap.browser === true, browser => patch({ capabilities: { ...cap, browser } })),
+      sw('Computer', cap.computer === true, computer => patch({ capabilities: { ...cap, computer } })),
+      sw('MCP', cap.mcp !== false, mcp => patch({ capabilities: { ...cap, mcp } })),
     ],
     Notifications: [
-      sw('Task done', !!note.done, done => patch({ notify: { ...note, done } })),
-      sw('Needs input', !!note.needsInput, needsInput => patch({ notify: { ...note, needsInput } })),
-      sw('Sound', !!note.sound, sound => patch({ notify: { ...note, sound } })),
+      sw('Task done', note.done !== false, done => patch({ notify: { ...note, done } })),
+      sw('Needs input', note.needsInput !== false, needsInput => patch({ notify: { ...note, needsInput } })),
+      sw('Sound', note.sound === true, sound => patch({ notify: { ...note, sound } })),
     ],
     Privacy: [
       ['Keep history', <Segmented value={String(settings.transcriptDays ?? 0) as '0' | '7' | '30' | '90'} onChange={v => patch({ transcriptDays: Number(v) as 0 | 7 | 30 | 90 })} options={[{ v: '0', label: 'Forever' }, { v: '7', label: '7 days' }, { v: '30', label: '30 days' }, { v: '90', label: '90 days' }]} />],

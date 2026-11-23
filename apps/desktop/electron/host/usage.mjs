@@ -63,12 +63,13 @@ export function createUsageLedger({ desktopDir, priceOf, activeEngine, onError }
       cacheReadTokens: num(t.cacheReadTokens ?? t.cacheRead),
       cacheWriteTokens: num(t.cacheWriteTokens ?? t.cacheWrite),
     }
+    const reported = t.costUsd ?? t.estimatedApiUsd
     const entry = {
       ts: Date.now(), threadId, project, engine, model, effort, ...tokens,
-      apiCostUsd: apiCostUsd(prices(priceOf?.(engine, model)), tokens),
+      // the engine's own figure wins: Claude Code writes 1-hour cache (2x input), which our 5-minute rates undercount
+      apiCostUsd: Number.isFinite(reported) ? reported : apiCostUsd(prices(priceOf?.(engine, model)), tokens),
       durationMs: num(t.durationMs ?? durationMs),
     }
-    const reported = t.costUsd ?? t.estimatedApiUsd
     if (Number.isFinite(reported)) entry.reportedCostUsd = reported
     const work = writes.then(() => append(JSON.stringify(entry) + '\n'))
     writes = work.catch(() => {})
