@@ -527,6 +527,8 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     push(threadId, { type: 'user', id: randomUUID(), text: prompt })
     push(threadId, { type: 'agent_start', id: randomUUID(), model: info.name, effort: level, mode })
     emit('thread:session', { threadId, path: filePath })
+    // a new thread is titled from its first message while the reply streams; the end of the run refreshes it
+    if (!thread.transcript.title) scheduleTitle(threadId)
     const capabilities = { web: true, browser: false, computer: false, mcp: true, ...settings.capabilities }
     void (async () => {
       try {

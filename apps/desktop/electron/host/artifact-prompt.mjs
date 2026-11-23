@@ -4,6 +4,11 @@ export const ARTIFACT_PROMPT = `The chat can render an artifact inline: a live c
 Write it as a fenced block whose info line is: artifact title="Short title" type="html|svg|chart|table"
 - type="chart": one JSON chart spec (below). type="table": JSON rows [{..}] or {"columns":[..],"rows":[[..]]}; sortable.
 - type="html": a page fragment, inline CSS/JS only. No external scripts, fonts, images or network; they are blocked. type="svg": one <svg> with a viewBox.
+Example, exactly this shape:
+\`\`\`artifact title="Signups" type="chart"
+{"kind":"bar","x":["Jan","Feb"],"series":[{"name":"Signups","values":[120,150]}]}
+\`\`\`
+HTML, SVG or chart JSON meant to be seen is always inside such a block, never loose in the reply or in a plain html/json code block.
 
 Every page loads a kit, so plain HTML already looks native: headings, p, button (class="primary" for the main one), input, select, textarea, label wrapping a field, input type="checkbox" class="switch", input type="range" data-out="id", details/summary, progress, meter, table, code, kbd. Layout classes: card, grid (auto columns; grid two|three), row, stack, spread, stat (with .l label, .v value, .d delta; .d.up/.d.down), tag (tag good|warn|bad), note, muted, mono, num. Tabs: <div class="tabs"><button data-tab="a">A</button>…</div> with <section data-panel="a">. Colours only through tokens: var(--fg) var(--muted) var(--faint) var(--line) var(--fill) var(--card); categories var(--c1)…var(--c8) in order; status var(--good) var(--warn) var(--bad). No page background, no fonts, no emoji, no gradients or glows.
 

@@ -143,7 +143,7 @@ function Effort({ m, value, onChange }: { m: ModelInfo; value?: string; onChange
 function Prices({ m }: { m: ModelInfo }) {
   return (
     <div className="mp-kvs">
-      <div className="mp-kv"><span>Context</span><span className="mp-kv-v">{ctx(m.contextWindow)}</span></div>
+      {m.contextWindow > 0 && <div className="mp-kv"><span>Context</span><span className="mp-kv-v">{ctx(m.contextWindow)}</span></div>}
       <div className="mp-kv"><span>Input</span><span className="mp-kv-v">{money(m.cost.input)}<span className="mp-faint"> / 1M</span></span></div>
       <div className="mp-kv"><span>Cached</span><span className="mp-kv-v">{money(m.cost.cacheRead)}<span className="mp-faint"> / 1M</span></span></div>
       <div className="mp-kv"><span>Output</span><span className="mp-kv-v">{money(m.cost.output)}<span className="mp-faint"> / 1M</span></span></div>
