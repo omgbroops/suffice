@@ -2,6 +2,7 @@
 // status command; credential files are never read or copied. API keys live encrypted (safeStorage) in keys.json.
 import { execFile as nodeExecFile } from 'node:child_process'
 import { accessSync, constants } from 'node:fs'
+import { randomUUID } from 'node:crypto'
 import { chmod, mkdir, readFile, rename, writeFile } from 'node:fs/promises'
 import { homedir } from 'node:os'
 import { delimiter, dirname, join } from 'node:path'
@@ -86,11 +87,14 @@ export function createAccounts({ desktopDir, env = process.env, execFile = nodeE
   }
   const writeKeys = async data => {
     await mkdir(dirname(keysPath), { recursive: true })
-    const tmp = `${keysPath}.${process.pid}.tmp`
+    const tmp = `${keysPath}.${randomUUID()}.tmp`
     await writeFile(tmp, JSON.stringify(data), { mode: 0o600 })
     await chmod(tmp, 0o600)
     await rename(tmp, keysPath)
   }
+  // read-modify-write runs one at a time, like settings: two parallel saves would each lose the other's key
+  let writing = Promise.resolve()
+  const queue = fn => (writing = writing.catch(() => {}).then(fn))
   const keyId = id => {
     if (!KEY_IDS.includes(id)) throw new Error('Unknown provider.')
     return id
@@ -133,18 +137,22 @@ export function createAccounts({ desktopDir, env = process.env, execFile = nodeE
     if (typeof value !== 'string' || value.trim().length < 8 || value.length > 500 || /\s/.test(value.trim())) throw new Error('That does not look like an API key.')
     if (!safeStorage?.isEncryptionAvailable()) throw new Error('Secure storage is not available on this Mac.')
     const v = value.trim()
-    const keys = await readKeys()
-    keys[id] = { enc: safeStorage.encryptString(v).toString('base64'), last4: v.slice(-4) }
-    await writeKeys(keys)
-    return { last4: keys[id].last4 }
+    return queue(async () => {
+      const keys = await readKeys()
+      keys[id] = { enc: safeStorage.encryptString(v).toString('base64'), last4: v.slice(-4) }
+      await writeKeys(keys)
+      return { last4: keys[id].last4 }
+    })
   }
 
   async function removeKey(id) {
     keyId(id)
-    const keys = await readKeys()
-    delete keys[id]
-    await writeKeys(keys)
-    return { last4: null }
+    return queue(async () => {
+      const keys = await readKeys()
+      delete keys[id]
+      await writeKeys(keys)
+      return { last4: null }
+    })
   }
 
   /** One cheap GET, only when the owner asks. The reply never contains the key. */

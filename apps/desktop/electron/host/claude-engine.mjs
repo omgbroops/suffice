@@ -113,6 +113,12 @@ export function createClaudeEngine({ push, spawn = nodeSpawn }) {
    * ('cancelled' when stopped). `sessionId` is reused with --resume once the thread has one.
    */
   function run({ threadId, claudePath, project, prompt, model, effort, approval, sessionId, resume, forkOf, onApproval, addDirs, ...rest }) {
+    // a second run on one thread would untrack the first child: refuse it here, like the host does
+    if (runs.has(threadId)) return Promise.reject(new Error('This thread is already running.'))
+    // spawn reports ENOENT for a missing binary and a missing project alike: check both up front so
+    // "spawn ENOENT" cannot masquerade as "Claude Code is not installed"
+    try { accessSync(claudePath, constants.X_OK) } catch { return Promise.reject(new Error(INSTALL_HINT)) }
+    try { accessSync(project) } catch { return Promise.reject(new Error('That project folder is missing.')) }
     return new Promise((resolve, reject) => {
       const args = ['-p', '--input-format', 'stream-json', '--output-format', 'stream-json', '--verbose', '--include-partial-messages',
         '--model', model, '--permission-mode', PERMISSION_MODE[approval] ?? 'manual', '--permission-prompts', 'host', '--permission-prompt-tool', 'stdio',
@@ -129,10 +135,17 @@ export function createClaudeEngine({ push, spawn = nodeSpawn }) {
       let settled = false
       const send = obj => { if (child.stdin.writable) child.stdin.write(JSON.stringify(obj) + '\n') }
       state.send = send
+      // SIGTERM, then SIGKILL a grace later: a child that catches SIGTERM must not leak
+      const escalate = () => {
+        state.killTimer ??= setTimeout(() => {
+          child.kill('SIGTERM')
+          state.killTimer = setTimeout(() => child.kill('SIGKILL'), GRACE_MS)
+        }, GRACE_MS)
+      }
       state.interrupt = () => {
         state.aborted = true
         send({ type: 'control_request', request_id: randomUUID(), request: { subtype: 'interrupt' } })
-        state.killTimer ??= setTimeout(() => child.kill('SIGTERM'), GRACE_MS)
+        escalate()
       }
       const finish = (fn, v) => {
         if (settled) return
@@ -160,12 +173,12 @@ export function createClaudeEngine({ push, spawn = nodeSpawn }) {
           }
         } else if (m.type === 'control_request' && m.request?.subtype === 'can_use_tool') {
           const { tool_name, input } = m.request
-          const allow = await onApproval(tool_name.toLowerCase(), input ?? {}).catch(() => false)
+          const allow = await onApproval(String(tool_name ?? '').toLowerCase(), input ?? {}).catch(() => false)
           send({ type: 'control_response', response: { subtype: 'success', request_id: m.request_id, response: allow ? { behavior: 'allow', updatedInput: input ?? {} } : { behavior: 'deny', message: 'The user denied this action.' } } })
         } else if (m.type === 'result') {
           state.result = m
           child.stdin.end() // one prompt per process: closing stdin lets the CLI exit
-          state.killTimer ??= setTimeout(() => child.kill('SIGTERM'), GRACE_MS)
+          escalate()
         }
       }
 
@@ -177,17 +190,18 @@ export function createClaudeEngine({ push, spawn = nodeSpawn }) {
           buffer = buffer.slice(i + 1)
           if (!line) continue
           try {
-            void handle(JSON.parse(line))
+            // one malformed event must not kill the run
+            void handle(JSON.parse(line)).catch(() => {})
           } catch {} // a non-JSON line is not ours to act on
         }
       })
       child.stderr.on('data', c => (stderr = (stderr + c).slice(-2000)))
       child.stdin.on('error', () => {})
       child.on('error', e => finish(reject, new Error(e.code === 'ENOENT' ? INSTALL_HINT : e.message)))
-      child.on('close', code => {
+      child.on('close', (code, signal) => {
         const r = state.result
         if (state.aborted) return finish(reject, new Error('Task stopped: cancelled'))
-        if (!r) return finish(reject, new Error(stderr.trim().split('\n').pop() || `Claude Code exited with code ${code}.`))
+        if (!r) return finish(reject, new Error(stderr.trim().split('\n').pop() || (signal ? `Claude Code was killed (${signal}).` : `Claude Code exited with code ${code}.`)))
         if (r.is_error || r.subtype !== 'success') return finish(reject, new Error(blockText(r.result) || r.errors?.join('; ') || `Claude Code stopped: ${r.subtype}.`))
         const u = r.usage ?? {}
         finish(resolve, { modelCalls: r.num_turns, inputTokens: u.input_tokens, outputTokens: u.output_tokens, cacheReadTokens: u.cache_read_input_tokens, cacheWriteTokens: u.cache_creation_input_tokens, costUsd: r.total_cost_usd, durationMs: r.duration_ms })
@@ -213,7 +227,11 @@ export function createClaudeEngine({ push, spawn = nodeSpawn }) {
       return true
     },
     dispose() {
-      for (const r of runs.values()) { r.aborted = true; r.child.kill('SIGTERM') }
+      for (const r of runs.values()) {
+        r.aborted = true
+        r.child.kill('SIGTERM')
+        r.killTimer ??= setTimeout(() => r.child.kill('SIGKILL'), GRACE_MS)
+      }
     },
   }
 }

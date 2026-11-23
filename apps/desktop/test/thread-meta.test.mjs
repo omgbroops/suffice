@@ -50,7 +50,8 @@ test('engine passes extra folders as --add-dir', async () => {
     return c
   }
   const e = createClaudeEngine({ push() {}, spawn })
-  await e.run({ threadId: 't', claudePath: 'claude', project: '/a', prompt: 'p', model: 'm', approval: 'ask', sessionId: 's', addDirs: ['/b', '/c'] })
+  // the engine checks the binary and project exist before spawning: use real ones
+  await e.run({ threadId: 't', claudePath: process.execPath, project: tmpdir(), prompt: 'p', model: 'm', approval: 'ask', sessionId: 's', addDirs: ['/b', '/c'] })
   assert.deepEqual(args.slice(args.indexOf('--add-dir'), args.indexOf('--add-dir') + 3), ['--add-dir', '/b', '/c'])
 })
 
