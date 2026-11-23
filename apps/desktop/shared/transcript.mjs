@@ -242,7 +242,9 @@ export function describeTool(name, input = {}) {
       return { verb: 'Wrote', meta: short(path) }
     case 'bash':
     case 'powershell':
-      // say what the command is for; the command itself is in the row's detail
+      // say what the command is for; the command itself is in the row's detail. Claude Code writes its own
+      // one-line description of each command: that names the real work, so it wins over parsing the command
+      if (str(input.description).trim()) return { verb: str(input.description).trim(), present: str(input.description).trim(), meta: '' }
       return { meta: '', ...summarizeCommand(str(input.command)) }
     case 'grep':
     case 'search':
@@ -294,10 +296,16 @@ const COMMANDS = [
 export function summarizeCommand(command) {
   // split on && || ; | and newlines, but not inside quotes (rg "a|b" is one step)
   const quoted = []
+  // heredoc bodies are file contents, not steps
+  command = command.replace(/<<-?\s*(['"]?)(\w+)\1[^\n]*\n[\s\S]*?\n\s*\2(?=\n|$)/g, '')
   const masked = command.replace(/'[^']*'|"[^"]*"/g, q => `\0${quoted.push(q) - 1}\0`)
   const steps = masked.split(/\n|&&|\|\||;|\|/).map(s => s.replace(/\0(\d+)\0/g, (_, i) => quoted[i]).trim().replace(/^(sudo|time|env)\s+/, '').replace(/^([A-Z_][A-Z0-9_]*=\S*\s+)+/, '').replace(/^npx\s+/, ''))
   const at = steps.findIndex(s => s && !/^(cd|export|set|source|\.)\b/.test(s))
-  const first = one(steps[at] ?? '')
+  // mkdir x && cat > t.py && python3 t.py ran a script: setup steps (file moves, looks) never name a chain
+  // when a later step does real work
+  const work = steps.slice(at + 1).filter(s => s && !/^(cd|export|set|source|\.)\b/.test(s)).map(one).find(r => r.kind !== 'look' && r.verb !== 'Moved files around' && !(r.verb === 'Ran' && /^(echo|printf|true|cat)$/.test(r.meta ?? '')))
+  const first0 = one(steps[at] ?? '')
+  const first = work && (first0.kind === 'look' || first0.verb === 'Moved files around') ? work : first0
   // cat x | grep y and git log | rg fix are searches: a later search step names the work
   if (first.kind === 'look') for (const s of steps.slice(at + 1)) { const r = one(s); if (r.verb === 'Searched code') return r }
   return first
