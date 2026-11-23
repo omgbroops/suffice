@@ -84,6 +84,9 @@ const handlers = {
   'projects:default': () => host.defaultProject(),
   'projects:recent': () => host.recentProjects(),
   'threads:list': ({ project }) => host.listThreads(project),
+  'threads:act': args => host.threadAct(args),
+  'threads:open-in': args => host.openIn(args),
+  'threads:targets': () => host.openTargets(),
   'notes:list': args => host.listNotes(args),
   // files chosen to mention in a prompt: project-relative when inside the project, absolute otherwise
   'files:pick': async ({ project }) => {
@@ -119,6 +122,8 @@ app.whenReady().then(async () => {
     safeStorage,
     emit: (channel, payload) => (send(channel, payload), notifier(channel, payload)),
     openExternal: url => void shell.openExternal(url),
+    openPath: async dir => { const e = await shell.openPath(dir); if (e) throw new Error(e) },
+    openApp: (name, dir) => new Promise((ok, no) => execFile('open', ['-a', name, dir], e => (e ? no(e) : ok()))),
     chooseDirectory: async () => {
       const result = await dialog.showOpenDialog(win, { title: 'Choose a project', properties: ['openDirectory'] })
       return result.canceled ? undefined : result.filePaths[0]

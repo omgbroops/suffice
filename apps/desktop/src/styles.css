@@ -1059,3 +1059,17 @@ body { font-size: calc(13px * var(--ui-zoom, 1)); }
 .switch.is-on { background: var(--btn-bg); }
 .switch.is-on i { transform: translateX(14px); background: var(--btn-ink); }
 .set-pane .accounts-head { margin: 16px 0 8px; }
+/* thread menu */
+.side-thread-row { position: relative; flex: none; }
+.side-thread-row > .side-thread { width: 100%; }
+.side-thread-more { position: absolute; right: 4px; top: 2px; opacity: 0; }
+.side-thread-row:hover .side-thread-more, .side-thread-row.is-open .side-thread-more, .side-thread-more:focus-visible { opacity: 1; }
+.side-thread-row:hover .side-thread-time, .side-thread-row.is-open .side-thread-time { visibility: hidden; }
+.side-section { padding: 8px 12px 2px; font-size: 11px; color: var(--text-4); }
+.side-archived { margin-top: 4px; }
+.thread-menu { z-index: 30; min-width: 180px; }
+.thread-menu-item { gap: 8px; }
+.thread-menu-label { flex: 1; }
+.thread-menu-key { font: inherit; font-size: 11px; color: var(--text-4); }
+.thread-menu-item.is-danger, .thread-menu-item.is-danger.is-selected { color: var(--red); }
+.thread-menu-input { width: 100%; height: 30px; padding: 0 9px; border-radius: 5px; background: transparent; color: var(--text); font: inherit; border: 0; outline: 0; }

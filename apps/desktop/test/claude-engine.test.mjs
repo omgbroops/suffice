@@ -269,3 +269,15 @@ test('claude engine: each mcp config becomes a --mcp-config flag', async () => {
     assert.deepEqual(argv.filter((a, i) => argv[i - 1] === '--mcp-config'), ['/a/mcp.json', '/b/mcp.json'])
   } finally { await t.cleanup() }
 })
+
+test('claude engine: forkOf resumes the old session as a fork under the new id', async () => {
+  const t = await runFake('text', { resume: true, forkOf: 'old-id' })
+  try {
+    await t.engine.run(t.args)
+    const [{ argv }] = await argvLog(t.s.log)
+    const i = argv.indexOf('--resume')
+    assert.deepEqual(argv.slice(i, i + 2), ['--resume', 'old-id'])
+    assert.ok(argv.includes('--fork-session'))
+    assert.deepEqual(argv.slice(argv.indexOf('--session-id'), argv.indexOf('--session-id') + 2), ['--session-id', 'sid-1'])
+  } finally { await t.cleanup() }
+})

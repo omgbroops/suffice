@@ -63,7 +63,9 @@ export type Mode = 'balanced' | 'efficient' | 'fast'
 export type AccountRow = { id: string; name: string; kind: 'cli' | 'key'; installed: boolean; connected: boolean; runnable: boolean; detail: string; howTo: string; install?: string; last4?: string }
 export type InitInfo = { accounts?: AccountRow[]; defaultLabel?: string | null; signedIn: boolean; home: string; settings: Settings; projects: string[]; platform: string }
 export type NoteSummary = { path: string; title: string; modified: number; links: string[] }
-export type ThreadSummary = { path: string; title: string; modified: number; running: boolean }
+export type ThreadSummary = { path: string; title: string; modified: number; running: boolean; pinned?: boolean; unread?: boolean; archived?: boolean; section?: string }
+export type ThreadAction = 'pin' | 'unread' | 'rename' | 'fork' | 'section' | 'archive' | 'delete'
+export type OpenTarget = { id: string; label: string }
 export type AuthEvent =
   | { type: 'url'; url: string }
   | { type: 'progress'; message: string }
@@ -102,6 +104,9 @@ export const api = {
   defaultProject: () => bridge().invoke<{ project: string; projects: string[] }>('projects:default'),
   setProject: (path: string) => bridge().invoke<{ project: string; projects: string[] }>('projects:set', { path }),
   threads: (project: string) => bridge().invoke<ThreadSummary[]>('threads:list', { project }),
+  threadAct: (action: ThreadAction, path: string, project: string, value?: string | boolean) => bridge().invoke<{ path: string }>('threads:act', { action, path, project, value }),
+  openTargets: () => bridge().invoke<OpenTarget[]>('threads:targets'),
+  openIn: (project: string, target: string) => bridge().invoke('threads:open-in', { project, target }),
   pickFiles: (project: string | null) => bridge().invoke<string[]>('files:pick', { project }),
   notes: (project: string) => bridge().invoke<NoteSummary[]>('notes:list', { project }),
   readNote: (project: string, path: string) => bridge().invoke<string>('notes:read', { project, path }),

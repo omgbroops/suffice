@@ -6,6 +6,7 @@ import * as Radix from '@radix-ui/react-icons'
 import { IconChevronRight, IconDots, IconPlus, IconSearch } from '../icons'
 import { Live } from './Live'
 import { baseName, displayName } from './groups'
+import { sectioned } from './ThreadMenu'
 
 /** Project tints: Auto follows the theme's ink; the rest are pastels redefined per theme in banger.css. */
 export const PASTELS = ['auto', 'rose', 'peach', 'butter', 'mint', 'sky', 'lilac'] as const
@@ -189,7 +190,7 @@ function ProjectRow({ path, current, working, open, onToggle, threads, renderThr
       </div>
       {open && threads.length > 0 && (
         <div className="side-proj-threads">
-          {shown.map(renderThread)}
+          {sectioned(shown, renderThread)}
           {threads.length > SHOWN && (
             <button className="side-more" onClick={() => setAll(a => !a)}>{all ? 'Show less' : `Show ${threads.length - SHOWN} more`}</button>
           )}
