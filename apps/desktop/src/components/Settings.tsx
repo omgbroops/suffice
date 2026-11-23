@@ -1,12 +1,14 @@
-import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useEffect, Fragment, useMemo, useState, type ReactNode } from 'react'
 import { api, type InitInfo, type ModelInfo, type Settings, type Usage } from '../api'
 import { Segmented } from './ui'
 import { AccountsList } from './Accounts'
-import { IconArrowLeft, IconClose, IconSearch } from '../icons'
+import { IconArrowLeft, IconBarChart, IconBell, IconClose, IconCode, IconComponent, IconCube, IconLock, IconMonitor, IconPerson, IconSearch, IconSliders } from '../icons'
 
 type Patch = (p: Partial<Settings>) => void
 
-const SECTIONS = ['Account', 'Usage', 'Appearance', 'Your Suffice', 'Code', 'Capabilities', 'Notifications', 'Privacy', 'Desktop app'] as const
+const SECTIONS = ['Account', 'Usage', 'Appearance', 'Your Suffice', 'Capabilities', 'Notifications', 'Privacy', 'Code', 'Desktop app'] as const
+const NAV_ICON = { Account: IconPerson, Usage: IconBarChart, Appearance: IconSliders, 'Your Suffice': IconComponent, Capabilities: IconCube, Notifications: IconBell, Privacy: IconLock, Code: IconCode, 'Desktop app': IconMonitor }
+const RULE_BEFORE = new Set(['Appearance', 'Code', 'Desktop app'])
 type Section = (typeof SECTIONS)[number]
 
 function Switch({ on, onChange, label }: { on: boolean; onChange: (v: boolean) => void; label: string }) {
@@ -166,7 +168,7 @@ export function SettingsPage({ platform, info, settings, models, patch, onClose 
         <nav className="set-nav">
           <button className="set-back" onClick={onClose}><IconArrowLeft /> Settings</button>
           <label className="set-search"><IconSearch /><input value={q} onChange={e => setQ(e.target.value)} placeholder="Search" aria-label="Search settings" /></label>
-          {SECTIONS.map(s => <button key={s} className={`set-nav-item${!needle && s === sec ? ' is-active' : ''}`} onClick={() => (setQ(''), setSec(s))}>{s}</button>)}
+          {SECTIONS.map(s => { const I = NAV_ICON[s]; return <Fragment key={s}>{RULE_BEFORE.has(s) && <i className="set-nav-rule" />}<button className={`set-nav-item${!needle && s === sec ? ' is-active' : ''}`} onClick={() => (setQ(''), setSec(s))}><I />{s}</button></Fragment> })}
         </nav>
         <div className="set-pane">
           {visible.map(s => (

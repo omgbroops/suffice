@@ -43,6 +43,7 @@ export type Settings = {
   responseStyle?: 'concise' | 'normal' | 'explanatory'
   /** false (default): Claude Code ignores the user's ~/.claude CLAUDE.md, settings, hooks, plugins, skills and MCP servers */
   useClaudeConfig?: boolean
+  onboarded?: boolean
   verbosity?: 'quiet' | 'normal' | 'verbose'
   folderAccess?: string[]
   capabilities?: { web?: boolean; browser?: boolean; computer?: boolean; mcp?: boolean }

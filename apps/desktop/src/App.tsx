@@ -369,7 +369,8 @@ export default function App() {
       </div>
     )
   if (!info || !settings) return <div className="app is-bare"><Titlebar platform={platform} /></div>
-  if (!info.signedIn || showAccounts) return <ConnectAccounts platform={platform} info={info} onDone={() => (setShowAccounts(false), void boot())} onBack={info.signedIn ? () => setShowAccounts(false) : undefined} />
+  // first launch shows setup once, even when an account was already signed in
+  if (!info.signedIn || showAccounts || !settings.onboarded) return <ConnectAccounts platform={platform} info={info} onDone={() => (setShowAccounts(false), void patchSettings({ onboarded: true }).then(() => boot()))} onBack={info.signedIn && settings.onboarded ? () => setShowAccounts(false) : undefined} />
 
   if (showSettings) return <SettingsPage platform={platform} info={info} settings={settings} models={models} patch={patchSettings} onClose={() => setShowSettings(false)} />
 

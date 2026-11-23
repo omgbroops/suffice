@@ -60,6 +60,7 @@ const SETTINGS = {
   customInstructions: v => isStr(v) && v.length <= 20_000,
   responseStyle: v => ['concise', 'normal', 'explanatory'].includes(v),
   useClaudeConfig: isBool,
+  onboarded: isBool,
   verbosity: v => ['quiet', 'normal', 'verbose'].includes(v),
   folderAccess: v => Array.isArray(v) && v.length <= 200 && v.every(x => isStr(x) && x && x.length <= 4096 && !x.includes('\0')),
   capabilities: v => isMap(v, isBool) && Object.keys(v).length > 0 && Object.keys(v).every(k => ['web', 'browser', 'computer', 'mcp'].includes(k)),
