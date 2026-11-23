@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
-import { api, type AccountRow, type Project, type InitInfo, type ModelInfo, type Settings, type ThreadSummary } from './api'
+import { api, type AccountRow, type Project, type InitInfo, type ModelInfo, type Settings, type ThreadAction, type ThreadSummary } from './api'
 import { emptyTranscript, reduce, type Transcript } from '../shared/transcript.mjs'
 import { ago, type Status } from './data'
 import { Composer } from './components/Composer'
@@ -12,7 +12,10 @@ import { IconArrowLeft, IconArrowRight, IconClose, IconCompose, IconFolder, Icon
 import { ProjectOrb } from './components/Orb'
 import { AutoNamesContext, ColorsContext, IconsContext, NamesContext, ProjectEmblem, SearchPalette, SideProjects } from './components/Sidebar'
 import { baseName, displayName, threadsByProject } from './components/groups'
+import { ArchivedList, ThreadRow, pinnedFirst } from './components/ThreadMenu'
 import { NotesView } from './components/NotesView'
+import { AccountsList } from './components/Accounts'
+import { SettingsPage } from './components/Settings'
 
 export type Thread = {
   key: string
@@ -25,6 +28,10 @@ export type Thread = {
   running: boolean
   transcript?: Transcript
   loading?: boolean
+  pinned?: boolean
+  unread?: boolean
+  archived?: boolean
+  section?: string
 }
 
 type View = { kind: 'home' } | { kind: 'notes' } | { kind: 'thread'; key: string }
@@ -49,73 +56,15 @@ function Titlebar({ platform, children }: { platform: string; children?: ReactNo
   return <header className={`titlebar is-${platform}`}>{children}</header>
 }
 
-type Row = AccountRow
-
-const STATUS = (r: Row) => (r.connected ? (r.kind === 'key' ? r.detail : 'Signed in') : r.installed ? 'Installed, not signed in' : 'Not installed')
 
 function ConnectAccounts({ platform, info, onDone, onBack }: { platform: string; info: InitInfo; onDone: () => void; onBack?: () => void }) {
-  const [rows, setRows] = useState<Row[]>(info.accounts ?? [])
-  const [busy, setBusy] = useState(false)
-  const [drafts, setDrafts] = useState<Record<string, string>>({})
-  const [msg, setMsg] = useState<Record<string, string>>({})
-  const [copied, setCopied] = useState('')
-  const refresh = async () => {
-    setBusy(true)
-    try {
-      setRows(await api.accounts())
-    } finally {
-      setBusy(false)
-    }
-  }
-  useEffect(() => {
-    void refresh()
-  }, [])
+  const [any, setAny] = useState(false)
   useEffect(() => {
     if (!onBack) return
     const esc = (e: KeyboardEvent) => e.key === 'Escape' && onBack()
     document.addEventListener('keydown', esc)
     return () => document.removeEventListener('keydown', esc)
   }, [onBack])
-  const clis = rows.filter(r => r.kind === 'cli')
-  const keys = rows.filter(r => r.kind === 'key')
-  const any = rows.some(r => r.connected)
-  const say = (id: string, m: string) => setMsg(x => ({ ...x, [id]: m }))
-  const save = async (r: Row) => {
-    const v = (drafts[r.id] ?? '').trim()
-    if (!v) return
-    try {
-      await api.setKey(r.id.slice(4), v)
-      setDrafts(d => ({ ...d, [r.id]: '' }))
-      say(r.id, '')
-      await refresh()
-    } catch (e) {
-      say(r.id, (e as Error).message)
-    }
-  }
-  const test = async (r: Row) => {
-    say(r.id, 'Testing…')
-    try {
-      say(r.id, (await api.testKey(r.id.slice(4))).message)
-    } catch (e) {
-      say(r.id, (e as Error).message)
-    }
-  }
-  const remove = async (r: Row) => {
-    try {
-      await api.removeKey(r.id.slice(4))
-      say(r.id, '')
-      await refresh()
-    } catch (e) {
-      say(r.id, (e as Error).message)
-    }
-  }
-  const copy = (r: Row) => {
-    const cmd = r.howTo.replace(/^Run /, '').replace(/ in a terminal$/, '')
-    void navigator.clipboard?.writeText(cmd)
-    setCopied(r.id)
-  }
-  const Dot = ({ on }: { on: boolean }) => <span className={`side-user-dot${on ? '' : ' is-off'}`} aria-hidden />
-
   return (
     <div className="app is-bare">
       <Titlebar platform={platform}>
@@ -126,52 +75,7 @@ function ConnectAccounts({ platform, info, onDone, onBack }: { platform: string;
         <div className="signin-card accounts-card">
           <span className="logo logo-lg">[suffice]</span>
           <p className="signin-copy">Connect an account to run tasks.</p>
-          <div className="menu accounts-list" role="list">
-            {clis.map(r => (
-              <div className="menu-row" role="listitem" key={r.id}>
-                <span>{r.name}</span>
-                <span className="menu-status-val">
-                  <Dot on={r.connected} />
-                  {STATUS(r)}
-                  {r.connected ? (
-                    <button className="btn" onClick={() => void refresh()} disabled={busy}>Refresh</button>
-                  ) : r.installed ? (
-                    <button className="btn" onClick={() => copy(r)}>{copied === r.id ? 'Copied' : 'Copy login command'}</button>
-                  ) : (
-                    <a className="btn" href={r.install} target="_blank" rel="noreferrer">Install</a>
-                  )}
-                </span>
-              </div>
-            ))}
-          </div>
-          <div className="signin-copy accounts-head">API keys</div>
-          <div className="menu accounts-list">
-            {keys.map(r => (
-              <form
-                className="menu-row accounts-key"
-                key={r.id}
-                onSubmit={e => {
-                  e.preventDefault()
-                  void save(r)
-                }}
-              >
-                <span>{r.name.replace(' key', '')}</span>
-                {r.connected ? (
-                  <span className="menu-status-val">
-                    <Dot on />
-                    {msg[r.id] || r.detail}
-                    <button type="button" className="btn" onClick={() => void test(r)}>Test</button>
-                    <button type="button" className="btn" onClick={() => void remove(r)}>Remove</button>
-                  </span>
-                ) : (
-                  <span className="menu-status-val">
-                    <input type="password" autoComplete="off" spellCheck={false} placeholder={msg[r.id] || 'Paste key'} aria-label={`${r.name}`} value={drafts[r.id] ?? ''} onChange={e => setDrafts(d => ({ ...d, [r.id]: e.target.value }))} />
-                    <button className="btn" disabled={!(drafts[r.id] ?? '').trim()}>Add key</button>
-                  </span>
-                )}
-              </form>
-            ))}
-          </div>
+          <AccountsList info={info} onRows={rows => setAny(rows.some(r => r.connected))} />
           <div className="accounts-foot">
             <button className="btn btn-primary btn-lg" disabled={!any} onClick={onDone} autoFocus>
               Continue
@@ -189,6 +93,7 @@ export default function App() {
   const [info, setInfo] = useState<InitInfo | null>(null)
   const [bootError, setBootError] = useState('')
   const [showAccounts, setShowAccounts] = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
   const [settings, setSettings] = useState<Settings | null>(null)
   const [projects, setProjects] = useState<string[]>([])
   const [projectList, setProjectList] = useState<Project[]>([])
@@ -235,7 +140,7 @@ export default function App() {
       for (const s of list) {
         const existing = byPath.get(s.path)
         const key = existing?.key ?? s.path
-        next[key] = { ...(existing ?? { key, project: p, running: s.running }), path: s.path, project: p, title: s.title !== 'New thread' ? s.title : existing?.title && existing.title !== 'Untitled' ? existing.title : s.title, description: s.description, category: s.category, modified: Math.max(existing?.modified ?? 0, s.modified) }
+        next[key] = { ...(existing ?? { key, project: p, running: s.running }), path: s.path, project: p, title: s.title !== 'New thread' ? s.title : existing?.title && existing.title !== 'Untitled' ? existing.title : s.title, description: s.description, category: s.category, modified: Math.max(existing?.modified ?? 0, s.modified), pinned: s.pinned, unread: s.unread, archived: s.archived, section: s.section }
       }
       // Keep threads from other projects and ones that have not been saved yet.
       for (const t of Object.values(prev)) if (!next[t.key] && (t.project !== p || !t.path || t.running)) next[t.key] = t
@@ -281,6 +186,10 @@ export default function App() {
       if ((platform === 'darwin' ? e.metaKey : e.ctrlKey) && e.key.toLowerCase() === 'b') {
         e.preventDefault()
         setSidebar(s => !s)
+      }
+      if ((platform === 'darwin' ? e.metaKey : e.ctrlKey) && e.key === ',') {
+        e.preventDefault()
+        setShowSettings(s => !s)
       }
       if ((platform === 'darwin' ? e.metaKey : e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault()
@@ -370,6 +279,13 @@ export default function App() {
     }
   }
 
+  // Appearance settings live on the root element so every surface follows them
+  useEffect(() => {
+    const r = document.documentElement
+    r.style.setProperty('--ui-zoom', String(({ small: 0.92, medium: 1, large: 1.1 } as Record<string, number>)[settings?.fontSize ?? 'medium']))
+    r.classList.toggle('reduce-motion', !!settings?.reduceMotion)
+  }, [settings?.fontSize, settings?.reduceMotion])
+
   const pickProject = async (path: string) => {
     try {
       const r = await api.setProject(path)
@@ -455,6 +371,8 @@ export default function App() {
   if (!info || !settings) return <div className="app is-bare"><Titlebar platform={platform} /></div>
   if (!info.signedIn || showAccounts) return <ConnectAccounts platform={platform} info={info} onDone={() => (setShowAccounts(false), void boot())} onBack={info.signedIn ? () => setShowAccounts(false) : undefined} />
 
+  if (showSettings) return <SettingsPage platform={platform} info={info} settings={settings} models={models} patch={patchSettings} onClose={() => setShowSettings(false)} />
+
   const picker = (
     <ModelPicker
       models={models}
@@ -482,10 +400,21 @@ export default function App() {
       <ProjectPicker project={current} projects={projects} onPick={p => void pickProject(p)} onAdd={() => void browseProject()} />
     )
   const composerProps = { permissions, model: picker }
-  const grouped = threadsByProject(list, projects)
+  const archived = list.filter(t => t.archived)
+  const grouped = threadsByProject(list.filter(t => !t.archived), projects)
+  for (const [p, rows] of grouped.byProject) grouped.byProject.set(p, pinnedFirst(rows))
+  grouped.other = pinnedFirst(grouped.other)
+  const actOn = async (t: Thread, a: ThreadAction, v?: string | boolean) => {
+    if (!t.path) return
+    try { await api.threadAct(a, t.path, t.project, v) } catch (e) { window.alert(e instanceof Error ? e.message : String(e)) }
+    if (a === 'delete') closeTab(t.key)
+    await refreshThreads(t.project)
+  }
   const renderThread = (t: Thread & { key: string }) => (
-    <button key={t.key} className={`side-thread${active?.key === t.key ? ' is-active' : ''}`} onClick={() => go({ kind: 'thread', key: t.key })} title={`${t.title} · ${displayName(names, t.project)}`}>
+    <ThreadRow key={t.key} t={t} sections={[...new Set(list.filter(x => x.project === t.project && x.section).map(x => x.section!))]} onAct={(a, v) => void actOn(t, a, v)}>
+    <button className={`side-thread${active?.key === t.key ? ' is-active' : ''}`} onClick={() => { if (t.unread) void actOn(t, 'unread', false); go({ kind: 'thread', key: t.key }) }} title={`${t.title} · ${displayName(names, t.project)}`}>
       <span className="side-thread-title">{t.title}</span>
+      {t.unread && <span className="side-user-dot" aria-label="Unread" />}
       {/* one trailing slot: live glyph while running, else age */}
       {statusOf(t) === 'working' ? (
         <StatusGlyph status="working" seed={t.key} />
@@ -493,6 +422,7 @@ export default function App() {
         <span className={`side-thread-time${statusOf(t) === 'input' ? ' is-needs' : ''}`}>{statusOf(t) === 'input' ? 'Reply' : ago(t.modified)}</span>
       )}
     </button>
+    </ThreadRow>
   )
 
   return (
@@ -597,6 +527,7 @@ export default function App() {
               }}
             />
           )}
+          <ArchivedList rows={archived} render={renderThread} />
           {projects.length === 0 && list.length === 0 && <div className="side-empty">No threads yet.</div>}
           {grouped.other.length > 0 && (
             <>
@@ -610,6 +541,7 @@ export default function App() {
           theme={settings?.theme ?? 'system'}
           onTheme={theme => void patchSettings({ theme })}
           onAccounts={() => setShowAccounts(true)}
+          onSettings={() => setShowSettings(true)}
         />
       </aside>
 
@@ -658,7 +590,7 @@ export default function App() {
           />
         ) : (
           <div className="home">
-            <Dither />
+            <Dither look={env === 'cloud'} />
             <div className="home-inner">
               <div className="home-head">
                 <span className="logo logo-lg">[suffice]</span>
@@ -692,14 +624,14 @@ export default function App() {
   )
 }
 
-/** One way back into the last thread: click it, or Tab from an empty composer. */
+/** One way back into the last thread: click it, or Tab from an empty composer or an unfocused Home. */
 function HomeContinue({ thread, onOpen }: { thread: Thread & { key: string }; onOpen: () => void }) {
   const open = useRef(onOpen)
   open.current = onOpen
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const el = document.activeElement
-      if (e.key === 'Tab' && !e.shiftKey && el instanceof HTMLTextAreaElement && el.closest('.home') && !el.value) (e.preventDefault(), open.current())
+      if (e.key === 'Tab' && !e.shiftKey && (el === document.body || (el instanceof HTMLTextAreaElement && el.closest('.home') && !el.value))) (e.preventDefault(), open.current())
     }
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
@@ -717,7 +649,7 @@ function HomeContinue({ thread, onOpen }: { thread: Thread & { key: string }; on
 
 type Theme = 'system' | 'light' | 'dark'
 
-function AccountMenu({ identity, onAccounts, theme, onTheme }: { identity: { name: string; avatar: string }; onAccounts: () => void; theme: Theme; onTheme: (t: Theme) => void }) {
+function AccountMenu({ identity, onAccounts, onSettings, theme, onTheme }: { identity: { name: string; avatar: string }; onAccounts: () => void; onSettings: () => void; theme: Theme; onTheme: (t: Theme) => void }) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -744,6 +676,9 @@ function AccountMenu({ identity, onAccounts, theme, onTheme }: { identity: { nam
               ]}
             />
           </div>
+          <button className="menu-item" onClick={() => (setOpen(false), onSettings())}>
+            Settings
+          </button>
           <button className="menu-item" onClick={() => (setOpen(false), onAccounts())}>
             Accounts
           </button>

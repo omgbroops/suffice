@@ -194,7 +194,7 @@ function ProjectRow({ path, current, working, open, onToggle, threads, renderThr
       </div>
       {open && threads.length > 0 && (
         <div className="side-proj-threads">
-          {groupByCategory(shown).map(g => (
+          {groupByCategory(shown.map(t => ({ ...t, category: t.section || t.category }))).map(g => (
             <div key={g.label ?? ''} className="side-group">
               {g.label && <div className="side-group-label">{g.label}</div>}
               {g.threads.map(renderThread)}

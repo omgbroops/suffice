@@ -6,7 +6,7 @@ export type ModelInfo = {
   id: string
   name: string
   contextWindow: number
-  cost: { input: number; output: number; cacheRead: number }
+  cost: { input: number; output: number; cacheRead: number; cacheWrite?: number }
   efforts: string[]
   /** modes this engine can run; absent means all */
   modes?: string[]
@@ -34,6 +34,28 @@ export type Settings = {
   theme?: 'system' | 'light' | 'dark'
   engineAuto?: boolean
   defaultProvider?: string
+  profileName?: string
+  callMe?: string
+  work?: string
+  fontSize?: 'small' | 'medium' | 'large'
+  reduceMotion?: boolean
+  customInstructions?: string
+  responseStyle?: 'concise' | 'normal' | 'explanatory'
+  /** false (default): Claude Code ignores the user's ~/.claude CLAUDE.md, settings, hooks, plugins, skills and MCP servers */
+  useClaudeConfig?: boolean
+  verbosity?: 'quiet' | 'normal' | 'verbose'
+  folderAccess?: string[]
+  capabilities?: { web?: boolean; browser?: boolean; computer?: boolean; mcp?: boolean }
+  notify?: { done?: boolean; needsInput?: boolean; sound?: boolean }
+  transcriptDays?: 0 | 7 | 30 | 90
+  openAtLogin?: boolean
+}
+
+export type Usage = {
+  total: { runs: number; inputTokens: number; outputTokens: number; cacheReadTokens: number; cacheWriteTokens: number; apiCostUsd: number }
+  days: { date: string; runs: number; apiCostUsd: number }[]
+  plan: { kind: 'subscription' | 'api'; name: string }
+  savedUsd: number
 }
 
 export type Mode = 'balanced' | 'efficient' | 'fast'
@@ -42,7 +64,9 @@ export type AccountRow = { id: string; name: string; kind: 'cli' | 'key'; instal
 export type InitInfo = { accounts?: AccountRow[]; defaultLabel?: string | null; signedIn: boolean; home: string; settings: Settings; projects: string[]; projectList?: Project[]; platform: string }
 export type NoteSummary = { path: string; title: string; modified: number; links: string[] }
 export type Project = { id: string; name: string; folders: string[] }
-export type ThreadSummary = { path: string; title: string; description?: string; category?: string; modified: number; running: boolean }
+export type ThreadSummary = { path: string; title: string; description?: string; category?: string; modified: number; running: boolean; pinned?: boolean; unread?: boolean; archived?: boolean; section?: string }
+export type ThreadAction = 'pin' | 'unread' | 'rename' | 'fork' | 'section' | 'archive' | 'delete'
+export type OpenTarget = { id: string; label: string }
 export type AuthEvent =
   | { type: 'url'; url: string }
   | { type: 'progress'; message: string }
@@ -82,6 +106,9 @@ export const api = {
   setProject: (path: string) => bridge().invoke<{ project: string; projects: string[] }>('projects:set', { path }),
   addFolder: (id: string) => bridge().invoke<Project[]>('projects:add-folder', { id }),
   threads: (project: string) => bridge().invoke<ThreadSummary[]>('threads:list', { project }),
+  threadAct: (action: ThreadAction, path: string, project: string, value?: string | boolean) => bridge().invoke<{ path: string }>('threads:act', { action, path, project, value }),
+  openTargets: () => bridge().invoke<OpenTarget[]>('threads:targets'),
+  openIn: (project: string, target: string) => bridge().invoke('threads:open-in', { project, target }),
   pickFiles: (project: string | null) => bridge().invoke<string[]>('files:pick', { project }),
   notes: (project: string) => bridge().invoke<NoteSummary[]>('notes:list', { project }),
   readNote: (project: string, path: string) => bridge().invoke<string>('notes:read', { project, path }),
@@ -92,5 +119,8 @@ export const api = {
   guide: (threadId: string, text: string, queue: boolean) => bridge().invoke('run:guide', { threadId, text, queue }),
   answerApproval: (id: string, allow: boolean) => bridge().invoke('approval:answer', { id, allow }),
   updateSettings: (patch: Partial<Settings>) => bridge().invoke<Settings>('settings:update', patch),
+  usage: () => bridge().invoke<Usage>('usage:summary'),
+  appInfo: () => bridge().invoke<{ version: string; openAtLogin: boolean }>('app:info'),
+  clearHistory: () => bridge().invoke('privacy:clear'),
   on: (channel: string, listener: (payload: any) => void) => bridge().on(channel, listener),
 }

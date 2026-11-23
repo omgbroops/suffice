@@ -2,7 +2,8 @@
 // runs. No Electron imports, so it can be driven from tests with plain Node.
 // Everything the renderer sees comes through `emit(channel, payload)`.
 
-import { mkdir, readFile, readdir, stat, writeFile, rename } from 'node:fs/promises'
+import { existsSync } from 'node:fs'
+import { copyFile, mkdir, readFile, readdir, stat, writeFile, rename } from 'node:fs/promises'
 import { basename, resolve } from 'node:path'
 import { randomUUID } from 'node:crypto'
 import { SessionManager } from '@earendil-works/pi-coding-agent'
@@ -24,12 +25,15 @@ import { emptyTranscript, fromSessionMessages, reduce, resultText } from '../../
 import { readNote, scanNotes } from './notes.mjs'
 import { suggestName } from './project-name.mjs'
 import { createErrorLog } from './errorlog.mjs'
-import { CLAUDE_EFFORTS, CLAUDE_MODELS, INSTALL_HINT, LOGIN_HINT, authStatus, childEnv, createClaudeEngine, findClaude } from './claude-engine.mjs'
+import { CLAUDE_EFFORTS, CLAUDE_MODELS, INSTALL_HINT, LOGIN_HINT, authStatus, childEnv, createClaudeEngine, findClaude, withCacheCost } from './claude-engine.mjs'
+import { writeMcpConfig } from './suffice-mcp.mjs'
+import { clearDirs, pruneOld } from './desktop.mjs'
 import { DEFAULTS, createAccounts } from './accounts.mjs'
 import { buildInput, claudeAsk, createTitler } from './thread-meta.mjs'
 import { categorize } from './categories.mjs'
 import { addFolder as addProjectFolder, extraFolders, sync as syncProjects } from './projects-store.mjs'
-import { bool, cleanSettingsPatch, object, oneOf, sessionPath, str } from './validate.mjs'
+import { bool, cleanSettingsPatch, object, oneOf, sessionPath, str, threadAction } from './validate.mjs'
+import { ACTIONS, createThreadMeta, forkClaudeFile, forkSessionFile, openTargets, trashFile } from './thread-meta.mjs'
 
 export const PROVIDER = 'openai'
 
@@ -129,12 +133,13 @@ async function writeJson(path, value) {
  *   claudeSpawn?: typeof import('node:child_process').spawn,
  * }} deps
  */
-export async function createHost({ home = parseOptions([]).home, emit, openExternal, chooseDirectory, runtime: givenRuntime, createSession = createSufficeSession, engine: givenEngine, claudePath: givenClaudePath, claudeSpawn, accounts: givenAccounts, safeStorage }) {
+export async function createHost({ home = parseOptions([]).home, emit, openExternal, chooseDirectory, openPath, openApp, exists = existsSync, runtime: givenRuntime, createSession = createSufficeSession, engine: givenEngine, claudePath: givenClaudePath, claudeSpawn, mcpConfigs = [], accounts: givenAccounts, safeStorage }) {
   process.env.PI_CODING_AGENT_DIR = home
   const desktopDir = resolve(home, 'desktop')
   const accounts = givenAccounts ?? (safeStorage ? createAccounts({ desktopDir, safeStorage }) : null)
   const need = () => accounts ?? (() => { throw new Error('Accounts are not available.') })()
   const transcriptDir = resolve(desktopDir, 'transcripts')
+  const threadMeta = createThreadMeta(resolve(desktopDir, 'threads.json'))
   await mkdir(transcriptDir, { recursive: true, mode: 0o700 })
   const settingsPath = resolve(desktopDir, 'settings.json')
   const savedSettings = plain(await readJson(settingsPath, {}))
@@ -147,6 +152,8 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     else if (!CLAUDE_MODELS.some(m => m.id === settings.model)) settings.model = CLAUDE_DEFAULT
   }
   fixModel()
+  const historyDirs = [transcriptDir, resolve(home, 'sessions')]
+  void pruneOld(historyDirs, settings.transcriptDays).catch(() => {})
   let accountRows = null
   let firstRunDone = false
   const isClaude = () => settings.engine !== 'openai'
@@ -460,8 +467,12 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
       starting.delete(threadId)
     }
     const resume = !!(thread?.path || path)
+    const mcpConfig = await writeMcpConfig({ home, capabilities: settings.capabilities ?? {} }).catch(() => null)
     const filePath = thread?.path ?? samePath(path) ?? resolve(sessionDir(home, project), `${randomUUID()}.claude.json`)
     const sessionId = basename(filePath, '.claude.json')
+    // a forked thread's first run branches from the old session; the mark is cleared once that run succeeds
+    const forkMeta = resume ? await readJson(filePath, null).catch(() => null) : null
+    const forkOf = typeof forkMeta?.forkOf === 'string' ? forkMeta.forkOf : undefined
     const transcript = thread?.transcript ?? (path ? await openTranscript(path) : emptyTranscript())
     thread = { ...thread, project, path: filePath, transcript, running: true, mode, claude: true }
     live.set(threadId, thread)
@@ -470,9 +481,11 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     await mkdir(sessionDir(home, project), { recursive: true, mode: 0o700 })
     if (!resume) await writeJson(filePath, { sessionId, project })
     emit('thread:session', { threadId, path: filePath })
+    const capabilities = { web: true, browser: false, computer: false, mcp: true, ...settings.capabilities }
     void (async () => {
       try {
-        const totals = await claudeEngine.run({ threadId, claudePath: bin, project, prompt, model, effort: level, approval: settings.approval, sessionId, resume, addDirs: extraFolders(projectList ?? await loadProjects(), project), onApproval: (name, input) => approve(threadId, name, input) })
+        const totals = await claudeEngine.run({ threadId, claudePath: bin, project, prompt, model, effort: level, approval: settings.approval, sessionId, resume, forkOf, addDirs: extraFolders(projectList ?? await loadProjects(), project), useClaudeConfig: settings.useClaudeConfig === true, instructions: settings, folderAccess: settings.folderAccess, capabilities, mcpConfigs: capabilities.browser || capabilities.computer ? [...mcpConfigs, ...(mcpConfig ? [mcpConfig] : [])] : [], onApproval: (name, input) => approve(threadId, name, input) })
+        if (forkOf) await writeJson(filePath, { ...forkMeta, forkOf: undefined })
         push(threadId, { type: 'end', ok: true, totals })
       } catch (e) {
         push(threadId, { type: 'end', ok: false, error: /cancelled/.test(e?.message ?? '') ? 'Stopped.' : e?.message || 'The run failed.' })
@@ -531,7 +544,9 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     }
   }
 
-  async function listThreads(project) {
+  const listThreads = async project => threadMeta.overlay(await listEngineThreads(project))
+
+  async function listEngineThreads(project) {
     if (!project) return []
     str(project, 'project')
     if (isClaude()) {
@@ -568,6 +583,36 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     return rows.map(r => { const category = c?.sections?.[r.path] ?? c?.labels?.[r.path]; return category ? { ...r, category } : r })
   }
 
+  /** One thread menu action. Delete and archive refuse a running thread; delete moves to <home>/desktop/trash. */
+  async function threadAct(raw) {
+    const { action, path: given, project, value } = threadAction(raw, ACTIONS)
+    const path = sessionPath(given, [sessionDir(home, project)], knownPaths())
+    if (['delete', 'archive'].includes(action) && value !== false && [...live.values()].some(t => t.path === path && t.running)) throw new Error('Stop the thread first.')
+    if (action === 'fork') {
+      const to = await (path.endsWith('.claude.json') ? forkClaudeFile(path) : forkSessionFile(path))
+      await copyFile(transcriptPath(path), transcriptPath(to)).catch(() => {})
+      const { section } = await threadMeta.get(path)
+      if (section) await threadMeta.set(to, { section })
+      return { path: to }
+    }
+    if (action === 'delete') {
+      await trashFile(path, resolve(desktopDir, 'trash'))
+      await threadMeta.set(path, { pinned: false, unread: false, title: '', section: '', archived: false })
+      return { path }
+    }
+    await threadMeta.set(path, { [{ pin: 'pinned', unread: 'unread', rename: 'title', section: 'section', archive: 'archived' }[action]]: value })
+    return { path }
+  }
+
+  const targets = () => openTargets(process.platform, exists)
+  async function openIn({ project, target }) {
+    str(project, 'project')
+    const t = targets().find(x => x.id === target)
+    if (!t || !(await recentProjects(home)).includes(project)) throw new Error('Cannot open that here.')
+    await (t.id === 'finder' ? openPath?.(project) : openApp?.(t.app, project))
+    return true
+  }
+
   // ---- projects, models, settings -----------------------------------------
   async function setProject(path) {
     str(path, 'path')
@@ -580,7 +625,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
 
   function models() {
     // Claude ids and prices (USD per million tokens) are OWNER TO VERIFY; see claude-engine.mjs
-    if (isClaude()) return CLAUDE_MODELS.map(m => ({ ...m, contextWindow: 0, cost: { ...m.cost, cacheRead: 0 }, efforts: CLAUDE_EFFORTS, modes: modesFor('claude') }))
+    if (isClaude()) return CLAUDE_MODELS.map(m => ({ ...m, contextWindow: 0, cost: withCacheCost(m.cost), efforts: CLAUDE_EFFORTS, modes: modesFor('claude') }))
     return runtime
       .getModels(PROVIDER)
       .filter(m => !m.type || m.type === 'chat')
@@ -675,6 +720,9 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
       return projectList
     },
     listThreads,
+    threadAct,
+    openIn,
+    openTargets: targets,
     // notes are read only from a project the user has opened
     listNotes: async ({ project }) => (typeof project === 'string' && (await recentProjects(home)).includes(project) ? scanNotes(project) : []),
     // the model's suggested name, kept in settings.projectAutoNames; the rename box falls back to it
@@ -708,6 +756,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     guide,
     answerApproval,
     updateSettings,
+    clearHistory: () => clearDirs(historyDirs),
     accountsList: () => accounts?.list() ?? [],
     setKey: ({ provider, key }) => need().setKey(str(provider, 'provider', { max: 40 }), str(key, 'key', { max: 500 })),
     testKey: ({ provider }) => need().testKey(str(provider, 'provider', { max: 40 })),
