@@ -6,7 +6,7 @@ const STATUS = (r: AccountRow) => (r.connected ? (r.kind === 'key' ? r.detail : 
 type Row = AccountRow
 
 /** Sign-in and API-key rows, shared by the connect screen and Settings. */
-export function AccountsList({ info, onRows }: { info: InitInfo; onRows?: (rows: Row[]) => void }) {
+export function AccountsList({ info, onRows, keys: showKeys = true }: { info: InitInfo; onRows?: (rows: Row[]) => void; keys?: boolean }) {
   const [rows, setRows] = useState<Row[]>(info.accounts ?? [])
   const [busy, setBusy] = useState(false)
   const [drafts, setDrafts] = useState<Record<string, string>>({})
@@ -82,6 +82,7 @@ export function AccountsList({ info, onRows }: { info: InitInfo; onRows?: (rows:
               </div>
             ))}
           </div>
+          {showKeys && <>
           <div className="signin-copy accounts-head">API keys</div>
           <div className="menu accounts-list">
             {keys.map(r => (
@@ -110,6 +111,7 @@ export function AccountsList({ info, onRows }: { info: InitInfo; onRows?: (rows:
               </form>
             ))}
           </div>
+          </>}
     </>
   )
 }

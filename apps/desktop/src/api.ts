@@ -69,6 +69,7 @@ export type UsageSummary = {
 }
 
 export type AccountRow = { id: string; name: string; kind: 'cli' | 'key'; installed: boolean; connected: boolean; runnable: boolean; detail: string; howTo: string; install?: string; last4?: string }
+export type ScreenStatus = { accessibility: boolean; screen: boolean }
 export type InitInfo = { accounts?: AccountRow[]; defaultLabel?: string | null; signedIn: boolean; home: string; settings: Settings; projects: string[]; projectList?: Project[]; platform: string }
 export type NoteSummary = { path: string; title: string; modified: number; links: string[] }
 export type Project = { id: string; name: string; folders: string[] }
@@ -105,6 +106,9 @@ export const api = {
   cancelLogin: () => bridge().invoke('auth:cancel'),
   logout: () => bridge().invoke<{ signedIn: boolean }>('auth:logout'),
   accounts: () => bridge().invoke<AccountRow[]>('accounts:list'),
+  introDone: () => bridge().invoke('intro:done'),
+  screenStatus: () => bridge().invoke<ScreenStatus>('screen:status'),
+  screenRequest: (kind: 'accessibility' | 'screen') => bridge().invoke<ScreenStatus>('screen:request', { kind }),
   setKey: (provider: string, key: string) => bridge().invoke<{ last4: string }>('accounts:key-set', { provider, key }),
   testKey: (provider: string) => bridge().invoke<{ ok: boolean; message: string }>('accounts:key-test', { provider }),
   removeKey: (provider: string) => bridge().invoke('accounts:key-remove', { provider }),

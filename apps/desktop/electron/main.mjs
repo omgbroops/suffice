@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, ipcMain, nativeTheme, Notification, protocol, safeStorage, shell } from 'electron'
+import { app, BrowserWindow, desktopCapturer, dialog, ipcMain, nativeTheme, Notification, protocol, safeStorage, shell, systemPreferences } from 'electron'
 import { fileURLToPath } from 'node:url'
 import { writeFile } from 'node:fs/promises'
 import { dirname, join, relative, resolve, sep } from 'node:path'
@@ -74,6 +74,42 @@ function createWindow() {
   else void win.loadFile(resolve(here, '..', 'dist', 'index.html'))
 }
 
+// First run: a frameless see-through window that floats a setup card over the desktop.
+// It owns `win` until 'intro:done' swaps in the main window.
+function createIntro() {
+  const intro = new BrowserWindow({
+    width: 980,
+    height: 640,
+    show: false,
+    frame: false,
+    transparent: true,
+    resizable: false,
+    maximizable: false,
+    fullscreenable: false,
+    hasShadow: false,
+    backgroundColor: '#00000000',
+    title: 'Welcome to Suffice',
+    webPreferences: { preload: resolve(here, 'preload.cjs'), contextIsolation: true, sandbox: true, nodeIntegration: false, spellcheck: false },
+  })
+  win = intro
+  intro.once('ready-to-show', () => intro.show())
+  intro.on('closed', () => { if (win === intro) win = null })
+  intro.webContents.setWindowOpenHandler(({ url }) => {
+    if (/^https?:/.test(url)) void shell.openExternal(url)
+    return { action: 'deny' }
+  })
+  intro.webContents.on('will-navigate', event => event.preventDefault())
+  if (devUrl) void intro.loadURL(`${devUrl}#intro`)
+  else void intro.loadFile(resolve(here, '..', 'dist', 'index.html'), { hash: 'intro' })
+}
+
+const darwin = process.platform === 'darwin'
+const PANES = { accessibility: 'Privacy_Accessibility', screen: 'Privacy_ScreenCapture' }
+const screenStatus = () => ({
+  accessibility: darwin ? systemPreferences.isTrustedAccessibilityClient(false) : true,
+  screen: darwin ? systemPreferences.getMediaAccessStatus('screen') === 'granted' : true,
+})
+
 // the CSS follows prefers-color-scheme, which Electron derives from themeSource
 const applyTheme = s => { if (['system', 'light', 'dark'].includes(s?.theme)) nativeTheme.themeSource = s.theme }
 
@@ -131,6 +167,22 @@ const handlers = {
   'privacy:clear': () => host.clearHistory(),
   'app:info': () => ({ version: app.getVersion(), openAtLogin: app.getLoginItemSettings().openAtLogin }),
   'usage:summary': args => host.usageSummary(args),
+  'screen:status': () => screenStatus(),
+  'screen:request': async ({ kind }) => {
+    if (!Object.hasOwn(PANES, kind)) throw new Error('Unknown permission.')
+    if (!darwin) return screenStatus()
+    // each call registers Suffice in the list macOS shows; the pane is where the switch lives
+    if (kind === 'accessibility') systemPreferences.isTrustedAccessibilityClient(true)
+    else await desktopCapturer.getSources({ types: ['screen'], thumbnailSize: { width: 1, height: 1 } }).catch(() => {})
+    await shell.openExternal(`x-apple.systempreferences:com.apple.preference.security?${PANES[kind]}`)
+    return screenStatus()
+  },
+  'intro:done': async () => {
+    await host.updateSettings({ onboarded: true })
+    const intro = win
+    createWindow()
+    intro?.close()
+  },
 }
 
 app.whenReady().then(async () => {
@@ -164,7 +216,8 @@ app.whenReady().then(async () => {
   }
   // before the first paint, so a saved Light or Dark never flashes the system theme
   applyTheme(host.getSettings())
-  createWindow()
+  if (host.getSettings().onboarded || process.env.SUFFICE_SKIP_INTRO === '1') createWindow()
+  else createIntro()
   app.on('activate', () => {
     if (!BrowserWindow.getAllWindows().length) createWindow()
   })
