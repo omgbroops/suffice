@@ -223,6 +223,10 @@
 /* a running command shows its last three output lines under the row */
 .step-tail { margin: 0 0 4px; padding-left: 12px; font-family: var(--mono); font-size: 11px; line-height: 16px; color: var(--text-4); white-space: pre; overflow: hidden; text-overflow: ellipsis; box-shadow: inset 1px 0 0 var(--hair); }
 
+/* a shell step reads as a terminal: the command bright, its output dim */
+.code.term { color: var(--text-3); white-space: pre-wrap; overflow-wrap: anywhere; }
+.term-cmd { color: var(--text); }
+
 /* a group's steps sit indented under its line */
 .group-steps { padding-left: 12px; box-shadow: inset 1px 0 0 var(--hair); }
 
@@ -265,3 +269,5 @@
 .artifact-full .artifact-head { padding: 10px 14px; }
 .artifact-body.is-full { flex: 1; min-height: 0; display: flex; }
 .artifact-body.is-full .artifact-frame, .artifact-body.is-full .artifact-code { flex: 1; height: 100%; max-height: none; }
+.side-group-label { padding: 8px 10px 2px; font-size: 11px; color: var(--text-4); }
+.side-group:first-child .side-group-label { padding-top: 2px; }

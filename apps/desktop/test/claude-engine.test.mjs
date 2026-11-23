@@ -231,5 +231,69 @@ test('claude engine: appendPrompt reaches --append-system-prompt, and is absent 
     const [first, second] = (await argvLog(t.s.log)).map(l => l.argv)
     assert.deepEqual(first.slice(first.indexOf('--append-system-prompt'), first.indexOf('--append-system-prompt') + 2), ['--append-system-prompt', 'be brief'])
     assert.ok(!second.includes('--append-system-prompt'))
+    // with user instructions too, still exactly one flag carrying both
+    await t.engine.run({ ...t.args, appendPrompt: 'be brief', instructions: { callMe: 'Abhay' } })
+    const third = (await argvLog(t.s.log))[2].argv
+    assert.equal(third.filter(x => x === '--append-system-prompt').length, 1)
+    assert.equal(third[third.indexOf('--append-system-prompt') + 1], 'Call the user Abhay.\n\nbe brief')
+  } finally { await t.cleanup() }
+})
+
+const flag = (argv, f) => { const i = argv.indexOf(f); return i < 0 ? null : argv.slice(i + 1) }
+
+test('settings args: isolation, instructions, folders, capabilities, mcp configs reach argv exactly', async () => {
+  const folder = await mkdtemp(join(tmpdir(), 'suffice-fa-'))
+  try {
+    const run = async extra => {
+      const t = await runFake('text', extra)
+      try { await t.engine.run(t.args); return (await argvLog(t.s.log))[0].argv } finally { await t.cleanup() }
+    }
+    const base = await run({})
+    assert.equal(flag(base, '--setting-sources')[0], 'project,local') // default: isolated
+    assert.ok(base.includes('--strict-mcp-config'))
+    for (const f of ['--append-system-prompt', '--add-dir', '--disallowedTools', '--mcp-config']) assert.ok(!base.includes(f), f)
+    const open = await run({ useClaudeConfig: true })
+    assert.ok(!open.includes('--setting-sources') && !open.includes('--strict-mcp-config'))
+    const full = await run({
+      instructions: { callMe: 'Abhay', responseStyle: 'concise', customInstructions: 'Be blunt.' },
+      folderAccess: [folder, '/nonexistent-xyz', '.', join(folder, 'nope')],
+      capabilities: { web: false, mcp: false }, mcpConfigs: ['/a.json', '/b.json'], useClaudeConfig: true,
+    })
+    assert.equal(flag(full, '--append-system-prompt')[0], 'Call the user Abhay.\nKeep replies short and to the point.\nBe blunt.')
+    assert.deepEqual(full.filter((a, i) => full[i - 1] === '--add-dir'), [folder])
+    assert.deepEqual(flag(full, '--disallowedTools').slice(0, 2), ['WebFetch', 'WebSearch'])
+    assert.ok(full.includes('--strict-mcp-config'))
+    assert.deepEqual(full.filter((a, i) => full[i - 1] === '--mcp-config'), ['/a.json', '/b.json'])
+    assert.ok(!(await run({ instructions: { responseStyle: 'normal', callMe: '  ' } })).includes('--append-system-prompt'))
+  } finally { await rm(folder, { recursive: true, force: true }) }
+})
+
+test('model costs carry cache read 0.1x and 5-minute write 1.25x of input; settings keys validate', async () => {
+  const { withCacheCost } = await import('../electron/host/claude-engine.mjs')
+  const { cleanSettingsPatch } = await import('../electron/host/validate.mjs')
+  assert.deepEqual(withCacheCost({ input: 4, output: 20 }), { input: 4, output: 20, cacheRead: 0.4, cacheWrite: 5 })
+  const ok = { useClaudeConfig: true, callMe: 'A', customInstructions: 'x', responseStyle: 'concise', verbosity: 'verbose', folderAccess: ['/a'], capabilities: { web: false } }
+  assert.deepEqual(cleanSettingsPatch(ok), ok)
+  assert.deepEqual(cleanSettingsPatch({ useClaudeConfig: 'y', responseStyle: 'loud', folderAccess: [1], capabilities: { evil: true } }), {})
+})
+
+test('claude engine: each mcp config becomes a --mcp-config flag', async () => {
+  const t = await runFake('text', { mcpConfigs: ['/a/mcp.json', '/b/mcp.json'] })
+  try {
+    await t.engine.run(t.args)
+    const [{ argv }] = await argvLog(t.s.log)
+    assert.deepEqual(argv.filter((a, i) => argv[i - 1] === '--mcp-config'), ['/a/mcp.json', '/b/mcp.json'])
+  } finally { await t.cleanup() }
+})
+
+test('claude engine: forkOf resumes the old session as a fork under the new id', async () => {
+  const t = await runFake('text', { resume: true, forkOf: 'old-id' })
+  try {
+    await t.engine.run(t.args)
+    const [{ argv }] = await argvLog(t.s.log)
+    const i = argv.indexOf('--resume')
+    assert.deepEqual(argv.slice(i, i + 2), ['--resume', 'old-id'])
+    assert.ok(argv.includes('--fork-session'))
+    assert.deepEqual(argv.slice(argv.indexOf('--session-id'), argv.indexOf('--session-id') + 2), ['--session-id', 'sid-1'])
   } finally { await t.cleanup() }
 })

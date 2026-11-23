@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, ipcMain, nativeTheme, protocol, safeStorage, shell } from 'electron'
+import { app, BrowserWindow, dialog, ipcMain, nativeTheme, Notification, protocol, safeStorage, shell } from 'electron'
 import { fileURLToPath } from 'node:url'
 import { writeFile } from 'node:fs/promises'
 import { dirname, join, relative, resolve, sep } from 'node:path'
@@ -10,6 +10,10 @@ import { CSP, decodeArtifactUrl } from '../shared/artifacts.mjs'
 
 // Artifacts are served from their own scheme, so the iframe gets a CSP of its own instead of the app's and a separate origin.
 protocol.registerSchemesAsPrivileged([{ scheme: 'suffice-artifact', privileges: { standard: true, secure: true } }])
+import { createInstaller } from './install.mjs'
+import { execFile } from 'node:child_process'
+import { promisify } from 'node:util'
+import { applyLoginItem, createNotifier } from './host/desktop.mjs'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const devUrl = process.env.SUFFICE_DESKTOP_DEV_URL
@@ -22,6 +26,11 @@ process.on('uncaughtException', e => logError('main', e))
 process.on('unhandledRejection', e => logError('main-rejection', e))
 
 const send = (channel, payload) => win?.webContents.send(channel, payload)
+const notifier = createNotifier({
+  getSettings: () => host?.getSettings() ?? {},
+  isFocused: () => !!win?.isFocused(),
+  show: o => { if (Notification.isSupported()) new Notification(o).show() },
+})
 
 function createWindow() {
   win = new BrowserWindow({
@@ -80,7 +89,12 @@ const handlers = {
   'projects:set': ({ path }) => host.setProject(path),
   'projects:default': () => host.defaultProject(),
   'projects:recent': () => host.recentProjects(),
+  'projects:list': () => host.projectsList(),
+  'projects:add-folder': args => host.addFolder(args),
   'threads:list': ({ project }) => host.listThreads(project),
+  'threads:act': args => host.threadAct(args),
+  'threads:open-in': args => host.openIn(args),
+  'threads:targets': () => host.openTargets(),
   'notes:list': args => host.listNotes(args),
   // files chosen to mention in a prompt: project-relative when inside the project, absolute otherwise
   'files:pick': async ({ project }) => {
@@ -113,14 +127,21 @@ const handlers = {
   'accounts:key-set': args => host.setKey(args),
   'accounts:key-test': args => host.testKey(args),
   'accounts:key-remove': args => host.removeKey(args),
-  'settings:update': async patch => { const s = await host.updateSettings(patch); applyTheme(s); return s },
+  'settings:update': async patch => { const s = await host.updateSettings(patch); applyTheme(s); applyLoginItem(app, s); return s },
+  'privacy:clear': () => host.clearHistory(),
+  'app:info': () => ({ version: app.getVersion(), openAtLogin: app.getLoginItemSettings().openAtLogin }),
 }
 
 app.whenReady().then(async () => {
+  const installer = createInstaller({ app, dialog, exec: promisify(execFile) })
+  if (await installer.offerMove()) return // relaunching from /Applications
+  void installer.ejectSource()
   host = await createHost({
     safeStorage,
-    emit: send,
+    emit: (channel, payload) => (send(channel, payload), notifier(channel, payload)),
     openExternal: url => void shell.openExternal(url),
+    openPath: async dir => { const e = await shell.openPath(dir); if (e) throw new Error(e) },
+    openApp: (name, dir) => new Promise((ok, no) => execFile('open', ['-a', name, dir], e => (e ? no(e) : ok()))),
     chooseDirectory: async () => {
       const result = await dialog.showOpenDialog(win, { title: 'Choose a project', properties: ['openDirectory'] })
       return result.canceled ? undefined : result.filePaths[0]

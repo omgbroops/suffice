@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { DURATION, MOON, tiltAt, viewAt } from './camera'
 
 const BAYER = [
   0, 32, 8, 40, 2, 34, 10, 42, 48, 16, 56, 24, 50, 18, 58, 26, 12, 44, 4, 36, 14, 46, 6, 38, 60, 28, 52, 20, 62, 30, 54, 22,
@@ -47,8 +48,10 @@ const smooth = (a: number, b: number, x: number) => {
   return t * t * (3 - 2 * t)
 }
 
-function scene(u: number, v: number, aspect: number) {
-  const x = u * aspect
+function scene(u: number, v: number, aspect: number, ox = 0, oy = 0) {
+  const x = u * aspect + ox
+  v += oy
+  u = x / aspect
   for (let i = RIDGES.length - 1; i >= 0; i--) {
     const r = RIDGES[i]
     const at = (px: number) => r.base - (ridged(px * r.freq + r.seed) - 0.45) * r.amp
@@ -59,7 +62,7 @@ function scene(u: number, v: number, aspect: number) {
       return r.lum + rim + mist
     }
   }
-  const mx = aspect * 0.68, my = 0.27, mr = 0.1
+  const mx = aspect * MOON.x, my = MOON.y, mr = 0.1
   const dx = (x - mx) / mr, dy = (v - my) / mr
   const d2 = dx * dx + dy * dy
   if (d2 < 1) {
@@ -73,8 +76,11 @@ function scene(u: number, v: number, aspect: number) {
   return 0.03 + smooth(0.0, 0.7, v) * 0.42 + glow + star
 }
 
-export function Dither({ cell = 2 }: { cell?: number }) {
+/** look: the camera looks up and closes in until the moon sits centred above the composer; eases back when false. */
+export function Dither({ cell = 2, look = false }: { cell?: number; look?: boolean }) {
   const ref = useRef<HTMLCanvasElement>(null)
+  const tilt = useRef(look ? 1 : 0)
+  const redraw = useRef<() => void>(() => {})
 
   useEffect(() => {
     const canvas = ref.current!
@@ -88,9 +94,11 @@ export function Dither({ cell = 2 }: { cell?: number }) {
       const ctx = canvas.getContext('2d')!
       const img = ctx.createImageData(w, h)
       const aspect = w / h
+      const t = tilt.current
       for (let y = 0; y < h; y++) {
         for (let x = 0; x < w; x++) {
-          const l = scene(x / w, y / h, aspect)
+          const p = t ? viewAt(t, x / w, y / h) : { u: x / w, v: y / h }
+          const l = scene(p.u, p.v, aspect)
           if (l > BAYER[(y & 7) * 8 + (x & 7)]) {
             const p = (y * w + x) * 4
             img.data[p] = img.data[p + 1] = img.data[p + 2] = 255
@@ -100,16 +108,37 @@ export function Dither({ cell = 2 }: { cell?: number }) {
       }
       ctx.putImageData(img, 0, 0)
     }
-    const ro = new ResizeObserver(() => {
+    redraw.current = () => {
       cancelAnimationFrame(frame)
       frame = requestAnimationFrame(draw)
-    })
+    }
+    const ro = new ResizeObserver(() => redraw.current())
     ro.observe(canvas)
     return () => {
       ro.disconnect()
       cancelAnimationFrame(frame)
     }
   }, [cell])
+
+  useEffect(() => {
+    const to = look ? 1 : 0
+    if (tilt.current === to) return
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      tilt.current = to
+      redraw.current()
+      return
+    }
+    const from = tilt.current, t0 = performance.now()
+    let id = 0
+    const step = (now: number) => {
+      const ms = now - t0
+      tilt.current = tiltAt(from, look, ms)
+      redraw.current()
+      if (ms < DURATION) id = requestAnimationFrame(step)
+    }
+    id = requestAnimationFrame(step)
+    return () => cancelAnimationFrame(id)
+  }, [look])
 
   return <canvas ref={ref} className="dither" aria-hidden />
 }

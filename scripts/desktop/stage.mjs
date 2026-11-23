@@ -1,3 +1,4 @@
+import {existsSync} from 'node:fs';
 import {cp,mkdir,readFile,realpath,writeFile,access,chmod} from 'node:fs/promises';
 import {createRequire} from 'node:module';
 import {dirname,resolve,relative,join,sep} from 'node:path';
@@ -6,6 +7,19 @@ const root=fileURLToPath(new URL('../../',import.meta.url));
 const read=async file=>JSON.parse(await readFile(file,'utf8'));
 const exists=async file=>access(file).then(()=>true,()=>false);
 const compatible=(list,value)=>!list||(!list.includes('!'+value)&&(!list.some(x=>!x.startsWith('!'))||list.includes(value)));
+// Dead weight in the production closure: source maps, typings, docs, and TypeScript beside its built .js. The pi packages read their own markdown/docs at runtime, so they keep theirs.
+const keepDocs=name=>name.startsWith('@earendil-works/')||name==='pi-web-access';
+const platformTag=process.platform+'-'+process.arch;
+function prune(file,path,name){
+ const base=path.split('/').at(-1);
+ if(/\.(?:map|d\.[cm]?ts)$/.test(base))return false;
+ if(/\.(?:md|markdown)$/i.test(base)&&!/^(?:license|licence)/i.test(base)&&!keepDocs(name)&&base.toLowerCase()!=='skill.md')return false;
+ if(/\.[cm]?ts$/.test(base)&&['js','mjs','cjs'].some(x=>existsSync(file.slice(0,-/\.[cm]?ts$/.exec(base)[0].length)+'.'+x)))return false;
+ if(!keepDocs(name)&&/^(?:docs|examples|__tests__|\.github)$/.test(base))return false;
+ const parts=path.split('/'),i=parts.indexOf('prebuilds');if(i>=0&&parts[i+1]&&parts[i+1]!==platformTag)return false;
+ const n=parts.indexOf('native');if(n>=0&&parts[n+1]&&['darwin','linux','win32'].includes(parts[n+1])&&parts[n+1]!==process.platform)return false;
+ return true;
+}
 // Copies exactly what main.mjs needs at runtime into a fresh dir electron-builder packs as-is: built renderer, electron/, shared/, the two workspace packages and the production dependency closure.
 export async function stageDesktop(stage,{version}){
  stage=resolve(stage);await mkdir(stage,{recursive:true});if(await exists(join(stage,'package.json')))throw new Error('Stage must be a fresh directory: '+stage);
@@ -31,6 +45,7 @@ export async function stageDesktop(stage,{version}){
   await mkdir(dirname(destination),{recursive:true});
   await cp(source,destination,{recursive:true,dereference:true,filter:file=>{
    if(!filter(file))return false;const path=relative(source,file).split(sep).join('/');
+   if(!prune(file,path,name))return false;
    if(name==='node-pty'&&path.startsWith('prebuilds/'))return path==='prebuilds'||path.split('/')[1]===process.platform+'-'+process.arch;
    if(name==='agent-desktop'&&path.startsWith('bin/')){const entry=path.split('/')[1];return entry==='agent-desktop'||entry.includes(process.platform+'-'+process.arch);}
    return true;

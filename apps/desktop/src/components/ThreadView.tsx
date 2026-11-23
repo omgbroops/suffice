@@ -143,7 +143,14 @@ function ToolView({ step, project }: { step: ToolStep; project: string }) {
       {body && (
         <div className="detail">
           {command && <div className="detail-head"><span className="detail-title">Command in {project.split(/[\\/]/).pop()}</span></div>}
-          <pre className="code">{body}</pre>
+          {command ? (
+            <pre className="code term">
+              <span className="term-cmd">$ {String(step.input?.command ?? '')}</span>
+              {step.output ? `\n${step.output}` : live ? '\nRunning…' : ''}
+            </pre>
+          ) : (
+            <pre className="code">{body}</pre>
+          )}
         </div>
       )}
     </Row>

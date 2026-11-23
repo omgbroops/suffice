@@ -3,9 +3,10 @@ import { ProjectOrb } from './Orb'
 import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from 'react'
 import { ago } from '../data'
 import * as Radix from '@radix-ui/react-icons'
-import { IconChevronRight, IconDots, IconPlus, IconSearch } from '../icons'
+import { IconChevronRight, IconDots, IconFolder, IconPlus, IconSearch } from '../icons'
 import { Live } from './Live'
 import { baseName, displayName } from './groups'
+import { groupByCategory } from './SidebarGroups'
 
 /** Project tints: Auto follows the theme's ink; the rest are pastels redefined per theme in banger.css. */
 export const PASTELS = ['auto', 'rose', 'peach', 'butter', 'mint', 'sky', 'lilac'] as const
@@ -100,7 +101,7 @@ function NameField({ path, onRename }: { path: string; onRename: (name: string) 
 }
 
 /** ⋯ menu: name, colour, and the generated emblem or an icon (Abhay 11-22: "pick name, color, emblem, that's it"; Icon opens a picker). */
-function ProjectMenu({ path, onTint, onIcon, onRename }: { path: string; onTint: (c: string) => void; onIcon: (i: string) => void; onRename: (name: string) => void }) {
+function ProjectMenu({ path, onTint, onIcon, onRename, onAddFolder }: { path: string; onAddFolder: () => void; onTint: (c: string) => void; onIcon: (i: string) => void; onRename: (name: string) => void }) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const colors = useContext(ColorsContext)
@@ -123,6 +124,9 @@ function ProjectMenu({ path, onTint, onIcon, onRename }: { path: string; onTint:
       {open && (
         <div className="menu menu-bottom menu-right proj-menu" role="menu" aria-label="Project" onClick={e => e.stopPropagation()}>
           <NameField path={path} onRename={onRename} />
+          <button className="menu-row" role="menuitem" onClick={() => (setOpen(false), onAddFolder())}>
+            <IconFolder size={14} /> Add folder
+          </button>
           <div className="proj-menu-label">Colour</div>
           <div className="proj-menu-row" role="group" aria-label="Colour">
             {PASTELS.map(c => (
@@ -163,7 +167,8 @@ function ProjectMenu({ path, onTint, onIcon, onRename }: { path: string; onTint:
 
 const SHOWN = 5
 
-function ProjectRow({ path, current, working, open, onToggle, threads, renderThread, onPick, onTint, onIcon, onRename }: {
+function ProjectRow({ path, current, working, open, onToggle, threads, renderThread, onPick, onTint, onIcon, onRename, onAddFolder }: {
+  onAddFolder: () => void
   path: string; current: boolean; working: boolean; open: boolean; onToggle: () => void; threads: Row[]; renderThread: (t: Row) => ReactNode
   onPick: () => void; onTint: (c: string) => void; onIcon: (i: string) => void; onRename: (name: string) => void
 }) {
@@ -185,11 +190,16 @@ function ProjectRow({ path, current, working, open, onToggle, threads, renderThr
             <IconChevronRight size={11} />
           </button>
         )}
-        <ProjectMenu path={path} onTint={onTint} onIcon={onIcon} onRename={onRename} />
+        <ProjectMenu path={path} onAddFolder={onAddFolder} onTint={onTint} onIcon={onIcon} onRename={onRename} />
       </div>
       {open && threads.length > 0 && (
         <div className="side-proj-threads">
-          {shown.map(renderThread)}
+          {groupByCategory(shown.map(t => ({ ...t, category: t.section || t.category }))).map(g => (
+            <div key={g.label ?? ''} className="side-group">
+              {g.label && <div className="side-group-label">{g.label}</div>}
+              {g.threads.map(renderThread)}
+            </div>
+          ))}
           {threads.length > SHOWN && (
             <button className="side-more" onClick={() => setAll(a => !a)}>{all ? 'Show less' : `Show ${threads.length - SHOWN} more`}</button>
           )}
@@ -203,7 +213,8 @@ const readOpen = (): Record<string, boolean> => {
   try { return JSON.parse(localStorage.getItem('suffice.expanded') ?? '{}') || {} } catch { return {} }
 }
 
-export function SideProjects({ projects, current, running, byProject, renderThread, onPick, onAdd, onTint, onIcon, onRename }: {
+export function SideProjects({ projects, current, running, byProject, renderThread, onPick, onAdd, onAddFolder, onTint, onIcon, onRename }: {
+  onAddFolder: (p: string) => void
   projects: string[]; current: string | null; running: Set<string>; byProject: Map<string, Row[]>; renderThread: (t: Row) => ReactNode
   onPick: (p: string) => void; onAdd: () => void; onTint: (p: string, c: string) => void; onIcon: (p: string, i: string) => void; onRename: (p: string, name: string) => void
 }) {
@@ -237,6 +248,7 @@ export function SideProjects({ projects, current, running, byProject, renderThre
             onTint={c => onTint(p, c)}
             onIcon={i => onIcon(p, i)}
             onRename={n => onRename(p, n)}
+            onAddFolder={() => onAddFolder(p)}
           />
         ))}
       </div>

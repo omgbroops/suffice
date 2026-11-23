@@ -29,6 +29,7 @@ export function sessionPath(path, dirs, known = []) {
 
 const isMap = (v, ok) => v && typeof v === 'object' && !Array.isArray(v) && Object.values(v).every(ok)
 const isStr = v => typeof v === 'string'
+const isBool = v => typeof v === 'boolean'
 const SETTINGS = {
   project: v => v === null || isStr(v),
   model: isStr,
@@ -46,6 +47,20 @@ const SETTINGS = {
   projectIcons: v => isMap(v, isStr),
   notesPrompt: isStr,
   theme: v => ['system', 'light', 'dark'].includes(v),
+  profileName: v => isStr(v) && v.length <= 100,
+  callMe: v => isStr(v) && v.length <= 100,
+  work: v => isStr(v) && v.length <= 100,
+  fontSize: v => ['small', 'medium', 'large'].includes(v),
+  reduceMotion: isBool,
+  customInstructions: v => isStr(v) && v.length <= 20_000,
+  responseStyle: v => ['concise', 'normal', 'explanatory'].includes(v),
+  useClaudeConfig: isBool,
+  verbosity: v => ['quiet', 'normal', 'verbose'].includes(v),
+  folderAccess: v => Array.isArray(v) && v.length <= 200 && v.every(x => isStr(x) && x && x.length <= 4096 && !x.includes('\0')),
+  capabilities: v => isMap(v, isBool) && Object.keys(v).length > 0 && Object.keys(v).every(k => ['web', 'browser', 'computer', 'mcp'].includes(k)),
+  notify: v => isMap(v, isBool),
+  transcriptDays: v => [0, 7, 30, 90].includes(v),
+  openAtLogin: isBool,
 }
 /** Known keys with well-typed values only; anything else is dropped. */
 export function cleanSettingsPatch(patch) {
@@ -58,4 +73,15 @@ export function cleanArtifactSave(a) {
   object(a, 'artifact')
   const name = str(a.name, 'name', { max: 120 }).replace(/[\\/:*?"<>|\0]+/g, '-').replace(/^\.+/, '') || 'artifact'
   return { project: str(a.project, 'project', { max: 4096 }), name, content: str(a.content, 'content', { max: 5_000_000 }) }
+}
+
+/** A thread menu action: known verb, a session path, and a short text value only where one is needed. */
+export function threadAction(a, actions) {
+  object(a, 'action')
+  const action = oneOf(a.action, actions, 'action')
+  let value = a.value
+  if (action === 'rename') value = str(value, 'value', { max: 120 }).trim() || str('', 'value')
+  else if (action === 'section') value = typeof value === 'string' && value.length <= 120 && !value.includes('\0') ? value.trim() : str(null, 'value')
+  else if (['pin', 'unread', 'archive'].includes(action)) bool(value, 'value')
+  return { action, path: str(a.path, 'path'), project: str(a.project, 'project'), value }
 }
