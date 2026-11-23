@@ -20,7 +20,10 @@ export function linksOf(text) {
   const prose = text.replace(/```[\s\S]*?```/g, '').replace(/`[^`\n]*`/g, '')
   const out = []
   for (const m of prose.matchAll(/\[\[([^\]|#\n]+)(?:#[^\]|\n]*)?(?:\|[^\]\n]*)?\]\]/g)) if (m[1].trim()) out.push({ wiki: m[1].trim() })
-  for (const m of prose.matchAll(/\]\(([^)\s]+?\.(?:md|markdown))(?:#[^)]*)?\)/gi)) if (!/^[a-z]+:/i.test(m[1])) out.push({ rel: decodeURI(m[1]) })
+  for (const m of prose.matchAll(/\]\(([^)\s]+?\.(?:md|markdown))(?:#[^)]*)?\)/gi)) {
+    if (/^[a-z]+:/i.test(m[1])) continue
+    try { out.push({ rel: decodeURI(m[1]) }) } catch { out.push({ rel: m[1] }) } // bad % escapes just never resolve
+  }
   return out
 }
 
