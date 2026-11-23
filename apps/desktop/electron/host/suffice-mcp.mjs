@@ -120,8 +120,10 @@ export const findNode = (path = process.env.PATH ?? '') => path.split(delimiter)
 export async function writeMcpConfig({ home, capabilities = {}, execPath = process.execPath, nodePath = findNode(), script = SELF }) {
   const caps = { browser: capabilities.browser === true, computer: capabilities.computer === true }
   if (!caps.browser && !caps.computer) return null
-  const env = { SUFFICE_HOME: resolve(home), SUFFICE_MCP_CAPS: JSON.stringify(caps), ...(nodePath ? {} : { ELECTRON_RUN_AS_NODE: '1' }) }
-  const config = { mcpServers: { suffice: { command: nodePath ?? execPath, args: [script], env } } }
+  // a packaged app keeps this script inside app.asar, which only Electron (in node mode) can read; system node cannot
+  const node = /\.asar[\\/]/.test(script) ? null : nodePath
+  const env = { SUFFICE_HOME: resolve(home), SUFFICE_MCP_CAPS: JSON.stringify(caps), ...(node ? {} : { ELECTRON_RUN_AS_NODE: '1' }) }
+  const config = { mcpServers: { suffice: { command: node ?? execPath, args: [script], env } } }
   const dir = resolve(home, 'desktop')
   await mkdir(dir, { recursive: true, mode: 0o700 })
   const file = join(dir, 'mcp.json')

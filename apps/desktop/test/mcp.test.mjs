@@ -113,3 +113,20 @@ test('real stdio process answers initialize and tools/list', async () => {
   assert.equal(lines.find(l => l.error)?.error.code, -32700)
   assert.ok(lines.find(l => l.id === 2).result.tools.some(t => t.name === 'browser_navigate'))
 })
+
+test('packaged app: a script inside app.asar runs under Electron node mode, never system node', async () => {
+  const { writeMcpConfig } = await import('../electron/host/suffice-mcp.mjs')
+  const { mkdtemp, readFile, rm } = await import('node:fs/promises')
+  const { tmpdir } = await import('node:os')
+  const { join } = await import('node:path')
+  const home = await mkdtemp(join(tmpdir(), 'mcp-asar-'))
+  try {
+    const script = '/Applications/Suffice.app/Contents/Resources/app.asar/apps/desktop/electron/host/suffice-mcp.mjs'
+    const file = await writeMcpConfig({ home, capabilities: { browser: true }, execPath: '/Applications/Suffice.app/Contents/MacOS/Suffice', nodePath: '/usr/local/bin/node', script })
+    const s = JSON.parse(await readFile(file, 'utf8')).mcpServers.suffice
+    assert.equal(s.command, '/Applications/Suffice.app/Contents/MacOS/Suffice')
+    assert.equal(s.env.ELECTRON_RUN_AS_NODE, '1')
+    const dev = JSON.parse(await readFile(await writeMcpConfig({ home, capabilities: { browser: true }, execPath: '/x/Electron', nodePath: '/usr/local/bin/node', script: '/repo/apps/desktop/electron/host/suffice-mcp.mjs' }), 'utf8')).mcpServers.suffice
+    assert.equal(dev.command, '/usr/local/bin/node')
+  } finally { await rm(home, { recursive: true, force: true }) }
+})
