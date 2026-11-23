@@ -4,6 +4,9 @@ import { dirname, relative, resolve, sep } from 'node:path'
 import { createHost } from './host/host.mjs'
 import { inside } from './host/notes.mjs'
 import { account } from './host/git.mjs'
+import { createInstaller } from './install.mjs'
+import { execFile } from 'node:child_process'
+import { promisify } from 'node:util'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const devUrl = process.env.SUFFICE_DESKTOP_DEV_URL
@@ -101,6 +104,9 @@ const handlers = {
 }
 
 app.whenReady().then(async () => {
+  const installer = createInstaller({ app, dialog, exec: promisify(execFile) })
+  if (await installer.offerMove()) return // relaunching from /Applications
+  void installer.ejectSource()
   host = await createHost({
     safeStorage,
     emit: send,
