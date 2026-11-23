@@ -106,7 +106,7 @@ export async function runAutoLadder({ runtime, task, variant, workspace, runDir,
       thinkingLevel: 'low', timeoutMs: remaining(), maxTurns, signal: controller.signal });
     let passed = false, detail = '';
     if (solo.status === 'completed') {
-      const acceptance = await runTaskAcceptance(soloWorkspace, task, { signal: controller.signal });
+      const acceptance = await runTaskAcceptance(soloWorkspace, task, { signal: controller.signal, runtime, finalAnswer: solo.final });
       passed = acceptance.status === 'passed' && await immutableIntact(soloWorkspace, task.workspaceDir);
       if (!passed) detail = `${acceptance.status}: ${(acceptance.stdout ?? '').split('\n').filter(l => /not ok|fail|Error/i.test(l)).slice(0, 10).join('\n')}`.slice(0, 1500);
     } else detail = `attempt ${solo.status}`;

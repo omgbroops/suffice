@@ -6,10 +6,13 @@ import { spawn, execFileSync } from 'node:child_process';
 import { readFile, open, unlink, readdir, lstat } from 'node:fs/promises';
 import { resolve, relative } from 'node:path';
 import { runNodeTests } from './workspace.mjs';
+import { runQnaAcceptance } from './aa-qna-verify.mjs';
 
 // Suite-aware acceptance: DeepSWE tasks grade via hidden-patch + spec runner;
-// everything else keeps the node --test path.
+// QnA-AA tasks grade via the Luna rubric judge; everything else keeps the
+// node --test path.
 export async function runTaskAcceptance(workspace, task, opts = {}) {
+  if (task.qna) return runQnaAcceptance(workspace, task, opts);
   return task.deepswe ? runDeepSweAcceptance(workspace, task, opts) : runNodeTests(workspace, task.acceptancePath, opts);
 }
 

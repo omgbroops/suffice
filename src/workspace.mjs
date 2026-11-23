@@ -11,6 +11,12 @@ import { spawn, execFileSync } from 'node:child_process';
 export async function materializeWorkspace(task, dest) {
   const generated = [];
   await cp(task.workspaceDir, dest, { recursive: true, errorOnExist: true, verbatimSymlinks: true });
+  if (task.qna) {
+    // Read-only repo-analysis tasks share one clone per repo; each run gets
+    // a cheap git worktree at the task's base commit instead of a file copy.
+    generated.push('src/.git');
+    execFileSync('git', ['-C', task.qna.repoDir, 'worktree', 'add', '--detach', '--force', resolve(dest, 'src'), task.qna.commit], { stdio: 'pipe' });
+  }
   if (task.depsDir && existsSync(resolve(task.depsDir, 'node_modules'))) {
     const target = resolve(dest, 'src', 'node_modules');
     try { execFileSync('cp', ['-al', resolve(task.depsDir, 'node_modules'), target]); }

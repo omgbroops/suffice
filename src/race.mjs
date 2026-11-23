@@ -69,11 +69,11 @@ export async function runRace({ runtime, task, variant, n = 3, runDir, thinkingL
       if (controller.signal.aborted) attemptCtl.abort();
       const agent = await runAgentImpl({ runtime, workspace, runDir: attemptDir, task: attemptTask, variant: spec.variant ?? variant, thinkingLevel: attemptThinking, timeoutMs, maxTurns, signal: attemptCtl.signal });
       if (deadline) clearTimeout(deadline);
-      if (controller.signal.aborted) return { index, spec, status: agent.status, providerFailureKind: agent.providerFailureKind, passed: false, usage: agent.usage, usageCostUnknown: agent.usageCostUnknown, turns: agent.turns, latencyMs: agent.latencyMs, workspace, runDir: attemptDir };
-      const acceptance = await runTaskAcceptance(workspace, task, { signal: controller.signal });
+      if (controller.signal.aborted) return { index, spec, status: agent.status, providerFailureKind: agent.providerFailureKind, passed: false, usage: agent.usage, usageCostUnknown: agent.usageCostUnknown, turns: agent.turns, latencyMs: agent.latencyMs, workspace, runDir: attemptDir, final: agent.final };
+      const acceptance = await runTaskAcceptance(workspace, task, { signal: controller.signal, runtime, finalAnswer: agent.final });
       const passed = agent.status === 'completed' && acceptance.status === 'passed' && await immutableIntact(workspace, task.workspaceDir);
       const { diffLines } = passed ? await attemptDiff(workspace, task.workspaceDir) : { diffLines: null };
-      return { index, spec, status: agent.status, providerFailureKind: agent.providerFailureKind, passed, diffLines, acceptanceStatus: acceptance.status, usage: agent.usage, usageCostUnknown: agent.usageCostUnknown, turns: agent.turns, latencyMs: agent.latencyMs, workspace, runDir: attemptDir };
+      return { index, spec, status: agent.status, providerFailureKind: agent.providerFailureKind, passed, diffLines, acceptanceStatus: acceptance.status, usage: agent.usage, usageCostUnknown: agent.usageCostUnknown, turns: agent.turns, latencyMs: agent.latencyMs, workspace, runDir: attemptDir, final: agent.final };
     })().then(
       attempt => ({ settled: true, attempt }),
       error => ({ settled: true, attempt: { index, status: 'harness_error', passed: false, error: String(error?.message ?? error) } }),
@@ -115,7 +115,7 @@ export async function runRace({ runtime, task, variant, n = 3, runDir, thinkingL
     // The race controller is already aborted to kill the losers; the
     // refinement gets a fresh signal so it is not born cancelled.
     const iterAgent = await runAgentImpl({ runtime, workspace: winner.workspace, runDir: resolve(runDir, 'iterate'), task: refineTask, variant, thinkingLevel, timeoutMs });
-    const acceptance = await runTaskAcceptance(winner.workspace, task);
+    const acceptance = await runTaskAcceptance(winner.workspace, task, { runtime, finalAnswer: iterAgent.final });
     const ok = iterAgent.status === 'completed' && acceptance.status === 'passed' && await immutableIntact(winner.workspace, task.workspaceDir);
     if (!ok) { await rm(winner.workspace, { recursive: true, force: true, verbatimSymlinks: true }); await cp(backup, winner.workspace, { recursive: true, verbatimSymlinks: true }); }
     iteration = { accepted: ok, agentStatus: iterAgent.status, latencyMs: iterAgent.latencyMs, turns: iterAgent.turns, usage: iterAgent.usage };

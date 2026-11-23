@@ -10,8 +10,8 @@ import { filesIn, readText, hash, materializeWorkspace } from './workspace.mjs';
 import { runTaskAcceptance } from './deepswe-verify.mjs';
 
 // Returns { passed } plus a compact failure digest the cheap model can retry against.
-async function check(workspace, task, baseline, signal) {
-  const acceptance = await runTaskAcceptance(workspace, task, { signal });
+async function check(workspace, task, baseline, signal, runtime, finalAnswer) {
+  const acceptance = await runTaskAcceptance(workspace, task, { signal, runtime, finalAnswer });
   if (acceptance.status !== 'passed') {
     const digest = `${acceptance.status}: ${(acceptance.stdout ?? '').split('\n').filter(l => /not ok|fail|Error/i.test(l)).slice(0, 10).join('\n')}`.slice(0, 3000);
     return { passed: false, detail: `acceptance ${digest}` };
@@ -50,7 +50,7 @@ export async function runEco({ runtime, task, variant, runDir, thinkingLevel = '
         timeoutMs: eco.cheapTimeoutMs ?? 120_000, signal: controller.signal });
       cheapRuns.push(run);
       if (run.status !== 'completed') break;
-      const verdict = await check(cheapWorkspace, task, task.workspaceDir, controller.signal);
+      const verdict = await check(cheapWorkspace, task, task.workspaceDir, controller.signal, runtime, run.final);
       cheapPassed = verdict.passed; lastDetail = verdict.detail ?? '';
     }
     const cheap = { status: cheapRuns.at(-1).status,

@@ -101,10 +101,10 @@ export const variants = Object.freeze([
   { id: 'eco-luna-sol', core: true, effort: 'medium', fast: { speculativeTest: true }, eco: { cheapModel: 'gpt-6-luna', cheapEffort: 'low', prefill: true, cheapRetries: 2 } },
   // Auto mode: one Luna classify call routes the task — repairs go cheap-first
   // (eco), features go to the strong model directly, the rest get the race.
-  // effort 'medium' matches the shipped /efficient command, whose escalation and
-  // feature paths run at the session thinkingLevel (cheap attempts stay pinned
-  // to low inside eco/auto themselves).
-  { id: 'auto', core: true, effort: 'medium', fast: { speculativeTest: true }, auto: {} },
+  // No variant effort pin: the strong path tracks the campaign --effort like
+  // the shipped /efficient command tracks ctx.thinkingLevel (cheap attempts
+  // stay pinned to low inside eco/auto themselves).
+  { id: 'auto', core: true, fast: { speculativeTest: true }, auto: {} },
   // Stock Pi: default tools, default prompt, no Suffice mechanisms — the true
   // upstream baseline. Model stays on the subscription default.
   { id: 'base-pi', basePi: true },
@@ -263,7 +263,9 @@ export async function runAgent({ runtime, workspace, runDir, task, variant, time
     pi.on('after_provider_response', event => log({ type: 'provider_response', status: event.status,
       requestId: event.headers?.['x-request-id'], retryAfter: event.headers?.['retry-after'] }));
     pi.on('tool_call', event => {
-      if (++toolCalls > 80 || controller.signal.aborted) { queueMicrotask(() => abort('tool_limit')); return { block: true, reason: 'Experiment tool budget exhausted.' }; }
+      // QnA tasks are read-only exploration — AA's harness allows 250 calls;
+      // match that budget so the score isn't a tool-cap artifact.
+      if (++toolCalls > (task.qna ? 250 : 80) || controller.signal.aborted) { queueMicrotask(() => abort('tool_limit')); return { block: true, reason: 'Experiment tool budget exhausted.' }; }
       if (event.toolName === 'codemode') programs.set(event.toolCallId, plannedReads(event.input.code));
       recentActions.push({ name: event.toolName, path: event.input?.path });
       if (recentActions.length > 6) recentActions.shift();
