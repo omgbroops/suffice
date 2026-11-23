@@ -274,6 +274,11 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     return true
   }
 
+  /** A run that dies while a permission prompt is open must not leave it answerable. */
+  function denyPending(threadId) {
+    for (const [id, pending] of approvals) if (pending.threadId === threadId) answerApproval(id, false)
+  }
+
   async function ensureAgent(threadId, { path, project, model, effort, fast }) {
     let thread = live.get(threadId)
     const desktopSettings = { 'approval-mode': APPROVAL[settings.approval] ?? APPROVAL.ask, naming: 'Automatic' }
@@ -386,6 +391,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
         push(threadId, { type: 'end', ok: false, error: cancelled ? 'Stopped.' : e?.message || 'The run failed.' })
       } finally {
         thread.running = false
+        denyPending(threadId)
         if (!thread.path) {
           thread.path = samePath(thread.agent.sessionPath())
           if (thread.path) emit('thread:session', { threadId, path: thread.path })
@@ -410,21 +416,28 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     let thread = live.get(threadId)
     if (thread?.running || starting.has(threadId)) throw new Error('This thread is already running.')
     starting.set(threadId, { stop: false })
-    try {
-      if (!(await authStatus(bin, childEnv())).loggedIn) throw new Error(LOGIN_HINT)
-    } finally {
-      starting.delete(threadId)
-    }
     const resume = !!(thread?.path || path)
     const filePath = thread?.path ?? samePath(path) ?? resolve(sessionDir(home, project), `${randomUUID()}.claude.json`)
     const sessionId = basename(filePath, '.claude.json')
-    const transcript = thread?.transcript ?? (path ? await openTranscript(path) : emptyTranscript())
+    let transcript, stopped
+    try {
+      if (!(await authStatus(bin, childEnv())).loggedIn) throw new Error(LOGIN_HINT)
+      transcript = thread?.transcript ?? (path ? await openTranscript(path) : emptyTranscript())
+      await mkdir(sessionDir(home, project), { recursive: true, mode: 0o700 })
+      if (!resume) await writeJson(filePath, { sessionId, project, title: prompt.replace(/\s+/g, ' ').trim().slice(0, 120) })
+    } finally {
+      // all of this happens before the thread is marked running, so a failure leaves it startable
+      stopped = starting.get(threadId)?.stop
+      starting.delete(threadId)
+    }
+    if (stopped) {
+      push(threadId, { type: 'end', ok: false, error: 'Stopped.' })
+      return { threadId, effort: level, mode, stopped: true }
+    }
     thread = { ...thread, project, path: filePath, transcript, running: true, mode, claude: true }
     live.set(threadId, thread)
     push(threadId, { type: 'user', id: randomUUID(), text: prompt })
     push(threadId, { type: 'agent_start', id: randomUUID(), model: info.name, effort: level, mode })
-    await mkdir(sessionDir(home, project), { recursive: true, mode: 0o700 })
-    if (!resume) await writeJson(filePath, { sessionId, project, title: prompt.replace(/\s+/g, ' ').trim().slice(0, 120) })
     emit('thread:session', { threadId, path: filePath })
     void (async () => {
       try {
@@ -434,6 +447,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
         push(threadId, { type: 'end', ok: false, error: /cancelled/.test(e?.message ?? '') ? 'Stopped.' : e?.message || 'The run failed.' })
       } finally {
         thread.running = false
+        denyPending(threadId)
         await persist(thread)
         emit('threads:changed', { project })
       }
@@ -442,7 +456,8 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
   }
 
   /** Mid-run input: steer reaches the agent before its next step; queue waits until it finishes. */
-  async function guide({ threadId, text, queue = false }) {
+  async function guide(args) {
+    const { threadId, text, queue = false } = object(args, 'guide')
     str(threadId, 'thread'); bool(queue, 'queue')
     if (typeof text !== 'string') throw new Error('Invalid text.')
     const thread = live.get(threadId)
@@ -469,7 +484,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     const pendingStart = starting.get(threadId)
     if (pendingStart) return (pendingStart.stop = true)
     if (!thread?.running) return false
-    for (const [id, pending] of approvals) if (pending.threadId === threadId) answerApproval(id, false)
+    denyPending(threadId)
     if (thread.claude) return claudeEngine.abort(threadId)
     thread.agent.abort()
     return true
@@ -610,9 +625,13 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     recentProjects: () => recentProjects(home),
     listThreads,
     // notes are read only from a project the user has opened
-    listNotes: async ({ project }) => (typeof project === 'string' && (await recentProjects(home)).includes(project) ? scanNotes(project) : []),
+    listNotes: async args => {
+      const { project } = object(args, 'notes')
+      return typeof project === 'string' && (await recentProjects(home)).includes(project) ? scanNotes(project) : []
+    },
     // the model's suggested name, kept in settings.projectAutoNames; the rename box falls back to it
-    nameProject: async ({ project }) => {
+    nameProject: async args => {
+      const { project } = object(args, 'project')
       str(project, 'project')
       if (isClaude() || !(await recentProjects(home)).includes(project) || !signedIn()) return settings
       if (settings.projectAutoNames?.[project]) return settings
@@ -624,12 +643,14 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
       })
       return name ? updateSettings({ projectAutoNames: { ...settings.projectAutoNames, [project]: name } }) : settings
     },
-    readNote: async ({ project, path }) => {
+    readNote: async args => {
+      const { project, path } = object(args, 'note')
       str(project, 'project'); str(path, 'path')
       if (!(await recentProjects(home)).includes(project)) throw new Error('Open that project first.')
       return readNote(project, path)
     },
-    openThread: async ({ threadId, path, project }) => {
+    openThread: async args => {
+      const { threadId, path, project } = object(args, 'thread')
       str(threadId, 'thread')
       const known = live.get(threadId)?.transcript
       if (known) return known
@@ -643,9 +664,18 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     answerApproval,
     updateSettings,
     accountsList: () => accounts?.list() ?? [],
-    setKey: ({ provider, key }) => need().setKey(str(provider, 'provider', { max: 40 }), str(key, 'key', { max: 500 })),
-    testKey: ({ provider }) => need().testKey(str(provider, 'provider', { max: 40 })),
-    removeKey: ({ provider }) => need().removeKey(str(provider, 'provider', { max: 40 })),
+    setKey: args => {
+      const { provider, key } = object(args, 'key')
+      return need().setKey(str(provider, 'provider', { max: 40 }), str(key, 'key', { max: 500 }))
+    },
+    testKey: args => {
+      const { provider } = object(args, 'key')
+      return need().testKey(str(provider, 'provider', { max: 40 }))
+    },
+    removeKey: args => {
+      const { provider } = object(args, 'key')
+      return need().removeKey(str(provider, 'provider', { max: 40 }))
+    },
     dispose,
   }
 }
