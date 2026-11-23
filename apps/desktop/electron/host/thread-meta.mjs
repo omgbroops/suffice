@@ -84,23 +84,28 @@ export function createTitler({ ask, done, ms = 1500 }) {
 export const ACTIONS = ['pin', 'unread', 'rename', 'fork', 'section', 'archive', 'delete']
 const KEYS = ['pinned', 'unread', 'title', 'section', 'archived']
 
+// one write queue per file, shared by every store on it, so two stores never interleave a read-modify-write
+const fileQueues = new Map()
+
 export function createThreadMeta(file) {
   let cache = null
-  let queue = Promise.resolve()
-  const load = async () => {
-    if (cache) return cache
+  const readDisk = async () => {
+    let text
+    try { text = await readFile(file, 'utf8') } catch { return {} }
     try {
-      const v = JSON.parse(await readFile(file, 'utf8'))
-      cache = v && typeof v === 'object' && !Array.isArray(v) ? v : {}
-    } catch {
-      cache = {}
-    }
-    return cache
+      const v = JSON.parse(text)
+      if (v && typeof v === 'object' && !Array.isArray(v)) return v
+    } catch {}
+    // a corrupt file is kept aside, never overwritten by the next save
+    await rename(file, `${file}.corrupt-${Date.now()}`).catch(() => {})
+    return {}
   }
+  const load = async () => (cache ??= await readDisk())
   /** Merge `patch` into one thread's entry; empty values clear the key. Writes are serialized. */
   const set = (path, patch) => {
-    const run = queue.then(async () => {
-      const all = await load()
+    const run = (fileQueues.get(file) ?? Promise.resolve()).then(async () => {
+      // re-read so another store's write is merged, not lost; memory changes only once the save lands
+      const all = { ...(await readDisk()) }
       const next = { ...all[path] }
       for (const k of KEYS) if (k in patch) { if (patch[k] === false || patch[k] === '' || patch[k] == null) delete next[k]; else next[k] = patch[k] }
       if (Object.keys(next).length) all[path] = next
@@ -108,9 +113,10 @@ export function createThreadMeta(file) {
       await mkdir(dirname(file), { recursive: true, mode: 0o700 })
       await writeFile(`${file}.tmp`, JSON.stringify(all, null, 2) + '\n', { mode: 0o600 })
       await rename(`${file}.tmp`, file)
+      cache = all
       return all[path] ?? {}
     })
-    queue = run.catch(() => {})
+    fileQueues.set(file, run.catch(() => {}))
     return run
   }
   /** Rows with their saved extras laid over: a manual title wins over the engine's. */

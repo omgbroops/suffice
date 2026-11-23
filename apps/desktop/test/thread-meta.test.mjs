@@ -43,6 +43,7 @@ test('engine passes extra folders as --add-dir', async () => {
     args = a
     const c = new EventEmitter()
     c.stdout = new EventEmitter(); c.stderr = new EventEmitter()
+    c.stdout.setEncoding = c.stderr.setEncoding = () => {} // real child streams have it
     c.stdin = { writable: true, write() {}, end() {}, on() {} }
     c.kill = () => {}
     setImmediate(() => c.stdout.emit('data', JSON.stringify({ type: 'result', subtype: 'success' }) + '\n'))

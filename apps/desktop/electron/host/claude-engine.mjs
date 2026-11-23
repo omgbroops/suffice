@@ -199,6 +199,9 @@ export function createClaudeEngine({ push, spawn = nodeSpawn }) {
         }
       }
 
+      // utf8 decoding keeps a multi-byte character whole when a chunk boundary splits it
+      child.stdout.setEncoding('utf8')
+      child.stderr.setEncoding('utf8')
       child.stdout.on('data', chunk => {
         buffer += chunk
         let i

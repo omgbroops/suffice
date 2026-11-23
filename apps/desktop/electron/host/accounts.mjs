@@ -83,7 +83,15 @@ export const pick = rows => ORDER.map(id => rows.find(r => r.id === id)).find(r 
 export function createAccounts({ desktopDir, env = process.env, execFile = nodeExecFile, safeStorage, fetch = globalThis.fetch, loadEngine = f => import(f), home = homedir() }) {
   const keysPath = join(desktopDir, 'keys.json')
   const readKeys = async () => {
-    try { return JSON.parse(await readFile(keysPath, 'utf8')) } catch { return {} }
+    let text
+    try { text = await readFile(keysPath, 'utf8') } catch { return {} }
+    try {
+      const v = JSON.parse(text)
+      if (v && typeof v === 'object' && !Array.isArray(v)) return v
+    } catch {}
+    // a corrupt or foreign key file is kept aside, never overwritten by the next save
+    await rename(keysPath, `${keysPath}.corrupt-${Date.now()}`).catch(() => {})
+    return {}
   }
   const writeKeys = async data => {
     await mkdir(dirname(keysPath), { recursive: true })

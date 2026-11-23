@@ -600,6 +600,8 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
         push(threadId, { type: 'end', ok: true, totals })
         void ledger.record({ threadId, project, engine: 'codex', model, effort: level, totals })
       } catch (e) {
+        // a failed or stopped turn still created the Codex session; keep it so the next message resumes it
+        if (e?.sessionId && e.sessionId !== meta.codexSession) await writeJson(filePath, { ...(await readJson(filePath, {})), engine: 'codex', codexSession: e.sessionId }).catch(() => {})
         push(threadId, { type: 'end', ok: false, error: /cancelled/.test(e?.message ?? '') ? 'Stopped.' : e?.message || 'The run failed.' })
       } finally {
         thread.running = false

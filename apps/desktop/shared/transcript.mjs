@@ -23,7 +23,12 @@ const lastAgent = t => {
   return m && m.role === 'agent' ? m : null
 }
 
-const clip = s => (typeof s === 'string' && s.length > OUTPUT_LIMIT ? `${s.slice(0, OUTPUT_LIMIT)}\n…` : s)
+// the cut steps back one when it would split an emoji's surrogate pair
+const clip = s => {
+  if (typeof s !== 'string' || s.length <= OUTPUT_LIMIT) return s
+  const end = /[\uD800-\uDBFF]/.test(s[OUTPUT_LIMIT - 1]) ? OUTPUT_LIMIT - 1 : OUTPUT_LIMIT
+  return `${s.slice(0, end)}\n…`
+}
 
 /** Text a tool result carries, joined and clipped. */
 export function resultText(content) {

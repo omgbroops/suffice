@@ -172,3 +172,32 @@ test('host: picking a Codex model runs the thread through Codex and keeps its se
     await t.cleanup(); await rm(home, { recursive: true, force: true })
   }
 })
+
+test('host: a failed Codex turn still keeps its session, so the next message resumes it', async () => {
+  const { mkdtemp, rm, readdir, readFile } = await import('node:fs/promises')
+  const { join } = await import('node:path')
+  const { createHost } = await import('../electron/host/host.mjs')
+  const t = await go('error')
+  const home = await mkdtemp(join(tmpdir(), 'suffice-codex-fail-'))
+  const savedHome = process.env.CODEX_HOME
+  process.env.CODEX_HOME = join(home, 'no-codex-home')
+  try {
+    const events = []
+    let done
+    const finished = new Promise(r => (done = r))
+    const host = await createHost({
+      home, claudePath: '/nonexistent/claude', codexPath: t.bin, openExternal: () => {}, chooseDirectory: async () => home,
+      emit: (c, p) => { events.push([c, p]); if (c === 'threads:changed') done() },
+    })
+    await host.run({ threadId: 'c2', project: home, prompt: 'hi', model: CODEX_MODELS[0].id, effort: 'low', mode: 'balanced' })
+    await finished
+    const end = events.find(([c, p]) => c === 'thread:event' && p.event.type === 'end')[1].event
+    assert.deepEqual([end.ok, end.error], [false, 'boom'])
+    const dir = join(home, 'sessions'), [sub] = await readdir(dir), [file] = (await readdir(join(dir, sub))).filter(f => f.endsWith('.claude.json'))
+    assert.equal(JSON.parse(await readFile(join(dir, sub, file), 'utf8')).codexSession, 'thr-9')
+    await host.dispose()
+  } finally {
+    savedHome === undefined ? delete process.env.CODEX_HOME : (process.env.CODEX_HOME = savedHome)
+    await t.cleanup(); await rm(home, { recursive: true, force: true })
+  }
+})

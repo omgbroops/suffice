@@ -208,6 +208,15 @@ const handlers = {
 app.whenReady().then(async () => {
   const installer = createInstaller({ app, dialog, exec: promisify(execFile) })
   if (await installer.offerMove()) return // relaunching from /Applications
+  // one app per data folder: a second copy would run a second host over the same settings, keys and threads.
+  // Taken after offerMove so the copy relaunched from /Applications is never refused by the one leaving.
+  if (!app.requestSingleInstanceLock()) return app.quit()
+  app.on('second-instance', () => {
+    if (!win || win.isDestroyed()) return
+    if (win.isMinimized()) win.restore()
+    win.show()
+    win.focus()
+  })
   void installer.ejectSource()
   host = await createHost({
     safeStorage,

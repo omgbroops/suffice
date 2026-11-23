@@ -1,6 +1,7 @@
 // Local-only error log: <home>/desktop/logs/app.log, ~1 MB, one rotated copy. Secrets are redacted.
 import { appendFile, mkdir, rename, stat } from 'node:fs/promises'
 import { resolve } from 'node:path'
+import { inspect } from 'node:util'
 
 const MAX = 1024 * 1024
 const SECRETS = [
@@ -16,7 +17,7 @@ export function createErrorLog(home, max = MAX) {
   const file = resolve(dir, 'app.log')
   let chain = Promise.resolve()
   const write = (source, error) => {
-    const text = error instanceof Error ? error.stack || error.message : typeof error === 'string' ? error : JSON.stringify(error) ?? String(error)
+    const text = error instanceof Error ? error.stack || error.message : typeof error === 'string' ? error : inspect(error, { depth: 4, breakLength: Infinity }) // inspect never throws on cycles, BigInt or Symbol
     const line = `${new Date().toISOString()} [${redact(String(source).slice(0, 40))}] ${redact(text).slice(0, 8000)}\n`
     return (chain = chain.then(async () => {
       await mkdir(dir, { recursive: true, mode: 0o700 })

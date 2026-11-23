@@ -65,26 +65,36 @@ export function createCliEngine({ push, spawn = nodeSpawn, label, installHint, p
         child.kill('SIGTERM')
         state.killTimer ??= setTimeout(() => child.kill('SIGKILL'), GRACE_MS)
       }
+      const handle = line => {
+        line = line.trim()
+        if (!line) return
+        let m
+        try { m = JSON.parse(line) } catch { return } // a non-JSON line is not ours to act on
+        try { p.line(m, h) } catch {} // one malformed event must not kill the run
+      }
+      // utf8 decoding keeps a multi-byte character whole when a chunk boundary splits it
+      child.stdout.setEncoding('utf8')
+      child.stderr.setEncoding('utf8')
       child.stdout.on('data', chunk => {
         buffer += chunk
         let i
         while ((i = buffer.indexOf('\n')) >= 0) {
-          const line = buffer.slice(0, i).trim()
+          handle(buffer.slice(0, i))
           buffer = buffer.slice(i + 1)
-          if (!line) continue
-          let m
-          try { m = JSON.parse(line) } catch { continue } // a non-JSON line is not ours to act on
-          try { p.line(m, h) } catch {} // one malformed event must not kill the run
         }
       })
       child.stderr.on('data', c => (stderr = (stderr + c).slice(-2000)))
       child.stdin.on('error', () => {})
       child.on('error', e => finish(reject, new Error(e.code === 'ENOENT' ? installHint : e.message)))
       child.on('close', (code, signal) => {
-        if (state.aborted) return finish(reject, new Error('Task stopped: cancelled'))
+        handle(buffer) // a last line with no newline
+        buffer = ''
+        // the session id rides on failures too, so the next message resumes the same session
+        const fail = msg => finish(reject, Object.assign(new Error(msg), { sessionId: p.outcome().sessionId }))
+        if (state.aborted) return fail('Task stopped: cancelled')
         const { error, totals, sessionId } = p.outcome()
-        if (error) return finish(reject, new Error(error))
-        if (code !== 0 || !totals) return finish(reject, new Error(stderr.trim().split('\n').pop() || (signal ? `${label} was killed (${signal}).` : `${label} exited with code ${code}.`)))
+        if (error) return fail(error)
+        if (code !== 0 || !totals) return fail(stderr.trim().split('\n').pop() || (signal ? `${label} was killed (${signal}).` : `${label} exited with code ${code}.`))
         finish(resolve, { ...totals, sessionId })
       })
       child.stdin.end(stdin ?? '')

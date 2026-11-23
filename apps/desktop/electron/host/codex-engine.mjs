@@ -63,6 +63,7 @@ function parser() {
   let sessionId, error
   const usage = { modelCalls: 0, inputTokens: 0, outputTokens: 0, cacheReadTokens: 0 }
   let completed = false
+  const started = new Set()
   const t0 = Date.now()
   return {
     line(m, h) {
@@ -82,12 +83,17 @@ function parser() {
         if (it.type === 'agent_message' && done && it.text) h.push({ type: 'text', delta: it.text }) // whole message, no deltas in exec
         else if (it.type === 'reasoning' && done && it.text) h.push({ type: 'thinking', delta: it.text })
         else if (it.type === 'command_execution') {
-          if (!done) h.push({ type: 'tool', id: it.id, name: 'bash', input: { command: it.command } })
-          else h.push({ type: 'tool_result', id: it.id, isError: it.status === 'failed' || (it.exit_code ?? 0) !== 0, output: it.aggregated_output ?? '' })
+          // a declined command can arrive as item.completed only, so open its step first
+          if (!done || !started.has(it.id)) { started.add(it.id); h.push({ type: 'tool', id: it.id, name: 'bash', input: { command: it.command } }) }
+          if (done) h.push({ type: 'tool_result', id: it.id, isError: it.status === 'failed' || it.status === 'declined' || (it.exit_code ?? 0) !== 0, output: it.aggregated_output || (it.status === 'declined' ? 'Declined.' : '') })
         } else if (it.type === 'file_change' && done) {
-          const path = it.changes?.[0]?.path
+          const path = (it.changes ?? []).map(c => c.path).join(', ')
           h.push({ type: 'tool', id: it.id, name: 'edit', input: { path, changes: it.changes } })
           h.push({ type: 'tool_result', id: it.id, isError: it.status === 'failed', output: (it.changes ?? []).map(c => `${c.kind} ${c.path}`).join('\n') })
+        } else if ((it.type === 'mcp_tool_call' || it.type === 'web_search') && done) {
+          const web = it.type === 'web_search'
+          h.push({ type: 'tool', id: it.id, name: web ? 'websearch' : `${it.server}.${it.tool}`, input: web ? { query: it.query } : it.arguments ?? {} })
+          h.push({ type: 'tool_result', id: it.id, isError: it.status === 'failed' || !!it.error, output: web ? '' : JSON.stringify(it.error ?? it.result ?? '').slice(0, 4000) })
         }
       }
     },
