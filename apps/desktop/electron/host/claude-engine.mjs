@@ -82,7 +82,7 @@ export function createClaudeEngine({ push, spawn = nodeSpawn }) {
   function run({ threadId, claudePath, project, prompt, model, effort, approval, sessionId, resume, onApproval }) {
     return new Promise((resolve, reject) => {
       const args = ['-p', '--input-format', 'stream-json', '--output-format', 'stream-json', '--verbose', '--include-partial-messages',
-        '--model', model, '--permission-mode', PERMISSION_MODE[approval] ?? 'manual', '--permission-prompts', 'host',
+        '--model', model, '--permission-mode', PERMISSION_MODE[approval] ?? 'manual', '--permission-prompts', 'host', '--permission-prompt-tool', 'stdio',
         ...(approval === 'never' ? ['--allow-dangerously-skip-permissions'] : []),
         ...(effort ? ['--effort', effort] : []),
         ...(resume ? ['--resume', sessionId] : ['--session-id', sessionId])]

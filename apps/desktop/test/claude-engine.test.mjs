@@ -90,6 +90,7 @@ test('claude engine: text deltas stream and totals map from the result', async (
     assert.deepEqual(argv.slice(argv.indexOf('--effort'), argv.indexOf('--effort') + 2), ['--effort', 'low'])
     assert.deepEqual(argv.slice(argv.indexOf('--permission-mode'), argv.indexOf('--permission-mode') + 2), ['--permission-mode', 'manual'])
     assert.ok(!argv.includes('--bare'))
+    assert.deepEqual(argv.slice(argv.indexOf('--permission-prompt-tool'), argv.indexOf('--permission-prompt-tool') + 2), ['--permission-prompt-tool', 'stdio']) // without it the CLI denies writes itself
   } finally { await t.cleanup() }
 })
 
