@@ -26,7 +26,8 @@ import { suggestName } from './project-name.mjs'
 import { createErrorLog } from './errorlog.mjs'
 import { CLAUDE_EFFORTS, CLAUDE_MODELS, INSTALL_HINT, LOGIN_HINT, authStatus, childEnv, createClaudeEngine, findClaude } from './claude-engine.mjs'
 import { DEFAULTS, createAccounts } from './accounts.mjs'
-import { bool, cleanSettingsPatch, object, oneOf, sessionPath, str } from './validate.mjs'
+import { bool, cleanSettingsPatch, int, object, oneOf, sessionPath, str } from './validate.mjs'
+import { createUsageLedger } from './usage.mjs'
 
 export const PROVIDER = 'openai'
 
@@ -158,6 +159,15 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
   // the pi runtime is only built for the OpenAI engine
   let runtime = givenRuntime ?? null
   const ensureRuntime = async () => (runtime ??= await createSufficeModelRuntime(modelRuntimeOptions(home), { onRefresh: () => emit('models:changed', null) }))
+  // API-rate per-1M prices for the engine's model; the Claude table lives in claude-engine.mjs
+  const priceOf = (engine, model) => {
+    try {
+      return engine === 'claude' ? CLAUDE_MODELS.find(m => m.id === model)?.cost : runtime?.getModel(PROVIDER, model)?.cost
+    } catch {
+      return null
+    }
+  }
+  const ledger = createUsageLedger({ desktopDir, priceOf, activeEngine: () => settings.engine, onError: e => errorLog.write('usage', e) })
   if (!isClaude()) await ensureRuntime()
   // claudePath comes from the settings file or the host, never from the renderer (cleanSettingsPatch drops it)
   const claudePath = () => givenClaudePath ?? settings.claudePath ?? findClaude()
@@ -369,6 +379,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
       if (thread.path) emit('thread:session', { threadId, path: thread.path })
     }
     void (async () => {
+      const t0 = Date.now()
       try {
         if (mode === 'efficient') {
           thread.quiet = true
@@ -381,6 +392,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
         } else if (mode === 'fast') await thread.agent.run(`/fast ${prompt}`)
         else await thread.agent.run(prompt)
         push(threadId, { type: 'end', ok: true, totals: thread.agent.totals })
+        void ledger.record({ threadId, project, engine: 'openai', model, effort: level, totals: thread.agent.totals, durationMs: Date.now() - t0 })
       } catch (e) {
         const cancelled = /cancelled/.test(e?.message ?? '')
         push(threadId, { type: 'end', ok: false, error: cancelled ? 'Stopped.' : e?.message || 'The run failed.' })
@@ -430,6 +442,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
       try {
         const totals = await claudeEngine.run({ threadId, claudePath: bin, project, prompt, model, effort: level, approval: settings.approval, sessionId, resume, onApproval: (name, input) => approve(threadId, name, input) })
         push(threadId, { type: 'end', ok: true, totals })
+        void ledger.record({ threadId, project, engine: 'claude', model, effort: level, totals })
       } catch (e) {
         push(threadId, { type: 'end', ok: false, error: /cancelled/.test(e?.message ?? '') ? 'Stopped.' : e?.message || 'The run failed.' })
       } finally {
@@ -552,6 +565,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
       await t.agent?.dispose().catch(() => {})
     }))
     live.clear()
+    await ledger.drain() // usage appends are fire-and-forget; none may land after teardown
   }
 
   return {
@@ -637,6 +651,10 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
       return openTranscript(sessionPath(path, [project ? sessionDir(home, project) : resolve(home, 'sessions')], knownPaths()))
     },
     logError: (source, error) => errorLog.write(source, error),
+    usageSummary: args => {
+      const { days } = object(args ?? {}, 'usage')
+      return ledger.summary({ days: int(days, 'days', { optional: true, min: 1, max: 90 }) })
+    },
     run,
     abort,
     guide,

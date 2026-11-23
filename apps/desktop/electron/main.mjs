@@ -98,6 +98,7 @@ const handlers = {
   'accounts:key-test': args => host.testKey(args),
   'accounts:key-remove': args => host.removeKey(args),
   'settings:update': async patch => { const s = await host.updateSettings(patch); applyTheme(s); return s },
+  'usage:summary': args => host.usageSummary(args),
 }
 
 app.whenReady().then(async () => {
