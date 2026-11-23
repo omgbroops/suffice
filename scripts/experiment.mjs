@@ -33,7 +33,7 @@ if (!['synthetic', 'real', 'real-hard', 'real-long', 'real-deepswe', 'real-deeps
 const taskPool = suite === 'real' ? realTasks.map(t => ({ ...t, split: 'real' })) : suite === 'real-hard' ? hardTasks.map(t => ({ ...t, split: 'real-hard' })) : suite === 'real-long' ? longTasks.map(t => ({ ...t, split: 'real-long' })) : suite === 'real-deepswe' ? deepTasks.map(t => ({ ...t, split: 'real-deepswe' })) : suite === 'real-deepswe-mid' ? midTasks.map(t => ({ ...t, split: 'real-deepswe-mid' })) : suite === 'real-deepswe-diff' ? diffTasks.map(t => ({ ...t, split: 'real-deepswe-diff' })) : suite === 'aa-qna' ? qnaTasks.map(t => ({ ...t, split: 'aa-qna' })) : tasks;
 const selectedTasks = taskPool.filter(t => (suite !== 'synthetic' || t.split === split) && (!args['--task'] || t.id === args['--task']) && t.id !== args['--exclude-task']).slice(Number(args['--offset'] ?? 0), args['--limit'] ? Number(args['--offset'] ?? 0) + Number(args['--limit']) : undefined);
 const modelOverride = args['--model'];
-const selectedVariants = variants.filter(v => !args['--variants'] || args['--variants'].split(',').includes(v.id)).map(v => modelOverride ? { ...v, model: modelOverride } : v);
+const selectedVariants = variants.filter(v => !args['--variants'] || args['--variants'].split(',').includes(v.id)).map(v => modelOverride ? { ...v, model: modelOverride, basePiModel: modelOverride } : v);
 if (args['--variants'] && args['--variants'].split(',').some(id => !variants.some(v => v.id === id))) throw new Error('Unknown variant; refusing partial experiment.');
 if (!selectedTasks.length || !selectedVariants.length) throw new Error('No matching tasks or variants.');
 const maxTurns = Number(args['--max-turns'] ?? 24);
