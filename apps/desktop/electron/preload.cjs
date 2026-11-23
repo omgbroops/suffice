@@ -1,6 +1,6 @@
 const { contextBridge, ipcRenderer } = require('electron')
 
-const INVOKE = new Set(['app:init', 'auth:login', 'auth:answer', 'auth:cancel', 'auth:logout', 'models:list', 'projects:choose', 'projects:set', 'projects:default', 'projects:recent', 'threads:list', 'threads:open', 'notes:list', 'notes:read', 'projects:name', 'files:pick', 'run:start', 'run:abort', 'run:guide', 'approval:answer', 'settings:update', 'git:identity', 'app:error', 'accounts:list', 'accounts:key-set', 'accounts:key-test', 'accounts:key-remove'])
+const INVOKE = new Set(['app:init', 'auth:login', 'auth:answer', 'auth:cancel', 'auth:logout', 'models:list', 'projects:choose', 'projects:set', 'projects:default', 'projects:recent', 'threads:list', 'threads:open', 'notes:list', 'notes:read', 'projects:name', 'files:pick', 'artifacts:save', 'run:start', 'run:abort', 'run:guide', 'approval:answer', 'settings:update', 'git:identity', 'app:error', 'accounts:list', 'accounts:key-set', 'accounts:key-test', 'accounts:key-remove'])
 const EVENTS = new Set(['auth:event', 'models:changed', 'thread:event', 'thread:session', 'thread:title', 'threads:changed', 'app:close-tab'])
 
 contextBridge.exposeInMainWorld('suffice', {

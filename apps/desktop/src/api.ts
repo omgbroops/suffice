@@ -81,6 +81,7 @@ export const api = {
   setProject: (path: string) => bridge().invoke<{ project: string; projects: string[] }>('projects:set', { path }),
   threads: (project: string) => bridge().invoke<ThreadSummary[]>('threads:list', { project }),
   pickFiles: (project: string | null) => bridge().invoke<string[]>('files:pick', { project }),
+  saveArtifact: (project: string, name: string, content: string) => bridge().invoke<string | null>('artifacts:save', { project, name, content }),
   notes: (project: string) => bridge().invoke<NoteSummary[]>('notes:list', { project }),
   readNote: (project: string, path: string) => bridge().invoke<string>('notes:read', { project, path }),
   nameProject: (project: string) => bridge().invoke<Settings>('projects:name', { project }),

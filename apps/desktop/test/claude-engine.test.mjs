@@ -222,3 +222,14 @@ test('the child env always carries USER, which the CLI needs to find its login',
   assert.equal(childEnv({ PATH: '/bin', HOME: '/h' }).USER, userInfo().username)
   assert.equal(childEnv({ USER: 'someone' }).USER, 'someone')
 })
+
+test('claude engine: appendPrompt reaches --append-system-prompt, and is absent when not given', async () => {
+  const t = await runFake('text')
+  try {
+    await t.engine.run({ ...t.args, appendPrompt: 'be brief' })
+    await t.engine.run(t.args)
+    const [first, second] = (await argvLog(t.s.log)).map(l => l.argv)
+    assert.deepEqual(first.slice(first.indexOf('--append-system-prompt'), first.indexOf('--append-system-prompt') + 2), ['--append-system-prompt', 'be brief'])
+    assert.ok(!second.includes('--append-system-prompt'))
+  } finally { await t.cleanup() }
+})

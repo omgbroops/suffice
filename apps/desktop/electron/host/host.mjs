@@ -25,6 +25,7 @@ import { readNote, scanNotes } from './notes.mjs'
 import { suggestName } from './project-name.mjs'
 import { createErrorLog } from './errorlog.mjs'
 import { CLAUDE_EFFORTS, CLAUDE_MODELS, INSTALL_HINT, LOGIN_HINT, authStatus, childEnv, createClaudeEngine, findClaude } from './claude-engine.mjs'
+import { ARTIFACT_PROMPT } from './artifact-prompt.mjs'
 import { DEFAULTS, createAccounts } from './accounts.mjs'
 import { bool, cleanSettingsPatch, object, oneOf, sessionPath, str } from './validate.mjs'
 
@@ -428,7 +429,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     emit('thread:session', { threadId, path: filePath })
     void (async () => {
       try {
-        const totals = await claudeEngine.run({ threadId, claudePath: bin, project, prompt, model, effort: level, approval: settings.approval, sessionId, resume, onApproval: (name, input) => approve(threadId, name, input) })
+        const totals = await claudeEngine.run({ threadId, claudePath: bin, project, prompt, model, effort: level, approval: settings.approval, sessionId, resume, appendPrompt: ARTIFACT_PROMPT, onApproval: (name, input) => approve(threadId, name, input) })
         push(threadId, { type: 'end', ok: true, totals })
       } catch (e) {
         push(threadId, { type: 'end', ok: false, error: /cancelled/.test(e?.message ?? '') ? 'Stopped.' : e?.message || 'The run failed.' })
