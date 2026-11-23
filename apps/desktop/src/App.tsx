@@ -47,7 +47,7 @@ function Titlebar({ platform, children }: { platform: string; children?: ReactNo
   return <header className={`titlebar is-${platform}`}>{children}</header>
 }
 
-function SignIn({ platform, onDone }: { platform: string; onDone: () => void }) {
+function SignIn({ platform, engine, onDone }: { platform: string; engine: 'claude' | 'openai'; onDone: () => void }) {
   const [state, setState] = useState<'idle' | 'waiting' | 'error'>('idle')
   const [message, setMessage] = useState('')
   const [url, setUrl] = useState('')
@@ -67,6 +67,17 @@ function SignIn({ platform, onDone }: { platform: string; onDone: () => void }) 
       }),
     [],
   )
+
+  // Claude engine: the app uses the user's own Claude Code login and never handles credentials itself;
+  // signing in happens in Claude Code, and this button only checks again
+  const check = async () => {
+    setState('waiting')
+    setMessage('Checking Claude Code…')
+    if ((await api.init()).signedIn) return onDone()
+    const r = await api.login()
+    setState('error')
+    setMessage(r.error ?? 'Claude Code is not signed in yet.')
+  }
 
   const start = async () => {
     setState('waiting')
@@ -90,7 +101,11 @@ function SignIn({ platform, onDone }: { platform: string; onDone: () => void }) 
         <Dither />
         <div className="signin-card">
           <span className="logo logo-lg">[suffice]</span>
-          <p className="signin-copy">Sign in with your ChatGPT account to run tasks. Credentials stay on this machine, shared with the Suffice CLI.</p>
+          <p className="signin-copy">
+            {engine === 'claude'
+              ? 'Suffice runs tasks with your own Claude Code. Run claude once in a terminal and sign in with your Claude account, then check again here.'
+              : 'Sign in with your ChatGPT account to run tasks. Credentials stay on this machine, shared with the Suffice CLI.'}
+          </p>
           {state === 'waiting' ? (
             <>
               <div className="signin-status is-live">{message}</div>
@@ -119,8 +134,8 @@ function SignIn({ platform, onDone }: { platform: string; onDone: () => void }) 
           ) : (
             <>
               {state === 'error' && <div className="signin-error">{message}</div>}
-              <button className="btn btn-primary btn-lg" onClick={start} autoFocus>
-                {state === 'error' ? 'Try again' : 'Sign in with ChatGPT'}
+              <button className="btn btn-primary btn-lg" onClick={engine === 'claude' ? check : start} autoFocus>
+                {engine === 'claude' ? 'Check again' : state === 'error' ? 'Try again' : 'Sign in with ChatGPT'}
               </button>
             </>
           )}
@@ -388,7 +403,7 @@ export default function App() {
       </div>
     )
   if (!info || !settings) return <div className="app is-bare"><Titlebar platform={platform} /></div>
-  if (!info.signedIn) return <SignIn platform={platform} onDone={() => void boot()} />
+  if (!info.signedIn) return <SignIn platform={platform} engine={info.settings.engine ?? 'claude'} onDone={() => void boot()} />
 
   const picker = (
     <ModelPicker

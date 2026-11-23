@@ -21,6 +21,8 @@ export type Settings = {
   recentModels: string[]
   mode: Mode
   cheapModel: string
+  /** which agent runs tasks: the user's own Claude Code (default) or OpenAI through the pi harness */
+  engine?: 'claude' | 'openai'
   /** project path -> tint name (see PASTELS) */
   projectColors?: Record<string, string>
   projectNames?: Record<string, string>
