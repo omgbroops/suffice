@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { IconArrowUp, IconPlus, IconStop } from '../icons'
 
 type Props = {
@@ -39,6 +39,22 @@ export function Composer(p: Props) {
     el.style.height = `${h}px`
     el.style.overflowY = h === MAX ? 'auto' : 'hidden'
   }, [text])
+
+  // an artifact in this thread answered (a picked option, a filled form): put it in the box; the person sends it
+  const textRef = useRef(text)
+  textRef.current = text
+  useEffect(() => {
+    const root = ta.current?.closest('.thread')
+    if (!root) return
+    const on = (e: Event) => {
+      const t = (e as CustomEvent<string>).detail
+      if (typeof t !== 'string' || !t.trim()) return
+      setText(textRef.current.trim() ? `${textRef.current.trimEnd()}\n${t}` : t)
+      requestAnimationFrame(() => { const el = ta.current; if (el) (el.focus(), el.setSelectionRange(el.value.length, el.value.length)) })
+    }
+    root.addEventListener('suffice:compose', on)
+    return () => root.removeEventListener('suffice:compose', on)
+  })
 
   const canSend = text.trim().length > 0 && !p.working && !p.disabled
   const send = (queue = false) => {

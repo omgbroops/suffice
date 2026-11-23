@@ -9,7 +9,7 @@ export const ArtifactCtx = createContext<{ project: string; pane: HTMLElement | 
 
 export type ArtifactSpec = { type: 'html' | 'svg' | 'chart' | 'table'; title: string; code: string; complete: boolean }
 
-const HEIGHT_CAP = 560
+const HEIGHT_CAP = 720
 const darkQuery = () => window.matchMedia('(prefers-color-scheme: dark)')
 
 function useDark() {
@@ -54,6 +54,7 @@ function FrameById({ spec, built, fill }: { spec: ArtifactSpec; built: { src: st
     const on = (e: MessageEvent) => {
       if (e.source !== ref.current?.contentWindow || e.data?.suffice_artifact !== built.id) return
       if (typeof e.data.h === 'number' && e.data.h > 0) setH(Math.min(Math.ceil(e.data.h), HEIGHT_CAP))
+      if (typeof e.data.reply === 'string') ref.current?.dispatchEvent(new CustomEvent('suffice:compose', { bubbles: true, detail: e.data.reply.slice(0, 4000) }))
     }
     window.addEventListener('message', on)
     return () => window.removeEventListener('message', on)

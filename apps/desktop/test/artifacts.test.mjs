@@ -1,7 +1,9 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 import { readFile } from 'node:fs/promises'
-import { readFence, classify, chartSvg, tableHtml, buildDoc, artifactUrl, decodeArtifactUrl, SANDBOX, CSP } from '../shared/artifacts.mjs'
+import { readFence, classify, buildDoc, artifactUrl, decodeArtifactUrl, SANDBOX, CSP } from '../shared/artifacts.mjs'
+import { kitCore } from '../shared/kit/core.mjs'
+import { KINDS } from '../shared/kit/index.mjs'
 import { cleanArtifactSave } from '../electron/host/validate.mjs'
 import { ARTIFACT_PROMPT } from '../electron/host/artifact-prompt.mjs'
 
@@ -34,27 +36,41 @@ test('classify: artifact blocks, the 15 line rule for plain html and svg', () =>
   assert.equal(classify('artifact type="chart"', '{', false).complete, false)
 })
 
-test('chartSvg: bars, lines, escaping and invalid specs', () => {
-  const spec = { kind: 'bar', x: ['Mon', '<b>'], series: [{ name: 'A&B', values: [3, 5] }] }
-  const svg = chartSvg(spec)
-  assert.equal((svg.match(/<rect class="bar"/g) ?? []).length, 2)
-  assert.ok(svg.includes('&lt;b&gt;') && !svg.includes('<b>'))
-  assert.ok(!/#[0-9a-f]{3,6}\b|rgb|hsl/i.test(svg), 'monochrome: no colour literals')
-  const line = chartSvg({ kind: 'line', x: [1, 2, 3], series: [{ name: 'a', values: [1, 2, 3] }, { name: 'b', values: [3, 2, 1] }] })
-  assert.ok(line.includes('<polyline') && line.includes('class="legend"') && line.includes('stroke-dasharray'))
-  assert.ok(chartSvg({ ...spec, kind: 'area' }).includes('<polygon'))
-  assert.throws(() => chartSvg({ ...spec, kind: 'pie' }), /kind/)
-  assert.throws(() => chartSvg({ x: ['a'], series: [{ values: [1, 2] }] }), /number per x/)
-  assert.throws(() => chartSvg({ x: [], series: [] }), /x array/)
-  assert.throws(() => chartSvg({ x: ['a'], series: [{ values: ['1'] }] }))
+// The kit runs in the iframe; its pure parts run here against a stub window.
+const kit = () => {
+  const w = { document: { readyState: 'complete', querySelectorAll: () => [] }, matchMedia: () => ({ matches: false }) }
+  kitCore(w, 'id')
+  return w.sx
+}
+
+test('kit: ticks, monotone curve, CSV, series shapes, folding', () => {
+  const sx = kit()
+  assert.deepEqual(sx.ticks(0, 9), [0, 2, 4, 6, 8, 10])
+  const d = sx.path([[0, 10], [10, 0], [20, 0], [30, 10]], 'smooth')
+  assert.match(d, /^M0\.00,10\.00C/)
+  // monotone: the flat middle segment never dips below 0 (no overshoot past the data)
+  const ys = [...d.matchAll(/(-?[\d.]+),(-?[\d.]+)/g)].map(m => +m[2])
+  assert.ok(Math.min(...ys) >= 0, d)
+  assert.deepEqual(sx.csv('a,b\n1,"x, y"\n2,"say ""hi"""\n'), { columns: ['a', 'b'], rows: [[1, 'x, y'], [2, 'say "hi"']] })
+  assert.deepEqual(sx.csv('a\tb\r\n3\t4').rows, [[3, 4]])
+  assert.deepEqual(sx.series({ rows: [{ m: 'Jan', a: 1, b: 2 }], x: 'm' }), { x: ['Jan'], series: [{ name: 'a', values: [1] }, { name: 'b', values: [2] }] })
+  assert.throws(() => sx.series({ x: ['a'], series: [{ values: [1, 2] }] }), /number per x/)
+  const f = sx.fold(Array.from({ length: 10 }, (_, i) => ({ label: `s${i}`, value: i + 1 })))
+  assert.equal(f.length, 8)
+  assert.equal(f[7].label, 'Other')
+  assert.equal(f[7].value, 1 + 2 + 3)
+  assert.equal(sx.fmt(12500), '12.5k')
+  assert.equal(sx.fmt(0.5, '%'), '0.5%')
 })
 
-test('tableHtml: rows, columns form, escaping, sort script', () => {
-  const h = tableHtml([{ a: 1, b: '<i>' }, { a: 2 }])
-  assert.ok(h.includes('<th tabindex="0">a</th>') && h.includes('&lt;i&gt;') && h.includes('class="n"'))
-  assert.ok(tableHtml({ columns: ['x'], rows: [[1]] }).includes('<td class="n" data-v="1">'))
-  assert.throws(() => tableHtml({ rows: 1 }), /rows/)
-  assert.ok(buildDoc({ type: 'table', code: '[{"a":1}]' }).includes("th.onclick"))
+test('kit: every kind is registered in the page, chart JSON cannot close the script', () => {
+  const d = buildDoc({ type: 'chart', code: JSON.stringify({ kind: 'bar', x: ['</script><b>'], series: [{ values: [1] }] }) })
+  for (const k of Object.keys(KINDS)) assert.ok(d.includes(`sx.kind("${k}",`), k)
+  assert.ok(!d.includes('</script><b>'))
+  assert.ok(d.includes('\\u003c/script>'))
+  assert.throws(() => buildDoc({ type: 'chart', code: 'nope' }))
+  assert.throws(() => buildDoc({ type: 'table', code: '{"rows":1}' }), /rows/)
+  assert.ok(buildDoc({ type: 'table', code: '[{"a":1}]' }).includes("sx.table('#sx-a',[{"))
 })
 
 test('buildDoc: CSP, scripts allowed only inline, no app chrome, invalid JSON throws', () => {
@@ -94,7 +110,7 @@ test('cleanArtifactSave: shape, name sanitised, size capped', () => {
 })
 
 test('prompt teaches the syntax and the host passes it to the engine', async () => {
-  for (const s of ['artifact title=', 'type="chart"', 'type="table"', 'var(--fg)', 'four backticks']) assert.ok(ARTIFACT_PROMPT.includes(s), s)
+  for (const s of ['artifact title=', 'type="chart"', 'type="table"', 'var(--fg)', 'four backticks', 'data-chart', 'data-reply', 'sx.drop']) assert.ok(ARTIFACT_PROMPT.includes(s), s)
   const host = await readFile(new URL('../electron/host/host.mjs', import.meta.url), 'utf8')
   assert.match(host, /appendPrompt: ARTIFACT_PROMPT/)
 })
