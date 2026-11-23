@@ -256,7 +256,7 @@ test('model costs carry cache read 0.1x and 5-minute write 1.25x of input; setti
   const { withCacheCost } = await import('../electron/host/claude-engine.mjs')
   const { cleanSettingsPatch } = await import('../electron/host/validate.mjs')
   assert.deepEqual(withCacheCost({ input: 4, output: 20 }), { input: 4, output: 20, cacheRead: 0.4, cacheWrite: 5 })
-  const ok = { useClaudeConfig: true, callMe: 'A', customInstructions: 'x', responseStyle: 'concise', verbosity: 'v', folderAccess: ['/a'], capabilities: { web: false } }
+  const ok = { useClaudeConfig: true, callMe: 'A', customInstructions: 'x', responseStyle: 'concise', verbosity: 'verbose', folderAccess: ['/a'], capabilities: { web: false } }
   assert.deepEqual(cleanSettingsPatch(ok), ok)
   assert.deepEqual(cleanSettingsPatch({ useClaudeConfig: 'y', responseStyle: 'loud', folderAccess: [1], capabilities: { evil: true } }), {})
 })

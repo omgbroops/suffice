@@ -32,16 +32,6 @@ export type Settings = {
   /** prompt behind Notes > Generate notes */
   notesPrompt?: string
   theme?: 'system' | 'light' | 'dark'
-  /** false (default): Claude Code ignores the user's ~/.claude CLAUDE.md, settings, hooks, plugins, skills and MCP servers */
-  useClaudeConfig?: boolean
-  callMe?: string
-  customInstructions?: string
-  responseStyle?: 'concise' | 'normal' | 'explanatory'
-  /** UI only */
-  verbosity?: string
-  /** extra directories the agent may read and write */
-  folderAccess?: string[]
-  capabilities?: { web?: boolean; browser?: boolean; computer?: boolean; mcp?: boolean }
   engineAuto?: boolean
   defaultProvider?: string
   profileName?: string
@@ -51,6 +41,7 @@ export type Settings = {
   reduceMotion?: boolean
   customInstructions?: string
   responseStyle?: 'concise' | 'normal' | 'explanatory'
+  /** false (default): Claude Code ignores the user's ~/.claude CLAUDE.md, settings, hooks, plugins, skills and MCP servers */
   useClaudeConfig?: boolean
   verbosity?: 'quiet' | 'normal' | 'verbose'
   folderAccess?: string[]
