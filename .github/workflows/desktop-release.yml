@@ -1,0 +1,21 @@
+name: desktop-release
+on:
+  workflow_dispatch:
+jobs:
+  macos-dmg:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: bun install --frozen-lockfile
+      - run: bun run desktop:installer
+      - run: bun run desktop:verify
+      - uses: actions/upload-artifact@v4
+        with:
+          name: suffice-macos-arm64-dmg
+          path: |
+            release/*.dmg
+            release/SHA256SUMS.txt
