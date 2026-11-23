@@ -13,7 +13,7 @@ const ok=async p=>access(p).then(()=>true,()=>false);
 async function check(app,file,seen=new Set()){
  if(seen.has(file))return;seen.add(file);
  const src=await readFile(file,'utf8');
- for(const m of src.matchAll(/(?:from\s*|import\s*\(\s*|import\s+)['"]([^'"]+)['"]/g)){const s=m[1];
+ for(const m of src.matchAll(/(?<![\w$"'.])(?:from\s*|import\s*\(\s*|import\s+)['"]([^'"]+)['"]/g)){const s=m[1];
   if(s.startsWith('.')){const t=resolve(dirname(file),s);if(!await ok(t))throw new Error('Unresolved import '+s+' in '+file);if(/\.m?js$/.test(t))await check(app,t,seen);}
   else if(!s.startsWith('node:')&&s!=='electron'){const name=s.split('/').slice(0,s.startsWith('@')?2:1).join('/');if(!await ok(join(app,'node_modules',name,'package.json')))throw new Error('Missing package '+name+' for '+file);}}
 }
