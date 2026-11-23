@@ -4,7 +4,7 @@ import { resolve, dirname, posix } from 'node:path';
 import { createAgentSession, DefaultResourceLoader, SettingsManager, SessionManager, createCodemodeExtension } from '@earendil-works/pi-coding-agent';
 import { filesIn, readText, workspaceTools, hash } from './workspace.mjs';
 import { createWatcher } from './watchers.mjs';
-import { stateDir } from './runtime.mjs';
+import { stateDir , getCatalogModel } from './runtime.mjs';
 import { plannedReads } from './planned-reads.mjs';
 import { Type } from 'typebox';
 import { buildCodeGraph, rankGraphCandidates } from './code-graph.mjs';
@@ -386,7 +386,7 @@ export async function runAgent({ runtime, workspace, runDir, task, variant, time
   try {
     await resourceLoader.reload();
     const created = await createAgentSession({ cwd: workspace, agentDir: resolve(stateDir, 'empty-agent'), modelRuntime: runtime,
-      model: runtime.getModel('openai', variant.model ?? 'gpt-6.1-sol'), thinkingLevel,
+      model: getCatalogModel(runtime, 'openai', variant.model ?? 'gpt-6.1-sol'), thinkingLevel,
       resourceLoader, settingsManager: settings, sessionManager: SessionManager.inMemory(workspace),
       tools: [...toolNames.filter(n => !variant.readOnly || !['file_edit', 'file_write'].includes(n)), ...(codemode ? ['codemode'] : [])],
       customTools: [...tools, historyTool],
@@ -458,7 +458,7 @@ export async function runBasePi({ runtime, workspace, runDir, task, timeoutMs = 
   try {
     await resourceLoader.reload();
     const created = await createAgentSession({ cwd: workspace, agentDir: resolve(stateDir, 'empty-agent'), modelRuntime: runtime,
-      model: runtime.getModel('openai', model), thinkingLevel,
+      model: getCatalogModel(runtime, 'openai', model), thinkingLevel,
       resourceLoader, settingsManager: settings, sessionManager: SessionManager.inMemory(workspace) });
     session = created.session;
     await session.bindExtensions({});

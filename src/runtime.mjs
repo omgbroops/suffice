@@ -28,3 +28,15 @@ export async function createRuntime() {
 export function safeError(error) {
   return { name: error?.name ?? 'Error', code: error?.code ?? 'unknown' };
 }
+
+// Some catalog entries (e.g. gpt-6.2-sol) are excluded by the provider's
+// availability probe even though they answer requests fine. Fall back to the
+// pinned catalog when getModel reports a known id as unavailable.
+export function getCatalogModel(runtime, provider, id) {
+  const found = runtime.getModel(provider, id);
+  if (found) return found;
+  try {
+    const catalog = JSON.parse(readFileSync(resolve(stateDir, 'pi/catalog.json'), 'utf8'));
+    return (catalog[provider]?.models ?? []).find(m => m.id === id) ?? null;
+  } catch { return null; }
+}
