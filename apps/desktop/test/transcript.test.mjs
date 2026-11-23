@@ -178,3 +178,11 @@ test('a shell step is named by the real work: Claude Code description first, the
   assert.equal(r.verb, 'Ran a script'); assert.equal(r.meta, 't.py')
   assert.equal(summarizeCommand('mkdir -p a && mv b a').verb, 'Moved files around')
 })
+
+test('MCP tool steps read as actions, not mcp__ names', async () => {
+  const { describeTool } = await import('../shared/transcript.mjs')
+  assert.deepEqual(describeTool('mcp__suffice__browser_navigate', { url: 'https://example.com' }), { verb: 'Opened', meta: 'example.com' })
+  assert.equal(describeTool('mcp__suffice__browser_read_page', {}).verb, 'Read the page')
+  assert.deepEqual(describeTool('mcp__github__create_issue', {}), { verb: 'Create issue', meta: 'github' })
+  assert.equal(describeTool('toolsearch', { query: 'select:x' }).verb, 'Loaded tools')
+})

@@ -230,10 +230,35 @@ export function compactDiff(lines, keep = 2) {
 const str = v => (typeof v === 'string' ? v : '')
 
 /** How a tool call reads in the thread: a verb and what it touched. */
+// Suffice's own browser/computer tools reach Claude Code as mcp__suffice__<tool>
+const SUFFICE_TOOLS = {
+  browser_navigate: i => ({ verb: 'Opened', meta: str(i.url).replace(/^https?:\/\//, '') }),
+  browser_read_page: () => ({ verb: 'Read the page', meta: '' }),
+  browser_get_text: () => ({ verb: 'Read the page', meta: '' }),
+  browser_click: () => ({ verb: 'Clicked', meta: '' }),
+  browser_type: () => ({ verb: 'Typed', meta: '' }),
+  browser_screenshot: () => ({ verb: 'Took a screenshot', meta: '' }),
+  computer_screenshot: () => ({ verb: 'Looked at the screen', meta: '' }),
+  computer_click: () => ({ verb: 'Clicked', meta: '' }),
+  computer_type: () => ({ verb: 'Typed', meta: '' }),
+  computer_key: i => ({ verb: 'Pressed', meta: str(i.key) || str(i.keys) }),
+  computer_snapshot: () => ({ verb: 'Read the app', meta: '' }),
+  computer_apps: () => ({ verb: 'Listed apps', meta: '' }),
+  computer_activate: i => ({ verb: 'Switched to', meta: str(i.app) || str(i.name) }),
+}
+
 export function describeTool(name, input = {}) {
+  const mcp = /^mcp__([^_]+(?:_[^_]+)*?)__(.+)$/.exec(name)
+  if (mcp) {
+    const own = mcp[1] === 'suffice' && SUFFICE_TOOLS[mcp[2]]
+    // another server's tool: its own name in words, never the mcp__ plumbing
+    return own ? own(input ?? {}) : { verb: mcp[2].replace(/_/g, ' ').replace(/^./, c => c.toUpperCase()), meta: mcp[1] }
+  }
   const path = str(input.path) || str(input.file)
   const short = p => p.replace(/\\/g, '/')
   switch (name) {
+    case 'toolsearch':
+      return { verb: 'Loaded tools', meta: '' }
     case 'read':
       return { verb: 'Read', meta: short(path) + (input.offset ? ` #L${input.offset}${input.limit ? `-${input.offset + input.limit}` : ''}` : '') }
     case 'edit':
