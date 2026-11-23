@@ -40,6 +40,11 @@ export function createCliEngine({ push, spawn = nodeSpawn, label, installHint, p
 
   function run(opts) {
     const { threadId, project } = opts
+    // a second run on one thread would untrack the first child: refuse it here, like the host does
+    if (runs.has(threadId)) return Promise.reject(new Error('This thread is already running.'))
+    // spawn reports ENOENT for a missing binary and a missing project alike: check both up front
+    try { accessSync(opts[pathKey], constants.X_OK) } catch { return Promise.reject(new Error(installHint)) }
+    try { accessSync(project) } catch { return Promise.reject(new Error('That project folder is missing.')) }
     return new Promise((resolve, reject) => {
       const { args, env = {}, stdin } = build(opts)
       const child = spawn(opts[pathKey], args, { cwd: project, env: { ...childEnv(), ...env }, stdio: ['pipe', 'pipe', 'pipe'] })
@@ -69,17 +74,17 @@ export function createCliEngine({ push, spawn = nodeSpawn, label, installHint, p
           if (!line) continue
           let m
           try { m = JSON.parse(line) } catch { continue } // a non-JSON line is not ours to act on
-          p.line(m, h)
+          try { p.line(m, h) } catch {} // one malformed event must not kill the run
         }
       })
       child.stderr.on('data', c => (stderr = (stderr + c).slice(-2000)))
       child.stdin.on('error', () => {})
       child.on('error', e => finish(reject, new Error(e.code === 'ENOENT' ? installHint : e.message)))
-      child.on('close', code => {
+      child.on('close', (code, signal) => {
         if (state.aborted) return finish(reject, new Error('Task stopped: cancelled'))
         const { error, totals, sessionId } = p.outcome()
         if (error) return finish(reject, new Error(error))
-        if (code !== 0 || !totals) return finish(reject, new Error(stderr.trim().split('\n').pop() || `${label} exited with code ${code}.`))
+        if (code !== 0 || !totals) return finish(reject, new Error(stderr.trim().split('\n').pop() || (signal ? `${label} was killed (${signal}).` : `${label} exited with code ${code}.`)))
         finish(resolve, { ...totals, sessionId })
       })
       child.stdin.end(stdin ?? '')
@@ -96,7 +101,11 @@ export function createCliEngine({ push, spawn = nodeSpawn, label, installHint, p
       return true
     },
     dispose() {
-      for (const r of runs.values()) { r.aborted = true; r.child.kill('SIGTERM') }
+      for (const r of runs.values()) {
+        r.aborted = true
+        r.child.kill('SIGTERM')
+        r.killTimer ??= setTimeout(() => r.child.kill('SIGKILL'), GRACE_MS)
+      }
     },
   }
 }
