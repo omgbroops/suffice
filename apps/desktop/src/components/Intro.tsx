@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { api, type InitInfo, type ScreenStatus, type Settings } from '../api'
 import { AccountsList } from './Accounts'
 import { Segmented } from './ui'
-import { IconCheck } from '../icons'
+import { IconCheck, IconGitHub } from '../icons'
 import { Dither } from './Dither'
 
 type Style = NonNullable<Settings['responseStyle']>
@@ -25,7 +25,9 @@ export function Intro() {
   const [style, setStyle] = useState<Style>('normal')
   const [theme, setTheme] = useState<'system' | 'light' | 'dark'>('system')
   const [busy, setBusy] = useState(false)
-  const [who, setWho] = useState<{ name: string; avatar: string }>({ name: '', avatar: '' })
+  const [gh, setGh] = useState<{ installed: boolean; login: string | null; avatar: string }>({ installed: true, login: null, avatar: '' })
+  const [code, setCode] = useState<string | null>(null)
+  const [ghError, setGhError] = useState('')
 
   useEffect(() => {
     document.documentElement.classList.add('is-intro')
@@ -35,8 +37,31 @@ export function Intro() {
       setStyle(i.settings.responseStyle ?? 'normal')
       setTheme(i.settings.theme ?? 'system')
     }, () => {})
-    api.gitIdentity().then(setWho, () => {})
+    api.githubStatus().then(setGh, () => {})
   }, [])
+
+  // gh finishes the device flow on its own; watch for the account while the code is up
+  useEffect(() => {
+    if (!code) return
+    const t = setInterval(() => api.githubStatus().then(g => {
+      setGh(g)
+      if (g.login) (setCode(null), setStep(1))
+      else if (!g.waiting) (setCode(null), setGhError('GitHub sign-in stopped. Try again.'))
+    }, () => {}), 1500)
+    return () => clearInterval(t)
+  }, [code])
+  const signIn = async () => {
+    if (gh.login) return setStep(1)
+    setGhError('')
+    try {
+      const r = await api.githubLogin()
+      if (!r.installed) setGhError('Install GitHub CLI first, then sign in.')
+      else setCode(r.code)
+    } catch (e) {
+      setGhError((e as Error).message)
+    }
+  }
+  const cancelSignIn = () => (setCode(null), void api.githubCancel().catch(() => {}))
 
   // macOS has no event for these grants; poll while the step is open
   useEffect(() => {
@@ -48,7 +73,8 @@ export function Intro() {
   }, [step])
 
   const first = (info?.settings.profileName ?? '').trim().split(/\s+/)[0] ?? ''
-  const holder = info?.settings.profileName?.trim() || who.name || 'You'
+  const holder = info?.settings.profileName?.trim() || gh.login || 'You'
+  const avatar = gh.avatar
   const both = screen.accessibility && screen.screen
   const canNext = step !== 1 || connected
   const finish = async () => {
@@ -63,6 +89,7 @@ export function Intro() {
   }
   const next = async () => {
     if (!canNext) return
+    if (step === 0) return void signIn()
     if (step === 2 && both && info) await api.updateSettings({ capabilities: { ...info.settings.capabilities, browser: true, computer: true } }).catch(() => {})
     if (step === STEPS.length - 1) return void finish()
     setStep(s => s + 1)
@@ -79,13 +106,36 @@ export function Intro() {
     void api.updateSettings({ theme: t }).catch(() => {})
   }
 
-  const label = step === 0 ? "Let's go" : step === STEPS.length - 1 ? 'Start' : 'Continue'
+  const label = step === STEPS.length - 1 ? 'Start' : 'Continue'
   return (
     <div className="intro">
       <div className="intro-card">
         <div className="intro-steps" aria-hidden>{STEPS.map((n, i) => <i key={n} className={i <= step ? 'is-on' : undefined} />)}</div>
         <section className="intro-copy" key={step}>
-          {step === 0 && <h1 className="intro-hello">Welcome to Suffice{first ? `, ${first}` : ''}.</h1>}
+          {step === 0 && (
+            <>
+              <h1 className="intro-hello">Welcome to Suffice{first ? `, ${first}` : ''}.</h1>
+              <div className="intro-auth">
+                {code ? (
+                  <>
+                    <div className="intro-code" aria-label="GitHub code">{code}</div>
+                    <div className="intro-auth-row">
+                      <button className="intro-link" onClick={() => window.open('https://github.com/login/device')}>Open GitHub</button>
+                      <button className="intro-link" onClick={cancelSignIn}>Cancel</button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <button className="btn btn-primary intro-gh" onClick={() => void signIn()}>
+                      <IconGitHub size={16} />{gh.login ? `Continue as ${gh.login}` : 'Sign in with GitHub'}<kbd>↩</kbd>
+                    </button>
+                    <button className="intro-link" onClick={() => setStep(1)}>Continue without an account</button>
+                  </>
+                )}
+                {ghError && <p className="intro-error">{ghError}</p>}
+              </div>
+            </>
+          )}
           {step === 1 && info && (
             <>
               <h1>Connect your models</h1>
@@ -127,20 +177,20 @@ export function Intro() {
               </div>
             </>
           )}
-          <footer className="intro-foot">
+          {step > 0 && <footer className="intro-foot">
             <button className="btn btn-primary intro-go" onClick={() => void next()} disabled={!canNext || busy}>
               {label} <kbd>↩</kbd>
             </button>
             {step === 2 && !both && <button className="intro-link" onClick={() => setStep(3)}>Skip for now</button>}
-            {step > 0 && <button className="intro-link intro-back" onClick={() => setStep(s => s - 1)}>Back</button>}
-          </footer>
+            <button className="intro-link intro-back" onClick={() => setStep(s => s - 1)}>Back</button>
+          </footer>}
         </section>
         <aside className="intro-stage" aria-hidden key={`s${step}`}>
           {step === 0 ? (
             <div className="intro-pass">
               <div className="intro-pass-art"><Dither /></div>
               <div className="intro-pass-body">
-                <div className="intro-pass-name">{who.avatar && <img src={who.avatar} alt="" />}{holder}</div>
+                <div className="intro-pass-name">{avatar && <img src={avatar} alt="" />}{holder}</div>
                 <div className="intro-pass-meta">{info?.defaultLabel ?? 'No model yet'}</div>
                 <div className="intro-pass-foot"><span className="logo">[suffice]</span><span>{new Date().toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span></div>
               </div>

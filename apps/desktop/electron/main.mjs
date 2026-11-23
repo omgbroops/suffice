@@ -4,7 +4,8 @@ import { writeFile } from 'node:fs/promises'
 import { dirname, join, relative, resolve, sep } from 'node:path'
 import { createHost } from './host/host.mjs'
 import { inside } from './host/notes.mjs'
-import { account } from './host/git.mjs'
+import { account, githubLogin } from './host/git.mjs'
+import { findBin } from './host/accounts.mjs'
 import { cleanArtifactSave } from './host/validate.mjs'
 import { CSP, decodeArtifactUrl } from '../shared/artifacts.mjs'
 
@@ -103,6 +104,7 @@ function createIntro() {
   else void intro.loadFile(resolve(here, '..', 'dist', 'index.html'), { hash: 'intro' })
 }
 
+let ghLogin = null // the one gh device-flow sign-in in flight
 const darwin = process.platform === 'darwin'
 const PANES = { accessibility: 'Privacy_Accessibility', screen: 'Privacy_ScreenCapture' }
 const screenStatus = () => ({
@@ -177,6 +179,23 @@ const handlers = {
     await shell.openExternal(`x-apple.systempreferences:com.apple.preference.security?${PANES[kind]}`)
     return screenStatus()
   },
+  'github:status': async () => {
+    const a = await account()
+    return { installed: !!findBin('gh'), login: a.name.startsWith('@') ? a.name : null, avatar: a.avatar, waiting: !!ghLogin }
+  },
+  'github:login': async () => {
+    ghLogin?.cancel()
+    const login = githubLogin(() => (ghLogin = null))
+    if (!login) {
+      await shell.openExternal('https://cli.github.com')
+      return { installed: false, code: null }
+    }
+    ghLogin = login
+    const code = await login.code
+    await shell.openExternal('https://github.com/login/device')
+    return { installed: true, code }
+  },
+  'github:cancel': () => void (ghLogin?.cancel(), (ghLogin = null)),
   'intro:done': async () => {
     await host.updateSettings({ onboarded: true })
     const intro = win

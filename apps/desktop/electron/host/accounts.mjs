@@ -67,7 +67,7 @@ export const DEFAULTS = { claude: { engine: 'claude', model: 'claude-opus-5-5', 
 export const label = id => DEFAULTS[id]?.label ?? [...CLI, ...KEYS.map(k => ({ ...k, id: `key:${k.id}`, name: `${k.name} key` }))].find(p => p.id === id)?.name ?? id
 
 export function findBin(name, env = process.env, home = homedir()) {
-  const dirs = [...(env.PATH ?? '').split(delimiter), join(home, '.local', 'bin'), '/opt/homebrew/bin', join(home, '.opencode', 'bin')].filter(Boolean)
+  const dirs = [...(env.PATH ?? '').split(delimiter), join(home, '.local', 'bin'), join(home, '.local', 'share', 'mise', 'shims'), '/opt/homebrew/bin', '/usr/local/bin', join(home, '.opencode', 'bin')].filter(Boolean)
   for (const d of dirs) {
     try {
       accessSync(join(d, name), constants.X_OK)
