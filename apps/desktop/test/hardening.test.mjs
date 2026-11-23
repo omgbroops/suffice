@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { getEventListeners } from 'node:events'
-import { mkdir, mkdtemp, readdir, readFile, rm, writeFile } from 'node:fs/promises'
+import { mkdir, mkdtemp, readdir, readFile, realpath, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { hash } from '@suffice/harness'
@@ -80,6 +80,17 @@ test('ipc: notes:read stays inside the project', async () => {
     await host.setProject(project)
     await assert.rejects(host.readNote({ project, path: '../secret.md' }))
     await assert.rejects(host.readNote({ project: home, path: 'secret.md' }), /Open that project/)
+  } finally { await host.dispose(); await done() }
+})
+
+test('projects:default makes <home>/default and selects it', async () => {
+  const { host, home, done } = await setup()
+  try {
+    const r = await host.defaultProject()
+    const want = join(await realpath(home), 'default')
+    assert.equal(r.project, want)
+    assert.ok((await readdir(home)).includes('default'))
+    assert.equal((await host.init()).settings.project, want)
   } finally { await host.dispose(); await done() }
 })
 

@@ -70,6 +70,7 @@ export const api = {
   logout: () => bridge().invoke<{ signedIn: boolean }>('auth:logout'),
   models: () => bridge().invoke<ModelInfo[]>('models:list'),
   chooseProject: () => bridge().invoke<{ project: string; projects: string[] } | null>('projects:choose'),
+  defaultProject: () => bridge().invoke<{ project: string; projects: string[] }>('projects:default'),
   setProject: (path: string) => bridge().invoke<{ project: string; projects: string[] }>('projects:set', { path }),
   threads: (project: string) => bridge().invoke<ThreadSummary[]>('threads:list', { project }),
   pickFiles: (project: string | null) => bridge().invoke<string[]>('files:pick', { project }),

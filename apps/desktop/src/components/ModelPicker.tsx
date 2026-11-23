@@ -33,6 +33,8 @@ function relativeCost(models: ModelInfo[]) {
   return (m: ModelInfo) => (blended(m) > 0 && hi > lo ? (Math.log(blended(m)) - lo) / (hi - lo) : 0)
 }
 
+// Priority tier is OpenAI's priority processing; engines that list their modes (Claude Code) have no such tier
+const priorityOk = (models: ModelInfo[]) => !models[0]?.modes
 const effortIn = (m: ModelInfo | undefined, wanted?: string) => (!m?.efforts.length ? undefined : m.efforts.includes(wanted ?? '') ? wanted : m.efforts.includes('low') ? 'low' : m.efforts[0])
 
 function CostMeter({ cost }: { cost: number }) {
@@ -196,7 +198,7 @@ function ModeDetail({ mode, p, costOf, maxHeight }: { mode: Mode; p: PickerProps
         </div>
       )}
       {mode === 'efficient' && p.cheap === p.value && <div className="mp-detail-sub mp-warn">The lead and cheap model are the same, so escalating changes nothing. Pick a stronger lead.</div>}
-      {lead && (
+      {lead && priorityOk(p.models) && (
         <div className="mp-field">
           <span>Priority tier</span>
           <Switch on={!!p.fast[lead.id]} onChange={v => p.onFast(lead.id, v)} label="Priority tier" />
@@ -221,7 +223,6 @@ function ModeDetail({ mode, p, costOf, maxHeight }: { mode: Mode; p: PickerProps
           <Prices m={lead} />
         </>
       ) : null}
-      {mode !== 'balanced' && <div className="mp-detail-sub mp-escalate">Attempts run on a copy of the project. The winning changes are applied back without asking.</div>}
     </div>
   )
 }
@@ -236,10 +237,12 @@ function ModelDetail({ m, p, cost, maxHeight }: { m: ModelInfo; p: PickerProps; 
       </div>
       
       <Effort m={m} value={effort} onChange={e => p.onEffort(m.id, e)} />
-      <div className="mp-field">
-        <span>Priority tier</span>
-        <Switch on={!!p.fast[m.id]} onChange={v => p.onFast(m.id, v)} label="Priority tier" />
-      </div>
+      {priorityOk(p.models) && (
+        <div className="mp-field">
+          <span>Priority tier</span>
+          <Switch on={!!p.fast[m.id]} onChange={v => p.onFast(m.id, v)} label="Priority tier" />
+        </div>
+      )}
       <div className="mp-rule" />
       <Scale cost={cost} />
       <Prices m={m} />
@@ -421,7 +424,16 @@ export function ModelPicker(p: PickerProps) {
                   aria-label="Search models"
                   onChange={e => setQuery(e.target.value)}
                   onKeyDown={e => {
-                    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                    // nothing typed: left/right step the hovered model's effort; while typing they move the caret
+                    if (!query && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+                      const m = byId.get(hi) ?? (hi.startsWith('mode:') && hi !== 'mode:fast' ? current : undefined)
+                      const cur = m && effortIn(m, efforts[m.id])
+                      if (m && cur) {
+                        e.preventDefault()
+                        const i = m.efforts.indexOf(cur) + (e.key === 'ArrowRight' ? 1 : -1)
+                        if (i >= 0 && i < m.efforts.length) p.onEffort(m.id, m.efforts[i])
+                      }
+                    } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
                       e.preventDefault()
                       move(e.key === 'ArrowDown' ? 1 : -1)
                     } else if (e.key === 'Enter') {
