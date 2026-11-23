@@ -2,7 +2,7 @@ import { Fragment, useContext, useEffect, useLayoutEffect, useMemo, useRef, useS
 import { compactDiff, describeTool, groupSteps, patchLines, visibleSteps, type StepGroup, type AgentMessage as Agent, type ApprovalStep, type RaceStep, type Step, type ToolStep, type Transcript } from '../../shared/transcript.mjs'
 import type { Status } from '../data'
 import { IconChevronDown } from '../icons'
-import { classify, readFence } from '../../shared/artifacts.mjs'
+import { classify, readFence, wrappedArtifact } from '../../shared/artifacts.mjs'
 import { ArtifactCard, ArtifactCtx } from './Artifact'
 import { CopyButton, Elapsed, StatusGlyph } from './ui'
 import { Live } from './Live'
@@ -43,8 +43,11 @@ export function Prose({ text, onLink }: { text: string; onLink?: (href: string) 
   while (i < lines.length) {
     const line = lines[i]
     if (/^```/.test(line)) {
-      const f = readFence(lines, i)
+      const inner = artifacts ? wrappedArtifact(lines, i) : -1
+      const f = readFence(lines, inner >= 0 ? inner : i)
       i = f.next
+      // the outer wrapper's closing fence, if the model added one, is not a new code block
+      if (inner >= 0 && /^`{3,}\s*$/.test(lines[i] ?? '')) i++
       const code = f.body.join('\n')
       const art = artifacts ? classify(f.info, code, f.complete) : null
       blocks.push(

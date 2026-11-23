@@ -98,3 +98,18 @@ test('prompt teaches the syntax and the host passes it to the engine', async () 
   const host = await readFile(new URL('../electron/host/host.mjs', import.meta.url), 'utf8')
   assert.match(host, /appendPrompt: ARTIFACT_PROMPT/)
 })
+
+test('an artifact wrapped in an outer ``` or ```markdown fence is still found, and the stray closer is not a block', async () => {
+  const { wrappedArtifact, readFence, classify } = await import('../shared/artifacts.mjs')
+  for (const outer of ['```', '```markdown']) {
+    const lines = [outer, '```artifact type=chart title="W"', '{"kind":"bar","x":["a"],"series":[{"name":"n","values":[1]}]}', '```', '```']
+    const at = wrappedArtifact(lines, 0)
+    assert.equal(at, 1)
+    const f = readFence(lines, at)
+    assert.equal(classify(f.info, f.body.join('\n'), f.complete).type, 'chart')
+    assert.equal(f.next, 4)
+    assert.ok(/^`{3,}\s*$/.test(lines[f.next]))
+  }
+  assert.equal(wrappedArtifact(['```python', '```artifact type=html'], 0), -1)
+  assert.equal(wrappedArtifact(['```', 'print(1)', '```'], 0), -1)
+})

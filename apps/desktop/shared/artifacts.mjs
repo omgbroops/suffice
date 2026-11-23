@@ -19,6 +19,12 @@ export function readFence(lines, i) {
   return { info: m[2].trim(), body, next: j, complete: false }
 }
 
+/** Models sometimes wrap an artifact in an outer ``` / ```markdown fence. Returns the index of the inner artifact
+ *  opener when lines[i] is such a wrapper, else -1; the wrapper's stray closing fence is then dropped by the caller. */
+export function wrappedArtifact(lines, i) {
+  return /^`{3,}\s*(markdown|md|text)?\s*$/i.test(lines[i]) && /^`{3,}\s*artifact\b/i.test(lines[i + 1] ?? '') ? i + 1 : -1
+}
+
 /** title="..." type=chart, quotes optional */
 export function parseAttrs(s) {
   const out = {}
