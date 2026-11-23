@@ -8,6 +8,6 @@ Write an artifact as a fenced block whose info line is: artifact title="Short ti
 - type="chart": JSON only: {"kind":"bar|line|area","x":["Mon","Tue"],"series":[{"name":"Sales","values":[3,5]}]}. One number per x for every series, at most 8 series.
 - type="table": JSON only: an array of row objects, or {"columns":["A","B"],"rows":[[1,2]]}. Columns are sortable.
 
-Style: the page is transparent and follows the app theme. Colour text with var(--fg), secondary text with var(--muted), borders with var(--line), subtle fills with var(--fill). Do not set a page background. Keep it monochrome, calm and compact, with system fonts and no emoji. If the artifact contains a fenced block, open the outer fence with four backticks.
+Style: the page is transparent and follows the app theme. Colour text with var(--fg), secondary text with var(--muted), borders with var(--line), subtle fills with var(--fill). Do not set a page background. Keep it monochrome, calm and compact, with system fonts and no emoji. Open the block directly with the artifact info line, never inside another code block. Only when the artifact's own content contains a triple-backtick fence, use four backticks for the artifact fence.
 
 Give the artifact one short sentence of context before it; do not repeat its contents afterwards.`
