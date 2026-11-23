@@ -306,21 +306,33 @@ export function flow(sx, host, spec) {
   var want = spec.direction === 'TB' ? 'TB' : 'LR', g = place(want)
   // a left-to-right chart wider than the box turns top-down instead of shrinking its text
   if (want === 'LR' && g.w > W) { var g2 = place('TB'); if (g2.w < g.w) g = g2 }
-  var VW = Math.max(W, g.w), VH = g.h, ox = (VW - g.w) / 2, lr = g.dir === 'LR'
+  // loops get their own lanes: shortest span innermost; loops whose layer ranges overlap never share a lane
+  var lanes = []
+  E.filter(function (e) { return e.rev }).sort(function (a, b) { return Math.abs(layer[a.u] - layer[a.v]) - Math.abs(layer[b.u] - layer[b.v]) }).forEach(function (e) {
+    var lo = Math.min(layer[e.u], layer[e.v]), hi = Math.max(layer[e.u], layer[e.v]), k = 0
+    while (lanes[k] && lanes[k].some(function (r) { return lo <= r[1] && r[0] <= hi })) k++
+    ;(lanes[k] = lanes[k] || []).push([lo, hi]); e.lane = k
+  })
+  // room for the loops outside the node grid: each side holds its outermost lane plus a label
+  var room = function (side) { var m = -1; E.forEach(function (e) { if (e.rev && (e.lane % 2 ? -1 : 1) === side) m = Math.max(m, Math.floor(e.lane / 2)) }); return m < 0 ? 0 : (44 + 34 * m) * 0.75 + 18 }
+  var r1 = room(1), r2 = room(-1), lr = g.dir === 'LR'
+  var VW = Math.max(W, g.w + (lr ? 0 : 2 * Math.max(r1, r2))), VH = g.h + (lr ? r1 + r2 : 0), ox = (VW - g.w) / 2, oy = lr ? r2 : 0
+
   var s0 = sx.svg(host, VW, VH, spec.title), svg = s0.svg
   var mid = 'sxa' + Math.floor(Math.random() * 1e9)
   var defs = sx.el('defs', {}, svg), mk = sx.el('marker', { id: mid, viewBox: '0 0 8 8', refX: 7, refY: 4, markerWidth: 8, markerHeight: 8, markerUnits: 'userSpaceOnUse', orient: 'auto-start-reverse' }, defs)
   sx.el('path', { d: 'M0,0.5L7.5,4L0,7.5z', style: 'fill:var(--muted)' }, mk)
   var eg = sx.el('g', {}, svg), ng = sx.el('g', {}, svg), cg = sx.el('g', {}, svg)
   var edgeEls = [], chips = [], nodeEls = []
-  var X = function (v) { return g.P[v][0] + ox }, Y = function (v) { return g.P[v][1] }
+  var X = function (v) { return g.P[v][0] + ox }, Y = function (v) { return g.P[v][1] + oy }
   E.forEach(function (e) {
     var u = e.u, v = e.v, d, mx, my
     if (e.rev) {
       // a back edge (a loop) runs around the side so it never sits on the forward edge between the same nodes
-      var bend = 44
-      if (lr) { var ba = Y(u) + B[u].h / 2, bb = Y(v) + B[v].h / 2 + 1, bx = X(u), bx2 = X(v); d = 'M' + bx + ',' + ba + 'C' + bx + ',' + (ba + bend) + ' ' + bx2 + ',' + (bb + bend) + ' ' + bx2 + ',' + bb; mx = (bx + bx2) / 2; my = Math.max(ba, bb) + bend * 0.75 }
-      else { var ra = X(u) + B[u].w / 2, rb = X(v) + B[v].w / 2 + 1, ry = Y(u), ry2 = Y(v); d = 'M' + ra + ',' + ry + 'C' + (ra + bend) + ',' + ry + ' ' + (rb + bend) + ',' + ry2 + ' ' + rb + ',' + ry2; mx = Math.max(ra, rb) + bend * 0.75; my = (ry + ry2) / 2 }
+      // odd lanes go round the other side (left in top-down, above in left-to-right), so a loop never has to cross another
+      var sg = e.lane % 2 ? -1 : 1, bend = sg * (44 + 34 * Math.floor(e.lane / 2))
+      if (lr) { var ba = Y(u) + sg * B[u].h / 2, bb = Y(v) + sg * (B[v].h / 2 + 1), bx = X(u), bx2 = X(v); d = 'M' + bx + ',' + ba + 'C' + bx + ',' + (ba + bend) + ' ' + bx2 + ',' + (bb + bend) + ' ' + bx2 + ',' + bb; mx = (bx + bx2) / 2; my = (sg > 0 ? Math.max(ba, bb) : Math.min(ba, bb)) + bend * 0.75 }
+      else { var ra = X(u) + sg * B[u].w / 2, rb = X(v) + sg * (B[v].w / 2 + 1), ry = Y(u), ry2 = Y(v); d = 'M' + ra + ',' + ry + 'C' + (ra + bend) + ',' + ry + ' ' + (rb + bend) + ',' + ry2 + ' ' + rb + ',' + ry2; mx = (sg > 0 ? Math.max(ra, rb) : Math.min(ra, rb)) + bend * 0.75; my = (ry + ry2) / 2 }
     } else if (lr) {
       var xa = X(u) + B[u].w / 2, xb = X(v) - B[v].w / 2 - 1, ya = Y(u), yb = Y(v), m = (xa + xb) / 2
       d = 'M' + xa + ',' + ya + 'C' + m + ',' + ya + ' ' + m + ',' + yb + ' ' + xb + ',' + yb; mx = m; my = (ya + yb) / 2

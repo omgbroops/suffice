@@ -165,12 +165,13 @@ export function treemap(sx, host, spec) {
     var r = sx.el('rect', { class: 'sx-mark', x: c.x, y: c.y, width: Math.max(0, c.w), height: Math.max(0, c.h), rx: 3, style: 'fill:' + c.col + ';stroke:var(--surface);stroke-width:2' }, sv)
     sx.hover(r, sx.tipRows(c.it.label, [[sx.fmt(c.it.value, spec.unit), Math.round(c.it.value / tot * 1000) / 10 + '%', c.col]].concat(c.it.gname != null ? [['Group', c.it.gname]] : [])))
     marks.push(r)
-    var lw = c.it.label.length * 6.4 + 14
-    if (c.w >= lw && c.h >= 20) {
+    // a label that does not fit is shortened with an ellipsis down to 3 characters; narrower tiles rely on hover
+    var fit = Math.floor((c.w - 14) / 6.4), name = c.it.label.length <= fit ? c.it.label : fit >= 4 ? c.it.label.slice(0, fit - 1).trimEnd() + '\u2026' : ''
+    if (name && c.h >= 20) {
       // label ink for a coloured fill: white, dark on yellow (palette rule); --on-cN pairs with --cN
       var on = /--c\d/.test(c.col) ? c.col.replace('--c', '--on-c') : 'var(--fg)'
-      var t = sx.el('text', { class: 'sx-label', x: c.x + 8, y: c.y + 16, style: 'fill:' + on }, sv); t.textContent = c.it.label
-      if (c.h >= 38) { var v = sx.el('text', { class: 'sx-tick', x: c.x + 8, y: c.y + 31, style: 'fill:' + on + ';fill-opacity:.75' }, sv); v.textContent = sx.fmt(c.it.value, spec.unit) }
+      var t = sx.el('text', { class: 'sx-label', x: c.x + 8, y: c.y + 16, style: 'fill:' + on }, sv); t.textContent = name
+      if (c.h >= 38 && c.w >= sx.fmt(c.it.value, spec.unit).length * 6 + 14) { var v = sx.el('text', { class: 'sx-tick', x: c.x + 8, y: c.y + 31, style: 'fill:' + on + ';fill-opacity:.75' }, sv); v.textContent = sx.fmt(c.it.value, spec.unit) }
     }
   })
   sx.enter(marks, 'sx-fade', Math.max(6, 300 / marks.length))

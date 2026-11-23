@@ -14,6 +14,14 @@ export function kitCore(w, id) {
   // ---- dom helpers
   var $ = function (t) { return typeof t === 'string' ? d.querySelector(t) : t }
   sx.$ = $
+  var mctx
+  /** Rendered width of a tick label (11 px in the page font), measured on a canvas. */
+  sx.textW = function (s, px) {
+    if (mctx == null) try { mctx = d.createElement('canvas').getContext('2d') || false } catch (e) { mctx = false }
+    if (!mctx) return String(s).length * 6.4 * (px || 11) / 11
+    mctx.font = (px || 11) + 'px ' + w.getComputedStyle(d.body).fontFamily
+    return mctx.measureText(String(s)).width
+  }
   sx.esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] }) }
   sx.el = function (tag, attrs, parent) {
     var e = d.createElementNS(NS, tag)
@@ -176,7 +184,9 @@ export function kitCore(w, id) {
       var n = opts.x.length, pw = (W - L - R) / n
       bw = pw
       X = function (i) { return L + pw * (i + 0.5) }
-      var every = Math.ceil(n / Math.max(2, Math.floor((W - L - R) / 64)))
+      // thin labels only as far as the widest one needs, plus a 10 px gap
+      var need = Math.max.apply(null, opts.x.map(function (s) { return sx.textW(s) })) + 10
+      var every = Math.max(1, Math.ceil(need / pw))
       opts.x.forEach(function (lab, i) {
         if (i % every) return
         var t = sx.el('text', { class: 'sx-tick', x: X(i), y: H - B + 18, 'text-anchor': 'middle' }, grid)
