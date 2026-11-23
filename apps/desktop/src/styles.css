@@ -1013,3 +1013,14 @@ button.tab { padding-right: 10px; flex: none; }
   }
   .dither { filter: invert(1); opacity: 0.09; }
 }
+
+/* connect accounts */
+.accounts-card { width: min(460px, 100%); }
+.accounts-list { position: static; width: 100%; min-width: 0; box-shadow: none; }
+.accounts-list .menu-row { height: auto; min-height: 36px; }
+.accounts-head { margin: 4px 0 -6px; }
+.accounts-list .btn { height: 24px; padding: 0 8px; margin-left: 8px; font-size: 12px; text-decoration: none; display: inline-flex; align-items: center; }
+.accounts-key input { width: 150px; height: 24px; padding: 0 8px; border: 0; outline: 0; border-radius: 6px; background: var(--fill-input); box-shadow: 0 0 0 1px rgba(var(--wash), calc(0.08 * var(--a))); color: var(--text); font: inherit; }
+.accounts-key input:focus { box-shadow: 0 0 0 1px rgba(var(--wash), calc(0.18 * var(--a))); }
+.accounts-foot { display: flex; align-items: center; gap: 12px; }
+.side-user-dot.is-off { background: var(--text-4); }
