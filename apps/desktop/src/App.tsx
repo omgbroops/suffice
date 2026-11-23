@@ -412,7 +412,7 @@ export default function App() {
   }
   const renderThread = (t: Thread & { key: string }) => (
     <ThreadRow key={t.key} t={t} sections={[...new Set(list.filter(x => x.project === t.project && x.section).map(x => x.section!))]} onAct={(a, v) => void actOn(t, a, v)}>
-    <button className={`side-thread${active?.key === t.key ? ' is-active' : ''}`} onClick={() => { if (t.unread) void actOn(t, 'unread', false); go({ kind: 'thread', key: t.key }) }} title={`${t.title} · ${displayName(names, t.project)}`}>
+    <button className={`side-thread${active?.key === t.key ? ' is-active' : ''}`} onClick={() => { if (t.unread) void actOn(t, 'unread', false); go({ kind: 'thread', key: t.key }) }} title={`${t.title} · ${displayName(names, t.project)}${t.description ? `\n\n${t.description}` : ''}`}>
       <span className="side-thread-title">{t.title}</span>
       {t.unread && <span className="side-user-dot" aria-label="Unread" />}
       {/* one trailing slot: live glyph while running, else age */}
@@ -560,6 +560,7 @@ export default function App() {
           <ThreadView
             key={active.key}
             title={active.title}
+            description={active.description}
             status={statusOf(active)}
             transcript={active.transcript}
             project={active.project}

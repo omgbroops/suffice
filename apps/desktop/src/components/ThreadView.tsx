@@ -300,6 +300,7 @@ function AgentMessageView({ msg, project, onApproval }: { msg: Agent; project: s
 
 export function ThreadView({
   title,
+  description,
   status,
   transcript,
   project,
@@ -307,6 +308,8 @@ export function ThreadView({
   onApproval,
 }: {
   title: string
+  /** the model's evolving summary of the thread; shown on hover of the title */
+  description?: string
   status: Status
   transcript: Transcript | undefined
   project: string
@@ -341,7 +344,7 @@ export function ThreadView({
         <span className="thread-crumb">{displayName(names, project)}</span>
         <span className="thread-sep" aria-hidden>/</span>
         {/* no glyph here: the tab and the sidebar row already show this thread's state */}
-        <span className="thread-title">{title}</span>
+        <span className="thread-title" title={description}>{title}</span>
         {status === 'input' && <span className="thread-status">{STATUS_LABEL[status]}</span>}
       </header>
       <div
