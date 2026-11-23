@@ -33,7 +33,7 @@ export const CLAUDE_EFFORTS = ['low', 'medium', 'high', 'xhigh', 'max']
 export function childEnv(base = process.env) {
   const env = { ...base }
   for (const k of Object.keys(env)) {
-    if (/_API_KEY$/i.test(k) || /^(ANTHROPIC_AUTH_TOKEN|CLAUDE_CODE_USE_(BEDROCK|VERTEX|FOUNDRY))$/.test(k)) delete env[k]
+    if (/API_KEY/i.test(k) || /^(ANTHROPIC_AUTH_TOKEN|CLAUDE_CODE_USE_(BEDROCK|VERTEX|FOUNDRY))$/.test(k)) delete env[k]
   }
   return env
 }
