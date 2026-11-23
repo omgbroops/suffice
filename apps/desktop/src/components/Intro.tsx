@@ -3,6 +3,7 @@ import { api, type InitInfo, type ScreenStatus, type Settings } from '../api'
 import { AccountsList } from './Accounts'
 import { Segmented } from './ui'
 import { IconCheck } from '../icons'
+import { Dither } from './Dither'
 
 type Style = NonNullable<Settings['responseStyle']>
 const STEPS = ['Welcome', 'Models', 'Screen', 'You'] as const
@@ -24,6 +25,7 @@ export function Intro() {
   const [style, setStyle] = useState<Style>('normal')
   const [theme, setTheme] = useState<'system' | 'light' | 'dark'>('system')
   const [busy, setBusy] = useState(false)
+  const [who, setWho] = useState<{ name: string; avatar: string }>({ name: '', avatar: '' })
 
   useEffect(() => {
     document.documentElement.classList.add('is-intro')
@@ -33,6 +35,7 @@ export function Intro() {
       setStyle(i.settings.responseStyle ?? 'normal')
       setTheme(i.settings.theme ?? 'system')
     }, () => {})
+    api.gitIdentity().then(setWho, () => {})
   }, [])
 
   // macOS has no event for these grants; poll while the step is open
@@ -44,6 +47,8 @@ export function Intro() {
     return () => clearInterval(t)
   }, [step])
 
+  const first = (info?.settings.profileName ?? '').trim().split(/\s+/)[0] ?? ''
+  const holder = info?.settings.profileName?.trim() || who.name || 'You'
   const both = screen.accessibility && screen.screen
   const canNext = step !== 1 || connected
   const finish = async () => {
@@ -78,9 +83,9 @@ export function Intro() {
   return (
     <div className="intro">
       <div className="intro-card">
-        <div className="intro-progress" aria-hidden><i style={{ width: `${((step + 1) / STEPS.length) * 100}%` }} /></div>
+        <div className="intro-steps" aria-hidden>{STEPS.map((n, i) => <i key={n} className={i <= step ? 'is-on' : undefined} />)}</div>
         <section className="intro-copy" key={step}>
-          {step === 0 && <h1 className="intro-hello">Welcome</h1>}
+          {step === 0 && <h1 className="intro-hello">Welcome to Suffice{first ? `, ${first}` : ''}.</h1>}
           {step === 1 && info && (
             <>
               <h1>Connect your models</h1>
@@ -131,14 +136,18 @@ export function Intro() {
           </footer>
         </section>
         <aside className="intro-stage" aria-hidden key={`s${step}`}>
+          {step === 0 ? (
+            <div className="intro-pass">
+              <div className="intro-pass-art"><Dither /></div>
+              <div className="intro-pass-body">
+                <div className="intro-pass-name">{who.avatar && <img src={who.avatar} alt="" />}{holder}</div>
+                <div className="intro-pass-meta">{info?.defaultLabel ?? 'No model yet'}</div>
+                <div className="intro-pass-foot"><span className="logo">[suffice]</span><span>{new Date().toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span></div>
+              </div>
+            </div>
+          ) : (
           <div className="intro-mock">
             <div className="intro-mock-bar"><i /><i /><i /></div>
-            {step === 0 && (
-              <div className="intro-mock-home">
-                <span className="logo">[suffice]</span>
-                <div className="intro-mock-composer">Fix the failing test in parse.ts</div>
-              </div>
-            )}
             {step === 1 && (
               <div className="intro-mock-pick">
                 <div className="intro-mock-row is-on">Claude Code · Opus 5.5</div>
@@ -161,6 +170,7 @@ export function Intro() {
               </div>
             )}
           </div>
+          )}
         </aside>
       </div>
     </div>
