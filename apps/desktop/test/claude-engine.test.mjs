@@ -172,7 +172,8 @@ test('claude engine: API keys and auth tokens never reach the child', async () =
     assert.deepEqual(env, [])
   } finally { await t.cleanup() }
   const e = childEnv({ ...bad, KEEP_ME: '1', PATH: '/x' })
-  assert.deepEqual(Object.keys(e).sort(), ['KEEP_ME', 'PATH'])
+  // every key in `bad` is gone; USER is added on purpose (the CLI needs it to find its login)
+  assert.deepEqual(Object.keys(e).sort(), ['KEEP_ME', 'PATH', 'USER'])
 })
 
 test('host on the claude engine: models, modes, mode refusal, login hint and a full run', async () => {
@@ -213,4 +214,11 @@ test('host on the claude engine: models, modes, mode refusal, login hint and a f
     await t.cleanup()
     await rm(home, { recursive: true, force: true })
   }
+})
+
+test('the child env always carries USER, which the CLI needs to find its login', async () => {
+  const { childEnv } = await import('../electron/host/claude-engine.mjs')
+  const { userInfo } = await import('node:os')
+  assert.equal(childEnv({ PATH: '/bin', HOME: '/h' }).USER, userInfo().username)
+  assert.equal(childEnv({ USER: 'someone' }).USER, 'someone')
 })

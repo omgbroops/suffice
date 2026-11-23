@@ -9,7 +9,7 @@
 
 import { spawn as nodeSpawn, execFile } from 'node:child_process'
 import { accessSync, constants } from 'node:fs'
-import { homedir } from 'node:os'
+import { homedir, userInfo } from 'node:os'
 import { delimiter, join } from 'node:path'
 import { randomUUID } from 'node:crypto'
 
@@ -36,6 +36,8 @@ export function childEnv(base = process.env) {
   for (const k of Object.keys(env)) {
     if (/API_KEY/i.test(k) || /^(ANTHROPIC_AUTH_TOKEN|CLAUDE_CODE_USE_(BEDROCK|VERTEX|FOUNDRY))$/.test(k)) delete env[k]
   }
+  // the CLI finds its login in the macOS Keychain by user name: without USER it reports signed out
+  if (!env.USER) try { env.USER = userInfo().username } catch {}
   return env
 }
 
