@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { EventEmitter } from 'node:events'
-import { mkdir, mkdtemp, readdir, readFile, rm, writeFile, access } from 'node:fs/promises'
+import { chmod, mkdir, mkdtemp, readdir, readFile, rm, writeFile, access } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { hash } from '@suffice/harness'
@@ -158,4 +158,44 @@ test('host openIn: only known targets on known projects', async () => {
     if (process.platform === 'darwin') { await host.openIn({ project, target: 'cursor' }); assert.deepEqual(calls.at(-1), ['app', 'Cursor', project]) }
     assert.deepEqual(calls[0], ['path', project])
   } finally { await done() }
+})
+
+// A fake `claude` for the title call: `auth` says signed in, `-p` answers with a title JSON.
+const TITLE_CLAUDE = `#!/usr/bin/env node
+if (process.argv[2] === 'auth') { console.log(JSON.stringify({ loggedIn: true, authMethod: 'claude.ai' })); process.exit(0) }
+process.stdin.resume()
+process.stdin.on('end', () => { console.log(JSON.stringify({ result: JSON.stringify({ title: 'Slugify helper with tests', description: 'Adds slugify and three tests.' }) })) })
+`
+
+test('host: opening a saved Claude thread with no title asks for one once, then writes meta and transcript', async () => {
+  const home = await mkdtemp(join(tmpdir(), 'suffice-retitle-'))
+  const project = await mkdtemp(join(tmpdir(), 'suffice-retitle-proj-'))
+  try {
+    const bin = join(home, 'claude')
+    await writeFile(bin, TITLE_CLAUDE)
+    await chmod(bin, 0o755)
+    const changed = []
+    const host = await createHost({ engine: 'claude', home, claudePath: bin, openExternal: () => {}, chooseDirectory: async () => project, emit: (c, p) => c === 'threads:changed' && changed.push(p) })
+    const dir = join(home, 'sessions', hash(project).slice(0, 20))
+    await mkdir(dir, { recursive: true })
+    const meta = join(dir, 'abc.claude.json')
+    await writeFile(meta, JSON.stringify({ sessionId: 'abc', project }))
+    const tdir = join(home, 'desktop', 'transcripts')
+    await mkdir(tdir, { recursive: true })
+    const transcript = { version: 1, messages: [{ role: 'user', text: 'add slugify with tests' }, { role: 'agent', steps: [{ kind: 'text', text: 'Done, 3 asserts pass.' }] }] }
+    await writeFile(join(tdir, `${hash(meta).slice(0, 24)}.json`), JSON.stringify(transcript))
+    await host.openThread({ threadId: 'x', path: meta, project })
+    await host.openThread({ threadId: 'y', path: meta, project }) // a second open while waiting adds no second ask
+    await new Promise(r => setTimeout(r, 2600))
+    const saved = JSON.parse(await readFile(meta, 'utf8'))
+    assert.equal(saved.title, 'Slugify helper with tests')
+    assert.equal(saved.sessionId, 'abc')
+    const tr = JSON.parse(await readFile(join(tdir, `${hash(meta).slice(0, 24)}.json`), 'utf8'))
+    assert.equal(tr.title, 'Slugify helper with tests')
+    assert.equal(changed.length, 1)
+    await host.dispose()
+  } finally {
+    await rm(home, { recursive: true, force: true })
+    await rm(project, { recursive: true, force: true })
+  }
 })

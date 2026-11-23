@@ -207,6 +207,17 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     ask: cheapAsk,
     done: async (id, meta) => {
       const thread = live.get(id)
+      // a saved Claude thread retitled on open: its id is the meta file's path
+      if (!thread && !disposed && untitled.has(id)) {
+        untitled.delete(id)
+        const saved = await readJson(id, null)
+        if (!saved || saved.title) return
+        await writeJson(id, { ...saved, ...meta })
+        const tr = await readJson(transcriptPath(id), null)
+        if (tr?.version === 1) await writeJson(transcriptPath(id), { ...tr, title: meta.title, description: meta.description })
+        emit('threads:changed', { project: saved.project })
+        return
+      }
       if (!thread?.path || disposed) return
       thread.transcript = { ...thread.transcript, title: meta.title, description: meta.description }
       if (thread.claude) await writeJson(thread.path, { ...(await readJson(thread.path, {})), ...meta })
@@ -222,6 +233,15 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
       }
     },
   })
+  // Claude threads whose title job was lost (the app quit right after the run) get one more try when opened
+  const untitled = new Set()
+  const retitle = async (path, transcript) => {
+    if (!path.endsWith('.claude.json') || untitled.has(path)) return
+    const first = transcript?.messages?.find(m => m.role === 'user')?.text
+    if (!first || (await readJson(path, {})).title) return
+    untitled.add(path)
+    titler.schedule(path, () => buildInput(transcript), first)
+  }
   const scheduleTitle = id => { const t = live.get(id); if (t) titler.schedule(id, () => buildInput(live.get(id).transcript), t.transcript.messages.find(m => m.role === 'user')?.text ?? '') }
 
   // ---- sign-in -----------------------------------------------------------
@@ -784,7 +804,10 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
       const known = live.get(threadId)?.transcript
       if (known) return known
       str(project, 'project', { optional: true })
-      return openTranscript(sessionPath(path, [project ? sessionDir(home, project) : resolve(home, 'sessions')], knownPaths()))
+      const file = sessionPath(path, [project ? sessionDir(home, project) : resolve(home, 'sessions')], knownPaths())
+      const transcript = await openTranscript(file)
+      void retitle(file, transcript).catch(() => {})
+      return transcript
     },
     logError: (source, error) => errorLog.write(source, error),
     usageSummary: args => {
