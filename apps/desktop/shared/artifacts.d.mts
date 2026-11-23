@@ -1,5 +1,6 @@
 export type ArtifactType = 'html' | 'svg' | 'chart' | 'table'
 export function readFence(lines: string[], i: number): { info: string; body: string[]; next: number; complete: boolean }
+export function wrappedArtifact(lines: string[], i: number): number
 export function classify(info: string, code: string, complete: boolean): { type: ArtifactType; title: string; code: string; complete: boolean } | null
 export function buildDoc(spec: { type: string; code: string }, opts?: { dark?: boolean; id?: string }): string
 export function artifactUrl(doc: string): string
