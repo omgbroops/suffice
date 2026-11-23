@@ -1079,3 +1079,91 @@ body { font-size: calc(13px * var(--ui-zoom, 1)); }
 .thread-menu-key { font: inherit; font-size: 11px; color: var(--text-4); }
 .thread-menu-item.is-danger, .thread-menu-item.is-danger.is-selected { color: var(--red); }
 .thread-menu-input { width: 100%; height: 30px; padding: 0 9px; border-radius: 5px; background: transparent; color: var(--text); font: inherit; border: 0; outline: 0; }
+
+/* settings: account + key rows read as plain settings rows, not a popup menu */
+.set-pane .accounts-list { background: none; box-shadow: none; padding: 0; gap: 0; border-radius: 0; animation: none; }
+.set-pane .accounts-list .menu-row { min-height: 48px; padding: 8px 0; border-radius: 0; background: none; color: var(--text); box-shadow: 0 1px 0 var(--hair); }
+.set-pane .accounts-list .menu-status-val { color: var(--text-3); }
+.set-pane .side-user-dot { background: var(--text-2); }
+.set-pane .side-user-dot.is-off { background: var(--text-4); }
+.set-pane .accounts-head { margin: 24px 0 0; color: var(--text); }
+
+/* first-run intro: a card floating over the desktop (the window itself is transparent) */
+html.is-intro, html.is-intro body, html.is-intro #root { background: transparent; }
+.intro { height: 100vh; padding: 30px; box-sizing: border-box; -webkit-app-region: drag; user-select: none; }
+.intro button, .intro input, .intro a, .intro .intro-accounts, .intro [role="radiogroup"] { -webkit-app-region: no-drag; }
+.intro-card {
+  position: relative; height: 100%; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); overflow: hidden;
+  background: var(--win); border-radius: 16px;
+  box-shadow: 0 0 0 1px rgba(var(--wash), calc(0.1 * var(--a))), 0 24px 60px -12px rgba(0, 0, 0, 0.55), 0 8px 20px -8px rgba(0, 0, 0, 0.4);
+}
+.intro-steps { position: absolute; top: 16px; left: 40px; right: 40px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; z-index: 1; }
+.intro-steps i { height: 6px; border-radius: 3px; background: var(--fill-bar); transition: background 320ms var(--ease); }
+.intro-steps i.is-on { background: var(--text-3); }
+.intro-copy { display: flex; flex-direction: column; gap: 14px; padding: 64px 40px 32px; min-height: 0; animation: intro-in 360ms var(--ease) both; }
+.intro-copy h1 { margin: 0; font-family: var(--pixel); font-size: 28px; line-height: 1.15; font-weight: 400; letter-spacing: 0; color: var(--text); }
+.intro-copy h1.intro-hello { font-size: 40px; line-height: 1.1; }
+.intro-lede { margin: 0; font-size: 14px; color: var(--text-2); }
+.intro-foot { margin-top: auto; display: flex; align-items: center; gap: 14px; }
+.intro-go { height: 34px; padding: 0 14px; gap: 10px; border-radius: 8px; }
+.intro-go kbd { font: inherit; font-size: 12px; opacity: 0.55; }
+.intro-link { align-self: flex-start; padding: 0; background: none; color: var(--text-3); font-size: 12.5px; }
+.intro-link:hover { color: var(--text); }
+.intro-back { margin-left: auto; }
+.intro-accounts { min-height: 0; overflow-y: auto; margin-right: -8px; padding-right: 8px; }
+.intro-accounts .accounts-list { background: none; box-shadow: none; padding: 0; gap: 0; animation: none; }
+.intro-accounts .menu-row { min-height: 44px; padding: 0; border-radius: 0; color: var(--text); box-shadow: 0 1px 0 var(--hair); background: none; }
+.intro-accounts .menu-status-val { color: var(--text-3); }
+.intro-accounts .accounts-key input { width: 130px; }
+.intro-grants { display: grid; margin-top: 4px; }
+.intro-grant { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 56px; box-shadow: 0 1px 0 var(--hair); }
+.intro-grant b { font-weight: 500; color: var(--text); }
+.intro-ok { display: inline-flex; align-items: center; gap: 6px; color: var(--text-2); }
+.intro-field { display: grid; gap: 8px; color: var(--text-2); }
+.intro-field input { height: 32px; padding: 0 10px; border: 0; outline: 0; border-radius: 7px; background: var(--fill-input); box-shadow: 0 0 0 1px rgba(var(--wash), calc(0.08 * var(--a))); color: var(--text); font: inherit; }
+.intro-field input:focus { box-shadow: 0 0 0 1px var(--edge-focus); }
+.intro-field [role="radiogroup"], .intro-field > div { justify-self: start; }
+.intro-stage { position: relative; margin: 40px 12px 12px 0; border-radius: 10px; background: var(--panel); box-shadow: inset 0 0 0 1px rgba(var(--wash), calc(0.06 * var(--a))); display: grid; place-items: center; overflow: hidden; animation: intro-fade 420ms var(--ease) both; }
+.intro-mock { width: 78%; border-radius: 10px; background: var(--win); box-shadow: 0 0 0 1px rgba(var(--wash), calc(0.1 * var(--a))), 0 18px 40px -16px rgba(0, 0, 0, 0.5); overflow: hidden; transform: translateY(0); animation: intro-rise 520ms var(--ease) both; }
+.intro-mock-bar { display: flex; gap: 6px; padding: 10px 12px; }
+.intro-mock-bar i { width: 8px; height: 8px; border-radius: 50%; background: var(--fill-3); }
+.intro-mock-home { display: grid; justify-items: center; gap: 18px; padding: 34px 22px 40px; }
+.intro-mock-composer { width: 100%; box-sizing: border-box; padding: 12px 14px 30px; border-radius: 10px; background: var(--fill-input); box-shadow: 0 0 0 1px rgba(var(--wash), calc(0.08 * var(--a))); color: var(--text-2); font-size: 12.5px; }
+.intro-mock-pick, .intro-mock-steps { display: grid; gap: 2px; padding: 4px 8px 12px; font-size: 12.5px; color: var(--text-2); }
+.intro-mock-row { padding: 8px 10px; border-radius: 6px; }
+.intro-mock-row.is-on { background: var(--fill-2); color: var(--text); }
+.intro-mock-steps > div { padding: 7px 10px; }
+.intro-mock-steps > .is-live { color: var(--text); background: linear-gradient(90deg, var(--text-3), var(--text) 40%, var(--text-3) 60%) 0 0 / 200% 100% text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: intro-shine 1.8s linear infinite; }
+.intro-mock-chat { display: grid; gap: 10px; padding: 6px 14px 18px; font-size: 12.5px; line-height: 1.5; }
+.intro-mock-you { justify-self: end; max-width: 80%; padding: 7px 11px; border-radius: 10px; background: var(--fill-2); color: var(--text); }
+.intro-mock-reply { color: var(--text-2); }
+@keyframes intro-in { from { opacity: 0; transform: translateY(6px); } }
+@keyframes intro-fade { from { opacity: 0; } }
+@keyframes intro-rise { from { opacity: 0; transform: translateY(14px) scale(0.98); } }
+@keyframes intro-shine { to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .intro-pass.is-live .intro-pass-grid i, .intro-copy, .intro-stage, .intro-mock, .intro-mock-steps > .is-live { animation: none; } }
+.intro-foot .intro-link { align-self: center; }
+.intro-pass { width: 400px; border-radius: 14px; overflow: hidden; background: var(--win); box-shadow: 0 0 0 1px rgba(var(--wash), calc(0.1 * var(--a))), 0 24px 50px -18px rgba(0, 0, 0, 0.55); animation: intro-rise 620ms var(--ease) both; }
+.intro-pass-body { display: grid; gap: 6px; padding: 16px 16px 14px; }
+.intro-pass-grid { display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 11px); grid-auto-columns: 11px; gap: 3px; justify-content: center; padding: 20px 16px 16px; box-shadow: 0 1px 0 var(--hair); }
+.intro-pass-grid i { border-radius: 3px; background: rgba(var(--wash), 0.07); }
+.intro-pass-grid i[data-l="1"] { background: rgba(var(--wash), 0.22); }
+.intro-pass-grid i[data-l="2"] { background: rgba(var(--wash), 0.4); }
+.intro-pass-grid i[data-l="3"] { background: rgba(var(--wash), 0.62); }
+.intro-pass-grid i[data-l="4"] { background: rgba(var(--wash), 0.88); }
+.intro-pass.is-live .intro-pass-grid i { animation: intro-cell 420ms var(--ease) both; }
+@keyframes intro-cell { from { opacity: 0; transform: scale(0.4); } }
+.intro-pass-name { display: flex; align-items: center; gap: 10px; color: var(--text); }
+.intro-pass-name img { width: 30px; height: 30px; border-radius: 50%; }
+.intro-pass-name span { display: grid; gap: 1px; }
+.intro-pass-name b { font-size: 15px; font-weight: 500; }
+.intro-pass-name small { color: var(--text-3); font-size: 12px; }
+.intro-pass-meta { color: var(--text-3); font-size: 12px; }
+.intro-pass-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 18px; color: var(--text-3); font: 11px var(--mono); }
+.intro-pass-foot .logo { font-size: 12px; }
+.intro-auth { margin-top: auto; display: grid; justify-items: start; gap: 14px; }
+.intro-gh { height: 40px; padding: 0 16px; gap: 10px; border-radius: 9px; font-size: 14px; }
+.intro-gh kbd { font: inherit; font-size: 12px; opacity: 0.55; }
+.intro-code { font: 32px/1 var(--pixel); letter-spacing: 0.08em; color: var(--text); }
+.intro-auth-row { display: flex; gap: 18px; }
+.intro-error { margin: 0; color: var(--red); font-size: 12.5px; }
