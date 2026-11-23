@@ -1,3 +1,4 @@
+import type { Thread } from '../App'
 import { ProjectOrb } from './Orb'
 import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from 'react'
 import { ago } from '../data'
@@ -37,7 +38,7 @@ export function ProjectEmblem({ path, size = 16, tint, icon, label }: { path: st
   return <ProjectOrb seed={path} size={size} tint={c} label={label ?? displayName(names, path)} />
 }
 
-type Row = { key: string; title: string; project: string; modified: number }
+type Row = Thread & { key: string }
 
 function useDismiss(open: boolean, close: () => void, ref: RefObject<HTMLElement | null>) {
   useEffect(() => {

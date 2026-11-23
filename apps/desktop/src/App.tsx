@@ -14,7 +14,7 @@ import { AutoNamesContext, ColorsContext, IconsContext, NamesContext, ProjectEmb
 import { baseName, displayName, threadsByProject } from './components/groups'
 import { NotesView } from './components/NotesView'
 
-type Thread = {
+export type Thread = {
   key: string
   path?: string
   project: string
