@@ -29,6 +29,7 @@ export function sessionPath(path, dirs, known = []) {
 
 const isMap = (v, ok) => v && typeof v === 'object' && !Array.isArray(v) && Object.values(v).every(ok)
 const isStr = v => typeof v === 'string'
+const isBool = v => typeof v === 'boolean'
 const SETTINGS = {
   project: v => v === null || isStr(v),
   model: isStr,
@@ -46,6 +47,20 @@ const SETTINGS = {
   projectIcons: v => isMap(v, isStr),
   notesPrompt: isStr,
   theme: v => ['system', 'light', 'dark'].includes(v),
+  profileName: v => isStr(v) && v.length <= 100,
+  callMe: v => isStr(v) && v.length <= 100,
+  work: v => isStr(v) && v.length <= 100,
+  fontSize: v => ['small', 'medium', 'large'].includes(v),
+  reduceMotion: isBool,
+  customInstructions: v => isStr(v) && v.length <= 20_000,
+  responseStyle: v => ['concise', 'normal', 'explanatory'].includes(v),
+  useClaudeConfig: isBool,
+  verbosity: v => ['quiet', 'normal', 'verbose'].includes(v),
+  folderAccess: v => Array.isArray(v) && v.length <= 200 && v.every(x => isStr(x) && x && x.length <= 4096 && !x.includes('\0')),
+  capabilities: v => isMap(v, isBool) && ['web', 'browser', 'computer', 'mcp'].some(k => k in v),
+  notify: v => isMap(v, isBool),
+  transcriptDays: v => [0, 7, 30, 90].includes(v),
+  openAtLogin: isBool,
 }
 /** Known keys with well-typed values only; anything else is dropped. */
 export function cleanSettingsPatch(patch) {

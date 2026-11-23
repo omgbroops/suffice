@@ -34,6 +34,27 @@ export type Settings = {
   theme?: 'system' | 'light' | 'dark'
   engineAuto?: boolean
   defaultProvider?: string
+  profileName?: string
+  callMe?: string
+  work?: string
+  fontSize?: 'small' | 'medium' | 'large'
+  reduceMotion?: boolean
+  customInstructions?: string
+  responseStyle?: 'concise' | 'normal' | 'explanatory'
+  useClaudeConfig?: boolean
+  verbosity?: 'quiet' | 'normal' | 'verbose'
+  folderAccess?: string[]
+  capabilities?: { web?: boolean; browser?: boolean; computer?: boolean; mcp?: boolean }
+  notify?: { done?: boolean; needsInput?: boolean; sound?: boolean }
+  transcriptDays?: 0 | 7 | 30 | 90
+  openAtLogin?: boolean
+}
+
+export type Usage = {
+  total: { runs: number; inputTokens: number; outputTokens: number; cacheReadTokens: number; cacheWriteTokens: number; apiCostUsd: number }
+  days: { date: string; runs: number; apiCostUsd: number }[]
+  plan: { kind: 'subscription' | 'api'; name: string }
+  savedUsd: number
 }
 
 export type Mode = 'balanced' | 'efficient' | 'fast'
@@ -90,5 +111,8 @@ export const api = {
   guide: (threadId: string, text: string, queue: boolean) => bridge().invoke('run:guide', { threadId, text, queue }),
   answerApproval: (id: string, allow: boolean) => bridge().invoke('approval:answer', { id, allow }),
   updateSettings: (patch: Partial<Settings>) => bridge().invoke<Settings>('settings:update', patch),
+  usage: () => bridge().invoke<Usage>('usage:summary'),
+  appInfo: () => bridge().invoke<{ version: string; openAtLogin: boolean }>('app:info'),
+  clearHistory: () => bridge().invoke('privacy:clear'),
   on: (channel: string, listener: (payload: any) => void) => bridge().on(channel, listener),
 }

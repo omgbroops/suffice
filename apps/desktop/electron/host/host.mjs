@@ -25,6 +25,7 @@ import { readNote, scanNotes } from './notes.mjs'
 import { suggestName } from './project-name.mjs'
 import { createErrorLog } from './errorlog.mjs'
 import { CLAUDE_EFFORTS, CLAUDE_MODELS, INSTALL_HINT, LOGIN_HINT, authStatus, childEnv, createClaudeEngine, findClaude } from './claude-engine.mjs'
+import { clearDirs, pruneOld } from './desktop.mjs'
 import { DEFAULTS, createAccounts } from './accounts.mjs'
 import { bool, cleanSettingsPatch, object, oneOf, sessionPath, str } from './validate.mjs'
 
@@ -144,6 +145,8 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     else if (!CLAUDE_MODELS.some(m => m.id === settings.model)) settings.model = CLAUDE_DEFAULT
   }
   fixModel()
+  const historyDirs = [transcriptDir, resolve(home, 'sessions')]
+  void pruneOld(historyDirs, settings.transcriptDays).catch(() => {})
   let accountRows = null
   let firstRunDone = false
   const isClaude = () => settings.engine !== 'openai'
@@ -642,6 +645,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     guide,
     answerApproval,
     updateSettings,
+    clearHistory: () => clearDirs(historyDirs),
     accountsList: () => accounts?.list() ?? [],
     setKey: ({ provider, key }) => need().setKey(str(provider, 'provider', { max: 40 }), str(key, 'key', { max: 500 })),
     testKey: ({ provider }) => need().testKey(str(provider, 'provider', { max: 40 })),
