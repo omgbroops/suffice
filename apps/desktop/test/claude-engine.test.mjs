@@ -260,3 +260,12 @@ test('model costs carry cache read 0.1x and 5-minute write 1.25x of input; setti
   assert.deepEqual(cleanSettingsPatch(ok), ok)
   assert.deepEqual(cleanSettingsPatch({ useClaudeConfig: 'y', responseStyle: 'loud', folderAccess: [1], capabilities: { evil: true } }), {})
 })
+
+test('claude engine: each mcp config becomes a --mcp-config flag', async () => {
+  const t = await runFake('text', { mcpConfigs: ['/a/mcp.json', '/b/mcp.json'] })
+  try {
+    await t.engine.run(t.args)
+    const [{ argv }] = await argvLog(t.s.log)
+    assert.deepEqual(argv.filter((a, i) => argv[i - 1] === '--mcp-config'), ['/a/mcp.json', '/b/mcp.json'])
+  } finally { await t.cleanup() }
+})

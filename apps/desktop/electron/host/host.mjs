@@ -25,6 +25,7 @@ import { readNote, scanNotes } from './notes.mjs'
 import { suggestName } from './project-name.mjs'
 import { createErrorLog } from './errorlog.mjs'
 import { CLAUDE_EFFORTS, CLAUDE_MODELS, INSTALL_HINT, LOGIN_HINT, authStatus, childEnv, createClaudeEngine, findClaude, withCacheCost } from './claude-engine.mjs'
+import { writeMcpConfig } from './suffice-mcp.mjs'
 import { DEFAULTS, createAccounts } from './accounts.mjs'
 import { bool, cleanSettingsPatch, object, oneOf, sessionPath, str } from './validate.mjs'
 
@@ -416,6 +417,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
       starting.delete(threadId)
     }
     const resume = !!(thread?.path || path)
+    const mcpConfig = await writeMcpConfig({ home, capabilities: settings.capabilities ?? {} }).catch(() => null)
     const filePath = thread?.path ?? samePath(path) ?? resolve(sessionDir(home, project), `${randomUUID()}.claude.json`)
     const sessionId = basename(filePath, '.claude.json')
     const transcript = thread?.transcript ?? (path ? await openTranscript(path) : emptyTranscript())
@@ -429,7 +431,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     const capabilities = { web: true, browser: false, computer: false, mcp: true, ...settings.capabilities }
     void (async () => {
       try {
-        const totals = await claudeEngine.run({ threadId, claudePath: bin, project, prompt, model, effort: level, approval: settings.approval, sessionId, resume, useClaudeConfig: settings.useClaudeConfig === true, instructions: settings, folderAccess: settings.folderAccess, capabilities, mcpConfigs: capabilities.browser || capabilities.computer ? mcpConfigs : [], onApproval: (name, input) => approve(threadId, name, input) })
+        const totals = await claudeEngine.run({ threadId, claudePath: bin, project, prompt, model, effort: level, approval: settings.approval, sessionId, resume, useClaudeConfig: settings.useClaudeConfig === true, instructions: settings, folderAccess: settings.folderAccess, capabilities, mcpConfigs: capabilities.browser || capabilities.computer ? [...mcpConfigs, ...(mcpConfig ? [mcpConfig] : [])] : [], onApproval: (name, input) => approve(threadId, name, input) })
         push(threadId, { type: 'end', ok: true, totals })
       } catch (e) {
         push(threadId, { type: 'end', ok: false, error: /cancelled/.test(e?.message ?? '') ? 'Stopped.' : e?.message || 'The run failed.' })
