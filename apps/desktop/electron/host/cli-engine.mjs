@@ -65,7 +65,9 @@ export function createCliEngine({ push, spawn = nodeSpawn, label, installHint, p
         child.kill('SIGTERM')
         state.killTimer ??= setTimeout(() => child.kill('SIGKILL'), GRACE_MS)
       }
-      const handle = line => {
+      const handle = (line, last = false) => {
+        // a plain-text CLI (parser.raw) gets every line as written; the JSONL ones skip what is not JSON
+        if (p.raw) { if (!last || line) try { p.raw(line.replace(/\r$/, ''), h) } catch {} return }
         line = line.trim()
         if (!line) return
         let m
@@ -87,7 +89,7 @@ export function createCliEngine({ push, spawn = nodeSpawn, label, installHint, p
       child.stdin.on('error', () => {})
       child.on('error', e => finish(reject, new Error(e.code === 'ENOENT' ? installHint : e.message)))
       child.on('close', (code, signal) => {
-        handle(buffer) // a last line with no newline
+        handle(buffer, true) // a last line with no newline
         buffer = ''
         // the session id rides on failures too, so the next message resumes the same session
         const fail = msg => finish(reject, Object.assign(new Error(msg), { sessionId: p.outcome().sessionId }))

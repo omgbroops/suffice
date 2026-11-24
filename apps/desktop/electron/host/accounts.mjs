@@ -10,7 +10,7 @@ import { childEnv } from './claude-engine.mjs'
 
 const ANSI = /\x1b\[[0-9;]*[A-Za-z]/g
 const clean = s => String(s ?? '').replace(ANSI, '')
-const DOCS = { claude: 'https://docs.claude.com/en/docs/claude-code/setup', codex: 'https://developers.openai.com/codex/cli', cursor: 'https://cursor.com/docs/cli', opencode: 'https://opencode.ai/docs/cli' }
+const DOCS = { claude: 'https://docs.claude.com/en/docs/claude-code/setup', codex: 'https://developers.openai.com/codex/cli', cursor: 'https://cursor.com/docs/cli', opencode: 'https://opencode.ai/docs/cli', devin: 'https://devin.ai' }
 
 /** Pure parsers: status text -> {connected, detail}. detail never carries an email, token or path. */
 export const parsers = {
@@ -37,6 +37,11 @@ export const parsers = {
     if (/logged in|signed in|authenticated/i.test(t)) return { connected: true, detail: 'Signed in' }
     return { connected: false, detail: 'Not signed in' }
   },
+  // `devin auth status` prints "Logged in (via Devin)." or "Not logged in." (devin 3000.14)
+  devin(out) {
+    const t = clean(out)
+    return /not logged in/i.test(t) || !/logged in/i.test(t) ? { connected: false, detail: 'Not signed in' } : { connected: true, detail: 'Signed in' }
+  },
   opencode(out) {
     const t = clean(out)
     const n = /(\d+)\s+credentials?/i.exec(t)
@@ -50,6 +55,7 @@ export const CLI = [
   { id: 'codex', name: 'Codex', bin: 'codex', args: ['login', 'status'], install: DOCS.codex, login: 'codex login', logout: 'codex logout', engineFile: './codex-engine.mjs' },
   { id: 'cursor', name: 'Cursor', bin: 'cursor-agent', args: ['status'], install: DOCS.cursor, login: 'cursor-agent login', logout: 'cursor-agent logout', engineFile: './cursor-engine.mjs' },
   { id: 'opencode', name: 'OpenCode', bin: 'opencode', args: ['auth', 'list'], install: DOCS.opencode, login: 'opencode auth login', logout: 'opencode auth logout', engineFile: './opencode-engine.mjs' },
+  { id: 'devin', name: 'Devin', bin: 'devin', args: ['auth', 'status'], install: DOCS.devin, login: 'devin auth login', logout: 'devin auth logout', engineFile: './devin-engine.mjs' },
 ]
 
 export const KEYS = [
@@ -60,7 +66,7 @@ export const KEYS = [
 ]
 export const KEY_IDS = KEYS.map(k => k.id)
 /** Autodetect priority: first connected wins. Key providers are `key:<id>`. */
-export const ORDER = ['claude', 'codex', 'cursor', 'opencode', ...KEY_IDS.map(id => `key:${id}`)]
+export const ORDER = ['claude', 'codex', 'cursor', 'opencode', 'devin', ...KEY_IDS.map(id => `key:${id}`)]
 
 /** What a provider sets when it becomes the default; model unset means the engine picks. */
 export const DEFAULTS = { claude: { engine: 'claude', model: 'claude-opus-5-5', efforts: { 'claude-opus-5-5': 'high' }, label: 'Claude Code · Opus 5.5' } }
@@ -110,7 +116,8 @@ export function createAccounts({ desktopDir, env = process.env, execFile = nodeE
 
   const run = (bin, args) =>
     new Promise(resolve => {
-      execFile(bin, args, { env: childEnv(env), timeout: 10_000 }, (err, stdout, stderr) => {
+      // ACP_BACKEND (set in a terminal inside the Devin app) makes the Devin CLI report signed out
+      execFile(bin, args, { env: { ...childEnv(env), ACP_BACKEND: undefined }, timeout: 10_000 }, (err, stdout, stderr) => {
         if (err?.killed || err?.signal) return resolve({ timedOut: true })
         resolve({ out: `${stdout ?? ''}\n${stderr ?? ''}` })
       })
