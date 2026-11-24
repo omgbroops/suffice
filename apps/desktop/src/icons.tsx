@@ -9,6 +9,8 @@ const wrap = (I: RadixIcon) => ({ size = 15, className }: P) => (
 )
 
 export const IconSidebar = wrap(R.ViewVerticalIcon)
+export const IconGlobe = wrap(R.GlobeIcon)
+export const IconReload = wrap(R.ReloadIcon)
 export const IconNotes = wrap(R.ReaderIcon)
 export const IconArrowLeft = wrap(R.ArrowLeftIcon)
 export const IconArrowRight = wrap(R.ArrowRightIcon)
@@ -37,6 +39,19 @@ export const IconSelector = wrap(R.CaretSortIcon)
 export const IconBrain = wrap(R.ReaderIcon)
 export const IconDots = wrap(R.DotsHorizontalIcon)
 export const IconCube = wrap(R.CubeIcon)
+
+export const IconDiff = ({ size = 15, ...rest }: P & SVGProps<SVGSVGElement>) => (
+  <svg width={size} height={size} viewBox="0 0 15 15" fill="none" stroke="currentColor" strokeWidth={1} strokeLinecap="round" aria-hidden {...rest}>
+    <rect x="2" y="2" width="11" height="11" rx="2" />
+    <path d="M5.5 5.75h4M7.5 3.75v4M5.5 10.25h4" />
+  </svg>
+)
+export const IconPrompt = ({ size = 15, ...rest }: P & SVGProps<SVGSVGElement>) => (
+  <svg width={size} height={size} viewBox="0 0 15 15" fill="none" stroke="currentColor" strokeWidth={1} strokeLinecap="round" strokeLinejoin="round" aria-hidden {...rest}>
+    <rect x="1.5" y="2.5" width="12" height="10" rx="2" />
+    <path d="M4.5 6l2 1.5-2 1.5M8 9.5h2.5" />
+  </svg>
+)
 
 export const IconBranch = ({ size = 15, ...rest }: P & SVGProps<SVGSVGElement>) => (
   <svg width={size} height={size} viewBox="0 0 15 15" fill="none" stroke="currentColor" strokeWidth={1} aria-hidden {...rest}>

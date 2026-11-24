@@ -10,8 +10,8 @@ export type ModelInfo = {
   efforts: string[]
   /** modes this engine can run; absent means all */
   modes?: string[]
-  /** 'codex': runs through the user's Codex CLI on their ChatGPT plan (no per-token price) */
-  engine?: 'codex'
+  /** which CLI agent runs it (absent: Claude Code, or the pi harness on the OpenAI engine); these have no per-token price */
+  engine?: 'codex' | 'cursor' | 'opencode' | 'devin'
 }
 
 export type Settings = {
@@ -143,5 +143,13 @@ export const api = {
   appInfo: () => bridge().invoke<{ version: string; openAtLogin: boolean }>('app:info'),
   clearHistory: () => bridge().invoke('privacy:clear'),
   usageSummary: (days?: number) => bridge().invoke<UsageSummary>('usage:summary', { days }),
+  changes: (project: string, scope: 'all' | 'staged' | 'unstaged' | 'commit', ignoreWhitespace: boolean) => bridge().invoke<{ git: boolean; patch: string; truncated?: boolean }>('workspace:changes', { project, scope, ignoreWhitespace }),
+  listFiles: (project: string) => bridge().invoke<string[]>('workspace:files', { project }),
+  terminalOpen: (project: string, cols: number, rows: number) => bridge().invoke<string>('terminal:open', { project, cols, rows }),
+  terminalWrite: (id: string, data: string) => bridge().invoke('terminal:write', { id, data }),
+  terminalResize: (id: string, cols: number, rows: number) => bridge().invoke('terminal:resize', { id, cols, rows }),
+  terminalClose: (id: string) => bridge().invoke('terminal:close', { id }),
+  listDir: (project: string, dir: string) => bridge().invoke<{ name: string; dir: boolean }[]>('workspace:list', { project, dir }),
+  readFile: (project: string, path: string) => bridge().invoke<{ text: string; skipped?: 'too-big' | 'binary' }>('workspace:read', { project, path }),
   on: (channel: string, listener: (payload: any) => void) => bridge().on(channel, listener),
 }
