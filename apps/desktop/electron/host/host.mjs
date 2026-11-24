@@ -28,6 +28,9 @@ import { createErrorLog } from './errorlog.mjs'
 import { CLAUDE_EFFORTS, CLAUDE_MODELS, INSTALL_HINT, LOGIN_HINT, authStatus, childEnv, createClaudeEngine, findClaude, sufficePrompt, withCacheCost } from './claude-engine.mjs'
 import { writeMcpConfig } from './suffice-mcp.mjs'
 import { CODEX_EFFORTS, INSTALL_HINT as CODEX_INSTALL_HINT, LOGIN_HINT as CODEX_LOGIN_HINT, codexModels, codexStatus, createCodexEngine, findCodex } from './codex-engine.mjs'
+import { CURSOR_EFFORTS, CURSOR_MODELS, INSTALL_HINT as CURSOR_INSTALL_HINT, LOGIN_HINT as CURSOR_LOGIN_HINT, createCursorEngine, cursorStatus, findCursor } from './cursor-engine.mjs'
+import { DEVIN_EFFORTS, DEVIN_MODELS, INSTALL_HINT as DEVIN_INSTALL_HINT, LOGIN_HINT as DEVIN_LOGIN_HINT, createDevinEngine, devinModelList, devinStatus, findDevin } from './devin-engine.mjs'
+import { OPENCODE_EFFORTS, OPENCODE_MODELS, INSTALL_HINT as OPENCODE_INSTALL_HINT, LOGIN_HINT as OPENCODE_LOGIN_HINT, createOpencodeEngine, findOpencode, opencodeStatus } from './opencode-engine.mjs'
 import { clearDirs, pruneOld } from './desktop.mjs'
 import { ARTIFACT_PROMPT } from './artifact-prompt.mjs'
 import { DEFAULTS, createAccounts } from './accounts.mjs'
@@ -154,8 +157,16 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
   const codexPath = () => (givenCodexPath !== undefined ? givenCodexPath : findCodex())
   const fixModel = () => {
     if (settings.engine === 'openai') { if (CLAUDE_MODELS.some(m => m.id === settings.model)) settings.model = DEFAULT_MODEL }
-    else if (!CLAUDE_MODELS.some(m => m.id === settings.model) && !(codexPath() ? codexModels() : []).some(m => m.id === settings.model)) settings.model = CLAUDE_DEFAULT
+    else if (!CLAUDE_MODELS.some(m => m.id === settings.model) && !(codexPath() ? codexModels() : []).some(m => m.id === settings.model) && !otherCliModels().some(m => m.id === settings.model)) settings.model = CLAUDE_DEFAULT
   }
+  // Cursor, OpenCode and Devin are off whenever a Codex path is injected (tests), and otherwise found on PATH
+  const cursorPath = () => (givenCodexPath !== undefined ? null : findCursor())
+  const opencodePath = () => (givenCodexPath !== undefined ? null : findOpencode())
+  const devinPath = () => (givenCodexPath !== undefined ? null : findDevin())
+  // the Devin CLI's own model list, read in the background; the short family names stand in until it arrives
+  let devinList = null
+  const devinModels = () => (devinPath() ? devinList ?? DEVIN_MODELS : [])
+  const otherCliModels = () => [...(cursorPath() ? CURSOR_MODELS : []), ...(opencodePath() ? OPENCODE_MODELS : []), ...devinModels()]
   fixModel()
   const historyDirs = [transcriptDir, resolve(home, 'sessions')]
   void pruneOld(historyDirs, settings.transcriptDays).catch(() => {})
@@ -189,6 +200,15 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
   // Codex runs beside Claude Code: picking a Codex model sends the thread through the user's Codex CLI (ChatGPT sign-in)
   const codexEngine = createCodexEngine({ push: (id, e) => push(id, e), spawn: codexSpawn })
   const codexList = () => (codexPath() ? codexModels() : [])
+  // The CLI agents that run beside Claude Code. A model id belongs to exactly one of them, so the model picks the agent.
+  const CLIS = {
+    codex: { name: 'Codex', path: codexPath, models: codexList, efforts: CODEX_EFFORTS, status: codexStatus, engine: codexEngine, pathKey: 'codexPath', installHint: CODEX_INSTALL_HINT, loginHint: CODEX_LOGIN_HINT },
+    cursor: { name: 'Cursor', path: cursorPath, models: () => (cursorPath() ? CURSOR_MODELS : []), efforts: CURSOR_EFFORTS, status: cursorStatus, engine: createCursorEngine({ push: (id, e) => push(id, e) }), pathKey: 'cursorPath', installHint: CURSOR_INSTALL_HINT, loginHint: CURSOR_LOGIN_HINT },
+    devin: { name: 'Devin', path: devinPath, models: devinModels, efforts: DEVIN_EFFORTS, status: devinStatus, engine: createDevinEngine({ push: (id, e) => push(id, e) }), pathKey: 'devinPath', installHint: DEVIN_INSTALL_HINT, loginHint: DEVIN_LOGIN_HINT },
+    opencode: { name: 'OpenCode', path: opencodePath, models: () => (opencodePath() ? OPENCODE_MODELS : []), efforts: OPENCODE_EFFORTS, status: opencodeStatus, engine: createOpencodeEngine({ push: (id, e) => push(id, e) }), pathKey: 'opencodePath', installHint: OPENCODE_INSTALL_HINT, loginHint: OPENCODE_LOGIN_HINT },
+  }
+  void devinModelList(devinPath()).then(list => { if (list && !disposed) { devinList = list; emit('models:changed', null) } }).catch(() => {})
+  const cliFor = model => Object.keys(CLIS).find(id => CLIS[id].models().some(m => m.id === model))
 
   // ---- projects (one or more folders) and thread titles ----------------------
   const projectsPath = resolve(desktopDir, 'projects.json')
@@ -428,7 +448,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     if (project !== null && project !== undefined) str(project, 'project')
     oneOf(mode, MODES, 'mode')
     if (disposed) throw new Error('The app is closing.')
-    if (isClaude() && codexList().some(m => m.id === model)) return runCodex({ threadId, path, project, prompt, model, effort })
+    if (isClaude() && cliFor(model)) return runCli(cliFor(model), { threadId, path, project, prompt, model, effort })
     if (isClaude()) return runClaude({ threadId, path, project, prompt, model: CLAUDE_MODELS.some(m => m.id === model) ? model : settings.model, effort, mode })
     if (mode === 'efficient' && !runtime.getModel(PROVIDER, cheapModel)) throw new Error(`${cheapModel} is not in the model catalog.`)
     if (!signedIn()) throw new Error('Sign in to start a task.')
@@ -558,12 +578,16 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
 
   // A Codex thread is stored like a Claude one (<id>.claude.json meta + saved transcript), so the sidebar, titles and
   // thread menu work unchanged; the meta file keeps Codex's own session id for `codex exec resume`.
-  async function runCodex({ threadId, path, project, prompt, model, effort }) {
+  // Cursor and OpenCode threads are stored the same way, each under its own `<agent>Session` key.
+  async function runCli(agent, { threadId, path, project, prompt, model, effort }) {
     if (!project) throw new Error('Choose a project first.')
-    const info = codexList().find(m => m.id === model)
-    const level = CODEX_EFFORTS.includes(effort) ? effort : 'medium'
-    const bin = codexPath()
-    if (!bin) throw new Error(CODEX_INSTALL_HINT)
+    const cli = CLIS[agent]
+    const sessionKey = `${agent}Session`
+    const info = cli.models().find(m => m.id === model)
+    const levels = info?.efforts ?? cli.efforts
+    const level = levels.includes(effort) ? effort : levels.includes('medium') ? 'medium' : levels[0] ?? ''
+    const bin = cli.path()
+    if (!bin) throw new Error(cli.installHint)
     if (path !== undefined && path !== null) path = sessionPath(path, [sessionDir(home, project)], knownPaths())
     else path = undefined
     let thread = live.get(threadId)
@@ -572,11 +596,11 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     const filePath = thread?.path ?? samePath(path) ?? resolve(sessionDir(home, project), `${randomUUID()}.claude.json`)
     let transcript, meta, stopped
     try {
-      if (!(await codexStatus(bin)).loggedIn) throw new Error(CODEX_LOGIN_HINT)
+      if (!(await cli.status(bin)).loggedIn) throw new Error(cli.loginHint)
       transcript = thread?.transcript ?? (path ? await openTranscript(path) : emptyTranscript())
       await mkdir(sessionDir(home, project), { recursive: true, mode: 0o700 })
       meta = (await readJson(filePath, null).catch(() => null)) ?? { sessionId: basename(filePath, '.claude.json'), project }
-      await writeJson(filePath, { ...meta, engine: 'codex' })
+      await writeJson(filePath, { ...meta, engine: agent })
     } finally {
       stopped = starting.get(threadId)?.stop
       starting.delete(threadId)
@@ -585,7 +609,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
       push(threadId, { type: 'end', ok: false, error: 'Stopped.' })
       return { threadId, effort: level, mode: 'balanced', stopped: true }
     }
-    thread = { ...thread, project, path: filePath, transcript, running: true, mode: 'balanced', claude: true, codex: true }
+    thread = { ...thread, project, path: filePath, transcript, running: true, mode: 'balanced', claude: true, cli: agent }
     live.set(threadId, thread)
     push(threadId, { type: 'user', id: randomUUID(), text: prompt })
     push(threadId, { type: 'agent_start', id: randomUUID(), model: info.name, effort: level, mode: 'balanced' })
@@ -594,14 +618,14 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     void (async () => {
       try {
         const instructions = [sufficePrompt(settings), ARTIFACT_PROMPT].filter(Boolean).join('\n\n')
-        const r = await codexEngine.run({ threadId, codexPath: bin, project, prompt, model, effort: level, approval: settings.approval, sessionId: meta.codexSession, resume: !!meta.codexSession, instructions })
-        const { sessionId: codexSession, ...totals } = r
-        if (codexSession && codexSession !== meta.codexSession) await writeJson(filePath, { ...(await readJson(filePath, {})), engine: 'codex', codexSession })
+        const r = await cli.engine.run({ threadId, [cli.pathKey]: bin, project, prompt, model, effort: level, approval: settings.approval, sessionId: meta[sessionKey], resume: !!meta[sessionKey], instructions })
+        const { sessionId, ...totals } = r
+        if (sessionId && sessionId !== meta[sessionKey]) await writeJson(filePath, { ...(await readJson(filePath, {})), engine: agent, [sessionKey]: sessionId })
         push(threadId, { type: 'end', ok: true, totals })
-        void ledger.record({ threadId, project, engine: 'codex', model, effort: level, totals })
+        void ledger.record({ threadId, project, engine: agent, model, effort: level, totals })
       } catch (e) {
-        // a failed or stopped turn still created the Codex session; keep it so the next message resumes it
-        if (e?.sessionId && e.sessionId !== meta.codexSession) await writeJson(filePath, { ...(await readJson(filePath, {})), engine: 'codex', codexSession: e.sessionId }).catch(() => {})
+        // a failed or stopped turn still created the agent's session; keep it so the next message resumes it
+        if (e?.sessionId && e.sessionId !== meta[sessionKey]) await writeJson(filePath, { ...(await readJson(filePath, {})), engine: agent, [sessionKey]: e.sessionId }).catch(() => {})
         push(threadId, { type: 'end', ok: false, error: /cancelled/.test(e?.message ?? '') ? 'Stopped.' : e?.message || 'The run failed.' })
       } finally {
         thread.running = false
@@ -622,9 +646,9 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     const body = text.trim()
     if (!body) throw new Error('Nothing to send.')
     if (!thread?.running) throw new Error('Nothing is running in this thread.')
-    if (thread.codex) {
-      // codex exec reads one prompt per run: the text waits for the next turn
-      throw new Error('Codex takes your next message after this run finishes.')
+    if (thread.cli) {
+      // these CLIs read one prompt per run: the text waits for the next turn
+      throw new Error(`${CLIS[thread.cli].name} takes your next message after this run finishes.`)
     }
     if (thread.claude) {
       // the CLI takes the message on stdin; queue is steer here, it has one input line per run
@@ -647,7 +671,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     if (pendingStart) return (pendingStart.stop = true)
     if (!thread?.running) return false
     denyPending(threadId)
-    if (thread.codex) return codexEngine.abort(threadId)
+    if (thread.cli) return CLIS[thread.cli].engine.abort(threadId)
     if (thread.claude) return claudeEngine.abort(threadId)
     thread.agent.abort()
     return true
@@ -748,7 +772,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     if (isClaude()) return [
       ...CLAUDE_MODELS.map(m => ({ ...m, contextWindow: 0, cost: withCacheCost(m.cost), efforts: CLAUDE_EFFORTS, modes: modesFor('claude') })),
       // ChatGPT-plan models: no per-token price to show
-      ...codexList().map(m => ({ ...m, contextWindow: 0, cost: { input: 0, output: 0, cacheRead: 0 }, efforts: CODEX_EFFORTS, modes: modesFor('claude'), engine: 'codex' })),
+      ...Object.entries(CLIS).flatMap(([engine, cli]) => cli.models().map(m => ({ contextWindow: 0, cost: { input: 0, output: 0, cacheRead: 0 }, efforts: cli.efforts, ...m, modes: modesFor('claude'), engine }))),
     ]
     return runtime
       .getModels(PROVIDER)
@@ -770,7 +794,7 @@ export async function createHost({ home = parseOptions([]).home, emit, openExter
     disposed = true
     titler.cancel()
     claudeEngine.dispose()
-    codexEngine.dispose?.()
+    for (const cli of Object.values(CLIS)) cli.engine.dispose?.()
     login?.controller.abort()
     for (const [id] of approvals) answerApproval(id, false)
     await Promise.all([...live.values()].map(async t => {
