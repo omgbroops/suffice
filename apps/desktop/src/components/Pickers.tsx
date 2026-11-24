@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import { useContext, useState, type ReactNode } from 'react'
 import type { Settings } from '../api'
 import { IconCheck, IconEye, IconFolder, IconLockOpen, IconPlus, IconShield } from '../icons'
@@ -83,6 +84,47 @@ function ProjectList({ project, projects, onPick, onAdd, close }: { project: str
         <span className="dd-title">Add folder…</span>
       </button>
     </div>
+  )
+}
+
+const agentIcons = import.meta.glob('../assets/agents/*.svg', { query: '?raw', import: 'default', eager: true }) as Record<string, string>
+export const AGENTS = [
+  { id: 'claude', name: 'Claude Code', icon: 'claudecode' },
+  { id: 'codex', name: 'Codex', icon: 'codex' },
+  { id: 'cursor', name: 'Cursor', icon: 'cursor' },
+  { id: 'opencode', name: 'OpenCode', icon: 'opencode' },
+  { id: 'devin', name: 'Devin', icon: 'devin' },
+]
+const AgentIcon = ({ icon, size = 14 }: { icon: string; size?: number }) => (
+  <span className="prov-icon" style={{ fontSize: size, width: size, height: size }} aria-hidden dangerouslySetInnerHTML={{ __html: agentIcons[`../assets/agents/${icon}.svg`] ?? '' }} />
+)
+
+/** Which CLI agent runs the new thread. `ready` holds the agents that are installed (they have models to offer). */
+export function AgentPicker({ value, ready, onChange }: { value: string; ready: Set<string>; onChange: (id: string) => void }) {
+  const current = AGENTS.find(a => a.id === value) ?? AGENTS[0]
+  return (
+    <Dropdown
+      width={232}
+      align="right"
+      trigger={({ open, toggle, ref }) => (
+        <button ref={ref} className={`ghost-btn${open ? ' is-open' : ''}`} onClick={toggle} aria-haspopup="menu" aria-expanded={open} title="Agent">
+          <AgentIcon icon={current.icon} />
+          {current.name}
+        </button>
+      )}
+    >
+      {close => (
+        <div className="dd-list">
+          {AGENTS.map(a => (
+            <button key={a.id} role="menuitemradio" aria-checked={a.id === value} disabled={!ready.has(a.id)} className={`dd-row${a.id === value ? ' is-selected' : ''}`} onClick={() => { onChange(a.id); close() }}>
+              <span className="dd-icon"><AgentIcon icon={a.icon} /></span>
+              <span className="dd-title dd-grow">{a.name}</span>
+              {!ready.has(a.id) && <span className="dd-aside">Not installed</span>}
+            </button>
+          ))}
+        </div>
+      )}
+    </Dropdown>
   )
 }
 

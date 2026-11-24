@@ -1,4 +1,6 @@
+import { bayer } from '../web/dither'
 import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import { ProviderIcon } from './ProviderIcon'
 import { createPortal } from 'react-dom'
 import type { Mode, ModelInfo } from '../api'
 import { IconBolt as IconLightning, IconCheck, IconChevronDown, IconLayers, IconMixer, IconSearch, IconTarget } from '../icons'
@@ -8,8 +10,8 @@ const LIST_W = 300
 const DETAIL_W = 300
 const MAX_H = 460
 
-export const EFFORT_LABEL: Record<string, string> = { off: 'Off', minimal: 'Minimal', low: 'Low', medium: 'Medium', high: 'High', xhigh: 'Extra high' }
-const SHORT: Record<string, string> = { off: 'Off', minimal: 'Min', low: 'Low', medium: 'Med', high: 'High', xhigh: 'XHigh' }
+export const EFFORT_LABEL: Record<string, string> = { off: 'Off', minimal: 'Minimal', low: 'Low', medium: 'Medium', high: 'High', xhigh: 'Extra high', max: 'Max' }
+const SHORT: Record<string, string> = { off: 'Off', minimal: 'Min', low: 'Low', medium: 'Med', high: 'High', xhigh: 'XHigh', max: 'Max' }
 
 export const MODE_INFO: Record<Mode, { name: string; note: string; icon: ReactNode }> = {
   balanced: { name: 'Balanced', note: 'Regular Suffice: one model at the effort you pick', icon: <IconLayers size={14} /> },
@@ -104,6 +106,38 @@ function ModelSelect({ models, value, onChange, label }: { models: ModelInfo[]; 
   )
 }
 
+/** The slider's fill: an ordered-dither ramp across the whole track, the same 1-bit texture as the home field. */
+function DitherRamp() {
+  const ref = useRef<HTMLCanvasElement>(null)
+  useEffect(() => {
+    const canvas = ref.current!
+    const track = canvas.closest<HTMLElement>('.mp-slider')!
+    const draw = () => {
+      const w = Math.ceil(track.clientWidth / 2), h = Math.ceil(track.clientHeight / 2)
+      if (!w || !h) return
+      canvas.width = w
+      canvas.height = h
+      canvas.style.width = `${w * 2}px`
+      canvas.style.height = `${h * 2}px`
+      const [r, g, b, a = 1] = (getComputedStyle(canvas).color.match(/[\d.]+/g) ?? []).map(Number)
+      const ctx = canvas.getContext('2d')!
+      const img = ctx.createImageData(w, h)
+      for (let y = 0; y < h; y++)
+        for (let x = 0; x < w; x++) {
+          const t = x / (w - 1)
+          if (0.1 + 0.85 * t ** 1.4 > bayer(x, y)) img.data.set([r, g, b, Math.round(a * 255)], (y * w + x) * 4)
+        }
+      ctx.putImageData(img, 0, 0)
+    }
+    const size = new ResizeObserver(draw)
+    size.observe(track)
+    const theme = matchMedia('(prefers-color-scheme: dark)')
+    theme.addEventListener('change', draw)
+    return () => { size.disconnect(); theme.removeEventListener('change', draw) }
+  }, [])
+  return <canvas ref={ref} aria-hidden />
+}
+
 function Effort({ m, value, onChange }: { m: ModelInfo; value?: string; onChange: (e: string) => void }) {
   const levels = m.efforts
   const track = useRef<HTMLDivElement>(null)
@@ -132,7 +166,7 @@ function Effort({ m, value, onChange }: { m: ModelInfo; value?: string; onChange
           if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') onChange(levels[Math.max(0, i - 1)])
         }}
       >
-        <span className="mp-slider-fill" style={{ width: `calc(${at * 100}% - ${at * 14}px + 14px)` }} />
+        <span className="mp-slider-fill" style={{ width: `calc(${at * 100}% - ${at * 14}px + 14px)` }}><DitherRamp /></span>
         {levels.map((l, j) => j > i && <span key={l} className="mp-slider-tick" style={{ left: `calc(${(j / (levels.length - 1)) * 100}% - ${(j / (levels.length - 1)) * 14}px + 7px)` }} />)}
         <span className="mp-slider-thumb" style={{ left: `calc(${at * 100}% - ${at * 14}px)` }} />
       </div>
@@ -141,7 +175,7 @@ function Effort({ m, value, onChange }: { m: ModelInfo; value?: string; onChange
 }
 
 function Prices({ m }: { m: ModelInfo }) {
-  if (m.engine === 'codex') return <div className="mp-kvs"><div className="mp-kv"><span>Runs on</span><span className="mp-kv-v">Codex · ChatGPT plan</span></div></div>
+  if (m.engine && !(m.cost.input > 0)) return <div className="mp-kvs"><div className="mp-kv"><span>Runs on</span><span className="mp-kv-v">{m.engine === 'codex' ? 'Codex · ChatGPT plan' : m.engine === 'cursor' ? 'Cursor CLI' : m.engine === 'devin' ? 'Devin CLI' : 'OpenCode CLI'}</span></div></div>
   return (
     <div className="mp-kvs">
       {m.contextWindow > 0 && <div className="mp-kv"><span>Context</span><span className="mp-kv-v">{ctx(m.contextWindow)}</span></div>}
@@ -158,6 +192,8 @@ function Scale(_: { cost: number; label?: string }) {
 
 type PickerProps = {
   models: ModelInfo[]
+  /** only this agent's models are listed (the new-thread screen); absent lists them all */
+  agent?: string
   mode: Mode
   value: string
   cheap: string
@@ -233,6 +269,7 @@ function ModelDetail({ m, p, cost, maxHeight }: { m: ModelInfo; p: PickerProps; 
   return (
     <div className="mp-detail" style={{ width: DETAIL_W, maxHeight }}>
       <div className="mp-detail-head">
+        <ProviderIcon id={m.id} />
         <span className="mp-detail-name">{m.name}</span>
         {effort && <span className="mp-faint">{EFFORT_LABEL[effort] ?? effort}</span>}
       </div>
@@ -254,7 +291,10 @@ function ModelDetail({ m, p, cost, maxHeight }: { m: ModelInfo; p: PickerProps; 
 const RECOMMENDED = /^gpt-6/
 
 export function ModelPicker(p: PickerProps) {
-  const { models, value, mode, efforts, fast, recent } = p
+  const { value, mode, efforts, fast, recent } = p
+  const models = useMemo(() => (p.agent ? p.models.filter(m => (m.engine ?? 'claude') === p.agent) : p.models), [p.models, p.agent])
+  const detail = useRef<HTMLDivElement>(null)
+  const [shift, setShift] = useState(0)
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [order, setOrder] = useState<Order>('default')
@@ -289,18 +329,20 @@ export function ModelPicker(p: PickerProps) {
 
   const sections = useMemo<Section[]>(() => {
     const q = query.trim().toLowerCase()
-    const modes: Item[] = (['balanced', 'efficient', 'fast'] as Mode[]).filter(id => !q || id.includes(q)).map(id => ({ kind: 'mode', id }))
+    const modes: Item[] = []
     const asItems = (ms: ModelInfo[]): Item[] => ms.map(m => ({ kind: 'model', m }))
     if (q) return [{ items: [...modes, ...asItems(models.filter(m => `${m.name} ${m.id}`.toLowerCase().includes(q)))] }]
     if (order === 'cost') return [{ items: modes }, { title: 'By cost', items: asItems([...models].sort((a, b) => blended(a) - blended(b))) }]
     const rec = recent.map(id => byId.get(id)).filter((m): m is ModelInfo => !!m)
-    const recommended = models.filter(m => RECOMMENDED.test(m.id)).sort((a, b) => b.id.localeCompare(a.id))
-    const rest = models.filter(m => !RECOMMENDED.test(m.id)).sort((a, b) => b.id.localeCompare(a.id, undefined, { numeric: true }))
+    const recommended = models.filter(m => RECOMMENDED.test(m.id) && !rec.includes(m)).sort((a, b) => b.id.localeCompare(a.id))
+    // a CLI agent's list is already in the order its own picker uses
+    const others = models.filter(m => !RECOMMENDED.test(m.id) && !rec.includes(m))
+    const rest = recommended.length ? others.sort((a, b) => b.id.localeCompare(a.id, undefined, { numeric: true })) : others
     return [
       { items: modes },
       ...(rec.length ? [{ title: 'Recently used', items: asItems(rec) }] : []),
       { title: 'Recommended', items: asItems(recommended) },
-      { title: 'More models', items: asItems(rest) },
+      { title: recommended.length ? 'More models' : rec.length ? 'All models' : undefined, items: asItems(rest) },
     ].filter(s => s.items.length)
   }, [query, order, recent, models, byId])
 
@@ -357,6 +399,18 @@ export function ModelPicker(p: PickerProps) {
     listRef.current?.querySelector(`[data-key="${CSS.escape(hiKey)}"]`)?.scrollIntoView({ block: 'nearest' })
   }, [hiKey])
 
+  // the detail card sits level with the row it describes, kept inside the picker's height
+  const follow = () => {
+    const row = listRef.current?.querySelector(`[data-key="${CSS.escape(hiKey)}"]`)
+    const box = pop.current, card = detail.current
+    if (!row || !box || !card) return
+    const top = row.getBoundingClientRect().top - box.getBoundingClientRect().top - 10
+    const room = box.offsetHeight - card.offsetHeight
+    const natural = pos.up ? room : 0
+    setShift(Math.min(Math.max(0, room), Math.max(0, top)) - natural)
+  }
+  useLayoutEffect(follow, [hiKey, open, pos.up, pos.maxHeight, hi, efforts])
+
   const modeOff = (id: string) => !!models[0]?.modes && !models[0].modes.includes(id)
   const choose = (it: Item) => {
     if (it.kind === 'mode' && modeOff(it.id)) return
@@ -379,21 +433,13 @@ export function ModelPicker(p: PickerProps) {
 
   const shownModel = byId.get(hi)
   const shownMode = hi.startsWith('mode:') ? (hi.slice(5) as Mode) : null
-  const label =
-    mode === 'efficient' ? (
+  const label = (
       <>
-        Efficient<span className="mp-faint">{cheapModel ? shortName(cheapModel.name) : p.cheap} → {current ? shortName(current.name) : value}</span>
-      </>
-    ) : mode === 'fast' ? (
-      <>
-        Fast<span className="mp-faint">{current ? shortName(current.name) : value} ×3</span>
-      </>
-    ) : (
-      <>
+        <ProviderIcon id={value} />
         {current?.name ?? value}
         {current && effortIn(current, efforts[current.id]) && <span className="mp-faint">{EFFORT_LABEL[effortIn(current, efforts[current.id])!]}</span>}
       </>
-    )
+  )
 
   const modeSub = (id: Mode) => {
     const lead = current ? shortName(current.name) : value
@@ -414,14 +460,16 @@ export function ModelPicker(p: PickerProps) {
             className={`mp${pos.up ? ' is-up' : ''}`}
             style={{ right: pos.right, top: pos.top, bottom: pos.bottom }}
           >
-            {shownMode ? <ModeDetail mode={shownMode} p={p} costOf={costOf} maxHeight={pos.maxHeight} /> : shownModel ? <ModelDetail m={shownModel} p={p} cost={costOf(shownModel)} maxHeight={pos.maxHeight} /> : null}
+            <div className="mp-detail-at" ref={detail} style={{ transform: `translateY(${shift}px)` }}>
+              {shownMode ? <ModeDetail mode={shownMode} p={p} costOf={costOf} maxHeight={pos.maxHeight} /> : shownModel ? <ModelDetail m={shownModel} p={p} cost={costOf(shownModel)} maxHeight={pos.maxHeight} /> : null}
+            </div>
             <div className="mp-list" style={{ width: LIST_W, maxHeight: pos.maxHeight }}>
               <div className="mp-search">
                 <IconSearch size={14} />
                 <input
                   autoFocus
                   value={query}
-                  placeholder="Search models and modes"
+                  placeholder="Search models"
                   aria-label="Search models"
                   onChange={e => setQuery(e.target.value)}
                   onKeyDown={e => {
@@ -468,7 +516,7 @@ export function ModelPicker(p: PickerProps) {
                   )}
                 </div>
               </div>
-              <div className="mp-scroll" ref={listRef} role="listbox" aria-label="Models">
+              <div className="mp-scroll" ref={listRef} role="listbox" aria-label="Models" onScroll={follow}>
                 {flat.length === 0 && <div className="mp-empty">No models match “{query}”</div>}
                 {sections.map((s, si) => (
                   <Fragment key={si}>
@@ -499,13 +547,14 @@ export function ModelPicker(p: PickerProps) {
                       const e = effortIn(m, efforts[m.id])
                       return (
                         <button key={key} data-key={key} role="option" aria-selected={selectedId === m.id} className={`mp-row${key === hiKey ? ' is-hi' : ''}`} onMouseMove={hover} onClick={() => choose(it)}>
+                          <ProviderIcon id={m.id} />
                           <span className="mp-row-name">
                             {m.name}
                             {e && <span className="mp-faint"> {EFFORT_LABEL[e]}</span>}
                           </span>
                           {fast[m.id] && <span className="mp-tag">Priority</span>}
                           {selectedId === m.id && <IconCheck size={13} className="mp-check" />}
-                          {m.engine !== 'codex' && <CostBar m={m} cost={costOf(m)} />}
+                          {(!m.engine || m.cost.input > 0) && <CostBar m={m} cost={costOf(m)} />}
                         </button>
                       )
                     })}
