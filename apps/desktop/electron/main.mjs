@@ -7,6 +7,8 @@ import { inside } from './host/notes.mjs'
 import { account, githubLogin, githubProfile } from './host/git.mjs'
 import { findBin } from './host/accounts.mjs'
 import { cleanArtifactSave } from './host/validate.mjs'
+import * as workspace from './host/workspace.mjs'
+import { createTerminals } from './host/terminal.mjs'
 import { CSP, decodeArtifactUrl } from '../shared/artifacts.mjs'
 
 // Artifacts are served from their own scheme, so the iframe gets a CSP of its own instead of the app's and a separate origin.
@@ -27,6 +29,7 @@ process.on('uncaughtException', e => logError('main', e))
 process.on('unhandledRejection', e => logError('main-rejection', e))
 
 const send = (channel, payload) => win?.webContents.send(channel, payload)
+const terminals = createTerminals({ emit: (channel, payload) => send(channel, payload) })
 const notifier = createNotifier({
   getSettings: () => host?.getSettings() ?? {},
   isFocused: () => !!win?.isFocused(),
@@ -40,7 +43,7 @@ function createWindow() {
     minWidth: 760,
     minHeight: 520,
     show: false,
-    backgroundColor: '#0c0c0c',
+    backgroundColor: '#0d0c0a',
     title: 'Suffice',
     titleBarStyle: 'hidden',
     ...(process.platform === 'darwin'
@@ -52,7 +55,16 @@ function createWindow() {
       sandbox: true,
       nodeIntegration: false,
       spellcheck: false,
+      // the right panel's browser tab is a <webview>; will-attach-webview below locks every one of them down
+      webviewTag: true,
     },
+  })
+  win.webContents.on('will-attach-webview', (event, prefs, params) => {
+    delete prefs.preload
+    prefs.nodeIntegration = false
+    prefs.contextIsolation = true
+    prefs.sandbox = true
+    if (!/^https?:\/\//i.test(params.src)) event.preventDefault()
   })
   win.once('ready-to-show', () => win.show())
   // Cmd/Ctrl+W closes the open tab (the default menu would close the window); on Home the page closes the window itself
@@ -62,7 +74,7 @@ function createWindow() {
       send('app:close-tab')
     }
   })
-  win.on('closed', () => (win = null))
+  win.on('closed', () => { win = null; terminals.dispose() })
   // Links open in the browser, never in the app window.
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (/^https?:/.test(url)) void shell.openExternal(url)
@@ -115,7 +127,21 @@ const screenStatus = () => ({
 // the CSS follows prefers-color-scheme, which Electron derives from themeSource
 const applyTheme = s => { if (['system', 'light', 'dark'].includes(s?.theme)) nativeTheme.themeSource = s.theme }
 
+// a project the app has open; the right panel never reads anywhere else
+const openProject = async project => {
+  if (typeof project !== 'string' || !(await host.recentProjects()).includes(project)) throw new Error('Open that project first.')
+  return project
+}
+
 const handlers = {
+  'workspace:changes': async ({ project, scope, ignoreWhitespace }) => workspace.changes(await openProject(project), { scope, ignoreWhitespace: ignoreWhitespace === true }),
+  'workspace:files': async ({ project }) => workspace.files(await openProject(project)),
+  'terminal:open': async ({ project, cols, rows }) => terminals.open({ cwd: await openProject(project), cols, rows }),
+  'terminal:write': args => terminals.write(args),
+  'terminal:resize': args => terminals.resize(args),
+  'terminal:close': args => terminals.close(args),
+  'workspace:list': async ({ project, dir }) => workspace.list(await openProject(project), dir),
+  'workspace:read': async ({ project, path }) => workspace.read(await openProject(project), path),
   'app:init': () => host.init(),
   'git:identity': () => account(),
   'auth:login': () => host.login(),
@@ -205,6 +231,16 @@ const handlers = {
   },
 }
 
+// pages inside a browser tab stay on http(s) and open their links in the same tab
+app.on('web-contents-created', (_event, contents) => {
+  if (contents.getType() !== 'webview') return
+  contents.setWindowOpenHandler(({ url }) => {
+    if (/^https?:/i.test(url)) void contents.loadURL(url)
+    return { action: 'deny' }
+  })
+  contents.on('will-navigate', (event, url) => { if (!/^https?:/i.test(url)) event.preventDefault() })
+})
+
 app.whenReady().then(async () => {
   const installer = createInstaller({ app, dialog, exec: promisify(execFile) })
   if (await installer.offerMove()) return // relaunching from /Applications
@@ -257,6 +293,7 @@ app.on('before-quit', event => {
   if (quitting || !host) return
   event.preventDefault()
   quitting = true
+  terminals.dispose()
   host.dispose().finally(() => app.quit())
 })
 app.on('window-all-closed', () => {
