@@ -18,6 +18,10 @@ type Props = {
   onAttach?: () => Promise<string[]>
   /** Keeps the unsent text when the composer unmounts (switching tabs or views) and restores it on return. */
   draftKey?: string
+  /** 'bar': one row (attach, text, send) with the pickers on a line under it; the new-thread screen */
+  layout?: 'bar'
+  /** bar layout only: sits first on the line under the box */
+  lead?: ReactNode
 }
 
 const MAX = 260
@@ -30,6 +34,22 @@ export function Composer(p: Props) {
     if (p.draftKey) t ? drafts.set(p.draftKey, t) : drafts.delete(p.draftKey)
   }
   const ta = useRef<HTMLTextAreaElement>(null)
+  // bar layout: when the pickers under the box do not fit, they drop their labels and keep their icons
+  const foot = useRef<HTMLDivElement>(null)
+  useLayoutEffect(() => {
+    const el = foot.current
+    if (!el) return
+    const fit = () => {
+      el.classList.remove('is-tight')
+      if (el.scrollWidth > el.clientWidth + 1) el.classList.add('is-tight')
+    }
+    fit()
+    const size = new ResizeObserver(fit)
+    size.observe(el)
+    const content = new MutationObserver(fit)
+    content.observe(el, { childList: true, subtree: true, characterData: true })
+    return () => { size.disconnect(); content.disconnect() }
+  }, [p.layout])
 
   useLayoutEffect(() => {
     const el = ta.current
@@ -68,31 +88,7 @@ export function Composer(p: Props) {
     setText('')
   }
 
-  return (
-    <div className={`composer${p.tip ? ' is-tall' : ''}`} onMouseDown={e => e.target === e.currentTarget && (e.preventDefault(), ta.current?.focus())}>
-      <div className="composer-input">
-        <textarea
-          ref={ta}
-          rows={1}
-          value={text}
-          autoFocus={p.autoFocus}
-          placeholder={p.tip ? '' : p.placeholder}
-          aria-label="Message"
-          onChange={e => setText(e.target.value)}
-          onKeyDown={e => {
-            if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
-              e.preventDefault()
-              send(e.metaKey || e.ctrlKey)
-            }
-          }}
-        />
-        {p.tip && !text && (
-          <div className="composer-tip" aria-hidden>
-            Tip: Change the model and capabilities (<kbd>{/Mac/.test(navigator.platform) ? '⌘' : 'Ctrl'}</kbd><kbd>/</kbd>)
-          </div>
-        )}
-      </div>
-      <div className="composer-row">
+  const attach = (
         <button
           className="icon-btn"
           aria-label="Mention files"
@@ -117,19 +113,69 @@ export function Composer(p: Props) {
         >
           <IconPlus size={15} />
         </button>
+  )
+  const sendBtn = p.working ? (
+    <button className="send-btn is-stop" onClick={p.onStop} aria-label="Stop">
+      <IconStop size={13} />
+    </button>
+  ) : (
+    <button className="send-btn" disabled={!canSend} onClick={() => send()} aria-label="Send" title={p.disabled}>
+      <IconArrowUp size={15} />
+    </button>
+  )
+  const input = (
+      <div className="composer-input">
+        <textarea
+          ref={ta}
+          rows={1}
+          value={text}
+          autoFocus={p.autoFocus}
+          placeholder={p.tip ? '' : p.placeholder}
+          aria-label="Message"
+          onChange={e => setText(e.target.value)}
+          onKeyDown={e => {
+            if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
+              e.preventDefault()
+              send(e.metaKey || e.ctrlKey)
+            }
+          }}
+        />
+        {p.tip && !text && (
+          <div className="composer-tip" aria-hidden>
+            Tip: Change the model and capabilities (<kbd>{/Mac/.test(navigator.platform) ? '⌘' : 'Ctrl'}</kbd><kbd>/</kbd>)
+          </div>
+        )}
+      </div>
+  )
+
+  if (p.layout === 'bar')
+    return (
+      <div className="composer-stack">
+        <div className="composer is-bar" onMouseDown={e => e.target === e.currentTarget && (e.preventDefault(), ta.current?.focus())}>
+          {attach}
+          {input}
+          {sendBtn}
+        </div>
+        <div className="composer-foot" ref={foot}>
+          {p.lead}
+          {p.project}
+          {p.permissions}
+          <div className="spacer" />
+          {p.model}
+        </div>
+      </div>
+    )
+
+  return (
+    <div className={`composer${p.tip ? ' is-tall' : ''}`} onMouseDown={e => e.target === e.currentTarget && (e.preventDefault(), ta.current?.focus())}>
+      {input}
+      <div className="composer-row">
+        {attach}
         {p.permissions}
         {p.project}
         <div className="spacer" />
         {p.model}
-        {p.working ? (
-          <button className="send-btn is-stop" onClick={p.onStop} aria-label="Stop">
-            <IconStop size={13} />
-          </button>
-        ) : (
-          <button className="send-btn" disabled={!canSend} onClick={() => send()} aria-label="Send" title={p.disabled}>
-            <IconArrowUp size={15} />
-          </button>
-        )}
+        {sendBtn}
       </div>
     </div>
   )
