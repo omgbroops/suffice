@@ -3,12 +3,14 @@ import { api, type AccountRow, type Project, type InitInfo, type ModelInfo, type
 import { emptyTranscript, reduce, type Transcript } from '../shared/transcript.mjs'
 import { ago, type Status } from './data'
 import { Composer } from './components/Composer'
-import { PermissionPicker, ProjectPicker } from './components/Pickers'
+import { AgentPicker, PermissionPicker, ProjectPicker } from './components/Pickers'
 import { ModelPicker } from './components/ModelPicker'
 import { ThreadView } from './components/ThreadView'
-import { Dither } from './components/Dither'
-import { Segmented, StatusGlyph } from './components/ui'
-import { IconArrowLeft, IconArrowRight, IconClose, IconCompose, IconFolder, IconHome, IconNotes, IconPin, IconPlus, IconSearch, IconSelector, IconSidebar } from './icons'
+import { Scene } from './web/Scene'
+import { RightPanel } from './components/RightPanel'
+import { dragResize, savedWidth, setVar } from './components/resize'
+import { Menu, Segmented, StatusGlyph } from './components/ui'
+import { IconArrowLeft, IconArrowRight, IconClose, IconCloud, IconCompose, IconFolder, IconHome, IconLaptop, IconNotes, IconPin, IconPlus, IconSearch, IconSelector, IconSidebar } from './icons'
 import { ProjectOrb } from './components/Orb'
 import { AutoNamesContext, ColorsContext, IconsContext, NamesContext, ProjectEmblem, SearchPalette, SideProjects } from './components/Sidebar'
 import { baseName, displayName, threadsByProject } from './components/groups'
@@ -71,7 +73,7 @@ function ConnectAccounts({ platform, info, onDone, onBack }: { platform: string;
         <span className="logo titlebar-logo">[suffice]</span>
       </Titlebar>
       <main className="signin">
-        <Dither />
+        <Scene preset="home" />
         <div className="signin-card accounts-card">
           <span className="logo logo-lg">[suffice]</span>
           <p className="signin-copy">Connect an account to run tasks.</p>
@@ -106,11 +108,19 @@ export default function App() {
   const [git, setGit] = useState({ name: '', avatar: '' })
   const [notice, setNotice] = useState('')
   const [env, setEnv] = useState<'local' | 'cloud'>('local')
+  const [rightOpen, setRightOpen] = useState(false)
+  useEffect(() => { const px = savedWidth('suffice.sideW'); if (px) setVar('--side-w', px) }, [])
   const [, tick] = useState(0)
   const platform = api.platform()
 
   const view = hist.stack[hist.i]
   const active = view.kind === 'thread' ? threads[view.key] : undefined
+  // what the agent edited in the thread's last turn: the right panel's "Last turn" changes
+  const lastAgent = active?.transcript?.messages.findLast(m => m.role === 'agent')
+  const turnEdits = useMemo(
+    () => (active ? (lastAgent && lastAgent.role === 'agent' ? lastAgent.steps : []).flatMap(s => (s.kind === 'tool' && s.patch ? [{ path: String(s.input?.path ?? s.input?.file_path ?? ''), patch: s.patch }] : [])) : undefined),
+    [active?.key, lastAgent],
+  )
   const project = settings?.project ?? null
 
   const boot = useCallback(async () => {
@@ -320,7 +330,7 @@ export default function App() {
     const p = t?.project ?? proj ?? project
     if (!p || !settings) return
     try {
-      await api.run({ threadId: key, path: t?.path, project: p, prompt: text, model: settings.model, effort: effortFor(modelInfo), fast: !!settings.fast[settings.model], mode: settings.mode ?? 'balanced', cheapModel: settings.cheapModel ?? 'gpt-6-luna' })
+      await api.run({ threadId: key, path: t?.path, project: p, prompt: text, model: settings.model, effort: effortFor(modelInfo), fast: !!settings.fast[settings.model], mode: 'balanced', cheapModel: settings.cheapModel ?? 'gpt-6-luna' })
     } catch (e) {
       failLocally(key, text, e instanceof Error ? e.message : String(e))
     }
@@ -373,11 +383,12 @@ export default function App() {
 
   if (showSettings) return <SettingsPage platform={platform} info={info} settings={settings} models={models} patch={patchSettings} onClose={() => setShowSettings(false)} />
 
-  const picker = (
+  const pickerFor = (agent?: string) => (
     <ModelPicker
       models={models}
+      agent={agent}
       value={settings.model}
-      mode={settings.mode ?? 'balanced'}
+      mode="balanced"
       cheap={settings.cheapModel ?? 'gpt-6-luna'}
       onMode={mode => void patchSettings({ mode })}
       onCheap={cheapModel => void patchSettings({ cheapModel })}
@@ -387,6 +398,21 @@ export default function App() {
       onChange={id => void patchSettings({ model: id, recentModels: [id, ...settings.recentModels.filter(x => x !== id)].slice(0, 3) })}
       onEffort={(id, e) => void patchSettings({ efforts: { ...settings.efforts, [id]: e } })}
       onFast={(id, on) => void patchSettings({ fast: { ...settings.fast, [id]: on } })}
+    />
+  )
+  const picker = pickerFor()
+  // the agent is whichever one the chosen model belongs to; picking an agent picks its last-used model, or its first
+  const agentOf = (id: string) => models.find(m => m.id === id)?.engine ?? 'claude'
+  const agent = agentOf(settings.model)
+  const agentPicker = settings.engine !== 'openai' && models.length > 0 && (
+    <AgentPicker
+      value={agent}
+      ready={new Set(models.map(m => m.engine ?? 'claude'))}
+      onChange={a => {
+        const mine = models.filter(m => (m.engine ?? 'claude') === a)
+        const next = settings.recentModels.find(id => mine.some(m => m.id === id)) ?? mine[0]?.id
+        if (next && a !== agent) void patchSettings({ model: next })
+      }}
     />
   )
   const permissions = <PermissionPicker value={settings.approval} onChange={approval => void patchSettings({ approval })} />
@@ -400,6 +426,7 @@ export default function App() {
       <ProjectPicker project={current} projects={projects} onPick={p => void pickProject(p)} onAdd={() => void browseProject()} />
     )
   const composerProps = { permissions, model: picker }
+  const recent = list.filter(t => !t.archived).slice(0, 3)
   const archived = list.filter(t => t.archived)
   const grouped = threadsByProject(list.filter(t => !t.archived), projects)
   for (const [p, rows] of grouped.byProject) grouped.byProject.set(p, pinnedFirst(rows))
@@ -430,7 +457,7 @@ export default function App() {
     <AutoNamesContext.Provider value={settings?.projectAutoNames ?? {}}>
     <NamesContext.Provider value={names}>
     <IconsContext.Provider value={settings?.projectIcons ?? {}}>
-    <div className={`app${sidebar ? '' : ' no-sidebar'}`}>
+    <div className={`app${sidebar ? '' : ' no-sidebar'}${rightOpen ? ' has-right' : ''}`}>
       <Titlebar platform={platform}>
         <div className="titlebar-lead">
           <button className="icon-btn" onClick={() => setSidebar(s => !s)} aria-label="Toggle sidebar" title="Toggle sidebar (Ctrl+B)">
@@ -489,6 +516,9 @@ export default function App() {
             <IconPlus size={13} />
           </button>
         </nav>
+        <button className={`icon-btn titlebar-right${rightOpen ? ' is-on' : ''}`} onClick={() => setRightOpen(o => !o)} aria-label="Toggle side panel" aria-pressed={rightOpen} title="Changes, files and browser">
+          <IconSidebar size={14} />
+        </button>
       </Titlebar>
 
       <aside className="sidebar">
@@ -546,6 +576,7 @@ export default function App() {
       </aside>
 
       <main className="panel">
+        {sidebar && <div className="rs" onPointerDown={e => dragResize(e, { key: 'suffice.sideW', start: e.currentTarget.parentElement!.getBoundingClientRect().left, min: 200, max: 420, sign: 1, apply: px => setVar('--side-w', px) })} />}
         {notice && (
           <div className="notice" role="status">
             {notice}
@@ -591,31 +622,46 @@ export default function App() {
           />
         ) : (
           <div className="home">
-            <Dither look={env === 'cloud'} />
-            <div className="home-inner">
-              <div className="home-head">
-                <span className="logo logo-lg">[suffice]</span>
-                <div className="spacer" />
-                <Segmented<'local' | 'cloud'>
-                  value={env}
-                  onChange={setEnv}
-                  options={[
-                    { v: 'cloud', label: 'Cloud' },
-                    { v: 'local', label: 'Local' },
-                  ]}
-                />
-              </div>
-              <Composer {...composerProps} draftKey="home" onAttach={project ? () => api.pickFiles(project) : undefined} project={projectPicker(project)} autoFocus tip onSend={startThread} />
-              {project && list[0] && <HomeContinue thread={list[0]} onOpen={() => go({ kind: 'thread', key: list[0].key })} />}
+            <Scene preset="home" />
+            <div className="home-center">
+              {project && recent.length > 0 && <HomeContinue threads={recent} onOpen={key => go({ kind: 'thread', key })} />}
               {!project && (
                 <button className="home-hint" onClick={() => void browseProject()}>
                   Choose a project folder to start
                 </button>
               )}
             </div>
+            <div className="home-inner">
+              <Composer
+                {...composerProps}
+                model={<>{agentPicker}{pickerFor(agentPicker ? agent : undefined)}</>}
+                layout="bar"
+                draftKey="home"
+                placeholder="Describe a task or ask a question"
+                onAttach={project ? () => api.pickFiles(project) : undefined}
+                project={projectPicker(project)}
+                autoFocus
+                onSend={startThread}
+                lead={
+                  <Menu
+                    side="top"
+                    items={['Local', 'Cloud']}
+                    value={env === 'cloud' ? 'Cloud' : 'Local'}
+                    onSelect={v => setEnv(v === 'Cloud' ? 'cloud' : 'local')}
+                    trigger={open => (
+                      <button className={`ghost-btn${open ? ' is-open' : ''}`} aria-haspopup="listbox" aria-expanded={open} title="Where the thread runs">
+                        {env === 'cloud' ? <IconCloud size={14} /> : <IconLaptop size={14} />}
+                        {env === 'cloud' ? 'Cloud' : 'Local'}
+                      </button>
+                    )}
+                  />
+                }
+              />
+            </div>
           </div>
         )}
       </main>
+      <RightPanel open={rightOpen} project={(view.kind === 'thread' && threads[view.key]?.project) || project} turn={turnEdits} onClose={() => setRightOpen(false)} />
       {search && <SearchPalette threads={list} onClose={() => setSearch(false)} onOpen={key => (setSearch(false), go({ kind: 'thread', key }))} />}
     </div>
     </IconsContext.Provider>
@@ -626,9 +672,9 @@ export default function App() {
 }
 
 /** One way back into the last thread: click it, or Tab from an empty composer or an unfocused Home. */
-function HomeContinue({ thread, onOpen }: { thread: Thread & { key: string }; onOpen: () => void }) {
-  const open = useRef(onOpen)
-  open.current = onOpen
+function HomeContinue({ threads, onOpen }: { threads: (Thread & { key: string })[]; onOpen: (key: string) => void }) {
+  const open = useRef(() => {})
+  open.current = () => onOpen(threads[0].key)
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const el = document.activeElement
@@ -637,14 +683,20 @@ function HomeContinue({ thread, onOpen }: { thread: Thread & { key: string }; on
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
   }, [])
-  const status = statusOf(thread)
   return (
-    <button className="home-continue" onClick={onOpen}>
-      <span className="home-continue-verb">Continue</span>
-      <span className="home-continue-title">{thread.title}</span>
-      {status === 'working' || status === 'input' ? <StatusGlyph status={status} /> : <span className="home-continue-age">{ago(thread.modified)}</span>}
-      <kbd>Tab</kbd>
-    </button>
+    <div className="home-recent">
+      {threads.map((thread, i) => {
+        const status = statusOf(thread)
+        return (
+          <button key={thread.key} className="home-continue" onClick={() => onOpen(thread.key)}>
+            <span className="home-continue-verb">{i === 0 && 'Continue'}</span>
+            <span className="home-continue-title">{thread.title}</span>
+            {status === 'working' || status === 'input' ? <StatusGlyph status={status} /> : <span className="home-continue-age">{ago(thread.modified)}</span>}
+            <kbd>{i === 0 && 'Tab'}</kbd>
+          </button>
+        )
+      })}
+    </div>
   )
 }
 

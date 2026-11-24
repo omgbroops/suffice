@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import '@fontsource-variable/inter'
 import './styles.css'
 import './banger.css'
+import './web.css'
 import App from './App'
 import { Intro } from './components/Intro'
 
