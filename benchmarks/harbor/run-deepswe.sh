@@ -21,16 +21,21 @@ HARBOR="$HARBOR" python3 "$ROOT/benchmarks/harbor/preflight.py"
 STATE_DIR="$(mktemp -d /tmp/suffice-openai-proxy-state.XXXXXX)"
 chmod 700 "$STATE_DIR"
 cleanup() {
-  if [[ -f "$STATE_DIR/auth.json" ]]; then
-    cp "$STATE_DIR/auth.json" "$AUTH_DIR/auth.json.benchmark-tmp" 2>/dev/null || true
-    chmod 600 "$AUTH_DIR/auth.json.benchmark-tmp" 2>/dev/null || true
-    mv "$AUTH_DIR/auth.json.benchmark-tmp" "$AUTH_DIR/auth.json" 2>/dev/null || rm -f "$AUTH_DIR/auth.json.benchmark-tmp"
+  if [[ -f "$STATE_DIR/auth.json" && -f "$STATE_DIR/auth.startup.json" ]] && ! cmp -s "$STATE_DIR/auth.json" "$STATE_DIR/auth.startup.json"; then
+    if cmp -s "$AUTH_DIR/auth.json" "$STATE_DIR/auth.startup.json" 2>/dev/null; then
+      cp "$STATE_DIR/auth.json" "$AUTH_DIR/auth.json.benchmark-tmp" 2>/dev/null || true
+      chmod 600 "$AUTH_DIR/auth.json.benchmark-tmp" 2>/dev/null || true
+      mv "$AUTH_DIR/auth.json.benchmark-tmp" "$AUTH_DIR/auth.json" 2>/dev/null || rm -f "$AUTH_DIR/auth.json.benchmark-tmp"
+    else
+      echo "warning: proxy rotated the OpenAI credential, but the host login changed during the benchmark; preserving the newer host login" >&2
+    fi
   fi
   rm -rf "$STATE_DIR"
 }
 trap cleanup EXIT
 cp "$AUTH_DIR/auth.json" "$STATE_DIR/auth.json"
-chmod 600 "$STATE_DIR/auth.json"
+cp "$AUTH_DIR/auth.json" "$STATE_DIR/auth.startup.json"
+chmod 600 "$STATE_DIR/auth.json" "$STATE_DIR/auth.startup.json"
 python3 - "$ROOT/benchmarks/harbor/proxy.compose.yaml" "$STATE_DIR" "$STRONG_MODEL,$CHEAP_MODEL" <<'PY'
 from pathlib import Path
 import sys
