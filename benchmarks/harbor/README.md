@@ -80,7 +80,7 @@ Use one visible DeepSWE task and one arm first:
 ```bash
 ARMS=core CONCURRENCY=1 \
   ./benchmarks/harbor/run-deepswe.sh \
-  --include-task-name termenv-preserve-ansi-resets
+  --include-task-name datacurve/termenv-preserve-ansi-resets
 ```
 
 Then repeat with `ARMS=pi` and `ARMS=auto` only after core installation and
@@ -123,7 +123,7 @@ $HARBOR run -d "$DATASET" -a nop    --n-attempts 1 --enable-verification -y -o b
 ```
 
 A one-task smoke preflight can append `--include-task-name
-termenv-preserve-ansi-resets`. Full 113-task oracle validation is expensive in
+datacurve/termenv-preserve-ansi-resets`. Full 113-task oracle validation is expensive in
 time and disk but does not use model inference.
 
 ## Scoring
