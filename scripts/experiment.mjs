@@ -1,44 +1,67 @@
-import { cp, mkdir, readFile, writeFile, statfs } from 'node:fs/promises';
+import { cp, mkdir, readFile, writeFile, statfs, rm, readdir } from 'node:fs/promises';
 import { resolve, relative } from 'node:path';
+import { spawnSync } from 'node:child_process';
 import { tasks } from '../benchmarks/tasks.mjs';
 import { realTasks } from '../benchmarks/real/tasks.mjs';
 import { hardTasks } from '../benchmarks/real-hard/tasks.mjs';
+import { deepTasks } from '../benchmarks/real-deepswe/tasks.mjs';
+import { midTasks } from '../benchmarks/real-deepswe/mid-tasks.mjs';
+import { diffTasks } from '../benchmarks/real-deepswe/diff-tasks.mjs';
+import { qnaTasks } from '../benchmarks/aa-index/qna-tasks.mjs';
+import { tbTasks } from '../benchmarks/aa-index/tb-tasks.mjs';
 import { longTasks } from '../benchmarks/real-long/tasks.mjs';
 import { createRuntime, loadEnvironment, root, stateDir } from '../src/runtime.mjs';
-import { variants, runAgent } from '../src/harness.mjs';
+import { variants, runAgent, runBasePi } from '../src/harness.mjs';
 import { runRace } from '../src/race.mjs';
 import { runSpecAgent } from '../src/spec-agent.mjs';
-import { runNodeTests, filesIn, readText, hash } from '../src/workspace.mjs';
+import { runEco } from '../src/eco.mjs';
+import { runAuto, runAutoLadder } from '../src/auto.mjs';
+import { filesIn, readText, hash, materializeWorkspace } from '../src/workspace.mjs';
+import { runTaskAcceptance } from '../src/deepswe-verify.mjs';
 import { freezeSources } from './freeze-sources.mjs';
 
 const args = Object.fromEntries(process.argv.slice(2).map(s => { const at = s.indexOf('='); return at < 0 ? [s, true] : [s.slice(0, at), s.slice(at + 1)]; }));
 const split = args['--split'] ?? 'pilot';
 const thinkingLevel = args['--effort'] ?? 'medium';
-if (!['low', 'medium', 'high'].includes(thinkingLevel)) throw new Error('Supported experiment efforts: low, medium, high.');
+
+function syncWinner(source, destination, tb = false) {
+  if (tb) {
+    const { uid, gid } = { uid: process.getuid?.() ?? 1000, gid: process.getgid?.() ?? 1000 };
+    for (const dir of [source, destination])
+      spawnSync('sudo', ['-n', 'chown', '-R', `${uid}:${gid}`, dir], { encoding: 'utf8' });
+  }
+  const result = spawnSync('rsync', ['-a', '--delete', '--exclude=/src/node_modules/', `${source}/`, `${destination}/`], { encoding: 'utf8' });
+  if (result.status !== 0 && result.status !== 24) throw new Error(`Winner workspace sync failed: ${result.stderr || result.stdout}`);
+}
+if (!['low', 'medium', 'high', 'xhigh'].includes(thinkingLevel)) throw new Error('Supported experiment efforts: low, medium, high, xhigh.');
 const suite = args['--suite'] ?? 'synthetic';
-if (!['synthetic', 'real', 'real-hard', 'real-long'].includes(suite)) throw new Error('Supported suites: synthetic, real, real-hard, real-long.');
-const taskPool = suite === 'real' ? realTasks.map(t => ({ ...t, split: 'real' })) : suite === 'real-hard' ? hardTasks.map(t => ({ ...t, split: 'real-hard' })) : suite === 'real-long' ? longTasks.map(t => ({ ...t, split: 'real-long' })) : tasks;
-const selectedTasks = taskPool.filter(t => (suite !== 'synthetic' || t.split === split) && (!args['--task'] || t.id === args['--task']) && t.id !== args['--exclude-task']);
+if (!['synthetic', 'real', 'real-hard', 'real-long', 'real-deepswe', 'real-deepswe-mid','real-deepswe-diff','aa-qna','aa-tb'].includes(suite)) throw new Error('Supported suites: synthetic, real, real-hard, real-long, real-deepswe, real-deepswe-mid, real-deepswe-diff, aa-qna, aa-tb.');
+const taskPool = suite === 'real' ? realTasks.map(t => ({ ...t, split: 'real' })) : suite === 'real-hard' ? hardTasks.map(t => ({ ...t, split: 'real-hard' })) : suite === 'real-long' ? longTasks.map(t => ({ ...t, split: 'real-long' })) : suite === 'real-deepswe' ? deepTasks.map(t => ({ ...t, split: 'real-deepswe' })) : suite === 'real-deepswe-mid' ? midTasks.map(t => ({ ...t, split: 'real-deepswe-mid' })) : suite === 'real-deepswe-diff' ? diffTasks.map(t => ({ ...t, split: 'real-deepswe-diff' })) : suite === 'aa-qna' ? qnaTasks.map(t => ({ ...t, split: 'aa-qna' })) : suite === 'aa-tb' ? tbTasks.map(t => ({ ...t, split: 'aa-tb' })) : tasks;
+const selectedTasks = taskPool.filter(t => (suite !== 'synthetic' || t.split === split) && (!args['--task'] || t.id === args['--task']) && t.id !== args['--exclude-task']).slice(Number(args['--offset'] ?? 0), args['--limit'] ? Number(args['--offset'] ?? 0) + Number(args['--limit']) : undefined);
 const modelOverride = args['--model'];
-const selectedVariants = variants.filter(v => !args['--variants'] || args['--variants'].split(',').includes(v.id)).map(v => modelOverride ? { ...v, model: modelOverride } : v);
+const selectedVariants = variants.filter(v => !args['--variants'] || args['--variants'].split(',').includes(v.id)).map(v => modelOverride ? { ...v, model: modelOverride, basePiModel: modelOverride } : v);
 if (args['--variants'] && args['--variants'].split(',').some(id => !variants.some(v => v.id === id))) throw new Error('Unknown variant; refusing partial experiment.');
 if (!selectedTasks.length || !selectedVariants.length) throw new Error('No matching tasks or variants.');
+const maxTurns = Number(args['--max-turns'] ?? 24);
 const repetitions = Number(args['--repetitions'] ?? 1);
 if (!Number.isInteger(repetitions) || repetitions < 1 || repetitions > 4) throw new Error('Repetitions must be 1-4.');
 const campaign = String(args['--campaign'] ?? `pilot-${new Date().toISOString().replace(/[:.]/g, '-')}`);
 if (!/^[a-zA-Z0-9_-]+$/.test(campaign)) throw new Error('Invalid campaign name.');
-const directory = resolve(stateDir, 'runs', campaign); await mkdir(directory, { recursive: true });
+const directory = resolve(stateDir, 'runs', campaign); await mkdir(directory, { recursive: true, verbatimSymlinks: true });
 loadEnvironment();
 const runtime = await createRuntime();
 if (!runtime.isUsingSubscription('openai')) throw new Error('Run node scripts/login.mjs first.');
 const inputs = {};
 const inputPaths = {};
-for (const file of ['package.json', 'bun.lock', 'scripts/experiment.mjs', 'scripts/run-pilot.mjs', 'scripts/freeze-sources.mjs', 'benchmarks/tasks.mjs', 'benchmarks/manifest.json', 'docs/EXPERIMENT.md', ...(suite === 'real' ? ['benchmarks/real/tasks.mjs'] : suite === 'real-hard' ? ['benchmarks/real-hard/tasks.mjs'] : suite === 'real-long' ? ['benchmarks/real-long/tasks.mjs'] : []), ...(await filesIn(resolve(root, 'src'))).map(f => `src/${f}`)]) inputs[file] = hash(await readFile(resolve(root, file)));
+for (const file of ['package.json', 'bun.lock', 'scripts/experiment.mjs', 'scripts/run-pilot.mjs', 'scripts/freeze-sources.mjs', 'benchmarks/tasks.mjs', 'benchmarks/manifest.json', 'docs/EXPERIMENT.md', ...(suite === 'real' ? ['benchmarks/real/tasks.mjs'] : suite === 'real-hard' ? ['benchmarks/real-hard/tasks.mjs'] : suite === 'real-long' ? ['benchmarks/real-long/tasks.mjs'] : suite === 'real-deepswe' ? ['benchmarks/real-deepswe/tasks.mjs'] : suite === 'real-deepswe-mid' ? ['benchmarks/real-deepswe/mid-tasks.mjs'] : suite === 'real-deepswe-diff' ? ['benchmarks/real-deepswe/diff-tasks.mjs'] : suite === 'aa-qna' ? ['benchmarks/aa-index/qna-tasks.mjs'] : suite === 'aa-tb' ? ['benchmarks/aa-index/tb-tasks.mjs'] : []), ...(await filesIn(resolve(root, 'src'))).map(f => `src/${f}`)]) inputs[file] = hash(await readFile(resolve(root, file)));
 for (const task of selectedTasks) {
-  inputs[`acceptance:${task.id}`] = hash(await readFile(task.acceptancePath));
-  inputPaths[`acceptance:${task.id}`] = relative(root, task.acceptancePath);
-  const workspaceBase = relative(root, task.workspaceDir);
-  for (const file of await filesIn(task.workspaceDir)) { inputs[`task:${task.id}/${file}`] = hash(await readFile(resolve(task.workspaceDir, file))); inputPaths[`task:${task.id}/${file}`] = `${workspaceBase}/${file}`; }
+  if (task.acceptancePath) inputs[`acceptance:${task.id}`] = hash(await readFile(task.acceptancePath));
+  if (task.acceptancePath) inputPaths[`acceptance:${task.id}`] = relative(root, task.acceptancePath);
+  if (task.tb) { const insPath = `.suffice/aa-index/tb-tasks/tasks/${task.tb.id}/instruction.md`;
+    inputs[`task:${task.id}/instruction.md`] = hash(await readFile(resolve(root, insPath)));
+    inputPaths[`task:${task.id}/instruction.md`] = insPath; }
+  const workspaceBase = task.workspaceDir ? relative(root, task.workspaceDir) : undefined;
+  if (task.workspaceDir) for (const file of await filesIn(task.workspaceDir)) { inputs[`task:${task.id}/${file}`] = hash(await readFile(resolve(task.workspaceDir, file))); inputPaths[`task:${task.id}/${file}`] = `${workspaceBase}/${file}`; }
 }
 const schedule = [];
 for (let repetition = 0; repetition < repetitions; repetition++) {
@@ -54,7 +77,8 @@ const manifest = { version: 5, campaign, startedAt: new Date().toISOString(), pi
   limitations: ['Restricted workspace tools shared by all arms; Pi SDK baseline, not unrestricted stock CLI.', 'Runtime permission boundary is Node permissions, not an OS sandbox.', 'Provider cache warmth is observed, not forcibly reset.', 'Subscription cost is API-equivalent estimate, not billed spend.'] };
 if (args['--resume']) {
   const frozen = JSON.parse(await readFile(resolve(directory, 'manifest.json'), 'utf8'));
-  if (frozen.reasoning !== manifest.reasoning || frozen.mainModel !== manifest.mainModel || JSON.stringify(frozen.inputs) !== JSON.stringify(inputs) || JSON.stringify(frozen.schedule) !== JSON.stringify(schedule)) throw new Error('Cannot resume: frozen configuration or inputs changed.');
+  const taskInputs = obj => Object.fromEntries(Object.entries(obj).filter(([k]) => k.startsWith('task:') || k.startsWith('acceptance:')));
+  if (frozen.reasoning !== manifest.reasoning || frozen.mainModel !== manifest.mainModel || JSON.stringify(taskInputs(frozen.inputs)) !== JSON.stringify(taskInputs(inputs)) || JSON.stringify(frozen.schedule) !== JSON.stringify(schedule)) throw new Error('Cannot resume: frozen configuration or task inputs changed.');
 } else {
   await writeFile(resolve(directory, 'manifest.json'), JSON.stringify(manifest, null, 2), { flag: 'wx' });
 }
@@ -71,30 +95,56 @@ for (const [index, item] of schedule.entries()) {
     try { await readFile(resolve(runDir, 'result.json')); continue; }
     catch (error) { if (error.code !== 'ENOENT') throw error; }
   }
-  await mkdir(runDir); await cp(task.workspaceDir, workspace, { recursive: true, errorOnExist: true });
+  await mkdir(runDir, { recursive: !!args['--resume'] });
+  let generatedFiles = [];
+  try { generatedFiles = await materializeWorkspace(task, workspace); }
+  catch (error) {
+    console.log(JSON.stringify({ event: 'materialize_error', runId, error: String(error).slice(0, 300) }));
+    await writeFile(resolve(runDir, 'result.json'), JSON.stringify({ runId, task: task.id, variant: variant.id, status: 'infrastructure_error', error: String(error).slice(0, 500), acceptance: { status: 'infrastructure_error' } }));
+    continue;
+  }
   console.log(JSON.stringify({ event: 'run_start', index: index + 1, total: schedule.length, runId }));
   let agent;
   if (variant.race) {
     const { race, effort, ...inner } = variant;
-    const raced = await runRace({ runtime, task, variant: inner, n: race.n ?? 3, selection: race.selection ?? 'first', attemptSpecs: race.attempts ?? [], iterate: !!race.iterate, runDir, thinkingLevel: effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000) });
+    const raced = await runRace({ runtime, task, variant: inner, n: race.n ?? 3, selection: race.selection ?? 'first', attemptSpecs: race.attempts ?? [], iterate: !!race.iterate, attemptDeadlineMs: race.attemptDeadlineMs ?? null, runDir, thinkingLevel: effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000), maxTurns });
     const winner = raced.attempts.find(a => a.index === raced.chosen);
-    if (winner) await cp(winner.workspace, workspace, { recursive: true, force: true });
+    if (winner) syncWinner(winner.workspace, workspace);
     agent = { ...raced, decisions: [], watcherCalls: 0, turns: raced.attempts.reduce((s, a) => s + (a.turns ?? 0), 0),
       usageCostUnknown: raced.attempts.some(a => a.usageCostUnknown), race: raced };
   } else if (variant.spec !== undefined) {
     const { spec, effort, ...inner } = variant;
-    const speced = await runSpecAgent({ runtime, task, variant: inner, spec, runDir, thinkingLevel: effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000) });
+    const speced = await runSpecAgent({ runtime, task, variant: inner, spec, runDir, thinkingLevel: effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000), maxTurns });
     agent = { ...speced, decisions: [], watcherCalls: 0 };
+  } else if (variant.eco !== undefined) {
+    const { eco, effort, ...inner } = variant;
+    const ecoed = await runEco({ runtime, task, variant: inner, eco, runDir, thinkingLevel: effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000), maxTurns });
+    if (ecoed.winnerWorkspace) syncWinner(ecoed.winnerWorkspace, workspace, !!task.tb);
+    agent = { ...ecoed, decisions: [], watcherCalls: 0 };
+  } else if (variant.auto !== undefined) {
+    const { auto, effort, ...inner } = variant;
+    const autoed = await runAuto({ runtime, task, variant: inner, workspace, runDir, thinkingLevel: effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000), maxTurns });
+    if (autoed.winnerWorkspace && autoed.winnerWorkspace !== workspace) syncWinner(autoed.winnerWorkspace, workspace, !!task.tb);
+    agent = { ...autoed, decisions: [], watcherCalls: 0 };
+  } else if (variant.autoLadder !== undefined) {
+    const { autoLadder, effort, ...inner } = variant;
+    const laddered = await runAutoLadder({ runtime, task, variant: inner, workspace, runDir, thinkingLevel: effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000), maxTurns });
+    if (laddered.winnerWorkspace && laddered.winnerWorkspace !== workspace) syncWinner(laddered.winnerWorkspace, workspace, !!task.tb);
+    agent = { ...laddered, decisions: [], watcherCalls: 0 };
+  } else if (variant.basePi) {
+    agent = await runBasePi({ runtime, workspace, runDir, task, thinkingLevel: variant.effort ?? thinkingLevel, model: variant.basePiModel, timeoutMs: Number(args['--timeout-ms'] ?? 240000), maxTurns });
   } else {
-    agent = await runAgent({ runtime, workspace, runDir, task, variant, thinkingLevel: variant.effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000) });
+    agent = await runAgent({ runtime, workspace, runDir, task, variant, thinkingLevel: variant.effort ?? thinkingLevel, timeoutMs: Number(args['--timeout-ms'] ?? 240000), maxTurns });
   }
-  const before = hash(await readFile(task.acceptancePath));
-  const acceptance = await runNodeTests(workspace, task.acceptancePath);
-  const after = hash(await readFile(task.acceptancePath));
-  if (before !== after || after !== inputs[`acceptance:${task.id}`]) throw new Error('Acceptance changed; abort experiment.');
+  const before = task.acceptancePath ? hash(await readFile(task.acceptancePath)) : null;
+  const finalAnswer = agent?.final ?? agent?.attempts?.find(a => a.index === agent?.chosen)?.final ?? agent?.race?.attempts?.find(a => a.index === agent?.race?.chosen)?.final;
+  const acceptance = await runTaskAcceptance(workspace, task, { timeoutMs: 900_000, runtime, runDir, finalAnswer });
+  if (task.tb) { try { const { tbCleanup } = await import('../src/tb.mjs'); tbCleanup(workspace); } catch {} }
+  const after = task.acceptancePath ? hash(await readFile(task.acceptancePath)) : null;
+  if (before !== after || (task.acceptancePath && after !== inputs[`acceptance:${task.id}`])) throw new Error('Acceptance changed; abort experiment.');
   const source = {};
-  for (const path of await filesIn(workspace)) source[path] = hash(await readText(workspace, path));
-  const immutableFilesIntact = Object.entries(source).filter(([path]) => !path.startsWith('src/')).every(([path, value]) => value === inputs[`task:${task.id}/${path}`]);
+  for (const path of await filesIn(workspace)) source[path] = hash(await readFile(resolve(workspace, path)));
+  const immutableFilesIntact = task.tb ? true : Object.entries(source).filter(([path]) => !path.startsWith('src/') && !generatedFiles.includes(path)).every(([path, value]) => value === inputs[`task:${task.id}/${path}`]);
   const result = { runId, ...item, ...agent, acceptance: { ...acceptance, stdout: undefined, stderr: undefined },
     success: agent.status === 'completed' && acceptance.status === 'passed' && immutableFilesIntact, immutableFilesIntact, source,
     watcherCostUsd: agent.decisions.reduce((sum, d) => sum + (d.costUsd ?? 0), 0),
@@ -107,6 +157,7 @@ for (const [index, item] of schedule.entries()) {
   result.totalEstimatedUsd = result.usageCostUnknown || result.watcherCostUnknown ? null : result.knownEstimatedUsd;
   await writeFile(resolve(runDir, 'acceptance.json'), JSON.stringify(acceptance, null, 2));
   await writeFile(resolve(runDir, 'result.json'), JSON.stringify(result, null, 2));
+  for (const e of await readdir(runDir)) if (!e.endsWith('.json') && !e.endsWith('.jsonl')) await rm(resolve(runDir, e), { recursive: true, force: true });
   console.log(JSON.stringify({ event: 'run_end', runId, status: result.status, success: result.success, turns: result.turns,
     tokens: result.usage.totalTokens, estimatedUsd: result.totalEstimatedUsd, watcherCalls: result.watcherCalls, latencyMs: result.latencyMs }));
   if (result.status === 'provider_error' && result.providerFailureKind !== 'transient_capacity') {

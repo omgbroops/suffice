@@ -1,7 +1,7 @@
 // Fast-mode pieces for the experiment harness. Duplicates the tiny extension
 // helpers from packages/cli/src/fast.mjs deliberately: experiment source is
 // hashed into frozen campaign manifests, so it cannot import product code.
-import { cp, mkdir, mkdtemp } from 'node:fs/promises';
+import { cp, mkdir, mkdtemp, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { filesIn, readText, hash, runNodeTests, formatTestResult } from './workspace.mjs';
 
@@ -132,7 +132,7 @@ export function withStreamPrefire(tools, { log = () => {}, workspace } = {}) {
 export async function srcFingerprint(workspace) {
   const parts = [];
   for (const path of (await filesIn(workspace)).filter(p => p.startsWith('src/'))) {
-    parts.push(`${path}:${hash(await readText(workspace, path))}`);
+    parts.push(`${path}:${hash(await readFile(resolve(workspace, path)))}`);
   }
   return hash(parts.join('\n'));
 }
@@ -146,10 +146,10 @@ export function withSpeculativeTests(tools, { workspace, snapshotRoot, artifacts
   const speculate = () => {
     if (signal?.aborted || pending) return;
     pending = (async () => {
-      await mkdir(snapshotRoot, { recursive: true });
+      await mkdir(snapshotRoot, { recursive: true, verbatimSymlinks: true });
       const dir = await mkdtemp(resolve(snapshotRoot, 'spec-'));
       const skip = [snapshotRoot, artifactsDir].filter(Boolean).map(p => resolve(p));
-      await cp(workspace, dir, { recursive: true, filter: src => !skip.some(s => src === s || src.startsWith(s + '/')) });
+      await cp(workspace, dir, { recursive: true, verbatimSymlinks: true, filter: src => !skip.some(s => src === s || src.startsWith(s + '/')) });
       // Fingerprint the copied bytes, not the live workspace: edits can land
       // mid-copy, and only the snapshot's own content decides what was run.
       const fp = await srcFingerprint(dir);

@@ -4,7 +4,7 @@ import { resolve, dirname, posix } from 'node:path';
 import { createAgentSession, DefaultResourceLoader, SettingsManager, SessionManager, createCodemodeExtension } from '@earendil-works/pi-coding-agent';
 import { filesIn, readText, workspaceTools, hash } from './workspace.mjs';
 import { createWatcher } from './watchers.mjs';
-import { stateDir } from './runtime.mjs';
+import { stateDir , getCatalogModel } from './runtime.mjs';
 import { plannedReads } from './planned-reads.mjs';
 import { Type } from 'typebox';
 import { buildCodeGraph, rankGraphCandidates } from './code-graph.mjs';
@@ -92,6 +92,39 @@ export const variants = Object.freeze([
   ] } },
   // SpecAgent: Luna scouts read-only, Sol repairs with the scout's notes.
   { id: 'spec-agent', core: true, effort: 'low', fast: { speculativeTest: true }, spec: { draftModel: 'gpt-6-luna', draftEffort: 'low', draftTurns: 8 } },
+  // Cost levers (research/cost-mode.md):
+  // Eco: Luna attempts the repair; Sol only runs when Luna's patch fails the
+  // verifier. Escalate-on-failure keeps the strong model's ceiling while
+  // paying its price only on misses — unlike review-on-success.
+  // effort 'medium' governs only the Sol escalation (cheap attempts stay pinned
+  // to low inside eco) — matches the shipped cheap-first modes.
+  { id: 'eco-luna-sol', core: true, effort: 'medium', fast: { speculativeTest: true }, eco: { cheapModel: 'gpt-6-luna', cheapEffort: 'low', prefill: true, cheapRetries: 2 } },
+  // Auto mode: one Luna classify call routes the task — repairs go cheap-first
+  // (eco), features go to the strong model directly, the rest get the race.
+  // No variant effort pin: the strong path tracks the campaign --effort like
+  // the shipped /efficient command tracks ctx.thinkingLevel (cheap attempts
+  // stay pinned to low inside eco/auto themselves).
+  { id: 'auto', core: true, fast: { speculativeTest: true }, auto: {} },
+  // Stock Pi: default tools, default prompt, no Suffice mechanisms — the true
+  // upstream baseline. Model stays on the subscription default.
+  { id: 'base-pi', basePi: true },
+  // Auto-ladder: classify like auto, but a failed solo attempt escalates to a
+  // stronger harness shape — race-3 seeded with the losing attempt's diff —
+  // instead of another solo try. Mid-run mode routing at the attempt boundary.
+  { id: 'auto-ladder', core: true, effort: 'medium', fast: { speculativeTest: true }, autoLadder: {} },
+  // Per-call effort routing: medium thinking while exploring/planning, low for
+  // the edit turns that follow.
+  { id: 'effort-route', core: true, effort: 'medium', effortRoute: { to: 'low', afterTurns: 2 } },
+  // Compact tool observations: clamp long tool outputs (head+tail) before the
+  // model sees them. Ledger: -19.8% input cost, neutral quality.
+  { id: 'compact-obs', core: true, effort: 'low', compactObs: true },
+  // Race-3-low-prefill with a per-attempt deadline: stragglers are killed
+  // instead of billed to the full timeout.
+  { id: 'race-3-low-deadline', core: true, fast: { speculativeTest: true }, race: { n: 3, selection: 'first', attemptDeadlineMs: 60_000, attempts: [
+    { thinkingLevel: 'low', prefill: true },
+    { thinkingLevel: 'low', prefill: true, promptSuffix: 'Prefer the smallest correct change. Do not refactor or reformat unrelated code.' },
+    { thinkingLevel: 'low', prefill: true, promptSuffix: 'Check edge cases and the full contract before finishing.' },
+  ] } },
   // Five cheap attempts: more min-of-N draws at still ~solo-medium cost.
   { id: 'race-5-low', core: true, fast: { speculativeTest: true }, race: { n: 5, selection: 'first', attempts: [
     { thinkingLevel: 'low' },
@@ -135,7 +168,7 @@ export async function runAgent({ runtime, workspace, runDir, task, variant, time
     .replace(/Bearer\s+\S+/gi, 'Bearer [redacted]').replace(/eyJ[A-Za-z0-9_.-]+/g, '[redacted]').replace(/sk-[A-Za-z0-9_-]+/g, '[redacted]')
     .replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, '[email]').slice(0, 700);
   const started = Date.now();
-  let session, abortedReason, turns = 0, toolCalls = 0, previousContext = [], watcherBusy = false, watcherCalls = 0, prefixRegressions = 0;
+  let session, abortedReason, turns = 0, toolCalls = 0, previousContext = [], watcherBusy = false, watcherCalls = 0, prefixRegressions = 0, providerRequests = 0, effortDropped = false;
   const seen = new Set();
   const programs = new Map();
   let skippedPlanned = 0;
@@ -151,7 +184,7 @@ export async function runAgent({ runtime, workspace, runDir, task, variant, time
   const watcher = variant.watcher && variant.watcher !== 'rules' ? createWatcher({
     kind: variant.watcher, runtime, ledgerPath: resolve(stateDir, 'jev-budget.jsonl'), timeoutMs: watcherTimeoutMs,
   }) : undefined;
-  const objective = `${task.title}\n${await readText(workspace, 'README.md')}`;
+  const objective = `${task.title}\n${await readText(workspace, 'README.md').catch(() => task.prompt?.slice(0, 4000) ?? '')}`;
   const contextDecisions = [];
   let retainedContextIds = [];
   const graph = variant.graph ? await buildCodeGraph(workspace) : null;
@@ -217,6 +250,11 @@ export async function runAgent({ runtime, workspace, runDir, task, variant, time
       previousContext = current;
     });
     pi.on('before_provider_request', event => {
+      if (variant.effortRoute && !effortDropped && ++providerRequests > variant.effortRoute.afterTurns) {
+        effortDropped = true;
+        pi.setThinkingLevel(variant.effortRoute.to);
+        log({ type: 'effort_route', afterTurns: variant.effortRoute.afterTurns, to: variant.effortRoute.to });
+      }
       const payload = event.payload;
       log({ type: 'request_shape', keys: Object.keys(payload), model: payload.model,
         toolNames: (payload.tools ?? []).map(t => t.name ?? t.type), bytes: Buffer.byteLength(JSON.stringify(payload)),
@@ -225,12 +263,28 @@ export async function runAgent({ runtime, workspace, runDir, task, variant, time
     pi.on('after_provider_response', event => log({ type: 'provider_response', status: event.status,
       requestId: event.headers?.['x-request-id'], retryAfter: event.headers?.['retry-after'] }));
     pi.on('tool_call', event => {
-      if (++toolCalls > 80 || controller.signal.aborted) { queueMicrotask(() => abort('tool_limit')); return { block: true, reason: 'Experiment tool budget exhausted.' }; }
+      // QnA tasks are read-only exploration — AA's harness allows 250 calls;
+      // match that budget so the score isn't a tool-cap artifact.
+      if (++toolCalls > (task.qna || task.tb ? 250 : 80) || controller.signal.aborted) { queueMicrotask(() => abort('tool_limit')); return { block: true, reason: 'Experiment tool budget exhausted.' }; }
       if (event.toolName === 'codemode') programs.set(event.toolCallId, plannedReads(event.input.code));
       recentActions.push({ name: event.toolName, path: event.input?.path });
       if (recentActions.length > 6) recentActions.shift();
     });
     pi.on('tool_result', async event => {
+      if (variant.compactObs && !event.isError) {
+        const cap = variant.compactObsCap ?? 4000;
+        const clamp = text => text.length > cap
+          ? `${text.slice(0, Math.floor(cap * 0.75))}\n… (${text.length - cap} chars omitted) …\n${text.slice(-Math.floor(cap * 0.25))}`
+          : text;
+        const structured = event.structuredContent;
+        if (structured && typeof structured === 'object' && !Array.isArray(structured)) {
+          const next = { ...structured };
+          if (typeof next.text === 'string') next.text = clamp(next.text);
+          return { content: [{ type: 'text', text: JSON.stringify(next) }], structuredContent: next };
+        }
+        const text = event.content.filter(c => c.type === 'text').map(c => c.text).join('\n');
+        if (text.length > cap) return { content: [{ type: 'text', text: clamp(text) }], structuredContent: structured };
+      }
       if (event.toolName === 'file_read' && !event.isError && event.structuredContent?.omittedBefore === 0 && event.structuredContent?.omittedAfter === 0) seen.add(event.input.path);
       if (variant.delegate && event.toolName === 'file_read' && !event.isError && !watcherBusy && watcherCalls < 2 && event.input.path?.startsWith('src/')) {
         watcherBusy = true;
@@ -311,12 +365,14 @@ export async function runAgent({ runtime, workspace, runDir, task, variant, time
         messages: messages.slice(start, start + count).map((m, i) => { const text = JSON.stringify(m); return { index: start + i, characters: text.length, characterOffset, text: text.slice(characterOffset, characterOffset + 4000), remaining: Math.max(0, text.length - characterOffset - 4000) }; }) };
       return { content: [{ type: 'text', text: JSON.stringify(data) }], structuredContent: data, details: {} };
     } };
-  const toolNames = ['files', 'file_read', 'search', 'file_edit', 'file_write', 'test', 'history_read'];
+  const toolNames = [...(task.tb ? ['shell'] : []), 'files', 'file_read', 'search', 'file_edit', 'file_write', 'test', 'history_read'];
   const settings = SettingsManager.inMemory({ compaction: { enabled: false }, retry: { enabled: true, maxRetries: fast ? 1 : 2, baseDelayMs: fast ? 1000 : 5000, maxAgentDelayMs: fast ? 15000 : 30000, provider: { maxRetries: 0 } }, cacheWarming: fast ? 'on' : 'off',
     defaultTools: [...toolNames, ...(codemode ? ['codemode'] : [])], codemode: { mode: 'only', inlineBudget: 2000 }, transport: fast ? 'websocket-cached' : 'sse' });
-  let tools = workspaceTools({ workspace, log, artifactsDir: resolve(runDir, 'artifacts'), signal: controller.signal, defaultReadLimit: variant.defaultReadLimit ?? 200 });
+  let tools = workspaceTools({ workspace, log, artifactsDir: resolve(runDir, 'artifacts'), signal: controller.signal, defaultReadLimit: variant.defaultReadLimit ?? 200, writeRoot: task.tb ? '' : 'src', shell: !!task.tb });
   if (variant.readOnly) tools = tools.filter(t => !['file_edit', 'file_write'].includes(t.name));
-  if (fast?.speculativeTest) tools = withSpeculativeTests(tools, { workspace, snapshotRoot: resolve(runDir, 'spec-snapshots'), artifactsDir: resolve(runDir, 'artifacts'), signal: controller.signal, log });
+  // Speculation replays the suite's visible spec file; DeepSWE tasks have
+  // none (their `test` tool already runs the base suite via deepswe.json).
+  if (fast?.speculativeTest && !task.deepswe && !task.tb) tools = withSpeculativeTests(tools, { workspace, snapshotRoot: resolve(runDir, 'spec-snapshots'), artifactsDir: resolve(runDir, 'artifacts'), signal: controller.signal, log });
   const streamPrefire = fast?.streamPrefire ? withStreamPrefire(tools, { log, workspace }) : null;
   if (streamPrefire) tools = streamPrefire.tools;
   const resourceLoader = new DefaultResourceLoader({ cwd: workspace, agentDir: resolve(stateDir, 'empty-agent'), settingsManager: settings,
@@ -330,7 +386,7 @@ export async function runAgent({ runtime, workspace, runDir, task, variant, time
   try {
     await resourceLoader.reload();
     const created = await createAgentSession({ cwd: workspace, agentDir: resolve(stateDir, 'empty-agent'), modelRuntime: runtime,
-      model: runtime.getModel('openai', variant.model ?? 'gpt-6.1-sol'), thinkingLevel,
+      model: getCatalogModel(runtime, 'openai', variant.model ?? 'gpt-6.1-sol'), thinkingLevel,
       resourceLoader, settingsManager: settings, sessionManager: SessionManager.inMemory(workspace),
       tools: [...toolNames.filter(n => !variant.readOnly || !['file_edit', 'file_write'].includes(n)), ...(codemode ? ['codemode'] : [])],
       customTools: [...tools, historyTool],
@@ -356,7 +412,7 @@ export async function runAgent({ runtime, workspace, runDir, task, variant, time
         if (turns >= maxTurns) queueMicrotask(() => abort('turn_limit'));
       }
     });
-    if (!abortedReason) await session.prompt(`${task.prompt}\nUse the provided test tool for the test command. Work only in this workspace; only src/ can be changed.`);
+    if (!abortedReason) await session.prompt(`${task.prompt}\n${task.promptSuffix ?? 'Use the provided test tool for the test command. Work only in this workspace; only src/ can be changed.'}`);
     const final = session.getLastAssistantText();
     const lastAssistant = [...session.messages].reverse().find(m => m.role === 'assistant');
     const status = abortedReason ?? (lastAssistant?.stopReason === 'error' || lastAssistant?.stopReason === 'aborted' ? 'provider_error' : 'completed');
@@ -367,6 +423,73 @@ export async function runAgent({ runtime, workspace, runDir, task, variant, time
   } catch (error) {
     log({ type: 'harness_error', name: /^[A-Za-z]+Error$/.test(error.name) ? error.name : 'Error', code: /^[A-Z_]+$/.test(error.code) ? error.code : 'HARNESS_ERROR' });
     return { status: abortedReason ?? 'harness_error', turns, toolCalls, usage, usageCostUnknown: true, usageTelemetryMissing, watcherCalls, decisions, latencyMs: Date.now() - started };
+  } finally {
+    clearTimeout(timer);
+    if (session) await writeFile(resolve(runDir, 'transcript.json'), JSON.stringify(session.messages));
+    if (session) session.dispose();
+    await writeFile(resolve(runDir, 'events.jsonl'), events.map(e => JSON.stringify(e)).join('\n') + '\n');
+  }
+}
+
+// Stock Pi run: Pi's own default tools and system prompt, no Suffice tools,
+// prompt, watchers, or fast machinery — the true upstream baseline arm.
+export async function runBasePi({ runtime, workspace, runDir, task, timeoutMs = 240_000, maxTurns = 24, thinkingLevel = 'medium', model = 'gpt-6.1-sol', signal }) {
+  if (!runtime.isUsingSubscription('openai')) throw new Error('OpenAI subscription authentication is required.');
+  await mkdir(runDir, { recursive: true });
+  const events = [];
+  const log = event => {
+    const record = { at: Date.now(), ...event };
+    events.push(record);
+    appendFileSync(resolve(runDir, 'events.jsonl'), JSON.stringify(record) + '\n');
+  };
+  const controller = new AbortController();
+  const started = Date.now();
+  let session, abortedReason, turns = 0, usageCostUnknown = false, usageTelemetryMissing = false;
+  const usage = { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, reasoning: 0, totalTokens: 0, estimatedApiUsd: 0 };
+  const providerErrors = [];
+  const abort = reason => { abortedReason ??= reason; controller.abort(); if (session) void session.abort(); };
+  const timer = setTimeout(() => abort('run_timeout'), timeoutMs);
+  signal?.addEventListener('abort', () => abort('external_cancel'), { once: true });
+  if (signal?.aborted) abort('external_cancel');
+  const settings = SettingsManager.inMemory({ retry: { enabled: true } });
+  const resourceLoader = new DefaultResourceLoader({ cwd: workspace, agentDir: resolve(stateDir, 'empty-agent'), settingsManager: settings,
+    noExtensions: true, noSkills: true, noPromptTemplates: true, noThemes: true, noContextFiles: true,
+    extensionFactories: [latencyTracker(log)] });
+  try {
+    await resourceLoader.reload();
+    const created = await createAgentSession({ cwd: workspace, agentDir: resolve(stateDir, 'empty-agent'), modelRuntime: runtime,
+      model: getCatalogModel(runtime, 'openai', model), thinkingLevel,
+      resourceLoader, settingsManager: settings, sessionManager: SessionManager.inMemory(workspace) });
+    session = created.session;
+    await session.bindExtensions({});
+    log({ type: 'initial', activeTools: session.getActiveToolNames(), promptChars: session.systemPrompt.length, promptHash: hash(session.systemPrompt),
+      extensionErrors: created.extensionsResult.errors.map(e => e.error ?? e.message ?? 'extension_error') });
+    session.subscribe(event => {
+      if (['auto_retry_start', 'auto_retry_end'].includes(event.type)) log({ type: event.type, attempt: event.attempt, success: event.success });
+      if (event.type === 'message_end' && event.message.role === 'assistant') {
+        const message = event.message; turns++;
+        for (const key of ['input', 'output', 'cacheRead', 'cacheWrite', 'reasoning', 'totalTokens']) usage[key] += message.usage?.[key] ?? 0;
+        if (!message.usage) usageTelemetryMissing = true;
+        const cost = message.usage?.cost?.total;
+        if (typeof cost === 'number' && Number.isFinite(cost) && cost >= 0) usage.estimatedApiUsd += cost;
+        else usageCostUnknown = true;
+        if (message.stopReason === 'error' || message.stopReason === 'aborted') usageCostUnknown = true;
+        if (message.stopReason === 'error') providerErrors.push(String(message.errorMessage ?? '').slice(0, 400));
+        log({ type: 'assistant', turn: turns, stopReason: message.stopReason, usage: message.usage,
+          content: message.content.filter(c => c.type !== 'thinking'), errorCode: message.stopReason === 'error' ? 'provider_error' : undefined });
+        if (turns >= maxTurns) queueMicrotask(() => abort('turn_limit'));
+      }
+    });
+    if (!abortedReason) await session.prompt(`${task.prompt}\n${task.promptSuffix ?? 'Work only in this workspace; only src/ can be changed.'}`);
+    const final = session.getLastAssistantText();
+    const lastAssistant = [...session.messages].reverse().find(m => m.role === 'assistant');
+    const status = abortedReason ?? (lastAssistant?.stopReason === 'error' || lastAssistant?.stopReason === 'aborted' ? 'provider_error' : 'completed');
+    const providerFailureKind = status === 'provider_error' ? (/overloaded|temporarily unavailable|server error|rate.?limit|429/i.test(providerErrors.at(-1) ?? '') ? 'transient_capacity' : 'other') : undefined;
+    return { status, providerFailureKind, turns, toolCalls: 0, usage, usageCostUnknown, usageTelemetryMissing, prefixRegressions: 0, watcherCalls: 0,
+      decisions: [], contextDecisions: [], latencyMs: Date.now() - started, final };
+  } catch (error) {
+    log({ type: 'harness_error', name: /^[A-Za-z]+Error$/.test(error.name) ? error.name : 'Error', code: /^[A-Z_]+$/.test(error.code) ? error.code : 'HARNESS_ERROR' });
+    return { status: abortedReason ?? 'harness_error', turns, toolCalls: 0, usage, usageCostUnknown: true, usageTelemetryMissing, watcherCalls: 0, decisions: [], latencyMs: Date.now() - started };
   } finally {
     clearTimeout(timer);
     if (session) await writeFile(resolve(runDir, 'transcript.json'), JSON.stringify(session.messages));

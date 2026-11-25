@@ -1,0 +1,372 @@
+{
+  "benchmark": "AA Terminal-Bench 4.1 (public subset) reproduction \u2014 not endorsed by AA",
+  "model": "gpt-6.2-sol",
+  "effort": "xhigh",
+  "sidekick": "gpt-6-luna",
+  "arms": [
+    "base-pi",
+    "core",
+    "auto"
+  ],
+  "codex_published_tb_xhigh": 58,
+  "note": "51 of AA's 66 cited tasks present in TB 4.1 repo; 30min run cap; 250 tool-call budget (matches AA harness)",
+  "table": {
+    "core": {
+      "total": 51,
+      "valid": 48,
+      "passed": 9,
+      "pass_excl_infra": 18.8,
+      "pass_incl_infra": 17.6,
+      "med_latency_s": 638,
+      "mean_cost_usd": 0.36,
+      "statuses": {
+        "completed": 40,
+        "infrastructure_error": 3,
+        "run_timeout": 8
+      }
+    },
+    "auto": {
+      "total": 50,
+      "valid": 45,
+      "passed": 8,
+      "pass_excl_infra": 17.8,
+      "pass_incl_infra": 16.0,
+      "med_latency_s": 640,
+      "mean_cost_usd": 0.41,
+      "statuses": {
+        "no_winner": 19,
+        "infrastructure_error": 3,
+        "completed": 26,
+        "external_cancel": 2
+      }
+    },
+    "base-pi": {
+      "total": 52,
+      "valid": 49,
+      "passed": 13,
+      "pass_excl_infra": 26.5,
+      "pass_incl_infra": 25.0,
+      "med_latency_s": 928,
+      "mean_cost_usd": 0.35,
+      "statuses": {
+        "run_timeout": 16,
+        "completed": 32,
+        "turn_limit": 1,
+        "infrastructure_error": 3
+      }
+    }
+  },
+  "infra_error_tasks": [
+    "tb-atrx-vep-crispr",
+    "tb-distributed-dedup",
+    "tb-jax-speedrun-gpu"
+  ],
+  "per_task": [
+    {
+      "task": "tb-atrx-vep-crispr",
+      "base-pi": "x",
+      "core": "x",
+      "auto": "x"
+    },
+    {
+      "task": "tb-batched-eval-parity",
+      "base-pi": "P",
+      "core": "P",
+      "auto": "P"
+    },
+    {
+      "task": "tb-biped-contact-dynamics",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "P"
+    },
+    {
+      "task": "tb-bun-sourcemap-leak",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-cad-model",
+      "base-pi": "P",
+      "core": "P",
+      "auto": "P"
+    },
+    {
+      "task": "tb-cargo-flight-dispatch",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-ctr-optimization",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-cumulative-layout-shift",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-data-anonymization",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-distributed-dedup",
+      "base-pi": "x",
+      "core": "x",
+      "auto": "x"
+    },
+    {
+      "task": "tb-foodstuff-beta-activity",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-formal-crypto",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-freecad-impeller",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-freecad-platform-drawing",
+      "base-pi": "P",
+      "core": "P",
+      "auto": "P"
+    },
+    {
+      "task": "tb-freecad-spring-clip",
+      "base-pi": "f",
+      "core": "P",
+      "auto": "f"
+    },
+    {
+      "task": "tb-freight-dispatch-shift",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-glycan-ms2-elucidation",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-gsea-proteomics",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-heat-pump-warranty",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-html-js-filter",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "P"
+    },
+    {
+      "task": "tb-interleaved-vigenere",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-intrastat-meldung",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-jax-speedrun-gpu",
+      "base-pi": "x",
+      "core": "x",
+      "auto": "x"
+    },
+    {
+      "task": "tb-ks-solver-cpp",
+      "base-pi": "P",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-kv-live-surgery",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-lake-temp-glm",
+      "base-pi": "P",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-layout-config-recreation",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-legacy-utility-triage",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-live-database-cutover",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-math-eval-grader",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-medical-claims-processing",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-music-harmony",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-nextjs-performance",
+      "base-pi": "P",
+      "core": "P",
+      "auto": "f"
+    },
+    {
+      "task": "tb-ontology-kg-querying",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-payments-pipeline-fix",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-photonic-waveguide-routing",
+      "base-pi": "P",
+      "core": "P",
+      "auto": "P"
+    },
+    {
+      "task": "tb-production-planning",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-protein-autointerp-disulfide",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-react-lead-form",
+      "base-pi": "f",
+      "core": "P",
+      "auto": "x"
+    },
+    {
+      "task": "tb-roy-polymorph-cn",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-rs-archive-clone",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-satb-audio-transcription",
+      "base-pi": "P",
+      "core": "P",
+      "auto": "P"
+    },
+    {
+      "task": "tb-session-window-debug",
+      "base-pi": "P",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-sglang-qwen-burst",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "x"
+    },
+    {
+      "task": "tb-shadow-relay",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-uefi-bootkit",
+      "base-pi": "P",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-vba-userform-port",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-vf2-speedup-networkx",
+      "base-pi": "P",
+      "core": "f",
+      "auto": "-"
+    },
+    {
+      "task": "tb-vllm-deepseek-streaming",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-vpp-loss-divergence",
+      "base-pi": "f",
+      "core": "f",
+      "auto": "f"
+    },
+    {
+      "task": "tb-wal-recovery-ordering",
+      "base-pi": "P",
+      "core": "P",
+      "auto": "P"
+    }
+  ]
+}
