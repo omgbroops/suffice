@@ -29,7 +29,7 @@ export async function runAuto({ runtime, task, variant, workspace, runDir, think
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
     const classify = createReadOnlyAssistant({ kind: 'luna', mode: 'select', runtime, timeoutMs: 15_000, maxCalls: 1 });
-    const prefill = await workspacePrefill(task.workspaceDir);
+    const prefill = task.workspaceDir ? await workspacePrefill(task.workspaceDir) : ''
     const decision = await classify({
       objective: `Classify this coding task.\n\nTask: ${task.title ?? ''}\n${task.prompt}\n\n${prefill}`.slice(0, 8000),
       latestEvidence: 'Choose the single route that fits the task best. repair = fixing existing behavior: tasks phrased as fix/repair/bug/regression, or describing incorrect behavior to correct — even when the fix adds a parameter or new code path. feature = a purely new capability not framed as a fix. When unsure between repair and feature, choose repair; when unsure otherwise, choose other.',
@@ -70,7 +70,7 @@ export async function runAutoLadder({ runtime, task, variant, workspace, runDir,
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
     const classify = createReadOnlyAssistant({ kind: 'luna', mode: 'select', runtime, timeoutMs: 15_000, maxCalls: 1 });
-    const prefill = await workspacePrefill(task.workspaceDir);
+    const prefill = task.workspaceDir ? await workspacePrefill(task.workspaceDir) : ''
     const decision = await classify({
       objective: `Classify this coding task.\n\nTask: ${task.title ?? ''}\n${task.prompt}\n\n${prefill}`.slice(0, 8000),
       latestEvidence: 'Choose the single route that fits the task best. repair = fixing existing behavior: tasks phrased as fix/repair/bug/regression, or describing incorrect behavior to correct — even when the fix adds a parameter or new code path. feature = a purely new capability not framed as a fix. When unsure between repair and feature, choose repair; when unsure otherwise, choose other.',
@@ -107,7 +107,7 @@ export async function runAutoLadder({ runtime, task, variant, workspace, runDir,
     let passed = false, detail = '';
     if (solo.status === 'completed') {
       const acceptance = await runTaskAcceptance(soloWorkspace, task, { signal: controller.signal, runtime, finalAnswer: solo.final });
-      passed = acceptance.status === 'passed' && await immutableIntact(soloWorkspace, task.workspaceDir);
+      passed = acceptance.status === 'passed' && (task.workspaceDir ? await immutableIntact(soloWorkspace, task.workspaceDir) : true);
       if (!passed) detail = `${acceptance.status}: ${(acceptance.stdout ?? '').split('\n').filter(l => /not ok|fail|Error/i.test(l)).slice(0, 10).join('\n')}`.slice(0, 1500);
     } else detail = `attempt ${solo.status}`;
     if (passed) {

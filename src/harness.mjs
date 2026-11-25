@@ -184,7 +184,7 @@ export async function runAgent({ runtime, workspace, runDir, task, variant, time
   const watcher = variant.watcher && variant.watcher !== 'rules' ? createWatcher({
     kind: variant.watcher, runtime, ledgerPath: resolve(stateDir, 'jev-budget.jsonl'), timeoutMs: watcherTimeoutMs,
   }) : undefined;
-  const objective = `${task.title}\n${await readText(workspace, 'README.md')}`;
+  const objective = `${task.title}\n${await readText(workspace, 'README.md').catch(() => task.prompt?.slice(0, 4000) ?? '')}`;
   const contextDecisions = [];
   let retainedContextIds = [];
   const graph = variant.graph ? await buildCodeGraph(workspace) : null;
@@ -265,7 +265,7 @@ export async function runAgent({ runtime, workspace, runDir, task, variant, time
     pi.on('tool_call', event => {
       // QnA tasks are read-only exploration — AA's harness allows 250 calls;
       // match that budget so the score isn't a tool-cap artifact.
-      if (++toolCalls > (task.qna ? 250 : 80) || controller.signal.aborted) { queueMicrotask(() => abort('tool_limit')); return { block: true, reason: 'Experiment tool budget exhausted.' }; }
+      if (++toolCalls > (task.qna || task.tb ? 250 : 80) || controller.signal.aborted) { queueMicrotask(() => abort('tool_limit')); return { block: true, reason: 'Experiment tool budget exhausted.' }; }
       if (event.toolName === 'codemode') programs.set(event.toolCallId, plannedReads(event.input.code));
       recentActions.push({ name: event.toolName, path: event.input?.path });
       if (recentActions.length > 6) recentActions.shift();
@@ -365,14 +365,14 @@ export async function runAgent({ runtime, workspace, runDir, task, variant, time
         messages: messages.slice(start, start + count).map((m, i) => { const text = JSON.stringify(m); return { index: start + i, characters: text.length, characterOffset, text: text.slice(characterOffset, characterOffset + 4000), remaining: Math.max(0, text.length - characterOffset - 4000) }; }) };
       return { content: [{ type: 'text', text: JSON.stringify(data) }], structuredContent: data, details: {} };
     } };
-  const toolNames = ['files', 'file_read', 'search', 'file_edit', 'file_write', 'test', 'history_read'];
+  const toolNames = [...(task.tb ? ['shell'] : []), 'files', 'file_read', 'search', 'file_edit', 'file_write', 'test', 'history_read'];
   const settings = SettingsManager.inMemory({ compaction: { enabled: false }, retry: { enabled: true, maxRetries: fast ? 1 : 2, baseDelayMs: fast ? 1000 : 5000, maxAgentDelayMs: fast ? 15000 : 30000, provider: { maxRetries: 0 } }, cacheWarming: fast ? 'on' : 'off',
     defaultTools: [...toolNames, ...(codemode ? ['codemode'] : [])], codemode: { mode: 'only', inlineBudget: 2000 }, transport: fast ? 'websocket-cached' : 'sse' });
-  let tools = workspaceTools({ workspace, log, artifactsDir: resolve(runDir, 'artifacts'), signal: controller.signal, defaultReadLimit: variant.defaultReadLimit ?? 200 });
+  let tools = workspaceTools({ workspace, log, artifactsDir: resolve(runDir, 'artifacts'), signal: controller.signal, defaultReadLimit: variant.defaultReadLimit ?? 200, writeRoot: task.tb ? '' : 'src', shell: !!task.tb });
   if (variant.readOnly) tools = tools.filter(t => !['file_edit', 'file_write'].includes(t.name));
   // Speculation replays the suite's visible spec file; DeepSWE tasks have
   // none (their `test` tool already runs the base suite via deepswe.json).
-  if (fast?.speculativeTest && !task.deepswe) tools = withSpeculativeTests(tools, { workspace, snapshotRoot: resolve(runDir, 'spec-snapshots'), artifactsDir: resolve(runDir, 'artifacts'), signal: controller.signal, log });
+  if (fast?.speculativeTest && !task.deepswe && !task.tb) tools = withSpeculativeTests(tools, { workspace, snapshotRoot: resolve(runDir, 'spec-snapshots'), artifactsDir: resolve(runDir, 'artifacts'), signal: controller.signal, log });
   const streamPrefire = fast?.streamPrefire ? withStreamPrefire(tools, { log, workspace }) : null;
   if (streamPrefire) tools = streamPrefire.tools;
   const resourceLoader = new DefaultResourceLoader({ cwd: workspace, agentDir: resolve(stateDir, 'empty-agent'), settingsManager: settings,
@@ -412,7 +412,7 @@ export async function runAgent({ runtime, workspace, runDir, task, variant, time
         if (turns >= maxTurns) queueMicrotask(() => abort('turn_limit'));
       }
     });
-    if (!abortedReason) await session.prompt(`${task.prompt}\nUse the provided test tool for the test command. Work only in this workspace; only src/ can be changed.`);
+    if (!abortedReason) await session.prompt(`${task.prompt}\n${task.promptSuffix ?? 'Use the provided test tool for the test command. Work only in this workspace; only src/ can be changed.'}`);
     const final = session.getLastAssistantText();
     const lastAssistant = [...session.messages].reverse().find(m => m.role === 'assistant');
     const status = abortedReason ?? (lastAssistant?.stopReason === 'error' || lastAssistant?.stopReason === 'aborted' ? 'provider_error' : 'completed');
@@ -480,7 +480,7 @@ export async function runBasePi({ runtime, workspace, runDir, task, timeoutMs = 
         if (turns >= maxTurns) queueMicrotask(() => abort('turn_limit'));
       }
     });
-    if (!abortedReason) await session.prompt(`${task.prompt}\nWork only in this workspace; only src/ can be changed.`);
+    if (!abortedReason) await session.prompt(`${task.prompt}\n${task.promptSuffix ?? 'Work only in this workspace; only src/ can be changed.'}`);
     const final = session.getLastAssistantText();
     const lastAssistant = [...session.messages].reverse().find(m => m.role === 'assistant');
     const status = abortedReason ?? (lastAssistant?.stopReason === 'error' || lastAssistant?.stopReason === 'aborted' ? 'provider_error' : 'completed');

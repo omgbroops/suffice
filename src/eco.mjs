@@ -35,7 +35,7 @@ export async function runEco({ runtime, task, variant, runDir, thinkingLevel = '
     const cheapWorkspace = resolve(cheapDir, 'workspace');
     await mkdir(cheapDir, { recursive: true });
     await materializeWorkspace(task, cheapWorkspace);
-    const cheapTask = eco.prefill ? { ...task, prompt: `${task.prompt}\n\n${await workspacePrefill(task.workspaceDir)}` } : task;
+    const cheapTask = eco.prefill ? { ...task, prompt: `${task.prompt}\n\n${(task.workspaceDir ? await workspacePrefill(task.workspaceDir) : '')}` } : task;
     const cheapVariant = { ...variant, model: eco.cheapModel ?? 'gpt-6-luna' };
     const retries = eco.cheapRetries ?? 0;
     const cheapRuns = [];

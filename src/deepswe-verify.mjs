@@ -12,6 +12,12 @@ import { runQnaAcceptance } from './aa-qna-verify.mjs';
 // QnA-AA tasks grade via the Luna rubric judge; everything else keeps the
 // node --test path.
 export async function runTaskAcceptance(workspace, task, opts = {}) {
+  if (task.tb) {
+    const { tbVerify } = await import('./tb.mjs');
+    const logsDir = resolve(workspace, '..', 'logs');
+    const r = tbVerify(task.tb.id, workspace, logsDir, { timeoutMs: opts.timeoutMs ?? 900_000 });
+    return { status: r.passed ? 'passed' : 'failed', reward: r.reward, stdout: r.verifierStdout, stderr: r.verifierStderr, detail: r };
+  }
   if (task.qna) return runQnaAcceptance(workspace, task, opts);
   return task.deepswe ? runDeepSweAcceptance(workspace, task, opts) : runNodeTests(workspace, task.acceptancePath, opts);
 }

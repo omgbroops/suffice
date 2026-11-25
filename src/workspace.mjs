@@ -10,6 +10,12 @@ import { spawn, execFileSync } from 'node:child_process';
 // immutable-file check must not count them as agent edits).
 export async function materializeWorkspace(task, dest) {
   const generated = [];
+  if (task.tb) {
+    const { tbStart } = await import('./tb.mjs');
+    tbStart(task.tb.id, dest);
+    generated.push(...(await filesIn(dest)));
+    return generated;
+  }
   await cp(task.workspaceDir, dest, { recursive: true, errorOnExist: true, verbatimSymlinks: true });
   if (task.qna) {
     // Read-only repo-analysis tasks share one clone per repo; each run gets
@@ -75,13 +81,13 @@ import { Type } from 'typebox';
 export const MAX_FILE_BYTES = 128 * 1024;
 export function hash(value) { return createHash('sha256').update(value).digest('hex'); }
 
-export async function scopedPath(root, requested, { write = false } = {}) {
+export async function scopedPath(root, requested, { write = false, writeRoot = 'src' } = {}) {
   if (typeof requested !== 'string' || !requested || isAbsolute(requested) || requested.includes(':')) throw new Error('Use a relative workspace path.');
   const target = resolve(root, requested);
   const rel = relative(root, target);
   if (!rel || rel.startsWith(`..${sep}`) || rel === '..' || isAbsolute(rel)) throw new Error('Path escapes workspace.');
   if (rel.split(sep).some(p => p.startsWith('.'))) throw new Error('Hidden paths are not available.');
-  if (write && !rel.startsWith(`src${sep}`)) throw new Error('Only src/ may be modified.');
+  if (write && writeRoot !== '' && !rel.startsWith(`${writeRoot}${sep}`)) throw new Error(`Only ${writeRoot}/ may be modified.`);
   let current = root;
   for (const part of rel.split(sep)) {
     current = resolve(current, part);
@@ -169,6 +175,10 @@ export function runShell(cmd, cwd, { signal, timeoutMs = 300_000 } = {}) {
     child.on('error', e => { clearTimeout(timer); resolveResult({ status: 'infrastructure_error', stdout: '', stderr: String(e), latencyMs: Date.now() - started }); });
     child.on('close', code => {
       clearTimeout(timer); signal?.removeEventListener('abort', stop);
+      // providers attempt to parse long base64 runs as embedded images; a
+      // mid-blob truncation produces an invalid image and 400s the request.
+      stdout = stdout.replace(/[A-Za-z0-9+/]{512,}={0,2}/g, m => `[base64 ${m.length} chars omitted]`);
+      stderr = stderr.replace(/[A-Za-z0-9+/]{512,}={0,2}/g, m => `[base64 ${m.length} chars omitted]`);
       resolveResult({ status: timedOut ? 'timeout' : code === 0 ? 'passed' : 'failed', exitCode: code, stdout, stderr, latencyMs: Date.now() - started });
     });
   });
@@ -180,12 +190,15 @@ export async function formatTestResult(result, artifactsDir) {
   return { ...result, stdout: result.stdout?.slice(0, 12_000), stderr: result.stderr?.slice(0, 3000), artifact: id };
 }
 const unknown = Type.Unknown();
-export function workspaceTools({ workspace, log = () => {}, artifactsDir, signal, defaultReadLimit = 200 }) {
+export function workspaceTools({ workspace, log = () => {}, artifactsDir, signal, defaultReadLimit = 200, writeRoot = 'src', shell = false }) {
   let serial = Promise.resolve();
   const mutate = fn => { const result = serial.then(fn); serial = result.catch(() => {}); return result; };
   const make = (name, description, parameters, operation) => ({ name, label: name, description, parameters, outputSchema: unknown,
     async execute(_id, args) { if (signal?.aborted) throw new Error('Run aborted.'); const result = await operation(args); log({ type: 'tool', name, args, resultHash: hash(JSON.stringify(result)), resultChars: JSON.stringify(result).length }); return toolResult(result); } });
+  const shellTool = shell ? [make('shell', 'Run a bash command in the task environment (container working dir /app). Returns stdout, stderr and exit status. Use for compilers, scripts, and inspecting data files.', Type.Object({ command: Type.String({ minLength: 1 }) }),
+    async ({ command }) => formatTestResult(await runShell(command, workspace, { signal }), artifactsDir))] : [];
   return [
+    ...shellTool,
     make('files', 'List all non-hidden files in the workspace.', Type.Object({}), async () => filesIn(workspace)),
     make('file_read', 'Read a UTF-8 workspace file. Optional one-based offset and line limit. Returns numbered source, total lines and omitted counts.',
       Type.Object({ path: Type.String(), offset: Type.Optional(Type.Integer({ minimum: 1 })), limit: Type.Optional(Type.Integer({ minimum: 1, maximum: 1000 })) }),
@@ -193,9 +206,9 @@ export function workspaceTools({ workspace, log = () => {}, artifactsDir, signal
     make('search', 'Search literal text across workspace source and documentation. Returns matching paths and numbered lines; max 40 matches.', Type.Object({ query: Type.String({ minLength: 1 }), path: Type.Optional(Type.String()) }),
       async ({ query, path }) => { const paths = path ? [path] : await filesIn(workspace); const matches = []; for (const p of paths) { const text = await readText(workspace, p); text.split('\n').forEach((line, i) => { if (line.toLowerCase().includes(query.toLowerCase()) && matches.length < 40) matches.push({ path: p, line: i + 1, text: line.slice(0, 500) }); }); } return matches; }),
     make('file_edit', 'Replace one exact unique text occurrence in a src/ file. Fails if old text is missing or ambiguous.', Type.Object({ path: Type.String(), oldText: Type.String({ minLength: 1 }), newText: Type.String() }),
-      args => mutate(async () => { const content = await readText(workspace, args.path); if (content.split(args.oldText).length !== 2) throw new Error('oldText must match exactly once.'); const next = content.replace(args.oldText, args.newText); if (Buffer.byteLength(next) > MAX_FILE_BYTES) throw new Error('File too large.'); await writeFile(await scopedPath(workspace, args.path, { write: true }), next); return { path: args.path, version: hash(next), edited: true }; })),
+      args => mutate(async () => { const content = await readText(workspace, args.path); if (content.split(args.oldText).length !== 2) throw new Error('oldText must match exactly once.'); const next = content.replace(args.oldText, args.newText); if (Buffer.byteLength(next) > MAX_FILE_BYTES) throw new Error('File too large.'); await writeFile(await scopedPath(workspace, args.path, { write: true, writeRoot }), next); return { path: args.path, version: hash(next), edited: true }; })),
     make('file_write', 'Write a complete UTF-8 src/ file; use file_edit for smaller changes.', Type.Object({ path: Type.String(), content: Type.String() }),
-      args => mutate(async () => { if (Buffer.byteLength(args.content) > MAX_FILE_BYTES) throw new Error('File too large.'); const target = await scopedPath(workspace, args.path, { write: true }); await mkdir(dirname(target), { recursive: true, verbatimSymlinks: true }); await writeFile(target, args.content); return { path: args.path, version: hash(args.content), written: true }; })),
+      args => mutate(async () => { if (Buffer.byteLength(args.content) > MAX_FILE_BYTES) throw new Error('File too large.'); const target = await scopedPath(workspace, args.path, { write: true, writeRoot }); await mkdir(dirname(target), { recursive: true, verbatimSymlinks: true }); await writeFile(target, args.content); return { path: args.path, version: hash(args.content), written: true }; })),
     make('test', 'Run the visible Node test suite. Returns status and diagnostic output. Acceptance tests are run separately by the evaluator.', Type.Object({}),
       async () => {
         if (existsSync(resolve(workspace, 'deepswe.json'))) {
