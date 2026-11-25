@@ -55,6 +55,35 @@ def iso_seconds(start, end):
         return None
 
 
+def benchmark_config_signature(result):
+    config = result.get("config") or {}
+    agent = config.get("agent") or {}
+    kwargs = dict(agent.get("kwargs") or {})
+    # Host-local locations change across otherwise identical reruns. The
+    # package content hash is separately preserved in kwargs.version.
+    for volatile in ("auth_dir", "package_tarball"):
+        kwargs.pop(volatile, None)
+    environment = config.get("environment") or {}
+    verifier = config.get("verifier") or {}
+    signature = {
+        "agent": {
+            "name": agent.get("name"),
+            "import_path": agent.get("import_path"),
+            "model_name": agent.get("model_name"),
+            "kwargs": kwargs,
+            "extra_allowed_hosts": sorted(agent.get("extra_allowed_hosts") or []),
+        },
+        "environment": {"type": environment.get("type")},
+        "verifier": {"disable": verifier.get("disable"), "environment_mode": verifier.get("environment_mode")},
+        "timeouts": {
+            "timeout_multiplier": config.get("timeout_multiplier"),
+            "agent_timeout_multiplier": config.get("agent_timeout_multiplier"),
+            "verifier_timeout_multiplier": config.get("verifier_timeout_multiplier"),
+        },
+    }
+    return json.dumps(signature, sort_keys=True, separators=(",", ":"))
+
+
 def collect(job_dirs):
     rows = []
     for root in job_dirs:
@@ -90,6 +119,7 @@ def collect(job_dirs):
                 "agent_name": (result.get("agent_info") or {}).get("name"),
                 "agent_version": (result.get("agent_info") or {}).get("version"),
                 "model": ((result.get("agent_info") or {}).get("model_info") or {}).get("name"),
+                "config_signature": benchmark_config_signature(result),
             })
     return rows
 
@@ -99,14 +129,14 @@ def classify(row):
     reward = row.get("reward")
     if exception_type in TIMEOUT_TYPES:
         return "timeout_zero", 0.0
-    if reward is not None and reward >= 0:
-        return "pass" if reward == 1 else "fail", reward
-    if reward is not None and reward < 0:
-        return "grader_error", None
     if exception_type == "AgentSafetyRefusalError":
         return "provider_refusal_incomplete", None
     if exception_type in INFRA_TYPES or exception_type:
         return "infrastructure_incomplete", None
+    if reward is not None and reward >= 0:
+        return "pass" if reward == 1 else "fail", reward
+    if reward is not None and reward < 0:
+        return "grader_error", None
     return "missing_reward_incomplete", None
 
 
@@ -130,8 +160,10 @@ def score_rows(rows, strict=False):
     graded = [row for row in final if row["score"] is not None]
     denominator = len(graded)
     pass_count = sum(1 for row in graded if row["score"] == 1)
+    config_count = len({row.get("config_signature") for row in rows})
     summary = {
         "tasks_seen": len(final),
+        "configuration_count": config_count,
         "graded_tasks": denominator,
         "incomplete_tasks": len(incomplete),
         "pass_count": pass_count,
@@ -145,6 +177,8 @@ def score_rows(rows, strict=False):
         "cost_coverage": (sum(1 for row in graded if row["cost_usd"] is not None) / denominator) if denominator else None,
         "agent_hours": sum(row["agent_seconds"] or 0 for row in graded) / 3600,
     }
+    if strict and config_count != 1:
+        summary["strict_config_error"] = "rows come from multiple benchmark configurations; score each configuration separately"
     if strict and incomplete:
         summary["strict_error"] = "incomplete infrastructure/missing-reward tasks are present; retry or void them deliberately before publishing"
     return summary, sorted(final, key=lambda row: row["task"]), sorted(incomplete, key=lambda row: row["task"])
@@ -179,6 +213,9 @@ def main():
     strict_failed = False
     if args.expected_tasks is not None and summary["tasks_seen"] != args.expected_tasks:
         print(f"ERROR: expected {args.expected_tasks} unique tasks, found {summary['tasks_seen']}", file=sys.stderr)
+        strict_failed = True
+    if args.strict and summary["configuration_count"] != 1:
+        print(f"ERROR: expected 1 benchmark configuration, found {summary['configuration_count']}", file=sys.stderr)
         strict_failed = True
     if args.strict and incomplete:
         print(f"ERROR: {len(incomplete)} incomplete tasks", file=sys.stderr)

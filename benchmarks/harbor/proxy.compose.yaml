@@ -15,5 +15,7 @@ services:
       interval: 1s
       timeout: 3s
       retries: 30
+    environment:
+      SUFFICE_PROXY_ALLOWED_MODELS: SUFFICE_PROXY_ALLOWED_MODELS_PLACEHOLDER
     volumes:
       - SUFFICE_PROXY_STATE_DIR_PLACEHOLDER:/secret:rw

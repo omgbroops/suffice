@@ -23,6 +23,34 @@ TOKEN_HOST = "auth.openai.com"
 API_HOST = "api.openai.com"
 RESOURCE = "https://api.openai.com/v1"
 EXPIRY_MARGIN_SEC = 180
+ALLOWED_MODELS = {value.strip() for value in os.environ.get("SUFFICE_PROXY_ALLOWED_MODELS", "").split(",") if value.strip()}
+INFERENCE_PATHS = {"/v1/responses", "/v1/chat/completions"}
+CHATGPT_UNSUPPORTED_FIELDS = {"prompt_cache_retention", "prompt_cache_options", "max_output_tokens", "temperature"}
+
+
+def sanitize_inference_body(body, allowed_models):
+    if body is None:
+        return None, None
+    try:
+        payload = json.loads(body)
+    except (TypeError, ValueError):
+        return None, "inference request body must be JSON"
+    if not isinstance(payload, dict):
+        return None, "inference request body must be a JSON object"
+    model = payload.get("model")
+    if allowed_models and model not in allowed_models:
+        return None, "model is not allowed for this benchmark run"
+    for field in CHATGPT_UNSUPPORTED_FIELDS:
+        payload.pop(field, None)
+    # Pi only omits configuration_update items when it knows the credential is
+    # direct ChatGPT OAuth. The proxy endpoint hides that signal, so remove the
+    # unsupported control items centrally before forwarding upstream.
+    if isinstance(payload.get("input"), list):
+        payload["input"] = [
+            item for item in payload["input"]
+            if not (isinstance(item, dict) and item.get("type") == "configuration_update")
+        ]
+    return json.dumps(payload, separators=(",", ":")).encode(), None
 
 
 def credential_from(payload):
@@ -40,7 +68,10 @@ def credential_from(payload):
 def write_json_atomic(path, value):
     tmp = path.with_suffix(".tmp")
     tmp.write_text(json.dumps(value, separators=(",", ":")), encoding="utf-8")
-    os.chmod(tmp, 0o600)
+    # The bind-mounted state directory itself is 0700 on the host. Keep the
+    # rotated file readable to the host account that owns the benchmark so the
+    # launcher can persist the rotated refresh token when the run exits.
+    os.chmod(tmp, 0o644)
     os.replace(tmp, path)
 
 
@@ -130,11 +161,15 @@ class Handler(BaseHTTPRequestHandler):
     def _forward(self):
         try:
             parsed = urllib.parse.urlsplit(self.path)
-            if not parsed.path.startswith("/v1/"):
-                self.send_error(404, "only /v1/* is proxied")
+            if self.command != "POST" or parsed.path not in INFERENCE_PATHS:
+                self.send_error(403, "only configured inference endpoints are proxied")
                 return
             length = int(self.headers.get("content-length") or "0")
             body = self.rfile.read(length) if length else None
+            body, rejection = sanitize_inference_body(body, ALLOWED_MODELS)
+            if rejection:
+                self.send_error(403, rejection)
+                return
             token = access_token()
             connection = http.client.HTTPSConnection(API_HOST, timeout=600, context=ssl.create_default_context())
             headers = {}

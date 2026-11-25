@@ -16,22 +16,29 @@ CHEAP_MODEL="${SUFFICE_CHEAP_MODEL:-gpt-6-luna}"
 PI_VERSION="${PI_VERSION:-1.5.2}"
 STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
 
-python3 "$ROOT/benchmarks/harbor/preflight.py"
+HARBOR="$HARBOR" python3 "$ROOT/benchmarks/harbor/preflight.py"
 
 STATE_DIR="$(mktemp -d /tmp/suffice-openai-proxy-state.XXXXXX)"
 chmod 700 "$STATE_DIR"
 cleanup() {
+  if [[ -f "$STATE_DIR/auth.json" ]]; then
+    cp "$STATE_DIR/auth.json" "$AUTH_DIR/auth.json.benchmark-tmp" 2>/dev/null || true
+    chmod 600 "$AUTH_DIR/auth.json.benchmark-tmp" 2>/dev/null || true
+    mv "$AUTH_DIR/auth.json.benchmark-tmp" "$AUTH_DIR/auth.json" 2>/dev/null || rm -f "$AUTH_DIR/auth.json.benchmark-tmp"
+  fi
   rm -rf "$STATE_DIR"
 }
 trap cleanup EXIT
 cp "$AUTH_DIR/auth.json" "$STATE_DIR/auth.json"
 chmod 600 "$STATE_DIR/auth.json"
-python3 - "$ROOT/benchmarks/harbor/proxy.compose.yaml" "$STATE_DIR" <<'PY'
+python3 - "$ROOT/benchmarks/harbor/proxy.compose.yaml" "$STATE_DIR" "$STRONG_MODEL,$CHEAP_MODEL" <<'PY'
 from pathlib import Path
 import sys
 source = Path(sys.argv[1]).read_text()
 state = sys.argv[2]
-Path(state, 'proxy.compose.yaml').write_text(source.replace('SUFFICE_PROXY_STATE_DIR_PLACEHOLDER', state))
+source = source.replace('SUFFICE_PROXY_STATE_DIR_PLACEHOLDER', state)
+source = source.replace('SUFFICE_PROXY_ALLOWED_MODELS_PLACEHOLDER', sys.argv[3])
+Path(state, 'proxy.compose.yaml').write_text(source)
 PY
 
 docker build -q -t suffice-openai-proxy:local "$ROOT/benchmarks/harbor/proxy" >/dev/null

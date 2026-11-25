@@ -12,7 +12,7 @@ try:
 except ModuleNotFoundError:  # harbor is installed by the benchmark environment setup
     _proxy_models_json = None
 from benchmarks.harbor.score import collect, score_rows
-from benchmarks.harbor.proxy.openai_proxy import credential_from
+from benchmarks.harbor.proxy.openai_proxy import credential_from, sanitize_inference_body
 
 
 class HarborBenchmarkTests(unittest.TestCase):
@@ -39,6 +39,24 @@ class HarborBenchmarkTests(unittest.TestCase):
         self.assertEqual(credential["access"], "a")
         with self.assertRaises(RuntimeError):
             credential_from({"openai": {"type": "api_key", "key": "x"}})
+
+    def test_proxy_restricts_models_and_removes_chatgpt_unsupported_fields(self):
+        body = json.dumps({
+            "model": "gpt-6.2-sol",
+            "temperature": 0.2,
+            "max_output_tokens": 100,
+            "prompt_cache_retention": "24h",
+            "input": [{"type": "configuration_update"}, {"type": "message", "content": "x"}],
+        }).encode()
+        sanitized, rejection = sanitize_inference_body(body, {"gpt-6.2-sol"})
+        self.assertIsNone(rejection)
+        payload = json.loads(sanitized)
+        self.assertNotIn("temperature", payload)
+        self.assertNotIn("max_output_tokens", payload)
+        self.assertNotIn("prompt_cache_retention", payload)
+        self.assertEqual([item["type"] for item in payload["input"]], ["message"])
+        _, rejection = sanitize_inference_body(body, {"gpt-6-luna"})
+        self.assertEqual(rejection, "model is not allowed for this benchmark run")
 
     def test_scorer_counts_timeout_zero_and_marks_infra_incomplete(self):
         rows = [
