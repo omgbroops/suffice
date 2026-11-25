@@ -15,6 +15,7 @@ STRONG_MODEL="${SUFFICE_STRONG_MODEL:-gpt-6.2-sol}"
 CHEAP_MODEL="${SUFFICE_CHEAP_MODEL:-gpt-6-luna}"
 PI_VERSION="${PI_VERSION:-1.5.2}"
 STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
+EXTRA_ARGS=("$@")
 
 HARBOR="$HARBOR" python3 "$ROOT/benchmarks/harbor/preflight.py"
 
@@ -125,7 +126,7 @@ run_arm() {
   elif [[ "$arm" == "core" || "$arm" == "auto" ]]; then
     args+=(--ak "arm=$arm" --ak effort=xhigh --ak cheap_effort=low --ak "version=$VERSION")
   fi
-  args+=("$@")
+  args+=("${EXTRA_ARGS[@]}")
 
   echo "[$arm] writing Harbor job under $job_dir"
   "${HARBOR}" "${args[@]}" 2>&1 | tee "$job_dir/launcher.log"
