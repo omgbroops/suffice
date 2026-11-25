@@ -23,13 +23,33 @@ STATE_DIR="$(mktemp -d /tmp/suffice-openai-proxy-state.XXXXXX)"
 chmod 700 "$STATE_DIR"
 cleanup() {
   if [[ -f "$STATE_DIR/auth.json" && -f "$STATE_DIR/auth.startup.json" ]] && ! cmp -s "$STATE_DIR/auth.json" "$STATE_DIR/auth.startup.json"; then
-    if cmp -s "$AUTH_DIR/auth.json" "$STATE_DIR/auth.startup.json" 2>/dev/null; then
-      cp "$STATE_DIR/auth.json" "$AUTH_DIR/auth.json.benchmark-tmp" 2>/dev/null || true
-      chmod 600 "$AUTH_DIR/auth.json.benchmark-tmp" 2>/dev/null || true
-      mv "$AUTH_DIR/auth.json.benchmark-tmp" "$AUTH_DIR/auth.json" 2>/dev/null || rm -f "$AUTH_DIR/auth.json.benchmark-tmp"
-    else
-      echo "warning: proxy rotated the OpenAI credential, but the host login changed during the benchmark; preserving the newer host login" >&2
-    fi
+    python3 - "$STATE_DIR" "$AUTH_DIR" <<'PY' || true
+import json, os, sys
+from pathlib import Path
+state_dir = Path(sys.argv[1])
+auth_dir = Path(sys.argv[2])
+state = json.loads((state_dir / 'auth.json').read_text())
+startup = json.loads((state_dir / 'auth.startup.json').read_text())
+host_path = auth_dir / 'auth.json'
+host = json.loads(host_path.read_text())
+def openai_part(document):
+    value = document.get('openai', document) if isinstance(document, dict) else None
+    return value if isinstance(value, dict) else None
+if openai_part(host) != openai_part(startup):
+    print('warning: proxy rotated the OpenAI credential, but the host OpenAI login changed during the benchmark; preserving the newer host login', file=sys.stderr)
+elif 'openai' in host or 'openai' in startup or 'openai' in state:
+    merged = dict(host)
+    merged['openai'] = openai_part(state)
+    tmp = auth_dir / 'auth.json.benchmark-tmp'
+    tmp.write_text(json.dumps(merged, separators=(',', ':')))
+    os.chmod(tmp, 0o600)
+    os.replace(tmp, host_path)
+else:
+    tmp = auth_dir / 'auth.json.benchmark-tmp'
+    tmp.write_text(json.dumps(state, separators=(',', ':')))
+    os.chmod(tmp, 0o600)
+    os.replace(tmp, host_path)
+PY
   fi
   rm -rf "$STATE_DIR"
 }
@@ -126,7 +146,9 @@ run_arm() {
   elif [[ "$arm" == "core" || "$arm" == "auto" ]]; then
     args+=(--ak "arm=$arm" --ak effort=xhigh --ak cheap_effort=low --ak "version=$VERSION")
   fi
-  args+=("${EXTRA_ARGS[@]}")
+  if ((${#EXTRA_ARGS[@]})); then
+    args+=("${EXTRA_ARGS[@]}")
+  fi
 
   echo "[$arm] writing Harbor job under $job_dir"
   "${HARBOR}" "${args[@]}" 2>&1 | tee "$job_dir/launcher.log"
