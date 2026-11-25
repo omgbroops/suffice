@@ -1,0 +1,21 @@
+# Template copied by run-deepswe.sh with a concrete state-dir path. The task
+# agent container has no credential mount or real OpenAI key; only this service
+# can read the copied OAuth state.
+services:
+  main:
+    depends_on:
+      suffice-openai-proxy:
+        condition: service_healthy
+  suffice-openai-proxy:
+    image: suffice-openai-proxy:local
+    init: true
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8787/health', timeout=2).read()"]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+    environment:
+      SUFFICE_PROXY_ALLOWED_MODELS: SUFFICE_PROXY_ALLOWED_MODELS_PLACEHOLDER
+    volumes:
+      - SUFFICE_PROXY_STATE_DIR_PLACEHOLDER:/secret:rw
